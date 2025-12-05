@@ -33,9 +33,10 @@ plot(x, ...)
 # S3 method for class 'estimate_means'
 tinyplot(
   x,
+  type = NULL,
+  dodge = NULL,
   show_data = FALSE,
   numeric_as_discrete = NULL,
-  theme = "tufte",
   ...
 )
 
@@ -89,7 +90,21 @@ visualisation_recipe(
   Arguments passed from
   [`plot()`](https://rdrr.io/r/graphics/plot.default.html) to
   [`visualisation_recipe()`](https://easystats.github.io/datawizard/reference/visualisation_recipe.html),
-  or to `tinyplot()` and `tinytheme()` if you use that method.
+  or to
+  [`tinyplot()`](https://grantmcdermott.com/tinyplot/man/tinyplot.html)
+  if you use that method.
+
+- type:
+
+  The type of `tinyplot` visualization. It is recommended that users
+  leave as `NULL` (the default), in which case the plot type will be
+  determined automatically by the underlying `modelbased` object.
+
+- dodge:
+
+  Dodge value for grouped plots. If `NULL` (the default), then the
+  dodging behavior is determined by the number of groups and
+  `getOption("modelbased_tinyplot_dodge")`.
 
 - show_data:
 
@@ -112,13 +127,6 @@ visualisation_recipe(
   for numeric predictors. It is possible to set a global default value
   using [`options()`](https://rdrr.io/r/base/options.html), e.g.
   `options(modelbased_numeric_as_discrete = 10)`.
-
-- theme:
-
-  A character string specifying the theme to use for the plot. Defaults
-  to `"tufte"`. For other options please see
-  [`tinyplot::tinytheme()`](https://grantmcdermott.com/tinyplot/man/tinytheme.html).
-  Use `NULL` if no theme should be applied.
 
 - show_residuals:
 
@@ -188,22 +196,41 @@ defaults using [`options()`](https://rdrr.io/r/base/options.html):
 # tinyplot
 # ==============================================
 # \donttest{
+library(tinyplot)
 data(efc, package = "modelbased")
 efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep"))
 m <- lm(neg_c_7 ~ e16sex + c172code + barthtot, data = efc)
 
 em <- estimate_means(m, "c172code")
-tinyplot::plt(em)
+plt(em)
 
 
+# pass additional tinyplot arguments for customization, e.g.
+plt(em, theme = "classic")
+
+plt(em, theme = "classic", flip = TRUE)
+
+# etc.
+
+# Aside: use tinyplot::tinytheme() to set a persistent theme
+tinytheme("classic")
+
+# continuous variable example
 em <- estimate_means(m, "barthtot")
-tinyplot::plt(em)
+plt(em)
 
 
+# grouped example
 m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
 em <- estimate_means(m, c("e16sex", "c172code"))
-tinyplot::plt(em)
+plt(em)
 
+# use plt_add (alias tinyplot_add) to add layers
+plt_add(type = "l", lty = 2)
+
+
+# Reset to default theme
+tinytheme()
 # }
 library(ggplot2)
 library(see)

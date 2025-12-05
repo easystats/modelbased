@@ -152,9 +152,10 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span><span class="co"># S3 method for class 'estimate_means'</span></span>
 <span><span class="fu">tinyplot</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
+<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dodge <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show_data <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  numeric_as_discrete <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  theme <span class="op">=</span> <span class="st">"tufte"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -207,7 +208,19 @@ for publication-ready figures, we recommend re-creating the figures using the
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed from <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> to <code><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe()</a></code>, or
-to <code>tinyplot()</code> and <code>tinytheme()</code> if you use that method.</p></dd>
+to <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">tinyplot()</a></code> if you use that method.</p></dd>
+
+
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
+<dd><p>The type of <code>tinyplot</code> visualization. It is recommended that
+users leave as <code>NULL</code> (the default), in which case the plot type will be
+determined automatically by the underlying <code>modelbased</code> object.</p></dd>
+
+
+<dt id="arg-dodge">dodge<a class="anchor" aria-label="anchor" href="#arg-dodge"></a></dt>
+<dd><p>Dodge value for grouped plots. If <code>NULL</code> (the default), then
+the dodging behavior is determined by the number of groups and
+<code>getOption("modelbased_tinyplot_dodge")</code>.</p></dd>
 
 
 <dt id="arg-show-data">show_data<a class="anchor" aria-label="anchor" href="#arg-show-data"></a></dt>
@@ -226,12 +239,6 @@ deviation around the mean are chosen as representative values for that
 predictor. Use <code>FALSE</code> to always use continuous color scales for numeric
 predictors. It is possible to set a global default value using <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
 e.g. <code>options(modelbased_numeric_as_discrete = 10)</code>.</p></dd>
-
-
-<dt id="arg-theme">theme<a class="anchor" aria-label="anchor" href="#arg-theme"></a></dt>
-<dd><p>A character string specifying the theme to use for the plot.
-Defaults to <code>"tufte"</code>. For other options please see <code><a href="https://grantmcdermott.com/tinyplot/man/tinytheme.html" class="external-link">tinyplot::tinytheme()</a></code>.
-Use <code>NULL</code> if no theme should be applied.</p></dd>
 
 
 <dt id="arg-show-residuals">show_residuals<a class="anchor" aria-label="anchor" href="#arg-show-residuals"></a></dt>
@@ -289,22 +296,41 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-in"><span><span class="co"># tinyplot</span></span></span>
 <span class="r-in"><span><span class="co"># ==============================================</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grantmcdermott.com/tinyplot/" class="external-link">tinyplot</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">efc</span>, package <span class="op">=</span> <span class="st">"modelbased"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">efc</span> <span class="op">&lt;-</span> <span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/to_factor.html" class="external-link">to_factor</a></span><span class="op">(</span><span class="va">efc</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"e16sex"</span>, <span class="st">"c172code"</span>, <span class="st">"e42dep"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">neg_c_7</span> <span class="op">~</span> <span class="va">e16sex</span> <span class="op">+</span> <span class="va">c172code</span> <span class="op">+</span> <span class="va">barthtot</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">em</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"c172code"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">tinyplot</span><span class="fu">::</span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="va">em</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="va">em</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">em</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"barthtot"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">tinyplot</span><span class="fu">::</span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="va">em</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># pass additional tinyplot arguments for customization, e.g.</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="va">em</span>, theme <span class="op">=</span> <span class="st">"classic"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="va">em</span>, theme <span class="op">=</span> <span class="st">"classic"</span>, flip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># etc.</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Aside: use tinyplot::tinytheme() to set a persistent theme</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinytheme.html" class="external-link">tinytheme</a></span><span class="op">(</span><span class="st">"classic"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># continuous variable example</span></span></span>
+<span class="r-in"><span><span class="va">em</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"barthtot"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="va">em</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-4.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># grouped example</span></span></span>
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">neg_c_7</span> <span class="op">~</span> <span class="va">e16sex</span> <span class="op">*</span> <span class="va">c172code</span> <span class="op">+</span> <span class="va">e42dep</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">em</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"e16sex"</span>, <span class="st">"c172code"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">tinyplot</span><span class="fu">::</span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="va">em</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="va">em</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># use plt_add (alias tinyplot_add) to add layers</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot_add.html" class="external-link">plt_add</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"l"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Reset to default theme</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinytheme.html" class="external-link">tinytheme</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span></span></span>
@@ -344,18 +370,18 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-out co"><span class="r-pr">#&gt;</span> y = 'Predicted value of mpg'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">layers</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-4.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># visualization_recipe() is called implicitly when you call plot()</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-5.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-7.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># It can be used in a pipe workflow</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="estimate_expectation.html">estimate_relation</a></span><span class="op">(</span>ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.8</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-6.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-8.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Customize aesthetics ----------</span></span></span>
 <span class="r-in"><span></span></span>
@@ -366,7 +392,7 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-in"><span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Relationship between MPG and WT"</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-7.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-9.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Customize raw data -------------</span></span></span>
 <span class="r-in"><span></span></span>
@@ -374,24 +400,24 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-8.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-10.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Single predictors examples -----------</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-9.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-11.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># 2-ways interaction ------------</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Numeric * numeric</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">*</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-10.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-12.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Numeric * factor</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-11.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-13.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ==============================================</span></span></span>
 <span class="r-in"><span><span class="co"># estimate_means</span></span></span>
@@ -428,7 +454,7 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-out co"><span class="r-pr">#&gt;</span> y = 'Mean of Sepal.Width'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">layers</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-12.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-14.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Customize aesthetics</span></span></span>
 <span class="r-in"><span><span class="va">layers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe</a></span><span class="op">(</span><span class="va">x</span>,</span></span>
@@ -437,7 +463,7 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-in"><span>  line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">layers</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-13.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-15.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Two levels ---------------</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span></span>
@@ -447,14 +473,14 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"wt"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-14.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-16.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># GLMs ---------------------</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>vs <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">vs</span>, cyl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-15.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-17.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="co"># ==============================================</span></span></span>
 <span class="r-in"><span><span class="co"># estimate_slopes</span></span></span>
@@ -499,7 +525,7 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-out co"><span class="r-pr">#&gt;</span> y = 'Slope of Petal.Length'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">layers</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-16.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-18.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># Customize aesthetics and add horizontal line and theme</span></span></span>
@@ -508,17 +534,17 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Effect of Petal.Length"</span>, title <span class="op">=</span> <span class="st">"Marginal Effects"</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-17.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-19.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Sepal.Width</span>, <span class="fl">4</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"Sepal.Width"</span>, by <span class="op">=</span> <span class="st">"Sepal.Width"</span>, length <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-18.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-20.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Sepal.Width</span>, <span class="fl">3</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"Sepal.Width"</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Width"</span>, <span class="st">"Species"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-19.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-21.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="co"># ==============================================</span></span></span>
 <span class="r-in"><span><span class="co"># estimate_grouplevel</span></span></span>
@@ -550,7 +576,7 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: coord_flip</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">layers</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-20.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-22.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># 2 random intercepts</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Newfactor</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></span>
@@ -558,13 +584,13 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-21.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-23.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># Note: we need to use hline instead of vline because the axes is flipped</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Newfactor</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-22.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-24.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

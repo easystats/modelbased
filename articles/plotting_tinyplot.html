@@ -148,6 +148,7 @@ shown.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/">modelbased</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grantmcdermott.com/tinyplot/" class="external-link">tinyplot</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinytheme.html" class="external-link">tinytheme</a></span><span class="op">(</span><span class="st">"classic"</span>, palette.qualitative <span class="op">=</span> <span class="st">"Tableau 10"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">efc</span>, package <span class="op">=</span> <span class="st">"modelbased"</span><span class="op">)</span></span>
 <span><span class="va">efc</span> <span class="op">&lt;-</span> <span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/to_factor.html" class="external-link">to_factor</a></span><span class="op">(</span><span class="va">efc</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"e16sex"</span>, <span class="st">"c172code"</span>, <span class="st">"e42dep"</span><span class="op">)</span><span class="op">)</span></span>
@@ -155,6 +156,20 @@ shown.</p>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">neg_c_7</span> <span class="op">~</span> <span class="va">e16sex</span> <span class="op">+</span> <span class="va">c172code</span> <span class="op">+</span> <span class="va">barthtot</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"c172code"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" width="100%"></p>
+<p>In general, plots can be further modified using functions or
+arguments from the <strong>tinyplot</strong> package.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"c172code"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"errorbar"</span>, flip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot_add.html" class="external-link">plt_add</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"l"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="100%"></p>
+<p><strong>Pro-tip:</strong> You can pass a labeling function to wrap
+long axis labels. Here we use one from the <code>scales</code>
+package.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"c172code"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span>xaxl <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/label_wrap.html" class="external-link">label_wrap</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, flip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="one-predictor---numeric">One predictor - numeric<a class="anchor" aria-label="anchor" href="#one-predictor---numeric"></a>
@@ -162,9 +177,9 @@ shown.</p>
 <p>For numeric predictors, the range of predictions at different values
 of the focal predictor are plotted, the uncertainty is displayed as
 confidence band.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"barthtot"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="100%"></p>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="two-predictors---categorical">Two predictors - categorical<a class="anchor" aria-label="anchor" href="#two-predictors---categorical"></a>
@@ -172,10 +187,16 @@ confidence band.</p>
 <p>For two categorical predictors, the first focal predictors is plotted
 along the x-axis, while the levels of the second predictor are mapped to
 different colors.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">neg_c_7</span> <span class="op">~</span> <span class="va">e16sex</span> <span class="op">*</span> <span class="va">c172code</span> <span class="op">+</span> <span class="va">e42dep</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"e16sex"</span>, <span class="st">"c172code"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="100%"></p>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="100%"></p>
+<p>Again, you can layer on top of this plot using standard
+<strong>tinyplot</strong> functions and arguments.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"e16sex"</span>, <span class="st">"c172code"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot_add.html" class="external-link">plt_add</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"l"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="two-predictors---numeric-categorical">Two predictors - numeric * categorical<a class="anchor" aria-label="anchor" href="#two-predictors---numeric-categorical"></a>
@@ -184,22 +205,21 @@ different colors.</p>
 categorical, range of predictions including confidence bands are shown,
 with the different levels of the second (categorical) predictor mapped
 to colors again.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">neg_c_7</span> <span class="op">~</span> <span class="va">barthtot</span> <span class="op">*</span> <span class="va">c172code</span> <span class="op">+</span> <span class="va">e42dep</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"barthtot"</span>, <span class="st">"c172code"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="100%"></p>
-<p>In general, plots can be further modified using functions or
-arguments from the <strong>tinyplot</strong> package. Thereby, other
-themes, color scales, faceting and so on, can be applied.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="100%"></p>
+<p>One potentially useful customization for these numeric * categorical
+cases is mapping predictive groups by facets (in addition to, or instead
+of colors). Below we make an additional tweak by wrapping the facet
+names, since these are rather long.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"barthtot"</span>, <span class="st">"c172code"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span>facet <span class="op">=</span> <span class="op">~</span><span class="va">c172code</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="100%"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"barthtot"</span>, <span class="st">"c172code"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"okabe"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-5-2.png" class="r-plt" width="100%"></p>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">within</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">c172code</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">" of education$"</span>, <span class="st">"\nof education"</span>, <span class="va">c172code</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span>facet <span class="op">=</span> <span class="st">"by"</span>, legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="two-predictors---categorical-numeric">Two predictors - categorical * numeric<a class="anchor" aria-label="anchor" href="#two-predictors---categorical-numeric"></a>
@@ -217,27 +237,27 @@ distributed from the minimum to the maximum, with a total number of
 <code>length = 10</code> in <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>, and
 thus for numeric predictors, a <em>range</em> of <em>length</em> values
 is used to estimate predictions.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># by default, `range = "range"` and `length = 10`</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c172code"</span>, <span class="st">"barthtot"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="100%"></p>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="100%"></p>
 <p>That means that the <code>length</code> argument can be used to
 control how many values (lines) for the numeric predictors are
 chosen.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c172code"</span>, <span class="st">"barthtot"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="100%"></p>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="100%"></p>
 <p>Another option would be to use <code>range = "grid"</code>, in which
 case the mean and +/- one standard deviation around the mean are chosen
 as representative values for numeric predictors.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c172code"</span>, <span class="st">"barthtot"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="100%"></p>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="100%"></p>
 <p>It is also possible to specify representative values, at which the
 estimated marginal means of the outcome should be plotted. Again,
 consult the documentation at <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">?insight::get_datagrid</a></code> for
 further details.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span></span>
 <span>  <span class="va">m</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -245,31 +265,50 @@ further details.</p>
 <span>    <span class="st">"barthtot = c(30, 50, 80)"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="100%"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c172code"</span>, <span class="st">"barthtot = [fivenum]"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-9-2.png" class="r-plt" width="100%"></p>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="100%"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c172code"</span>, <span class="st">"barthtot = [fivenum]"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-12-2.png" class="r-plt" width="100%"></p>
+<p>One aesthetic issue in the preceding plots is the fact that the
+middle x-axis category is missing (hidden) due to space limitations.
+Again, this is a common problem when we have several discrete categories
+and long label strings. One option is to increase the horizontal spacing
+by moving the legend (e.g., <code>legend = bottom!</code>). But a more
+sure-fire way to ensure that all tick labels are printed is by using a
+labelling function that wraps the text and/or flipping the plot.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c172code"</span>, <span class="st">"barthtot = [fivenum]"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span>xaxl <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/label_wrap.html" class="external-link">label_wrap</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, flip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="three-numeric-predictors">Three numeric predictors<a class="anchor" aria-label="anchor" href="#three-numeric-predictors"></a>
 </h2>
 <p>The default plot-setting for three numeric predictors can be rather
 confusing.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">neg_c_7</span> <span class="op">~</span> <span class="va">c12hour</span> <span class="op">*</span> <span class="va">barthtot</span> <span class="op">*</span> <span class="va">c160age</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c12hour"</span>, <span class="st">"barthtot"</span>, <span class="st">"c160age"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="100%"></p>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="100%"></p>
 <p>Instead, it is recommended to use <code>length</code>, create a
 “reference grid”, or again specify meaningful values directly in the
-<code>by</code> argument.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c12hour"</span>, <span class="st">"barthtot"</span>, <span class="st">"c160age"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="100%"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c12hour"</span>, <span class="st">"barthtot"</span>, <span class="st">"c160age"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-11-2.png" class="r-plt" width="100%"></p>
+<code>by</code> argument. Note that this will have the ancillary effect
+of generating facets by the third variable (here: “cs160age”, i.e. carer
+age).</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c12hour"</span>, <span class="st">"barthtot"</span>, <span class="st">"c160age"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span></span>
+<span>    main <span class="op">=</span> <span class="st">"Effect of care on elder outcomes"</span>,</span>
+<span>    sub <span class="op">=</span> <span class="st">"Facets denote representative carer ages"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="100%"></p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c12hour"</span>, <span class="st">"barthtot"</span>, <span class="st">"c160age"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span></span>
+<span>    main <span class="op">=</span> <span class="st">"Effect of care on elder outcomes"</span>,</span>
+<span>    sub <span class="op">=</span> <span class="st">"Facets denote representative carer ages (mean +/- 1 SD)"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-15-2.png" class="r-plt" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="three-categorical-predictors">Three categorical predictors<a class="anchor" aria-label="anchor" href="#three-categorical-predictors"></a>
@@ -277,10 +316,16 @@ confusing.</p>
 <p>Multiple categorical predictors are usually less problematic, since
 discrete color scales and faceting are used to distinguish between
 factor levels.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">neg_c_7</span> <span class="op">~</span> <span class="va">e16sex</span> <span class="op">*</span> <span class="va">c172code</span> <span class="op">*</span> <span class="va">e42dep</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"e16sex"</span>, <span class="st">"c172code"</span>, <span class="st">"e42dep"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="100%"></p>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="100%"></p>
+<p>Again, though we can improve the final aesthetic with a few
+tweaks.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"e16sex"</span>, <span class="st">"c172code"</span>, <span class="st">"e42dep"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span>dodge <span class="op">=</span> <span class="fl">0.02</span>, theme <span class="op">=</span> <span class="st">"clean2"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="smooth-plots">Smooth plots<a class="anchor" aria-label="anchor" href="#smooth-plots"></a>
@@ -290,15 +335,19 @@ focal predictors. While this mostly works well for plotting linear
 relationships, plots may look less smooth for certain models that
 involve quadratic or cubic terms, or splines, or for instance if you
 have GAMs.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">neg_c_7</span> <span class="op">~</span> <span class="va">e16sex</span> <span class="op">*</span> <span class="va">c12hour</span> <span class="op">+</span> <span class="va">e16sex</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">c12hour</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinytheme.html" class="external-link">tinytheme</a></span><span class="op">(</span><span class="st">"classic"</span>, palette.qualitative <span class="op">=</span> <span class="st">"Tableau 10"</span><span class="op">)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">neg_c_7</span> <span class="op">~</span> <span class="va">e16sex</span> <span class="op">*</span> <span class="va">c12hour</span> <span class="op">+</span> <span class="va">e16sex</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">c12hour</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c12hour"</span>, <span class="st">"e16sex"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="100%"></p>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="100%"></p>
 <p>In this case, simply increase the number of representative values by
 setting <code>length</code> to a higher number.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c12hour"</span>, <span class="st">"e16sex"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">200</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="100%"></p>
+<p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" width="100%"></p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># reset theme</span></span>
+<span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinytheme.html" class="external-link">tinytheme</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
