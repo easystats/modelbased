@@ -15,9 +15,10 @@
 
 \method{tinyplot}{estimate_means}(
   x,
+  type = NULL,
+  dodge = NULL,
   show_data = FALSE,
   numeric_as_discrete = NULL,
-  theme = "tufte",
   ...
 )
 
@@ -60,7 +61,15 @@
 \item{x}{A modelbased object.}
 
 \item{...}{Arguments passed from \code{plot()} to \code{visualisation_recipe()}, or
-to \code{tinyplot()} and \code{tinytheme()} if you use that method.}
+to \code{tinyplot()} if you use that method.}
+
+\item{type}{The type of \code{tinyplot} visualization. It is recommended that
+users leave as \code{NULL} (the default), in which case the plot type will be
+determined automatically by the underlying \code{modelbased} object.}
+
+\item{dodge}{Dodge value for grouped plots. If \code{NULL} (the default), then
+the dodging behavior is determined by the number of groups and
+\code{getOption("modelbased_tinyplot_dodge")}.}
 
 \item{show_data}{Logical, if \code{TRUE}, display the "raw" data as a background
 to the model-based estimation. This argument will be ignored for plotting
@@ -75,10 +84,6 @@ deviation around the mean are chosen as representative values for that
 predictor. Use \code{FALSE} to always use continuous color scales for numeric
 predictors. It is possible to set a global default value using \code{options()},
 e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
-
-\item{theme}{A character string specifying the theme to use for the plot.
-Defaults to \code{"tufte"}. For other options please see \code{\link[tinyplot:tinytheme]{tinyplot::tinytheme()}}.
-Use \code{NULL} if no theme should be applied.}
 
 \item{show_residuals}{Logical, if \code{TRUE}, display residuals of the model
 as a background to the model-based estimation. Residuals will be computed
@@ -148,19 +153,36 @@ when using \code{tinyplot::plt()}. Should be a number between \code{0} and \code
 # tinyplot
 # ==============================================
 \donttest{
+library(tinyplot)
 data(efc, package = "modelbased")
 efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep"))
 m <- lm(neg_c_7 ~ e16sex + c172code + barthtot, data = efc)
 
 em <- estimate_means(m, "c172code")
-tinyplot::plt(em)
+plt(em)
 
+# pass additional tinyplot arguments for customization, e.g.
+plt(em, theme = "classic")
+plt(em, theme = "classic", flip = TRUE)
+# etc.
+
+# Aside: use tinyplot::tinytheme() to set a persistent theme
+tinytheme("classic")
+
+# continuous variable example
 em <- estimate_means(m, "barthtot")
-tinyplot::plt(em)
+plt(em)
 
+# grouped example
 m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
 em <- estimate_means(m, c("e16sex", "c172code"))
-tinyplot::plt(em)
+plt(em)
+
+# use plt_add (alias tinyplot_add) to add layers
+plt_add(type = "l", lty = 2)
+
+# Reset to default theme
+tinytheme()
 }
 \dontshow{\}) # examplesIf}
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0") withAutoprint(\{ # examplesIf}

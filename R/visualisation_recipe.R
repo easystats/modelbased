@@ -45,7 +45,7 @@
 #' @param point,line,pointrange,ribbon,facet,grid Additional
 #' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Arguments passed from `plot()` to `visualisation_recipe()`, or
-#' to `tinyplot()` and `tinytheme()` if you use that method.
+#' to `tinyplot()` if you use that method.
 #'
 #' @details There are two options to remove the confidence bands or errors bars
 #' from the plot. To remove error bars, simply set the `pointrange` geom to

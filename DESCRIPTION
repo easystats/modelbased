@@ -98,10 +98,11 @@ Suggests:
     rtdists,
     RWiener,
     sandwich,
+    scales,
     see (>= 0.11.0),
     survival,
     testthat (>= 3.2.1),
-    tinyplot,
+    tinyplot (>= 0.6.0),
     tinytable,
     vdiffr,
     withr
