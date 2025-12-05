@@ -16,6 +16,9 @@
 * More informative warnings and error messages were added to `estimate_contrasts()`
   when computing effect sizes.
 
+* Improved plotting methods for the *tinyplot* package. The related vignette
+  was also updated.
+
 # modelbased 0.13.0
 
 ## Changes
