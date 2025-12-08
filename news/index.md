@@ -1,5 +1,34 @@
 # Changelog
 
+## modelbased 0.13.1
+
+### Changes
+
+- The `type` argument in
+  [`estimate_grouplevel()`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)
+  gains a `"marginal"` option, to return marginal group-levels
+  estimates.
+
+- Added an
+  [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html) method
+  for *modelbased* objects.
+
+- Better formatting of the output for equivalence-tests, when the
+  `equivalence` argument was used. Related docs were added. It is also
+  possible to use
+  [`parameters::equivalence_test()`](https://easystats.github.io/bayestestR/reference/equivalence_test.html)
+  on *modelbased* objects.
+
+- Function calls are now saved as `call` attribute in *modelbased*
+  objects.
+
+- More informative warnings and error messages were added to
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  when computing effect sizes.
+
+- Improved plotting methods for the *tinyplot* package. The related
+  vignette was also updated.
+
 ## modelbased 0.13.0
 
 CRAN release: 2025-08-30
