@@ -37,7 +37,7 @@ License: GPL-3
 URL: https://easystats.github.io/modelbased/
 BugReports: https://github.com/easystats/modelbased/issues
 Depends:
-    R (>= 3.6)
+    R (>= 4.0)
 Imports:
     bayestestR (>= 0.17.0),
     datawizard (>= 1.3.0),
