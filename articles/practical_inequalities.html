@@ -129,12 +129,16 @@
       <img src="../logo.png" class="logo" alt=""><h1>Case Study: Measuring and comparing absolute and relative inequalities in R</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/v0.13.1/vignettes/practical_inequalities.Rmd" class="external-link"><code>vignettes/practical_inequalities.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/vignettes/practical_inequalities.Rmd" class="external-link"><code>vignettes/practical_inequalities.Rmd</code></a></small>
       <div class="d-none name"><code>practical_inequalities.Rmd</code></div>
     </div>
 
     
     
+<pre><code><span><span class="co">## Warning in check_dep_version(dep_pkg = "TMB"): package version mismatch: </span></span>
+<span><span class="co">## glmmTMB was built with TMB package version 1.9.18</span></span>
+<span><span class="co">## Current TMB package version is 1.9.19</span></span>
+<span><span class="co">## Please re-install glmmTMB from source or restore original 'TMB' package (see '?reinstalling' for more information)</span></span></code></pre>
 <style type="text/css">
 .custom_note {
   border-left: solid 5px hsl(220, 100%, 30%);
@@ -179,7 +183,7 @@ measures.</p>
 <h3 id="required-packages">Required Packages<a class="anchor" aria-label="anchor" href="#required-packages"></a>
 </h3>
 <p>First, let’s load the necessary libraries.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/easystats/" class="external-link">easystats</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -194,7 +198,7 @@ level, a key socioeconomic variable.</p>
 <p>Our goal is to compute absolute and relative inequality measures for
 the <code>education</code> variable to understand its overall impact on
 patients’ QoL.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load the data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">qol_cancer</span><span class="op">)</span></span>
 <span></span>
@@ -219,20 +223,20 @@ patients’ QoL.</p>
 (<code>QoL</code>) based on <code>time</code>, <code>education</code>,
 and their interaction. This allows the effect of education to vary over
 time.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit a linear model</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">QoL</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="va">education</span>, data <span class="op">=</span> <span class="va">qol_cancer</span><span class="op">)</span></span></code></pre></div>
 <p>Before calculating inequality, let’s visualize the estimated marginal
 means from our model. This plot shows how the average QoL changes over
 time for each education level. We can see clear gaps between the
 groups.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get estimated marginal means for each combination of time and education</span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"education"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot the means</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_inequalities_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="100%"></p>
+<p><img src="practical_inequalities_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="100%"></p>
 <p>The plot shows that individuals with higher education report a higher
 QoL, and these gaps appear to widen over time. Our inequality measures
 will quantify this “average gap.”</p>
@@ -261,7 +265,7 @@ two</em> education groups?”</p>
 </h3>
 <p>First, let’s look at the simple pairwise differences, averaged across
 the three time points.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate the average difference between each pair of education levels</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"education"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
@@ -286,7 +290,7 @@ measure, we can compute the mean of these differences.</p>
 the absolute inequality by setting
 <code>comparison = "inequality"</code>. This calculates the mean of the
 absolute values of all pairwise differences.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute the absolute inequality for the 'education' variable</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"education"</span>, comparison <span class="op">=</span> <span class="st">"inequality"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
@@ -330,7 +334,7 @@ High educated individuals have a QoL score that is even 1.22 times
 higher compared to those with low education, while the difference
 between middle and high education is 1.08 times. All differences are
 statistically significant.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate the ratio of means for each pair of education levels</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"education"</span>, comparison <span class="op">=</span> <span class="va">ratio</span> <span class="op">~</span> <span class="va">pairwise</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
@@ -351,7 +355,7 @@ statistically significant.</p>
 </h3>
 <p>To summarize these information and to calculate the relative
 inequality, we set <code>comparison = "inequality_ratio"</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute the relative inequality (inequality ratio)</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"education"</span>, comparison <span class="op">=</span> <span class="st">"inequality_ratio"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
@@ -380,7 +384,7 @@ differs across different subgroups or conditions.</p>
 <p>Let’s randomly split our data into two groups based on patient
 <code>ID</code> to simulate comparing inequality between, for example,
 two different treatment centers or demographic groups.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Split data and fit separate models</span></span>
 <span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">QoL</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="va">education</span>, data <span class="op">=</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_match.html" class="external-link">data_filter</a></span><span class="op">(</span><span class="va">qol_cancer</span>, <span class="va">ID</span> <span class="op">&lt;</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">QoL</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="va">education</span>, data <span class="op">=</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_match.html" class="external-link">data_filter</a></span><span class="op">(</span><span class="va">qol_cancer</span>, <span class="va">ID</span> <span class="op">&gt;=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
@@ -395,11 +399,11 @@ two different treatment centers or demographic groups.</p>
 <span></span>
 <span><span class="co"># Show plots side-by-side</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
-<p><img src="practical_inequalities_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="100%"></p>
+<p><img src="practical_inequalities_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="100%"></p>
 <p>The visual gap between education levels appears larger in Group 1.
 Let’s confirm this by calculating the absolute inequality for each
 group.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Absolute inequality in Group 1</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m1</span>, contrast <span class="op">=</span> <span class="st">"education"</span>, comparison <span class="op">=</span> <span class="st">"inequality"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
@@ -429,7 +433,7 @@ Difference = 7.27). This demonstrates how these measures can be used to
 formally test for differences in inequality across populations.</p>
 <p>It is also possible to compare the absolute inequalities across
 groups directly:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a new variable to distinguish groups</span></span>
 <span><span class="va">qol_cancer</span><span class="op">$</span><span class="va">grp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">qol_cancer</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;</span> <span class="fl">100</span>, <span class="st">"Group 1"</span>, <span class="st">"Group 2"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># fit a model with the group variable</span></span>
@@ -458,7 +462,7 @@ two groups is statistically significant. To do so, we perform a
 i.e. we simply replace <code>comparison = "inequality"</code> with
 <code>comparison = "inequality_pairwise"</code> in the
 <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> function:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate the absolute inequality for each group, and compare them</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m</span>,</span>
@@ -480,7 +484,7 @@ the two groups is 3.77, however, the p-value indicates that this
 difference is not statistically significant - the absolute inequalities
 in education are not significantly different between the two groups.</p>
 <p>The same can be done for relative inequality:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate the relative inequality for each group</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m</span>,</span>
@@ -529,7 +533,7 @@ can examine the <em>trend</em> in inequality by contrasting the slopes
 of the <code>time</code> variable across the different
 <code>education</code> groups. The results below are essentially shown
 in the two plots above.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate the slope of 'time' for each education level in the first group</span></span>
 <span><span class="co"># see also left panel of the plot above</span></span>
 <span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">m1</span>, trend <span class="op">=</span> <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"education"</span><span class="op">)</span></span>
@@ -577,7 +581,7 @@ in the two plots above.</p>
 time (Slope = -6.71), while it is stable for the ‘mid’ and ‘high’
 groups. This suggests the gap is widening. We can quantify this change
 in inequality directly.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate the inequality in the *slopes* of time</span></span>
 <span><span class="co"># This tells us if the rate of change in QoL is unequal across groups</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
@@ -617,7 +621,7 @@ are smaller in Group 2 (Mean Difference = 2.88), suggesting a more
 uniform change over time.</p>
 <p>To test if the difference in slopes is statistically significant, we
 can perform a pairwise comparison of the slopes across groups:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate the pairwise inequality in the *slopes* of time</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m</span>,</span>

@@ -2,6 +2,8 @@
 
 ## modelbased 0.13.1
 
+CRAN release: 2025-12-08
+
 ### Changes
 
 - The `type` argument in

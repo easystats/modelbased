@@ -388,8 +388,8 @@ get_emcontrasts(model)
 #> No variable was specified for contrast estimation. Selecting `contrast =
 #>   "Species"`.
 #>  contrast               estimate     SE  df t.ratio p.value
-#>  setosa - versicolor       0.658 0.0679 147   9.685  <.0001
-#>  setosa - virginica        0.454 0.0679 147   6.683  <.0001
+#>  setosa - versicolor       0.658 0.0679 147   9.685 <0.0001
+#>  setosa - virginica        0.454 0.0679 147   6.683 <0.0001
 #>  versicolor - virginica   -0.204 0.0679 147  -3.003  0.0088
 #> 
 #> P value adjustment: tukey method for comparing a family of 3 estimates 
@@ -403,7 +403,7 @@ get_emcontrasts(model)
 #>   "Species"`.
 #>  contrast               estimate    SE  df t.ratio p.value
 #>  setosa - versicolor       1.590 0.394 144   4.039  0.0003
-#>  setosa - virginica        1.774 0.413 144   4.293  0.0001
+#>  setosa - virginica        1.774 0.413 144   4.293 <0.0001
 #>  versicolor - virginica    0.184 0.145 144   1.272  0.4131
 #> 
 #> P value adjustment: tukey method for comparing a family of 3 estimates 
@@ -426,17 +426,17 @@ get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 #>  setosa Petal.Width2.5 - virginica Petal.Width2.5        2.0417 0.922 144
 #>  versicolor Petal.Width2.5 - virginica Petal.Width2.5    0.7337 0.272 144
 #>  t.ratio p.value
-#>    6.550  <.0001
-#>    4.955  <.0001
+#>    6.550 <0.0001
+#>    4.955 <0.0001
 #>   -2.057  0.3158
 #>   -2.614  0.1005
 #>    0.289  0.9997
 #>   -0.689  0.9829
 #>   -4.009  0.0013
-#>   -4.858  <.0001
-#>   -6.355  <.0001
+#>   -4.858 <0.0001
+#>   -6.355 <0.0001
 #>   -3.678  0.0044
-#>   -5.642  <.0001
+#>   -5.642 <0.0001
 #>   -4.043  0.0012
 #>    1.371  0.7441
 #>    2.214  0.2379
@@ -462,17 +462,17 @@ get_emcontrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 #>  setosa Petal.Width2 - virginica Petal.Width2         1.939 0.7160 144   2.706
 #>  versicolor Petal.Width2 - virginica Petal.Width2     0.523 0.1580 144   3.306
 #>  p.value
-#>   <.0001
-#>   <.0001
+#>  <0.0001
+#>  <0.0001
 #>   0.3158
 #>   0.5487
 #>   0.0074
 #>   0.9943
 #>   0.0100
-#>   <.0001
-#>   <.0001
+#>  <0.0001
+#>  <0.0001
 #>   0.0080
-#>   <.0001
+#>  <0.0001
 #>   0.0012
 #>   0.3840
 #>   0.0802
@@ -485,14 +485,14 @@ get_emcontrasts(model, by = "Petal.Width", length = 4)
 #>   "Species"`.
 #> Petal.Width = 0.1:
 #>  contrast               estimate    SE  df t.ratio p.value
-#>  setosa - versicolor      1.8275 0.279 144   6.550  <.0001
-#>  setosa - virginica       1.5479 0.312 144   4.955  <.0001
+#>  setosa - versicolor      1.8275 0.279 144   6.550 <0.0001
+#>  setosa - virginica       1.5479 0.312 144   4.955 <0.0001
 #>  versicolor - virginica  -0.2797 0.406 144  -0.689  0.7703
 #> 
 #> Petal.Width = 0.9:
 #>  contrast               estimate    SE  df t.ratio p.value
-#>  setosa - versicolor      1.6544 0.288 144   5.743  <.0001
-#>  setosa - virginica       1.7125 0.325 144   5.276  <.0001
+#>  setosa - versicolor      1.6544 0.288 144   5.743 <0.0001
+#>  setosa - virginica       1.7125 0.325 144   5.276 <0.0001
 #>  versicolor - virginica   0.0581 0.208 144   0.280  0.9577
 #> 
 #> Petal.Width = 1.7:

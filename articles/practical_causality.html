@@ -129,12 +129,16 @@
       <img src="../logo.png" class="logo" alt=""><h1>Case Study: Causal inference for observational data using modelbased</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/v0.13.1/vignettes/practical_causality.Rmd" class="external-link"><code>vignettes/practical_causality.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/vignettes/practical_causality.Rmd" class="external-link"><code>vignettes/practical_causality.Rmd</code></a></small>
       <div class="d-none name"><code>practical_causality.Rmd</code></div>
     </div>
 
     
     
+<pre><code><span><span class="co">## Warning in check_dep_version(dep_pkg = "TMB"): package version mismatch: </span></span>
+<span><span class="co">## glmmTMB was built with TMB package version 1.9.18</span></span>
+<span><span class="co">## Current TMB package version is 1.9.19</span></span>
+<span><span class="co">## Please re-install glmmTMB from source or restore original 'TMB' package (see '?reinstalling' for more information)</span></span></code></pre>
 <p>This vignette demonstrates how to perform causal inference with
 observational data using the <code>modelbased</code> package. While the
 examples below use the terms “treatment” and “control” groups, these
@@ -212,7 +216,7 @@ outcome, which was measured for 188 cancer patient at three time points
 simulated and not part of the original data set. Since we have repeated
 measurements, we use the <code>glmmTMB</code> package to fit a linear
 mixed model to the data.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># example</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/">modelbased</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a></span><span class="op">)</span></span>
@@ -242,7 +246,7 @@ mixed model to the data.</p>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/to_factor.html" class="external-link">to_factor</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"treatment"</span>, <span class="st">"time"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We first look at the simple effect of <code>treatment</code>, which
 is about 5.9.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># simple pooled effect</span></span>
 <span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">+</span> <span class="va">time</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">phq4</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
@@ -267,7 +271,7 @@ Potential confounders serve as independent variables in this model,
 generating predicted probabilities for each observation’s membership in
 either the treatment or control group. Based on these probabilities, the
 IPW is calculated.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># logistic regression model</span></span>
 <span><span class="va">m_ipw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span></span>
 <span>  <span class="va">treatment</span> <span class="op">~</span> <span class="va">time</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">phq4</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">age</span>,</span>
@@ -301,7 +305,7 @@ matching <span class="citation">(Li and Greene 2013; Kostouraki et al.
 (MW) and Overlap Weights (OW) here, we will use Inverse Probability
 Weighting (IPW) for illustrative purposes in the subsequent
 examples.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># calculating matching weights</span></span>
 <span><span class="va">d</span><span class="op">$</span><span class="va">matching_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
 <span>  <span class="va">d</span><span class="op">$</span><span class="va">treatment</span> <span class="op">==</span> <span class="fl">1</span>,</span>
@@ -323,7 +327,7 @@ examples.</p>
 the treatment effect, after weighting, is about 5.58 points, i.e. the
 treatment on average results in a QoL score that is 5.58 points higher
 in comparison to the non-treated group.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">+</span> <span class="va">time</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">phq4</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
 <span>  weights <span class="op">=</span> <span class="va">ipw</span>,</span>
@@ -339,7 +343,7 @@ in comparison to the non-treated group.</p>
 significant advantage in calculating contrasts between
 <code>treatment</code> levels, as the results are equivalent to a
 simpler approach.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m2</span>,</span>
 <span>  <span class="st">"treatment"</span>,</span>
@@ -369,7 +373,7 @@ over time, we need to include an interaction between
 substantially greater increase in QoL over time within the treatment
 group. In such more complex modeling scenarios, g-computation becomes
 particularly advantageous.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># interaction terms involved</span></span>
 <span><span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">*</span> <span class="va">time</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">phq4</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
@@ -385,12 +389,12 @@ particularly advantageous.</p>
 <span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
 <span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_causality_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="90%" height="90%"></p>
+<p><img src="practical_causality_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="90%" height="90%"></p>
 <p>We now see that the coefficient table is no longer helpful, because
 the treatment effect cannot be isolated. If we want to know the ATE of
 <code>treatment</code>, we need to calculate contrasts for the levels of
 our <code>treatment</code> predictor.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ATE no longer visible from coefficient table</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">m3</span>, keep <span class="op">=</span> <span class="st">"^treatment"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Fixed Effects</span></span>
@@ -427,7 +431,7 @@ overall ATE that we calculated with <code><a href="../reference/estimate_contras
 However, we can do the same using <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> and
 the <code>by</code> argument. As we can see, results are fairly
 similar.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># contrasts of treatment levels, using g-computation</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m3</span>,</span>
@@ -453,7 +457,7 @@ statistically significant? In other words, is the ATE increasing (or
 decreasing) significantly over time? We can calculate <em>interaction
 contrasts</em> (described in detail <a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html#does-difference-between-two-levels-of-episode-in-the-control-group-differ-from-difference-of-same-two-levels-in-the-treatment-group">in
 this vignette</a>) to check this!</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m3</span>,</span>
 <span>  <span class="st">"treatment"</span>,</span>
@@ -493,7 +497,7 @@ situations.</p>
 estimated difference of 5.99, the contrasts derived from the same model
 using g-computation are close to the effect we found before, with an
 estimated difference of 5.64.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># more complex model</span></span>
 <span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">*</span> <span class="va">time</span> <span class="op">+</span> <span class="va">treatment</span> <span class="op">*</span> <span class="va">education</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">phq4</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
@@ -537,7 +541,7 @@ average treatment effect on the untreated (ATU).</p>
 who already received it. Likewise, the ATU estimates how much the
 treatment would change the outcome if it were given to those who didn’t
 already receive it.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># we need the data used to fit the model - this may not be</span></span>
@@ -614,7 +618,7 @@ the <code>vcov</code> argument within the
 supports robust standard errors via the <code>sandwich</code> package
 since version 1.1.12, however, currently only the <code>"HC0"</code>
 option (which is equivalent to the Huber-White estimator).</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># complex model, with IPW *and* G-computation (double-robust) is accurate!</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m4</span>,</span>
@@ -635,7 +639,7 @@ option (which is equivalent to the Huber-White estimator).</p>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <p>A fully Bayesian approach, as demonstrated here, also provides a
 robust alternative.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Same model as m4, within a Bayesian framework, using the Stan and brms package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paul-buerkner/brms" class="external-link">brms</a></span><span class="op">)</span></span>
 <span><span class="va">m5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://paulbuerkner.com/brms/reference/brm.html" class="external-link">brm</a></span><span class="op">(</span></span>
@@ -645,7 +649,7 @@ robust alternative.</p>
 <span>  seed <span class="op">=</span> <span class="fl">123</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">d</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m5</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span>, weights <span class="op">=</span> <span class="st">"ipw"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>

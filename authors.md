@@ -21,7 +21,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/easystats/modelbased/blob/v0.13.1/inst/CITATION)
+[`inst/CITATION`](https://github.com/easystats/modelbased/blob/main/inst/CITATION)
 
 Makowski, D., Ben-Shachar, M. S., Wiernik, B. M., Patil, I., Thériault,
 R., & Lüdecke, D. (2025). modelbased: An R package to make the most out

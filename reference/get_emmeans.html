@@ -98,7 +98,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Consistent API for 'emmeans' and 'marginaleffects'</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/v0.13.1/R/get_emcontrasts.R" class="external-link"><code>R/get_emcontrasts.R</code></a>, <a href="https://github.com/easystats/modelbased/blob/v0.13.1/R/get_emmeans.R" class="external-link"><code>R/get_emmeans.R</code></a>, <a href="https://github.com/easystats/modelbased/blob/v0.13.1/R/get_emtrends.R" class="external-link"><code>R/get_emtrends.R</code></a>, and 3 more</small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/R/get_emcontrasts.R" class="external-link"><code>R/get_emcontrasts.R</code></a>, <a href="https://github.com/easystats/modelbased/blob/main/R/get_emmeans.R" class="external-link"><code>R/get_emmeans.R</code></a>, <a href="https://github.com/easystats/modelbased/blob/main/R/get_emtrends.R" class="external-link"><code>R/get_emtrends.R</code></a>, and 3 more</small>
       <div class="d-none name"><code>get_emmeans.Rd</code></div>
     </div>
 
@@ -424,8 +424,8 @@ Olea &amp; Plagborg-Møller, 2019).</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast =</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   "Species"`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  contrast               estimate     SE  df t.ratio p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - versicolor       0.658 0.0679 147   9.685  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica        0.454 0.0679 147   6.683  &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - versicolor       0.658 0.0679 147   9.685 &lt;0.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica        0.454 0.0679 147   6.683 &lt;0.0001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor - virginica   -0.204 0.0679 147  -3.003  0.0088</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 3 estimates </span>
@@ -439,7 +439,7 @@ Olea &amp; Plagborg-Møller, 2019).</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   "Species"`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  contrast               estimate    SE  df t.ratio p.value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - versicolor       1.590 0.394 144   4.039  0.0003</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica        1.774 0.413 144   4.293  0.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica        1.774 0.413 144   4.293 &lt;0.0001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor - virginica    0.184 0.145 144   1.272  0.4131</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 3 estimates </span>
@@ -462,17 +462,17 @@ Olea &amp; Plagborg-Møller, 2019).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  setosa Petal.Width2.5 - virginica Petal.Width2.5        2.0417 0.922 144</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor Petal.Width2.5 - virginica Petal.Width2.5    0.7337 0.272 144</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  t.ratio p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    6.550  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4.955  &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    6.550 &lt;0.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4.955 &lt;0.0001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -2.057  0.3158</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -2.614  0.1005</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0.289  0.9997</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -0.689  0.9829</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -4.009  0.0013</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -4.858  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -6.355  &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -4.858 &lt;0.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -6.355 &lt;0.0001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -3.678  0.0044</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -5.642  &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -5.642 &lt;0.0001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -4.043  0.0012</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    1.371  0.7441</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    2.214  0.2379</span>
@@ -498,17 +498,17 @@ Olea &amp; Plagborg-Møller, 2019).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  setosa Petal.Width2 - virginica Petal.Width2         1.939 0.7160 144   2.706</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor Petal.Width2 - virginica Petal.Width2     0.523 0.1580 144   3.306</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;0.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;0.0001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.3158</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.5487</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0074</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.9943</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;0.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;0.0001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0080</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;0.0001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0012</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.3840</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0802</span>
@@ -521,14 +521,14 @@ Olea &amp; Plagborg-Møller, 2019).</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   "Species"`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width = 0.1:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  contrast               estimate    SE  df t.ratio p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - versicolor      1.8275 0.279 144   6.550  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica       1.5479 0.312 144   4.955  &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - versicolor      1.8275 0.279 144   6.550 &lt;0.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica       1.5479 0.312 144   4.955 &lt;0.0001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor - virginica  -0.2797 0.406 144  -0.689  0.7703</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width = 0.9:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  contrast               estimate    SE  df t.ratio p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - versicolor      1.6544 0.288 144   5.743  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica       1.7125 0.325 144   5.276  &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - versicolor      1.6544 0.288 144   5.743 &lt;0.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica       1.7125 0.325 144   5.276 &lt;0.0001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor - virginica   0.0581 0.208 144   0.280  0.9577</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width = 1.7:</span>
