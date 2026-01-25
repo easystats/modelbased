@@ -1,10 +1,5 @@
 # Case Study: Causal inference for observational data using modelbased
 
-    ## Warning in check_dep_version(dep_pkg = "TMB"): package version mismatch: 
-    ## glmmTMB was built with TMB package version 1.9.18
-    ## Current TMB package version is 1.9.19
-    ## Please re-install glmmTMB from source or restore original 'TMB' package (see '?reinstalling' for more information)
-
 This vignette demonstrates how to perform causal inference with
 observational data using the `modelbased` package. While the examples
 below use the terms “treatment” and “control” groups, these labels are

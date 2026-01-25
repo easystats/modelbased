@@ -1,10 +1,5 @@
 # Case Study: Intersectionality Analysis Using The MAIHDA Framework
 
-    ## Warning in check_dep_version(dep_pkg = "TMB"): package version mismatch: 
-    ## glmmTMB was built with TMB package version 1.9.18
-    ## Current TMB package version is 1.9.19
-    ## Please re-install glmmTMB from source or restore original 'TMB' package (see '?reinstalling' for more information)
-
 This vignette demonstrate how to use *modelbased* in the context of an
 intersectional multilevel analysis of individual heterogeneity, using
 the MAIHDA framework. The general approach of the MAIHDA framework

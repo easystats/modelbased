@@ -1,10 +1,5 @@
 # Case Study: Measuring and comparing absolute and relative inequalities in R
 
-    ## Warning in check_dep_version(dep_pkg = "TMB"): package version mismatch: 
-    ## glmmTMB was built with TMB package version 1.9.18
-    ## Current TMB package version is 1.9.19
-    ## Please re-install glmmTMB from source or restore original 'TMB' package (see '?reinstalling' for more information)
-
 ## 1. Introduction: Why Summarize Effects?
 
 In the social sciences, many key variables are nominal (like race or
