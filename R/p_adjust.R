@@ -24,13 +24,22 @@
   # we have to print a different error message.
   emmeans_options <- c("scheffe", "mvt", "dunnettx")
 
-  all_methods <- c(tolower(stats::p.adjust.methods), emmeans_options, "tukey", "sidak", "esarey", "sup-t")
+  all_methods <- c(
+    tolower(stats::p.adjust.methods),
+    emmeans_options,
+    "tukey",
+    "sidak",
+    "esarey",
+    "sup-t"
+  )
   insight::validate_argument(p_adjust, all_methods)
 
   # emmeans methods? Then tell user
   if (p_adjust %in% emmeans_options) {
     insight::format_error(paste0(
-      "`p_adjust = \"", p_adjust, "\"` is only available when `backend = \"emmeans\"."
+      "`p_adjust = \"",
+      p_adjust,
+      "\"` is only available when `backend = \"emmeans\"."
     ))
   }
 
@@ -96,12 +105,16 @@
   # columns.
   coef_column <- intersect(c(.valid_coefficient_names(), "estimate"), colnames(params))[1]
   if (is.na(coef_column)) {
-    insight::format_alert("Could not find coefficient column to apply `sup-t` adjustment.")
+    insight::format_alert(
+      "Could not find coefficient column to apply `sup-t` adjustment."
+    )
     return(params)
   }
   se_column <- intersect(c("SE", "std.error"), colnames(params))[1]
   if (is.na(se_column)) {
-    insight::format_alert("Could not extract standard errors to apply `sup-t` adjustment.")
+    insight::format_alert(
+      "Could not extract standard errors to apply `sup-t` adjustment."
+    )
     return(params)
   }
   p_column <- intersect(c("p", "p.value"), colnames(params))[1]
@@ -112,7 +125,9 @@
   ci_low_column <- intersect(c("CI_low", "conf.low"), colnames(params))[1]
   ci_high_column <- intersect(c("CI_high", "conf.high"), colnames(params))[1]
   if (is.na(ci_low_column) || is.na(ci_high_column)) {
-    insight::format_alert("Could not extract confidence intervals to apply `sup-t` adjustment.")
+    insight::format_alert(
+      "Could not extract confidence intervals to apply `sup-t` adjustment."
+    )
     return(params)
   }
   df_column <- intersect(c("df", "df_error"), colnames(params))[1]
@@ -122,18 +137,30 @@
   }
   # calculate updated confidence interval level, based on simultaenous
   # confidence intervals (https://onlinelibrary.wiley.com/doi/10.1002/jae.2656)
-  crit <- mvtnorm::qmvt(ci_level, df = params[[df_column]][1], tail = "both.tails", corr = vc)$quantile
+  crit <- mvtnorm::qmvt(
+    ci_level,
+    df = params[[df_column]][1],
+    tail = "both.tails",
+    corr = vc
+  )$quantile
   # update confidence intervals
   params[[ci_low_column]] <- params[[coef_column]] - crit * params[[se_column]]
   params[[ci_high_column]] <- params[[coef_column]] + crit * params[[se_column]]
   # update p-values
   for (i in 1:nrow(params)) {
-    params[[p_column]][i] <- 1 - mvtnorm::pmvt(
-      lower = rep(-abs(stats::qt(params[[p_column]][i] / 2, df = params[[df_column]][i])), nrow(vc)),
-      upper = rep(abs(stats::qt(params[[p_column]][i] / 2, df = params[[df_column]][i])), nrow(vc)),
-      corr = vc,
-      df = params[[df_column]][i]
-    )
+    params[[p_column]][i] <- 1 -
+      mvtnorm::pmvt(
+        lower = rep(
+          -abs(stats::qt(params[[p_column]][i] / 2, df = params[[df_column]][i])),
+          nrow(vc)
+        ),
+        upper = rep(
+          abs(stats::qt(params[[p_column]][i] / 2, df = params[[df_column]][i])),
+          nrow(vc)
+        ),
+        corr = vc,
+        df = params[[df_column]][i]
+      )
   }
   # clean up - remove temporary column
   params[[".sup_df"]] <- NULL
@@ -145,7 +172,9 @@
 .p_adjust_esarey <- function(x) {
   # only for slopes
   if (!inherits(x, c("estimate_slopes", "marginaleffects_slopes"))) {
-    insight::format_error("The `esarey` p-value adjustment is only available for Johnson-Neyman intervals, i.e. when calling `estimate_slopes()` with an interaction term of two numeric predictors.") # nolint
+    insight::format_error(
+      "The `esarey` p-value adjustment is only available for Johnson-Neyman intervals, i.e. when calling `estimate_slopes()` with an interaction term of two numeric predictors."
+    ) # nolint
   }
   # get names of interaction terms
   pred <- attributes(x)$trend
@@ -153,7 +182,9 @@
 
   # check for valid values - all must be numeric
   if (!all(vapply(attributes(x)$datagrid[c(pred, mod)], is.numeric, logical(1)))) {
-    insight::format_error("The `esarey` p-value adjustment is only available for Johnson-Neyman intervals, i.e. when calling `estimate_slopes()` with an interaction term of two numeric predictors.") # nolint
+    insight::format_error(
+      "The `esarey` p-value adjustment is only available for Johnson-Neyman intervals, i.e. when calling `estimate_slopes()` with an interaction term of two numeric predictors."
+    ) # nolint
   }
 
   int <- paste0(pred, ":", mod)
@@ -186,14 +217,17 @@
   # produces a sequence of marginal effects
   marginal_effects <- beta_pred + beta_int * range_sequence
   # SEs of those marginal effects
-  me_ses <- sqrt(vcov_pred + (range_sequence^2) * vcov_int + 2 * range_sequence * vcov_pred_int)
+  me_ses <- sqrt(
+    vcov_pred + (range_sequence^2) * vcov_int + 2 * range_sequence * vcov_pred_int
+  )
 
   # t-values across range of marginal effects
   statistic <- marginal_effects / me_ses
   # degrees of freedom
   dof <- insight::get_df(model, type = "wald")
   # Get the minimum p values used in the adjustment
-  pvalues <- 2 * pmin(stats::pt(statistic, df = dof), (1 - stats::pt(statistic, df = dof)))
+  pvalues <- 2 *
+    pmin(stats::pt(statistic, df = dof), (1 - stats::pt(statistic, df = dof)))
   # Multipliers
   multipliers <- seq_along(marginal_effects) / length(marginal_effects)
   # Order the pvals

@@ -1,3 +1,9 @@
+# modelbased (devel)
+
+## Bug fixes
+
+* Fixed issue in `estimate_slope()` when `p_adjust = "esarey"`.
+
 # modelbased 0.13.1
 
 ## Changes
