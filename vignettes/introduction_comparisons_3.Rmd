@@ -265,6 +265,24 @@ pr <- estimate_means(m_mod, c("Murder", "Illiteracy=c(0.7,1.5,2.8)"))
 plot(pr) + ggplot2::facet_wrap(~Illiteracy)
 ```
 
+### P-value adjustement
+
+For Johnson-Neyman intervals, which arise from interactions between two numeric predictors, we are essentially conducting multiple comparisons across the values of the moderator. To account for this, p-values can be adjusted to avoid an inflation of type-I errors. For `estimate_slopes()`, you can use the `p_adjust` argument for this purpose. While common methods like `"holm"` or `"bonferroni"` are available, for the specific case of Johnson-Neyman intervals, the `"esarey"` or `"sup-t"` adjustments are particularly recommended. The `"sup-t"` method, for instance, computes simultaneous confidence bands (Montiel Olea & Plagborg-Møller, 2019), providing a more rigorous test for the interval.
+
+```{r}
+# we will force to calculate slopes at 200 values for "Illiteracy" using `length`
+slopes <- estimate_slopes(
+  m_mod,
+  "Murder",
+  by = "Illiteracy",
+  length = 200,
+  p_adjust = "esarey"
+)
+summary(slopes)
+```
+
+The results for the p-value adjusted spotlight analysis now suggest that values below `0.50` and above `2.80` are significantly different from zero.
+
 [Go to next vignette: **Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
 
 # References
@@ -272,5 +290,7 @@ plot(pr) + ggplot2::facet_wrap(~Illiteracy)
 Johnson, P.O. & Fay, L.C. (1950). The Johnson-Neyman technique, its theory and application. Psychometrika, 15, 349-367. doi: 10.1007/BF02288864
 
 McCabe CJ, Kim DS, King KM. (2018). Improving Present Practices in the Visual Display of Interactions. Advances in Methods and Practices in Psychological Science, 1(2):147-165. doi:10.1177/2515245917746792
+
+Montiel Olea, J. L., and Plagborg-Møller, M. (2019). Simultaneous confidence bands: Theory, implementation, and an application to SVARs. Journal of Applied Econometrics, 34(1), 1–17. doi:10.1002/jae.2656
 
 Spiller, S. A., Fitzsimons, G. J., Lynch, J. G., & McClelland, G. H. (2013). Spotlights, Floodlights, and the Magic Number Zero: Simple Effects Tests in Moderated Regression. Journal of Marketing Research, 50(2), 277–288. doi:10.1509/jmr.12.0420
