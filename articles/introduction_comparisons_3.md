@@ -398,6 +398,46 @@ plot(pr) + ggplot2::facet_wrap(~Illiteracy)
 
 ![](introduction_comparisons_3_files/figure-html/unnamed-chunk-17-1.png)
 
+#### P-value adjustement
+
+For Johnson-Neyman intervals, which arise from interactions between two
+numeric predictors, we are essentially conducting multiple comparisons
+across the values of the moderator. To account for this, p-values can be
+adjusted to avoid an inflation of type-I errors. For
+[`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md),
+you can use the `p_adjust` argument for this purpose. While common
+methods like `"holm"` or `"bonferroni"` are available, for the specific
+case of Johnson-Neyman intervals, the `"esarey"` or `"sup-t"`
+adjustments are particularly recommended. The `"sup-t"` method, for
+instance, computes simultaneous confidence bands (Montiel Olea &
+Plagborg-Møller, 2019), providing a more rigorous test for the interval.
+
+``` r
+
+slopes <- estimate_slopes(
+  m_mod,
+  "Murder",
+  by = "Illiteracy",
+  p_adjust = "esarey"
+)
+summary(slopes)
+#> Johnson-Neymann Intervals
+#> 
+#> Start |  End | Direction | Confidence     
+#> ------------------------------------------
+#> 0.50  | 0.50 | positive  | Significant    
+#> 0.76  | 1.27 | positive  | Not Significant
+#> 1.52  | 2.54 | negative  | Not Significant
+#> 2.80  | 2.80 | negative  | Significant    
+#> 
+#> Marginal effects estimated for Murder
+#> Type of slope was dY/dX
+```
+
+The results for the p-value adjusted spotlight analysis now suggest that
+values below `0.50` and above `2.80` are significantly different from
+zero.
+
 [Go to next vignette: **Contrasts and Comparisons for Generalized Linear
 Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
 
@@ -410,6 +450,10 @@ theory and application. Psychometrika, 15, 349-367. doi:
 McCabe CJ, Kim DS, King KM. (2018). Improving Present Practices in the
 Visual Display of Interactions. Advances in Methods and Practices in
 Psychological Science, 1(2):147-165. <doi:10.1177/2515245917746792>
+
+Montiel Olea, J. L., and Plagborg-Møller, M. (2019). Simultaneous
+confidence bands: Theory, implementation, and an application to SVARs.
+Journal of Applied Econometrics, 34(1), 1–17. <doi:10.1002/jae.2656>
 
 Spiller, S. A., Fitzsimons, G. J., Lynch, J. G., & McClelland, G. H.
 (2013). Spotlights, Floodlights, and the Magic Number Zero: Simple

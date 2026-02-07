@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -483,6 +483,44 @@ is not significant.</p>
 <code class="sourceCode R"><span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m_mod</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Murder"</span>, <span class="st">"Illiteracy=c(0.7,1.5,2.8)"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Illiteracy</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_comparisons_3_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="672"></p>
+</div>
+<div class="section level4">
+<h4 id="p-value-adjustement">P-value adjustement<a class="anchor" aria-label="anchor" href="#p-value-adjustement"></a>
+</h4>
+<p>For Johnson-Neyman intervals, which arise from interactions between
+two numeric predictors, we are essentially conducting multiple
+comparisons across the values of the moderator. To account for this,
+p-values can be adjusted to avoid an inflation of type-I errors. For
+<code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code>, you can use the <code>p_adjust</code>
+argument for this purpose. While common methods like <code>"holm"</code>
+or <code>"bonferroni"</code> are available, for the specific case of
+Johnson-Neyman intervals, the <code>"esarey"</code> or
+<code>"sup-t"</code> adjustments are particularly recommended. The
+<code>"sup-t"</code> method, for instance, computes simultaneous
+confidence bands (Montiel Olea &amp; Plagborg-Møller, 2019), providing a
+more rigorous test for the interval.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span></span>
+<span>  <span class="va">m_mod</span>,</span>
+<span>  <span class="st">"Murder"</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"Illiteracy"</span>,</span>
+<span>  p_adjust <span class="op">=</span> <span class="st">"esarey"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Johnson-Neymann Intervals</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Start |  End | Direction | Confidence     </span></span>
+<span><span class="co">#&gt; ------------------------------------------</span></span>
+<span><span class="co">#&gt; 0.50  | 0.50 | positive  | Significant    </span></span>
+<span><span class="co">#&gt; 0.76  | 1.27 | positive  | Not Significant</span></span>
+<span><span class="co">#&gt; 1.52  | 2.54 | negative  | Not Significant</span></span>
+<span><span class="co">#&gt; 2.80  | 2.80 | negative  | Significant    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Marginal effects estimated for Murder</span></span>
+<span><span class="co">#&gt; Type of slope was dY/dX</span></span></code></pre></div>
+<p>The results for the p-value adjusted spotlight analysis now suggest
+that values below <code>0.50</code> and above <code>2.80</code> are
+significantly different from zero.</p>
 <p><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html">Go
 to next vignette: <strong>Contrasts and Comparisons for Generalized
 Linear Models</strong></a></p>
@@ -498,6 +536,9 @@ its theory and application. Psychometrika, 15, 349-367. doi:
 <p>McCabe CJ, Kim DS, King KM. (2018). Improving Present Practices in
 the Visual Display of Interactions. Advances in Methods and Practices in
 Psychological Science, 1(2):147-165. <a href="doi:10.1177/2515245917746792" class="uri">doi:10.1177/2515245917746792</a></p>
+<p>Montiel Olea, J. L., and Plagborg-Møller, M. (2019). Simultaneous
+confidence bands: Theory, implementation, and an application to SVARs.
+Journal of Applied Econometrics, 34(1), 1–17. <a href="doi:10.1002/jae.2656" class="uri">doi:10.1002/jae.2656</a></p>
 <p>Spiller, S. A., Fitzsimons, G. J., Lynch, J. G., &amp; McClelland, G.
 H. (2013). Spotlights, Floodlights, and the Magic Number Zero: Simple
 Effects Tests in Moderated Regression. Journal of Marketing Research,
