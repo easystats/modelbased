@@ -9,8 +9,6 @@
   # extract information
   datagrid <- attributes(params)$datagrid
   focal <- attributes(params)$contrast
-  # Use .safe to handle cases where no statistic is extracted
-  statistic <- .safe(insight::get_statistic(model)$Statistic)
   # extract degrees of freedom
   dof <- .safe(params$df[1])
   if (is.null(dof)) {
@@ -61,6 +59,14 @@
     # base R adjustments
     params[["p"]] <- stats::p.adjust(params[["p"]], method = p_adjust)
   } else if (p_adjust == "tukey") {
+    # find first occurence of one of the following columns: "t", "z", or "statistic"
+    stat_cols <- c("t", "z", "statistic")
+    stat_column <- stat_cols %in% colnames(params)
+    if (any(stat_column)) {
+      statistic <- params[[stat_cols[stat_column][1]]]
+    } else {
+      statistic <- NULL
+    }
     if (!is.null(statistic)) {
       # tukey adjustment
       params[["p"]] <- suppressWarnings(stats::ptukey(
