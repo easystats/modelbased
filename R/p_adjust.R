@@ -53,7 +53,11 @@
 
   # needed for rank adjustment
   focal_terms <- datagrid[focal]
-  rank_adjust <- prod(vapply(focal_terms, insight::n_unique, numeric(1)))
+
+  # rank_adjust <- prod(vapply(focal_terms, insight::n_unique, numeric(1)))
+
+  # for contrasts, ranks = number of contrasts
+  rank_adjust <- nrow(params)
 
   if (p_adjust %in% tolower(stats::p.adjust.methods)) {
     # base R adjustments
