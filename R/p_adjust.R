@@ -70,17 +70,26 @@
       statistic <- NULL
     }
     if (!is.null(statistic)) {
-      # tukey adjustment
-      params[["p"]] <- suppressWarnings(stats::ptukey(
-        sqrt(2) * abs(statistic),
-        rank_adjust,
-        dof,
-        lower.tail = FALSE
-      ))
-      # for specific contrasts, ptukey might fail, and the tukey-adjustement
-      # could just be simple p-value calculation
-      if (all(is.na(params[["p"]]))) {
-        params[["p"]] <- 2 * stats::pt(abs(statistic), df = dof, lower.tail = FALSE)
+      if (rank_adjust < 2) {
+        if (verbose) {
+          insight::format_alert(
+            "Tukey adjustment requires at least 2 groups. P-values were not adjusted."
+          )
+        }
+      } else if (!is.null(dof) && is.finite(dof) && dof <= 0) {
+        if (verbose) {
+          insight::format_alert(
+            "Tukey adjustment requires positive degrees of freedom. P-values were not adjusted."
+          )
+        }
+      } else {
+        # tukey adjustment
+        params[["p"]] <- stats::ptukey(
+          sqrt(2) * abs(statistic),
+          rank_adjust,
+          dof,
+          lower.tail = FALSE
+        )
       }
     } else if (verbose) {
       insight::format_alert("No test-statistic found. P-values were not adjusted.")
