@@ -60,10 +60,12 @@
     params[["p"]] <- stats::p.adjust(params[["p"]], method = p_adjust)
   } else if (p_adjust == "tukey") {
     # find first occurence of one of the following columns: "t", "z", or "statistic"
-    stat_cols <- c("t", "z", "statistic")
-    stat_column <- stat_cols %in% colnames(params)
-    if (any(stat_column)) {
-      statistic <- params[[stat_cols[stat_column][1]]]
+    stat_col_name <- Find(
+      function(col) col %in% colnames(params),
+      c("t", "z", "statistic")
+    )
+    if (!is.null(stat_col_name)) {
+      statistic <- params[[stat_col_name]]
     } else {
       statistic <- NULL
     }
