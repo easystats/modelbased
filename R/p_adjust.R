@@ -8,9 +8,7 @@
 
   # extract information
   datagrid <- attributes(params)$datagrid
-  focal <- attributes(params)$contrast
-  # Use .safe to handle cases where no statistic is extracted
-  statistic <- .safe(insight::get_statistic(model)$Statistic)
+  focal <- .safe(insight::trim_ws(gsub("=.*", "\\1", attributes(params)$contrast)))
   # extract degrees of freedom
   dof <- .safe(params$df[1])
   if (is.null(dof)) {
@@ -54,25 +52,48 @@
   }
 
   # needed for rank adjustment
-  focal_terms <- datagrid[focal]
-  rank_adjust <- prod(vapply(focal_terms, insight::n_unique, numeric(1)))
+  focal_terms <- .safe(datagrid[focal])
+  if (is.null(focal_terms)) {
+    rank_adjust <- 1
+  } else {
+    rank_adjust <- prod(vapply(focal_terms, insight::n_unique, numeric(1)))
+  }
 
   if (p_adjust %in% tolower(stats::p.adjust.methods)) {
     # base R adjustments
     params[["p"]] <- stats::p.adjust(params[["p"]], method = p_adjust)
   } else if (p_adjust == "tukey") {
+    # find first occurence of one of the following columns: "t", "z", or "statistic"
+    stat_col_name <- Find(
+      function(col) col %in% colnames(params),
+      c("t", "z", "statistic")
+    )
+    if (!is.null(stat_col_name)) {
+      statistic <- params[[stat_col_name]]
+    } else {
+      statistic <- NULL
+    }
     if (!is.null(statistic)) {
-      # tukey adjustment
-      params[["p"]] <- suppressWarnings(stats::ptukey(
-        sqrt(2) * abs(statistic),
-        rank_adjust,
-        dof,
-        lower.tail = FALSE
-      ))
-      # for specific contrasts, ptukey might fail, and the tukey-adjustement
-      # could just be simple p-value calculation
-      if (all(is.na(params[["p"]]))) {
-        params[["p"]] <- 2 * stats::pt(abs(statistic), df = dof, lower.tail = FALSE)
+      if (rank_adjust < 2) {
+        if (verbose) {
+          insight::format_alert(
+            "Tukey adjustment requires at least 2 groups. P-values were not adjusted."
+          )
+        }
+      } else if (!is.null(dof) && is.finite(dof) && dof <= 0) {
+        if (verbose) {
+          insight::format_alert(
+            "Tukey adjustment requires positive degrees of freedom. P-values were not adjusted."
+          )
+        }
+      } else {
+        # tukey adjustment
+        params[["p"]] <- stats::ptukey(
+          sqrt(2) * abs(statistic),
+          rank_adjust,
+          dof,
+          lower.tail = FALSE
+        )
       }
     } else if (verbose) {
       insight::format_alert("No test-statistic found. P-values were not adjusted.")

@@ -265,7 +265,7 @@ pr <- estimate_means(m_mod, c("Murder", "Illiteracy=c(0.7,1.5,2.8)"))
 plot(pr) + ggplot2::facet_wrap(~Illiteracy)
 ```
 
-### P-value adjustement
+### P-value adjustment
 
 For Johnson-Neyman intervals, which arise from interactions between two numeric predictors, we are essentially conducting multiple comparisons across the values of the moderator. To account for this, p-values can be adjusted to avoid an inflation of type-I errors. For `estimate_slopes()`, you can use the `p_adjust` argument for this purpose. While common methods like `"holm"` or `"bonferroni"` are available, for the specific case of Johnson-Neyman intervals, the `"esarey"` or `"sup-t"` adjustments are particularly recommended. The `"sup-t"` method, for instance, computes simultaneous confidence bands (Montiel Olea & Plagborg-Møller, 2019), providing a more rigorous test for the interval.
 

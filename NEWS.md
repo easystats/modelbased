@@ -4,6 +4,8 @@
 
 * Fixed issue in `estimate_slope()` when `p_adjust = "esarey"`.
 
+* Fixed issue in `estimate_contrasts()` when `p_adjust = "tukey"`.
+
 # modelbased 0.13.1
 
 ## Changes

@@ -146,11 +146,6 @@ get_marginalcontrasts <- function(
   # `by="Petal.Width=c(1, 2)"`)
   out <- .filter_contrasts_average(out, my_args)
 
-  # adjust p-values
-  if (!model_info$is_bayesian) {
-    out <- .p_adjust(model, out, p_adjust, verbose, ...)
-  }
-
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
@@ -169,8 +164,17 @@ get_marginalcontrasts <- function(
     )
   )
 
+  # adjust p-values - we do this here because we need all the information
+  # from the attributes
+  if (!model_info$is_bayesian) {
+    out <- .p_adjust(model, out, p_adjust, verbose, ...)
+  }
+
   # remove "estimate_means" class attribute
-  class(out) <- setdiff(unique(c("marginaleffects_contrasts", class(out))), "estimate_means")
+  class(out) <- setdiff(
+    unique(c("marginaleffects_contrasts", class(out))),
+    "estimate_means"
+  )
   out
 }
 
@@ -191,7 +195,8 @@ get_marginalcontrasts <- function(
         example_values <- sample(unique(out[[i]]), pmin(3, insight::n_unique(out[[i]])))
         # tell user...
         insight::format_error(paste0(
-          "None of the values specified for the predictor `", i,
+          "None of the values specified for the predictor `",
+          i,
           "` are available in the data. This is required for `estimate=\"average\"`.",
           " Either use a different option for the `estimate` argument, or use values that",
           " are present in the data, such as ",
@@ -217,11 +222,13 @@ get_marginalcontrasts <- function(
 # in the marginaleffects package, and extract the potential filter values used
 # in `by` and `contrast` (if any), to "clean" these arguments and save the levels
 # or values at which rows should be filtered later...
-.get_marginaleffects_hypothesis_argument <- function(comparison,
-                                                     my_args,
-                                                     model_data = NULL,
-                                                     estimate = NULL,
-                                                     ...) {
+.get_marginaleffects_hypothesis_argument <- function(
+  comparison,
+  my_args,
+  model_data = NULL,
+  estimate = NULL,
+  ...
+) {
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
   joint_test <- FALSE
@@ -235,7 +242,8 @@ get_marginalcontrasts <- function(
   # contrasts (but only for `estimate = "average"`!). Furthermore, "clean" `by`
   # argument (remove filter), because we need the pure variable name for setting
   # up the hypothesis argument, where variables in `by` are used in the formula
-  if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
+  if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) {
+    # "[^0-9A-Za-z\\._]"
     # find which element in `by` has a filter
     filter_index <- grep("=", my_args$by, fixed = TRUE)
     for (f in filter_index) {
@@ -269,7 +277,12 @@ get_marginalcontrasts <- function(
   # values for later use. we only need this for `estimate = "average"`, because
   # that is the only situation where we do *not* use a data grid, which we else
   # could use for filtering, by dropping not-wanted rows from the grid.
-  if (identical(estimate, "average") && !is.null(my_args$contrast) && any(grepl("=", my_args$contrast, fixed = TRUE))) { # nolint
+  if (
+    identical(estimate, "average") &&
+      !is.null(my_args$contrast) &&
+      any(grepl("=", my_args$contrast, fixed = TRUE))
+  ) {
+    # nolint
     # find which element in `by` has a filter
     filter_index <- grep("=", my_args$contrast, fixed = TRUE)
     for (f in filter_index) {
@@ -332,12 +345,7 @@ get_marginalcontrasts <- function(
       }
       # for some comparisons, we need an empty left-hand side. else, we default
       # to "difference".
-      formula_lhs <- switch(
-        comparison,
-        poly = ,
-        helmert = "",
-        "difference"
-      )
+      formula_lhs <- switch(comparison, poly = , helmert = "", "difference")
       formula_rhs <- comparison
     }
     # we put "by" into the formula. user either provided "by", or we put the
@@ -419,10 +427,22 @@ get_marginalcontrasts <- function(
 
 .valid_hypothesis_strings <- function() {
   c(
-    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
-    "revpairwise", "revreference", "revsequential", "poly", "helmert",
-    "trt_vs_ctrl", "joint", "inequality", "inequality_pairwise",
-    "inequality_ratio", "inequality_ratio_pairwise"
+    "pairwise",
+    "reference",
+    "sequential",
+    "meandev",
+    "meanotherdev",
+    "revpairwise",
+    "revreference",
+    "revsequential",
+    "poly",
+    "helmert",
+    "trt_vs_ctrl",
+    "joint",
+    "inequality",
+    "inequality_pairwise",
+    "inequality_ratio",
+    "inequality_ratio_pairwise"
   )
 }
 
@@ -445,9 +465,12 @@ get_marginalcontrasts <- function(
   match_lengths <- attr(matches, "match.length")
 
   # extract all "b" strings, so we have a vector of all "b" used in the comparison
-  unlist(lapply(seq_along(matches), function(i) {
-    substr(comparison, matches[i], matches[i] + match_lengths[i] - 1)
-  }), use.names = FALSE)
+  unlist(
+    lapply(seq_along(matches), function(i) {
+      substr(comparison, matches[i], matches[i] + match_lengths[i] - 1)
+    }),
+    use.names = FALSE
+  )
 }
 
 
@@ -458,7 +481,10 @@ get_marginalcontrasts <- function(
   # this is the row-order we use in modelbased
   datagrid$.rowid <- 1:nrow(datagrid)
   # this is the row-order in marginaleffects
-  datagrid <- datawizard::data_arrange(datagrid, colnames(datagrid)[1:(length(datagrid) - 1)])
+  datagrid <- datawizard::data_arrange(
+    datagrid,
+    colnames(datagrid)[1:(length(datagrid) - 1)]
+  )
   # we need to extract all b's and the former parameter numbers
   b <- .extract_custom_comparison(comparison)
   old_b_numbers <- as.numeric(gsub("b", "", b, fixed = TRUE))
