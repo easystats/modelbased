@@ -700,7 +700,7 @@ test_that("estimate_contrasts - p.adjust", {
     tolerance = 1e-3
   )
 
-  skip_if_not(getRversion() < "4.5.0")
+  skip_if(getRversion() < "4.5.0")
   skip_if_not_installed("emmeans")
 
   data(penguins)
