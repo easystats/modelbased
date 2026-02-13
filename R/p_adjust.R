@@ -8,7 +8,7 @@
 
   # extract information
   datagrid <- attributes(params)$datagrid
-  focal <- attributes(params)$contrast
+  focal <- .safe(insight::trim_ws(gsub("=.*", "\\1", attributes(params)$contrast)))
   # extract degrees of freedom
   dof <- .safe(params$df[1])
   if (is.null(dof)) {
@@ -52,8 +52,12 @@
   }
 
   # needed for rank adjustment
-  focal_terms <- datagrid[focal]
-  rank_adjust <- prod(vapply(focal_terms, insight::n_unique, numeric(1)))
+  focal_terms <- .safe(datagrid[focal])
+  if (is.null(focal_terms)) {
+    rank_adjust <- 1
+  } else {
+    rank_adjust <- prod(vapply(focal_terms, insight::n_unique, numeric(1)))
+  }
 
   if (p_adjust %in% tolower(stats::p.adjust.methods)) {
     # base R adjustments
