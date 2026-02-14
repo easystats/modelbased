@@ -465,7 +465,12 @@ estimate_means <- function(
   }
 
   # sanity check - did method return standard errors?
-  .check_standard_errors(out = means, model = model, verbose = verbose)
+  .check_standard_errors(
+    out = means,
+    by = attributes(means)$by,
+    model = model,
+    verbose = verbose
+  )
 
   # restore attributes later
   info <- attributes(estimated)

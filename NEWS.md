@@ -6,6 +6,8 @@
 
 * Fixed issue in `estimate_contrasts()` when `p_adjust = "tukey"`.
 
+* Fixed error with truncated message when standard errors could not be calculated.
+
 # modelbased 0.13.1
 
 ## Changes
