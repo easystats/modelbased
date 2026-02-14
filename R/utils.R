@@ -117,7 +117,7 @@
     # add example code, if valid
     if (!is.null(by_vars)) {
       msg <- c(
-        paste0(msg, "You may try following:"),
+        paste(msg, "You may try following:"),
         insight::color_text(code_snippet, "green"),
         "\n"
       )
