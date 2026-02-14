@@ -2,8 +2,24 @@
 #' @noRd
 .brms_aux_elements <- function(model = NULL) {
   out <- c(
-    "sigma", "mu", "nu", "shape", "beta", "phi", "hu", "ndt", "zoi", "coi",
-    "kappa", "bias", "bs", "zi", "alpha", "xi", "delta", "k"
+    "sigma",
+    "mu",
+    "nu",
+    "shape",
+    "beta",
+    "phi",
+    "hu",
+    "ndt",
+    "zoi",
+    "coi",
+    "kappa",
+    "bias",
+    "bs",
+    "zi",
+    "alpha",
+    "xi",
+    "delta",
+    "k"
   )
   unique(c(out, insight::find_auxiliary(model, verbose = FALSE)))
 }
@@ -13,8 +29,17 @@
 #' @noRd
 .valid_coefficient_names <- function(model = NULL) {
   out <- c(
-    "Mean", "Probability", "Difference", "Ratio", "Rate", "ZI-Probability",
-    "Proportion", "Median", "MAP", "Coefficient", "Odds_ratio"
+    "Mean",
+    "Probability",
+    "Difference",
+    "Ratio",
+    "Rate",
+    "ZI-Probability",
+    "Proportion",
+    "Median",
+    "MAP",
+    "Coefficient",
+    "Odds_ratio"
   )
   dpars <- insight::find_auxiliary(model, verbose = FALSE)
   if (!is.null(dpars)) {
@@ -46,13 +71,15 @@
 
 #' @keywords internal
 #' @noRd
-.check_standard_errors <- function(out,
-                                   by = NULL,
-                                   contrast = NULL,
-                                   model = NULL,
-                                   model_name = "model",
-                                   verbose = TRUE,
-                                   ...) {
+.check_standard_errors <- function(
+  out,
+  by = NULL,
+  contrast = NULL,
+  model = NULL,
+  model_name = "model",
+  verbose = TRUE,
+  ...
+) {
   if (!verbose || is.null(out$SE)) {
     return(NULL)
   }
@@ -85,11 +112,15 @@
     code_snippet <- paste0(code_snippet, "\n)")
     # setup message
     msg <- insight::format_message(
-      "Could not calculate standard errors for contrasts. This can happen when random effects are involved. You may try following:"
+      "Could not calculate standard errors for contrasts. This can happen when random effects are involved."
     )
     # add example code, if valid
     if (!is.null(by_vars)) {
-      msg <- c(msg, insight::color_text(code_snippet, "green"), "\n")
+      msg <- c(
+        paste(msg, "You may try following:"),
+        insight::color_text(code_snippet, "green"),
+        "\n"
+      )
     }
     message(msg)
 
@@ -145,7 +176,11 @@
   }
 
   # no need to check if check is disabled
-  if (is.null(integer_as_continuous) || is.na(integer_as_continuous) || isTRUE(integer_as_continuous)) {
+  if (
+    is.null(integer_as_continuous) ||
+      is.na(integer_as_continuous) ||
+      isTRUE(integer_as_continuous)
+  ) {
     return(FALSE)
   }
 
