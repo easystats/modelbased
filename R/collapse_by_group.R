@@ -34,7 +34,7 @@ collapse_by_group <- function(grid, model, collapse_by = NULL, residuals = FALSE
 
   model_data <- insight::get_data(model, source = "frame", verbose = FALSE)
 
-  if (is.null(collapse_by) || isTRUE(residuals)) {
+  if (is.null(collapse_by) || isTRUE(collapse_by) || isTRUE(residuals)) {
     collapse_by <- insight::find_random(model, flatten = TRUE)
   }
 
