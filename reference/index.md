@@ -29,6 +29,8 @@
   [`visualisation_recipe(`*`<estimate_slopes>`*`)`](https://easystats.github.io/modelbased/reference/visualisation_recipe.estimate_predicted.md)
   [`visualisation_recipe(`*`<estimate_grouplevel>`*`)`](https://easystats.github.io/modelbased/reference/visualisation_recipe.estimate_predicted.md)
   : Automated plotting for 'modelbased' objects
+- [`collapse_by_group()`](https://easystats.github.io/modelbased/reference/collapse_by_group.md)
+  : Collapse raw data by random effect groups
 - [`residualize_over_grid()`](https://easystats.github.io/modelbased/reference/residualize_over_grid.md)
   : Compute partial residuals from a data grid
 

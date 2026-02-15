@@ -36,6 +36,7 @@ tinyplot(
   type = NULL,
   dodge = NULL,
   show_data = FALSE,
+  collapse_group = NULL,
   numeric_as_discrete = NULL,
   ...
 )
@@ -45,6 +46,7 @@ visualisation_recipe(
   x,
   show_data = FALSE,
   show_residuals = FALSE,
+  collapse_group = NULL,
   point = NULL,
   line = NULL,
   pointrange = NULL,
@@ -109,11 +111,24 @@ visualisation_recipe(
 - show_data:
 
   Logical, if `TRUE`, display the "raw" data as a background to the
-  model-based estimation. This argument will be ignored for plotting
+  model-based estimation. For mixed models, you can additionally use the
+  `collapse_group` argument to "collapse" data points by random effects
+  grouping factors. Argument `show_data` will be ignored for plotting
   objects returned by
   [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
   or
   [`estimate_grouplevel()`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md).
+
+- collapse_group:
+
+  This argument only takes effect when either `show_data` or
+  `show_residuals` is `TRUE`. For mixed effects models, name of the
+  grouping variable of random effects. If `collapse_group = TRUE`, data
+  points "collapsed" by the first random effect groups are added to the
+  plot. Else, if `collapse_group` is a name of a group factor, data is
+  collapsed by that specific random effect. See
+  [`collapse_by_group()`](https://easystats.github.io/modelbased/reference/collapse_by_group.md)
+  for further details.
 
 - numeric_as_discrete:
 
@@ -134,6 +149,9 @@ visualisation_recipe(
   the model-based estimation. Residuals will be computed for the
   predictors in the data grid, using
   [`residualize_over_grid()`](https://easystats.github.io/modelbased/reference/residualize_over_grid.md).
+  For mixed models, you can additionally use the `collapse_group`
+  argument to "collapse" data points from residuals by random effects
+  grouping factors.
 
 - point, line, pointrange, ribbon, facet, grid:
 
@@ -375,11 +393,27 @@ x <- estimate_means(model, by = c("cyl", "wt"))
 plot(x)
 
 
-
 # GLMs ---------------------
 data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
 x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"), by = c("cyl"))
 plot(x)
+
+
+# ==============================================
+# Adding original data to the plot
+# ==============================================
+data(efc, package = "modelbased")
+efc$e15relat <- as.factor(efc$e15relat)
+efc$c161sex <- as.factor(efc$c161sex)
+levels(efc$c161sex) <- c("male", "female")
+model <- lme4::lmer(neg_c_7 ~ c161sex + (1 | e15relat), data = efc)
+
+me <- estimate_means(model, "c161sex")
+plot(me, show_data = TRUE)
+
+
+# data points: collapse by / average over random effects groups -------
+plot(me, show_data = TRUE, collapse_group = "e15relat")
 
 # }
 # ==============================================

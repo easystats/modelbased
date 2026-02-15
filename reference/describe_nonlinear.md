@@ -50,6 +50,6 @@ link_data <- estimate_relation(model, length = 100)
 describe_nonlinear(link_data, x = "x")
 #> Start |   End | Length | Change | Slope |   R2
 #> ----------------------------------------------
-#> -2.61 | -0.06 |   0.47 |  -6.58 | -2.58 | 0.02
+#> -2.61 | -0.06 |   0.47 |  -6.57 | -2.58 | 0.02
 #> -0.06 |  2.75 |   0.52 |   7.53 |  2.67 | 0.02
 ```

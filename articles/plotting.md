@@ -257,3 +257,87 @@ estimate_means(m, c("c12hour", "e16sex"), length = 200) |> plot()
 ```
 
 ![](plotting_files/figure-html/unnamed-chunk-14-1.png)
+
+## Adding raw data points or partial residuals to the plot
+
+It is possible to add a layer with the original data points to the plot
+using `show_data = TRUE`.
+
+``` r
+
+set.seed(1234)
+x <- rnorm(200)
+z <- rnorm(200)
+# quadratic relationship
+y <- 2 * x + x^2 + 4 * z + rnorm(200)
+
+d <- data.frame(x, y, z)
+m <- lm(y ~ x + z, data = d)
+pr <- estimate_means(m, "x")
+
+plot(pr, show_data = TRUE)
+```
+
+![](plotting_files/figure-html/unnamed-chunk-15-1.png)
+
+Plotting partial residuals on top of the estimated marginal means allows
+detecting missed modeling, like unmodeled non-linear relationships or
+unmodeled interactions. In a nutshell, it allows *Visualizing Fit and
+Lack of Fit in Complex Regression Models with Predictor Effect Plots and
+Partial Residuals* (Fox & Weisberg 2018).
+
+To add partial residuals to a plot, add `show_residuals = TRUE` to the
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) function call.
+Unlike plotting raw data, partial residuals are much better in detecting
+spurious patterns of relationships between predictors and outcome. In
+the above example, we have a non-linear relationship. The missed pattern
+is not obvious when looking at the raw data, however, it becomes more
+apparent when plotting the partial residuals.
+
+``` r
+
+plot(pr, show_residuals = TRUE)
+```
+
+![](plotting_files/figure-html/unnamed-chunk-16-1.png)
+
+Data points will also be colored by groups automatically.
+
+``` r
+
+m <- lm(neg_c_7 ~ e16sex * c172code, data = efc)
+emm <- estimate_means(m, c("e16sex", "c172code"))
+plot(
+  emm,
+  show_data = TRUE, # show data points
+  point = list(size = 2.5) # adjust point geoms, increase size
+) + facet_wrap(~c172code) # facet panels (group by category)
+```
+
+For mixed models, data points can be “collapsed” (i.e. averaged over)
+grouping variables from the random effects. First, we show an example
+that includes all data points.
+
+``` r
+
+library(lme4)
+
+data(efc)
+efc$e15relat <- as.factor(efc$e15relat)
+efc$c161sex <- as.factor(efc$c161sex)
+levels(efc$c161sex) <- c("male", "female")
+model <- lmer(neg_c_7 ~ c161sex + (1 | e15relat), data = efc)
+
+me <- estimate_means(model, "c161sex")
+plot(me, show_data = TRUE)
+```
+
+Next, we specify the `collapse_group` argument, to tell the
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) function to
+“average” data points over the random effects groups, represented by the
+`e15relat` variable.
+
+``` r
+
+plot(me, show_data = TRUE, collapse_group = "e15relat")
+```
