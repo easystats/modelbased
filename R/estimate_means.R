@@ -238,7 +238,8 @@
 #'   integer variables as numerics (and possibly produce fractions).
 #'
 #' See also [this vignette](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
-#' for some examples.
+#' for some examples, and [`insight::get_datagrid()`] to learn more about how to
+#' create data grids for predictors of interest.
 #'
 #' @section Predictions on different scales:
 #'
