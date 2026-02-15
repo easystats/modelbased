@@ -142,8 +142,16 @@ estimate_slopes <- function(
     backend <- getOption("modelbased_backend", "marginaleffects")
   }
 
+  trend_missing <- missing(trend)
+
   # handle alias
-  if (missing(trend)) {
+  if (!trend_missing && !missing(slope) && !identical(trend, slope)) {
+    insight::format_warning(
+      "Both `slope` and `trend` were provided with different values. Please use only `slope` in future code."
+    )
+    trend <- slope
+  }
+  if (trend_missing) {
     trend <- slope
   }
 
