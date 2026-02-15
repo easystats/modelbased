@@ -74,7 +74,7 @@ the dodging behavior is determined by the number of groups and
 \code{getOption("modelbased_tinyplot_dodge")}.}
 
 \item{show_data}{Logical, if \code{TRUE}, display the "raw" data as a background
-to the model-based estimation. For mixed models, you can additional use the
+to the model-based estimation. For mixed models, you can additionally use the
 \code{collapse_group} argument to "collapse" data points by random effects
 grouping factors. Argument \code{show_data} will be ignored for plotting objects
 returned by \code{estimate_slopes()} or \code{estimate_grouplevel()}.}
@@ -99,7 +99,7 @@ e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
 \item{show_residuals}{Logical, if \code{TRUE}, display residuals of the model as a
 background to the model-based estimation. Residuals will be computed for the
 predictors in the data grid, using \code{\link[=residualize_over_grid]{residualize_over_grid()}}. For mixed
-models, you can additional use the \code{collapse_group} argument to "collapse"
+models, you can additionally use the \code{collapse_group} argument to "collapse"
 data points from residuals by random effects grouping factors.}
 
 \item{point, line, pointrange, ribbon, facet, grid}{Additional

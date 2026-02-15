@@ -23,7 +23,7 @@
 #'
 #' @param x A modelbased object.
 #' @param show_data Logical, if `TRUE`, display the "raw" data as a background
-#' to the model-based estimation. For mixed models, you can additional use the
+#' to the model-based estimation. For mixed models, you can additionally use the
 #' `collapse_group` argument to "collapse" data points by random effects
 #' grouping factors. Argument `show_data` will be ignored for plotting objects
 #' returned by `estimate_slopes()` or `estimate_grouplevel()`.
@@ -44,7 +44,7 @@
 #' @param show_residuals Logical, if `TRUE`, display residuals of the model as a
 #' background to the model-based estimation. Residuals will be computed for the
 #' predictors in the data grid, using [`residualize_over_grid()`]. For mixed
-#' models, you can additional use the `collapse_group` argument to "collapse"
+#' models, you can additionally use the `collapse_group` argument to "collapse"
 #' data points from residuals by random effects grouping factors.
 #' @param collapse_group This argument only takes effect when either `show_data`
 #' or `show_residuals` is `TRUE`. For mixed effects models, name of the grouping

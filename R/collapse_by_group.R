@@ -75,7 +75,13 @@ collapse_by_group <- function(grid, model, collapse_by = NULL, residuals = FALSE
     } # else ordinal?
   }
 
-  rawdata$random <- factor(model_data[[collapse_by]])
+  if (nrow(rawdata) == nrow(model_data)) {
+    rawdata$random <- factor(model_data[[collapse_by]])
+  } else if (collapse_by %in% colnames(rowdata)) {
+    rawdata$random <- factor(rawdata[[collapse_by]])
+  } else {
+    insight::format_error(paste0("Could not find `", collapse_by, "` column."))
+  }
 
   agg_data <- stats::aggregate(
     rawdata[[y_name]],
