@@ -60,7 +60,8 @@ collapse_by_group <- function(grid, model, collapse_by = NULL, residuals = FALSE
     # we need this column for labelling data points, but not for collapsing
     rawdata$rowname <- NULL
 
-    if (any(vapply(rawdata[-(1:2)], Negate(is.factor), logical(1)))) {
+    predictor_names <- setdiff(colnames(rawdata), y_name)
+    if (any(vapply(rawdata[predictor_names], Negate(is.factor), logical(1)))) {
       insight::format_alert(
         "Collapsing usually not informative across a continuous variable."
       )
