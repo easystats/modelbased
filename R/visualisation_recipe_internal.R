@@ -604,12 +604,6 @@
   model <- attributes(x)$model
   rawdata <- collapse_by_group(x, model, collapse_by, residuals = show_residuals)
 
-  # Add response to data if not there
-  y <- insight::find_response(model)
-  if (!y %in% names(rawdata)) {
-    rawdata[y] <- insight::get_response(model, verbose = FALSE)
-  }
-
   # if we have less than 8 values for the legend, a continuous color scale
   # is used by default - we then must convert values into factors, when we
   # show data or residuals - but we must ensure that the levels are sorted
@@ -630,7 +624,7 @@
     model = model,
     aes = aes,
     data = rawdata,
-    y = y,
+    y = insight::find_response(model),
     size = 2.5,
     jitter = 0.1
   )
