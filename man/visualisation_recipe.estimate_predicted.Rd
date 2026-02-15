@@ -26,6 +26,7 @@
   x,
   show_data = FALSE,
   show_residuals = FALSE,
+  collapse_group = NULL,
   point = NULL,
   line = NULL,
   pointrange = NULL,
@@ -88,6 +89,12 @@ e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
 \item{show_residuals}{Logical, if \code{TRUE}, display residuals of the model
 as a background to the model-based estimation. Residuals will be computed
 for the predictors in the data grid, using \code{\link[=residualize_over_grid]{residualize_over_grid()}}.}
+
+\item{collapse_group}{For mixed effects models, name of the grouping variable
+of random effects. If \code{collapse_group = TRUE}, data points "collapsed" by the
+first random effect groups are added to the plot. Else, if \code{collapse_group}
+is a name of a group factor, data is collapsed by that specific random
+effect. See \code{\link[=collapse_by_group]{collapse_by_group()}} for further details.}
 
 \item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}

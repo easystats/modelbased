@@ -42,6 +42,11 @@
 #' @param show_residuals Logical, if `TRUE`, display residuals of the model
 #' as a background to the model-based estimation. Residuals will be computed
 #' for the predictors in the data grid, using [`residualize_over_grid()`].
+#' @param collapse_group For mixed effects models, name of the grouping variable
+#' of random effects. If `collapse_group = TRUE`, data points "collapsed" by the
+#' first random effect groups are added to the plot. Else, if `collapse_group`
+#' is a name of a group factor, data is collapsed by that specific random
+#' effect. See [`collapse_by_group()`] for further details.
 #' @param point,line,pointrange,ribbon,facet,grid Additional
 #' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Arguments passed from `plot()` to `visualisation_recipe()`, or
@@ -159,18 +164,21 @@
 #' plot(x)
 #' }
 #' @export
-visualisation_recipe.estimate_predicted <- function(x,
-                                                    show_data = FALSE,
-                                                    show_residuals = FALSE,
-                                                    point = NULL,
-                                                    line = NULL,
-                                                    pointrange = NULL,
-                                                    ribbon = NULL,
-                                                    facet = NULL,
-                                                    grid = NULL,
-                                                    join_dots = NULL,
-                                                    numeric_as_discrete = NULL,
-                                                    ...) {
+visualisation_recipe.estimate_predicted <- function(
+  x,
+  show_data = FALSE,
+  show_residuals = FALSE,
+  collapse_group = NULL,
+  point = NULL,
+  line = NULL,
+  pointrange = NULL,
+  ribbon = NULL,
+  facet = NULL,
+  grid = NULL,
+  join_dots = NULL,
+  numeric_as_discrete = NULL,
+  ...
+) {
   # Process argument ---------------------------------------------------------
   # --------------------------------------------------------------------------
 
@@ -186,6 +194,7 @@ visualisation_recipe.estimate_predicted <- function(x,
     x,
     show_data = show_data,
     show_residuals = show_residuals,
+    collapse_by = collapse_group,
     point = point,
     line = line,
     pointrange = pointrange,
@@ -233,13 +242,15 @@ visualisation_recipe.estimate_means <- visualisation_recipe.estimate_predicted
 #' plot(visualisation_recipe(x))
 #' }
 #' @export
-visualisation_recipe.estimate_slopes <- function(x,
-                                                 line = NULL,
-                                                 pointrange = NULL,
-                                                 ribbon = NULL,
-                                                 facet = NULL,
-                                                 grid = NULL,
-                                                 ...) {
+visualisation_recipe.estimate_slopes <- function(
+  x,
+  line = NULL,
+  pointrange = NULL,
+  ribbon = NULL,
+  facet = NULL,
+  grid = NULL,
+  ...
+) {
   .visualization_recipe(
     x,
     show_data = FALSE,
@@ -285,13 +296,15 @@ visualisation_recipe.estimate_slopes <- function(x,
 #' plot(x)
 #' }
 #' @export
-visualisation_recipe.estimate_grouplevel <- function(x,
-                                                     line = NULL,
-                                                     pointrange = NULL,
-                                                     ribbon = NULL,
-                                                     facet = NULL,
-                                                     grid = NULL,
-                                                     ...) {
+visualisation_recipe.estimate_grouplevel <- function(
+  x,
+  line = NULL,
+  pointrange = NULL,
+  ribbon = NULL,
+  facet = NULL,
+  grid = NULL,
+  ...
+) {
   if (is.null(facet)) {
     facet <- list(scales = "free")
   } else {
