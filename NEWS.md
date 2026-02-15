@@ -1,5 +1,14 @@
 # modelbased (devel)
 
+## Changes
+
+* New function `collapse_by_group()`, which extracts the raw data points and
+  "averages" (i.e. "collapses") the response variable over the levels of the
+  grouping factor given in `collapse_by`. Only works with mixed models.
+  Additionally, the `plot()` and `visualization_recipe()` methods get a
+  `collapse_group` argument to use this feature when adding data points to plots
+  using `show_data` or `show_residuals`.
+
 ## Bug fixes
 
 * Fixed issue in `estimate_slope()` when `p_adjust = "esarey"`.
