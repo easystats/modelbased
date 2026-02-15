@@ -13,9 +13,12 @@ test_that("estimate_slopes", {
 
   # aliases
   estim1 <- estimate_slopes(model, slope = "Petal.Length")
-  estim2 <- estimate_slopes(model, trend = "Petal.Length")
+  # "trend" is an alias, we expect no message or warning here
+  expect_silent({
+    estim2 <- estimate_slopes(model, trend = "Petal.Length")
+  })
   expect_equal(estim1$Slope, estim2$Slope, tolerance = 1e-4)
-
+  # if both "slope" and "trend" are provided, warn
   expect_warning(
     {
       estim3 <- estimate_slopes(model, slope = "Petal.Length", trend = "Species")
