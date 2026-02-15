@@ -2,8 +2,10 @@
 
 #' @export
 standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
+  model <- insight::get_model(x)
+
   # Get data of predictors
-  data <- insight::get_data(attributes(x)$model, verbose = FALSE, ...)
+  data <- insight::get_data(model, verbose = FALSE, ...)
   data[[attributes(x)$response]] <- NULL # Remove resp from data
 
   # Standardize predictors
@@ -12,8 +14,6 @@ standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
     reference = data,
     ...
   )
-
-  model <- insight::get_model(x)
 
   # Standardize response
   if (include_response && insight::model_info(model, response = 1)$is_linear) {
