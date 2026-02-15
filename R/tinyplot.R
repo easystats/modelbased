@@ -191,7 +191,7 @@ tinyplot.estimate_means <- function(
 
   if (show_data) {
     # extract raw data from the model
-    model <- attributes(x)$model
+    model <- insight::get_model(x)
     if (is.null(collapse_group)) {
       rawdata <- as.data.frame(insight::get_data(model, verbose = FALSE))
     } else {
