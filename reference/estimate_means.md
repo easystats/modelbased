@@ -361,7 +361,9 @@ so consult its documentation for more details.
 
 See also [this
 vignette](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
-for some examples.
+for some examples, and
+[`insight::get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html)
+to learn more about how to create data grids for predictors of interest.
 
 ## Predictions on different scales
 
