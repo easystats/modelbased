@@ -307,7 +307,8 @@ integer variables as numerics (and possibly produce fractions).
 }
 
 See also \href{https://easystats.github.io/modelbased/articles/visualisation_matrix.html}{this vignette}
-for some examples.
+for some examples, and \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to
+create data grids for predictors of interest.
 }
 
 \examples{
