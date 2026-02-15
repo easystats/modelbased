@@ -197,7 +197,7 @@ plt_add(type = "l", lty = 2)
 tinytheme()
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0") withAutoprint(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2", "lme4"), quietly = TRUE)) && getRversion() >= "4.1.0") withAutoprint(\{ # examplesIf}
 library(ggplot2)
 library(see)
 # ==============================================
@@ -275,11 +275,25 @@ model <- lm(mpg ~ cyl * wt, data = data)
 x <- estimate_means(model, by = c("cyl", "wt"))
 plot(x)
 
-
 # GLMs ---------------------
 data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
 x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"), by = c("cyl"))
 plot(x)
+
+# ==============================================
+# Adding original data to the plot
+# ==============================================
+data(efc, package = "modelbased")
+efc$e15relat <- as.factor(efc$e15relat)
+efc$c161sex <- as.factor(efc$c161sex)
+levels(efc$c161sex) <- c("male", "female")
+model <- lme4::lmer(neg_c_7 ~ c161sex + (1 | e15relat), data = efc)
+
+me <- estimate_means(model, "c161sex")
+plot(me, show_data = TRUE)
+
+# data points: collapse by / average over random effects groups -------
+plot(me, show_data = TRUE, collapse_group = "e15relat")
 }
 \dontshow{\}) # examplesIf}
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
