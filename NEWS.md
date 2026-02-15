@@ -1,5 +1,10 @@
 # modelbased (devel)
 
+## Changes
+
+* The `trend` argument in `estimate_slopes()` was renamed into `slope`. `trend`
+  will remain as alias.
+
 ## Bug fixes
 
 * Fixed issue in `estimate_slope()` when `p_adjust = "esarey"`.
