@@ -213,7 +213,7 @@
     insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
     model <- marginaleffects::components(x, "model")
   } else {
-    model <- attributes(x)$model
+    model <- insight::get_model(x)
   }
 
   # variance-covariance matrix, to adjust p-values

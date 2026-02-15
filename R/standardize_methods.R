@@ -2,8 +2,10 @@
 
 #' @export
 standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
+  model <- insight::get_model(x)
+
   # Get data of predictors
-  data <- insight::get_data(attributes(x)$model, verbose = FALSE, ...)
+  data <- insight::get_data(model, verbose = FALSE, ...)
   data[[attributes(x)$response]] <- NULL # Remove resp from data
 
   # Standardize predictors
@@ -14,8 +16,8 @@ standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   )
 
   # Standardize response
-  if (include_response && insight::model_info(attributes(x)$model, response = 1)$is_linear) {
-    resp <- insight::get_response(attributes(x)$model)
+  if (include_response && insight::model_info(model, response = 1)$is_linear) {
+    resp <- insight::get_response(model)
     disp <- attributes(datawizard::standardize(resp, ...))$scale
 
     for (col in c("Predicted", "Mean", "CI_low", "CI_high")) {
@@ -31,7 +33,10 @@ standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
     }
   }
 
-  attr(x, "table_title") <- c(paste(attributes(x)$table_title[1], " (standardized)"), "blue")
+  attr(x, "table_title") <- c(
+    paste(attributes(x)$table_title[1], " (standardized)"),
+    "blue"
+  )
   x
 }
 
@@ -42,7 +47,7 @@ standardize.estimate_means <- standardize.estimate_predicted
 
 #' @export
 standardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
-  model <- attributes(x)$model
+  model <- insight::get_model(x)
 
   if (insight::model_info(model, response = 1)$is_linear) {
     # Get dispersion scaling factor
@@ -53,14 +58,25 @@ standardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
     }
 
     # Standardize relevant cols
-    for (col in c("Difference", "Ratio", "Coefficient", "SE", "MAD", "CI_low", "CI_high")) {
+    for (col in c(
+      "Difference",
+      "Ratio",
+      "Coefficient",
+      "SE",
+      "MAD",
+      "CI_low",
+      "CI_high"
+    )) {
       if (col %in% names(x)) {
         x[col] <- x[[col]] / disp
       }
     }
   }
 
-  attr(x, "table_title") <- c(paste(attributes(x)$table_title[1], " (standardized)"), "blue")
+  attr(x, "table_title") <- c(
+    paste(attributes(x)$table_title[1], " (standardized)"),
+    "blue"
+  )
   x
 }
 
@@ -73,7 +89,7 @@ standardize.estimate_slopes <- standardize.estimate_contrasts
 #' @method unstandardize estimate_predicted
 #' @export
 unstandardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
-  model <- attributes(x)$model
+  model <- insight::get_model(x)
 
   # Get data of predictors
   data <- insight::get_data(model, verbose = FALSE, ...)
@@ -113,7 +129,7 @@ unstandardize.estimate_means <- unstandardize.estimate_predicted
 
 #' @export
 unstandardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
-  model <- attributes(x)$model
+  model <- insight::get_model(x)
 
   if (insight::model_info(model, response = 1)$is_linear) {
     # Get dispersion scaling factor
@@ -124,7 +140,15 @@ unstandardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
     }
 
     # Standardize relevant cols
-    for (col in c("Difference", "Ratio", "Coefficient", "SE", "MAD", "CI_low", "CI_high")) {
+    for (col in c(
+      "Difference",
+      "Ratio",
+      "Coefficient",
+      "SE",
+      "MAD",
+      "CI_low",
+      "CI_high"
+    )) {
       if (col %in% names(x)) {
         x[col] <- x[[col]] * disp
       }

@@ -527,7 +527,7 @@
 
 #' @keywords internal
 .visualization_recipe_rawdata <- function(x, aes, numeric_as_discrete = 8) {
-  model <- attributes(x)$model
+  model <- insight::get_model(x)
   rawdata <- insight::get_data(model, verbose = FALSE)
 
   # Add response to data if not there
@@ -560,7 +560,7 @@
 
 #' @keywords internal
 .visualization_recipe_residuals <- function(x, aes, numeric_as_discrete = 8) {
-  model <- attributes(x)$model
+  model <- insight::get_model(x)
   residual_data <- residualize_over_grid(x, model)
 
   # if we have less than 8 values for the legend, a continuous color scale
@@ -601,7 +601,7 @@
   numeric_as_discrete = 8,
   show_residuals = FALSE
 ) {
-  model <- attributes(x)$model
+  model <- insight::get_model(x)
   rawdata <- collapse_by_group(x, model, collapse_by, residuals = show_residuals)
 
   # if we have less than 8 values for the legend, a continuous color scale
