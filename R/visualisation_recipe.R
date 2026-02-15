@@ -23,8 +23,10 @@
 #'
 #' @param x A modelbased object.
 #' @param show_data Logical, if `TRUE`, display the "raw" data as a background
-#' to the model-based estimation. This argument will be ignored for plotting
-#' objects returned by `estimate_slopes()` or `estimate_grouplevel()`.
+#' to the model-based estimation. For mixed models, you can additional use the
+#' `collapse_group` argument to "collapse" data points by random effects
+#' grouping factors. Argument `show_data` will be ignored for plotting objects
+#' returned by `estimate_slopes()` or `estimate_grouplevel()`.
 #' @param join_dots Logical, if `TRUE` (default) and for categorical focal terms
 #' in `by`, dots (estimates) are connected by lines, i.e. plots will be a
 #' combination of dots with error bars and connecting lines. If `FALSE`, only
@@ -39,14 +41,17 @@
 #' predictor. Use `FALSE` to always use continuous color scales for numeric
 #' predictors. It is possible to set a global default value using `options()`,
 #' e.g. `options(modelbased_numeric_as_discrete = 10)`.
-#' @param show_residuals Logical, if `TRUE`, display residuals of the model
-#' as a background to the model-based estimation. Residuals will be computed
-#' for the predictors in the data grid, using [`residualize_over_grid()`].
-#' @param collapse_group For mixed effects models, name of the grouping variable
-#' of random effects. If `collapse_group = TRUE`, data points "collapsed" by the
-#' first random effect groups are added to the plot. Else, if `collapse_group`
-#' is a name of a group factor, data is collapsed by that specific random
-#' effect. See [`collapse_by_group()`] for further details.
+#' @param show_residuals Logical, if `TRUE`, display residuals of the model as a
+#' background to the model-based estimation. Residuals will be computed for the
+#' predictors in the data grid, using [`residualize_over_grid()`]. For mixed
+#' models, you can additional use the `collapse_group` argument to "collapse"
+#' data points from residuals by random effects grouping factors.
+#' @param collapse_group This argument only takes effect when either `show_data`
+#' or `show_residuals` is `TRUE`. For mixed effects models, name of the grouping
+#' variable of random effects. If `collapse_group = TRUE`, data points
+#' "collapsed" by the first random effect groups are added to the plot. Else, if
+#' `collapse_group` is a name of a group factor, data is collapsed by that
+#' specific random effect. See [`collapse_by_group()`] for further details.
 #' @param point,line,pointrange,ribbon,facet,grid Additional
 #' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Arguments passed from `plot()` to `visualisation_recipe()`, or

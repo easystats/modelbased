@@ -34,7 +34,7 @@ collapse_by_group <- function(grid, model, collapse_by = NULL, residuals = FALSE
 
   model_data <- insight::get_data(model, source = "frame", verbose = FALSE)
 
-  if (is.null(collapse_by) || isTRUE(collapse_by)) {
+  if (is.null(collapse_by) || isTRUE(residuals)) {
     collapse_by <- insight::find_random(model, flatten = TRUE)
   }
 
@@ -47,7 +47,7 @@ collapse_by_group <- function(grid, model, collapse_by = NULL, residuals = FALSE
   }
 
   if (!collapse_by %in% colnames(model_data)) {
-    insight::format_error("Could not find `", collapse_by, "` column.")
+    insight::format_error(paste0("Could not find `", collapse_by, "` column."))
   }
 
   if (residuals) {
@@ -55,7 +55,7 @@ collapse_by_group <- function(grid, model, collapse_by = NULL, residuals = FALSE
     y_name <- "Mean"
   } else {
     rawdata <- insight::get_data(model, source = "environment", verbose = FALSE)
-    y_name <- attributes(grid)$response
+    y_name <- insight::find_response(model)
 
     # we need this column for labelling data points, but not for collapsing
     rawdata$rowname <- NULL
@@ -82,6 +82,10 @@ collapse_by_group <- function(grid, model, collapse_by = NULL, residuals = FALSE
     by = rawdata[colnames(rawdata) != y_name],
     FUN = mean
   )
+
+  if (residuals) {
+    y_name <- insight::find_response(model)
+  }
 
   colnames(agg_data)[ncol(agg_data)] <- y_name
   colnames(agg_data)[colnames(agg_data) == "group"] <- "group_col"

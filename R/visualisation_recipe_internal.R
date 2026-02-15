@@ -322,7 +322,7 @@
   }
 
   # add raw data as first layer ----------------------------------
-  if (show_data) {
+  if (show_data && is.null(collapse_by)) {
     layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes, numeric_as_discrete)
     # Update with additional args
     if (!is.null(point)) {
@@ -332,7 +332,7 @@
   }
 
   # add residual data as next lowest layer
-  if (show_residuals) {
+  if (show_residuals && is.null(collapse_by)) {
     layers[[paste0("l", l)]] <- .visualization_recipe_residuals(
       x,
       aes,
@@ -346,12 +346,13 @@
   }
 
   # next possible data layer is collapsing by group ---------------
-  if (!is.null(collapse_by)) {
+  if (!is.null(collapse_by) && (show_data || show_residuals)) {
     layers[[paste0("l", l)]] <- .visualization_recipe_collapsed_data(
       x,
       aes,
       collapse_by,
-      numeric_as_discrete
+      numeric_as_discrete,
+      show_residuals
     )
     # Update with additional args
     if (!is.null(point)) {
@@ -597,17 +598,16 @@
   x,
   aes,
   collapse_by,
-  numeric_as_discrete = 8
+  numeric_as_discrete = 8,
+  show_residuals = FALSE
 ) {
   model <- attributes(x)$model
-  grid <- attributes(x)$datagrid
-
-  rawdata <- collapse_by_group(grid, model, collapse_by)
+  rawdata <- collapse_by_group(x, model, collapse_by, residuals = show_residuals)
 
   # Add response to data if not there
-  y <- insight::find_response(attributes(x)$model)
+  y <- insight::find_response(model)
   if (!y %in% names(rawdata)) {
-    rawdata[y] <- insight::get_response(attributes(x)$model, verbose = FALSE)
+    rawdata[y] <- insight::get_response(model, verbose = FALSE)
   }
 
   # if we have less than 8 values for the legend, a continuous color scale
@@ -626,13 +626,20 @@
     )
   }
 
-  .data_point_geom(model = model, aes = aes, data = rawdata, y = y)
+  .data_point_geom(
+    model = model,
+    aes = aes,
+    data = rawdata,
+    y = y,
+    size = 2.5,
+    jitter = 0.1
+  )
 }
 
 
 # helpers -----------------------------------------------------------------
 
-.data_point_geom <- function(model, aes, data, y) {
+.data_point_geom <- function(model, aes, data, y, ...) {
   if (aes$type == "pointrange" && !is.numeric(data[[aes$x]])) {
     geom <- "jitter"
   } else {
@@ -655,6 +662,15 @@
     shape = shape,
     stroke = stroke
   )
+
+  dots <- list(...)
+  if (!is.null(dots$size)) {
+    out$size <- dots$size
+  }
+  if (!is.null(dots$jitter)) {
+    out$position <- "jitter"
+    out$width <- dots$jitter
+  }
 
   # check if we have matching columns in the raw data - some functions,
   # likes slopes, have mapped these aes to other columns that are not part
