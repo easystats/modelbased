@@ -221,14 +221,6 @@ to fix the offset at a specific value. Or use \code{estimate = "average"}, to
 average predictions over the distribution of the offset (if appropriate).
 }}
 
-\item{trend}{A character indicating the name of the variable for which to
-compute the slopes. To get marginal effects at specific values, use
-\code{trend="<variable>"} along with the \code{by} argument, e.g.
-\code{by="<variable>=c(1, 3, 5)"}, or a combination of \code{by} and \code{length}, for
-instance, \verb{by="<variable>", length=30}. To calculate average marginal
-effects over a range of values, use \code{trend="<variable>=seq(1, 3, 0.1)"} (or
-similar) and omit the variable provided in \code{trend} from the \code{by} argument.}
-
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{estimate}{The \code{estimate} argument determines how predictions are
@@ -293,7 +285,7 @@ when transformations are applied.}
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
 Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-predictors (one specified in \code{trend}, one in \code{by}). In this case, the
+predictors (one specified in \code{slope}, one in \code{by}). In this case, the
 \code{"esarey"} or \code{"sup-t"} options are recommended, but \code{p_adjust} can also be
 one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
 \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
