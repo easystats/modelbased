@@ -18,6 +18,7 @@
   type = NULL,
   dodge = NULL,
   show_data = FALSE,
+  collapse_group = NULL,
   numeric_as_discrete = NULL,
   ...
 )
@@ -78,6 +79,13 @@ to the model-based estimation. For mixed models, you can additional use the
 grouping factors. Argument \code{show_data} will be ignored for plotting objects
 returned by \code{estimate_slopes()} or \code{estimate_grouplevel()}.}
 
+\item{collapse_group}{This argument only takes effect when either \code{show_data}
+or \code{show_residuals} is \code{TRUE}. For mixed effects models, name of the grouping
+variable of random effects. If \code{collapse_group = TRUE}, data points
+"collapsed" by the first random effect groups are added to the plot. Else, if
+\code{collapse_group} is a name of a group factor, data is collapsed by that
+specific random effect. See \code{\link[=collapse_by_group]{collapse_by_group()}} for further details.}
+
 \item{numeric_as_discrete}{Maximum number of unique values in a numeric
 predictor to treat that predictor as discrete. Defaults to \code{8}. Numeric
 predictors are usually mapped to a continuous color scale, unless they have
@@ -93,13 +101,6 @@ background to the model-based estimation. Residuals will be computed for the
 predictors in the data grid, using \code{\link[=residualize_over_grid]{residualize_over_grid()}}. For mixed
 models, you can additional use the \code{collapse_group} argument to "collapse"
 data points from residuals by random effects grouping factors.}
-
-\item{collapse_group}{This argument only takes effect when either \code{show_data}
-or \code{show_residuals} is \code{TRUE}. For mixed effects models, name of the grouping
-variable of random effects. If \code{collapse_group = TRUE}, data points
-"collapsed" by the first random effect groups are added to the plot. Else, if
-\code{collapse_group} is a name of a group factor, data is collapsed by that
-specific random effect. See \code{\link[=collapse_by_group]{collapse_by_group()}} for further details.}
 
 \item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}
