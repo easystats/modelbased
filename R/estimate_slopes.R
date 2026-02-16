@@ -142,6 +142,10 @@ estimate_slopes <- function(
     backend <- getOption("modelbased_backend", "marginaleffects")
   }
 
+  # ----------------------
+  # Important: do not touch (i.e. remove) the `trend` argument, as it would
+  # break code in Andy's easystats book!
+  # ----------------------
   trend_missing <- missing(trend)
 
   # handle alias
