@@ -314,6 +314,8 @@ plot(
 ) + facet_wrap(~c172code) # facet panels (group by category)
 ```
 
+![](plotting_files/figure-html/unnamed-chunk-17-1.png)
+
 For mixed models, data points can be “collapsed” (i.e. averaged over)
 grouping variables from the random effects. First, we show an example
 that includes all data points.
@@ -332,6 +334,8 @@ me <- estimate_means(model, "c161sex")
 plot(me, show_data = TRUE)
 ```
 
+![](plotting_files/figure-html/unnamed-chunk-18-1.png)
+
 Next, we specify the `collapse_group` argument, to tell the
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) function to
 “average” data points over the random effects groups, represented by the
@@ -341,3 +345,5 @@ Next, we specify the `collapse_group` argument, to tell the
 
 plot(me, show_data = TRUE, collapse_group = "e15relat")
 ```
+
+![](plotting_files/figure-html/unnamed-chunk-19-1.png)
