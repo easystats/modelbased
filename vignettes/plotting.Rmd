@@ -205,7 +205,7 @@ plot(pr, show_residuals = TRUE)
 
 Data points will also be colored by groups automatically.
 
-```r
+```{r}
 m <- lm(neg_c_7 ~ e16sex * c172code, data = efc)
 emm <- estimate_means(m, c("e16sex", "c172code"))
 plot(
@@ -218,7 +218,7 @@ plot(
 
 For mixed models, data points can be "collapsed" (i.e. averaged over) grouping variables from the random effects. First, we show an example that includes all data points.
 
-```r
+```{r}
 library(lme4)
 
 data(efc)
@@ -233,7 +233,7 @@ plot(me, show_data = TRUE)
 
 Next, we specify the `collapse_group` argument, to tell the `plot()` function to "average" data points over the random effects groups, represented by the `e15relat` variable.
 
-```r
+```{r}
 plot(me, show_data = TRUE, collapse_group = "e15relat")
 ```
 
