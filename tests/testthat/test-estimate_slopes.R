@@ -12,46 +12,103 @@ test_that("estimate_slopes", {
   expect_equal(estim1$Slope, estim2$Slope, tolerance = 1e-4)
 
   estim1 <- suppressMessages(estimate_slopes(model, by = "Species", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_slopes(model, by = "Species", backend = "marginaleffects"))
+  estim2 <- suppressMessages(estimate_slopes(
+    model,
+    by = "Species",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(3L, 9L))
   expect_equal(estim1$Slope, estim2$Slope, tolerance = 1e-4)
 
-  estim1 <- suppressMessages(estimate_slopes(model, by = "Petal.Length", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_slopes(model, by = "Petal.Length", backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_slopes(
+    model,
+    by = "Petal.Length",
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_slopes(
+    model,
+    by = "Petal.Length",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(10L, 9L))
   expect_equal(estim1$Slope, estim2$Slope, tolerance = 0.2)
 
-  estim1 <- suppressMessages(estimate_slopes(model, by = c("Species", "Petal.Length"), backend = "emmeans"))
+  estim1 <- suppressMessages(estimate_slopes(
+    model,
+    by = c("Species", "Petal.Length"),
+    backend = "emmeans"
+  ))
   expect_identical(dim(estim1), c(30L, 10L))
 
-  estim2 <- suppressMessages(estimate_slopes(model, by = c("Species", "Petal.Length"), preserve_range = FALSE, backend = "marginaleffects"))
+  estim2 <- suppressMessages(estimate_slopes(
+    model,
+    by = c("Species", "Petal.Length"),
+    preserve_range = FALSE,
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim2), c(30L, 9L))
-  expect_equal(estim1$Slope, estim2$Slope[order(estim2$Petal.Length, estim2$Species)], tolerance = 1e-3)
+  expect_equal(
+    estim1$Slope,
+    estim2$Slope[order(estim2$Petal.Length, estim2$Species)],
+    tolerance = 1e-3
+  )
 
   # test different DF
-  estim1 <- suppressMessages(estimate_slopes(model, by = "Petal.Length", backend = "marginaleffects"))
-  estim2 <- suppressMessages(estimate_slopes(model, by = "Petal.Length", df = Inf, backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_slopes(
+    model,
+    by = "Petal.Length",
+    backend = "marginaleffects"
+  ))
+  estim2 <- suppressMessages(estimate_slopes(
+    model,
+    by = "Petal.Length",
+    df = Inf,
+    backend = "marginaleffects"
+  ))
   expect_named(
     estim1,
     c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "t", "df", "p")
   )
-  expect_named(
-    estim2,
-    c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "z", "p")
-  )
+  expect_named(estim2, c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "z", "p"))
 
   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 
-  estim1 <- suppressMessages(estimate_slopes(model, by = "Sepal.Width", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_slopes(model, by = "Sepal.Width", backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_slopes(
+    model,
+    by = "Sepal.Width",
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_slopes(
+    model,
+    by = "Sepal.Width",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(10L, 9L))
   expect_equal(estim1$Slope, estim2$Slope, tolerance = 0.2)
-  estim1 <- suppressMessages(estimate_slopes(model, by = "Sepal.Width", length = 5, backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_slopes(model, by = "Sepal.Width", length = 5, backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_slopes(
+    model,
+    by = "Sepal.Width",
+    length = 5,
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_slopes(
+    model,
+    by = "Sepal.Width",
+    length = 5,
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(5L, 9L))
   expect_equal(estim1$Slope, estim2$Slope, tolerance = 0.2)
-  estim1 <- suppressMessages(estimate_slopes(model, by = "Sepal.Width = c(1, 2, 3)", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_slopes(model, by = "Sepal.Width = c(1, 2, 3)", backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_slopes(
+    model,
+    by = "Sepal.Width = c(1, 2, 3)",
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_slopes(
+    model,
+    by = "Sepal.Width = c(1, 2, 3)",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(3L, 9L))
   expect_equal(estim1$Slope, estim2$Slope, tolerance = 0.2)
 })
@@ -64,17 +121,22 @@ test_that("estimate_slopes, johnson-neyman p-adjust", {
   expect_equal(
     out$CI_low,
     c(
-      -0.83863, -0.66978, -0.50396, -0.34188, -0.18459, -0.03252,
-      0.11384, 0.25426, 0.38899, 0.51855
+      -0.83863,
+      -0.66978,
+      -0.50396,
+      -0.34188,
+      -0.18459,
+      -0.03252,
+      0.11384,
+      0.25426,
+      0.38899,
+      0.51855
     ),
     tolerance = 1e-2
   )
   expect_equal(
     out$p,
-    c(
-      0.00664, 0.03956, 0.20019, 0.70529, 0.52501, 0.08553, 0.00496,
-      0.00013, 0, 0
-    ),
+    c(0.00664, 0.03956, 0.20019, 0.70529, 0.52501, 0.08553, 0.00496, 0.00013, 0, 0),
     tolerance = 1e-2
   )
 
@@ -82,17 +144,22 @@ test_that("estimate_slopes, johnson-neyman p-adjust", {
   expect_equal(
     out$CI_low,
     c(
-      -0.89944, -0.72628, -0.55667, -0.39145, -0.23184, -0.07835,
-      0.06843, 0.20825, 0.3414, 0.46848
+      -0.89944,
+      -0.72628,
+      -0.55667,
+      -0.39145,
+      -0.23184,
+      -0.07835,
+      0.06843,
+      0.20825,
+      0.3414,
+      0.46848
     ),
     tolerance = 1e-2
   )
   expect_equal(
     out$p,
-    c(
-      0.03438, 0.14813, 0.50393, 0.83427, 0.24689, 0.03326, 0.00219,
-      9e-05, 0, 0
-    ),
+    c(0.03438, 0.14813, 0.50393, 0.83427, 0.24689, 0.03326, 0.00219, 9e-05, 0, 0),
     tolerance = 1e-2
   )
 
@@ -102,17 +169,22 @@ test_that("estimate_slopes, johnson-neyman p-adjust", {
   expect_equal(
     out$CI_low,
     c(
-      -0.90003, -0.72665, -0.55721, -0.39196, -0.23229, -0.07873,
-      0.06797, 0.20793, 0.34088, 0.468
+      -0.90003,
+      -0.72665,
+      -0.55721,
+      -0.39196,
+      -0.23229,
+      -0.07873,
+      0.06797,
+      0.20793,
+      0.34088,
+      0.468
     ),
     tolerance = 1e-2
   )
   expect_equal(
     out$p,
-    c(
-      0.01765, 0.08691, 0.36222, 0.9097, 0.76792, 0.17275, 0.01369,
-      5e-04, 1e-05, 0
-    ),
+    c(0.01765, 0.08691, 0.36222, 0.9097, 0.76792, 0.17275, 0.01369, 5e-04, 1e-05, 0),
     tolerance = 1e-2
   )
 })
@@ -121,7 +193,12 @@ test_that("estimate_slopes, johnson-neyman p-adjust", {
 test_that("estimate_slopes, custom comparison", {
   data(iris)
   m <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
-  out <- estimate_contrasts(m, "Sepal.Length", by = "Species", comparison = "(b1 - b2) = (b1 - b3)")
+  out <- estimate_contrasts(
+    m,
+    "Sepal.Length",
+    by = "Species",
+    comparison = "(b1 - b2) = (b1 - b3)"
+  )
   expect_identical(dim(out), c(1L, 8L))
   expect_equal(out$Difference, -0.08782885, tolerance = 1e-4)
 })
@@ -140,8 +217,18 @@ test_that("estimate_slopes, works with lme4", {
   expect_equal(
     out$Slope,
     c(
-      0.01847, 0.02553, 0.02322, 0.02119, 0.02458, 0.02548, 0.01366,
-      0.01519, 0.02286, 0.00541, 0.00632, 0.01085
+      0.01847,
+      0.02553,
+      0.02322,
+      0.02119,
+      0.02458,
+      0.02548,
+      0.01366,
+      0.01519,
+      0.02286,
+      0.00541,
+      0.00632,
+      0.01085
     ),
     tolerance = 1e-3
   )
@@ -160,8 +247,18 @@ test_that("estimate_slopes, works with glmmTMB", {
   expect_equal(
     out$Slope,
     c(
-      0.01847, 0.02553, 0.02322, 0.02119, 0.02458, 0.02548, 0.01366,
-      0.01519, 0.02286, 0.00541, 0.00632, 0.01085
+      0.01847,
+      0.02553,
+      0.02322,
+      0.02119,
+      0.02458,
+      0.02548,
+      0.01366,
+      0.01519,
+      0.02286,
+      0.00541,
+      0.00632,
+      0.01085
     ),
     tolerance = 1e-3
   )
@@ -196,9 +293,16 @@ test_that("estimate_slopes, works with glmmTMB and splines", {
 test_that("estimate_slopes, estimate-argument works", {
   skip_if(getRversion() < "4.5.0")
   skip_if_not_installed("datawizard")
-  data(penguins)
-  penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
-  m <- glm(long_bill ~ sex + species + island * bill_dep, data = penguins, family = "binomial")
+  data(penguins, package = "datasets")
+  penguins$long_bill <- factor(
+    datawizard::categorize(penguins$bill_len),
+    labels = c("short", "long")
+  )
+  m <- glm(
+    long_bill ~ sex + species + island * bill_dep,
+    data = penguins,
+    family = "binomial"
+  )
 
   out <- estimate_slopes(m, "bill_dep", by = "island")
   expect_equal(out$Slope, c(0.00607, 0.04194, 0.00529), tolerance = 1e-4)
