@@ -16,9 +16,9 @@
 #' @param trend A character indicating the name of the variable for which
 #' to compute the slopes. To get marginal effects at specific values, use
 #' `trend="<variable>"` along with the `by` argument, e.g.
-#' `by="<variable>=c(1, 3, 5)"`, or a combination of `by` and `length`, for
+#' `by="<variable> = c(1, 3, 5)"`, or a combination of `by` and `length`, for
 #' instance, `by="<variable>", length=30`. To calculate average marginal
-#' effects over a range of values, use `trend="<variable>=seq(1, 3, 0.1)"` (or
+#' effects over a range of values, use `trend="<variable> = seq(1, 3, 0.1)"` (or
 #' similar) and omit the variable provided in `trend` from the `by` argument.
 #'
 #' @examplesIf require("emmeans", quietly = TRUE)

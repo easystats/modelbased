@@ -26,9 +26,9 @@ estimate_slopes(
 \item{slope, trend}{A character indicating the name of the variable for which
 to compute the slopes. To get marginal effects at specific values, use
 \code{slope="<variable>"} along with the \code{by} argument, e.g.
-\code{by="<variable>=c(1, 3, 5)"}, or a combination of \code{by} and \code{length}, for
+\code{by="<variable> = c(1, 3, 5)"}, or a combination of \code{by} and \code{length}, for
 instance, \verb{by="<variable>", length=30}. To calculate average marginal
-effects over a range of values, use \code{slope="<variable>=seq(1, 3, 0.1)"} (or
+effects over a range of values, use \code{slope="<variable> = seq(1, 3, 0.1)"} (or
 similar) and omit the variable provided in \code{slope} from the \code{by} argument.
 \code{trend} is an alias for \code{slope}, for backward compatibility.}
 
