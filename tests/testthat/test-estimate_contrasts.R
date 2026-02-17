@@ -703,7 +703,7 @@ test_that("estimate_contrasts - p.adjust", {
   skip_if(getRversion() < "4.5.0")
   skip_if_not_installed("emmeans")
 
-  data(penguins)
+  data(penguins, package = "datasets")
   m_spec <- lm(body_mass ~ species, data = penguins)
   out1 <- estimate_contrasts(m_spec, p_adjust = "tukey")
   out2 <- estimate_contrasts(m_spec, p_adjust = "tukey", backend = "emmeans")
@@ -1709,7 +1709,7 @@ test_that("estimate_contrast, informative error when `by` and `contrast` are the
 
 test_that("estimate_contrast, works with aov (when no statistic is extracted)", {
   skip_if(getRversion() < "4.5.0")
-  data(penguins)
+  data(penguins, package = "datasets")
   fit <- aov(formula = body_mass ~ species, data = penguins)
 
   out1 <- marginaleffects::avg_predictions(fit, by = "species", hypothesis = ~pairwise)
@@ -1736,7 +1736,7 @@ test_that("estimate_contrast, works with aov (when no statistic is extracted)", 
 test_that("estimate_contrast, slopes with different estimate options", {
   skip_if(getRversion() < "4.5.0")
   skip_if_not_installed("datawizard")
-  data(penguins)
+  data(penguins, package = "datasets")
   penguins$long_bill <- factor(
     datawizard::categorize(penguins$bill_len),
     labels = c("short", "long")
@@ -1772,7 +1772,7 @@ test_that("estimate_contrast, p-adjust tukey works for contrasting slopes", {
   skip_if(getRversion() < "4.5.0")
   skip_if_not_installed("emmeans")
 
-  data(penguins)
+  data(penguins, package = "datasets")
   m <- lm(flipper_len ~ body_mass * species, data = penguins)
 
   out1 <- as.data.frame(pairs(emmeans::emtrends(m, ~species, var = "body_mass")))
@@ -1783,5 +1783,9 @@ test_that("estimate_contrast, p-adjust tukey works for contrasting slopes", {
     p_adjust = "tukey"
   )
 
+  # Note: p-values from emmeans::emtrends() + pairs() and estimate_contrasts()
+  # can differ slightly due to different underlying calculation/adjustment
+  # methods, especially with Tukey p-adjustment. A tolerance of 1e-2 is used
+  # here to avoid fragile tests while still ensuring close agreement.
   expect_equal(out1$p.value, out2$p, tolerance = 1e-2)
 })

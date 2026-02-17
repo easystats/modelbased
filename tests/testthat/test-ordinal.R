@@ -24,7 +24,10 @@ test_that("estimate_relation prints ordinal models correctly", {
 
   # keep row column
   out <- suppressWarnings(estimate_relation(m, data = iris[1:3, ], verbose = FALSE))
-  expect_named(out, c("Row", "Response", "Sepal.Width", "Predicted", "CI_low", "CI_high", "Residuals")) # nolint
+  expect_named(
+    out,
+    c("Row", "Response", "Sepal.Width", "Predicted", "CI_low", "CI_high", "Residuals")
+  )
   expect_identical(dim(out), c(9L, 7L))
 })
 
@@ -34,7 +37,7 @@ test_that("estimate_means, print bracl", {
   # required for the penguins dataset, which was added in R 4.5.0
   skip_if(getRversion() < "4.5.0")
 
-  data(penguins)
+  data(penguins, package = "datasets")
 
   m <- brglm2::bracl(species ~ island + sex, data = penguins)
   out <- estimate_means(m, by = "island")

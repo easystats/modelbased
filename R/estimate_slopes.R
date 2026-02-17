@@ -108,7 +108,7 @@
 #' @examplesIf all(insight::check_if_installed(c("marginaleffects", "emmeans"), quietly = TRUE)) && getRversion() >= "4.5.0"
 #' \dontrun{
 #' # marginal effects with different `estimate` options
-#' data(penguins)
+#' data(penguins, package = "datasets")
 #' penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
 #' m <- glm(long_bill ~ sex + species + island * bill_dep, data = penguins, family = "binomial")
 #'
@@ -121,28 +121,27 @@
 #' marginaleffects::avg_slopes(m, variables = "bill_dep", by = "island")
 #' }
 #' @export
-estimate_slopes <- function(model,
-                            trend = NULL,
-                            by = NULL,
-                            predict = NULL,
-                            ci = 0.95,
-                            estimate = NULL,
-                            transform = NULL,
-                            p_adjust = "none",
-                            keep_iterations = FALSE,
-                            backend = NULL,
-                            verbose = TRUE,
-                            ...) {
+estimate_slopes <- function(
+  model,
+  trend = NULL,
+  by = NULL,
+  predict = NULL,
+  ci = 0.95,
+  estimate = NULL,
+  transform = NULL,
+  p_adjust = "none",
+  keep_iterations = FALSE,
+  backend = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Process argument ---------------------------------------------------------
   if (is.null(backend)) {
     backend <- getOption("modelbased_backend", "marginaleffects")
   }
 
   # validate input
-  estimate <- insight::validate_argument(
-    estimate,
-    c("typical", "specific", "average")
-  )
+  estimate <- insight::validate_argument(estimate, c("typical", "specific", "average"))
 
   if (backend == "emmeans") {
     # Emmeans ----------------------------------------------------------------
