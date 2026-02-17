@@ -211,7 +211,7 @@ emm <- estimate_means(m, c("e16sex", "c172code"))
 plot(
   emm,
   show_data = TRUE, # show data points
-  point = list(size = 2.5) # adjust point geoms, increase size
+  point = list(size = 2) # adjust point geoms, increase size
 ) + facet_wrap(~c172code) # facet panels (group by category)
 
 ```

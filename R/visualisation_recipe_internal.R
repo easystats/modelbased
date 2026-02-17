@@ -625,7 +625,7 @@
     aes = aes,
     data = rawdata,
     y = insight::find_response(model),
-    size = 2.5,
+    size = 2,
     jitter = 0.1
   )
 }
