@@ -109,7 +109,7 @@
 #' @examplesIf all(insight::check_if_installed(c("marginaleffects", "emmeans"), quietly = TRUE)) && getRversion() >= "4.5.0"
 #' \dontrun{
 #' # marginal effects with different `estimate` options
-#' data(penguins)
+#' data(penguins, package = "datasets")
 #' penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
 #' m <- glm(long_bill ~ sex + species + island * bill_dep, data = penguins, family = "binomial")
 #'

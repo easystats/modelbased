@@ -8,9 +8,17 @@
 
   # extract information
   datagrid <- attributes(params)$datagrid
-  focal <- .safe(insight::trim_ws(gsub("=.*", "\\1", attributes(params)$contrast)))
+
+  # when contrasting slopes, we need "by" as focal term
+  if (inherits(params, "estimate_slopes")) {
+    focal <- .safe(insight::trim_ws(gsub("=.*", "\\1", attributes(params)$by)))
+  } else {
+    focal <- .safe(insight::trim_ws(gsub("=.*", "\\1", attributes(params)$contrast)))
+  }
+
   # extract degrees of freedom
   dof <- .safe(params$df[1])
+
   if (is.null(dof)) {
     dof <- insight::get_df(model, type = "wald", verbose = FALSE)
   }

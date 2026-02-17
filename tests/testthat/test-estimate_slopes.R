@@ -310,7 +310,7 @@ test_that("estimate_slopes, works with glmmTMB and splines", {
 test_that("estimate_slopes, estimate-argument works", {
   skip_if(getRversion() < "4.5.0")
   skip_if_not_installed("datawizard")
-  data(penguins)
+  data(penguins, package = "datasets")
   penguins$long_bill <- factor(
     datawizard::categorize(penguins$bill_len),
     labels = c("short", "long")
