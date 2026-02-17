@@ -15,17 +15,18 @@
 #' and [README examples](https://easystats.github.io/modelbased/index.html#features) for
 #' various examples, tutorials and use cases.
 #'
-#' @param trend A character indicating the name of the variable for which to
-#' compute the slopes. To get marginal effects at specific values, use
-#' `trend="<variable>"` along with the `by` argument, e.g.
+#' @param slope,trend A character indicating the name of the variable for which
+#' to compute the slopes. To get marginal effects at specific values, use
+#' `slope="<variable>"` along with the `by` argument, e.g.
 #' `by="<variable>=c(1, 3, 5)"`, or a combination of `by` and `length`, for
 #' instance, `by="<variable>", length=30`. To calculate average marginal
-#' effects over a range of values, use `trend="<variable>=seq(1, 3, 0.1)"` (or
-#' similar) and omit the variable provided in `trend` from the `by` argument.
+#' effects over a range of values, use `slope="<variable>=seq(1, 3, 0.1)"` (or
+#' similar) and omit the variable provided in `slope` from the `by` argument.
+#' `trend` is an alias for `slope`, for backward compatibility.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. For `estimate_slopes()`, multiple comparison only occurs for
 #' Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-#' predictors (one specified in `trend`, one in `by`). In this case, the
+#' predictors (one specified in `slope`, one in `by`). In this case, the
 #' `"esarey"` or `"sup-t"` options are recommended, but `p_adjust` can also be
 #' one of `"none"` (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`,
 #' `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, or `"holm"`. `"sup-t"` computes
@@ -57,7 +58,7 @@
 #' # Model it
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' # Compute the marginal effect of Petal.Length at each level of Species
-#' slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
+#' slopes <- estimate_slopes(model, slope = "Petal.Length", by = "Species")
 #' slopes
 #'
 #' # What is the *average* slope of Petal.Length? This can be calculated by
@@ -65,7 +66,7 @@
 #' # We pass a function to `comparison` that calculates the mean of the slopes.
 #' estimate_slopes(
 #'   model,
-#'   trend = "Petal.Length",
+#'   slope = "Petal.Length",
 #'   by = "Species",
 #'   comparison = ~I(mean(x))
 #' )
@@ -82,7 +83,7 @@
 #'
 #' model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
 #' slopes <- estimate_slopes(model,
-#'   trend = "Petal.Length",
+#'   slope = "Petal.Length",
 #'   by = c("Petal.Length", "Species"), length = 20
 #' )
 #' summary(slopes)
@@ -90,19 +91,19 @@
 #'
 #' # marginal effects, grouped by Species, at different values of Petal.Length
 #' estimate_slopes(model,
-#'   trend = "Petal.Length",
+#'   slope = "Petal.Length",
 #'   by = c("Petal.Length", "Species"), length = 10
 #' )
 #'
 #' # marginal effects at different values of Petal.Length
-#' estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length", length = 10)
+#' estimate_slopes(model, slope = "Petal.Length", by = "Petal.Length", length = 10)
 #'
 #' # marginal effects at very specific values of Petal.Length
-#' estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
+#' estimate_slopes(model, slope = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
 #'
 #' # average marginal effects of Petal.Length,
 #' # just for the trend within a certain range
-#' estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
+#' estimate_slopes(model, slope = "Petal.Length=seq(2, 4, 0.01)")
 #' }
 #'
 #' @examplesIf all(insight::check_if_installed(c("marginaleffects", "emmeans"), quietly = TRUE)) && getRversion() >= "4.5.0"
@@ -123,7 +124,7 @@
 #' @export
 estimate_slopes <- function(
   model,
-  trend = NULL,
+  slope = NULL,
   by = NULL,
   predict = NULL,
   ci = 0.95,
@@ -133,11 +134,29 @@ estimate_slopes <- function(
   keep_iterations = FALSE,
   backend = NULL,
   verbose = TRUE,
+  trend = NULL,
   ...
 ) {
   # Process argument ---------------------------------------------------------
   if (is.null(backend)) {
     backend <- getOption("modelbased_backend", "marginaleffects")
+  }
+
+  # ----------------------
+  # Important: do not touch (i.e. remove) the `trend` argument, as it would
+  # break code in Andy's easystats book!
+  # ----------------------
+  trend_missing <- missing(trend)
+
+  # handle alias
+  if (!trend_missing && !missing(slope) && !identical(trend, slope)) {
+    insight::format_warning(
+      "Both `slope` and `trend` were provided with different values. Please use only `slope` in future code."
+    )
+    trend <- slope
+  }
+  if (trend_missing) {
+    trend <- slope
   }
 
   # validate input

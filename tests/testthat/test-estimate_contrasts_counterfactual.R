@@ -14,7 +14,12 @@ test_that("estimate_contrast, counterfactual", {
 
   mod <- lm(re78 ~ treat * (age + educ + race + re74), data = lalonde, weights = wts)
 
-  out1 <- marginaleffects::avg_comparisons(mod, variables = "treat", wts = "wts", vcov = "HC3")
+  out1 <- marginaleffects::avg_comparisons(
+    mod,
+    variables = "treat",
+    wts = "wts",
+    vcov = "HC3"
+  )
 
   out2 <- estimate_contrasts(
     mod,
@@ -57,7 +62,11 @@ test_that("estimate_contrast, counterfactual", {
   )
 
   # transformed response
-  mod <- lm(log1p(re78) ~ treat * (age + educ + race + re74), data = lalonde, weights = wts)
+  mod <- lm(
+    log1p(re78) ~ treat * (age + educ + race + re74),
+    data = lalonde,
+    weights = wts
+  )
 
   out1 <- marginaleffects::avg_comparisons(
     mod,
@@ -101,7 +110,11 @@ test_that("estimate_contrast, counterfactual, custom hypothesis", {
   # create a treatment effect that increased over time
   # with more improvements for higher educated patients
   d$QoL <- d$QoL +
-    rnorm(nrow(d), (d$treatment * d$time * 5) + ifelse(d$education == "high", 5, 0), sd = 2)
+    rnorm(
+      nrow(d),
+      (d$treatment * d$time * 5) + ifelse(d$education == "high", 5, 0),
+      sd = 2
+    )
 
   # convert to factors
   d <- datawizard::to_factor(d, c("treatment", "time"))
@@ -170,7 +183,11 @@ test_that("estimate_contrast, counterfactual, snapshots, Level-columns", {
   # create a treatment effect that increased over time
   # with more improvements for higher educated patients
   d$QoL <- d$QoL +
-    rnorm(nrow(d), (d$treatment * d$time * 5) + ifelse(d$education == "high", 5, 0), sd = 2)
+    rnorm(
+      nrow(d),
+      (d$treatment * d$time * 5) + ifelse(d$education == "high", 5, 0),
+      sd = 2
+    )
 
   # convert to factors
   d <- datawizard::to_factor(d, c("treatment", "time"))
@@ -219,5 +236,5 @@ test_that("estimate_contrast, counterfactual, snapshots, Level-columns", {
     estimate = "population",
     weights = "ipw"
   )
-  expect_snapshot(print(out, table_width = Inf))
+  expect_snapshot(print(out, table_width = Inf), variant = "windows")
 })

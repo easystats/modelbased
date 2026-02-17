@@ -11,6 +11,23 @@ test_that("estimate_slopes", {
   expect_identical(dim(estim1), c(1L, 8L))
   expect_equal(estim1$Slope, estim2$Slope, tolerance = 1e-4)
 
+  # aliases
+  estim1 <- estimate_slopes(model, slope = "Petal.Length")
+  # "trend" is an alias, we expect no message or warning here
+  expect_silent({
+    estim2 <- estimate_slopes(model, trend = "Petal.Length")
+  })
+  expect_equal(estim1$Slope, estim2$Slope, tolerance = 1e-4)
+  # if both "slope" and "trend" are provided, warn
+  expect_warning(
+    {
+      estim3 <- estimate_slopes(model, slope = "Petal.Length", trend = "Species")
+    },
+    regex = "Both `slope` and `trend` were provided",
+    fixed = TRUE
+  )
+  expect_equal(estim1$Slope, estim3$Slope, tolerance = 1e-4)
+
   estim1 <- suppressMessages(estimate_slopes(model, by = "Species", backend = "emmeans"))
   estim2 <- suppressMessages(estimate_slopes(
     model,

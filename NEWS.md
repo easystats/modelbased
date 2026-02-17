@@ -2,6 +2,9 @@
 
 ## Changes
 
+* The `trend` argument in `estimate_slopes()` was renamed into `slope`. `trend`
+  will remain as alias.
+
 * New function `collapse_by_group()`, which extracts the raw data points and
   "averages" (i.e. "collapses") the response variable over the levels of the
   grouping factor given in `collapse_by`. Only works with mixed models.

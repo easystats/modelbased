@@ -45,7 +45,7 @@ The two probably most popular R packages for extracting these quantities of inte
 
 The package's approach simplifies estimation by focusing on three key questions:
 
-1. Predictor of Interest: Which variable's effect do you want to analyze? This is specified with the `by`, `contrast`, or `trend` arguments.
+1. Predictor of Interest: Which variable's effect do you want to analyze? This is specified with the `by`, `contrast`, or `slope` arguments.
 
 2. Evaluation Points: At which specific values should the predictor be evaluated? This is also defined in the `by` argument. For a more refined control over the evaluation points, see the [data grids](https://easystats.github.io/insight/reference/get_datagrid.html) vignette.
 
