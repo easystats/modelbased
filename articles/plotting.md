@@ -281,8 +281,8 @@ plot(pr, show_data = TRUE)
 ![](plotting_files/figure-html/unnamed-chunk-15-1.png)
 
 Plotting partial residuals on top of the estimated marginal means allows
-detecting missed modeling, like unmodeled non-linear relationships or
-unmodeled interactions. In a nutshell, it allows *Visualizing Fit and
+detecting missed modeling, like unmodelled non-linear relationships or
+unmodelled interactions. In a nutshell, it allows *Visualizing Fit and
 Lack of Fit in Complex Regression Models with Predictor Effect Plots and
 Partial Residuals* (Fox & Weisberg 2018).
 

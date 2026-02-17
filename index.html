@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.1.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -141,7 +141,7 @@
 <p><em>How to start?</em></p>
 <p>The package’s approach simplifies estimation by focusing on three key questions:</p>
 <ol style="list-style-type: decimal">
-<li><p>Predictor of Interest: Which variable’s effect do you want to analyze? This is specified with the <code>by</code>, <code>contrast</code>, or <code>trend</code> arguments.</p></li>
+<li><p>Predictor of Interest: Which variable’s effect do you want to analyze? This is specified with the <code>by</code>, <code>contrast</code>, or <code>slope</code> arguments.</p></li>
 <li><p>Evaluation Points: At which specific values should the predictor be evaluated? This is also defined in the <code>by</code> argument. For a more refined control over the evaluation points, see the <a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">data grids</a> vignette.</p></li>
 <li><p>Target Population: What population should the inferences generalize to? The <code>estimate</code> argument controls this by defining whether predictions are for a typical individual, an average of the sample, or an average of a broader population.</p></li>
 </ol>
@@ -242,13 +242,13 @@
 <span><span class="va">means</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
 <span><span class="va">means</span></span>
 <span><span class="co">## Estimated Marginal Means</span></span>
-<span><span class="co">## </span></span>
+<span><span class="co">##</span></span>
 <span><span class="co">## Species    | Mean |   SE |       95% CI | t(147)</span></span>
 <span><span class="co">## ------------------------------------------------</span></span>
 <span><span class="co">## setosa     | 3.43 | 0.05 | [3.33, 3.52] |  71.36</span></span>
 <span><span class="co">## versicolor | 2.77 | 0.05 | [2.68, 2.86] |  57.66</span></span>
 <span><span class="co">## virginica  | 2.97 | 0.05 | [2.88, 3.07] |  61.91</span></span>
-<span><span class="co">## </span></span>
+<span><span class="co">##</span></span>
 <span><span class="co">## Variable predicted: Sepal.Width</span></span>
 <span><span class="co">## Predictors modulated: Species</span></span>
 <span></span>
@@ -292,13 +292,13 @@
 <span><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
 <span><span class="va">contrasts</span></span>
 <span><span class="co">## Marginal Contrasts Analysis</span></span>
-<span><span class="co">## </span></span>
+<span><span class="co">##</span></span>
 <span><span class="co">## Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p</span></span>
 <span><span class="co">## ------------------------------------------------------------------------------</span></span>
 <span><span class="co">## versicolor | setosa     |      -0.66 | 0.07 | [-0.79, -0.52] |  -9.69 | &lt; .001</span></span>
 <span><span class="co">## virginica  | setosa     |      -0.45 | 0.07 | [-0.59, -0.32] |  -6.68 | &lt; .001</span></span>
 <span><span class="co">## virginica  | versicolor |       0.20 | 0.07 | [ 0.07,  0.34] |   3.00 |  0.003</span></span>
-<span><span class="co">## </span></span>
+<span><span class="co">##</span></span>
 <span><span class="co">## Variable predicted: Sepal.Width</span></span>
 <span><span class="co">## Predictors contrasted: Species</span></span>
 <span><span class="co">## p-values are uncorrected.</span></span></code></pre></div>
@@ -324,7 +324,7 @@
 <span><span class="co"># no line break for table</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">difference</span>, table_width <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="co">## Marginal Contrasts Analysis</span></span>
-<span><span class="co">## </span></span>
+<span><span class="co">##</span></span>
 <span><span class="co">## Level1     | Level2     | Petal.Length | Difference |   SE |         95% CI | t(144) |      p</span></span>
 <span><span class="co">## ---------------------------------------------------------------------------------------------</span></span>
 <span><span class="co">## versicolor | setosa     |         1.00 |      -1.70 | 0.34 | [-2.37, -1.02] |  -4.97 | &lt; .001</span></span>
@@ -336,7 +336,7 @@
 <span><span class="co">## versicolor | setosa     |         6.90 |      -1.78 | 1.44 | [-4.62,  1.06] |  -1.24 |  0.218</span></span>
 <span><span class="co">## virginica  | setosa     |         6.90 |      -2.25 | 1.42 | [-5.06,  0.56] |  -1.58 |  0.116</span></span>
 <span><span class="co">## virginica  | versicolor |         6.90 |      -0.47 | 0.28 | [-1.03,  0.09] |  -1.65 |  0.101</span></span>
-<span><span class="co">## </span></span>
+<span><span class="co">##</span></span>
 <span><span class="co">## Variable predicted: Sepal.Width</span></span>
 <span><span class="co">## Predictors contrasted: Species</span></span>
 <span><span class="co">## p-values are uncorrected.</span></span></code></pre></div>
@@ -423,7 +423,7 @@
 <span><span class="co"># Print first 5 lines of output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred1</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">## Model-based Predictions</span></span>
-<span><span class="co">## </span></span>
+<span><span class="co">##</span></span>
 <span><span class="co">## Sepal.Length | Predicted |   SE |       95% CI | Residuals | Petal.Length</span></span>
 <span><span class="co">## -------------------------------------------------------------------------</span></span>
 <span><span class="co">## 5.10         |      2.38 | 0.10 | [2.19, 2.57] |     -0.98 |         1.40</span></span>
@@ -431,7 +431,7 @@
 <span><span class="co">## 4.70         |      1.63 | 0.12 | [1.39, 1.87] |     -0.33 |         1.30</span></span>
 <span><span class="co">## 4.60         |      1.45 | 0.13 | [1.19, 1.70] |      0.05 |         1.50</span></span>
 <span><span class="co">## 5.00         |      2.19 | 0.10 | [1.99, 2.39] |     -0.79 |         1.40</span></span>
-<span><span class="co">## </span></span>
+<span><span class="co">##</span></span>
 <span><span class="co">## Variable predicted: Petal.Length</span></span>
 <span></span>
 <span><span class="co"># Same for model 2</span></span>
