@@ -1766,3 +1766,22 @@ test_that("estimate_contrast, comparison-options as strings", {
   out <- estimate_contrasts(mod2, contrast = "cyl_helmert", comparison = "poly")
   expect_equal(out$Difference, c(-8.17673, 0.92996), tolerance = 1e-4)
 })
+
+
+test_that("estimate_contrast, p-adjust tukey works for contrasting slopes", {
+  skip_if(getRversion() < "4.5.0")
+  skip_if_not_installed("emmeans")
+
+  data(penguins)
+  m <- lm(flipper_len ~ body_mass * species, data = penguins)
+
+  out1 <- as.data.frame(pairs(emmeans::emtrends(m, ~species, var = "body_mass")))
+  out2 <- estimate_contrasts(
+    m,
+    contrast = "body_mass",
+    by = "species",
+    p_adjust = "tukey"
+  )
+
+  expect_equal(out1$p.value, out2$p, tolerance = 1e-2)
+})
