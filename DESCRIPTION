@@ -101,7 +101,7 @@ Suggests:
     scales,
     see (>= 0.11.0),
     survival,
-    testthat (== 3.3.1),
+    testthat (<= 3.3.1),
     tinyplot (>= 0.6.0),
     tinytable,
     vdiffr,
