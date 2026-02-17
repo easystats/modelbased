@@ -1,5 +1,34 @@
 # Changelog
 
+## modelbased 0.14.0
+
+### Changes
+
+- The `trend` argument in
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  was renamed into `slope`. `trend` will remain as alias.
+
+- New function
+  [`collapse_by_group()`](https://easystats.github.io/modelbased/reference/collapse_by_group.md),
+  which extracts the raw data points and “averages” (i.e. “collapses”)
+  the response variable over the levels of the grouping factor given in
+  `collapse_by`. Only works with mixed models. Additionally, the
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) and
+  `visualization_recipe()` methods get a `collapse_group` argument to
+  use this feature when adding data points to plots using `show_data` or
+  `show_residuals`.
+
+### Bug fixes
+
+- Fixed issue in `estimate_slope()` when `p_adjust = "esarey"`.
+
+- Fixed issue in
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  when `p_adjust = "tukey"`.
+
+- Fixed error with truncated message when standard errors could not be
+  calculated.
+
 ## modelbased 0.13.1
 
 CRAN release: 2025-12-08

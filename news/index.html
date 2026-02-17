@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.1.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,20 @@
       <small>Source: <a href="https://github.com/easystats/modelbased/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.14.0" id="modelbased-0140">modelbased 0.14.0<a class="anchor" aria-label="anchor" href="#modelbased-0140"></a></h2>
+<div class="section level3">
+<h3 id="changes-0-14-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-14-0"></a></h3>
+<ul><li><p>The <code>trend</code> argument in <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code> was renamed into <code>slope</code>. <code>trend</code> will remain as alias.</p></li>
+<li><p>New function <code><a href="../reference/collapse_by_group.html">collapse_by_group()</a></code>, which extracts the raw data points and “averages” (i.e. “collapses”) the response variable over the levels of the grouping factor given in <code>collapse_by</code>. Only works with mixed models. Additionally, the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> and <code>visualization_recipe()</code> methods get a <code>collapse_group</code> argument to use this feature when adding data points to plots using <code>show_data</code> or <code>show_residuals</code>.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-14-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-14-0"></a></h3>
+<ul><li><p>Fixed issue in <code>estimate_slope()</code> when <code>p_adjust = "esarey"</code>.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> when <code>p_adjust = "tukey"</code>.</p></li>
+<li><p>Fixed error with truncated message when standard errors could not be calculated.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.13.1" id="modelbased-0131">modelbased 0.13.1<a class="anchor" aria-label="anchor" href="#modelbased-0131"></a></h2><p class="text-muted">CRAN release: 2025-12-08</p>
 <div class="section level3">
