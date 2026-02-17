@@ -587,7 +587,7 @@ estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
 # }
 # \dontrun{
 # marginal effects with different `estimate` options
-data(penguins)
+data(penguins, package = "datasets")
 penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
 m <- glm(long_bill ~ sex + species + island * bill_dep, data = penguins, family = "binomial")
 
