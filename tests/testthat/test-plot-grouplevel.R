@@ -27,6 +27,7 @@ test_that("plots grouplevel Bayesian", {
   skip_if_not_installed("brms")
 
   model <- insight::download_model("brms_sigma_3")
+  skip_if(is.null(model))
 
   out <- estimate_grouplevel(model)
   vdiffr::expect_doppelganger("plot-grouplevel-Bayes-1", plot(out))
@@ -35,6 +36,7 @@ test_that("plots grouplevel Bayesian", {
   vdiffr::expect_doppelganger("plot-grouplevel-Bayes-2", plot(out))
 
   model <- insight::download_model("brms_zi_4")
+  skip_if(is.null(model))
 
   out <- estimate_grouplevel(model)
   vdiffr::expect_doppelganger("plot-grouplevel-Bayes-3", plot(out))

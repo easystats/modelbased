@@ -1,25 +1,26 @@
 #' @rdname get_emmeans
 #' @export
-get_marginalcontrasts <- function(model,
-                                  contrast = NULL,
-                                  by = NULL,
-                                  predict = NULL,
-                                  ci = 0.95,
-                                  comparison = "pairwise",
-                                  estimate = NULL,
-                                  p_adjust = "none",
-                                  transform = NULL,
-                                  keep_iterations = FALSE,
-                                  verbose = TRUE,
-                                  ...) {
+get_marginalcontrasts <- function(
+  model,
+  contrast = NULL,
+  by = NULL,
+  predict = NULL,
+  ci = 0.95,
+  comparison = "pairwise",
+  estimate = NULL,
+  transform = NULL,
+  p_adjust = "none",
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # check if available
-  insight::check_if_installed("marginaleffects", minimum_version = "0.25.0")
+  insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
 
   # temporarily overwrite settings that error on "too many" rows
   me_option <- getOption("marginaleffects_safe")
   options(marginaleffects_safe = FALSE)
   on.exit(options(marginaleffects_safe = me_option))
-
 
   # First step: prepare arguments ---------------------------------------------
   # ---------------------------------------------------------------------------
@@ -28,9 +29,10 @@ get_marginalcontrasts <- function(model,
   if (is.null(contrast)) {
     contrast <- "auto"
   }
-  if (is.null(estimate)) {
-    estimate <- getOption("modelbased_estimate", "typical")
-  }
+
+  # validate arguments
+  estimate <- .validate_estimate_arg(estimate)
+  comparison <- .check_for_inequality_comparison(comparison)
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
@@ -40,13 +42,7 @@ get_marginalcontrasts <- function(model,
   model_info <- insight::model_info(model, response = 1, verbose = FALSE)
 
   # Guess arguments
-  my_args <- .guess_marginaleffects_arguments(
-    model,
-    by,
-    contrast,
-    verbose = verbose,
-    ...
-  )
+  my_args <- .guess_marginaleffects_arguments(model, by, contrast, verbose = verbose, ...)
 
   # sanitize comparison argument, to ensure compatibility between different
   # marginaleffects versions - newer versions don't accept a string argument,
@@ -68,29 +64,49 @@ get_marginalcontrasts <- function(model,
   }
 
   # sanity check: `contrast` and `by` cannot be the same
-  cleaned_by <- gsub("=.*", "\\1", my_args$by)
-  cleaned_contrast <- gsub("=.*", "\\1", my_args$contrast)
-  if (length(cleaned_by) && length(cleaned_contrast) && (all(cleaned_by %in% cleaned_contrast) || all(cleaned_contrast %in% cleaned_by))) { # nolint
+  if (
+    length(my_args$cleaned_by) &&
+      length(my_args$cleaned_contrast) &&
+      (all(my_args$cleaned_by %in% my_args$cleaned_contrast) ||
+        all(my_args$cleaned_contrast %in% my_args$cleaned_by))
+  ) {
     insight::format_error(
       "You cannot specifiy the same variables in `contrast` and `by`. Either omit `by`, or choose a different variable for `contrast` or `by`." # nolint
     )
   }
 
+  # check whether we contrast slopes or categorical predictors:
+  # if first focal term is numeric, we contrast slopes, but slopes only for
+  # numerics with many values, not for binary or likert-alike
+  compute_slopes <- is.numeric(model_data[[first_focal]]) &&
+    !.is_likert(model_data[[first_focal]], verbose = verbose, ...) &&
+    !first_focal %in% on_the_fly_factors
 
   # Second step: compute contrasts, for slopes or categorical -----------------
   # ---------------------------------------------------------------------------
 
-  # if first focal term is numeric, we contrast slopes, but slopes only for
-  # # numerics with many values, not for binary or likert-alike
-  if (
-    is.numeric(model_data[[first_focal]]) &&
-      !.is_likert(model_data[[first_focal]], ...) &&
-      !first_focal %in% on_the_fly_factors
-  ) {
-    # nolint
+  if (.is_inequality_comparison(comparison)) {
+    # inequality effect summary, see Trenton D. Mize, Bing Han 2025
+    # Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables
+    # Sociological Science February 5, 10.15195/v12.a7
+    # this requires a special handling, because we can only use it with avg_comparisons
+    out <- get_inequalitycontrasts(
+      model,
+      model_data,
+      my_args,
+      comparison,
+      ci,
+      compute_slopes,
+      estimate,
+      ...
+    )
+    predict <- "response"
+  } else if (compute_slopes) {
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
-      insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
+      insight::format_error(
+        "Please specify the `by` argument to calculate contrasts of slopes."
+      )
     }
     # call slopes with hypothesis argument
     out <- estimate_slopes(
@@ -98,6 +114,7 @@ get_marginalcontrasts <- function(model,
       trend = my_args$contrast,
       by = my_args$by,
       ci = ci,
+      estimate = estimate,
       hypothesis = my_args$comparison_slopes,
       backend = "marginaleffects",
       transform = transform,
@@ -105,13 +122,6 @@ get_marginalcontrasts <- function(model,
       verbose = verbose,
       ...
     )
-  } else if (identical(comparison, "inequality") || identical(comparison, "inequality_pairwise")) {
-    # inequality effect summary, see Trenton D. Mize, Bing Han 2025
-    # Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables
-    # Sociological Science February 5, 10.15195/v12.a7
-    # this requires a special handling, because we can only use it with avg_comparisons
-    out <- .calculate_inequality_effect(model, model_data, my_args, comparison, ci, ...)
-    predict <- "response"
   } else {
     # for contrasts of categorical predictors, we call avg_predictions
     out <- estimate_means(
@@ -136,12 +146,6 @@ get_marginalcontrasts <- function(model,
   # `by="Petal.Width=c(1, 2)"`)
   out <- .filter_contrasts_average(out, my_args)
 
-  # adjust p-values
-  if (!model_info$is_bayesian) {
-    out <- .p_adjust(model, out, p_adjust, verbose, ...)
-  }
-
-
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
@@ -160,47 +164,18 @@ get_marginalcontrasts <- function(model,
     )
   )
 
+  # adjust p-values - we do this here because we need all the information
+  # from the attributes
+  if (!model_info$is_bayesian) {
+    out <- .p_adjust(model, out, p_adjust, verbose, ...)
+  }
+
   # remove "estimate_means" class attribute
   class(out) <- setdiff(
     unique(c("marginaleffects_contrasts", class(out))),
     "estimate_means"
   )
   out
-}
-
-
-# special contrasts: inequality---------------- -------------------------------
-
-.calculate_inequality_effect <- function(model, model_data, my_args, comparison, ci, ...) {
-  # to calculate marginal effects inequalities, all contrast predictors
-  # must be factors
-  check_factors <- .safe(vapply(model_data[my_args$contrast], is.factor, logical(1)), NULL)
-  if (is.null(check_factors) || !all(check_factors)) {
-    insight::format_error("All variables specified in `contrast` must be factors for `comparison = \"inequality\"`.")
-  }
-  # for this special case, we need "avg_comparisons()", else we cannot specify
-  # the "variables" argument as named list
-  out <- marginaleffects::avg_comparisons(
-    model = model,
-    variables = as.list(stats::setNames(
-      rep_len("pairwise", length(my_args$contrast)),
-      my_args$contrast
-    )),
-    by = ifelse(is.null(my_args$by), TRUE, my_args$by),
-    hypothesis = ~I(mean(abs(x))) | term,
-    ...
-  )
-  # for the total marginal effects, we need to call "hypothesis()" again, this
-  # time with ~revpairwise option
-  if (comparison == "inequality_pairwise") {
-    if (nrow(out) < 2) {
-      insight::format_error("Pairwise comparisons require at least two marginal effects inequalities measures.")
-    }
-    out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
-  }
-
-  class(out) <- unique(c("marginaleffects_means", class(out)))
-  format(out, model, ci, hypothesis = "inequality", ...)
 }
 
 
@@ -220,7 +195,8 @@ get_marginalcontrasts <- function(model,
         example_values <- sample(unique(out[[i]]), pmin(3, insight::n_unique(out[[i]])))
         # tell user...
         insight::format_error(paste0(
-          "None of the values specified for the predictor `", i,
+          "None of the values specified for the predictor `",
+          i,
           "` are available in the data. This is required for `estimate=\"average\"`.",
           " Either use a different option for the `estimate` argument, or use values that",
           " are present in the data, such as ",
@@ -230,27 +206,35 @@ get_marginalcontrasts <- function(model,
       }
       out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
     }
+    # sanity check - do we have any rows left?
+    if (nrow(out) == 0) {
+      .filter_error("No rows left after filtering.")
+    }
   }
   out
 }
 
 
 # make "comparison" argument compatible -----------------------------------
+# -------------------------------------------------------------------------
 
 # this function has two major tasks: format the "comparison" argument for use
 # in the marginaleffects package, and extract the potential filter values used
 # in `by` and `contrast` (if any), to "clean" these arguments and save the levels
 # or values at which rows should be filtered later...
-.get_marginaleffects_hypothesis_argument <- function(comparison,
-                                                     my_args,
-                                                     model_data = NULL,
-                                                     estimate = NULL,
-                                                     ...) {
+.get_marginaleffects_hypothesis_argument <- function(
+  comparison,
+  my_args,
+  model_data = NULL,
+  estimate = NULL,
+  ...
+) {
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
   joint_test <- FALSE
   # save original `by`
   original_by <- my_args$by
+  original_comparison <- comparison
 
   # make sure "by" is a valid column name, and no filter-directive, like
   # "Species='setosa'". If `by` is also used for filtering, split and extract
@@ -258,7 +242,8 @@ get_marginalcontrasts <- function(model,
   # contrasts (but only for `estimate = "average"`!). Furthermore, "clean" `by`
   # argument (remove filter), because we need the pure variable name for setting
   # up the hypothesis argument, where variables in `by` are used in the formula
-  if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
+  if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) {
+    # "[^0-9A-Za-z\\._]"
     # find which element in `by` has a filter
     filter_index <- grep("=", my_args$by, fixed = TRUE)
     for (f in filter_index) {
@@ -292,7 +277,12 @@ get_marginalcontrasts <- function(model,
   # values for later use. we only need this for `estimate = "average"`, because
   # that is the only situation where we do *not* use a data grid, which we else
   # could use for filtering, by dropping not-wanted rows from the grid.
-  if (identical(estimate, "average") && !is.null(my_args$contrast) && any(grepl("=", my_args$contrast, fixed = TRUE))) { # nolint
+  if (
+    identical(estimate, "average") &&
+      !is.null(my_args$contrast) &&
+      any(grepl("=", my_args$contrast, fixed = TRUE))
+  ) {
+    # nolint
     # find which element in `by` has a filter
     filter_index <- grep("=", my_args$contrast, fixed = TRUE)
     for (f in filter_index) {
@@ -353,7 +343,9 @@ get_marginalcontrasts <- function(model,
         comparison <- "reference"
         joint_test <- TRUE
       }
-      formula_lhs <- "difference"
+      # for some comparisons, we need an empty left-hand side. else, we default
+      # to "difference".
+      formula_lhs <- switch(comparison, poly = , helmert = "", "difference")
       formula_rhs <- comparison
     }
     # we put "by" into the formula. user either provided "by", or we put the
@@ -370,6 +362,18 @@ get_marginalcontrasts <- function(model,
       my_args$by <- formula_group
     }
     comparison <- stats::as.formula(f)
+    # if user specified group in "by" *and* in formula, we keep the group
+    # for contrasts of slopes - thus,we need to update comparison_slopes
+    by_formula <- trimws(unlist(
+      strsplit(deparse(original_comparison), "|", fixed = TRUE),
+      use.names = FALSE
+    ))[2]
+    if (!is.na(by_formula) && identical(by_formula, formula_group)) {
+      # we have a group variable in the formula, which is the same as in `by`
+      # so we keep it for the slopes comparison - this is required to add
+      # grouping in (pairwise) slopes
+      comparison_slopes <- comparison
+    }
   }
   # remove "by" from "contrast"
   my_args$contrast <- setdiff(my_args$contrast, my_args$by)
@@ -387,7 +391,7 @@ get_marginalcontrasts <- function(model,
     }
   }
 
-  c(
+  out <- c(
     # the "my_args" argument, containing "by" and "contrast"
     my_args,
     list(
@@ -399,22 +403,52 @@ get_marginalcontrasts <- function(model,
       by_filter = insight::compact_list(by_filter),
       contrast_filter = insight::compact_list(contrast_filter),
       # in case we have a joint/omnibus test
-      joint_test = joint_test
+      joint_test = joint_test,
+      # cleaned `by` and `contrast`, without filtering information
+      cleaned_by = gsub("=.*", "\\1", my_args$by),
+      cleaned_contrast = gsub("=.*", "\\1", my_args$contrast)
     )
   )
+
+  # clean empty values
+  if (!length(out$cleaned_by)) {
+    out$cleaned_by <- NULL
+  }
+  if (!length(out$cleaned_contrast)) {
+    out$cleaned_contrast <- NULL
+  }
+
+  out
 }
 
 
+# supported comparison strings  --------------------------------------
+# --------------------------------------------------------------------
+
 .valid_hypothesis_strings <- function() {
   c(
-    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
-    "revpairwise", "revreference", "revsequential", "poly", "helmert",
-    "trt_vs_ctrl", "joint", "inequality", "inequality_pairwise"
+    "pairwise",
+    "reference",
+    "sequential",
+    "meandev",
+    "meanotherdev",
+    "revpairwise",
+    "revreference",
+    "revsequential",
+    "poly",
+    "helmert",
+    "trt_vs_ctrl",
+    "joint",
+    "inequality",
+    "inequality_pairwise",
+    "inequality_ratio",
+    "inequality_ratio_pairwise"
   )
 }
 
 
 # check for custom hypothesis  --------------------------------------
+# -------------------------------------------------------------------
 
 .is_custom_comparison <- function(comparison) {
   !is.null(comparison) &&
@@ -431,9 +465,12 @@ get_marginalcontrasts <- function(model,
   match_lengths <- attr(matches, "match.length")
 
   # extract all "b" strings, so we have a vector of all "b" used in the comparison
-  unlist(lapply(seq_along(matches), function(i) {
-    substr(comparison, matches[i], matches[i] + match_lengths[i] - 1)
-  }), use.names = FALSE)
+  unlist(
+    lapply(seq_along(matches), function(i) {
+      substr(comparison, matches[i], matches[i] + match_lengths[i] - 1)
+    }),
+    use.names = FALSE
+  )
 }
 
 

@@ -28,6 +28,26 @@ from a wide range of statistical models. In line with the **easystats**’
 user-friendliness to help researchers harness the full power of their
 models.
 
+*How to start?*
+
+The package’s approach simplifies estimation by focusing on three key
+questions:
+
+1.  Predictor of Interest: Which variable’s effect do you want to
+    analyze? This is specified with the `by`, `contrast`, or `slope`
+    arguments.
+
+2.  Evaluation Points: At which specific values should the predictor be
+    evaluated? This is also defined in the `by` argument. For a more
+    refined control over the evaluation points, see the [data
+    grids](https://easystats.github.io/insight/reference/get_datagrid.html)
+    vignette.
+
+3.  Target Population: What population should the inferences generalize
+    to? The `estimate` argument controls this by defining whether
+    predictions are for a typical individual, an average of the sample,
+    or an average of a broader population.
+
 ## Installation
 
 [![CRAN](https://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased)
@@ -155,13 +175,13 @@ model <- lm(Sepal.Width ~ Species, data = iris)
 means <- estimate_means(model, by = "Species")
 means
 ## Estimated Marginal Means
-## 
+##
 ## Species    | Mean |   SE |       95% CI | t(147)
 ## ------------------------------------------------
 ## setosa     | 3.43 | 0.05 | [3.33, 3.52] |  71.36
 ## versicolor | 2.77 | 0.05 | [2.68, 2.86] |  57.66
 ## virginica  | 2.97 | 0.05 | [2.88, 3.07] |  61.91
-## 
+##
 ## Variable predicted: Sepal.Width
 ## Predictors modulated: Species
 
@@ -214,13 +234,13 @@ model <- lm(Sepal.Width ~ Species, data = iris)
 contrasts <- estimate_contrasts(model, contrast = "Species")
 contrasts
 ## Marginal Contrasts Analysis
-## 
+##
 ## Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p
 ## ------------------------------------------------------------------------------
 ## versicolor | setosa     |      -0.66 | 0.07 | [-0.79, -0.52] |  -9.69 | < .001
 ## virginica  | setosa     |      -0.45 | 0.07 | [-0.59, -0.32] |  -6.68 | < .001
 ## virginica  | versicolor |       0.20 | 0.07 | [ 0.07,  0.34] |   3.00 |  0.003
-## 
+##
 ## Variable predicted: Sepal.Width
 ## Predictors contrasted: Species
 ## p-values are uncorrected.
@@ -249,7 +269,7 @@ difference <- estimate_contrasts(
 # no line break for table
 print(difference, table_width = Inf)
 ## Marginal Contrasts Analysis
-## 
+##
 ## Level1     | Level2     | Petal.Length | Difference |   SE |         95% CI | t(144) |      p
 ## ---------------------------------------------------------------------------------------------
 ## versicolor | setosa     |         1.00 |      -1.70 | 0.34 | [-2.37, -1.02] |  -4.97 | < .001
@@ -261,7 +281,7 @@ print(difference, table_width = Inf)
 ## versicolor | setosa     |         6.90 |      -1.78 | 1.44 | [-4.62,  1.06] |  -1.24 |  0.218
 ## virginica  | setosa     |         6.90 |      -2.25 | 1.42 | [-5.06,  0.56] |  -1.58 |  0.116
 ## virginica  | versicolor |         6.90 |      -0.47 | 0.28 | [-1.03,  0.09] |  -1.65 |  0.101
-## 
+##
 ## Variable predicted: Sepal.Width
 ## Predictors contrasted: Species
 ## p-values are uncorrected.
@@ -363,7 +383,7 @@ pred1$Petal.Length <- iris$Petal.Length # Add true response
 # Print first 5 lines of output
 head(pred1, n = 5)
 ## Model-based Predictions
-## 
+##
 ## Sepal.Length | Predicted |   SE |       95% CI | Residuals | Petal.Length
 ## -------------------------------------------------------------------------
 ## 5.10         |      2.38 | 0.10 | [2.19, 2.57] |     -0.98 |         1.40
@@ -371,7 +391,7 @@ head(pred1, n = 5)
 ## 4.70         |      1.63 | 0.12 | [1.39, 1.87] |     -0.33 |         1.30
 ## 4.60         |      1.45 | 0.13 | [1.19, 1.70] |      0.05 |         1.50
 ## 5.00         |      2.19 | 0.10 | [1.99, 2.39] |     -0.79 |         1.40
-## 
+##
 ## Variable predicted: Petal.Length
 
 # Same for model 2

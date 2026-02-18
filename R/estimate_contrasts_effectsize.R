@@ -1,15 +1,23 @@
-.estimate_contrasts_effectsize <- function(model,
-                                           estimated,
-                                           contrasts_results,
-                                           effectsize,
-                                           bootstraps,
-                                           bootES_type,
-                                           backend) {
+.estimate_contrasts_effectsize <- function(
+  model,
+  estimated,
+  contrasts_results,
+  effectsize,
+  bootstraps,
+  bootES_type,
+  backend
+) {
   # Add standardized effect size
   insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "boot"))
 
   if (effectsize == "emmeans" && backend != "emmeans") {
-    insight::format_error("`effectsize = \"emmeans\"` only possible with `backend = \"emmeans\"`")
+    insight::format_error(
+      "`effectsize = \"emmeans\"` only possible with `backend = \"emmeans\"`"
+    )
+  }
+
+  if (!is.null(bootES_type) && effectsize != "boot") {
+    insight::format_error("`es_type` can only be used when `effectsize = \"boot\"`.")
   }
 
   # Check if the model includes any random effects. Effect size calculations in
@@ -36,7 +44,8 @@
     ))
   }
 
-  switch(effectsize,
+  switch(
+    effectsize,
     emmeans = {
       eff <- emmeans::eff_size(
         estimated,
@@ -54,10 +63,16 @@
       # d_adj <- contrasts$t * contrasts$SE / sigma(model) * sqrt(1 - R2)
       # New: d_adj <- difference * (1- R2)/ sigma
       R2 <- summary(model)$r.squared
-      d_adj <- contrasts_results$Difference * (1 - R2) / insight::get_sigma(model, verbose = FALSE)
+      d_adj <- contrasts_results$Difference *
+        (1 - R2) /
+        insight::get_sigma(model, verbose = FALSE)
       contrasts_results <- cbind(contrasts_results, marginal_d = d_adj)
     },
     boot = {
+      # set default
+      if (is.null(bootES_type)) {
+        bootES_type <- "cohens.d"
+      }
       insight::check_if_installed("bootES")
       dat <- insight::get_data(model)
       resp <- insight::find_response(model)
@@ -84,7 +99,11 @@
 
       eff <- do.call(rbind, es.lists)
       eff <- eff[1:3]
-      names(eff) <- c(bootES_type, paste0(bootES_type, "_CI_low"), paste0(bootES_type, "_CI_high"))
+      names(eff) <- c(
+        bootES_type,
+        paste0(bootES_type, "_CI_low"),
+        paste0(bootES_type, "_CI_high")
+      )
 
       contrasts_results <- cbind(contrasts_results, eff)
     }

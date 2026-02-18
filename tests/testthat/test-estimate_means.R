@@ -1,6 +1,6 @@
 skip_on_cran()
 skip_if_not_installed("emmeans")
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
 test_that("estimate_means() - lm", {
   data(mtcars)
@@ -91,12 +91,13 @@ test_that("estimate_means() - lm", {
   expect_equal(estim1$CI_low[order(estim1$Sepal.Width)], estim2$CI_low, tolerance = 1e-3)
 
   # In formula modification
-  # FIXME: this got broken but it seems just to tedious to fix. Don't use in formula transforms.
-  # model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
-  # estim <- suppressMessages(estimate_means(model))
-  # expect_equal(dim(estim), c(3L, 5L))
   model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
-  estim <- estimate_means(model, by = c("wt", "gear"), backend = "marginalmeans")
+  estim <- suppressMessages(estimate_means(model))
+  expect_equal(dim(estim), c(3L, 7L))
+  estim <- suppressMessages(estimate_means(model, backend = "emmeans"))
+  expect_equal(dim(estim), c(3L, 5L))
+  model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
+  estim <- estimate_means(model, by = c("wt", "gear"), backend = "marginaleffects")
   expect_identical(dim(estim), c(30L, 8L))
 
   # One continuous and one factor
@@ -159,7 +160,7 @@ test_that("estimate_means() - lm", {
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
   estim1 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "marginalmeans"))
+  estim2 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "marginaleffects"))
   expect_identical(dim(estim1), c(4L, 6L))
   expect_identical(dim(estim2), c(4L, 8L))
   expect_equal(estim1$Mean, estim2$Mean[order(estim2$Sepal.Width)], tolerance = 1e-4)
@@ -326,7 +327,7 @@ test_that("estimate_means() - glm", {
 
 
 test_that("get_marginaleffects, overall mean", {
-  skip_if_not_installed("marginaleffects")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
   skip_if_not_installed("emmeans")
 
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
@@ -431,7 +432,12 @@ test_that("estimate_means, full averaging", {
   estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "population")
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
-  estim1 <- marginaleffects::avg_predictions(m, newdata = "balanced", by = c("c161sex", "c172code"))
+  # See https://github.com/vincentarelbundock/marginaleffects/issues/1575
+  # marginaleffects has a new behavior for calculating averages for numerics
+  # in the data grid, this, `newdata = "balanced"` gives slightly different results
+  # we therefor calculate the data grid manually here
+  d <- insight::get_datagrid(m, by = c("c161sex", "c172code"), factors = "all")
+  estim1 <- marginaleffects::avg_predictions(m, newdata = d, by = c("c161sex", "c172code"))
   estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "typical")
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 

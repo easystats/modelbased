@@ -53,7 +53,10 @@ pool_contrasts <- function(x, ...) {
   # confidence intervals ----
   pooled_comparisons <- .pool_ci_and_stats(pooled_comparisons, estimate_name, ci, dof)
 
-  attributes(pooled_comparisons) <- utils::modifyList(attributes(original_x[[1]]), attributes(pooled_comparisons))
+  attributes(pooled_comparisons) <- utils::modifyList(
+    attributes(original_x[[1]]),
+    attributes(pooled_comparisons)
+  )
   pooled_comparisons
 }
 
@@ -110,7 +113,14 @@ pool_predictions <- function(x, transform = NULL, ...) {
   obj_name <- deparse(substitute(x), width.cutoff = 500)
   original_x <- x
 
-  if (!all(vapply(x, inherits, logical(1), c("estimate_means", "estimate_slopes", "estimate_predicted")))) {
+  if (
+    !all(vapply(
+      x,
+      inherits,
+      logical(1),
+      c("estimate_means", "estimate_slopes", "estimate_predicted")
+    ))
+  ) {
     insight::format_error(
       "`x` must be a list of `estimate_means` objects, as returned by `estimate_means()`, or a list of `estimate_predicted` objects, as returned by functions like `estimate_expectation()`." # nolint
     )
@@ -122,7 +132,7 @@ pool_predictions <- function(x, transform = NULL, ...) {
   # preparation ----
 
   ci <- attributes(x[[1]])$ci
-  model <- attributes(x[[1]])$model
+  model <- insight::get_model(x[[1]])
   dof <- x[[1]]$df
 
   # we don't use the link-inverse because standard errors are calculated using
@@ -146,7 +156,9 @@ pool_predictions <- function(x, transform = NULL, ...) {
 
   # back-transform response and CI?
   if (!is.null(transform_fun)) {
-    pooled_predictions[[estimate_name]] <- transform_fun(pooled_predictions[[estimate_name]])
+    pooled_predictions[[estimate_name]] <- transform_fun(pooled_predictions[[
+      estimate_name
+    ]])
     pooled_predictions$CI_low <- transform_fun(pooled_predictions$CI_low)
     pooled_predictions$CI_high <- transform_fun(pooled_predictions$CI_high)
   }
@@ -162,7 +174,6 @@ pool_slopes <- pool_predictions
 
 # helper ------
 
-
 # pool estimate
 .pool_estimates <- function(original_x, estimate_name, pooled_predictions) {
   n_rows <- nrow(original_x[[1]])
@@ -170,7 +181,10 @@ pool_slopes <- pool_predictions
 
   for (i in 1:n_rows) {
     # pooled estimate
-    pooled_pred <- unlist(lapply(original_x, function(j) j[[estimate_name]][i]), use.names = FALSE)
+    pooled_pred <- unlist(
+      lapply(original_x, function(j) j[[estimate_name]][i]),
+      use.names = FALSE
+    )
     pooled_predictions[[estimate_name]][i] <- mean(pooled_pred, na.rm = TRUE)
 
     # pooled standard error
@@ -205,7 +219,8 @@ pool_slopes <- pool_predictions
   alpha <- (1 + ci) / 2
   fac <- stats::qt(alpha, df = pooled_df)
   pooled_estimates$CI_low <- pooled_estimates[[estimate_name]] - fac * pooled_estimates$SE
-  pooled_estimates$CI_high <- pooled_estimates[[estimate_name]] + fac * pooled_estimates$SE
+  pooled_estimates$CI_high <- pooled_estimates[[estimate_name]] +
+    fac * pooled_estimates$SE
 
   # update statistic column
   statistic <- pooled_estimates[[estimate_name]] / pooled_estimates$SE
@@ -217,7 +232,8 @@ pool_slopes <- pool_predictions
   # udpate df and p-value
   pooled_estimates$df <- pooled_df
   if ("p" %in% colnames(pooled_estimates)) {
-    pooled_estimates$p <- 2 * stats::pt(abs(statistic), df = pooled_df, lower.tail = FALSE)
+    pooled_estimates$p <- 2 *
+      stats::pt(abs(statistic), df = pooled_df, lower.tail = FALSE)
   }
 
   pooled_estimates
@@ -245,7 +261,18 @@ pool_slopes <- pool_predictions
 
 .stat_column_names <- function() {
   t_names <- c("t", "t-value", "t value", "t.value", "Pr(>|t|)")
-  z_names <- c("z", "z-value", "z value", "z.value", "Pr(>|z|)", "Pr(>|Z|)", "Naive z", "Robust z", "san.z", "Wald Z")
+  z_names <- c(
+    "z",
+    "z-value",
+    "z value",
+    "z.value",
+    "Pr(>|z|)",
+    "Pr(>|Z|)",
+    "Naive z",
+    "Robust z",
+    "san.z",
+    "Wald Z"
+  )
   f_names <- c("F", "F-value", "F value", "F.value", "Pr(>|F|)")
   chi_names <- c("Chisq", "chi-sq", "chi.sq", "Wald", "W", "Pr(>|W|)")
 

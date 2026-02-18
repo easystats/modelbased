@@ -1,13 +1,15 @@
 #' @export
-estimate_contrasts.estimate_predicted <- function(model,
-                                                  contrast = NULL,
-                                                  by = NULL,
-                                                  predict = "response",
-                                                  ci = 0.95,
-                                                  p_adjust = "none",
-                                                  comparison = "pairwise",
-                                                  verbose = TRUE,
-                                                  ...) {
+estimate_contrasts.estimate_predicted <- function(
+  model,
+  contrast = NULL,
+  by = NULL,
+  predict = "response",
+  ci = 0.95,
+  p_adjust = "none",
+  comparison = "pairwise",
+  verbose = TRUE,
+  ...
+) {
   # sanity check
   if (inherits(comparison, "formula")) {
     comparison <- all.vars(comparison)[1]
@@ -20,7 +22,7 @@ estimate_contrasts.estimate_predicted <- function(model,
   # the "model" object is an object of class "estimate_predicted", we want
   # to copy that into a separate object, for clearer names
   predictions <- object <- model
-  model <- attributes(object)$model
+  model <- insight::get_model(object)
   datagrid <- attributes(object)$datagrid
 
   # sanity check - user-defined by-variables may not be in the data
@@ -80,12 +82,7 @@ estimate_contrasts.estimate_predicted <- function(model,
     se_from_predictions <- tryCatch(
       {
         # arguments for predict(), to get SE on response scale for non-Gaussian models
-        my_args <- list(
-          model,
-          newdata = datagrid,
-          type = predict,
-          se.fit = TRUE
-        )
+        my_args <- list(model, newdata = datagrid, type = predict, se.fit = TRUE)
         # for mixed models, need to set re.form to NULL or NA
         if (insight::is_mixed_model(model)) {
           my_args$re.form <- NULL
@@ -120,6 +117,7 @@ estimate_contrasts.estimate_predicted <- function(model,
   }
 
   # compute contrasts or comparisons
+  # fmt: skip
   out <- switch(comparison,
     pairwise = .compute_comparisons(predictions, dof, vcov_matrix, datagrid, contrast, by, crit_factor),
     interaction = .compute_interactions(predictions, dof, vcov_matrix, datagrid, contrast, by, crit_factor)
@@ -143,7 +141,9 @@ estimate_contrasts.estimate_predicted <- function(model,
       to_remove <- unique(out[[i]])
       for (j in to_remove) {
         if (all(c("Level1", "Level2") %in% colnames(out))) {
+          # fmt: skip
           levels(out$Level1) <- insight::trim_ws(gsub(j, "", levels(out$Level1), fixed = TRUE))
+          # fmt: skip
           levels(out$Level2) <- insight::trim_ws(gsub(j, "", levels(out$Level2), fixed = TRUE))
         } else if ("Parameter" %in% colnames(out)) {
           out$Parameter <- insight::trim_ws(gsub(j, "", out$Parameter, fixed = TRUE))
@@ -181,7 +181,15 @@ estimate_contrasts.estimate_predicted <- function(model,
 
 
 # pairwise comparisons ----------------------------------------------------
-.compute_comparisons <- function(predictions, dof, vcov_matrix, datagrid, contrast, by, crit_factor) {
+.compute_comparisons <- function(
+  predictions,
+  dof,
+  vcov_matrix,
+  datagrid,
+  contrast,
+  by,
+  crit_factor
+) {
   # we need the focal terms and all unique values from the datagrid
   focal_terms <- unique(c(contrast, by))
 
@@ -254,54 +262,57 @@ estimate_contrasts.estimate_predicted <- function(model,
   }
 
   # now we iterate over all pairs and try to find the corresponding predictions
-  out <- do.call(rbind, lapply(seq_len(nrow(pairs_data[[1]])), function(i) {
-    pos1 <- predictions[[focal_terms[1]]] == pairs_data[[1]][i, 1]
-    pos2 <- predictions[[focal_terms[1]]] == pairs_data[[2]][i, 1]
+  out <- do.call(
+    rbind,
+    lapply(seq_len(nrow(pairs_data[[1]])), function(i) {
+      pos1 <- predictions[[focal_terms[1]]] == pairs_data[[1]][i, 1]
+      pos2 <- predictions[[focal_terms[1]]] == pairs_data[[2]][i, 1]
 
-    # for all focal terms, make sure we only keep the matching pairs
-    if (length(focal_terms) > 1) {
-      for (j in 2:length(focal_terms)) {
-        pos1 <- pos1 & predictions[[focal_terms[j]]] == pairs_data[[1]][i, j]
-        pos2 <- pos2 & predictions[[focal_terms[j]]] == pairs_data[[2]][i, j]
+      # for all focal terms, make sure we only keep the matching pairs
+      if (length(focal_terms) > 1) {
+        for (j in 2:length(focal_terms)) {
+          pos1 <- pos1 & predictions[[focal_terms[j]]] == pairs_data[[1]][i, j]
+          pos2 <- pos2 & predictions[[focal_terms[j]]] == pairs_data[[2]][i, j]
+        }
       }
-    }
-    # once we have found the correct rows for the pairs, we can calculate
-    # the contrast. We need the predicted values first
-    predicted1 <- predictions$Predicted[pos1]
-    predicted2 <- predictions$Predicted[pos2]
+      # once we have found the correct rows for the pairs, we can calculate
+      # the contrast. We need the predicted values first
+      predicted1 <- predictions$Predicted[pos1]
+      predicted2 <- predictions$Predicted[pos2]
 
-    # we then create labels for the pairs. "result" is a data frame with
-    # the labels (of the pairwise contrasts) as columns.
-    result <- data.frame(
-      Parameter = paste(
-        paste0("(", paste(pairs_data[[1]][i, contrast_pos], collapse = " "), ")"),
-        paste0("(", paste(pairs_data[[2]][i, contrast_pos], collapse = " "), ")"),
-        sep = "-"
-      ),
-      stringsAsFactors = FALSE
-    )
-    # we then add the contrast and the standard error. for linear models, the
-    # SE is sqrt(se1^2 + se2^2).
-    result$Difference <- predicted1 - predicted2
-    # sum of squared standard errors
-    sum_se_squared <- predictions$SE[pos1]^2 + predictions$SE[pos2]^2
-    # for non-Gaussian models, we subtract the covariance of the two predictions
-    # but only if the vcov_matrix is not NULL and has the correct dimensions
-    correct_row_dims <- nrow(vcov_matrix) > 0 && all(nrow(vcov_matrix) >= which(pos1))
-    correct_col_dims <- ncol(vcov_matrix) > 0 && all(ncol(vcov_matrix) >= which(pos2))
-    if (is.null(vcov_matrix) || !correct_row_dims || !correct_col_dims) {
-      vcov_sub <- 0
-    } else {
-      vcov_sub <- vcov_matrix[which(pos1), which(pos2)]^2
-    }
-    # Avoid negative values in sqrt()
-    if (vcov_sub >= sum_se_squared) {
-      result$SE <- sqrt(sum_se_squared)
-    } else {
-      result$SE <- sqrt(sum_se_squared - vcov_sub)
-    }
-    result
-  }))
+      # we then create labels for the pairs. "result" is a data frame with
+      # the labels (of the pairwise contrasts) as columns.
+      result <- data.frame(
+        Parameter = paste(
+          paste0("(", paste(pairs_data[[1]][i, contrast_pos], collapse = " "), ")"),
+          paste0("(", paste(pairs_data[[2]][i, contrast_pos], collapse = " "), ")"),
+          sep = "-"
+        ),
+        stringsAsFactors = FALSE
+      )
+      # we then add the contrast and the standard error. for linear models, the
+      # SE is sqrt(se1^2 + se2^2).
+      result$Difference <- predicted1 - predicted2
+      # sum of squared standard errors
+      sum_se_squared <- predictions$SE[pos1]^2 + predictions$SE[pos2]^2
+      # for non-Gaussian models, we subtract the covariance of the two predictions
+      # but only if the vcov_matrix is not NULL and has the correct dimensions
+      correct_row_dims <- nrow(vcov_matrix) > 0 && all(nrow(vcov_matrix) >= which(pos1))
+      correct_col_dims <- ncol(vcov_matrix) > 0 && all(ncol(vcov_matrix) >= which(pos2))
+      if (is.null(vcov_matrix) || !correct_row_dims || !correct_col_dims) {
+        vcov_sub <- 0
+      } else {
+        vcov_sub <- vcov_matrix[which(pos1), which(pos2)]^2
+      }
+      # Avoid negative values in sqrt()
+      if (vcov_sub >= sum_se_squared) {
+        result$SE <- sqrt(sum_se_squared)
+      } else {
+        result$SE <- sqrt(sum_se_squared - vcov_sub)
+      }
+      result
+    })
+  )
   # add CI and p-values
   out$CI_low <- out$Difference - stats::qt(crit_factor, df = dof) * out$SE
   out$CI_high <- out$Difference + stats::qt(crit_factor, df = dof) * out$SE
@@ -313,10 +324,13 @@ estimate_contrasts.estimate_predicted <- function(model,
     idx <- rep_len(TRUE, nrow(out))
     for (filter_by in by) {
       # create index with "by" variables for each comparison pair
-      filter_data <- do.call(cbind, lapply(pairs_data, function(i) {
-        colnames(i) <- focal_terms
-        i[filter_by]
-      }))
+      filter_data <- do.call(
+        cbind,
+        lapply(pairs_data, function(i) {
+          colnames(i) <- focal_terms
+          i[filter_by]
+        })
+      )
       # check which pairs have identical values - these are the rows we want to keep
       idx <- idx & unname(apply(filter_data, 1, function(r) r[1] == r[2]))
     }
@@ -333,14 +347,24 @@ estimate_contrasts.estimate_predicted <- function(model,
 
 
 # interaction contrasts  ----------------------------------------------------
-.compute_interactions <- function(predictions, dof, vcov_matrix, datagrid, contrast, by, crit_factor) {
+.compute_interactions <- function(
+  predictions,
+  dof,
+  vcov_matrix,
+  datagrid,
+  contrast,
+  by,
+  crit_factor
+) {
   # we need the focal terms and all unique values from the datagrid
   focal_terms <- c(contrast, by)
   at_list <- lapply(datagrid[focal_terms], unique)
 
   ## TODO: interaction contrasts currently only work for two focal terms
   if (length(focal_terms) != 2) {
-    insight::format_error("Interaction contrasts currently only work for two focal terms.")
+    insight::format_error(
+      "Interaction contrasts currently only work for two focal terms."
+    )
   }
 
   # create pairwise combinations of first focal term
@@ -370,60 +394,72 @@ estimate_contrasts.estimate_predicted <- function(model,
   pairs_focal2$Freq <- NULL
 
   # now we iterate over all pairs and try to find the corresponding predictions
-  out <- do.call(rbind, lapply(seq_len(nrow(pairs_focal1)), function(i) {
-    # differences between levels of first focal term
-    pos1 <- predictions[[focal_terms[1]]] == pairs_focal1[i, 1]
-    pos2 <- predictions[[focal_terms[1]]] == pairs_focal1[i, 2]
+  out <- do.call(
+    rbind,
+    lapply(seq_len(nrow(pairs_focal1)), function(i) {
+      # differences between levels of first focal term
+      pos1 <- predictions[[focal_terms[1]]] == pairs_focal1[i, 1]
+      pos2 <- predictions[[focal_terms[1]]] == pairs_focal1[i, 2]
 
-    do.call(rbind, lapply(seq_len(nrow(pairs_focal2)), function(j) {
-      # difference between levels of first focal term, *within* first
-      # level of second focal term
-      pos_1a <- pos1 & predictions[[focal_terms[2]]] == pairs_focal2[j, 1]
-      pos_1b <- pos2 & predictions[[focal_terms[2]]] == pairs_focal2[j, 1]
-      # difference between levels of first focal term, *within* second
-      # level of second focal term
-      pos_2a <- pos1 & predictions[[focal_terms[2]]] == pairs_focal2[j, 2]
-      pos_2b <- pos2 & predictions[[focal_terms[2]]] == pairs_focal2[j, 2]
-      # once we have found the correct rows for the pairs, we can calculate
-      # the contrast. We need the predicted values first
-      predicted1 <- predictions$Predicted[pos_1a] - predictions$Predicted[pos_1b]
-      predicted2 <- predictions$Predicted[pos_2a] - predictions$Predicted[pos_2b]
-      # we then create labels for the pairs. "result" is a data frame with
-      # the labels (of the pairwise contrasts) as columns.
-      result <- data.frame(
-        a = paste(pairs_focal1[i, 1], pairs_focal1[i, 2], sep = "-"),
-        b = paste(pairs_focal2[j, 1], pairs_focal2[j, 2], sep = " and "),
-        stringsAsFactors = FALSE
+      do.call(
+        rbind,
+        lapply(seq_len(nrow(pairs_focal2)), function(j) {
+          # difference between levels of first focal term, *within* first
+          # level of second focal term
+          pos_1a <- pos1 & predictions[[focal_terms[2]]] == pairs_focal2[j, 1]
+          pos_1b <- pos2 & predictions[[focal_terms[2]]] == pairs_focal2[j, 1]
+          # difference between levels of first focal term, *within* second
+          # level of second focal term
+          pos_2a <- pos1 & predictions[[focal_terms[2]]] == pairs_focal2[j, 2]
+          pos_2b <- pos2 & predictions[[focal_terms[2]]] == pairs_focal2[j, 2]
+          # once we have found the correct rows for the pairs, we can calculate
+          # the contrast. We need the predicted values first
+          predicted1 <- predictions$Predicted[pos_1a] - predictions$Predicted[pos_1b]
+          predicted2 <- predictions$Predicted[pos_2a] - predictions$Predicted[pos_2b]
+          # we then create labels for the pairs. "result" is a data frame with
+          # the labels (of the pairwise contrasts) as columns.
+          result <- data.frame(
+            a = paste(pairs_focal1[i, 1], pairs_focal1[i, 2], sep = "-"),
+            b = paste(pairs_focal2[j, 1], pairs_focal2[j, 2], sep = " and "),
+            stringsAsFactors = FALSE
+          )
+          colnames(result) <- focal_terms
+          # we then add the contrast and the standard error. for linear models, the
+          # SE is sqrt(se1^2 + se2^2)
+          result$Difference <- predicted1 - predicted2
+          sum_se_squared <- sum(
+            predictions$SE[pos_1a]^2,
+            predictions$SE[pos_1b]^2,
+            predictions$SE[pos_2a]^2,
+            predictions$SE[pos_2b]^2
+          )
+          # for non-Gaussian models, we subtract the covariance of the two predictions
+          # but only if the vcov_matrix is not NULL and has the correct dimensions
+          correct_row_dims <- nrow(vcov_matrix) > 0 &&
+            all(nrow(vcov_matrix) >= which(pos_1a)) &&
+            all(nrow(vcov_matrix) >= which(pos_2a)) # nolint
+          correct_col_dims <- ncol(vcov_matrix) > 0 &&
+            all(ncol(vcov_matrix) >= which(pos_1b)) &&
+            all(ncol(vcov_matrix) >= which(pos_2b)) # nolint
+          if (is.null(vcov_matrix) || !correct_row_dims || !correct_col_dims) {
+            vcov_sub <- 0
+          } else {
+            vcov_sub <- sum(
+              vcov_matrix[which(pos_1a), which(pos_1b)]^2,
+              vcov_matrix[which(pos_2a), which(pos_2b)]^2
+            )
+          }
+          # Avoid negative values in sqrt()
+          if (vcov_sub >= sum_se_squared) {
+            result$SE <- sqrt(sum_se_squared)
+          } else {
+            result$SE <- sqrt(sum_se_squared - vcov_sub)
+          }
+          result
+        })
       )
-      colnames(result) <- focal_terms
-      # we then add the contrast and the standard error. for linear models, the
-      # SE is sqrt(se1^2 + se2^2)
-      result$Difference <- predicted1 - predicted2
-      sum_se_squared <- sum(
-        predictions$SE[pos_1a]^2, predictions$SE[pos_1b]^2,
-        predictions$SE[pos_2a]^2, predictions$SE[pos_2b]^2
-      )
-      # for non-Gaussian models, we subtract the covariance of the two predictions
-      # but only if the vcov_matrix is not NULL and has the correct dimensions
-      correct_row_dims <- nrow(vcov_matrix) > 0 && all(nrow(vcov_matrix) >= which(pos_1a)) && all(nrow(vcov_matrix) >= which(pos_2a)) # nolint
-      correct_col_dims <- ncol(vcov_matrix) > 0 && all(ncol(vcov_matrix) >= which(pos_1b)) && all(ncol(vcov_matrix) >= which(pos_2b)) # nolint
-      if (is.null(vcov_matrix) || !correct_row_dims || !correct_col_dims) {
-        vcov_sub <- 0
-      } else {
-        vcov_sub <- sum(
-          vcov_matrix[which(pos_1a), which(pos_1b)]^2,
-          vcov_matrix[which(pos_2a), which(pos_2b)]^2
-        )
-      }
-      # Avoid negative values in sqrt()
-      if (vcov_sub >= sum_se_squared) {
-        result$SE <- sqrt(sum_se_squared)
-      } else {
-        result$SE <- sqrt(sum_se_squared - vcov_sub)
-      }
-      result
-    }))
-  }))
+    })
+  )
   # add CI and p-values
   out$CI_low <- out$Difference - stats::qt(crit_factor, df = dof) * out$SE
   out$CI_high <- out$Difference + stats::qt(crit_factor, df = dof) * out$SE

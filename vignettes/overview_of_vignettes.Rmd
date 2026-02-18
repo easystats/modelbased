@@ -47,6 +47,7 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 ### Visualization
 
 * [Plotting estimated marginal means](https://easystats.github.io/modelbased/articles/plotting.html)
+* [Plotting estimated marginal means with tinyplot](https://easystats.github.io/modelbased/articles/plotting_tinyplot.html)
 * [Visualize effects and interactions](https://easystats.github.io/modelbased/articles/estimate_relation.html)
 * [The Modelisation Approach to Statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 
@@ -58,6 +59,7 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 * [Understanding your models](https://easystats.github.io/modelbased/articles/workflow_modelbased.html)
 * [Causal inference for observational data](https://easystats.github.io/modelbased/articles/practical_causality.html)
 * [Intersectionality analysis using the MAIHDA framework](https://easystats.github.io/modelbased/articles/practical_intersectionality.html)
+* [Measuring and comparing absolute and relative inequalities](https://easystats.github.io/modelbased/articles/practical_inequalities.html)
 * [Interrupted Time Series Analysis with `modelbased`](https://easystats.github.io/modelbased/articles/practical_its.html)
 * [An Introduction to Growth Mixture Models](https://easystats.github.io/modelbased/articles/practical_growthmixture.html)
 

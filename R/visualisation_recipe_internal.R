@@ -3,7 +3,7 @@
 #' @keywords internal
 .find_aes <- function(x, model_info = NULL, numeric_as_discrete = 8) {
   # init basic aes
-  data <- as.data.frame(x)
+  data <- as.data.frame(x, preserve_names = TRUE)
   data$.group <- 1
 
   att <- attributes(x)
@@ -61,7 +61,9 @@
     # we wouldn't expect that there is more than one of these columns, but we
     # check for that anyway...
     if (length(valid_y_vars) == 0) {
-      insight::format_error("Could not find a suitable column for the y-axis. Expected one of: 'Slope', 'Median', 'Mean', 'MAP'.")
+      insight::format_error(
+        "Could not find a suitable column for the y-axis. Expected one of: 'Slope', 'Median', 'Mean', 'MAP'."
+      )
     }
     aes$y <- valid_y_vars[1]
     if ("Comparison" %in% names(data)) {
@@ -88,32 +90,50 @@
     if (!is.null(att$coef_name) && length(att$coef_name)) {
       aes$y <- att$coef_name
     } else {
+      # Default y-axis for frequentist models
       aes$y <- "Coefficient"
     }
+    # Set a custom plot type, used later to apply specific geoms (pointrange, coord_flip)
     aes$type <- "grouplevel"
-    # setup facets
+
+    # --- Setup for faceting (creating multiple plot panels) ---
     facet_by <- NULL
+    # Check if there are multiple parameters (e.g., random intercept and random slope)
     if (insight::n_unique(data$Parameter) > 1) {
       facet_by <- c(facet_by, "Parameter")
-      # aes$color <- "Parameter"
     }
+    # Check if there are multiple grouping factors (e.g., (1|Subject) + (1|School))
     if (insight::n_unique(data$Group) > 1) {
       facet_by <- c(facet_by, "Group")
     }
+    # Check for multiple components (for complex distributional models)
     if (insight::n_unique(data$Component) > 1) {
       facet_by <- c(facet_by, "Component")
     }
+
+    # If any faceting is needed, create a new 'facet' column in the data
     if (!is.null(facet_by)) {
+      # Start with the group name (e.g., "Subject")
       data$facet <- data$Group
+      # Append the parameter name if needed (e.g., "Subject: Days")
       if ("Parameter" %in% facet_by) {
         data$facet <- paste0(data$facet, ": ", data$Parameter)
       }
+      # Append the component name if needed (e.g., "Subject: Days (sigma)")
       if ("Component" %in% facet_by) {
-        data$facet <- paste0(data$facet, " (", gsub("_", " ", data$Component, fixed = TRUE), ")")
+        data$facet <- paste0(
+          data$facet,
+          " (",
+          gsub("_", " ", data$Component, fixed = TRUE),
+          ")"
+        )
       }
+      # Tell the main plotting function to use this new column for faceting
       aes$facet <- "facet"
     }
+    # Find the columns for confidence intervals (ymin, ymax)
     aes <- .find_aes_ci(aes, data)
+    # Return the aesthetics and data, and exit the function
     return(list(aes = aes, data = data))
   }
 
@@ -122,7 +142,9 @@
     by <- att$by
   }
   if (length(by) == 0) {
-    insight::format_error("No `by` variable was detected, so nothing to put in the x-axis.")
+    insight::format_error(
+      "No `by` variable was detected, so nothing to put in the x-axis."
+    )
   }
 
   # first variable for x-axis - decide whether we have a dot- or a line-plot
@@ -168,7 +190,10 @@
     if (is.numeric(data[[by[3]]])) {
       aes$alpha <- by[3]
     } else {
-      aes$facet <- stats::as.formula(paste("~", paste(utils::tail(by, -2), collapse = " * ")))
+      aes$facet <- stats::as.formula(paste(
+        "~",
+        paste(utils::tail(by, -2), collapse = " * ")
+      ))
     }
     data$.group <- paste(data$.group, data[[by[3]]])
   }
@@ -242,19 +267,22 @@
 
 # Workhorse function ------------------------------------------------------
 
-
 #' @keywords internal
-.visualization_recipe <- function(x,
-                                  show_data = TRUE,
-                                  point = NULL,
-                                  line = NULL,
-                                  pointrange = NULL,
-                                  ribbon = NULL,
-                                  facet = NULL,
-                                  grid = NULL,
-                                  join_dots = TRUE,
-                                  numeric_as_discrete = 8,
-                                  ...) {
+.visualization_recipe <- function(
+  x,
+  show_data = TRUE,
+  show_residuals = FALSE,
+  collapse_by = NULL,
+  point = NULL,
+  line = NULL,
+  pointrange = NULL,
+  ribbon = NULL,
+  facet = NULL,
+  grid = NULL,
+  join_dots = TRUE,
+  numeric_as_discrete = 8,
+  ...
+) {
   # init
   response_scale <- attributes(x)$predict
   model_info <- attributes(x)$model_info
@@ -275,8 +303,11 @@
   }
 
   # Don't plot raw data if `predict` is not on the response scale
-  if (!is.null(response_scale) && !response_scale %in% c("prediction", "response", "expectation", "invlink(link)")) {
-    show_data <- FALSE
+  if (
+    !is.null(response_scale) &&
+      !response_scale %in% c("prediction", "response", "expectation", "invlink(link)")
+  ) {
+    show_data <- show_residuals <- FALSE
   }
 
   # Don't plot raw data for transformed responses with no back-transformation
@@ -286,32 +317,61 @@
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(attributes(x)$model))
     if (!is.null(trans_fun) && all(trans_fun != "identity")) {
-      show_data <- FALSE
+      show_data <- show_residuals <- FALSE
     }
   }
 
-
   # add raw data as first layer ----------------------------------
-  if (show_data) {
-    layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)
+  if (show_data && is.null(collapse_by)) {
+    layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes, numeric_as_discrete)
     # Update with additional args
-    if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
+    if (!is.null(point)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
+    }
     l <- l + 1
   }
 
+  # add residual data as next lowest layer
+  if (show_residuals && is.null(collapse_by)) {
+    layers[[paste0("l", l)]] <- .visualization_recipe_residuals(
+      x,
+      aes,
+      numeric_as_discrete
+    )
+    # Update with additional args
+    if (!is.null(point)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
+    }
+    l <- l + 1
+  }
+
+  # next possible data layer is collapsing by group ---------------
+  if (!is.null(collapse_by) && (show_data || show_residuals)) {
+    layers[[paste0("l", l)]] <- .visualization_recipe_collapsed_data(
+      x,
+      aes,
+      collapse_by,
+      numeric_as_discrete,
+      show_residuals
+    )
+    # Update with additional args
+    if (!is.null(point)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
+    }
+    l <- l + 1
+  }
 
   # intercept line for slopes ----------------------------------
   if (inherits(x, "estimate_slopes")) {
     layers[[paste0("l", l)]] <- insight::compact_list(list(
       geom = "hline",
       yintercept = 0,
-      alpha = 1 / 2,
+      alpha = getOption("modelbased_slopes_alpha", 1 / 2),
       linetype = "dashed"
     ))
     l <- l + 1
     global_aes$group <- ".group"
   }
-
 
   # Uncertainty -----------------------------------
   if (!identical(ribbon, "none") && aes$type == "ribbon" && is.null(aes$alpha)) {
@@ -332,9 +392,11 @@
         geom = "ribbon",
         data = data,
         aes = aes_list,
-        alpha = 1 / 3
+        alpha = getOption("modelbased_ribbon_alpha", 1 / 4)
       )
-      if (!is.null(ribbon)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
+      if (!is.null(ribbon)) {
+        layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
+      }
       l <- l + 1
     }
   }
@@ -344,26 +406,19 @@
   # connecting lines between point geoms
   if (!aes$type %in% do_not_join) {
     # base list elements
-    aes_list <- list(
-      y = aes$y,
-      x = aes$x,
-      color = aes$color,
-      alpha = aes$alpha
-    )
+    aes_list <- list(y = aes$y, x = aes$x, color = aes$color, alpha = aes$alpha)
     # optionally add group aes, if not in global_aes and not null
     if (!"group" %in% names(global_aes) || !is.null(aes$group)) {
       aes_list$group <- aes$group
     }
-    layers[[paste0("l", l)]] <- list(
-      geom = "line",
-      data = data,
-      aes = aes_list
-    )
+    layers[[paste0("l", l)]] <- list(geom = "line", data = data, aes = aes_list)
     if (!is.null(aes$color) && aes$type %in% c("pointrange", "point")) {
       layers[[paste0("l", l)]]$position <- "dodge"
       layers[[paste0("l", l)]]$width <- 0.2
     }
-    if (!is.null(line)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
+    if (!is.null(line)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
+    }
     l <- l + 1
   }
 
@@ -386,7 +441,9 @@
       layers[[paste0("l", l)]]$position <- "dodge"
       layers[[paste0("l", l)]]$width <- 0.2
     }
-    if (!is.null(pointrange)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
+    if (!is.null(pointrange)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
+    }
     l <- l + 1
   }
   if (aes$type == "grouplevel") {
@@ -394,15 +451,12 @@
     l <- l + 1
   }
 
-
   # grids and facets ----------------------------------
   if (!is.null(aes$facet)) {
-    layers[[paste0("l", l)]] <- list(
-      geom = "facet_wrap",
-      data = data,
-      facets = aes$facet
-    )
-    if (!is.null(facet)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    layers[[paste0("l", l)]] <- list(geom = "facet_wrap", data = data, facets = aes$facet)
+    if (!is.null(facet)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    }
     l <- l + 1
   }
   if (!is.null(aes$grid)) {
@@ -412,10 +466,11 @@
       rows = aes$grid,
       scales = "free_x"
     )
-    if (!is.null(grid)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    if (!is.null(grid)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    }
     l <- l + 1
   }
-
 
   # add axis and legend labels ----------------------------------
   if (!is.null(aes$labs)) {
@@ -429,11 +484,11 @@
     l <- l + 1
   }
 
-
   # probability scale? ----------------------------------
   if (
     !is.null(response_scale) &&
-      response_scale %in% c("response", "expectation", "invlink(link)", "prob", "probs") &&
+      response_scale %in%
+        c("response", "expectation", "invlink(link)", "prob", "probs") &&
       isTRUE(
         model_info$is_logit |
           model_info$is_binomial |
@@ -456,9 +511,12 @@
     l <- l + 1
   }
 
-
   # Out
-  class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))
+  class(layers) <- unique(c(
+    "visualisation_recipe",
+    "see_visualisation_recipe",
+    class(layers)
+  ))
   attr(layers, "data") <- data
   attr(layers, "global_aes") <- insight::compact_list(global_aes)
   layers
@@ -467,17 +525,116 @@
 
 # Raw data ----------------------------------------------------------------
 
-
 #' @keywords internal
-.visualization_recipe_rawdata <- function(x, aes) {
-  model <- attributes(x)$model
+.visualization_recipe_rawdata <- function(x, aes, numeric_as_discrete = 8) {
+  model <- insight::get_model(x)
   rawdata <- insight::get_data(model, verbose = FALSE)
 
   # Add response to data if not there
   y <- insight::find_response(attributes(x)$model)
-  if (!y %in% names(rawdata)) rawdata[y] <- insight::get_response(attributes(x)$model, verbose = FALSE)
+  if (!y %in% names(rawdata)) {
+    rawdata[y] <- insight::get_response(attributes(x)$model, verbose = FALSE)
+  }
 
-  if (aes$type == "pointrange" && !is.numeric(rawdata[[aes$x]])) {
+  # if we have less than 8 values for the legend, a continuous color scale
+  # is used by default - we then must convert values into factors, when we
+  # show data or residuals - but we must ensure that the levels are sorted
+  # according to the original data grid, thus we need "sort()"
+  if (
+    !is.null(aes$color) &&
+      is.numeric(rawdata[[aes$color]]) &&
+      insight::n_unique(rawdata[[aes$color]]) < numeric_as_discrete
+  ) {
+    new_values <- insight::format_value(rawdata[[aes$color]], protect_integers = TRUE)
+    rawdata[[aes$color]] <- factor(
+      new_values,
+      levels = as.character(sort(as.numeric(unique(new_values))))
+    )
+  }
+
+  .data_point_geom(model = model, aes = aes, data = rawdata, y = y)
+}
+
+
+# residuals ----------------------------------------------------------------
+
+#' @keywords internal
+.visualization_recipe_residuals <- function(x, aes, numeric_as_discrete = 8) {
+  model <- insight::get_model(x)
+  residual_data <- residualize_over_grid(x, model)
+
+  # if we have less than 8 values for the legend, a continuous color scale
+  # is used by default - we then must convert values into factors, when we
+  # show data or residuals - but we must ensure that the levels are sorted
+  # according to the original data grid, thus we need "sort()"
+  if (
+    !is.null(aes$color) &&
+      is.numeric(residual_data[[aes$color]]) &&
+      insight::n_unique(residual_data[[aes$color]]) < numeric_as_discrete
+  ) {
+    new_values <- insight::format_value(
+      residual_data[[aes$color]],
+      protect_integers = TRUE
+    )
+    residual_data[[aes$color]] <- factor(
+      new_values,
+      levels = as.character(sort(as.numeric(unique(new_values))))
+    )
+  }
+
+  .data_point_geom(
+    model = model,
+    aes = aes,
+    data = residual_data,
+    y = intersect(colnames(residual_data), c("Mean", "Predicted"))[1]
+  )
+}
+
+
+# Collapsed data ----------------------------------------------------------------
+
+#' @keywords internal
+.visualization_recipe_collapsed_data <- function(
+  x,
+  aes,
+  collapse_by,
+  numeric_as_discrete = 8,
+  show_residuals = FALSE
+) {
+  model <- insight::get_model(x)
+  rawdata <- collapse_by_group(x, model, collapse_by, residuals = show_residuals)
+
+  # if we have less than 8 values for the legend, a continuous color scale
+  # is used by default - we then must convert values into factors, when we
+  # show data or residuals - but we must ensure that the levels are sorted
+  # according to the original data grid, thus we need "sort()"
+  if (
+    !is.null(aes$color) &&
+      is.numeric(rawdata[[aes$color]]) &&
+      insight::n_unique(rawdata[[aes$color]]) < numeric_as_discrete
+  ) {
+    new_values <- insight::format_value(rawdata[[aes$color]], protect_integers = TRUE)
+    rawdata[[aes$color]] <- factor(
+      new_values,
+      levels = as.character(sort(as.numeric(unique(new_values))))
+    )
+  }
+
+  .data_point_geom(
+    model = model,
+    aes = aes,
+    data = rawdata,
+    y = insight::find_response(model),
+    size = 2,
+    jitter = 0.1
+  )
+}
+
+
+# helpers -----------------------------------------------------------------
+
+.data_point_geom <- function(model, aes, data, y, ...) {
+  if (aes$type == "pointrange" && !is.numeric(data[[aes$x]])) {
     geom <- "jitter"
   } else {
     geom <- "point"
@@ -493,31 +650,35 @@
 
   out <- list(
     geom = geom,
-    data = rawdata,
-    aes = list(
-      y = y,
-      x = aes$x,
-      color = aes$color,
-      alpha = aes$alpha
-    ),
+    data = data,
+    aes = list(y = y, x = aes$x, color = aes$color, alpha = aes$alpha),
     height = 0,
     shape = shape,
     stroke = stroke
   )
 
+  dots <- list(...)
+  if (!is.null(dots$size)) {
+    out$size <- dots$size
+  }
+  if (!is.null(dots$jitter)) {
+    out$position <- "jitter"
+    out$width <- dots$jitter
+  }
+
   # check if we have matching columns in the raw data - some functions,
   # likes slopes, have mapped these aes to other columns that are not part
   # of the raw data - we set them to NULL
-  if (!is.null(aes$color) && !aes$color %in% colnames(rawdata)) {
+  if (!is.null(aes$color) && !aes$color %in% colnames(data)) {
     out$aes$color <- NULL
   }
-  if (!is.null(aes$alpha) && !aes$alpha %in% colnames(rawdata)) {
+  if (!is.null(aes$alpha) && !aes$alpha %in% colnames(data)) {
     out$aes$alpha <- NULL
   }
 
   # set default alpha, if not mapped by aes
   if (is.null(aes$alpha)) {
-    out$alpha <- 1 / 3
+    out$alpha <- getOption("modelbased_ribbon_alpha", 1 / 3)
   } else {
     out$alpha <- NULL
   }

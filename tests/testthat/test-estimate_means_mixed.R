@@ -1,6 +1,6 @@
 skip_on_cran()
 skip_if_not_installed("emmeans")
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
 test_that("estimate_means() - mixed models", {
   skip_if_not_installed("lme4")
@@ -108,9 +108,8 @@ test_that("estimate_contrasts - Random Effects Levels, pairwise", {
 
   # Quality of Life score ranges from 0 to 25
   m_null <- glmmTMB::glmmTMB(qol ~ 1 + (1 | gender:employed:age), data = dat)
-  expect_message(
-    estimate_means(m_null, by = c("gender", "employed", "age")),
-    regex = "Standard errors are probably not reliable"
+  expect_silent(
+    estimate_means(m_null, by = c("gender", "employed", "age"))
   )
   expect_silent(
     estimate_means(m_null, by = c("gender", "employed", "age"), verbose = FALSE)

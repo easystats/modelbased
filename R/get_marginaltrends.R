@@ -7,19 +7,25 @@
 #' get_marginaltrends(model, trend = "Petal.Length", by = "Petal.Length")
 #' get_marginaltrends(model, trend = "Petal.Length", by = c("Species", "Petal.Length"))
 #' @export
-get_marginaltrends <- function(model,
-                               trend = NULL,
-                               by = NULL,
-                               predict = NULL,
-                               ci = 0.95,
-                               p_adjust = "none",
-                               transform = NULL,
-                               keep_iterations = FALSE,
-                               verbose = TRUE,
-                               ...) {
+get_marginaltrends <- function(
+  model,
+  trend = NULL,
+  by = NULL,
+  predict = NULL,
+  ci = 0.95,
+  estimate = NULL,
+  transform = NULL,
+  p_adjust = "none",
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # check if available
-  insight::check_if_installed("marginaleffects")
+  insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
   dots <- list(...)
+
+  # set defaults
+  estimate <- .validate_estimate_arg(estimate)
 
   # model details
   model_info <- insight::model_info(model, response = 1, verbose = FALSE)
@@ -34,10 +40,12 @@ get_marginaltrends <- function(model,
   if (is.null(by) && is.null(myargs$range)) {
     datagrid <- datagrid_info <- NULL
   } else {
+    # setup arguments to create the data grid
+    dg_factors <- switch(estimate, specific = "reference", "all")
     dg_args <- list(
       model,
       by = c(by, myargs$range),
-      factors = "all",
+      factors = dg_factors,
       include_random = TRUE,
       verbose = FALSE
     )
@@ -101,16 +109,19 @@ get_marginaltrends <- function(model,
 
   # setup arguments again
   fun_args <- insight::compact_list(c(
-    list(
-      model,
-      variables = myargs$trend,
-      by = myargs$by,
-      newdata = datagrid,
-      conf_level = ci
-    ),
+    list(model, variables = myargs$trend, by = myargs$by, conf_level = ci),
     dots
   ))
 
+  # all other "marginalizations"
+  # we don't want a datagrid for "average" option
+  if (is.null(dots$newdata) && estimate != "average") {
+    # we allow individual "newdata" options, so do not
+    # # overwrite if explicitly set
+    fun_args$newdata <- datagrid
+  }
+
+  # fmt: skip
   # handle distributional parameters
   if (!is.null(predict) && inherits(model, "brmsfit") && predict %in% .brms_aux_elements(model)) {
     fun_args$dpar <- predict
@@ -143,6 +154,14 @@ get_marginaltrends <- function(model,
     estimated$std.error <- NULL
   }
 
+  # Fifth step: post-processing marginal means----------------------------------
+  # ---------------------------------------------------------------------------
+
+  # filter "by" rows when we have "average" marginalization, because we don't
+  # pass data grid in such situations - but we still created the data grid based
+  # on the `by` variables, for internal use, for example filtering at this point
+  estimated <- .filter_datagrid_average(estimated, estimate, datagrid, datagrid_info)
+
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
@@ -159,7 +178,8 @@ get_marginaltrends <- function(model,
         ci = ci,
         transform = !is.null(transform),
         keep_iterations = keep_iterations,
-        vcov = vcov_slopes
+        vcov = vcov_slopes,
+        equivalence = dots$equivalence
       )
     )
   )

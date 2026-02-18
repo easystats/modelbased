@@ -1,4 +1,4 @@
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 skip_if_not_installed("lme4")
 
 test_that("multivariate response", {

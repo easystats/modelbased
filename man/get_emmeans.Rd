@@ -49,8 +49,8 @@ get_marginalcontrasts(
   ci = 0.95,
   comparison = "pairwise",
   estimate = NULL,
-  p_adjust = "none",
   transform = NULL,
+  p_adjust = "none",
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -74,8 +74,9 @@ get_marginaltrends(
   by = NULL,
   predict = NULL,
   ci = 0.95,
-  p_adjust = "none",
+  estimate = NULL,
   transform = NULL,
+  p_adjust = "none",
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -143,14 +144,22 @@ section \emph{Comparison options} below.
 multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
-\item String: Two special string options are \code{"inequality"} and
-\code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
+\item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},
+and \code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
 marginal effect inequality summary of categorical predictors' overall
 effects, respectively, the comprehensive effect of an independent
 variable across all outcome categories of a nominal or ordinal dependent
-variable (total marginal effect, see \emph{Mize and Han, 2025}).
-\code{comparison = "inequality_pairwise"} computes the difference (pairwise
-comparisons) between marginal effects inequality measures.
+variable (also called \emph{absolute inequality}, or total marginal effect,
+see \emph{Mize and Han, 2025}). \code{"inequality_ratio"} computes the ratio of
+marginal effect inequality measures, also known as \emph{relative inequality}.
+This is useful to compare the relative effects of different predictors on
+the dependent variable. It provides a measure of how much more or less
+inequality one predictor has compared to another.
+\code{comparison = "inequality_pairwise"} computes pairwise differences of
+absolute inequality measures, while \code{"inequality_ratio_pairwise"}
+computes pairwise differences of relative inequality measures (ratios).
+See an overview of applications in the related case study in the
+\href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignettes}.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
@@ -200,24 +209,24 @@ Additional arguments can be passed to these functions.
 \code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
 \code{rope_range}, or \code{test} are passed to that function.
 \item Especially for \code{estimate_contrasts()} with integer focal predictors, for
-which contrasts should be calculated, use argument \code{integer_as_numeric} to
-set the maximum number of unique values in an integer predictor to treat
+which contrasts should be calculated, use argument \code{integer_as_continuous}
+to set the maximum number of unique values in an integer predictor to treat
 that predictor as "discrete integer" or as numeric. For the first case,
 contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
-\code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
-\code{5}.
+\code{integer_as_continuous} unique values, it is treated as numeric. Defaults
+to \code{5}. Set to \code{TRUE} to always treat integer predictors as continuous.
 \item For count regression models that use an offset term, use \verb{offset = <value>}
 to fix the offset at a specific value. Or use \code{estimate = "average"}, to
 average predictions over the distribution of the offset (if appropriate).
 }}
 
-\item{trend}{A character indicating the name of the variable for which to
-compute the slopes. To get marginal effects at specific values, use
+\item{trend}{A character indicating the name of the variable for which
+to compute the slopes. To get marginal effects at specific values, use
 \code{trend="<variable>"} along with the \code{by} argument, e.g.
-\code{by="<variable>=c(1, 3, 5)"}, or a combination of \code{by} and \code{length}, for
+\code{by="<variable> = c(1, 3, 5)"}, or a combination of \code{by} and \code{length}, for
 instance, \verb{by="<variable>", length=30}. To calculate average marginal
-effects over a range of values, use \code{trend="<variable>=seq(1, 3, 0.1)"} (or
+effects over a range of values, use \code{trend="<variable> = seq(1, 3, 0.1)"} (or
 similar) and omit the variable provided in \code{trend} from the \code{by} argument.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
@@ -250,26 +259,27 @@ the predicted response for the 'average' observation in a broader possible
 target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for \strong{G-computation}
-(\emph{Chatton and Rohrer 2024}).
+(causal inference, see \emph{Chatton and Rohrer 2024}). \code{"counterfactual"} is
+an alias for \code{"population"}.
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
-e.g. \code{options(modelbased_estimate = "average")}. When you set \code{estimate} to
-\code{"average"}, it calculates the average based only on the data points that
-actually exist. This is in particular important for two or more focal
-predictors, because it doesn't generate a \emph{complete} grid of all theoretical
-combinations of predictor values. Consequently, the output may not include
-all the values.}
+e.g. \code{options(modelbased_estimate = "average")}.
 
-\item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
-Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-predictors (one specified in \code{trend}, one in \code{by}). In this case, the
-\code{"esarey"} or \code{"sup-t"} options are recommended, but \code{p_adjust} can also be
-one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
-\code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
-simultaneous confidence bands, also called sup-t confidence band (Montiel
-Olea & Plagborg-Møller, 2019).}
+Note following limitations:
+\itemize{
+\item When you set \code{estimate} to \code{"average"}, it calculates the average based
+only on the data points that actually exist. This is in particular
+important for two or more focal predictors, because it doesn't generate a
+\emph{complete} grid of all theoretical combinations of predictor values.
+Consequently, the output may not include all the values.
+\item Filtering the output at values of continuous predictors, e.g.
+\code{by = "x=1:5"}, in combination with \code{estimate = "average"} may result in
+returning an empty data frame because of what was described above. In such
+case, you can use \code{estimate = "typical"} or use the \code{newdata} argument to
+provide a data grid of predictor values at which to evaluate predictions.
+\item \code{estimate = "population"} is not available for \code{estimate_slopes()}.
+}}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
@@ -279,6 +289,16 @@ posterior distribution, before computing summaries. Can also be \code{TRUE}, in
 which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
+
+\item{p_adjust}{The p-values adjustment method for frequentist multiple
+comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
+Johnson-Neyman intervals, i.e. in case of interactions with two numeric
+predictors (one specified in \code{slope}, one in \code{by}). In this case, the
+\code{"esarey"} or \code{"sup-t"} options are recommended, but \code{p_adjust} can also be
+one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
+\code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
+simultaneous confidence bands, also called sup-t confidence band (Montiel
+Olea & Plagborg-Møller, 2019).}
 }
 \description{
 These functions are convenient wrappers around the \strong{emmeans} and the
@@ -290,7 +310,7 @@ The \code{get_emmeans()}, \code{get_emcontrasts()} and \code{get_emtrends()} fun
 wrappers around \code{emmeans::emmeans()} and \code{emmeans::emtrends()}.
 }
 \examples{
-\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # Basic usage
 model <- lm(Sepal.Width ~ Species, data = iris)
 get_emcontrasts(model)
@@ -308,7 +328,7 @@ get_emcontrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 get_emcontrasts(model, by = "Petal.Width", length = 4)
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("emmeans", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
 # By default, 'by' is set to "Species"
@@ -329,7 +349,7 @@ get_emmeans(model, by = c("Species", "Petal.Length"), length = 2)
 get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \dontrun{
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
@@ -343,7 +363,7 @@ model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 get_emtrends(model)
 get_emtrends(model, by = "Sepal.Width")
 \dontshow{\}) # examplesIf}
-\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
 # By default, 'by' is set to "Species"
@@ -364,7 +384,7 @@ get_marginalmeans(model, by = c("Species", "Petal.Length"), length = 2)
 get_marginalmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 get_marginaltrends(model, trend = "Petal.Length", by = "Species")

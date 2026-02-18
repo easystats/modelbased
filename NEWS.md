@@ -1,9 +1,110 @@
-# modelbased (devel)
+# modelbased 0.14.0
 
 ## Changes
 
+* The `trend` argument in `estimate_slopes()` was renamed into `slope`. `trend`
+  will remain as alias.
+
+* New function `collapse_by_group()`, which extracts the raw data points and
+  "averages" (i.e. "collapses") the response variable over the levels of the
+  grouping factor given in `collapse_by`. Only works with mixed models.
+  Additionally, the `plot()` and `visualization_recipe()` methods get a
+  `collapse_group` argument to use this feature when adding data points to plots
+  using `show_data` or `show_residuals`.
+
+## Bug fixes
+
+* Fixed issue in `estimate_slope()` when `p_adjust = "esarey"`.
+
+* Fixed issue in `estimate_contrasts()` when `p_adjust = "tukey"`.
+
+* Fixed error with truncated message when standard errors could not be calculated.
+
+# modelbased 0.13.1
+
+## Changes
+
+* The `type` argument in `estimate_grouplevel()` gains a `"marginal"` option,
+  to return marginal group-levels estimates.
+
+* Added an `as.data.frame()` method for *modelbased* objects.
+
+* Better formatting of the output for equivalence-tests, when the `equivalence`
+  argument was used. Related docs were added. It is also possible to use
+  `parameters::equivalence_test()` on *modelbased* objects.
+
+* Function calls are now saved as `call` attribute in *modelbased* objects.
+
+* More informative warnings and error messages were added to `estimate_contrasts()`
+  when computing effect sizes.
+
+* Improved plotting methods for the *tinyplot* package. The related vignette
+  was also updated.
+
+# modelbased 0.13.0
+
+## Changes
+
+* Methods for the *tinyplot* package were added.
+
+* `estimate_slopes()` now also gets the `estimate` argument, to specify how to
+  estimate / marginalize over non-focal terms.
+
+* Improvements to `estimate_contrasts()`:
+
+  * `comparison = "inequality"` now also works when contrasting slopes for a
+    numeric predictor.
+
+  * New option `comparison = "inequality_ratio"` for `estimate_contrast()`,
+    which computes the ratio of marginal effects inequality measures across
+    groups.
+
+  * For contrasts, the message about the units of contrasts ("in %-points") has
+    been removed, because this was slightly misleading. The units were in
+    %-points if multiplied by 100, but this multiplication was not done in the
+    output.
+
+  * `estimate_contrasts()` for slopes now allows additional grouping of contrasts
+    using the `by` argument together with the `comparison` argument by specifying
+    the grouping variable in the formula, e.g. `contrast = c("x", "group")` and
+    `~ pairwise | group`.
+
 * `estimate_expectation()` and `estimate_relation()` now support objects of
   class `htest`.
+
+* `estimate_grouplevel()` now supports models from package *coxme*.
+
+* New function `residualize_over_grid()`, which residualizes a model
+  over a grid of predictors. This is useful to visualize the residuals of a
+  model over a grid of predictors.
+
+* `visualisation_recipe()` and `plot()` get a `show_residuals` argument,
+  to show the residuals of the model, related to the data grid, in the plot.
+
+* Documentation of the `display()` method for *modelbased* objects has been
+  added.
+
+* Improved documentation and improved informative messages.
+
+* Message about unreliable standard errors (for certain models, when predicting
+  random effects) was removed for now, as it is uncertain whether the standard
+  errors were unreliable.
+
+* Modified code base to address changes in the *marginaleffects* package from
+  version 0.29.0 onwards.
+
+## Bug fixes
+
+* Fixed issue with `by` in `estimate_contrasts()` when `comparison` was
+  `"inequality"`.
+
+* Some comparison options, like `"helmert"` or `"poly"`, could not be specified
+  as string-value, only as formula. This has been fixed, so they can now be
+  specified as string-value, too.
+
+* In-formula transformations of predictors in `by` could not be handled when
+  `by` was not specified. This has been fixed, and automatic detection of `by`
+  variables now also works with in-formula transformations.
 
 # modelbased 0.12.0
 

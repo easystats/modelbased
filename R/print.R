@@ -3,7 +3,7 @@
 #' `print()` method for **modelbased** objects. Can be used to tweak the output
 #' of tables.
 #'
-#' @param x An object returned by the different `estimate_*()` functions.
+#' @param x,object An object returned by the different `estimate_*()` functions.
 #' @param include_grid Logical, if `TRUE`, the data grid is included in the
 #' table output. Only applies to prediction-functions like `estimate_relation()`
 #' or `estimate_link()`. Default is `NULL`, which will set the value based on
@@ -12,6 +12,11 @@
 #' are shown. If `FALSE`, redundant (duplicated) labels are removed from rows.
 #' Default is `NULL`, which will set the value based on
 #' `options(modelbased_full_labels)`, and use `TRUE` is no option is set.
+#' @param format String, indicating the output format. Can be `"markdown"`
+#' `"html"`, or `"tt"`. `format = "html"` create a HTML table using the *gt*
+#' package. `format = "tt"` creates a `tinytable` object, which is either
+#' printed as markdown or HTML table, depending on the environment. See
+#' [`insight::export_table()`] for details.
 #' @param ... Arguments passed to `insight::format_table()` or
 #' `insight::export_table()`.
 #'
@@ -32,6 +37,10 @@
 #'
 #' - `modelbased_full_labels`: `options(modelbased_full_labels = FALSE)` will
 #'   remove redundant (duplicated) labels from rows.
+#'
+#' - `easystats_display_format`: `options(easystats_display_format = <value>)`
+#'   will set the default format for the `display()` methods. Can be one of
+#'   `"markdown"`, `"html"`, or `"tt"`.
 #'
 #' @note Use `print_html()` and `print_md()` to create tables in HTML or
 #' markdown format, respectively.
@@ -73,6 +82,11 @@ print.estimate_contrasts <- function(x,
   if (is.null(full_labels)) {
     full_labels <- getOption("modelbased_full_labels", TRUE)
   }
+
+  # fix for inequality-comparisons
+  colnames(x)[colnames(x) == "Mean_Ratio_Difference"] <- "Mean Ratio Difference"
+  colnames(x)[colnames(x) == "Mean_Difference"] <- "Mean Difference"
+  colnames(x)[colnames(x) == "Mean_Ratio"] <- "Mean Ratio"
 
   # copy original
   out <- x

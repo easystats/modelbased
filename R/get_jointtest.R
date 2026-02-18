@@ -1,16 +1,20 @@
-.joint_test <- function(means, ...) {
-  UseMethod(".joint_test")
+#' @keywords internal
+.get_jointtest <- function(means, ...) {
+  UseMethod(".get_jointtest")
 }
 
 
 # marginaleffects
 
-.joint_test.predictions <- function(means, my_args, test = "f", ...) {
+.get_jointtest.predictions <- function(means, my_args, test = "f", ...) {
   cnames <- colnames(means)
   # we need to separate the "by" argument, to find out which variables
   # were used as contrasts, and which for grouping
   by_vars <- intersect(cnames, my_args$by)
   contrast_vars <- setdiff(my_args$by, by_vars)
+
+  # save "marginaleffects" object attributes, for later
+  me_attribute <- attributes(means)$marginaleffects
 
   # if we have no grouping variable, joint test simplifies to an anova-table
   # tell user to use `anova()` then.
@@ -77,6 +81,7 @@
     colnames(result) <- c("Contrast", by_vars, "estimate", "Chi2", "p", "df")
   }
   class(result) <- unique(c(class(means), "marginal_jointtest", "data.frame"))
+  attr(result, "marginaleffects") <- me_attribute
 
   result
 }
@@ -84,7 +89,7 @@
 
 # emmeans
 
-.joint_test.emmGrid <- function(means, my_args, ...) {
+.get_jointtest.emmGrid <- function(means, my_args, ...) {
   by_arg <- attributes(means)$misc$by.vars
   result <- try(as.data.frame(emmeans::joint_tests(means, by = by_arg)), silent = TRUE)
 

@@ -17,6 +17,11 @@ calculate marginal means. Can be \code{"marginaleffects"} or \code{"emmeans"}.
 \item \verb{options(modelbased_estimate = <string>)} will set a default value for the
 \code{estimate} argument, which modulates the type of target population
 predictions refer to.
+\item \verb{options(modelbased_integer = <value>)} will set the minimum number of
+unique values in an integer predictor to treat that predictor as a
+"discrete integer" or as continuous. If the integer has more than
+\code{modelbased_integer} unique values, it is treated as continuous. Set to
+\code{TRUE} to always treat integer predictors as continuous.
 }
 
 \strong{For printing}
@@ -29,6 +34,9 @@ printing.
 by default or not.
 \item \code{options(modelbased_full_labels = FALSE)} will remove redundant
 (duplicated) labels from rows.
+\item \verb{options(easystats_display_format = <value>)} will set the default format
+for the \code{display()} methods. Can be one of \code{"markdown"}, \code{"html"}, or
+\code{"tt"}. See \code{\link[=display.estimate_contrasts]{display.estimate_contrasts()}} for details.
 }
 
 \strong{For plotting}
@@ -38,6 +46,12 @@ the \code{join_dots}.
 \item \verb{options(modelbased_numeric_as_discrete = <number>)} will set a default
 value for the \code{modelbased_numeric_as_discrete} argument. Can also be
 \code{FALSE}.
+\item \verb{options(modelbased_ribbon_alpha = <number>)} will set a default value for
+the \code{alpha} argument of the \code{ribbon} geom. Should be a number between \code{0}
+and \code{1}.
+\item \verb{options(modelbased_tinyplot_dodge = <number>)} will set a default value
+for the \code{dodge} argument (spacing between geoms) when using
+\code{tinyplot::plt()}. Should be a number between \code{0} and \code{1}.
 }
 }
 

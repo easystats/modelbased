@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 skip_on_os("mac")
 
 test_that("filtering for by and contrast works for different estimate options", {
@@ -30,9 +30,26 @@ test_that("filtering for by and contrast works for different estimate options", 
   out <- estimate_contrasts(m, "c172code=c('low','mid')", by = "c161sex", estimate = "average")
   expect_identical(dim(out), c(2L, 10L))
   expect_identical(as.character(out$Level1), c("mid", "mid"))
-  out <- estimate_contrasts(m, "c172code=c('low','mid')", by = "c161sex", estimate = "population")
+  out <- estimate_contrasts(
+    m,
+    "c172code=c('low','mid')",
+    by = "c161sex",
+    estimate = "population"
+  )
+  out2 <- marginaleffects::avg_comparisons(
+    m,
+    variables = "c172code",
+    by = "c161sex",
+    newdata = insight::get_datagrid(m, c("c172code=c('low','mid')", "c161sex"))
+  )
   expect_identical(dim(out), c(2L, 10L))
   expect_identical(as.character(out$Level1), c("mid", "mid"))
+  expect_identical(as.character(out$Level2), c("low", "low"))
+  expect_named(
+    out,
+    c("Level1", "Level2", "c161sex", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
+  expect_equal(out$Difference, out2$estimate, tolerance = 1e-4)
 })
 
 
@@ -64,4 +81,45 @@ test_that("special filtering for by and contrast works", {
   #     "virginica, 1", "virginica, 2", "virginica, 2"
   #   )
   # )
+})
+
+
+test_that("filtering throws informative error when zero rows are returned", {
+  set.seed(1234)
+  n <- 365
+  event_start <- 200
+  time <- seq_len(n)
+  event <- c(rep_len(0, event_start), rep_len(1, n - event_start))
+  outcome <- 10 + # 1. Pre-intervention intercept
+    15 * time + # 2. Pre-intervention slope (trend)
+    20 * event + # 3. Level change (a jump of +20)
+    5 * event * time + # 4. Slope change (slope becomes 15 + 5 = 20)
+    rnorm(n, mean = 0, sd = 100) # Add some random noise
+
+  dat <- data.frame(outcome, time, event)
+  mod <- lm(outcome ~ time * event, data = dat)
+  expect_error(
+    estimate_contrasts(mod, contrast = "event", by = "time=200", estimate = "average"),
+    regex = "No rows returned from marginal means"
+  )
+  expect_silent(estimate_contrasts(mod, contrast = "event", by = "time=200"))
+
+  d <- data.frame(event = c(0, 1), time = 200)
+  expect_silent(estimate_contrasts(
+    mod,
+    contrast = "event",
+    by = "time",
+    newdata = d,
+    estimate = "average"
+  ))
+
+  out1 <- estimate_contrasts(mod, contrast = "event", by = "time=200")
+  out2 <- estimate_contrasts(
+    mod,
+    contrast = "event",
+    by = "time",
+    newdata = d,
+    estimate = "average"
+  )
+  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
 })

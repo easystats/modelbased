@@ -1,4 +1,4 @@
-skip_if_not_installed("insight", minimum_version = "1.1.0")
+skip_if_not_installed("insight", minimum_version = "1.4.1")
 
 test_that("estimate_relation - shape", {
   skip_if_not_installed("gamm4")

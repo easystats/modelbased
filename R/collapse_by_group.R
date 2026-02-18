@@ -1,0 +1,105 @@
+#' @title Collapse raw data by random effect groups
+#' @name collapse_by_group
+#'
+#' @description This function extracts the raw data points (i.e. the data
+#'   that was used to fit the model) and "averages" (i.e. "collapses") the
+#'   response variable over the levels of the grouping factor given in
+#'   `collapse_by`. Only works with mixed models.
+#'
+#' @param collapse_by Name of the (random effects) grouping factor. Data is
+#'   collapsed by the levels of this factor.
+#' @param residuals Logical, if `TRUE`, collapsed partial residuals instead
+#'   of raw data by the levels of the grouping factor.
+#' @inheritParams residualize_over_grid
+#'
+#' @return A data frame with raw data points, averaged over the levels of
+#'   the given grouping factor from the random effects. The group level of
+#'   the random effect is saved in the column `"random"`.
+#'
+#' @examplesIf require("lme4", quietly = TRUE)
+#' data(efc, package = "modelbased")
+#' efc$e15relat <- as.factor(efc$e15relat)
+#' efc$c161sex <- as.factor(efc$c161sex)
+#' levels(efc$c161sex) <- c("male", "female")
+#' model <- lme4::lmer(neg_c_7 ~ c161sex + (1 | e15relat), data = efc)
+#' me <- estimate_means(model, "c161sex")
+#' head(efc)
+#' collapse_by_group(me, model, "e15relat")
+#'
+#' @export
+collapse_by_group <- function(grid, model, collapse_by = NULL, residuals = FALSE) {
+  if (!insight::is_mixed_model(model)) {
+    insight::format_error("This function only works with mixed effects models.")
+  }
+
+  model_data <- insight::get_data(model, source = "frame", verbose = FALSE)
+
+  if (is.null(collapse_by) || isTRUE(collapse_by) || isTRUE(residuals)) {
+    collapse_by <- insight::find_random(model, flatten = TRUE)
+  }
+
+  if (length(collapse_by) > 1) {
+    collapse_by <- collapse_by[1]
+    insight::format_alert(
+      "More than one random grouping variable found.",
+      paste0("Using `", collapse_by, "`.")
+    )
+  }
+
+  if (!collapse_by %in% colnames(model_data)) {
+    insight::format_error(paste0("Could not find `", collapse_by, "` column."))
+  }
+
+  if (residuals) {
+    rawdata <- residualize_over_grid(grid, model)
+    y_name <- "Mean"
+  } else {
+    rawdata <- insight::get_data(model, source = "environment", verbose = FALSE)
+    y_name <- insight::find_response(model)
+
+    # we need this column for labelling data points, but not for collapsing
+    rawdata$rowname <- NULL
+
+    predictor_names <- setdiff(colnames(rawdata), y_name)
+    if (any(vapply(rawdata[predictor_names], Negate(is.factor), logical(1)))) {
+      insight::format_alert(
+        "Collapsing usually not informative across a continuous variable."
+      )
+    }
+  }
+
+  if (is.factor(rawdata[[y_name]])) {
+    rawdata[[y_name]] <- as.numeric(rawdata[[y_name]])
+    if (insight::model_info(model)$is_binomial) {
+      rawdata[[y_name]] <- rawdata[[y_name]] - 1
+    } # else ordinal?
+  }
+
+  if (nrow(rawdata) == nrow(model_data)) {
+    rawdata$random <- factor(model_data[[collapse_by]])
+  } else if (collapse_by %in% colnames(rawdata)) {
+    rawdata$random <- factor(rawdata[[collapse_by]])
+  } else {
+    insight::format_error(paste0("Could not find `", collapse_by, "` column."))
+  }
+
+  agg_data <- stats::aggregate(
+    rawdata[[y_name]],
+    by = rawdata[colnames(rawdata) != y_name],
+    FUN = mean
+  )
+
+  if (residuals) {
+    y_name <- insight::find_response(model)
+  }
+
+  colnames(agg_data)[ncol(agg_data)] <- y_name
+  colnames(agg_data)[colnames(agg_data) == "group"] <- "group_col"
+
+  # sanity check, add dummy if not present
+  if (is.null(agg_data$group_col)) {
+    agg_data$group_col <- factor(1)
+  }
+
+  agg_data
+}

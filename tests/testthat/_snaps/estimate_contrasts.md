@@ -165,7 +165,7 @@
       Variable predicted: y
       Predictors contrasted: Species
       p-values are uncorrected.
-      Contrasts are on the response-scale (in %-points).
+      Contrasts are on the response-scale.
 
 ---
 
@@ -185,7 +185,7 @@
       Variable predicted: y
       Predictors contrasted: Species
       p-values are uncorrected.
-      Contrasts are on the response-scale (in %-points).
+      Contrasts are on the response-scale.
 
 ---
 
@@ -206,7 +206,7 @@
       Variable predicted: y
       Predictors contrasted: Species
       p-value adjustment method: Holm (1979)
-      Contrasts are on the response-scale (in %-points).
+      Contrasts are on the response-scale.
 
 ---
 
@@ -226,7 +226,7 @@
       Variable predicted: y
       Predictors contrasted: Species
       p-value adjustment method: Holm (1979)
-      Contrasts are on the response-scale (in %-points).
+      Contrasts are on the response-scale.
 
 # estimate_contrasts - filtering works
 

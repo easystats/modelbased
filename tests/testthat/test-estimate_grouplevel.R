@@ -140,3 +140,183 @@ test_that("estimate_grouplevel - Bayesian, rstanarm", {
   expect_identical(dim(out), c(3L, 4L))
   expect_named(out, c("Group", "Level", "Parameter", "Coefficient"))
 })
+
+
+skip_if_not_installed("withr")
+
+withr::with_environment(
+  new.env(),
+  test_that("estimate_grouplevel, coxme", {
+    skip_on_cran()
+    skip_if_not_installed("coxme")
+    skip_if_not_installed("survival")
+
+    Surv <- survival::Surv
+    rats <- survival::rats
+    lung <- survival::lung
+
+    set.seed(1234)
+    rats$grp <- sample(letters[1:3], nrow(rats), replace = TRUE)
+
+    data(eortc, package = "coxme")
+    d <<- coxme::eortc
+    d2 <<- rats
+    d3 <<- lung
+
+    m1 <- coxme::coxme(Surv(y, uncens) ~ trt + (1 | center), data = d)
+    m2 <- coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), d3)
+    m3 <- coxme::coxme(Surv(time, status) ~ rx + (1 + rx | litter) + (1 | grp), d2)
+
+    out <- estimate_grouplevel(m1)
+    expect_identical(dim(out), c(37L, 5L))
+    out <- estimate_grouplevel(m2)
+    expect_identical(dim(out), c(18L, 5L))
+    out <- estimate_grouplevel(m3)
+    expect_identical(dim(out), c(203L, 5L))
+  })
+)
+
+skip_if_not_installed("marginaleffects")
+
+test_that("estimate_grouplevel type='marginal'", {
+  skip_on_cran()
+  skip_if_not_installed("lme4")
+  data(mtcars)
+
+  model <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)
+  gl1 <- estimate_grouplevel(model, type = "random")
+  gl3 <- estimate_grouplevel(model, type = "marginal")
+  expect_s3_class(gl3, "estimate_grouplevel")
+  expect_equal(dim(gl3), c(6, 6))
+  expect_equal(
+    colnames(gl3),
+    c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
+  )
+  expect_equal(
+    as.numeric(cor.test(gl1$Coefficient, gl3$Coefficient)$estimate),
+    -0.04057546,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  # include random slope
+  model <- lme4::lmer(mpg ~ hp + (1 + hp | carb), data = mtcars)
+  gl1 <- estimate_grouplevel(model, type = "random")
+  gl3 <- estimate_grouplevel(model, type = "marginal")
+  expect_s3_class(gl3, "estimate_grouplevel")
+  expect_identical(dim(gl3), c(12L, 6L))
+  expect_equal(
+    colnames(gl3),
+    c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
+  )
+  r <- cor.test(
+    gl1[gl1$Parameter == "(Intercept)", "Coefficient"],
+    gl3[gl3$Parameter == "(Intercept)", "Coefficient"]
+  )
+  expect_gt(r$estimate, 0.95)
+  r <- cor.test(
+    gl1[gl1$Parameter == "hp", "Coefficient"],
+    gl3[gl3$Parameter == "hp", "Coefficient"]
+  )
+  expect_gt(r$estimate, 0.99)
+
+  # check with cross classified design
+  model <- lme4::lmer(mpg ~ hp + (1 + hp | carb) + (1 | gear), data = mtcars)
+  gl1 <- estimate_grouplevel(model, type = "random")
+  gl3 <- estimate_grouplevel(model, type = "marginal")
+  expect_s3_class(gl3, "estimate_grouplevel")
+  expect_identical(dim(gl3), c(15L, 6L))
+  expect_equal(
+    colnames(gl3),
+    c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
+  )
+  r <- cor.test(
+    gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "carb", "Coefficient"],
+    gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "carb", "Coefficient"]
+  )
+  expect_equal(r$estimate, 0.6626235, tolerance = 1e-4, ignore_attr = TRUE)
+  r <- cor.test(
+    gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "gear", "Coefficient"],
+    gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "gear", "Coefficient"]
+  )
+  r <- cor.test(
+    gl1[gl1$Parameter == "hp", "Coefficient"],
+    gl3[gl3$Parameter == "hp", "Coefficient"]
+  )
+  expect_gt(r$estimate, 0.99)
+
+  # check with suppressed intercept
+  model <- lme4::lmer(mpg ~ hp + (0 + hp | carb), data = mtcars)
+  gl1 <- estimate_grouplevel(model, type = "random")
+  gl3 <- estimate_grouplevel(model, type = "marginal")
+  expect_identical(dim(gl3), c(12L, 6L))
+  r <- cor.test(
+    gl1[gl1$Parameter == "hp", "Coefficient"],
+    gl3[gl3$Parameter == "hp", "Coefficient"]
+  )
+  expect_gt(r$estimate, 0.99)
+})
+
+test_that("estimate_grouplevel type='marginal' correlations", {
+  skip_on_cran()
+  skip_if_not_installed("lme4")
+  data(mtcars)
+
+  model <- lme4::lmer(mpg ~ hp + (1 + hp | carb) + (1 | gear), data = mtcars)
+  m1 <- estimate_grouplevel(model, type = "random")
+  m2 <- estimate_grouplevel(model, type = "total")
+  m3 <- estimate_grouplevel(model, type = "marginal")
+
+  # merge m1 and m3 to compare
+  m1_intercept <- m1[m1$Parameter == "(Intercept)", ]
+  m3_intercept <- m3[m3$Parameter == "(Intercept)", ]
+  merged_intercepts <- merge(m1_intercept, m3_intercept, by = c("Group", "Level"))
+  expect_equal(
+    cor(merged_intercepts$Coefficient.x, merged_intercepts$Coefficient.y),
+    0.6493804,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  m1_hp <- m1[m1$Parameter == "hp", ]
+  m3_hp <- m3[m3$Parameter == "hp", ]
+  merged_hp <- merge(m1_hp, m3_hp, by = c("Group", "Level"))
+  expect_gt(cor(merged_hp$Coefficient.x, merged_hp$Coefficient.y), 0.99)
+
+  # merge m2 and m3 to compare
+  m2_intercept <- m2[m2$Parameter == "(Intercept)", ]
+  m3_intercept <- m3[m3$Parameter == "(Intercept)", ]
+  m2_intercept$Level <- as.character(m2_intercept$Level)
+  m3_intercept$Level <- as.character(m3_intercept$Level)
+  merged_intercepts <- merge(m2_intercept, m3_intercept, by = c("Group", "Level"))
+  expect_equal(
+    cor(merged_intercepts$Coefficient.x, merged_intercepts$Coefficient.y),
+    0.6493804,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  m2_hp <- m2[m2$Parameter == "hp", ]
+  m3_hp <- m3[m3$Parameter == "hp", ]
+  m2_hp$Level <- as.character(m2_hp$Level)
+  m3_hp$Level <- as.character(m3_hp$Level)
+  merged_hp <- merge(m2_hp, m3_hp, by = c("Group", "Level"))
+  expect_gt(cor(merged_hp$Coefficient.x, merged_hp$Coefficient.y), 0.99)
+})
+
+test_that("estimate_grouplevel type='marginal' nested design", {
+  skip_on_cran()
+  skip_if_not_installed("lme4")
+  data(sleepstudy, package = "lme4")
+  set.seed(12345)
+  sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
+  sleepstudy$subgrp <- NA
+  for (i in 1:5) {
+    filter_group <- sleepstudy$grp == i
+    sleepstudy$subgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
+  }
+  model <- lme4::lmer(Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject), data = sleepstudy)
+  out <- estimate_grouplevel(model, type = "marginal")
+  expect_identical(dim(out), c(53L, 6L))
+  expect_true(all(unique(out$Group) %in% c("grp", "subgrp", "Subject")))
+})

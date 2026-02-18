@@ -28,3 +28,4 @@
 \.code-workspace$
 ^\.lintr$
 ^tests/testthat/_snaps/.
+^GEMINI\.md$

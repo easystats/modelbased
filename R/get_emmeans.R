@@ -13,6 +13,14 @@
 #' @inheritParams estimate_slopes
 #' @inheritParams estimate_contrasts
 #'
+#' @param trend A character indicating the name of the variable for which
+#' to compute the slopes. To get marginal effects at specific values, use
+#' `trend="<variable>"` along with the `by` argument, e.g.
+#' `by="<variable> = c(1, 3, 5)"`, or a combination of `by` and `length`, for
+#' instance, `by="<variable>", length=30`. To calculate average marginal
+#' effects over a range of values, use `trend="<variable> = seq(1, 3, 0.1)"` (or
+#' similar) and omit the variable provided in `trend` from the `by` argument.
+#'
 #' @examplesIf require("emmeans", quietly = TRUE)
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 #'
@@ -34,12 +42,14 @@
 #' get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 #' }
 #' @export
-get_emmeans <- function(model,
-                        by = "auto",
-                        predict = NULL,
-                        keep_iterations = FALSE,
-                        verbose = TRUE,
-                        ...) {
+get_emmeans <- function(
+  model,
+  by = "auto",
+  predict = NULL,
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # check if available
   insight::check_if_installed("emmeans")
 
@@ -50,11 +60,7 @@ get_emmeans <- function(model,
   predict <- .get_emmeans_type_argument(model, predict, type = "means", ...)
 
   # setup arguments
-  fun_args <- list(
-    model,
-    specs = my_args$emmeans_specs,
-    at = my_args$emmeans_at
-  )
+  fun_args <- list(model, specs = my_args$emmeans_specs, at = my_args$emmeans_at)
 
   # handle distributional parameters
   if (predict %in% .brms_aux_elements(model) && inherits(model, "brmsfit")) {
@@ -108,10 +114,7 @@ get_emmeans <- function(model,
 # =========================================================================
 
 #' @keywords internal
-.guess_emmeans_arguments <- function(model,
-                                     by = NULL,
-                                     verbose = TRUE,
-                                     ...) {
+.guess_emmeans_arguments <- function(model, by = NULL, verbose = TRUE, ...) {
   # Gather info
   model_data <- insight::get_data(model, verbose = FALSE)
   predictors <- intersect(
@@ -123,10 +126,25 @@ get_emmeans <- function(model,
   if (!is.null(by) && length(by) == 1 && by == "auto") {
     by <- predictors[!sapply(model_data[predictors], is.numeric)]
     if (!length(by) || all(is.na(by))) {
-      insight::format_error("Model contains no categorical factor. Please specify `by`.")
+      # in-formula transformations, like `as.factor(x)`, need special handling
+      # because these predictors are no factors in the data. we get flags for
+      # such transformations when we request data from the model frame
+      model_frame <- insight::get_data(model, source = "mf", verbose = FALSE)
+      factors <- attributes(model_frame)$factors
+      # if still no factors found, throw error
+      if (is.null(factors)) {
+        insight::format_error(
+          "Model contains no categorical factor. Please specify `by`."
+        )
+      }
+      by <- factors
     }
     if (verbose) {
-      insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
+      insight::format_alert(paste0(
+        "We selected `by = c(",
+        toString(paste0('"', by, '"')),
+        ")`."
+      ))
     }
   }
 
@@ -138,11 +156,7 @@ get_emmeans <- function(model,
 ## TODO: validate predict argument to make sure it only has valid options
 .get_emmeans_type_argument <- function(model, predict, type = "means", ...) {
   if (is.null(predict)) {
-    predict <- switch(type,
-      means = "response",
-      contrasts = "response",
-      "none"
-    )
+    predict <- switch(type, means = "response", contrasts = "response", "none")
   } else if (predict == "link") {
     predict <- "none"
   }
@@ -213,18 +227,12 @@ get_emmeans <- function(model,
 
 # Bring arguments in shape for emmeans ----------------------------------------
 
-
 #' @keywords internal
 .process_emmeans_arguments <- function(model, args, data, ...) {
   # Create the data_matrix
   # ---------------------------
   # data <- insight::get_data(model, verbose = FALSE)
-  predictors <- insight::find_predictors(
-    model,
-    effects = "fixed",
-    flatten = TRUE,
-    ...
-  )
+  predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
   data <- data[intersect(predictors, colnames(data))]
 
   # Deal with 'at'
@@ -281,8 +289,10 @@ get_emmeans <- function(model,
     model_terms <- insight::find_terms(model)$conditional
     for (var_at in names(args$emmeans_at)) {
       term <- model_terms[grepl(var_at, model_terms, fixed = TRUE)]
-      if (any(grepl(paste0("as.factor(", var_at, ")"), term, fixed = TRUE)) ||
-        any(grepl(paste0("as.character(", var_at, ")"), term, fixed = TRUE))) {
+      if (
+        any(grepl(paste0("as.factor(", var_at, ")"), term, fixed = TRUE)) ||
+          any(grepl(paste0("as.character(", var_at, ")"), term, fixed = TRUE))
+      ) {
         args$retransform[[var_at]] <- args$emmeans_at[[var_at]]
         args$emmeans_at[[var_at]] <- as.numeric(as.character(args$emmeans_at[[var_at]]))
       }

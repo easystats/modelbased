@@ -1,6 +1,6 @@
 skip_on_os(c("mac", "linux"))
 skip_if_not_installed("emmeans")
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 skip_if_not_installed("withr")
 
 test_that("estimate_slopes - print summary", {
@@ -38,6 +38,17 @@ test_that("estimate_means - print multiple by's", {
 
   fit <- lm(neg_c_7 ~ c12hour * barthtot * c161sex * c172code * e16sex, data = efc)
   expect_snapshot(print(estimate_means(fit, c("c12hour", "barthtot = [sd]", "c161sex", "c172code", "e16sex"), backend = "marginaleffects", length = 3), table_width = Inf), variant = "windows") # nolint
+})
+
+
+test_that("estimate_means - using display() to print multiple by's", {
+  skip_if_not_installed("tinytable")
+  data(efc, package = "modelbased")
+
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+  fit <- lm(neg_c_7 ~ c12hour * barthtot * c161sex * c172code, data = efc)
+  expect_snapshot(display(estimate_means(fit, c("c12hour = c(50, 100)", "c172code", "c161sex")), format = "tt"))
 })
 
 

@@ -6,19 +6,32 @@
 #' which can be useful to add the random effects to the original data.
 #'
 #' @param model A mixed model with random effects.
-#' @param type `"random"` or `"total"`. If `"random"` (default), the
-#'   coefficients correspond to the conditional estimates of  the random effects
-#'   (as they are returned by `lme4::ranef()`). They typically correspond to the
-#'   deviation of each individual group from their fixed effect (assuming the
-#'   random effect is also included as a fixed effect). As such, a coefficient
-#'   close to 0 means that the participants' effect is the same as the
-#'   population-level effect (in other words, it is "in the norm"). If
-#'   `"total"`, it will return the sum of the random effect and its
+#' @param type String, describing the type of estimates that should be returned.
+#'   Can be `"random"`, `"total"`, or `"marginal"` (experimental).
+#'   - If `"random"` (default), the coefficients correspond to the conditional
+#'   estimates of  the random effects (as they are returned by `lme4::ranef()`).
+#'   They typically correspond to the deviation of each individual group from
+#'   their fixed effect (assuming the random effect is also included as a fixed
+#'   effect). As such, a coefficient close to 0 means that the participants'
+#'   effect is the same as the population-level effect (in other words, it is
+#'   "in the norm").
+#'   - If `"total"`, it will return the sum of the random effect and its
 #'   corresponding fixed effects, which internally relies on the `coef()` method
 #'   (see `?coef.merMod`). Note that `type = "total"` yet does not return
 #'   uncertainty indices (such as SE and CI) for models from *lme4* or
 #'   *glmmTMB*, as the necessary information to compute them is not yet
 #'   available. However, for Bayesian models, it is possible to compute them.
+#'   - If `"marginal"` (experimental), it returns marginal group-levels
+#'   estimates. The random intercepts are computed using marginal means (see
+#'   [estimate_means()]), and the random slopes using marginal effects (see
+#'   [estimate_slopes()]). This method does not directly extract the parameters
+#'   estimated by the model, but recomputes them using model predictions. While
+#'   this is more computationally intensive, one of the benefits include
+#'   interpretability: the random intercepts correspond to the "mean" value of
+#'   the outcome for each group, and the random slopes correspond to the direct
+#'   average "effect" of the predictor for each random group. Note that in this
+#'   case, the group-level estimates are not technically "intercepts" or model
+#'   parameters, but marginal average levels and effects.
 #' @param dispersion,test,diagnostic Arguments passed to
 #'    [parameters::model_parameters()] for Bayesian models. By default, it won't
 #'    return significance or diagnostic indices (as it is not typically very
@@ -59,11 +72,9 @@ estimate_grouplevel <- function(model, ...) {
 
 #' @rdname estimate_grouplevel
 #' @export
-estimate_grouplevel.default <- function(model,
-                                        type = "random",
-                                        ...) {
+estimate_grouplevel.default <- function(model, type = "random", ...) {
   # validate argument
-  type <- insight::validate_argument(type, c("random", "total"))
+  type <- insight::validate_argument(type, c("random", "total", "marginal"))
 
   # sanity check
   if (is.null(insight::find_random(model))) {
@@ -77,22 +88,27 @@ estimate_grouplevel.default <- function(model,
     ...
   )
 
-  # get cleaned parameter names with additional information
-  clean_parameters <- attributes(params)$clean_parameters
+  if (type %in% c("random", "total")) {
+    # get cleaned parameter names with additional information
+    clean_parameters <- attributes(params)$clean_parameters
 
-  # Re-add info
-  if (!"Group" %in% names(params) && !is.null(clean_parameters)) {
-    params$Group <- clean_parameters$Group
+    # Re-add info
+    if (!"Group" %in% names(params) && !is.null(clean_parameters)) {
+      params$Group <- clean_parameters$Group
+    }
+    if (!"Level" %in% names(params) && !is.null(clean_parameters)) {
+      params$Level <- clean_parameters$Cleaned_Parameter
+    }
+
+    # TODO: improve / add new printing that groups by group/level?
+    random <- as.data.frame(params)
+
+    # Remove columns with only NaNs (as these are probably those of fixed effects)
+    random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
+  } else if (type == "marginal") {
+    # EXPERIMENTAL
+    random <- .grouplevel_marginal(model)
   }
-  if (!"Level" %in% names(params) && !is.null(clean_parameters)) {
-    params$Level <- clean_parameters$Cleaned_Parameter
-  }
-
-  # TODO: improve / add new printing that groups by group/level?
-  random <- as.data.frame(params)
-
-  # Remove columns with only NaNs (as these are probably those of fixed effects)
-  random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
 
   # Clean and Reorganize columns
   random <- .clean_grouplevel(random)
@@ -107,12 +123,14 @@ estimate_grouplevel.default <- function(model,
 
 #' @rdname estimate_grouplevel
 #' @export
-estimate_grouplevel.brmsfit <- function(model,
-                                        type = "random",
-                                        dispersion = TRUE,
-                                        test = NULL,
-                                        diagnostic = NULL,
-                                        ...) {
+estimate_grouplevel.brmsfit <- function(
+  model,
+  type = "random",
+  dispersion = TRUE,
+  test = NULL,
+  diagnostic = NULL,
+  ...
+) {
   # validate argument
   type <- insight::validate_argument(type, c("random", "total"))
 
@@ -136,7 +154,8 @@ estimate_grouplevel.brmsfit <- function(model,
 
   # match parameters
   if (!is.null(clean_parameters)) {
-    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE]
+    # fmt: skip
+    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE] # nolint
   }
 
   # Re-add info
@@ -163,19 +182,17 @@ estimate_grouplevel.brmsfit <- function(model,
     # Filter out non-random effects
     random <- random[startsWith(random$Parameter, "r_"), ]
     # Remove Group from Level
-    random$Level <- sapply(
-      1:nrow(random),
-      function(i) gsub(paste0("^", random$Group[i], "\\."), "", random$Level[i])
-    )
+    random$Level <- sapply(seq_len(nrow(random)), function(i) {
+      gsub(paste0("^", random$Group[i], "\\."), "", random$Level[i])
+    })
     # Find the group name (what follows "r_" and before the first "[" or "__")
     random$Group <- gsub("^r_(.*?)(\\[.*|__.*)", "\\1", random$Name)
     # Keep Parameter what's in between [ and ]
     random$Parameter <- gsub("^r_.*?\\[(.*?)\\].*", "\\1", random$Name)
     # Remove Level from it
-    random$Parameter <- sapply(
-      1:nrow(random),
-      function(i) gsub(paste0("^", random$Level[i], "\\,"), "", random$Parameter[i])
-    )
+    random$Parameter <- sapply(seq_len(nrow(random)), function(i) {
+      gsub(paste0("^", random$Level[i], "\\,"), "", random$Parameter[i])
+    })
     # remove temporary name column
     random$Name <- NULL
   }
@@ -189,12 +206,14 @@ estimate_grouplevel.brmsfit <- function(model,
 
 
 #' @export
-estimate_grouplevel.stanreg <- function(model,
-                                        type = "random",
-                                        dispersion = TRUE,
-                                        test = NULL,
-                                        diagnostic = NULL,
-                                        ...) {
+estimate_grouplevel.stanreg <- function(
+  model,
+  type = "random",
+  dispersion = TRUE,
+  test = NULL,
+  diagnostic = NULL,
+  ...
+) {
   # validate argument
   type <- insight::validate_argument(type, c("random", "total"))
 
@@ -222,14 +241,10 @@ estimate_grouplevel.stanreg <- function(model,
   ## insight::clean_parameter())
   if (!is.null(clean_parameters)) {
     # fix for rstanarm, which contains a sigma columns
-    clean_parameters <- clean_parameters[
-      clean_parameters$Component != "sigma" & !startsWith(clean_parameters$Parameter, "Sigma["), ,
-      drop = FALSE # nolint
-    ]
-    clean_parameters <- clean_parameters[
-      clean_parameters$Parameter %in% params$Parameter, ,
-      drop = FALSE
-    ]
+    # fmt: skip
+    clean_parameters <- clean_parameters[clean_parameters$Component != "sigma" & !startsWith(clean_parameters$Parameter, "Sigma["), , drop = FALSE] # nolint
+    # fmt: skip
+    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE] # nolint
 
     params$Parameter <- insight::trim_ws(sub(":.*", "", clean_parameters$Group))
     params$Group <- insight::trim_ws(sub("^[^:]*:", "", clean_parameters$Group))
@@ -302,7 +317,84 @@ estimate_grouplevel.stanreg <- function(model,
       ),
     ]
   } else {
-    random <- random[order(random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter), ] # nolint
+    random <- random[
+      order(random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter),
+    ]
   }
   random
+}
+
+
+# Experimental ------------------------------------------------------------
+
+# Quick tests:
+# model <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)
+# model <- lme4::lmer(mpg ~ hp + (1 + hp | carb), data = mtcars)
+# model <- lme4::lmer(mpg ~ hp + (1 + hp | carb) + (1 | gear), data = mtcars)
+
+# m1 <- estimate_grouplevel(model, type = "random")
+# m2 <- estimate_grouplevel(model, type = "total")
+# m3 <- estimate_grouplevel(model, type = "marginal")
+# cor.test(m1$Coefficient, m3$Coefficient)  # r = 1
+# cor.test(m2$Coefficient, m3$Coefficient)  # r = 1
+.grouplevel_marginal <- function(model) {
+  insight::check_if_installed("lme4")
+
+  out <- list()
+
+  # TODO: currently only takes random effects for main component into account
+  # we could also look for random effects in zero-inflated, dispersion, etc.
+
+  # Analyze random effect structure
+  randomgroups <- insight::find_random(model, split_nested = TRUE)$random
+  # extract random slopes and their related grouping variable
+  randomslopes <- list()
+  p <- lme4::ranef(model)
+  for (g in names(p)) {
+    s <- names(p[[g]])[names(p[[g]]) != "(Intercept)"]
+
+    # Only pick non-factor random slopes for now
+    # TODO: correctly deal with the case when the random slope is a factor
+    pred <- insight::find_predictors(model, effects = "all", flatten = TRUE)
+    s <- s[s %in% pred]
+
+    if (length(s) > 0) {
+      randomslopes[[g]] <- s
+    }
+  }
+
+  # Extract coefs
+  for (g in randomgroups) {
+    intercepts <- estimate_means(model, by = g, include_random = TRUE, estimate = "average")
+    out[[g]] <- data.frame(
+      Group = g,
+      Level = intercepts[[g]],
+      Parameter = "(Intercept)",
+      Coefficient = intercepts$Mean,
+      CI_low = intercepts$CI_low,
+      CI_high = intercepts$CI_high,
+      stringsAsFactors = FALSE
+    )
+
+    if (g %in% names(randomslopes)) {
+      for (s in randomslopes[[g]]) {
+        slopes <- estimate_slopes(model, by = g, trend = s, include_random = TRUE)
+        out[[paste(g, s, sep = "_")]] <- data.frame(
+          Group = g,
+          Level = slopes[[g]],
+          Parameter = s,
+          Coefficient = slopes$Slope,
+          CI_low = slopes$CI_low,
+          CI_high = slopes$CI_high,
+          stringsAsFactors = FALSE
+        )
+      }
+    }
+  }
+  params <- do.call(rbind, out)
+  row.names(params) <- NULL
+
+  # TODO: robustify this function and integrate into the above
+
+  params
 }
