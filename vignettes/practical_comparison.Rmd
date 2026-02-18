@@ -44,6 +44,18 @@ library(marginaleffects)
 library(ggeffects)
 ```
 
+The package design is built around following three questions:
+
+1. Predictor of Interest: Which variable's effect on the outcome do you want to analyze? This is specified with the `by`, `contrast`, or `slope` arguments.
+
+2. Evaluation Points: At which specific values should the predictor be evaluated? This can also be defined in the `by` argument; additionally, you have the arguments `length` and `range` especially for continuous predictors. For a more refined control over the evaluation points, see the [data grids](https://easystats.github.io/insight/reference/get_datagrid.html) vignette.
+
+3. Target Population: What population should the inferences generalize to? The `estimate` argument controls this by defining whether predictions are for a typical individual, an average of the sample, or an average of a broader population.
+
+# Estimated marginal means
+
+We start with the default `estimate` option (`"typical"`), which is the same as if we were estimating marginal means using the *emmeans* package.
+
 ## Categorical predictors
 
 ```{r}
