@@ -200,6 +200,9 @@
 #' [insight::get_datagrid()] (used when `data = "grid"`) and
 #' [insight::get_predicted()]. Furthermore, for count regression models that use
 #' an offset term, use `offset = <value>` to fix the offset at a specific value.
+#' For models of class `nestedLogit`, use the `submodel` argument to specify
+#' the component for which predictions should be returned (see
+#' `?insight::get_predicted` for details).
 #'
 #' @return A data frame of predicted values and uncertainty intervals, with
 #' class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted]
