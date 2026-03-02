@@ -2,6 +2,8 @@
 
 ## modelbased 0.14.0
 
+CRAN release: 2026-02-17
+
 ### Changes
 
 - The `trend` argument in
