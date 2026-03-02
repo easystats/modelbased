@@ -1,5 +1,10 @@
 # modelbased (devel)
 
+## Breaking Changes
+
+* Argument `join_dots` in the `plot()` method, which is used to connect dots
+  with lines, now defaults to `FALSE`.
+
 ## Changes
 
 * Support for models of class `nestedLogit`.

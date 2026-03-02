@@ -105,11 +105,11 @@ data points from residuals by random effects grouping factors.}
 \item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}
 
-\item{join_dots}{Logical, if \code{TRUE} (default) and for categorical focal terms
-in \code{by}, dots (estimates) are connected by lines, i.e. plots will be a
-combination of dots with error bars and connecting lines. If \code{FALSE}, only
-dots and error bars are shown. It is possible to set a global default value
-using \code{options()}, e.g. \code{options(modelbased_join_dots = FALSE)}.}
+\item{join_dots}{Logical, if \code{TRUE} and for categorical focal terms in \code{by},
+dots (estimates) are connected by lines, i.e. plots will be a combination of
+dots with error bars and connecting lines. If \code{FALSE} (default), only dots
+and error bars are shown. It is possible to set a global default value using
+\code{options()}, e.g. \code{options(modelbased_join_dots = TRUE)}.}
 }
 \value{
 An object of class \code{visualisation_recipe} that describes the layers
