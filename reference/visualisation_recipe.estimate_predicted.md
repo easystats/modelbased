@@ -160,13 +160,13 @@ visualisation_recipe(
 
 - join_dots:
 
-  Logical, if `TRUE` (default) and for categorical focal terms in `by`,
-  dots (estimates) are connected by lines, i.e. plots will be a
-  combination of dots with error bars and connecting lines. If `FALSE`,
+  Logical, if `TRUE` and for categorical focal terms in `by`, dots
+  (estimates) are connected by lines, i.e. plots will be a combination
+  of dots with error bars and connecting lines. If `FALSE` (default),
   only dots and error bars are shown. It is possible to set a global
   default value using
   [`options()`](https://rdrr.io/r/base/options.html), e.g.
-  `options(modelbased_join_dots = FALSE)`.
+  `options(modelbased_join_dots = TRUE)`.
 
 ## Value
 
@@ -346,16 +346,6 @@ layers <- visualisation_recipe(x)
 layers
 #> Layer 1
 #> --------
-#> Geom type: line
-#> data = [3 x 8]
-#> aes_string(
-#>   y = 'Mean'
-#>   x = 'Species'
-#>   group = '.group'
-#> )
-#> 
-#> Layer 2
-#> --------
 #> Geom type: pointrange
 #> data = [3 x 8]
 #> aes_string(
@@ -366,7 +356,7 @@ layers
 #>   group = '.group'
 #> )
 #> 
-#> Layer 3
+#> Layer 2
 #> --------
 #> Geom type: labs
 #> y = 'Mean of Sepal.Width'
@@ -433,16 +423,6 @@ layers
 #> 
 #> Layer 2
 #> --------
-#> Geom type: line
-#> data = [3 x 9]
-#> aes_string(
-#>   y = 'Slope'
-#>   x = 'Species'
-#>   group = '.group'
-#> )
-#> 
-#> Layer 3
-#> --------
 #> Geom type: pointrange
 #> data = [3 x 9]
 #> aes_string(
@@ -453,7 +433,7 @@ layers
 #>   group = '.group'
 #> )
 #> 
-#> Layer 4
+#> Layer 3
 #> --------
 #> Geom type: labs
 #> y = 'Slope of Petal.Length'

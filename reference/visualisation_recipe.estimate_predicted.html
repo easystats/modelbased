@@ -37,7 +37,7 @@ for publication-ready figures, we recommend re-creating the figures using the
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -268,11 +268,11 @@ aesthetics and parameters for the geoms (see customization example).</p></dd>
 
 
 <dt id="arg-join-dots">join_dots<a class="anchor" aria-label="anchor" href="#arg-join-dots"></a></dt>
-<dd><p>Logical, if <code>TRUE</code> (default) and for categorical focal terms
-in <code>by</code>, dots (estimates) are connected by lines, i.e. plots will be a
-combination of dots with error bars and connecting lines. If <code>FALSE</code>, only
-dots and error bars are shown. It is possible to set a global default value
-using <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>, e.g. <code>options(modelbased_join_dots = FALSE)</code>.</p></dd>
+<dd><p>Logical, if <code>TRUE</code> and for categorical focal terms in <code>by</code>,
+dots (estimates) are connected by lines, i.e. plots will be a combination of
+dots with error bars and connecting lines. If <code>FALSE</code> (default), only dots
+and error bars are shown. It is possible to set a global default value using
+<code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>, e.g. <code>options(modelbased_join_dots = TRUE)</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -443,16 +443,6 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-in"><span><span class="va">layers</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: line</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 8]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   y = 'Mean'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   x = 'Species'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: pointrange</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 8]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
@@ -463,7 +453,7 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: labs</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> y = 'Mean of Sepal.Width'</span>
@@ -530,16 +520,6 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: line</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 9]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   y = 'Slope'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   x = 'Species'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: pointrange</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 9]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
@@ -550,7 +530,7 @@ when using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html"
 <span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: labs</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> y = 'Slope of Petal.Length'</span>
