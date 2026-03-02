@@ -27,6 +27,16 @@
 </defs>
 <g clip-path='url(#cpMjcuOTB8NjQ0LjI1fDIyLjc4fDU0NS4xMQ==)'>
 <rect x='27.90' y='22.78' width='616.35' height='522.33' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<polyline points='126.13,474.50 318.74,353.37 511.35,310.73 ' style='stroke-width: 1.07; stroke: #132B43; stroke-linecap: butt;' />
+<polyline points='129.98,456.63 322.59,330.99 515.20,287.40 ' style='stroke-width: 1.07; stroke: #1A3855; stroke-linecap: butt;' />
+<polyline points='133.84,438.83 326.45,308.69 519.06,264.16 ' style='stroke-width: 1.07; stroke: #214667; stroke-linecap: butt;' />
+<polyline points='137.69,420.97 330.30,286.31 522.91,240.84 ' style='stroke-width: 1.07; stroke: #28547A; stroke-linecap: butt;' />
+<polyline points='141.54,403.10 334.15,263.92 526.76,217.51 ' style='stroke-width: 1.07; stroke: #2F638E; stroke-linecap: butt;' />
+<polyline points='145.39,385.30 338.00,241.62 530.61,194.27 ' style='stroke-width: 1.07; stroke: #3772A2; stroke-linecap: butt;' />
+<polyline points='149.24,367.44 341.85,219.24 534.47,170.94 ' style='stroke-width: 1.07; stroke: #3E81B7; stroke-linecap: butt;' />
+<polyline points='153.10,349.57 345.71,196.85 538.32,147.62 ' style='stroke-width: 1.07; stroke: #4691CC; stroke-linecap: butt;' />
+<polyline points='156.95,331.77 349.56,174.56 542.17,124.38 ' style='stroke-width: 1.07; stroke: #4EA1E1; stroke-linecap: butt;' />
+<polyline points='160.80,313.90 353.41,152.17 546.02,101.05 ' style='stroke-width: 1.07; stroke: #56B1F7; stroke-linecap: butt;' />
 <line x1='126.13' y1='521.37' x2='126.13' y2='427.63' style='stroke-width: 1.07; stroke: #132B43; stroke-linecap: butt;' />
 <line x1='318.74' y1='385.21' x2='318.74' y2='321.53' style='stroke-width: 1.07; stroke: #132B43; stroke-linecap: butt;' />
 <line x1='511.35' y1='348.98' x2='511.35' y2='272.49' style='stroke-width: 1.07; stroke: #132B43; stroke-linecap: butt;' />
@@ -126,6 +136,6 @@
 <text x='677.97' y='301.82' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>3.0</text>
 <text x='677.97' y='283.88' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>3.5</text>
 <text x='677.97' y='265.94' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>4.0</text>
-<text x='27.90' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='77.05px' lengthAdjust='spacingAndGlyphs'>plot-means-4</text>
+<text x='27.90' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='108.59px' lengthAdjust='spacingAndGlyphs'>plot-means-4-lines</text>
 </g>
 </svg>

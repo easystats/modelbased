@@ -917,7 +917,6 @@
 <circle cx='535.12' cy='372.04' r='1.60' style='stroke-width: 0.00; stroke: none; fill: #000000; fill-opacity: 0.33;' />
 <circle cx='645.52' cy='436.34' r='1.60' style='stroke-width: 0.00; stroke: none; fill: #000000; fill-opacity: 0.33;' />
 <circle cx='607.46' cy='436.34' r='1.60' style='stroke-width: 0.00; stroke: none; fill: #000000; fill-opacity: 0.33;' />
-<polyline points='218.72,404.62 528.60,391.03 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
 <line x1='218.72' y1='425.72' x2='218.72' y2='383.53' style='stroke-width: 1.07; stroke-linecap: butt;' />
 <line x1='528.60' y1='410.01' x2='528.60' y2='372.04' style='stroke-width: 1.07; stroke-linecap: butt;' />
 <circle cx='218.72' cy='404.62' r='2.84' style='stroke-width: 1.42; fill: #000000;' />
