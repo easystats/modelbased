@@ -177,16 +177,6 @@
 <circle cx='477.38' cy='374.13' r='1.60' style='stroke-width: 0.00; stroke: none; fill: #4793CE; fill-opacity: 0.33;' />
 <circle cx='595.57' cy='343.40' r='1.60' style='stroke-width: 0.00; stroke: none; fill: #50A5E7; fill-opacity: 0.33;' />
 <circle cx='485.07' cy='374.13' r='1.60' style='stroke-width: 0.00; stroke: none; fill: #4187BF; fill-opacity: 0.33;' />
-<polyline points='126.62,325.54 320.19,472.16 513.75,475.36 ' style='stroke-width: 1.07; stroke: #132B43; stroke-linecap: butt;' />
-<polyline points='130.49,309.90 324.06,455.81 517.63,464.23 ' style='stroke-width: 1.07; stroke: #1A3855; stroke-linecap: butt;' />
-<polyline points='134.36,294.33 327.93,439.53 521.50,453.14 ' style='stroke-width: 1.07; stroke: #214667; stroke-linecap: butt;' />
-<polyline points='138.23,278.69 331.80,423.19 525.37,442.02 ' style='stroke-width: 1.07; stroke: #28547A; stroke-linecap: butt;' />
-<polyline points='142.10,263.06 335.67,406.84 529.24,430.89 ' style='stroke-width: 1.07; stroke: #2F638E; stroke-linecap: butt;' />
-<polyline points='145.98,247.48 339.54,390.56 533.11,419.80 ' style='stroke-width: 1.07; stroke: #3772A2; stroke-linecap: butt;' />
-<polyline points='149.85,231.85 343.41,374.22 536.98,408.67 ' style='stroke-width: 1.07; stroke: #3E81B7; stroke-linecap: butt;' />
-<polyline points='153.72,216.22 347.29,357.87 540.85,397.54 ' style='stroke-width: 1.07; stroke: #4691CC; stroke-linecap: butt;' />
-<polyline points='157.59,200.64 351.16,341.59 544.73,386.46 ' style='stroke-width: 1.07; stroke: #4EA1E1; stroke-linecap: butt;' />
-<polyline points='161.46,185.01 355.03,325.25 548.60,375.33 ' style='stroke-width: 1.07; stroke: #56B1F7; stroke-linecap: butt;' />
 <line x1='126.62' y1='352.58' x2='126.62' y2='298.49' style='stroke-width: 1.07; stroke: #132B43; stroke-linecap: butt;' />
 <line x1='130.49' y1='335.08' x2='130.49' y2='284.73' style='stroke-width: 1.07; stroke: #1A3855; stroke-linecap: butt;' />
 <line x1='134.36' y1='327.06' x2='134.36' y2='261.59' style='stroke-width: 1.07; stroke: #214667; stroke-linecap: butt;' />

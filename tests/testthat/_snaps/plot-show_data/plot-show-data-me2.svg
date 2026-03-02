@@ -43,7 +43,6 @@
 <circle cx='546.88' cy='318.41' r='2.13' style='stroke-width: 0.00; stroke: none; fill: #000000; fill-opacity: 0.33;' />
 <circle cx='244.68' cy='386.06' r='2.13' style='stroke-width: 0.00; stroke: none; fill: #000000; fill-opacity: 0.33;' />
 <circle cx='523.40' cy='267.13' r='2.13' style='stroke-width: 0.00; stroke: none; fill: #000000; fill-opacity: 0.33;' />
-<polyline points='218.72,288.34 528.60,229.55 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
 <line x1='218.72' y1='379.56' x2='218.72' y2='197.13' style='stroke-width: 1.07; stroke-linecap: butt;' />
 <line x1='528.60' y1='311.65' x2='528.60' y2='147.45' style='stroke-width: 1.07; stroke-linecap: butt;' />
 <circle cx='218.72' cy='288.34' r='2.84' style='stroke-width: 1.42; fill: #000000;' />
