@@ -1,3 +1,9 @@
+# modelbased (devel)
+
+## Changes
+
+* Support for models of class `nestedLogit`.
+
 # modelbased 0.14.0
 
 ## Changes
