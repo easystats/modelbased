@@ -176,7 +176,11 @@ estimate_relation(
   (used when `data = "grid"`) and
   [`insight::get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.html).
   Furthermore, for count regression models that use an offset term, use
-  `offset = <value>` to fix the offset at a specific value.
+  `offset = <value>` to fix the offset at a specific value. For models
+  of class `nestedLogit`, use the `submodel` argument to specify the
+  component for which predictions should be returned (see
+  [`?insight::get_predicted`](https://easystats.github.io/insight/reference/get_predicted.html)
+  for details).
 
 ## Value
 

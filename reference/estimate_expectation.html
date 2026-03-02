@@ -61,7 +61,7 @@ See the details section below for details about the different possibilities.'><m
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -299,7 +299,10 @@ to the output. You can reshape them to a long format by running
 <dd><p>You can add all the additional control arguments from
 <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> (used when <code>data = "grid"</code>) and
 <code><a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">insight::get_predicted()</a></code>. Furthermore, for count regression models that use
-an offset term, use <code>offset = &lt;value&gt;</code> to fix the offset at a specific value.</p></dd>
+an offset term, use <code>offset = &lt;value&gt;</code> to fix the offset at a specific value.
+For models of class <code>nestedLogit</code>, use the <code>submodel</code> argument to specify
+the component for which predictions should be returned (see
+<code><a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">?insight::get_predicted</a></code> for details).</p></dd>
 
 </dl></div>
     <div class="section level2">
