@@ -287,11 +287,19 @@ get_marginalmeans <- function(
 #   - `dots`: The `...` arguments, with arguments consumed by this function removed.
 .get_datagrid_means <- function(model, by, estimate, dots) {
   dg_factors <- switch(estimate, specific = "reference", "all")
-  dg_args <- list(model, by = by, factors = dg_factors, include_random = TRUE, verbose = FALSE)
+  dg_args <- list(
+    model,
+    by = by,
+    factors = dg_factors,
+    include_random = TRUE,
+    verbose = FALSE
+  )
   # did user request weights? These are not supported for data-grid
   # marginalization types
   if (
-    estimate %in% c("specific", "typical") && (!is.null(dots$weights) || !is.null(dots$wts))
+    estimate %in%
+      c("specific", "typical") &&
+      (!is.null(dots$weights) || !is.null(dots$wts))
   ) {
     insight::format_warning(
       "Using weights is not possible when `estimate` is set to \"typical\" or \"specific\". Use `estimate = \"average\"` to include weights for marginal means or contrasts."
@@ -322,7 +330,10 @@ get_marginalmeans <- function(
   # restore data types -  if we have defined numbers in `by`, like
   # `by = "predictor = 5"`, and `predictor` was a factor, it is returned as
   # numeric in the data grid. Fix this here, else marginal effects will fail
-  datagrid <- datawizard::data_restoretype(datagrid, insight::get_data(model, verbose = FALSE))
+  datagrid <- datawizard::data_restoretype(
+    datagrid,
+    insight::get_data(model, verbose = FALSE)
+  )
 
   list(datagrid = datagrid, datagrid_info = datagrid_info, dots = dots)
 }
@@ -420,7 +431,8 @@ get_marginalmeans <- function(
   # pass data grid in such situations - but we still created the data grid based
   # on the `by` variables, for internal use, for example filtering at this point
   if (
-    identical(estimate, "average") && all(datagrid_info$at_specs$varname %in% colnames(means))
+    identical(estimate, "average") &&
+      all(datagrid_info$at_specs$varname %in% colnames(means))
   ) {
     # sanity check - are all filter values from the data grid in the marginaleffects
     # object? For `estimate_average()`, predictions are based on the data, not
@@ -519,7 +531,7 @@ get_marginalmeans <- function(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
     "coef_name", "slope", "ci", "model_info", "contrast_filter",
-    "keep_iterations", "joint_test", "vcov", "equivalence"
+    "keep_iterations", "joint_test", "vcov", "equivalence", "context_effects"
   )
 }
 
@@ -531,9 +543,16 @@ get_marginalmeans <- function(
   model,
   by = NULL,
   contrast = NULL,
+  comparison = NULL,
   verbose = TRUE,
   ...
 ) {
+  # special case: calculating context effects for models with within-between
+  # effects. In this case, we don't want any further checks
+  if (identical(comparison, "context")) {
+    return(list(by = by, contrast = contrast))
+  }
+
   # Gather info and data from model
   model_data <- insight::get_data(model, verbose = FALSE)
 
@@ -597,7 +616,10 @@ get_marginalmeans <- function(
         "Model contains an offset-term and you average predictions over the distribution of that offset. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and set `estimate = \"typical\"`."
       )
       # if offset term is log-transformed, tell user. offset should be fixed then
-      log_offset <- insight::find_transformation(insight::find_offset(model, as_term = TRUE))
+      log_offset <- insight::find_transformation(insight::find_offset(
+        model,
+        as_term = TRUE
+      ))
       if (!is.null(log_offset) && startsWith(log_offset, "log")) {
         msg <- c(
           msg,
