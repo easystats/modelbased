@@ -17,11 +17,11 @@ test_that("estimate_contrast, context effects, linear", {
     c("bill_len_between", "bill_len_within"),
     comparison = "context"
   )
-  expect_equal(out$Mean, b[1] - b[2], tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Estimate, b[1] - b[2], tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$SE, sqrt((se[1]^2 + se[2]^2)), tolerance = 1e-4, ignore_attr = TRUE)
 })
 
-test_that("estimate_contrast, context effects, linear", {
+test_that("estimate_contrast, context effects, glm", {
   data(penguins, package = "datasets")
   d <- datawizard::demean(penguins, "bill_len", by = "species")
   d$out <- datawizard::categorize(d$flipper_len) - 1
