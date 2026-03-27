@@ -838,7 +838,9 @@ equivalence_columns <- c(
   # estimate name
   if (is.null(predict_type)) {
     estimate_name <- "Mean"
-  } else if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
+  } else if (predict_type == "context") {
+    estimate_name <- "Estimate"
+  } else if (tolower(predict_type) %in% .brms_aux_elements()) {
     # for Bayesian models with distributional parameter
     estimate_name <- tools::toTitleCase(predict_type)
   } else if (
