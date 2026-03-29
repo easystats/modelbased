@@ -11,11 +11,7 @@
     )
   } else {
     dots <- list(...)
-    fun_args <- list(
-      model,
-      variables = my_args$contrast,
-      hypothesis = my_args$comparison,
-    )
+    fun_args <- list(model, variables = my_args$contrast, hypothesis = my_args$comparison)
     if (is.null(dots$type)) {
       fun_args$type <- "link"
     }
