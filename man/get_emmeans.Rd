@@ -140,8 +140,12 @@ described below, see documentation of \link[marginaleffects:comparisons]{margina
 section \emph{Comparison options} below.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
-multiple hypotheses jointly (usually used for factorial designs),
+\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, \code{"slope"} or \code{"trt_vs_ctrl"}.
+The \code{"slope"} option calculcates contrasts between average slopes and can
+also be used to calculate "context" effects, which is the difference of
+within- and between-effects (see
+https://statisticalhorizons.com/between-within-contextual-effects/). To
+test multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
 \item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},

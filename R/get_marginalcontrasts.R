@@ -108,7 +108,7 @@ get_marginalcontrasts <- function(
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
       insight::format_error(
-        "Please specify the `by` argument to calculate contrasts of slopes."
+        "Please specify the `by` argument to calculate contrasts of slopes. If you want to calculate the average contrast between two slopes, use `comparison = \"slope\"` instead."
       )
     }
     # call slopes with hypothesis argument

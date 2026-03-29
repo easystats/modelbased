@@ -16,7 +16,7 @@ format.estimate_contrasts <- function(
   }
   # change parameter name for context effects
   if (isTRUE(attributes(x)$context_effects)) {
-    x$Parameter <- "Context effect"
+    x$Parameter <- "Average slope"
   }
 
   # don't print columns of adjusted_for variables

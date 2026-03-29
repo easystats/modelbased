@@ -260,6 +260,10 @@
       return(out)
     }
   }
+  # handle special value: contrasting average slopes (context effects)
+  if (identical(comparison, "slope")) {
+    comparison <- "context"
+  }
   comparison
 }
 
