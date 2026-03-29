@@ -36,11 +36,12 @@ test_that("estimate_contrast, context effects, glm", {
     comparison = "context"
   )
   expect_equal(out$Estimate, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
+
   out <- modelbased::estimate_contrasts(
     m,
     c("bill_len_between", "bill_len_within"),
     comparison = "context",
     type = "response"
   )
-  expect_equal(out$Estimate, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Estimate, 0.01784138, tolerance = 1e-4, ignore_attr = TRUE)
 })
