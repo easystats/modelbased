@@ -12,11 +12,15 @@
   } else {
     dots <- list(...)
     fun_args <- list(model, variables = my_args$contrast, hypothesis = my_args$comparison)
+    # set default for "type" argument, if not provided
     if (is.null(dots$type)) {
       fun_args$type <- "link"
-    }
-    if (is.null(dots$transform)) {
-      fun_args$transform <- "exp"
+      # if "type" was not provided, also change transform argument. we do
+      # this only when user did not provide "type", else - if user provided
+      # "type" - we keep the default NULL
+      if (is.null(dots$transform)) {
+        fun_args$transform <- "exp"
+      }
     }
     out <- do.call(marginaleffects::avg_comparisons, c(fun_args, dots))
   }
