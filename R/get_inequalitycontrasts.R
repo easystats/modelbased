@@ -1,7 +1,7 @@
 # special contrasts: inequality ---------------------------------------------
 # ---------------------------------------------------------------------------
 
-get_inequalitycontrasts <- function(
+.get_inequalitycontrasts <- function(
   model,
   model_data,
   my_args,
@@ -93,7 +93,10 @@ get_inequalitycontrasts <- function(
 
     # to calculate marginal effects inequalities, all contrast predictors
     # must be factors
-    check_factors <- .safe(vapply(model_data[my_args$contrast], is.factor, logical(1)), NULL)
+    check_factors <- .safe(
+      vapply(model_data[my_args$contrast], is.factor, logical(1)),
+      NULL
+    )
     if (is.null(check_factors) || !all(check_factors)) {
       insight::format_error(
         "All variables specified in `contrast` must be factors for `comparison = \"inequality\"`."
@@ -183,7 +186,10 @@ get_inequalitycontrasts <- function(
     inequality_pairwise = ,
     inequality = stats::as.formula(paste(c("~ pairwise", group), collapse = " | ")),
     inequality_ratio_pairwise = ,
-    inequality_ratio = stats::as.formula(paste(c("ratio ~ pairwise", group), collapse = " | ")),
+    inequality_ratio = stats::as.formula(paste(
+      c("ratio ~ pairwise", group),
+      collapse = " | "
+    )),
   )
   f2 <- stats::as.formula(paste(c("~ I(mean(abs(x)))", group), collapse = " | "))
   list(f1 = f1, f2 = f2)
@@ -200,7 +206,9 @@ get_inequalitycontrasts <- function(
   f <- unlist(strsplit(insight::safe_deparse(comparison), "|", fixed = TRUE))
   # check parts left and right of the bar "|"
   if (length(f) != 2) {
-    insight::format_error("Formula must contain exactly one `|` character separating two parts, e.g. `~ inequality | group`.")
+    insight::format_error(
+      "Formula must contain exactly one `|` character separating two parts, e.g. `~ inequality | group`."
+    )
   }
   # check parts left and right of the bar "|"
   left_part <- insight::trim_ws(f[[1]])
@@ -268,7 +276,11 @@ get_inequalitycontrasts <- function(
   )
 
   if (!is.null(comparison)) {
-    if (length(comparison) == 1 && is.character(comparison) && comparison %in% inequality_comparisons) {
+    if (
+      length(comparison) == 1 &&
+        is.character(comparison) &&
+        comparison %in% inequality_comparisons
+    ) {
       return(TRUE)
     }
     # if we have a formula, we check whether it starts with "inequality". We
@@ -287,7 +299,7 @@ get_inequalitycontrasts <- function(
 
 # return the valid inequality comparison value
 .inequality_type <- function(comparison) {
-  if (!.is_inequality_comparison(comparison)){
+  if (!.is_inequality_comparison(comparison)) {
     return(NULL)
   }
   comparison

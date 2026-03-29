@@ -1,7 +1,7 @@
 # special contrasts: context effects ----------------------------------------
 # ---------------------------------------------------------------------------
 
-get_contexteffects <- function(model, my_args, model_info, ...) {
+.get_contexteffects <- function(model, my_args, model_info, ...) {
   if (model_info$is_linear) {
     out <- marginaleffects::avg_comparisons(
       model,

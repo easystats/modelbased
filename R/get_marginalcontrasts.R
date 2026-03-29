@@ -90,7 +90,7 @@ get_marginalcontrasts <- function(
     # Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables
     # Sociological Science February 5, 10.15195/v12.a7
     # this requires a special handling, because we can only use it with avg_comparisons
-    out <- get_inequalitycontrasts(
+    out <- .get_inequalitycontrasts(
       model,
       model_data,
       my_args,
@@ -102,7 +102,7 @@ get_marginalcontrasts <- function(
     )
     predict <- "response"
   } else if (isTRUE(my_args$context_effects)) {
-    out <- get_contexteffects(model, my_args, model_info, ...)
+    out <- .get_contexteffects(model, my_args, model_info, ...)
     predict <- "context"
   } else if (compute_slopes) {
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
