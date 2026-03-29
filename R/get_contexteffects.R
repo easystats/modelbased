@@ -10,14 +10,19 @@ get_contexteffects <- function(model, my_args, model_info, ...) {
       ...
     )
   } else {
-    out <- marginaleffects::avg_comparisons(
+    dots <- list(...)
+    fun_args <- list(
       model,
       variables = my_args$contrast,
       hypothesis = my_args$comparison,
-      type = "link",
-      transform = "exp",
-      ...
     )
+    if (is.null(dots$type)) {
+      fun_args$type <- "link"
+    }
+    if (is.null(dots$transform)) {
+      fun_args$transform <- "exp"
+    }
+    out <- do.call(marginaleffects::avg_comparisons, c(fun_args, dots))
   }
   # save some labels for printing
   attr(out, "by") <- my_args$by
