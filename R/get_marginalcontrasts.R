@@ -102,8 +102,14 @@ get_marginalcontrasts <- function(
     )
     predict <- "response"
   } else if (isTRUE(my_args$context_effects)) {
-    out <- .get_contexteffects(model, my_args, model_info, ...)
-    predict <- "context"
+    out <- .get_contexteffects(model, my_args, predict, transform, model_info, ...)
+    # set defaults, for proper printing
+    if (is.null(predict)) {
+      predict <- "link"
+      if (is.null(transform)) {
+        transform <- "exp"
+      }
+    }
   } else if (compute_slopes) {
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
@@ -159,6 +165,7 @@ get_marginalcontrasts <- function(
     info = list(
       contrast = my_args$contrast,
       predict = predict,
+      transform = transform,
       comparison = my_args$comparison,
       estimate = estimate,
       p_adjust = p_adjust,

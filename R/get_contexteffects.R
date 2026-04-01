@@ -1,7 +1,14 @@
 # special contrasts: context effects ----------------------------------------
 # ---------------------------------------------------------------------------
 
-.get_contexteffects <- function(model, my_args, model_info, ...) {
+.get_contexteffects <- function(
+  model,
+  my_args,
+  predict = NULL,
+  transform = NULL,
+  model_info,
+  ...
+) {
   if (model_info$is_linear) {
     out <- marginaleffects::avg_comparisons(
       model,
@@ -13,14 +20,17 @@
     dots <- list(...)
     fun_args <- list(model, variables = my_args$contrast, hypothesis = my_args$comparison)
     # set default for "type" argument, if not provided
-    if (is.null(dots$type)) {
+    if (is.null(predict)) {
       fun_args$type <- "link"
       # if "type" was not provided, also change transform argument. we do
       # this only when user did not provide "type", else - if user provided
       # "type" - we keep the default NULL
-      if (is.null(dots$transform)) {
+      if (is.null(transform)) {
         fun_args$transform <- "exp"
       }
+    } else {
+      fun_args$type <- predict
+      fun_args$transform <- transform
     }
     out <- do.call(marginaleffects::avg_comparisons, c(fun_args, dots))
   }

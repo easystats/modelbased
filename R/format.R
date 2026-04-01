@@ -154,6 +154,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   predict_type <- attributes(x)$predict
+  transform <- attributes(x)$transform
 
   # special attributes we get from "get_marginalcontrasts()"
   comparison <- list(...)$hypothesis
@@ -178,7 +179,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     # for simple means, we don't want p-values
     remove_columns <- c(remove_columns, "p")
     # estimate name
-    estimate_name <- .guess_estimate_name(predict_type, info)
+    estimate_name <- .guess_estimate_name(predict_type, transform, info)
   }
 
   # reshape and format columns
@@ -834,12 +835,10 @@ equivalence_columns <- c(
 # based on on which scale predictions were requested
 
 #' @keywords internal
-.guess_estimate_name <- function(predict_type, info) {
+.guess_estimate_name <- function(predict_type, transform = NULL, info) {
   # estimate name
   if (is.null(predict_type)) {
     estimate_name <- "Mean"
-  } else if (predict_type == "context") {
-    estimate_name <- "Estimate"
   } else if (tolower(predict_type) %in% .brms_aux_elements()) {
     # for Bayesian models with distributional parameter
     estimate_name <- tools::toTitleCase(predict_type)
@@ -850,6 +849,19 @@ equivalence_columns <- c(
     # here we add all models that model the probability of an outcome, such as
     # binomial, multinomial, or Bernoulli models
     estimate_name <- "Probability"
+  } else if (
+    predict_type %in%
+      c("none", "link") &&
+      identical(transform, "exp") &&
+      (info$is_binomial || info$is_bernoulli || info$is_multinomial)
+  ) {
+    # here we add all models that have odds ratios as exponentiated coefficients
+    estimate_name <- "Odds_Ratio"
+  } else if (
+    predict_type %in% c("none", "link") && identical(transform, "exp") && (info$is_count)
+  ) {
+    # here we add all models that have IRRs as exponentiated coefficients
+    estimate_name <- "IRR"
   } else if (predict_type == "survival" && info$is_survival) {
     # this is for survival models, where we want to predict the survival probability
     estimate_name <- "Probability"
