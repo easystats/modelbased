@@ -123,7 +123,7 @@ section \emph{Comparison options} below.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
 \code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, \code{"slope"} or \code{"trt_vs_ctrl"}.
-The \code{"slope"} option calculcates contrasts between average slopes and can
+The \code{"slope"} option calculates contrasts between average slopes and can
 also be used to calculate "context" effects, which is the difference of
 within- and between-effects (see
 https://statisticalhorizons.com/between-within-contextual-effects/). To

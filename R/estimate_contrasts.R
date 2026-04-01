@@ -34,7 +34,7 @@
 #'   section _Comparison options_ below.
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
 #'     `"meanotherdev"`, `"poly"`, `"helmert"`, `"slope"` or `"trt_vs_ctrl"`.
-#'     The `"slope"` option calculcates contrasts between average slopes and can
+#'     The `"slope"` option calculates contrasts between average slopes and can
 #'     also be used to calculate "context" effects, which is the difference of
 #'     within- and between-effects (see
 #'     https://statisticalhorizons.com/between-within-contextual-effects/). To
