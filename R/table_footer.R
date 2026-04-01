@@ -22,14 +22,23 @@
   if (isTRUE(info$joint_test)) {
     table_footer <- NULL
   } else {
-    table_footer <- paste0("\nVariable predicted: ", toString(insight::find_response(model)))
+    table_footer <- paste0(
+      "\nVariable predicted: ",
+      toString(insight::find_response(model))
+    )
   }
 
   # modulated predictors (focal terms) ---------------------------------------
 
   if (!is.null(by) && !isTRUE(info$joint_test)) {
     modulate_string <- switch(type, inequality = , contrasts = "contrasted", "modulated")
-    table_footer <- paste0(table_footer, "\nPredictors ", modulate_string, ": ", toString(by))
+    table_footer <- paste0(
+      table_footer,
+      "\nPredictors ",
+      modulate_string,
+      ": ",
+      toString(by)
+    )
   }
 
   # predictors controlled (non-focal terms) ----------------------------------
@@ -49,7 +58,11 @@
       # over the list, because we may have different types of data
       for (av in seq_along(adjusted_values)) {
         if (is.numeric(adjusted_values[[av]])) {
-          adjusted_for[av] <- sprintf("%s (%.2g)", adjusted_for[av], adjusted_values[[av]])
+          adjusted_for[av] <- sprintf(
+            "%s (%.2g)",
+            adjusted_for[av],
+            adjusted_values[[av]]
+          )
         } else if (identical(type, "predictions")) {
           adjusted_for[av] <- sprintf("%s (%s)", adjusted_for[av], adjusted_values[[av]])
         }
@@ -87,7 +100,12 @@
 
   # tell user about scale of predictions / contrasts -------------------------
 
-  result_type <- switch(type, inequality = "Differences", contrasts = "Contrasts", "Predictions")
+  result_type <- switch(
+    type,
+    inequality = "Differences",
+    contrasts = "Contrasts",
+    "Predictions"
+  )
 
   if (!is.null(predict) && isFALSE(model_info$is_linear)) {
     # exceptions
@@ -141,7 +159,11 @@
       hypothesis_labels <- unlist(
         lapply(parameter_names, function(i) {
           rows <- as.numeric(sub(".", "", i))
-          paste0(i, " = ", toString(paste0(info$focal_terms, " [", transposed_dg[, rows], "]")))
+          paste0(
+            i,
+            " = ",
+            toString(paste0(info$focal_terms, " [", transposed_dg[, rows], "]"))
+          )
         }),
         use.names = FALSE
       )

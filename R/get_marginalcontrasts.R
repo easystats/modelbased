@@ -90,7 +90,7 @@ get_marginalcontrasts <- function(
     # Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables
     # Sociological Science February 5, 10.15195/v12.a7
     # this requires a special handling, because we can only use it with avg_comparisons
-    out <- get_inequalitycontrasts(
+    out <- .get_inequalitycontrasts(
       model,
       model_data,
       my_args,
@@ -101,11 +101,20 @@ get_marginalcontrasts <- function(
       ...
     )
     predict <- "response"
+  } else if (isTRUE(my_args$context_effects)) {
+    out <- .get_contexteffects(model, my_args, predict, transform, model_info, ...)
+    # set defaults, for proper printing
+    if (is.null(predict)) {
+      predict <- "link"
+      if (is.null(transform)) {
+        transform <- "exp"
+      }
+    }
   } else if (compute_slopes) {
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
       insight::format_error(
-        "Please specify the `by` argument to calculate contrasts of slopes."
+        "Please specify the `by` argument to calculate contrasts of slopes. If you want to calculate the average contrast between two slopes, use `comparison = \"slope\"` instead."
       )
     }
     # call slopes with hypothesis argument
@@ -156,10 +165,12 @@ get_marginalcontrasts <- function(
     info = list(
       contrast = my_args$contrast,
       predict = predict,
+      transform = transform,
       comparison = my_args$comparison,
       estimate = estimate,
       p_adjust = p_adjust,
       contrast_filter = my_args$contrast_filter,
+      context_effects = my_args$context_effects,
       keep_iterations = keep_iterations
     )
   )
@@ -170,11 +181,15 @@ get_marginalcontrasts <- function(
     out <- .p_adjust(model, out, p_adjust, verbose, ...)
   }
 
-  # remove "estimate_means" class attribute
-  class(out) <- setdiff(
-    unique(c("marginaleffects_contrasts", class(out))),
-    "estimate_means"
-  )
+  # no extra class attribute for context effects, because we don't want
+  # the regular contrast formatting here.
+  if (!isTRUE(my_args$context_effects)) {
+    # remove "estimate_means" class attribute
+    class(out) <- setdiff(
+      unique(c("marginaleffects_contrasts", class(out))),
+      "estimate_means"
+    )
+  }
   out
 }
 
@@ -232,6 +247,12 @@ get_marginalcontrasts <- function(
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
   joint_test <- FALSE
+  context_effects <- FALSE
+  # overwrite "comparison" when it's set to "context".
+  if (identical(comparison, "context")) {
+    comparison <- "b1 - b2 = 0"
+    context_effects <- TRUE
+  }
   # save original `by`
   original_by <- my_args$by
   original_comparison <- comparison
@@ -404,6 +425,8 @@ get_marginalcontrasts <- function(
       contrast_filter = insight::compact_list(contrast_filter),
       # in case we have a joint/omnibus test
       joint_test = joint_test,
+      # remember if we want to calculate context effects
+      context_effects = context_effects,
       # cleaned `by` and `contrast`, without filtering information
       cleaned_by = gsub("=.*", "\\1", my_args$by),
       cleaned_contrast = gsub("=.*", "\\1", my_args$contrast)

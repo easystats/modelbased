@@ -14,9 +14,16 @@ format.estimate_contrasts <- function(
     select <- NULL
     include_grid <- FALSE
   }
+  # change parameter name for context effects
+  if (isTRUE(attributes(x)$context_effects)) {
+    x$Parameter <- "Average slope"
+  }
+
   # don't print columns of adjusted_for variables
   adjusted_for <- attr(x, "adjusted_for", exact = TRUE)
-  if (!is.null(adjusted_for) && all(adjusted_for %in% colnames(x)) && !isTRUE(include_grid)) {
+  if (
+    !is.null(adjusted_for) && all(adjusted_for %in% colnames(x)) && !isTRUE(include_grid)
+  ) {
     # remove non-focal terms from data frame
     x[adjusted_for] <- NULL
   } else if (isTRUE(include_grid)) {
@@ -84,7 +91,13 @@ format.estimate_contrasts <- function(
   }
 
   if (!is.null(format) && format %in% c("md", "markdown", "html")) {
-    insight::format_table(x, ci_brackets = c("(", ")"), select = select, format = format, ...)
+    insight::format_table(
+      x,
+      ci_brackets = c("(", ")"),
+      select = select,
+      format = format,
+      ...
+    )
   } else {
     insight::format_table(x, select = select, ...)
   }
@@ -106,8 +119,12 @@ format.estimate_grouplevel <- format.estimate_contrasts
 #' @export
 format.estimate_smooth <- function(x, ...) {
   # Colnames
-  if ("Size" %in% names(x)) x$Size <- ifelse(x$Size < 1, paste0(insight::format_value(x$Size * 100), "%"), "100%")
-  if ("Part" %in% names(x)) x$Part <- insight::format_value(x$Part, protect_integers = TRUE)
+  if ("Size" %in% names(x)) {
+    x$Size <- ifelse(x$Size < 1, paste0(insight::format_value(x$Size * 100), "%"), "100%")
+  }
+  if ("Part" %in% names(x)) {
+    x$Part <- insight::format_value(x$Part, protect_integers = TRUE)
+  }
 
   insight::format_table(x, ...)
 }
@@ -137,6 +154,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   predict_type <- attributes(x)$predict
+  transform <- attributes(x)$transform
 
   # special attributes we get from "get_marginalcontrasts()"
   comparison <- list(...)$hypothesis
@@ -161,7 +179,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     # for simple means, we don't want p-values
     remove_columns <- c(remove_columns, "p")
     # estimate name
-    estimate_name <- .guess_estimate_name(predict_type, info)
+    estimate_name <- .guess_estimate_name(predict_type, transform, info)
   }
 
   # reshape and format columns
@@ -190,7 +208,14 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   }
   model_data <- insight::get_data(model, verbose = FALSE)
   # define all columns that should be removed
-  remove_columns <- c("Predicted", "s.value", "S", "CI", "rowid_dedup", equivalence_columns)
+  remove_columns <- c(
+    "Predicted",
+    "s.value",
+    "S",
+    "CI",
+    "rowid_dedup",
+    equivalence_columns
+  )
   # for contrasting slope, we need to keep the "Parameter" column
   # however, for estimating trends/slope, the "Parameter" column is usually
   # redundant. Since we cannot check for class-attributes, we simply check if
@@ -377,7 +402,11 @@ format.marginaleffects_contrasts <- function(
       # replace all comparison levels with tokens
       params[] <- lapply(params, function(comparison_pair) {
         for (j in seq_along(all_num_levels)) {
-          comparison_pair <- sub(all_num_levels[j], replace_num_levels[j], comparison_pair)
+          comparison_pair <- sub(
+            all_num_levels[j],
+            replace_num_levels[j],
+            comparison_pair
+          )
         }
         for (j in seq_along(all_levels)) {
           comparison_pair <- sub(
@@ -489,7 +518,10 @@ format.marginaleffects_contrasts <- function(
       if (!is.null(contrast_filter)) {
         # make sure we also have all levels for non-filtered variables
         contrast_filter <- insight::compact_list(c(
-          lapply(dgrid[setdiff(focal_terms, unique(c(by, names(contrast_filter))))], unique),
+          lapply(
+            dgrid[setdiff(focal_terms, unique(c(by, names(contrast_filter))))],
+            unique
+          ),
           contrast_filter
         ))
         # now create combinations of all filter variables
@@ -515,7 +547,6 @@ format.marginaleffects_contrasts <- function(
 
 # Helper ----------------------------------------------------------------------
 # -----------------------------------------------------------------------------
-
 
 # since we combine levels from different factors, we have to make
 # sure levels are unique across different terms. If not, paste
@@ -553,15 +584,17 @@ equivalence_columns <- c(
 # outputs from {marginaleffects}
 
 #' @keywords internal
-.standardize_marginaleffects_columns <- function(x,
-                                                 remove_columns,
-                                                 model,
-                                                 model_data,
-                                                 info,
-                                                 ci = 0.95,
-                                                 estimate_name = NULL,
-                                                 is_contrast_analysis = FALSE,
-                                                 ...) {
+.standardize_marginaleffects_columns <- function(
+  x,
+  remove_columns,
+  model,
+  model_data,
+  info,
+  ci = 0.95,
+  estimate_name = NULL,
+  is_contrast_analysis = FALSE,
+  ...
+) {
   # tidy output - we want to tidy the output, using `model_parameters()` or
   # `describe_posterior()` for Bayesian models. We also need to know how the
   # coefficient column is named, because we replace that column name with an
@@ -578,7 +611,12 @@ equivalence_columns <- c(
   # column names for their "coefficient". We now extract the relevant one.
   possible_colnames <- c(
     attributes(params)$coefficient_name,
-    "Coefficient", "Slope", "Predicted", "Median", "Mean", "MAP"
+    "Coefficient",
+    "Slope",
+    "Predicted",
+    "Median",
+    "Mean",
+    "MAP"
   )
   coefficient_name <- intersect(possible_colnames, colnames(params))[1]
   # we need to remove some more columns
@@ -665,9 +703,18 @@ equivalence_columns <- c(
   if (.is_inequality_comparison(comparison_hypothesis)) {
     # fix for pairwise inequality labels - these are named like "(b1) - (b2)" etc.
     # but we want the original labels instead of b1, b2 etc.
-    if(comparison_hypothesis %in% c("inequality_pairwise", "inequality_ratio_pairwise") && !is.null(by_terms)) {
+    if (
+      comparison_hypothesis %in%
+        c("inequality_pairwise", "inequality_ratio_pairwise") &&
+        !is.null(by_terms)
+    ) {
       # clean parameter names
-      parameter_names <- gsub(")", "", gsub("(", "", params$Parameter, fixed = TRUE), fixed = TRUE)
+      parameter_names <- gsub(
+        ")",
+        "",
+        gsub("(", "", params$Parameter, fixed = TRUE),
+        fixed = TRUE
+      )
       # extract data for by-variable
       by_var <- model_data[[by_terms]]
       # make sure we have a factor
@@ -693,7 +740,11 @@ equivalence_columns <- c(
     }
 
     # fix labels for inequality analysis for slopes
-    if (comparison_hypothesis %in% c("inequality", "inequality_ratio") && isTRUE(attributes(x)$compute_slopes)) {
+    if (
+      comparison_hypothesis %in%
+        c("inequality", "inequality_ratio") &&
+        isTRUE(attributes(x)$compute_slopes)
+    ) {
       # for slopes, we either have the trend variable, or only the grouping,
       # but not the "inequality" variabe (the first in "by"). Update labels,
       # so users know by which variables slopes are averaged and grouped
@@ -752,7 +803,9 @@ equivalence_columns <- c(
 
 #' @keywords internal
 .add_contrasts_ci <- function(is_contrast_analysis, params) {
-  if (is_contrast_analysis && !"CI_low" %in% colnames(params) && "SE" %in% colnames(params)) {
+  if (
+    is_contrast_analysis && !"CI_low" %in% colnames(params) && "SE" %in% colnames(params)
+  ) {
     # extract ci-level
     if ("CI" %in% colnames(params)) {
       ci <- params[["CI"]][1]
@@ -782,17 +835,33 @@ equivalence_columns <- c(
 # based on on which scale predictions were requested
 
 #' @keywords internal
-.guess_estimate_name <- function(predict_type, info) {
+.guess_estimate_name <- function(predict_type, transform = NULL, info) {
   # estimate name
   if (is.null(predict_type)) {
     estimate_name <- "Mean"
-  } else if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
+  } else if (tolower(predict_type) %in% .brms_aux_elements()) {
     # for Bayesian models with distributional parameter
     estimate_name <- tools::toTitleCase(predict_type)
-  } else if (!predict_type %in% c("none", "link") && (info$is_binomial || info$is_bernoulli || info$is_multinomial)) {
+  } else if (
+    !predict_type %in% c("none", "link") &&
+      (info$is_binomial || info$is_bernoulli || info$is_multinomial)
+  ) {
     # here we add all models that model the probability of an outcome, such as
     # binomial, multinomial, or Bernoulli models
     estimate_name <- "Probability"
+  } else if (
+    predict_type %in%
+      c("none", "link") &&
+      identical(transform, "exp") &&
+      (info$is_binomial || info$is_bernoulli || info$is_multinomial)
+  ) {
+    # here we add all models that have odds ratios as exponentiated coefficients
+    estimate_name <- "Odds_Ratio"
+  } else if (
+    predict_type %in% c("none", "link") && identical(transform, "exp") && (info$is_count)
+  ) {
+    # here we add all models that have IRRs as exponentiated coefficients
+    estimate_name <- "IRR"
   } else if (predict_type == "survival" && info$is_survival) {
     # this is for survival models, where we want to predict the survival probability
     estimate_name <- "Probability"
@@ -800,7 +869,11 @@ equivalence_columns <- c(
     # this is for zero-inflated models, where we want to predict the probability
     # of a zero-inflated outcome
     estimate_name <- "Probability"
-  } else if (predict_type %in% c("response", "invlink(link)") && (info$is_beta || info$is_orderedbeta)) {
+  } else if (
+    predict_type %in%
+      c("response", "invlink(link)") &&
+      (info$is_beta || info$is_orderedbeta)
+  ) {
     # this is for beta regression models, where we want to predict the mean
     # value of the outcome, which is a proportion
     estimate_name <- "Proportion"
@@ -834,7 +907,11 @@ equivalence_columns <- c(
       if (substring(input_string, match_positions[i], match_positions[i]) == "-") {
         inside_parentheses <- FALSE
         for (j in seq_along(match_positions)) {
-          if (i != j && match_positions[i] > match_positions[j] && match_positions[i] < (match_positions[j] + match_lengths[j])) {
+          if (
+            i != j &&
+              match_positions[i] > match_positions[j] &&
+              match_positions[i] < (match_positions[j] + match_lengths[j])
+          ) {
             inside_parentheses <- TRUE
             break
           }
@@ -850,11 +927,7 @@ equivalence_columns <- c(
     for (i in 1:(length(split_positions) - 1)) {
       parts <- c(
         parts,
-        substring(
-          input_string,
-          split_positions[i] + 1,
-          split_positions[i + 1] - 1
-        )
+        substring(input_string, split_positions[i] + 1, split_positions[i + 1] - 1)
       )
     }
   }

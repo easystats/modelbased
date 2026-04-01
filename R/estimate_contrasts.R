@@ -33,8 +33,12 @@
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html) and
 #'   section _Comparison options_ below.
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
-#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test
-#'     multiple hypotheses jointly (usually used for factorial designs),
+#'     `"meanotherdev"`, `"poly"`, `"helmert"`, `"slope"` or `"trt_vs_ctrl"`.
+#'     The `"slope"` option calculates contrasts between average slopes and can
+#'     also be used to calculate "context" effects, which is the difference of
+#'     within- and between-effects (see
+#'     https://statisticalhorizons.com/between-within-contextual-effects/). To
+#'     test multiple hypotheses jointly (usually used for factorial designs),
 #'     `comparison` can also be `"joint"`. In this case, use the `test` argument
 #'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
 #'   * String: Special string options are `"inequality"`, `"inequality_ratio"`,
