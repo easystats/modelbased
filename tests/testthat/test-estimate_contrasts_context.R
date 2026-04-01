@@ -17,7 +17,7 @@ test_that("estimate_contrast, context effects, linear", {
     c("bill_len_between", "bill_len_within"),
     comparison = "context"
   )
-  expect_equal(out$Estimate, b[1] - b[2], tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Mean, b[1] - b[2], tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$SE, sqrt((se[1]^2 + se[2]^2)), tolerance = 1e-4, ignore_attr = TRUE)
 })
 
@@ -35,20 +35,20 @@ test_that("estimate_contrast, context effects, glm", {
     c("bill_len_between", "bill_len_within"),
     comparison = "context"
   )
-  expect_equal(out$Estimate, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Odds_Ratio, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
 
   out <- modelbased::estimate_contrasts(
     m,
     c("bill_len_between", "bill_len_within"),
     comparison = "slope"
   )
-  expect_equal(out$Estimate, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Odds_Ratio, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
 
   out <- modelbased::estimate_contrasts(
     m,
     c("bill_len_between", "bill_len_within"),
     comparison = "context",
-    type = "response"
+    predict = "response"
   )
-  expect_equal(out$Estimate, 0.01784138, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Probability, 0.01784138, tolerance = 1e-4, ignore_attr = TRUE)
 })
