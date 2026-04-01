@@ -117,12 +117,6 @@
       `invlink(link)` = "response",
       predict
     )
-    ## TODO: simplification, we just mention it is transformed; we could check
-    ## model info and then handle different cases, like odds ratios or IRRs etc.
-    ## See `.guess_estimate_name()`
-    if (!is.null(transform)) {
-      predict <- "transformed"
-    }
     table_footer <- paste0(
       table_footer,
       "\n",
