@@ -120,7 +120,7 @@ get_marginaltrends(
   Is passed to the `type` argument in
   [`emmeans::emmeans()`](https://rvlenth.github.io/emmeans/reference/emmeans.html)
   (when `backend = "emmeans"`) or in
-  [`marginaleffects::avg_predictions()`](https://marginaleffects.com/man/r/predictions.html)
+  [`marginaleffects::avg_predictions()`](https://rdrr.io/pkg/marginaleffects/man/predictions.html)
   (when `backend = "marginaleffects"`). Valid options for `predict` are:
 
   - `backend = "marginaleffects"`: `predict` can be `"response"`,
@@ -161,16 +161,21 @@ get_marginaltrends(
     or matrix, a string equation specifying the hypothesis to test, a
     string naming the comparison method, a formula, or a function. For
     options not described below, see documentation of
-    [marginaleffects::comparisons](https://marginaleffects.com/man/r/comparisons.html),
+    [marginaleffects::comparisons](https://rdrr.io/pkg/marginaleffects/man/comparisons.html),
     [this website](https://marginaleffects.com/bonus/hypothesis.html)
     and section *Comparison options* below.
 
     - String: One of `"pairwise"`, `"reference"`, `"sequential"`,
-      `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, or
-      `"trt_vs_ctrl"`. To test multiple hypotheses jointly (usually used
-      for factorial designs), `comparison` can also be `"joint"`. In
-      this case, use the `test` argument to specify which test should be
-      conducted: `"F"` (default) or `"Chi2"`.
+      `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, `"slope"` or
+      `"trt_vs_ctrl"`. The `"slope"` option calculates contrasts between
+      average slopes and can also be used to calculate "context"
+      effects, which is the difference of within- and between-effects
+      (see
+      https://statisticalhorizons.com/between-within-contextual-effects/).
+      To test multiple hypotheses jointly (usually used for factorial
+      designs), `comparison` can also be `"joint"`. In this case, use
+      the `test` argument to specify which test should be conducted:
+      `"F"` (default) or `"Chi2"`.
 
     - String: Special string options are `"inequality"`,
       `"inequality_ratio"`, and `"inequality_pairwise"`.

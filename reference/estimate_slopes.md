@@ -78,7 +78,7 @@ estimate_slopes(
   Is passed to the `type` argument in
   [`emmeans::emmeans()`](https://rvlenth.github.io/emmeans/reference/emmeans.html)
   (when `backend = "emmeans"`) or in
-  [`marginaleffects::avg_predictions()`](https://marginaleffects.com/man/r/predictions.html)
+  [`marginaleffects::avg_predictions()`](https://rdrr.io/pkg/marginaleffects/man/predictions.html)
   (when `backend = "marginaleffects"`). Valid options for `predict` are:
 
   - `backend = "marginaleffects"`: `predict` can be `"response"`,

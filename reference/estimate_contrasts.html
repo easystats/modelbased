@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -193,7 +193,7 @@ predictors of interest.</p></dd>
 
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
 <dd><p>Is passed to the <code>type</code> argument in <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans::emmeans()</a></code> (when
-<code>backend = "emmeans"</code>) or in <code><a href="https://marginaleffects.com/man/r/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code> (when
+<code>backend = "emmeans"</code>) or in <code><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code> (when
 <code>backend = "marginaleffects"</code>). Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>,
 <code>"inverse_link"</code> or any valid <code>type</code> option supported by model's class
 <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method (e.g., for zero-inflation models from package
@@ -226,11 +226,15 @@ See also <code>method</code> argument in <a href="https://rvlenth.github.io/emme
 <li><p>For <code>backend = "marginaleffects"</code>, can be a numeric value, vector, or
 matrix, a string equation specifying the hypothesis to test, a string
 naming the comparison method, a formula, or a function. For options not
-described below, see documentation of <a href="https://marginaleffects.com/man/r/comparisons.html" class="external-link">marginaleffects::comparisons</a>,
+described below, see documentation of <a href="https://rdrr.io/pkg/marginaleffects/man/comparisons.html" class="external-link">marginaleffects::comparisons</a>,
 <a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a> and
 section <em>Comparison options</em> below.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"reference"</code>, <code>"sequential"</code>, <code>"meandev"</code>
-<code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, or <code>"trt_vs_ctrl"</code>. To test
-multiple hypotheses jointly (usually used for factorial designs),
+<code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, <code>"slope"</code> or <code>"trt_vs_ctrl"</code>.
+The <code>"slope"</code> option calculates contrasts between average slopes and can
+also be used to calculate "context" effects, which is the difference of
+within- and between-effects (see
+https://statisticalhorizons.com/between-within-contextual-effects/). To
+test multiple hypotheses jointly (usually used for factorial designs),
 <code>comparison</code> can also be <code>"joint"</code>. In this case, use the <code>test</code> argument
 to specify which test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>.</p></li>
 <li><p>String: Special string options are <code>"inequality"</code>, <code>"inequality_ratio"</code>,
@@ -935,9 +939,9 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | Median |         95% CI |     pd |          ROPE | % in ROPE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      |  -2.21 | [-5.91,  1.28] | 89.40% | [-0.10, 0.10] |     2.11%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      |  -4.80 | [-8.41, -1.26] | 99.28% | [-0.10, 0.10] |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      |  -2.57 | [-5.35,  0.33] | 95.85% | [-0.10, 0.10] |     1.11%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      |  -2.23 | [-5.90,  1.34] | 89.40% | [-0.10, 0.10] |     2.13%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      |  -4.82 | [-8.43, -1.18] | 99.33% | [-0.10, 0.10] |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      |  -2.55 | [-5.35,  0.21] | 96.70% | [-0.10, 0.10] |     1.08%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: cyl</span></span>
@@ -949,18 +953,18 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 |   wt | Median |          95% CI |     pd |          ROPE | % in ROPE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 1.51 |  -6.03 | [-15.06,  3.23] | 90.08% | [-0.10, 0.10] |     0.79%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 1.51 |  -9.96 | [-15.19, -4.66] |   100% | [-0.10, 0.10] |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 1.51 |  -3.80 | [-14.07,  6.00] | 78.05% | [-0.10, 0.10] |     1.08%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 2.82 |  -3.14 | [ -6.34,  0.12] | 97.00% | [-0.10, 0.10] |     0.82%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 2.82 |  -5.99 | [ -9.34, -2.66] | 99.95% | [-0.10, 0.10] |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 2.82 |  -2.89 | [ -6.49,  0.91] | 93.95% | [-0.10, 0.10] |     1.00%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 4.12 |  -0.25 | [ -8.01,  7.34] | 52.45% | [-0.10, 0.10] |     2.21%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 4.12 |  -2.05 | [ -7.60,  3.20] | 77.55% | [-0.10, 0.10] |     2.13%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 4.12 |  -1.84 | [ -7.72,  4.37] | 73.15% | [-0.10, 0.10] |     2.37%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 5.42 |   2.68 | [-12.58, 17.61] | 63.68% | [-0.10, 0.10] |     0.95%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 5.42 |   1.94 | [ -7.39, 10.80] | 65.67% | [-0.10, 0.10] |     1.61%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 5.42 |  -0.90 | [-13.52, 12.84] | 55.25% | [-0.10, 0.10] |     1.11%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 1.51 |  -6.05 | [-14.94,  3.33] | 89.90% | [-0.10, 0.10] |     0.89%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 1.51 | -10.01 | [-15.18, -4.77] |   100% | [-0.10, 0.10] |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 1.51 |  -3.95 | [-14.47,  5.84] | 79.67% | [-0.10, 0.10] |     1.18%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 2.82 |  -3.16 | [ -6.41,  0.25] | 96.53% | [-0.10, 0.10] |     0.95%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 2.82 |  -6.05 | [ -9.35, -2.62] | 99.90% | [-0.10, 0.10] |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 2.82 |  -2.86 | [ -6.63,  0.64] | 94.75% | [-0.10, 0.10] |     1.16%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 4.12 |  -0.22 | [ -8.12,  7.44] | 52.05% | [-0.10, 0.10] |     1.87%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 4.12 |  -2.01 | [ -7.48,  3.29] | 77.53% | [-0.10, 0.10] |     1.95%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 4.12 |  -1.80 | [ -7.61,  4.26] | 73.22% | [-0.10, 0.10] |     2.13%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 5.42 |   2.75 | [-12.82, 17.23] | 63.82% | [-0.10, 0.10] |     0.97%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 5.42 |   1.99 | [ -7.20, 10.88] | 67.45% | [-0.10, 0.10] |     1.61%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 5.42 |  -0.62 | [-13.32, 12.49] | 54.65% | [-0.10, 0.10] |     1.42%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: cyl</span></span>
@@ -999,7 +1003,7 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
+  <p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://indrajeetpatil.github.io/" class="external-link">Indrajeet Patil</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

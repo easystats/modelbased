@@ -117,7 +117,7 @@ estimate_contrasts(
   Is passed to the `type` argument in
   [`emmeans::emmeans()`](https://rvlenth.github.io/emmeans/reference/emmeans.html)
   (when `backend = "emmeans"`) or in
-  [`marginaleffects::avg_predictions()`](https://marginaleffects.com/man/r/predictions.html)
+  [`marginaleffects::avg_predictions()`](https://rdrr.io/pkg/marginaleffects/man/predictions.html)
   (when `backend = "marginaleffects"`). Valid options for `predict` are:
 
   - `backend = "marginaleffects"`: `predict` can be `"response"`,
@@ -162,16 +162,21 @@ estimate_contrasts(
     or matrix, a string equation specifying the hypothesis to test, a
     string naming the comparison method, a formula, or a function. For
     options not described below, see documentation of
-    [marginaleffects::comparisons](https://marginaleffects.com/man/r/comparisons.html),
+    [marginaleffects::comparisons](https://rdrr.io/pkg/marginaleffects/man/comparisons.html),
     [this website](https://marginaleffects.com/bonus/hypothesis.html)
     and section *Comparison options* below.
 
     - String: One of `"pairwise"`, `"reference"`, `"sequential"`,
-      `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, or
-      `"trt_vs_ctrl"`. To test multiple hypotheses jointly (usually used
-      for factorial designs), `comparison` can also be `"joint"`. In
-      this case, use the `test` argument to specify which test should be
-      conducted: `"F"` (default) or `"Chi2"`.
+      `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, `"slope"` or
+      `"trt_vs_ctrl"`. The `"slope"` option calculates contrasts between
+      average slopes and can also be used to calculate "context"
+      effects, which is the difference of within- and between-effects
+      (see
+      https://statisticalhorizons.com/between-within-contextual-effects/).
+      To test multiple hypotheses jointly (usually used for factorial
+      designs), `comparison` can also be `"joint"`. In this case, use
+      the `test` argument to specify which test should be conducted:
+      `"F"` (default) or `"Chi2"`.
 
     - String: Special string options are `"inequality"`,
       `"inequality_ratio"`, and `"inequality_pairwise"`.
@@ -966,9 +971,9 @@ estimate_contrasts(model)
 #> 
 #> Level1 | Level2 | Median |         95% CI |     pd |          ROPE | % in ROPE
 #> ------------------------------------------------------------------------------
-#> 6      | 4      |  -2.21 | [-5.91,  1.28] | 89.40% | [-0.10, 0.10] |     2.11%
-#> 8      | 4      |  -4.80 | [-8.41, -1.26] | 99.28% | [-0.10, 0.10] |        0%
-#> 8      | 6      |  -2.57 | [-5.35,  0.33] | 95.85% | [-0.10, 0.10] |     1.11%
+#> 6      | 4      |  -2.23 | [-5.90,  1.34] | 89.40% | [-0.10, 0.10] |     2.13%
+#> 8      | 4      |  -4.82 | [-8.43, -1.18] | 99.33% | [-0.10, 0.10] |        0%
+#> 8      | 6      |  -2.55 | [-5.35,  0.21] | 96.70% | [-0.10, 0.10] |     1.08%
 #> 
 #> Variable predicted: mpg
 #> Predictors contrasted: cyl
@@ -980,18 +985,18 @@ estimate_contrasts(model, by = "wt", length = 4)
 #> 
 #> Level1 | Level2 |   wt | Median |          95% CI |     pd |          ROPE | % in ROPE
 #> --------------------------------------------------------------------------------------
-#> 6      | 4      | 1.51 |  -6.03 | [-15.06,  3.23] | 90.08% | [-0.10, 0.10] |     0.79%
-#> 8      | 4      | 1.51 |  -9.96 | [-15.19, -4.66] |   100% | [-0.10, 0.10] |        0%
-#> 8      | 6      | 1.51 |  -3.80 | [-14.07,  6.00] | 78.05% | [-0.10, 0.10] |     1.08%
-#> 6      | 4      | 2.82 |  -3.14 | [ -6.34,  0.12] | 97.00% | [-0.10, 0.10] |     0.82%
-#> 8      | 4      | 2.82 |  -5.99 | [ -9.34, -2.66] | 99.95% | [-0.10, 0.10] |        0%
-#> 8      | 6      | 2.82 |  -2.89 | [ -6.49,  0.91] | 93.95% | [-0.10, 0.10] |     1.00%
-#> 6      | 4      | 4.12 |  -0.25 | [ -8.01,  7.34] | 52.45% | [-0.10, 0.10] |     2.21%
-#> 8      | 4      | 4.12 |  -2.05 | [ -7.60,  3.20] | 77.55% | [-0.10, 0.10] |     2.13%
-#> 8      | 6      | 4.12 |  -1.84 | [ -7.72,  4.37] | 73.15% | [-0.10, 0.10] |     2.37%
-#> 6      | 4      | 5.42 |   2.68 | [-12.58, 17.61] | 63.68% | [-0.10, 0.10] |     0.95%
-#> 8      | 4      | 5.42 |   1.94 | [ -7.39, 10.80] | 65.67% | [-0.10, 0.10] |     1.61%
-#> 8      | 6      | 5.42 |  -0.90 | [-13.52, 12.84] | 55.25% | [-0.10, 0.10] |     1.11%
+#> 6      | 4      | 1.51 |  -6.05 | [-14.94,  3.33] | 89.90% | [-0.10, 0.10] |     0.89%
+#> 8      | 4      | 1.51 | -10.01 | [-15.18, -4.77] |   100% | [-0.10, 0.10] |        0%
+#> 8      | 6      | 1.51 |  -3.95 | [-14.47,  5.84] | 79.67% | [-0.10, 0.10] |     1.18%
+#> 6      | 4      | 2.82 |  -3.16 | [ -6.41,  0.25] | 96.53% | [-0.10, 0.10] |     0.95%
+#> 8      | 4      | 2.82 |  -6.05 | [ -9.35, -2.62] | 99.90% | [-0.10, 0.10] |        0%
+#> 8      | 6      | 2.82 |  -2.86 | [ -6.63,  0.64] | 94.75% | [-0.10, 0.10] |     1.16%
+#> 6      | 4      | 4.12 |  -0.22 | [ -8.12,  7.44] | 52.05% | [-0.10, 0.10] |     1.87%
+#> 8      | 4      | 4.12 |  -2.01 | [ -7.48,  3.29] | 77.53% | [-0.10, 0.10] |     1.95%
+#> 8      | 6      | 4.12 |  -1.80 | [ -7.61,  4.26] | 73.22% | [-0.10, 0.10] |     2.13%
+#> 6      | 4      | 5.42 |   2.75 | [-12.82, 17.23] | 63.82% | [-0.10, 0.10] |     0.97%
+#> 8      | 4      | 5.42 |   1.99 | [ -7.20, 10.88] | 67.45% | [-0.10, 0.10] |     1.61%
+#> 8      | 6      | 5.42 |  -0.62 | [-13.32, 12.49] | 54.65% | [-0.10, 0.10] |     1.42%
 #> 
 #> Variable predicted: mpg
 #> Predictors contrasted: cyl
