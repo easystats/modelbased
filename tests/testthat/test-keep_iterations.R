@@ -69,7 +69,7 @@ test_that("estimate_contrasts() - posterior draws", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations", "joint_test"
+      "keep_iterations", "joint_test", "context_effects"
     )
   )
   # fmt: skip
@@ -95,7 +95,7 @@ test_that("estimate_contrasts() - posterior draws", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations", "joint_test"
+      "keep_iterations", "joint_test", "context_effects"
     )
   )
   # fmt: skip
