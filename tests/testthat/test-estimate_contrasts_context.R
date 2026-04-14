@@ -19,6 +19,7 @@ test_that("estimate_contrast, context effects, linear", {
   )
   expect_equal(out$Mean, b[1] - b[2], tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$SE, sqrt((se[1]^2 + se[2]^2)), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_true(!is.null(out$p))
 })
 
 test_that("estimate_contrast, context effects, glm", {
@@ -36,6 +37,7 @@ test_that("estimate_contrast, context effects, glm", {
     comparison = "context"
   )
   expect_equal(out$Odds_Ratio, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_true(!is.null(out$p))
 
   out <- modelbased::estimate_contrasts(
     m,
@@ -43,6 +45,7 @@ test_that("estimate_contrast, context effects, glm", {
     comparison = "slope"
   )
   expect_equal(out$Odds_Ratio, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_true(!is.null(out$p))
 
   out <- modelbased::estimate_contrasts(
     m,

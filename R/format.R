@@ -155,6 +155,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   predict_type <- attributes(x)$predict
   transform <- attributes(x)$transform
+  context_effects <- attributes(x)$context_effects
 
   # special attributes we get from "get_marginalcontrasts()"
   comparison <- list(...)$hypothesis
@@ -173,7 +174,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     )
     # for inequality analysis, we want to keep the stratification variable
     remove_columns <- setdiff(remove_columns, attributes(x)$hypothesis_by)
-  } else if (is_contrast_analysis) {
+  } else if (is_contrast_analysis || context_effects) {
     estimate_name <- "Difference"
   } else {
     # for simple means, we don't want p-values
