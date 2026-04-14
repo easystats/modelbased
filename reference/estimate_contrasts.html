@@ -471,6 +471,16 @@ compute B-A and C-(A+B)/2.</p></li>
 <li><p><code>comparison = "trt_vs_ctrl"</code>: This compares all levels (excluding the
 first, which is typically the control) against the first level. It's often
 used when comparing multiple treatment groups to a single control group.</p></li>
+<li><p><code>comparison = "slope"</code>: This calculates contrasts between average slopes.
+An interesting use-case is the calculation of "context" effects when
+modelling within- and between-effects. An example for within- and between
+effects is described <a href="https://easystats.github.io/parameters/articles/demean.html" class="external-link">in this vignette</a>.
+A context effect describes the additional influence that the social or
+regional environment (e.g., place of residence) has on an individual,
+independent of their personal characteristics. It demonstrates that people
+with identical individual circumstances (such as the same income) face
+different opportunities or risks depending on the environment in which they
+live.</p></li>
 <li><p>To test multiple hypotheses jointly (usually used for factorial designs),
 <code>comparison</code> can also be <code>"joint"</code>. In this case, use the <code>test</code> argument
 to specify which test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>.</p></li>
@@ -1003,7 +1013,7 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://indrajeetpatil.github.io/" class="external-link">Indrajeet Patil</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
+  <p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://www.indrapatil.com/" class="external-link">Indrajeet Patil</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
