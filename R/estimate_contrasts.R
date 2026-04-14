@@ -113,6 +113,16 @@
 #' - `comparison = "trt_vs_ctrl"`: This compares all levels (excluding the
 #'   first, which is typically the control) against the first level. It's often
 #'   used when comparing multiple treatment groups to a single control group.
+#' - `comparison = "slope"`: This calculates contrasts between average slopes.
+#'   An interesting use-case is the calculation of "context" effects when
+#'   modelling within- and between-effects. An example for within- and between
+#'   effects is described [in this vignette](https://easystats.github.io/parameters/articles/demean.html).
+#'   A context effect describes the additional influence that the social or
+#'   regional environment (e.g., place of residence) has on an individual,
+#'   independent of their personal characteristics. It demonstrates that people
+#'   with identical individual circumstances (such as the same income) face
+#'   different opportunities or risks depending on the environment in which they
+#'   live.
 #' - To test multiple hypotheses jointly (usually used for factorial designs),
 #'   `comparison` can also be `"joint"`. In this case, use the `test` argument
 #'   to specify which test should be conducted: `"F"` (default) or `"Chi2"`.

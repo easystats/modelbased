@@ -360,6 +360,16 @@ compute B-A and C-(A+B)/2.
 \item \code{comparison = "trt_vs_ctrl"}: This compares all levels (excluding the
 first, which is typically the control) against the first level. It's often
 used when comparing multiple treatment groups to a single control group.
+\item \code{comparison = "slope"}: This calculates contrasts between average slopes.
+An interesting use-case is the calculation of "context" effects when
+modelling within- and between-effects. An example for within- and between
+effects is described \href{https://easystats.github.io/parameters/articles/demean.html}{in this vignette}.
+A context effect describes the additional influence that the social or
+regional environment (e.g., place of residence) has on an individual,
+independent of their personal characteristics. It demonstrates that people
+with identical individual circumstances (such as the same income) face
+different opportunities or risks depending on the environment in which they
+live.
 \item To test multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
