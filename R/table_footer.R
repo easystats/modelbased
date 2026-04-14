@@ -117,14 +117,23 @@
       `invlink(link)` = "response",
       predict
     )
-    table_footer <- paste0(
-      table_footer,
-      "\n",
-      result_type,
-      " are on the ",
-      predict,
-      "-scale."
-    )
+    # we may have link-scale and transformation. to avoid confusion, tell this
+    # here
+    if (predict == "link" && !is.null(transform)) {
+      predict <- paste0(transform, "-transformed ", predict)
+    }
+    # if we have contrasts of slope for GLMs, the default is to calculate
+    # ORs or IRRs - in this case, we don't add information about the scale
+    if (!any(c("Odds_Ratio", "IRR") %in% colnames(x))) {
+      table_footer <- paste0(
+        table_footer,
+        "\n",
+        result_type,
+        " are on the ",
+        predict,
+        "-scale."
+      )
+    }
   } else if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(model))

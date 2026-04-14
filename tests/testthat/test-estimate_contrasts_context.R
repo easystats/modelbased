@@ -12,14 +12,17 @@ test_that("estimate_contrast, context effects, linear", {
   b <- coef(summary(m))[2:3, 1]
   se <- coef(summary(m))[2:3, 2]
 
-  out <- modelbased::estimate_contrasts(
+  out <- estimate_contrasts(
     m,
     c("bill_len_between", "bill_len_within"),
     comparison = "context"
   )
-  expect_equal(out$Mean, b[1] - b[2], tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Difference, b[1] - b[2], tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$SE, sqrt((se[1]^2 + se[2]^2)), tolerance = 1e-4, ignore_attr = TRUE)
   expect_true(!is.null(out$p))
+
+  output <- capture.output(out)
+  expect_identical(output[3], "Difference |   SE |         95% CI |      z |      p")
 })
 
 test_that("estimate_contrast, context effects, glm", {
@@ -31,7 +34,7 @@ test_that("estimate_contrast, context effects, glm", {
   b <- coef(summary(m))[2:3, 1]
   se <- coef(summary(m))[2:3, 2]
 
-  out <- modelbased::estimate_contrasts(
+  out <- estimate_contrasts(
     m,
     c("bill_len_between", "bill_len_within"),
     comparison = "context"
@@ -39,7 +42,10 @@ test_that("estimate_contrast, context effects, glm", {
   expect_equal(out$Odds_Ratio, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
   expect_true(!is.null(out$p))
 
-  out <- modelbased::estimate_contrasts(
+  output <- capture.output(out)
+  expect_identical(output[3], "Odds_Ratio |       95% CI |     p")
+
+  out <- estimate_contrasts(
     m,
     c("bill_len_between", "bill_len_within"),
     comparison = "slope"
@@ -47,7 +53,7 @@ test_that("estimate_contrast, context effects, glm", {
   expect_equal(out$Odds_Ratio, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
   expect_true(!is.null(out$p))
 
-  out <- modelbased::estimate_contrasts(
+  out <- estimate_contrasts(
     m,
     c("bill_len_between", "bill_len_within"),
     comparison = "context",

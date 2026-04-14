@@ -16,7 +16,7 @@ format.estimate_contrasts <- function(
   }
   # change parameter name for context effects
   if (isTRUE(attributes(x)$context_effects)) {
-    x$Parameter <- "Average slope"
+    x$Parameter <- NULL
   }
 
   # don't print columns of adjusted_for variables
@@ -174,7 +174,14 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     )
     # for inequality analysis, we want to keep the stratification variable
     remove_columns <- setdiff(remove_columns, attributes(x)$hypothesis_by)
-  } else if (is_contrast_analysis || context_effects) {
+  } else if (context_effects) {
+    # for contrasting average slopes (context effects), the estimate might be
+    # an odds ratio or IRR by default - thus, we want to keep those names
+    estimate_name <- .guess_estimate_name(predict_type, transform, info)
+    if (identical(estimate_name, "Mean")) {
+      estimate_name <- "Difference"
+    }
+  } else if (is_contrast_analysis) {
     estimate_name <- "Difference"
   } else {
     # for simple means, we don't want p-values
