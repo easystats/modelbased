@@ -174,7 +174,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     )
     # for inequality analysis, we want to keep the stratification variable
     remove_columns <- setdiff(remove_columns, attributes(x)$hypothesis_by)
-  } else if (context_effects) {
+  } else if (isTRUE(context_effects)) {
     # for contrasting average slopes (context effects), the estimate might be
     # an odds ratio or IRR by default - thus, we want to keep those names
     estimate_name <- .guess_estimate_name(predict_type, transform, info)
