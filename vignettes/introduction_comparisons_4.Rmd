@@ -83,10 +83,10 @@ Contrasts or comparisons can also be represented on the link-scale, in this case
 estimate_contrasts(m, "x1", predict = "link")
 ```
 
-The `transform` argument in `estimate_contrasts()` can be used transform comparisons. For example, to transform contrasts to _odds ratios_, we can use `transform = exp` in combination with `predict = "link"`.
+The `transform` argument in `estimate_contrasts()` can be used transform comparisons. For example, to transform contrasts to _odds ratios_, we can use `transform = "exp"` in combination with `predict = "link"`.
 
 ```{r message=TRUE}
-estimate_contrasts(m, "x1", predict = "link", transform = exp)
+estimate_contrasts(m, "x1", predict = "link", transform = "exp")
 ```
 
 [Go to next vignette: **Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html)
