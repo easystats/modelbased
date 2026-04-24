@@ -293,8 +293,12 @@
 #' )
 #' estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 #'
-#' # context effects ----------------------------
-#' # --------------------------------------------
+#' # Context effects --------------------------------------------
+#' # This is the difference of within- and between-effects, which
+#' # typically are two slopes that are compared. It is possible
+#' # to calculate the context effect at different levels of
+#' # another variable.
+#' # ------------------------------------------------------------
 #' data("qol_cancer", package = "parameters")
 #' qol_cancer <- datawizard::demean(qol_cancer, select = "phq4", by = "ID")
 #' model <- lme4::lmer(
