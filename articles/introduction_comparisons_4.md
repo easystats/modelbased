@@ -101,18 +101,18 @@ estimate_contrasts(m, "x1", predict = "link")
 #> Predictors contrasted: x1
 #> Predictors averaged: x2 (10), x3
 #> p-values are uncorrected.
-#> Contrasts are on the link-scale.
+#> Contrasts are on the FALSE-transformed link-scale.
 ```
 
 The `transform` argument in
 [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
 can be used transform comparisons. For example, to transform contrasts
-to *odds ratios*, we can use `transform = exp` in combination with
+to *odds ratios*, we can use `transform = "exp"` in combination with
 `predict = "link"`.
 
 ``` r
 
-estimate_contrasts(m, "x1", predict = "link", transform = exp)
+estimate_contrasts(m, "x1", predict = "link", transform = "exp")
 #> Marginal Contrasts Analysis
 #> 
 #> Level1 | Level2 | Difference |        95% CI |     p
@@ -125,7 +125,7 @@ estimate_contrasts(m, "x1", predict = "link", transform = exp)
 #> Predictors contrasted: x1
 #> Predictors averaged: x2 (10), x3
 #> p-values are uncorrected.
-#> Contrasts are on the link-scale.
+#> Contrasts are on the exp-transformed link-scale.
 ```
 
 [Go to next vignette: **Contrasts and Comparisons for Zero-Inflation

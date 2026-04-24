@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,7 +130,7 @@
                         <h4 data-toc-skip class="author">The easystats
 team</h4>
             
-            <h4 data-toc-skip class="date">2026-04-14</h4>
+            <h4 data-toc-skip class="date">2026-04-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/vignettes/practical_growthmixture.Rmd" class="external-link"><code>vignettes/practical_growthmixture.Rmd</code></a></small>
       <div class="d-none name"><code>practical_growthmixture.Rmd</code></div>
@@ -391,7 +391,7 @@ as it computes the means for each class separately.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors modulated: education</span></span>
-<span><span class="co">#&gt; Predictions are on the link-scale.</span></span></code></pre></div>
+<span><span class="co">#&gt; Predictions are on the FALSE-transformed link-scale.</span></span></code></pre></div>
 <p>This table gives us the expected mean <code>QoL</code> for each
 education level, conditional on class membership. For instance, a
 patient with “low” education in Class 2 has an estimated mean QoL of
@@ -453,7 +453,7 @@ provides a very detailed picture.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: education</span></span>
-<span><span class="co">#&gt; Contrasts are on the link-scale.</span></span></code></pre></div>
+<span><span class="co">#&gt; Contrasts are on the FALSE-transformed link-scale.</span></span></code></pre></div>
 <p>The output is rich with information. For example,
 <code>2 high | 2 low</code> shows the contrast between high and low
 education <em>within Class 2</em> (an increase of <code>11.53</code> in

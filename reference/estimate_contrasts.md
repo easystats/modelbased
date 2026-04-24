@@ -1039,5 +1039,38 @@ estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 #> Predictors contrasted: Species
 #> Predictors averaged: Petal.Width (1.2)
 #> 
+
+# Context effects --------------------------------------------
+# This is the difference of within- and between-effects, which
+# typically are two slopes that are compared. It is possible
+# to calculate the context effect at different levels of
+# another variable.
+# ------------------------------------------------------------
+data("qol_cancer", package = "parameters")
+qol_cancer <- datawizard::demean(qol_cancer, select = "phq4", by = "ID")
+model <- lme4::lmer(
+  QoL ~ time * (phq4_within + phq4_between) + (1 + time | ID),
+  data = qol_cancer
+)
+# context effect (difference between within- and between-effect)
+# at each time point
+estimate_contrasts(
+  model,
+  c("phq4_within", "phq4_between"),
+  by = "time",
+  comparison = "slope"
+)
+#> Marginal Contrasts Analysis
+#> 
+#> time | Difference |   SE |        95% CI |    z |      p
+#> --------------------------------------------------------
+#> 1    |       1.73 | 0.99 | [-0.20, 3.66] | 1.76 |  0.079
+#> 2    |       2.54 | 0.65 | [ 1.27, 3.81] | 3.93 | < .001
+#> 3    |       3.36 | 0.97 | [ 1.45, 5.27] | 3.45 | < .001
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: phq4_within, phq4_between
+#> p-values are uncorrected.
+#> 
 # }
 ```

@@ -257,7 +257,7 @@ estimate_means(brms_mixture_2, by = "education", predict = "link")
 #> 
 #> Variable predicted: QoL
 #> Predictors modulated: education
-#> Predictions are on the link-scale.
+#> Predictions are on the FALSE-transformed link-scale.
 ```
 
 This table gives us the expected mean `QoL` for each education level,
@@ -326,7 +326,7 @@ estimate_contrasts(
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: education
-#> Contrasts are on the link-scale.
+#> Contrasts are on the FALSE-transformed link-scale.
 ```
 
 The output is rich with information. For example, `2 high | 2 low` shows
