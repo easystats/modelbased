@@ -167,16 +167,11 @@ estimate_contrasts(
     and section *Comparison options* below.
 
     - String: One of `"pairwise"`, `"reference"`, `"sequential"`,
-      `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, `"slope"` or
-      `"trt_vs_ctrl"`. The `"slope"` option calculates contrasts between
-      average slopes and can also be used to calculate "context"
-      effects, which is the difference of within- and between-effects
-      (see
-      https://statisticalhorizons.com/between-within-contextual-effects/).
-      To test multiple hypotheses jointly (usually used for factorial
-      designs), `comparison` can also be `"joint"`. In this case, use
-      the `test` argument to specify which test should be conducted:
-      `"F"` (default) or `"Chi2"`.
+      `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, or
+      `"trt_vs_ctrl"`. To test multiple hypotheses jointly (usually used
+      for factorial designs), `comparison` can also be `"joint"`. In
+      this case, use the `test` argument to specify which test should be
+      conducted: `"F"` (default) or `"Chi2"`.
 
     - String: Special string options are `"inequality"`,
       `"inequality_ratio"`, and `"inequality_pairwise"`.
@@ -197,6 +192,16 @@ estimate_contrasts(
       relative inequality measures (ratios). See an overview of
       applications in the related case study in the
       [vignettes](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
+
+    - String: Additional special string options are `"slope"` and
+      `"slope_pairwise"`. `comparison ="slope"` calculates contrasts
+      between average slopes and can also be used to calculate "context"
+      effects, which is the difference of within- and between-effects
+      (see
+      https://statisticalhorizons.com/between-within-contextual-effects/).
+      `comparison ="slope_paiwirse"` returns pairwise comparisons of
+      such context effects, which can be used when `by` is used to
+      stratify results by the levels of another variable.
 
     - String equation: To identify parameters from the output, either
       specify the term name, or `"b1"`, `"b2"` etc. to indicate rows,
@@ -485,6 +490,12 @@ x averaged over all conditions, or instead within each condition (using
   people with identical individual circumstances (such as the same
   income) face different opportunities or risks depending on the
   environment in which they live.
+
+- `comparison = "slope_pairwise"`: This returns pairwise comparisons of
+  context effects (i.e., the pairwise comparisons of the difference of
+  between within- and between-effects, or the difference of average
+  slopes). This can be used when `by` is used to stratify results by the
+  levels of another variable.
 
 - To test multiple hypotheses jointly (usually used for factorial
   designs), `comparison` can also be `"joint"`. In this case, use the
@@ -1052,6 +1063,7 @@ model <- lme4::lmer(
   QoL ~ time * (phq4_within + phq4_between) + (1 + time | ID),
   data = qol_cancer
 )
+
 # context effect (difference between within- and between-effect)
 # at each time point
 estimate_contrasts(
@@ -1067,6 +1079,28 @@ estimate_contrasts(
 #> 1    |       1.73 | 0.99 | [-0.20, 3.66] | 1.76 |  0.079
 #> 2    |       2.54 | 0.65 | [ 1.27, 3.81] | 3.93 | < .001
 #> 3    |       3.36 | 0.97 | [ 1.45, 5.27] | 3.45 | < .001
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: phq4_within, phq4_between
+#> p-values are uncorrected.
+#> 
+
+# is the difference of the context effect between the time points
+# statistically significant? We need pairwise comparisons of contrasts
+# of slopes to calculate this
+estimate_contrasts(
+  model,
+  c("phq4_within", "phq4_between"),
+  by = "time",
+  comparison = "slope_pairwise"
+)
+#> Marginal Contrasts Analysis
+#> 
+#> Level1 | Level2 | Difference |   SE |        95% CI |    z |     p
+#> ------------------------------------------------------------------
+#> 2      |      1 |       0.81 | 0.74 | [-0.63, 2.25] | 1.11 | 0.269
+#> 3      |      1 |       1.63 | 1.47 | [-1.26, 4.51] | 1.11 | 0.269
+#> 3      |      2 |       0.81 | 0.74 | [-0.63, 2.25] | 1.11 | 0.269
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: phq4_within, phq4_between

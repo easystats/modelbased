@@ -166,16 +166,11 @@ get_marginaltrends(
     and section *Comparison options* below.
 
     - String: One of `"pairwise"`, `"reference"`, `"sequential"`,
-      `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, `"slope"` or
-      `"trt_vs_ctrl"`. The `"slope"` option calculates contrasts between
-      average slopes and can also be used to calculate "context"
-      effects, which is the difference of within- and between-effects
-      (see
-      https://statisticalhorizons.com/between-within-contextual-effects/).
-      To test multiple hypotheses jointly (usually used for factorial
-      designs), `comparison` can also be `"joint"`. In this case, use
-      the `test` argument to specify which test should be conducted:
-      `"F"` (default) or `"Chi2"`.
+      `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, or
+      `"trt_vs_ctrl"`. To test multiple hypotheses jointly (usually used
+      for factorial designs), `comparison` can also be `"joint"`. In
+      this case, use the `test` argument to specify which test should be
+      conducted: `"F"` (default) or `"Chi2"`.
 
     - String: Special string options are `"inequality"`,
       `"inequality_ratio"`, and `"inequality_pairwise"`.
@@ -196,6 +191,16 @@ get_marginaltrends(
       relative inequality measures (ratios). See an overview of
       applications in the related case study in the
       [vignettes](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
+
+    - String: Additional special string options are `"slope"` and
+      `"slope_pairwise"`. `comparison ="slope"` calculates contrasts
+      between average slopes and can also be used to calculate "context"
+      effects, which is the difference of within- and between-effects
+      (see
+      https://statisticalhorizons.com/between-within-contextual-effects/).
+      `comparison ="slope_paiwirse"` returns pairwise comparisons of
+      such context effects, which can be used when `by` is used to
+      stratify results by the levels of another variable.
 
     - String equation: To identify parameters from the output, either
       specify the term name, or `"b1"`, `"b2"` etc. to indicate rows,

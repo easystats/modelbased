@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -229,12 +229,8 @@ naming the comparison method, a formula, or a function. For options not
 described below, see documentation of <a href="https://rdrr.io/pkg/marginaleffects/man/comparisons.html" class="external-link">marginaleffects::comparisons</a>,
 <a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a> and
 section <em>Comparison options</em> below.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"reference"</code>, <code>"sequential"</code>, <code>"meandev"</code>
-<code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, <code>"slope"</code> or <code>"trt_vs_ctrl"</code>.
-The <code>"slope"</code> option calculates contrasts between average slopes and can
-also be used to calculate "context" effects, which is the difference of
-within- and between-effects (see
-https://statisticalhorizons.com/between-within-contextual-effects/). To
-test multiple hypotheses jointly (usually used for factorial designs),
+<code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, or <code>"trt_vs_ctrl"</code>. To test
+multiple hypotheses jointly (usually used for factorial designs),
 <code>comparison</code> can also be <code>"joint"</code>. In this case, use the <code>test</code> argument
 to specify which test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>.</p></li>
 <li><p>String: Special string options are <code>"inequality"</code>, <code>"inequality_ratio"</code>,
@@ -253,6 +249,14 @@ absolute inequality measures, while <code>"inequality_ratio_pairwise"</code>
 computes pairwise differences of relative inequality measures (ratios).
 See an overview of applications in the related case study in the
 <a href="https://easystats.github.io/modelbased/articles/practical_inequalities.html">vignettes</a>.</p></li>
+<li><p>String: Additional special string options are <code>"slope"</code> and
+<code>"slope_pairwise"</code>. <code>comparison ="slope"</code> calculates contrasts between
+average slopes and can also be used to calculate "context" effects, which
+is the difference of within- and between-effects (see
+https://statisticalhorizons.com/between-within-contextual-effects/).
+<code>comparison ="slope_paiwirse"</code> returns pairwise comparisons of such
+context effects, which can be used when <code>by</code> is used to stratify results
+by the levels of another variable.</p></li>
 <li><p>String equation: To identify parameters from the output, either specify
 the term name, or <code>"b1"</code>, <code>"b2"</code> etc. to indicate rows, e.g.:<code>"hp = drat"</code>,
 <code>"b1 = b2"</code>, or <code>"b1 + b2 + b3 = 0"</code>.</p></li>
@@ -481,6 +485,11 @@ independent of their personal characteristics. It demonstrates that people
 with identical individual circumstances (such as the same income) face
 different opportunities or risks depending on the environment in which they
 live.</p></li>
+<li><p><code>comparison = "slope_pairwise"</code>: This returns pairwise comparisons of
+context effects (i.e., the pairwise comparisons of the difference of
+between within- and between-effects, or the difference of average slopes).
+This can be used when <code>by</code> is used to stratify results by the levels of
+another variable.</p></li>
 <li><p>To test multiple hypotheses jointly (usually used for factorial designs),
 <code>comparison</code> can also be <code>"joint"</code>. In this case, use the <code>test</code> argument
 to specify which test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>.</p></li>
@@ -1018,6 +1027,7 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-in"><span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="op">(</span><span class="va">phq4_within</span> <span class="op">+</span> <span class="va">phq4_between</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">qol_cancer</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># context effect (difference between within- and between-effect)</span></span></span>
 <span class="r-in"><span><span class="co"># at each time point</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span></span></span>
@@ -1033,6 +1043,28 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    |       1.73 | 0.99 | [-0.20, 3.66] | 1.76 |  0.079</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    |       2.54 | 0.65 | [ 1.27, 3.81] | 3.93 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3    |       3.36 | 0.97 | [ 1.45, 5.27] | 3.45 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: phq4_within, phq4_between</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># is the difference of the context effect between the time points</span></span></span>
+<span class="r-in"><span><span class="co"># statistically significant? We need pairwise comparisons of contrasts</span></span></span>
+<span class="r-in"><span><span class="co"># of slopes to calculate this</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="st">"time"</span>,</span></span>
+<span class="r-in"><span>  comparison <span class="op">=</span> <span class="st">"slope_pairwise"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | Difference |   SE |        95% CI |    z |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      |      1 |       0.81 | 0.74 | [-0.63, 2.25] | 1.11 | 0.269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      |      1 |       1.63 | 1.47 | [-1.26, 4.51] | 1.11 | 0.269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      |      2 |       0.81 | 0.74 | [-0.63, 2.25] | 1.11 | 0.269</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: phq4_within, phq4_between</span></span>
