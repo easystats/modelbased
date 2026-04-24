@@ -181,6 +181,8 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     if (identical(estimate_name, "Mean")) {
       estimate_name <- "Difference"
     }
+    # for context analysis, we want to keep the stratification variable
+    remove_columns <- setdiff(remove_columns, attributes(x)$hypothesis_by)
   } else if (is_contrast_analysis) {
     estimate_name <- "Difference"
   } else {

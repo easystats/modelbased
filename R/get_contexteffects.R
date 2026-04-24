@@ -9,16 +9,25 @@
   model_info,
   ...
 ) {
-  if (model_info$is_linear) {
-    out <- marginaleffects::avg_comparisons(
-      model,
-      variables = my_args$contrast,
-      hypothesis = my_args$comparison,
-      ...
-    )
+  # if we have stratified by another group, we need the difference between
+  # contrasts at each group level
+  if (is.null(my_args$by)) {
+    comparison <- my_args$comparison
   } else {
-    dots <- list(...)
-    fun_args <- list(model, variables = my_args$contrast, hypothesis = my_args$comparison)
+    comparison <- as.formula(paste("~I(diff(x)) |", my_args$by))
+  }
+
+  # prepare arguments
+  dots <- list(...)
+  fun_args <- insight::compact_list(list(
+    model,
+    variables = my_args$contrast,
+    hypothesis = comparison,
+    by = my_args$by
+  ))
+
+  # for non-Gaussian models, we need to modify arguments "type" and "transform"
+  if (!model_info$is_linear) {
     # set default for "type" argument, if not provided
     if (is.null(predict)) {
       fun_args$type <- "link"
@@ -32,10 +41,12 @@
       fun_args$type <- predict
       fun_args$transform <- transform
     }
-    out <- do.call(marginaleffects::avg_comparisons, c(fun_args, dots))
   }
+
+  out <- do.call(marginaleffects::avg_comparisons, c(fun_args, dots))
+
   # save some labels for printing
-  attr(out, "by") <- my_args$by
+  attr(out, "by") <- attr(out, "hypothesis_by") <- my_args$by
   attr(out, "contrast") <- my_args$contrast
   attr(out, "context_effects") <- TRUE
   class(out) <- unique(c("marginaleffects_means", class(out)))

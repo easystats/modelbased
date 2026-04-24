@@ -1479,7 +1479,7 @@ test_that("estimate_contrast, slopes with emmeans", {
     m1,
     c("var_binom", "var_cont"),
     predict = "link",
-    transform = exp,
+    transform = "exp",
     length = 3
   )
   expect_snapshot(print(out, table_width = Inf))
@@ -1508,7 +1508,7 @@ test_that("estimate_contrast, slopes with emmeans", {
     m1,
     c("var_binom", "var_cont=[sd]"),
     predict = "link",
-    transform = exp
+    transform = "exp"
   )
   expect_identical(
     as.character(out$Level1),

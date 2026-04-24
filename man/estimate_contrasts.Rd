@@ -514,7 +514,7 @@ averaging across random effects groups is then more accurate.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("lme4", "marginaleffects", "parameters", "rstanarm"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("lme4", "marginaleffects", "parameters", "datawizard", "rstanarm"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 \dontrun{
 # Basic usage --------------------------------
 # --------------------------------------------
@@ -608,6 +608,23 @@ model <- rstanarm::stan_glm(
   refresh = 0
 )
 estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
+
+# context effects ----------------------------
+# --------------------------------------------
+data("qol_cancer", package = "parameters")
+qol_cancer <- datawizard::demean(qol_cancer, select = "phq4", by = "ID")
+model <- lme4::lmer(
+  QoL ~ time * (phq4_within + phq4_between) + (1 + time | ID),
+  data = qol_cancer
+)
+# context effect (difference between within- and between-effect)
+# at each time point
+estimate_contrasts(
+  model,
+  c("phq4_within", "phq4_between"),
+  by = "time",
+  comparison = "slope"
+)
 }
 \dontshow{\}) # examplesIf}
 }
