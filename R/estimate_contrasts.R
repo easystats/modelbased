@@ -304,9 +304,9 @@
 #'
 #' # Context effects --------------------------------------------
 #' # This is the difference of within- and between-effects, which
-#' # typically are two slopes that are compared. It is possible
-#' # to calculate the context effect at different levels of
-#' # another variable.
+#' # typically are two average slopes that are compared. It is
+#' # possible to calculate the context effect at different levels
+#' # of another variable.
 #' # ------------------------------------------------------------
 #' data("qol_cancer", package = "parameters")
 #' qol_cancer <- datawizard::demean(qol_cancer, select = "phq4", by = "ID")
@@ -316,7 +316,8 @@
 #' )
 #'
 #' # context effect (difference between within- and between-effect)
-#' # at each time point
+#' # at each time point - we calculate the contrast of two average slopes
+#' # at different levels of "time"
 #' estimate_contrasts(
 #'   model,
 #'   c("phq4_within", "phq4_between"),
