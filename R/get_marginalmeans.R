@@ -549,7 +549,7 @@ get_marginalmeans <- function(
 ) {
   # special case: calculating context effects for models with within-between
   # effects. In this case, we don't want any further checks
-  if (identical(comparison, "context")) {
+  if (identical(comparison, "context") || identical(comparison, "context_pairwise")) {
     return(list(by = by, contrast = contrast))
   }
 

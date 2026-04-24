@@ -33,12 +33,8 @@
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html) and
 #'   section _Comparison options_ below.
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
-#'     `"meanotherdev"`, `"poly"`, `"helmert"`, `"slope"` or `"trt_vs_ctrl"`.
-#'     The `"slope"` option calculates contrasts between average slopes and can
-#'     also be used to calculate "context" effects, which is the difference of
-#'     within- and between-effects (see
-#'     https://statisticalhorizons.com/between-within-contextual-effects/). To
-#'     test multiple hypotheses jointly (usually used for factorial designs),
+#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test
+#'     multiple hypotheses jointly (usually used for factorial designs),
 #'     `comparison` can also be `"joint"`. In this case, use the `test` argument
 #'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
 #'   * String: Special string options are `"inequality"`, `"inequality_ratio"`,
@@ -57,6 +53,14 @@
 #'     computes pairwise differences of relative inequality measures (ratios).
 #'     See an overview of applications in the related case study in the
 #'     [vignettes](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
+#'   * String: Additional special string options are `"slope"` and
+#'     `"slope_pairwise"`. `comparison ="slope"` calculates contrasts between
+#'     average slopes and can also be used to calculate "context" effects, which
+#'     is the difference of within- and between-effects (see
+#'     https://statisticalhorizons.com/between-within-contextual-effects/).
+#'     `comparison ="slope_paiwirse"` returns pairwise comparisons of such
+#'     context effects, which can be used when `by` is used to stratify results
+#'     by the levels of another variable.
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
@@ -123,6 +127,11 @@
 #'   with identical individual circumstances (such as the same income) face
 #'   different opportunities or risks depending on the environment in which they
 #'   live.
+#' - `comparison = "slope_pairwise"`: This returns pairwise comparisons of
+#'   context effects (i.e., the pairwise comparisons of the difference of
+#'   between within- and between-effects, or the difference of average slopes).
+#'   This can be used when `by` is used to stratify results by the levels of
+#'   another variable.
 #' - To test multiple hypotheses jointly (usually used for factorial designs),
 #'   `comparison` can also be `"joint"`. In this case, use the `test` argument
 #'   to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
@@ -305,6 +314,7 @@
 #'   QoL ~ time * (phq4_within + phq4_between) + (1 + time | ID),
 #'   data = qol_cancer
 #' )
+#'
 #' # context effect (difference between within- and between-effect)
 #' # at each time point
 #' estimate_contrasts(
@@ -312,6 +322,16 @@
 #'   c("phq4_within", "phq4_between"),
 #'   by = "time",
 #'   comparison = "slope"
+#' )
+#'
+#' # is the difference of the context effect between the time points
+#' # statistically significant? We need pairwise comparisons of contrasts
+#' # of slopes to calculate this
+#' estimate_contrasts(
+#'   model,
+#'   c("phq4_within", "phq4_between"),
+#'   by = "time",
+#'   comparison = "slope_pairwise"
 #' )
 #' }
 #'

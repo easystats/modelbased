@@ -249,8 +249,7 @@ get_marginalcontrasts <- function(
   joint_test <- FALSE
   context_effects <- FALSE
   # overwrite "comparison" when it's set to "context".
-  if (identical(comparison, "context")) {
-    comparison <- "b1 - b2 = 0"
+  if (identical(comparison, "context") || identical(comparison, "context_pairwise")) {
     context_effects <- TRUE
   }
   # save original `by`
@@ -333,7 +332,7 @@ get_marginalcontrasts <- function(
     # if "comparison" is a function, or a matrix (possibly with contrasts),
     # we don't modify or check it, but just pass it to the "hypothesis" argument
     # in marginaleffects
-  } else if (!is.function(comparison) && !is.matrix(comparison)) {
+  } else if (!context_effects && !is.function(comparison) && !is.matrix(comparison)) {
     # only proceed if we don't have custom comparisons
     # if we have a formula as comparison, we convert it into strings in order
     # to extract the information for "comparison" and "by", because we
@@ -465,7 +464,9 @@ get_marginalcontrasts <- function(
     "inequality",
     "inequality_pairwise",
     "inequality_ratio",
-    "inequality_ratio_pairwise"
+    "inequality_ratio_pairwise",
+    "context",
+    "context_pairwise"
   )
 }
 

@@ -140,12 +140,8 @@ described below, see documentation of \link[marginaleffects:comparisons]{margina
 section \emph{Comparison options} below.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, \code{"slope"} or \code{"trt_vs_ctrl"}.
-The \code{"slope"} option calculates contrasts between average slopes and can
-also be used to calculate "context" effects, which is the difference of
-within- and between-effects (see
-https://statisticalhorizons.com/between-within-contextual-effects/). To
-test multiple hypotheses jointly (usually used for factorial designs),
+\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
+multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
 \item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},
@@ -164,6 +160,14 @@ absolute inequality measures, while \code{"inequality_ratio_pairwise"}
 computes pairwise differences of relative inequality measures (ratios).
 See an overview of applications in the related case study in the
 \href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignettes}.
+\item String: Additional special string options are \code{"slope"} and
+\code{"slope_pairwise"}. \code{comparison ="slope"} calculates contrasts between
+average slopes and can also be used to calculate "context" effects, which
+is the difference of within- and between-effects (see
+https://statisticalhorizons.com/between-within-contextual-effects/).
+\code{comparison ="slope_paiwirse"} returns pairwise comparisons of such
+context effects, which can be used when \code{by} is used to stratify results
+by the levels of another variable.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.

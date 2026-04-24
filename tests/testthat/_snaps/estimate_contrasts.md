@@ -914,5 +914,5 @@
       Variable predicted: outcome
       Predictors contrasted: var_binom, var_cont
       p-values are uncorrected.
-      Contrasts are on the link-scale.
+      Contrasts are on the exp-transformed link-scale.
 

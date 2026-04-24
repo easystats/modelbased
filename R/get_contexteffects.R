@@ -12,7 +12,7 @@
   # if we have stratified by another group, we need the difference between
   # contrasts at each group level
   if (is.null(my_args$by)) {
-    comparison <- my_args$comparison
+    comparison <- as.formula("~I(diff(x))")
   } else {
     comparison <- as.formula(paste("~I(diff(x)) |", my_args$by))
   }
@@ -44,6 +44,39 @@
   }
 
   out <- do.call(marginaleffects::avg_comparisons, c(fun_args, dots))
+
+  # pairwise comparison of context effects?
+  if (identical(my_args$comparison, "context_pairwise")) {
+    # save original levels for formatting
+    original_levels <- .safe(out[[my_args$by]])
+    # calculate pairwise comparisons
+    out <- marginaleffects::hypotheses(out, hypothesis = ~pairwise)
+    # format comparison levels. we first split the column with "b" parameter
+    # names, like "(b1) - (b2)", into two columns. Then we remove the "b" and
+    # just keep the number, which indicates the row.
+    if (!is.null(original_levels)) {
+      params <- as.data.frame(do.call(
+        rbind,
+        lapply(out$hypothesis, .split_at_minus_outside_parentheses)
+      ))
+      # split "b" strings and remove "b"
+      params[] <- lapply(params, function(i) as.numeric(gsub("b", "", i, fixed = TRUE)))
+      # give proper names
+      colnames(params) <- c("Level1", "Level2")
+      # replace numbers with original levels
+      params$Level1 <- original_levels[params$Level1]
+      params$Level2 <- original_levels[params$Level2]
+      # save attributes
+      att <- attributes(out)
+      # remove old "by" column and bind new one back to output
+      out[[my_args$by]] <- NULL
+      out <- cbind(params, out)
+      # add back original attributes
+      cn <- colnames(out)
+      attributes(out) <- utils::modifyList(attributes(out), att)
+      colnames(out) <- cn
+    }
+  }
 
   # save some labels for printing
   attr(out, "by") <- attr(out, "hypothesis_by") <- my_args$by

@@ -122,12 +122,8 @@ described below, see documentation of \link[marginaleffects:comparisons]{margina
 section \emph{Comparison options} below.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, \code{"slope"} or \code{"trt_vs_ctrl"}.
-The \code{"slope"} option calculates contrasts between average slopes and can
-also be used to calculate "context" effects, which is the difference of
-within- and between-effects (see
-https://statisticalhorizons.com/between-within-contextual-effects/). To
-test multiple hypotheses jointly (usually used for factorial designs),
+\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
+multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
 \item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},
@@ -146,6 +142,14 @@ absolute inequality measures, while \code{"inequality_ratio_pairwise"}
 computes pairwise differences of relative inequality measures (ratios).
 See an overview of applications in the related case study in the
 \href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignettes}.
+\item String: Additional special string options are \code{"slope"} and
+\code{"slope_pairwise"}. \code{comparison ="slope"} calculates contrasts between
+average slopes and can also be used to calculate "context" effects, which
+is the difference of within- and between-effects (see
+https://statisticalhorizons.com/between-within-contextual-effects/).
+\code{comparison ="slope_paiwirse"} returns pairwise comparisons of such
+context effects, which can be used when \code{by} is used to stratify results
+by the levels of another variable.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
@@ -370,6 +374,11 @@ independent of their personal characteristics. It demonstrates that people
 with identical individual circumstances (such as the same income) face
 different opportunities or risks depending on the environment in which they
 live.
+\item \code{comparison = "slope_pairwise"}: This returns pairwise comparisons of
+context effects (i.e., the pairwise comparisons of the difference of
+between within- and between-effects, or the difference of average slopes).
+This can be used when \code{by} is used to stratify results by the levels of
+another variable.
 \item To test multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
@@ -621,6 +630,7 @@ model <- lme4::lmer(
   QoL ~ time * (phq4_within + phq4_between) + (1 + time | ID),
   data = qol_cancer
 )
+
 # context effect (difference between within- and between-effect)
 # at each time point
 estimate_contrasts(
@@ -628,6 +638,16 @@ estimate_contrasts(
   c("phq4_within", "phq4_between"),
   by = "time",
   comparison = "slope"
+)
+
+# is the difference of the context effect between the time points
+# statistically significant? We need pairwise comparisons of contrasts
+# of slopes to calculate this
+estimate_contrasts(
+  model,
+  c("phq4_within", "phq4_between"),
+  by = "time",
+  comparison = "slope_pairwise"
 )
 }
 \dontshow{\}) # examplesIf}

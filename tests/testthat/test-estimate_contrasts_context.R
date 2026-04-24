@@ -17,12 +17,12 @@ test_that("estimate_contrast, context effects, linear", {
     c("bill_len_between", "bill_len_within"),
     comparison = "context"
   )
-  expect_equal(out$Difference, b[1] - b[2], tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Difference, b[2] - b[1], tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$SE, sqrt((se[1]^2 + se[2]^2)), tolerance = 1e-4, ignore_attr = TRUE)
   expect_true(!is.null(out$p))
 
   output <- capture.output(out)
-  expect_identical(output[3], "Difference |   SE |         95% CI |      z |      p")
+  expect_identical(output[3], "Difference |   SE |       95% CI |     z |      p")
 
   m <- lm(bill_dep ~ year * (bill_len_between + bill_len_within), data = d)
   out <- estimate_contrasts(
@@ -35,6 +35,23 @@ test_that("estimate_contrast, context effects, linear", {
   x1 <- estimate_slopes(m, "bill_len_within", by = "year")
   x2 <- estimate_slopes(m, "bill_len_between", by = "year")
   expect_equal(out$Difference, x1$Slope - x2$Slope, tolerance = 1e-4)
+
+  out <- estimate_contrasts(
+    m,
+    c("bill_len_between", "bill_len_within"),
+    by = "year",
+    comparison = "context_pairwise"
+  )
+  expect_named(
+    out,
+    c("Level1", "Level2", "Parameter", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+  )
+  expect_equal(
+    out$Difference,
+    c(-0.04317, -0.08635, -0.04317),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 })
 
 test_that("estimate_contrast, context effects, glm", {
@@ -51,7 +68,7 @@ test_that("estimate_contrast, context effects, glm", {
     c("bill_len_between", "bill_len_within"),
     comparison = "context"
   )
-  expect_equal(out$Odds_Ratio, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Odds_Ratio, exp(b[2] - b[1]), tolerance = 1e-4, ignore_attr = TRUE)
   expect_true(!is.null(out$p))
 
   output <- capture.output(out)
@@ -62,7 +79,7 @@ test_that("estimate_contrast, context effects, glm", {
     c("bill_len_between", "bill_len_within"),
     comparison = "slope"
   )
-  expect_equal(out$Odds_Ratio, exp(b[1] - b[2]), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Odds_Ratio, exp(b[2] - b[1]), tolerance = 1e-4, ignore_attr = TRUE)
   expect_true(!is.null(out$p))
 
   out <- estimate_contrasts(
@@ -71,5 +88,5 @@ test_that("estimate_contrast, context effects, glm", {
     comparison = "context",
     predict = "response"
   )
-  expect_equal(out$Probability, 0.01784138, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Probability, -0.01784138, tolerance = 1e-4, ignore_attr = TRUE)
 })

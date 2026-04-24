@@ -264,6 +264,9 @@
   if (identical(comparison, "slope")) {
     comparison <- "context"
   }
+  if (identical(comparison, "slope_pairwise")) {
+    comparison <- "context_pairwise"
+  }
   comparison
 }
 
