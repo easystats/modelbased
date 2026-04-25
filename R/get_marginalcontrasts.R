@@ -93,7 +93,9 @@ get_marginalcontrasts <- function(
     !first_focal %in% on_the_fly_factors
 
   # check whether both focal terms are numeric, in which case we calculate
-  # the contrasts of two average slopes (context effects)
+  # the contrasts of two average slopes (context effects). We could skip this
+  # check when the user uses `comparison = "slope"`, however, this is not
+  # straightforward. It's better
   if (
     is.numeric(model_data[[second_focal]]) &&
       !.is_likert(model_data[[second_focal]], verbose = verbose, ...) &&
