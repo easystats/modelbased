@@ -460,7 +460,8 @@ get_marginalcontrasts <- function(
   # check whether both focal terms are numeric, in which case we calculate
   # the contrasts of two average slopes (context effects). We could skip this
   # check when the user uses `comparison = "slope"`, however, this is not
-  # straightforward. It's better
+  # straightforward. It's better to allow users to define two numeric variables
+  # for contrasting, without the need to care about special comparison-options
   if (
     is.numeric(model_data[[second_focal]]) &&
       !.is_likert(model_data[[second_focal]], verbose = verbose, ...) &&
