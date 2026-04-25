@@ -24,6 +24,9 @@ test_that("estimate_contrast, context effects, linear", {
   output <- capture.output(out)
   expect_identical(output[3], "Difference |   SE |       95% CI |     z |      p")
 
+  out2 <- estimate_contrasts(m, c("bill_len_between", "bill_len_within"))
+  expect_equal(out, out2, ignore_attr = TRUE, tolerance = 1e-4)
+
   m <- lm(bill_dep ~ year * (bill_len_between + bill_len_within), data = d)
   out <- estimate_contrasts(
     m,
@@ -35,6 +38,9 @@ test_that("estimate_contrast, context effects, linear", {
   x1 <- estimate_slopes(m, "bill_len_within", by = "year")
   x2 <- estimate_slopes(m, "bill_len_between", by = "year")
   expect_equal(out$Difference, x1$Slope - x2$Slope, tolerance = 1e-4)
+
+  out2 <- estimate_contrasts(m, c("bill_len_between", "bill_len_within"), by = "year")
+  expect_equal(out, out2, ignore_attr = TRUE, tolerance = 1e-4)
 
   out <- estimate_contrasts(
     m,
@@ -52,6 +58,9 @@ test_that("estimate_contrast, context effects, linear", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+
+  out2 <- estimate_contrasts(m, c("bill_len_between", "bill_len_within", "year"))
+  expect_equal(out, out2, ignore_attr = TRUE, tolerance = 1e-4)
 })
 
 test_that("estimate_contrast, context effects, glm", {
