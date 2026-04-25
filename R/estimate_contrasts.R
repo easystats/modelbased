@@ -61,7 +61,9 @@
 #'     right-hand side determines the pairs of estimates to compare (`reference`,
 #'     `sequential`, `meandev`, etc., see string-options). Optionally, comparisons
 #'     can be carried out within subsets by indicating the grouping variable
-#'     after a vertical bar ( `|`).
+#'     after a vertical bar ( `|`). If the left-hand side is missing, it defaults
+#'     to `difference` (i.e. `comparison = ~pairs | group` is identical to
+#'     `comparison = difference ~ pairs | group`).
 #'   * A custom function, e.g. `comparison = myfun`, or
 #'     `comparison = ~I(my_fun(x)) | groups`.
 #'   * If contrasts should be calculated (or grouped by) factors, `comparison`

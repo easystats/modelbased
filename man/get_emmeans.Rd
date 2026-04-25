@@ -168,7 +168,9 @@ side indicates the type of comparison (\code{difference} or \code{ratio}), the
 right-hand side determines the pairs of estimates to compare (\code{reference},
 \code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
 can be carried out within subsets by indicating the grouping variable
-after a vertical bar ( \code{|}).
+after a vertical bar ( \code{|}). If the left-hand side is missing, it defaults
+to \code{difference} (i.e. \code{comparison = ~pairs | group} is identical to
+\code{comparison = difference ~ pairs | group}).
 \item A custom function, e.g. \code{comparison = myfun}, or
 \code{comparison = ~I(my_fun(x)) | groups}.
 \item If contrasts should be calculated (or grouped by) factors, \code{comparison}

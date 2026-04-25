@@ -440,6 +440,8 @@ get_marginalcontrasts <- function(
   # .get_contexteffects()
   if (length(out$contrast) > 1) {
     second_focal <- out$contrast[2]
+  } else {
+    second_focal <- NULL
   }
 
   # sanity check - is it a list? if so, use name
@@ -463,7 +465,8 @@ get_marginalcontrasts <- function(
   # straightforward. It's better to allow users to define two numeric variables
   # for contrasting, without the need to care about special comparison-options
   if (
-    is.numeric(model_data[[second_focal]]) &&
+    !is.null(second_focal) &&
+      is.numeric(model_data[[second_focal]]) &&
       !.is_likert(model_data[[second_focal]], verbose = verbose, ...) &&
       !second_focal %in% on_the_fly_factors &&
       out$compute_slopes &&
