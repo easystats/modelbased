@@ -348,9 +348,14 @@ get_marginalcontrasts <- function(
       is.numeric(model_data[[second_focal]]) &&
       !.is_likert(model_data[[second_focal]], verbose = verbose, ...) &&
       !second_focal %in% on_the_fly_factors &&
-      contrast_slopes &&
-      !any(c("context", "context_pairwise") %in% comparison)
+      contrast_slopes
   ) {
+    # "pairwise" argument will be ignored for context effects
+    if (!identical(comparison, "pairwise")) {
+      insight::format_alert(
+        "The `comparison` argument will be set to `\"pairwise\"` when contrasting average slopes."
+      )
+    }
     # overwrite some of the previous arguments
     context_effects <- TRUE
     # if we have no "by" variable, user doesn't want to stratify, so set to
