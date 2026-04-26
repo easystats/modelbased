@@ -40,7 +40,7 @@ set.seed(333)
 
 When analyzing longitudinal or clustered data, a standard mixed-effects model often blends two completely different processes into a single coefficient: the overall differences between individuals (or groups) and the acute fluctuations within an individual. However, separating these effects is just the first step. By evaluating them side-by-side, we can uncover a third, crucial piece of the puzzle: the *context effect*.
 
-The context effect describes the additional influence that a broader environment or a chronic baseline trait has on an individual, independent of their immediate, momentary state [@bell_understanding_2018, @rohrer_these_2023]. By using the `demean()` function to separate our time-varying predictors, we can isolate the within- and between-components, evaluate them independently, and formally test how the overarching context shapes individual outcomes.
+The context effect describes the additional influence that a broader environment or a chronic baseline trait has on an individual, independent of their immediate, momentary state ([@bell_understanding_2018, @rohrer_these_2023]). By using the `demean()` function to separate our time-varying predictors, we can isolate the within- and between-components, evaluate them independently, and formally test how the overarching context shapes individual outcomes.
 
 To understand the underlying problem of heterogeneity bias, demeaning (person-mean centering), and within/between effects in more detail, it is highly recommended to [read this vignette first](https://easystats.github.io/parameters/articles/demean.html).
 
