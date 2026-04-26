@@ -12,9 +12,9 @@
   # if we have stratified by another group, we need the difference between
   # contrasts at each group level
   if (is.null(my_args$by)) {
-    comparison <- as.formula("~I(diff(x))")
+    comparison <- stats::as.formula("~I(diff(x))")
   } else {
-    comparison <- as.formula(paste("~I(diff(x)) |", my_args$by))
+    comparison <- stats::as.formula(paste("~I(diff(x)) |", my_args$by))
   }
 
   # prepare arguments
