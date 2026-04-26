@@ -9,8 +9,8 @@ uncover a third, crucial piece of the puzzle: the *context effect*.
 
 The context effect describes the additional influence that a broader
 environment or a chronic baseline trait has on an individual,
-independent of their immediate, momentary state Rohrer and Murayama
-(2023). By using the
+independent of their immediate, momentary state (Rohrer and Murayama
+(2023)). By using the
 [`demean()`](https://easystats.github.io/datawizard/reference/demean.html)
 function to separate our time-varying predictors, we can isolate the
 within- and between-components, evaluate them independently, and
