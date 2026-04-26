@@ -52,16 +52,10 @@ get_marginalcontrasts <- function(
     my_args,
     model_data,
     estimate,
+    on_the_fly_factors,
+    verbose,
     ...
   )
-
-  # extract first focal term
-  first_focal <- my_args$contrast[1]
-
-  # sanity check - is it a list? if so, use name
-  if (is.list(first_focal)) {
-    first_focal <- names(first_focal)
-  }
 
   # sanity check: `contrast` and `by` cannot be the same
   if (
@@ -74,13 +68,6 @@ get_marginalcontrasts <- function(
       "You cannot specifiy the same variables in `contrast` and `by`. Either omit `by`, or choose a different variable for `contrast` or `by`." # nolint
     )
   }
-
-  # check whether we contrast slopes or categorical predictors:
-  # if first focal term is numeric, we contrast slopes, but slopes only for
-  # numerics with many values, not for binary or likert-alike
-  compute_slopes <- is.numeric(model_data[[first_focal]]) &&
-    !.is_likert(model_data[[first_focal]], verbose = verbose, ...) &&
-    !first_focal %in% on_the_fly_factors
 
   # Second step: compute contrasts, for slopes or categorical -----------------
   # ---------------------------------------------------------------------------
@@ -96,7 +83,6 @@ get_marginalcontrasts <- function(
       my_args,
       comparison,
       ci,
-      compute_slopes,
       estimate,
       ...
     )
@@ -110,11 +96,11 @@ get_marginalcontrasts <- function(
         transform <- "exp"
       }
     }
-  } else if (compute_slopes) {
+  } else if (my_args$contrast_slopes) {
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
       insight::format_error(
-        "Please specify the `by` argument to calculate contrasts of slopes. If you want to calculate the average contrast between two slopes, use `comparison = \"slope\"` instead."
+        "Please specify the `by` argument to calculate contrasts of slopes."
       )
     }
     # call slopes with hypothesis argument
@@ -242,16 +228,15 @@ get_marginalcontrasts <- function(
   my_args,
   model_data = NULL,
   estimate = NULL,
+  on_the_fly_factors = NULL,
+  verbose = TRUE,
   ...
 ) {
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
   joint_test <- FALSE
   context_effects <- FALSE
-  # overwrite "comparison" when it's set to "context".
-  if (identical(comparison, "context") || identical(comparison, "context_pairwise")) {
-    context_effects <- TRUE
-  }
+
   # save original `by`
   original_by <- my_args$by
   original_comparison <- comparison
@@ -302,7 +287,6 @@ get_marginalcontrasts <- function(
       !is.null(my_args$contrast) &&
       any(grepl("=", my_args$contrast, fixed = TRUE))
   ) {
-    # nolint
     # find which element in `by` has a filter
     filter_index <- grep("=", my_args$contrast, fixed = TRUE)
     for (f in filter_index) {
@@ -319,6 +303,69 @@ get_marginalcontrasts <- function(
           stats::setNames(list(.safe(eval(str2lang(filter_value[2])))), filter_value[1])
         )
       }
+    }
+  }
+
+  # -----------------------------------------------------------------------
+  # here we check whether user wants to compute contrasts of slopes by group, or
+  # even contrasts of two average slopes (context effects).
+  # -----------------------------------------------------------------------
+
+  # extract first focal term
+  first_focal <- my_args$contrast[1]
+
+  # extract second focal term - if we have two numeric focal terms, we
+  # calculate "context" effects (the contrast of average slopes), see
+  # .get_contexteffects()
+  if (length(my_args$contrast) > 1) {
+    second_focal <- my_args$contrast[2]
+  } else {
+    second_focal <- NULL
+  }
+
+  # sanity check - is it a list? if so, use name
+  if (is.list(first_focal)) {
+    first_focal <- names(first_focal)
+  }
+  if (is.list(second_focal)) {
+    second_focal <- names(second_focal)
+  }
+
+  # check whether we contrast slopes or categorical predictors:
+  # if first focal term is numeric, we contrast slopes, but slopes only for
+  # numerics with many values, not for binary or likert-alike
+  contrast_slopes <- is.numeric(model_data[[first_focal]]) &&
+    !.is_likert(model_data[[first_focal]], verbose = verbose, ...) &&
+    !first_focal %in% on_the_fly_factors
+
+  # check whether both focal terms are numeric, in which case we calculate
+  # the contrasts of two average slopes (context effects). We could skip this
+  # check when the user uses `comparison = "slope"`, however, this is not
+  # straightforward. It's better to allow users to define two numeric variables
+  # for contrasting, without the need to care about special comparison-options
+  if (
+    !is.null(second_focal) &&
+      is.numeric(model_data[[second_focal]]) &&
+      !.is_likert(model_data[[second_focal]], verbose = verbose, ...) &&
+      !second_focal %in% on_the_fly_factors &&
+      contrast_slopes
+  ) {
+    # "pairwise" argument will be ignored for context effects
+    if (!identical(comparison, "pairwise")) {
+      insight::format_alert(
+        "The `comparison` argument will be set to `\"pairwise\"` when contrasting average slopes."
+      )
+    }
+    # overwrite some of the previous arguments
+    context_effects <- TRUE
+    # if we have no "by" variable, user doesn't want to stratify, so set to
+    # pairwise comparisons of categorical variable
+    if (is.null(my_args$by) && length(my_args$contrast) > 2) {
+      comparison <- "context_pairwise"
+      my_args$by <- my_args$contrast[3:length(my_args$contrast)]
+      my_args$contrast <- my_args$contrast[1:2]
+    } else {
+      comparison <- "context"
     }
   }
 
@@ -428,7 +475,9 @@ get_marginalcontrasts <- function(
       context_effects = context_effects,
       # cleaned `by` and `contrast`, without filtering information
       cleaned_by = gsub("=.*", "\\1", my_args$by),
-      cleaned_contrast = gsub("=.*", "\\1", my_args$contrast)
+      cleaned_contrast = gsub("=.*", "\\1", my_args$contrast),
+      # remember whether contrasts of slopes should be calculated
+      contrast_slopes = contrast_slopes
     )
   )
 

@@ -7,6 +7,14 @@
 #' @param contrast A character vector indicating the name of the variable(s) for
 #' which to compute the contrasts, optionally including representative values or
 #' levels at which contrasts are evaluated (e.g., `contrast="x=c('a','b')"`).
+#' **Note:** It is also possible to contrast average slopes, i.e. `contrast` can
+#' be the name of two numeric predictors. However, while it is possible to
+#' filter data for one numeric contrast (e.g., `contrast = c("num_pred=c(0, 1, 3)")`),
+#' it is not possible to "filter" at certain values for two numeric predictors.
+#' For contrasting slopes, the `comparison` will always be `"pairwise"`. It is
+#' possible to compute pairwise comparisons of two average slopes at the levels
+#' of a third variable, by also adding that variable to the `contrast` argument,
+#' e.g. `contrast = c("num1", "num2", "factor")`. See 'Examples'.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
 #' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"sup-t"`,
@@ -53,25 +61,20 @@
 #'     computes pairwise differences of relative inequality measures (ratios).
 #'     See an overview of applications in the related case study in the
 #'     [vignettes](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
-#'   * String: Additional special string options are `"slope"` and
-#'     `"slope_pairwise"`. `comparison ="slope"` calculates contrasts between
-#'     average slopes and can also be used to calculate "context" effects, which
-#'     is the difference of within- and between-effects (see
-#'     https://statisticalhorizons.com/between-within-contextual-effects/).
-#'     `comparison ="slope_paiwirse"` returns pairwise comparisons of such
-#'     context effects, which can be used when `by` is used to stratify results
-#'     by the levels of another variable.
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
-#'   * Formula: A formula like `comparison ~ pairs | group`, where the left-hand
-#'     side indicates the type of comparison (`difference` or `ratio`), the
+#'   * Formula: A formula like `<comparison> ~ pairs | group`, where the left-hand
+#'     side indicates the type of `<comparison>` (`difference` or `ratio`), the
 #'     right-hand side determines the pairs of estimates to compare (`reference`,
 #'     `sequential`, `meandev`, etc., see string-options). Optionally, comparisons
 #'     can be carried out within subsets by indicating the grouping variable
-#'     after a vertical bar ( `|`).
+#'     after a vertical bar ( `|`). If the left-hand side is missing, it defaults
+#'     to `difference` (i.e. `comparison = ~pairs | group` is identical to
+#'     `comparison = difference ~ pairs | group`).
 #'   * A custom function, e.g. `comparison = myfun`, or
-#'     `comparison ~ I(my_fun(x)) | groups`.
+#'     `<comparison> ~ I(my_fun(x)) | groups` (where `<comparison>` can be
+#'     `difference` or `ratio`, or skipped).
 #'   * If contrasts should be calculated (or grouped by) factors, `comparison`
 #'     can also be a matrix that specifies factor contrasts (see 'Examples').
 #' @param effectsize Desired measure of standardized effect size, one of
@@ -117,21 +120,6 @@
 #' - `comparison = "trt_vs_ctrl"`: This compares all levels (excluding the
 #'   first, which is typically the control) against the first level. It's often
 #'   used when comparing multiple treatment groups to a single control group.
-#' - `comparison = "slope"`: This calculates contrasts between average slopes.
-#'   An interesting use-case is the calculation of "context" effects when
-#'   modelling within- and between-effects. An example for within- and between
-#'   effects is described [in this vignette](https://easystats.github.io/parameters/articles/demean.html).
-#'   A context effect describes the additional influence that the social or
-#'   regional environment (e.g., place of residence) has on an individual,
-#'   independent of their personal characteristics. It demonstrates that people
-#'   with identical individual circumstances (such as the same income) face
-#'   different opportunities or risks depending on the environment in which they
-#'   live.
-#' - `comparison = "slope_pairwise"`: This returns pairwise comparisons of
-#'   context effects (i.e., the pairwise comparisons of the difference of
-#'   between within- and between-effects, or the difference of average slopes).
-#'   This can be used when `by` is used to stratify results by the levels of
-#'   another variable.
 #' - To test multiple hypotheses jointly (usually used for factorial designs),
 #'   `comparison` can also be `"joint"`. In this case, use the `test` argument
 #'   to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
@@ -163,6 +151,27 @@
 #'
 #' Examples for analysing inequalities are shown in the related
 #' [vignette](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
+#'
+#' @section Context Effects - contrasting average slopes:
+#' Calculating contrasts between average slopes can tell us about the
+#' "context" effects when modelling within- and between-effects. An example
+#' for within- and between effects is described
+#' [in this vignette](https://easystats.github.io/parameters/articles/demean.html).
+#' A context effect describes the additional influence that the social or
+#' regional environment (e.g., place of residence) has on an individual,
+#' independent of their personal characteristics. It demonstrates that people
+#' with identical individual circumstances (such as the same income) face
+#' different opportunities or risks depending on the environment in which they
+#' live. This can be achieved by specifying both numeric predictors in the
+#' `contrast` argument, e.g. `contrast = c("x_within", "x_between")`. It is
+#' also possible to stratify context effects at different levels of another
+#' variable using `by`. If pairwise comparisons of context effects (i.e., the
+#' pairwise comparisons of the difference of between within- and
+#' between-effects, or the difference of average slopes) at different levels
+#' of another variable are required, add that variable to the `contrast`
+#' argument instead, e.g. `contrast = c("x_within", "x_between", "factor")`.
+#' Note that when average slopes are contrasted, the `comparison` argument has
+#' no effect and is always set to `"pairwise"`. See also 'Examples'.
 #'
 #' @section Effect Size:
 #'
@@ -318,22 +327,13 @@
 #' # context effect (difference between within- and between-effect)
 #' # at each time point - we calculate the contrast of two average slopes
 #' # at different levels of "time"
-#' estimate_contrasts(
-#'   model,
-#'   c("phq4_within", "phq4_between"),
-#'   by = "time",
-#'   comparison = "slope"
-#' )
+#' estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
 #'
 #' # is the difference of the context effect between the time points
-#' # statistically significant? We need pairwise comparisons of contrasts
-#' # of slopes to calculate this
-#' estimate_contrasts(
-#'   model,
-#'   c("phq4_within", "phq4_between"),
-#'   by = "time",
-#'   comparison = "slope_pairwise"
-#' )
+#' # statistically significant? We want pairwise comparisons of contrasts
+#' # of slopes to calculate this (i.e. contrasts of average slopes at pairs
+#' # of levels of "time")
+#' estimate_contrasts(model, c("phq4_within", "phq4_between", "time"))
 #' }
 #'
 #' @return A data frame of estimated contrasts.

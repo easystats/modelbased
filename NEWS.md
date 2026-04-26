@@ -9,9 +9,10 @@
 
 * Support for models of class `nestedLogit`.
 
-* Added option  `comparison = "slope"` to `estimate_contrast()`, to allow
-  calculating contrasts of average slopes. This can also be useful when
-  estimating the context effects of within- and between-effects in a model.
+* `estimate_contrasts()` can now also calculate contrasts of average slopes, by
+  defining two numeric predictors in the `contrast` argument. This can also be
+  useful when estimating the context effects of within- and between-effects in a
+  model.
 
 # modelbased 0.14.0
 

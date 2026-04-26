@@ -67,7 +67,15 @@ average predictions over the distribution of the offset (if appropriate).
 
 \item{contrast}{A character vector indicating the name of the variable(s) for
 which to compute the contrasts, optionally including representative values or
-levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).}
+levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).
+\strong{Note:} It is also possible to contrast average slopes, i.e. \code{contrast} can
+be the name of two numeric predictors. However, while it is possible to
+filter data for one numeric contrast (e.g., \code{contrast = c("num_pred=c(0, 1, 3)")}),
+it is not possible to "filter" at certain values for two numeric predictors.
+For contrasting slopes, the \code{comparison} will always be \code{"pairwise"}. It is
+possible to compute pairwise comparisons of two average slopes at the levels
+of a third variable, by also adding that variable to the \code{contrast} argument,
+e.g. \code{contrast = c("num1", "num2", "factor")}. See 'Examples'.}
 
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
@@ -142,25 +150,20 @@ absolute inequality measures, while \code{"inequality_ratio_pairwise"}
 computes pairwise differences of relative inequality measures (ratios).
 See an overview of applications in the related case study in the
 \href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignettes}.
-\item String: Additional special string options are \code{"slope"} and
-\code{"slope_pairwise"}. \code{comparison ="slope"} calculates contrasts between
-average slopes and can also be used to calculate "context" effects, which
-is the difference of within- and between-effects (see
-https://statisticalhorizons.com/between-within-contextual-effects/).
-\code{comparison ="slope_paiwirse"} returns pairwise comparisons of such
-context effects, which can be used when \code{by} is used to stratify results
-by the levels of another variable.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
-\item Formula: A formula like \code{comparison ~ pairs | group}, where the left-hand
-side indicates the type of comparison (\code{difference} or \code{ratio}), the
+\item Formula: A formula like \verb{<comparison> ~ pairs | group}, where the left-hand
+side indicates the type of \verb{<comparison>} (\code{difference} or \code{ratio}), the
 right-hand side determines the pairs of estimates to compare (\code{reference},
 \code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
 can be carried out within subsets by indicating the grouping variable
-after a vertical bar ( \code{|}).
+after a vertical bar ( \code{|}). If the left-hand side is missing, it defaults
+to \code{difference} (i.e. \code{comparison = ~pairs | group} is identical to
+\code{comparison = difference ~ pairs | group}).
 \item A custom function, e.g. \code{comparison = myfun}, or
-\code{comparison ~ I(my_fun(x)) | groups}.
+\verb{<comparison> ~ I(my_fun(x)) | groups} (where \verb{<comparison>} can be
+\code{difference} or \code{ratio}, or skipped).
 \item If contrasts should be calculated (or grouped by) factors, \code{comparison}
 can also be a matrix that specifies factor contrasts (see 'Examples').
 }
@@ -364,21 +367,6 @@ compute B-A and C-(A+B)/2.
 \item \code{comparison = "trt_vs_ctrl"}: This compares all levels (excluding the
 first, which is typically the control) against the first level. It's often
 used when comparing multiple treatment groups to a single control group.
-\item \code{comparison = "slope"}: This calculates contrasts between average slopes.
-An interesting use-case is the calculation of "context" effects when
-modelling within- and between-effects. An example for within- and between
-effects is described \href{https://easystats.github.io/parameters/articles/demean.html}{in this vignette}.
-A context effect describes the additional influence that the social or
-regional environment (e.g., place of residence) has on an individual,
-independent of their personal characteristics. It demonstrates that people
-with identical individual circumstances (such as the same income) face
-different opportunities or risks depending on the environment in which they
-live.
-\item \code{comparison = "slope_pairwise"}: This returns pairwise comparisons of
-context effects (i.e., the pairwise comparisons of the difference of
-between within- and between-effects, or the difference of average slopes).
-This can be used when \code{by} is used to stratify results by the levels of
-another variable.
 \item To test multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
@@ -411,6 +399,29 @@ impact on the dependent variable in terms of inequalities.
 
 Examples for analysing inequalities are shown in the related
 \href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignette}.
+}
+
+\section{Context Effects - contrasting average slopes}{
+
+Calculating contrasts between average slopes can tell us about the
+"context" effects when modelling within- and between-effects. An example
+for within- and between effects is described
+\href{https://easystats.github.io/parameters/articles/demean.html}{in this vignette}.
+A context effect describes the additional influence that the social or
+regional environment (e.g., place of residence) has on an individual,
+independent of their personal characteristics. It demonstrates that people
+with identical individual circumstances (such as the same income) face
+different opportunities or risks depending on the environment in which they
+live. This can be achieved by specifying both numeric predictors in the
+\code{contrast} argument, e.g. \code{contrast = c("x_within", "x_between")}. It is
+also possible to stratify context effects at different levels of another
+variable using \code{by}. If pairwise comparisons of context effects (i.e., the
+pairwise comparisons of the difference of between within- and
+between-effects, or the difference of average slopes) at different levels
+of another variable are required, add that variable to the \code{contrast}
+argument instead, e.g. \code{contrast = c("x_within", "x_between", "factor")}.
+Note that when average slopes are contrasted, the \code{comparison} argument has
+no effect and is always set to \code{"pairwise"}. See also 'Examples'.
 }
 
 \section{Effect Size}{
@@ -634,22 +645,13 @@ model <- lme4::lmer(
 # context effect (difference between within- and between-effect)
 # at each time point - we calculate the contrast of two average slopes
 # at different levels of "time"
-estimate_contrasts(
-  model,
-  c("phq4_within", "phq4_between"),
-  by = "time",
-  comparison = "slope"
-)
+estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
 
 # is the difference of the context effect between the time points
-# statistically significant? We need pairwise comparisons of contrasts
-# of slopes to calculate this
-estimate_contrasts(
-  model,
-  c("phq4_within", "phq4_between"),
-  by = "time",
-  comparison = "slope_pairwise"
-)
+# statistically significant? We want pairwise comparisons of contrasts
+# of slopes to calculate this (i.e. contrasts of average slopes at pairs
+# of levels of "time")
+estimate_contrasts(model, c("phq4_within", "phq4_between", "time"))
 }
 \dontshow{\}) # examplesIf}
 }

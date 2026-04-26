@@ -753,7 +753,7 @@ equivalence_columns <- c(
     if (
       comparison_hypothesis %in%
         c("inequality", "inequality_ratio") &&
-        isTRUE(attributes(x)$compute_slopes)
+        isTRUE(attributes(x)$contrast_slopes)
     ) {
       # for slopes, we either have the trend variable, or only the grouping,
       # but not the "inequality" variabe (the first in "by"). Update labels,
