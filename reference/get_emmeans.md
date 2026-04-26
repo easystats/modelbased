@@ -97,7 +97,16 @@ get_marginaltrends(
   A character vector indicating the name of the variable(s) for which to
   compute the contrasts, optionally including representative values or
   levels at which contrasts are evaluated (e.g.,
-  `contrast="x=c('a','b')"`).
+  `contrast="x=c('a','b')"`). **Note:** It is also possible to contrast
+  average slopes, i.e. `contrast` can be the name of two numeric
+  predictors. However, while it is possible to filter data for one
+  numeric contrast (e.g., `contrast = c("num_pred=c(0, 1, 3)")`), it is
+  not possible to "filter" at certain values for two numeric predictors.
+  For contrasting slopes, the `comparison` will always be `"pairwise"`.
+  It is possible to compute pairwise comparisons of two average slopes
+  at the levels of a third variable, by also adding that variable to the
+  `contrast` argument, e.g. `contrast = c("num1", "num2", "factor")`.
+  See 'Examples'.
 
 - by:
 
@@ -192,30 +201,23 @@ get_marginaltrends(
       applications in the related case study in the
       [vignettes](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
 
-    - String: Additional special string options are `"slope"` and
-      `"slope_pairwise"`. `comparison ="slope"` calculates contrasts
-      between average slopes and can also be used to calculate "context"
-      effects, which is the difference of within- and between-effects
-      (see
-      https://statisticalhorizons.com/between-within-contextual-effects/).
-      `comparison ="slope_paiwirse"` returns pairwise comparisons of
-      such context effects, which can be used when `by` is used to
-      stratify results by the levels of another variable.
-
     - String equation: To identify parameters from the output, either
       specify the term name, or `"b1"`, `"b2"` etc. to indicate rows,
       e.g.:`"hp = drat"`, `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
 
-    - Formula: A formula like `comparison ~ pairs | group`, where the
-      left-hand side indicates the type of comparison (`difference` or
-      `ratio`), the right-hand side determines the pairs of estimates to
-      compare (`reference`, `sequential`, `meandev`, etc., see
+    - Formula: A formula like `<comparison> ~ pairs | group`, where the
+      left-hand side indicates the type of `<comparison>` (`difference`
+      or `ratio`), the right-hand side determines the pairs of estimates
+      to compare (`reference`, `sequential`, `meandev`, etc., see
       string-options). Optionally, comparisons can be carried out within
       subsets by indicating the grouping variable after a vertical bar (
-      `|`).
+      `|`). If the left-hand side is missing, it defaults to
+      `difference` (i.e. `comparison = ~pairs | group` is identical to
+      `comparison = difference ~ pairs | group`).
 
     - A custom function, e.g. `comparison = myfun`, or
-      `comparison ~ I(my_fun(x)) | groups`.
+      `<comparison> ~ I(my_fun(x)) | groups` (where `<comparison>` can
+      be `difference` or `ratio`, or skipped).
 
     - If contrasts should be calculated (or grouped by) factors,
       `comparison` can also be a matrix that specifies factor contrasts
