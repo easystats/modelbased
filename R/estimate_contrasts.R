@@ -9,7 +9,7 @@
 #' levels at which contrasts are evaluated (e.g., `contrast="x=c('a','b')"`).
 #' **Note:** It is also possible to contrast average slopes, i.e. `contrast` can
 #' be the name of two numeric predictors. However, while it is possible to filter
-#' data for one numeric contrast (e.g., `contrast = c("num_pred=c(0, 1, 3)")`,
+#' data for one numeric contrast (e.g., `contrast = c("num_pred=c(0, 1, 3)")`),
 #' it is not possible to "filter" at certain values of predictors for two
 #' numeric predictors. For contrasting slopes, the `comparison` will always be
 #' `"pairwise"`. It is possible to compute pairwise comparisons of two average
