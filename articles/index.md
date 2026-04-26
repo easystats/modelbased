@@ -38,6 +38,8 @@
   means](https://easystats.github.io/modelbased/articles/plotting.md):
 - [Case Study: Causal inference for observational data using
   modelbased](https://easystats.github.io/modelbased/articles/practical_causality.md):
+- [Context Effects: How the Environment Shapes the
+  Individual](https://easystats.github.io/modelbased/articles/practical_context_effect.md):
 - [An Introduction to Growth Mixture Models with brms and
   easystats](https://easystats.github.io/modelbased/articles/practical_growthmixture.md):
 - [Case Study: Measuring and comparing absolute and relative

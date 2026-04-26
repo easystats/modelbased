@@ -55,6 +55,8 @@ All package vignettes are available at
   framework](https://easystats.github.io/modelbased/articles/practical_intersectionality.html)
 - [Measuring and comparing absolute and relative
   inequalities](https://easystats.github.io/modelbased/articles/practical_inequalities.html)
+- [Context Effects: How the Environment Shapes the
+  Individual](https://easystats.github.io/modelbased/articles/practical_context_effect.html)
 - [Interrupted Time Series Analysis with
   `modelbased`](https://easystats.github.io/modelbased/articles/practical_its.html)
 - [An Introduction to Growth Mixture
