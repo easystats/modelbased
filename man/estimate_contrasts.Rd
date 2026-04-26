@@ -645,20 +645,13 @@ model <- lme4::lmer(
 # context effect (difference between within- and between-effect)
 # at each time point - we calculate the contrast of two average slopes
 # at different levels of "time"
-estimate_contrasts(
-  model,
-  c("phq4_within", "phq4_between"),
-  by = "time"
-)
+estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
 
 # is the difference of the context effect between the time points
 # statistically significant? We want pairwise comparisons of contrasts
 # of slopes to calculate this (i.e. contrasts of average slopes at pairs
 # of levels of "time")
-estimate_contrasts(
-  model,
-  c("phq4_within", "phq4_between", "time")
-)
+estimate_contrasts(model, c("phq4_within", "phq4_between", "time"))
 }
 \dontshow{\}) # examplesIf}
 }
