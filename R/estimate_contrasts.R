@@ -56,8 +56,8 @@
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
-#'   * Formula: A formula like `comparison = ~pairs | group`, where the left-hand
-#'     side indicates the type of comparison (`difference` or `ratio`), the
+#'   * Formula: A formula like `<comparison> ~ pairs | group`, where the left-hand
+#'     side indicates the type of `<comparison>` (`difference` or `ratio`), the
 #'     right-hand side determines the pairs of estimates to compare (`reference`,
 #'     `sequential`, `meandev`, etc., see string-options). Optionally, comparisons
 #'     can be carried out within subsets by indicating the grouping variable
@@ -65,7 +65,8 @@
 #'     to `difference` (i.e. `comparison = ~pairs | group` is identical to
 #'     `comparison = difference ~ pairs | group`).
 #'   * A custom function, e.g. `comparison = myfun`, or
-#'     `comparison = ~I(my_fun(x)) | groups`.
+#'     `<comparison> ~ I(my_fun(x)) | groups` (where `<comparison>` can be
+#'     `difference` or `ratio`, or skipped).
 #'   * If contrasts should be calculated (or grouped by) factors, `comparison`
 #'     can also be a matrix that specifies factor contrasts (see 'Examples').
 #' @param effectsize Desired measure of standardized effect size, one of

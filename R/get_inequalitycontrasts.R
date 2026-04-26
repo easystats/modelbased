@@ -7,7 +7,6 @@
   my_args,
   comparison,
   ci,
-  compute_slopes = FALSE,
   estimate = NULL,
   ...
 ) {
@@ -38,14 +37,14 @@
   #   to average over other variables in `by`, we use the formula interface.
   #   For example, `by = c("grp1", "gpr2")` and `comparison = ~ inequality | grp2`
   #   would average over `grp1` and calculate pairwise comparisons for `grp2`.
-  if (is.null(my_args$by) || (length(my_args$by) == 1 && compute_slopes)) {
+  if (is.null(my_args$by) || (length(my_args$by) == 1 && my_args$contrast_slopes)) {
     group <- NULL
   } else if (inherits(comparison, "formula")) {
     # groups in formula interface are used for grouping
     out <- .process_inequality_formula(comparison)
     comparison <- out$comparison
     group <- out$group
-  } else if (compute_slopes) {
+  } else if (my_args$contrast_slopes) {
     # `by` is used for grouping, but first `by` element is ignored for slopes.
     # we need the fist element in `by` for contrasting slopes at a predictor
     group <- my_args$by[-1]
@@ -58,7 +57,7 @@
   # inequality comparisons for slopes -------------------------
   # -----------------------------------------------------------
 
-  if (compute_slopes) {
+  if (my_args$contrast_slopes) {
     # marginal effects inequalities for slopes.
     # we need a `by` argument, otherwise, pairwise comparisons of slopes for all
     # combinations of values of the `trend` variable would be calculated.
@@ -85,7 +84,7 @@
     # save some labels for printing
     attr(out, "by") <- my_args$by
     attr(out, "trend") <- my_args$contrast
-    attr(out, "compute_slopes") <- TRUE
+    attr(out, "contrast_slopes") <- TRUE
   } else {
     # -----------------------------------------------------------
     # inequality comparisons for categorical predictors ---------
@@ -259,13 +258,6 @@
     if (.is_inequality_comparison(out)) {
       return(out)
     }
-  }
-  # handle special value: contrasting average slopes (context effects)
-  if (identical(comparison, "slope")) {
-    comparison <- "context"
-  }
-  if (identical(comparison, "slope_pairwise")) {
-    comparison <- "context_pairwise"
   }
   comparison
 }

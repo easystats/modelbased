@@ -145,8 +145,8 @@ See an overview of applications in the related case study in the
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
-\item Formula: A formula like \code{comparison = ~pairs | group}, where the left-hand
-side indicates the type of comparison (\code{difference} or \code{ratio}), the
+\item Formula: A formula like \verb{<comparison> ~ pairs | group}, where the left-hand
+side indicates the type of \verb{<comparison>} (\code{difference} or \code{ratio}), the
 right-hand side determines the pairs of estimates to compare (\code{reference},
 \code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
 can be carried out within subsets by indicating the grouping variable
@@ -154,7 +154,8 @@ after a vertical bar ( \code{|}). If the left-hand side is missing, it defaults
 to \code{difference} (i.e. \code{comparison = ~pairs | group} is identical to
 \code{comparison = difference ~ pairs | group}).
 \item A custom function, e.g. \code{comparison = myfun}, or
-\code{comparison = ~I(my_fun(x)) | groups}.
+\verb{<comparison> ~ I(my_fun(x)) | groups} (where \verb{<comparison>} can be
+\code{difference} or \code{ratio}, or skipped).
 \item If contrasts should be calculated (or grouped by) factors, \code{comparison}
 can also be a matrix that specifies factor contrasts (see 'Examples').
 }
