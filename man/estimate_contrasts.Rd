@@ -69,12 +69,14 @@ average predictions over the distribution of the offset (if appropriate).
 which to compute the contrasts, optionally including representative values or
 levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).
 \strong{Note:} It is also possible to contrast average slopes, i.e. \code{contrast} can
-be the name of two numeric predictors. In this case, it is not possible to
-"filter" at certain values of those predictors, which is possible otherwise.
-For contrasting slopes, the \code{comparison} will always be \code{"pairwise"}. It is
-possible to compute pairwise comparisons of two average slopes at the levels
-of the third variable, by also adding that variable to the \code{contrast}
-argument. See 'Examples'.}
+be the name of two numeric predictors. However, while it is possible to filter
+data for one numeric contrast (e.g., \code{contrast = c("num_pred=c(0, 1, 3)")},
+it is not possible to "filter" at certain values of predictors for two
+numeric predictors. For contrasting slopes, the \code{comparison} will always be
+\code{"pairwise"}. It is possible to compute pairwise comparisons of two average
+slopes at the levels of a third variable, by also adding that variable to the
+\code{contrast} argument, e.g. \code{contrast = c("num1", "num2", "factor")}. See
+'Examples'.}
 
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
@@ -418,7 +420,7 @@ variable using \code{by}. If pairwise comparisons of context effects (i.e., the
 pairwise comparisons of the difference of between within- and
 between-effects, or the difference of average slopes) at different levels
 of another variable are required, add that variable to the \code{contrast}
-argument instead, e.g. \code{contrast = c("x_within", "x_between", "groups")}.
+argument instead, e.g. \code{contrast = c("x_within", "x_between", "factor")}.
 Note that when average slopes are contrasted, the \code{comparison} argument has
 no effect and is always set to \code{"pairwise"}. See also 'Examples'.
 }
@@ -651,7 +653,7 @@ estimate_contrasts(
 )
 
 # is the difference of the context effect between the time points
-# statistically significant? We need pairwise comparisons of contrasts
+# statistically significant? We want pairwise comparisons of contrasts
 # of slopes to calculate this (i.e. contrasts of average slopes at pairs
 # of levels of "time")
 estimate_contrasts(

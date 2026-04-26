@@ -11,10 +11,11 @@
 #' be the name of two numeric predictors. However, while it is possible to filter
 #' data for one numeric contrast (e.g., `contrast = c("num_pred=c(0, 1, 3)")`,
 #' it is not possible to "filter" at certain values of predictors for two
-#' numeric predictor. For contrasting slopes, the `comparison` will always be
+#' numeric predictors. For contrasting slopes, the `comparison` will always be
 #' `"pairwise"`. It is possible to compute pairwise comparisons of two average
-#' slopes at the levels of the third variable, by also adding that variable to
-#' the `contrast` argument. See 'Examples'.
+#' slopes at the levels of a third variable, by also adding that variable to the
+#' `contrast` argument, e.g. `contrast = c("num1", "num2", "factor")`. See
+#' 'Examples'.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
 #' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"sup-t"`,
@@ -169,7 +170,7 @@
 #' pairwise comparisons of the difference of between within- and
 #' between-effects, or the difference of average slopes) at different levels
 #' of another variable are required, add that variable to the `contrast`
-#' argument instead, e.g. `contrast = c("x_within", "x_between", "groups")`.
+#' argument instead, e.g. `contrast = c("x_within", "x_between", "factor")`.
 #' Note that when average slopes are contrasted, the `comparison` argument has
 #' no effect and is always set to `"pairwise"`. See also 'Examples'.
 #'
@@ -334,7 +335,7 @@
 #' )
 #'
 #' # is the difference of the context effect between the time points
-#' # statistically significant? We need pairwise comparisons of contrasts
+#' # statistically significant? We want pairwise comparisons of contrasts
 #' # of slopes to calculate this (i.e. contrasts of average slopes at pairs
 #' # of levels of "time")
 #' estimate_contrasts(
