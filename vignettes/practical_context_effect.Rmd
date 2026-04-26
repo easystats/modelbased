@@ -115,7 +115,9 @@ estimate_contrasts(mixed, c("phq4_within", "phq4_between"))
 
 The output shows a significant contrast of 2.41 between the within- and between-effects. Since the between-effect in our model (-6.13) is stronger (more negative) than the within-effect (-3.72), the context-effect (Between minus Within) is -2.41.
 
-What does this mean practically? Imagine two patients who both report the exact same raw `phq4` score on a given day. However, Patient A generally suffers from a higher overarching psychological burden (their personal `phq4` average is 1 unit higher than Patient B's). The context effect tells us that, despite experiencing the exact same severity of symptoms today, Patient A's expected Quality of Life is an additional 2.41 points lower than Patient B's simply because of their higher baseline burden. The trait-like baseline carries an extra "penalty" for the quality of life that goes beyond mere day-to-day fluctuations.
+**What does this mean practically?**
+
+Imagine two patients who both report the exact same raw `phq4` score on a given day. However, Patient A generally suffers from a higher overarching psychological burden (their personal `phq4` average is 1 unit higher than Patient B's). The context effect tells us that, despite experiencing the exact same severity of symptoms today, Patient A's expected Quality of Life is an additional 2.41 points lower than Patient B's simply because of their higher baseline burden. The trait-like baseline carries an extra "penalty" for the quality of life that goes beyond mere day-to-day fluctuations.
 
 # Time trends of within- and between-effects
 
