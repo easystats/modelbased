@@ -8,12 +8,13 @@
 #' which to compute the contrasts, optionally including representative values or
 #' levels at which contrasts are evaluated (e.g., `contrast="x=c('a','b')"`).
 #' **Note:** It is also possible to contrast average slopes, i.e. `contrast` can
-#' be the name of two numeric predictors. In this case, it is not possible to
-#' "filter" at certain values of those predictors, which is possible otherwise.
-#' For contrasting slopes, the `comparison` will always be `"pairwise"`. It is
-#' possible to compute pairwise comparisons of two average slopes at the levels
-#' of the third variable, by also adding that variable to the `contrast`
-#' argument. See 'Examples'.
+#' be the name of two numeric predictors. However, while it is possible to filter
+#' data for one numeric contrast (e.g., `contrast = c("num_pred=c(0, 1, 3)")`,
+#' it is not possible to "filter" at certain values of predictors for two
+#' numeric predictor. For contrasting slopes, the `comparison` will always be
+#' `"pairwise"`. It is possible to compute pairwise comparisons of two average
+#' slopes at the levels of the third variable, by also adding that variable to
+#' the `contrast` argument. See 'Examples'.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
 #' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"sup-t"`,
