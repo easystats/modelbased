@@ -20,11 +20,6 @@ test_that("estimate_contrast, context effects, linear", {
   output <- capture.output(out)
   expect_identical(output[3], "Difference |   SE |       95% CI |     z |      p")
 
-  expect_error(
-    estimate_contrasts(m, c("bill_len_between=c(1,3)", "bill_len_within")),
-    regex = "Filtering predictions"
-  )
-
   m <- lm(bill_dep ~ year * (bill_len_between + bill_len_within), data = d)
   out <- estimate_contrasts(m, c("bill_len_between", "bill_len_within"), by = "year")
   expect_named(out, c("year", "Difference", "SE", "CI_low", "CI_high", "z", "p"))

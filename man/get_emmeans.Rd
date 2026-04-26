@@ -87,7 +87,14 @@ get_marginaltrends(
 
 \item{contrast}{A character vector indicating the name of the variable(s) for
 which to compute the contrasts, optionally including representative values or
-levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).}
+levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).
+\strong{Note:} It is also possible to contrast average slopes, i.e. \code{contrast} can
+be the name of two numeric predictors. In this case, it is not possible to
+"filter" at certain values of those predictors, which is possible otherwise.
+For contrasting slopes, the \code{comparison} will always be \code{"pairwise"}. It is
+possible to compute pairwise comparisons of two average slopes at the levels
+of the third variable, by also adding that variable to the \code{contrast}
+argument. See 'Examples'.}
 
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not

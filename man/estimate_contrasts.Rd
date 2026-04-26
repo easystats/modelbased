@@ -67,7 +67,14 @@ average predictions over the distribution of the offset (if appropriate).
 
 \item{contrast}{A character vector indicating the name of the variable(s) for
 which to compute the contrasts, optionally including representative values or
-levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).}
+levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).
+\strong{Note:} It is also possible to contrast average slopes, i.e. \code{contrast} can
+be the name of two numeric predictors. In this case, it is not possible to
+"filter" at certain values of those predictors, which is possible otherwise.
+For contrasting slopes, the \code{comparison} will always be \code{"pairwise"}. It is
+possible to compute pairwise comparisons of two average slopes at the levels
+of the third variable, by also adding that variable to the \code{contrast}
+argument. See 'Examples'.}
 
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
@@ -393,7 +400,7 @@ Examples for analysing inequalities are shown in the related
 \href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignette}.
 }
 
-\section{Context Effects}{
+\section{Context Effects - contrasting average slopes}{
 
 Calculating contrasts between average slopes can tell us about the
 "context" effects when modelling within- and between-effects. An example
@@ -412,7 +419,8 @@ pairwise comparisons of the difference of between within- and
 between-effects, or the difference of average slopes) at different levels
 of another variable are required, add that variable to the \code{contrast}
 argument instead, e.g. \code{contrast = c("x_within", "x_between", "groups")}.
-See also 'Examples'.
+Note that when average slopes are contrasted, the \code{comparison} argument has
+no effect and is always set to \code{"pairwise"}. See also 'Examples'.
 }
 
 \section{Effect Size}{

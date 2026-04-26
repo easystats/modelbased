@@ -306,14 +306,13 @@ get_marginalcontrasts <- function(
   # -----------------------------------------------------------------------
 
   # extract first focal term
-  cleaned_contrasts = gsub("=.*", "\\1", my_args$contrast)
-  first_focal <- cleaned_contrasts[1]
+  first_focal <- my_args$contrast[1]
 
   # extract second focal term - if we have two numeric focal terms, we
   # calculate "context" effects (the contrast of average slopes), see
   # .get_contexteffects()
-  if (length(cleaned_contrasts) > 1) {
-    second_focal <- cleaned_contrasts[2]
+  if (length(my_args$contrast) > 1) {
+    second_focal <- my_args$contrast[2]
   } else {
     second_focal <- NULL
   }
@@ -346,21 +345,14 @@ get_marginalcontrasts <- function(
       contrast_slopes &&
       !any(c("context", "context_pairwise") %in% comparison)
   ) {
-    # warn user when he wants to filter contrasts - this doesn't work for
-    # contrasting slopes
-    if (any(grepl("=", my_args$contrast, fixed = TRUE))) {
-      insight::format_error(
-        "Filtering predictions is not possible when average slopes should be contrasted. Please remove any `...=c()` filter from your `contrast` argument."
-      )
-    }
     # overwrite some of the previous arguments
     context_effects <- TRUE
     # if we have no "by" variable, user doesn't want to stratify, so set to
     # pairwise comparisons of categorical variable
-    if (is.null(my_args$by) && length(cleaned_contrasts) > 2) {
+    if (is.null(my_args$by) && length(my_args$contrast) > 2) {
       comparison <- "context_pairwise"
-      my_args$by <- cleaned_contrasts[3:length(cleaned_contrasts)]
-      my_args$contrast <- cleaned_contrasts[1:2]
+      my_args$by <- my_args$contrast[3:length(my_args$contrast)]
+      my_args$contrast <- my_args$contrast[1:2]
     } else {
       comparison <- "context"
     }

@@ -7,6 +7,13 @@
 #' @param contrast A character vector indicating the name of the variable(s) for
 #' which to compute the contrasts, optionally including representative values or
 #' levels at which contrasts are evaluated (e.g., `contrast="x=c('a','b')"`).
+#' **Note:** It is also possible to contrast average slopes, i.e. `contrast` can
+#' be the name of two numeric predictors. In this case, it is not possible to
+#' "filter" at certain values of those predictors, which is possible otherwise.
+#' For contrasting slopes, the `comparison` will always be `"pairwise"`. It is
+#' possible to compute pairwise comparisons of two average slopes at the levels
+#' of the third variable, by also adding that variable to the `contrast`
+#' argument. See 'Examples'.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
 #' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"sup-t"`,
@@ -144,7 +151,7 @@
 #' Examples for analysing inequalities are shown in the related
 #' [vignette](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
 #'
-#' @section Context Effects:
+#' @section Context Effects - contrasting average slopes:
 #' Calculating contrasts between average slopes can tell us about the
 #' "context" effects when modelling within- and between-effects. An example
 #' for within- and between effects is described
@@ -162,7 +169,8 @@
 #' between-effects, or the difference of average slopes) at different levels
 #' of another variable are required, add that variable to the `contrast`
 #' argument instead, e.g. `contrast = c("x_within", "x_between", "groups")`.
-#' See also 'Examples'.
+#' Note that when average slopes are contrasted, the `comparison` argument has
+#' no effect and is always set to `"pairwise"`. See also 'Examples'.
 #'
 #' @section Effect Size:
 #'
