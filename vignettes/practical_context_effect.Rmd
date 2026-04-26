@@ -14,7 +14,7 @@ editor_options:
 bibliography: bibliography.bib
 ---
 
-```{r , include=FALSE}
+```{r, include=FALSE}
 library(knitr)
 knitr::opts_chunk$set(
   echo = TRUE,
