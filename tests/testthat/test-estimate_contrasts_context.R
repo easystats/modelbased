@@ -47,6 +47,53 @@ test_that("estimate_contrast, context effects, linear", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+
+  m <- lm(bill_dep ~ sex * year * (bill_len_between + bill_len_within), data = d)
+  out <- estimate_contrasts(
+    m,
+    c("bill_len_between", "bill_len_within"),
+    by = c("sex", "year")
+  )
+  expect_identical(
+    capture.output(out),
+    c(
+      "Marginal Contrasts Analysis",
+      "",
+      "sex    | year | Difference |   SE |        95% CI |    z |      p",
+      "-----------------------------------------------------------------",
+      "female | 2007 |       0.28 | 0.08 | [ 0.12, 0.45] | 3.41 | < .001",
+      "female | 2008 |       0.26 | 0.06 | [ 0.15, 0.37] | 4.47 | < .001",
+      "female | 2009 |       0.24 | 0.10 | [ 0.05, 0.42] | 2.48 |  0.013",
+      "male   | 2007 |       0.46 | 0.10 | [ 0.26, 0.65] | 4.60 | < .001",
+      "male   | 2008 |       0.28 | 0.06 | [ 0.15, 0.40] | 4.41 | < .001",
+      "male   | 2009 |       0.10 | 0.10 | [-0.11, 0.30] | 0.93 |  0.355",
+      "",
+      "Variable predicted: bill_dep",
+      "Predictors contrasted: bill_len_between, bill_len_within",
+      "p-values are uncorrected."
+    )
+  )
+  out <- estimate_contrasts(
+    m,
+    c("bill_len_between", "bill_len_within", "sex"),
+    by = "year"
+  )
+  expect_identical(
+    capture.output(out),
+    c(
+      "Marginal Contrasts Analysis",
+      "",
+      "Level1 | Level2 | year | Difference |   SE |        95% CI |     z |     p",
+      "--------------------------------------------------------------------------",
+      "male   | female | 2007 |       0.17 | 0.13 | [-0.08, 0.43] |  1.33 | 0.183",
+      "male   | female | 2008 |       0.02 | 0.09 | [-0.15, 0.18] |  0.18 | 0.853",
+      "male   | female | 2009 |      -0.14 | 0.14 | [-0.42, 0.14] | -0.99 | 0.320",
+      "",
+      "Variable predicted: bill_dep",
+      "Predictors contrasted: bill_len_between, bill_len_within",
+      "p-values are uncorrected."
+    )
+  )
 })
 
 test_that("estimate_contrast, context effects, glm", {
