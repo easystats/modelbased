@@ -13,8 +13,16 @@
   # contrasts at each group level
   if (is.null(my_args$by)) {
     comparison <- stats::as.formula("~I(diff(x))")
+  } else if (length(my_args$by) > 2) {
+    # it is not possible to have more than two by-variables for now
+    insight::format_error(
+      "It is not possible to have more than two variables in `by` when calculating contrasts of slopes."
+    )
   } else {
-    comparison <- stats::as.formula(paste("~I(diff(x)) |", my_args$by))
+    comparison <- stats::as.formula(paste(
+      "~I(diff(x)) |",
+      paste(my_args$by, collapse = "+")
+    ))
   }
 
   # prepare arguments
@@ -47,10 +55,20 @@
 
   # pairwise comparison of context effects?
   if (identical(my_args$comparison, "context_pairwise")) {
-    # save original levels for formatting
-    original_levels <- .safe(out[[my_args$by]])
+    # if we have more than one by-variable, use the last one for stratification
+    stratify_by <- my_args$by[length(my_args$by)]
+    # save original levels from the contrast-variable for formatting
+    original_levels <- .safe(out[[my_args$by[1]]])
+    if (length(my_args$by) > 1) {
+      comparison <- stats::as.formula(paste(
+        "~pairwise |",
+        paste(stratify_by, collapse = "+")
+      ))
+    } else {
+      comparison <- ~pairwise
+    }
     # calculate pairwise comparisons
-    out <- marginaleffects::hypotheses(out, hypothesis = ~pairwise)
+    out <- marginaleffects::hypotheses(out, hypothesis = comparison)
     # format comparison levels. we first split the column with "b" parameter
     # names, like "(b1) - (b2)", into two columns. Then we remove the "b" and
     # just keep the number, which indicates the row.
@@ -68,8 +86,8 @@
       params$Level2 <- original_levels[params$Level2]
       # save attributes
       att <- attributes(out)
-      # remove old "by" column and bind new one back to output
-      out[[my_args$by]] <- NULL
+      # remove old "by" column and bind new one with the contrast-levels back to output
+      out[[my_args$by[1]]] <- NULL
       out <- cbind(params, out)
       # add back original attributes
       cn <- colnames(out)

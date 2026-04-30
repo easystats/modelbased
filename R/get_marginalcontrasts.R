@@ -358,11 +358,14 @@ get_marginalcontrasts <- function(
     }
     # overwrite some of the previous arguments
     context_effects <- TRUE
-    # if we have no "by" variable, user doesn't want to stratify, so set to
-    # pairwise comparisons of categorical variable
-    if (is.null(my_args$by) && length(my_args$contrast) > 2) {
+    if (length(my_args$contrast) > 2) {
+      # if we have more than just the slopes in "contrasts", the user wants to
+      # contrast by a second grouping variable - we want pairwise comparisons
       comparison <- "context_pairwise"
-      my_args$by <- my_args$contrast[3:length(my_args$contrast)]
+      original_by <- my_args$by <- c(
+        my_args$contrast[3:length(my_args$contrast)],
+        my_args$by
+      )
       my_args$contrast <- my_args$contrast[1:2]
     } else {
       comparison <- "context"
