@@ -420,6 +420,8 @@ pairwise comparisons of the difference of between within- and
 between-effects, or the difference of average slopes) at different levels
 of another variable are required, add that variable to the \code{contrast}
 argument instead, e.g. \code{contrast = c("x_within", "x_between", "factor")}.
+These contrasts can additionally be stratified by another variable using \code{by}
+again, e.g. \verb{contrast = c("x_within", "x_between", "factor1"), by = "factor2"}.
 Note that when average slopes are contrasted, the \code{comparison} argument has
 no effect and is always set to \code{"pairwise"}. See also 'Examples'.
 }
