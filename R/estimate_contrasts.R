@@ -331,11 +331,25 @@
 #' # at different levels of "time"
 #' estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
 #'
-#' # is the difference of the context effect between the time points
-#' # statistically significant? We want pairwise comparisons of contrasts
-#' # of slopes to calculate this (i.e. contrasts of average slopes at pairs
-#' # of levels of "time")
-#' estimate_contrasts(model, c("phq4_within", "phq4_between", "time"))
+#' # is the trend of the context effect across time points statistically
+#' # significant? In this case, we just want the contrasts of the overall
+#' # average slopes (not stratfied nor contrasted by time).
+#' estimate_contrasts(model, c("phq4_within", "phq4_between"))
+#'
+#' # now we ask whether contexts effects are different for different educational
+#' # levels. We now need to model a 3-way interaction between time, education
+#' # and the centered phq4 variables.
+#' model <- lme4::lmer(
+#'   QoL ~ time * education * (phq4_within + phq4_between) + (1 + time | ID),
+#'   data = qol_cancer
+#' )
+#'
+#' # how do time trends of context effects differ between education levels?
+#' estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "education")
+#'
+#' # are differences in time trends of context effects statistically significant
+#' # between education levels?
+#' estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
 #' }
 #'
 #' @return A data frame of estimated contrasts.
