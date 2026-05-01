@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -531,6 +531,8 @@ pairwise comparisons of the difference of between within- and
 between-effects, or the difference of average slopes) at different levels
 of another variable are required, add that variable to the <code>contrast</code>
 argument instead, e.g. <code>contrast = c("x_within", "x_between", "factor")</code>.
+These contrasts can additionally be stratified by another variable using <code>by</code>
+again, e.g. <code>contrast = c("x_within", "x_between", "factor1"), by = "factor2"</code>.
 Note that when average slopes are contrasted, the <code>comparison</code> argument has
 no effect and is always set to <code>"pairwise"</code>. See also 'Examples'.</p>
     </div>
