@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1060,18 +1060,54 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># is the difference of the context effect between the time points</span></span></span>
-<span class="r-in"><span><span class="co"># statistically significant? We want pairwise comparisons of contrasts</span></span></span>
-<span class="r-in"><span><span class="co"># of slopes to calculate this (i.e. contrasts of average slopes at pairs</span></span></span>
-<span class="r-in"><span><span class="co"># of levels of "time")</span></span></span>
-<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span>, <span class="st">"time"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># is the trend of the context effect across time points statistically</span></span></span>
+<span class="r-in"><span><span class="co"># significant? In this case, we just want the contrasts of the overall</span></span></span>
+<span class="r-in"><span><span class="co"># average slopes (not stratfied nor contrasted by time).</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | Difference |   SE |        95% CI |    z |     p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      |      1 |       0.81 | 0.74 | [-0.63, 2.25] | 1.11 | 0.269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      |      1 |       1.63 | 1.47 | [-1.26, 4.51] | 1.11 | 0.269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      |      2 |       0.81 | 0.74 | [-0.63, 2.25] | 1.11 | 0.269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Difference |   SE |       95% CI |    z |      p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.54       | 0.65 | [1.27, 3.81] | 3.93 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: phq4_within, phq4_between</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># now we ask whether contexts effects are different for different educational</span></span></span>
+<span class="r-in"><span><span class="co"># levels. We now need to model a 3-way interaction between time, education</span></span></span>
+<span class="r-in"><span><span class="co"># and the centered phq4 variables.</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="va">education</span> <span class="op">*</span> <span class="op">(</span><span class="va">phq4_within</span> <span class="op">+</span> <span class="va">phq4_between</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">qol_cancer</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># how do time trends of context effects differ between education levels?</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"education"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> education | Difference |   SE |        95% CI |     z |      p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> low       |       1.69 | 1.30 | [-0.85, 4.24] |  1.30 |  0.192</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid       |       3.92 | 0.87 | [ 2.21, 5.64] |  4.49 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high      |      -1.76 | 1.84 | [-5.36, 1.84] | -0.96 |  0.337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: phq4_within, phq4_between</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># are differences in time trends of context effects statistically significant</span></span></span>
+<span class="r-in"><span><span class="co"># between education levels?</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span>, <span class="st">"education"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | Difference |   SE |         95% CI |     z |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid    | low    |       2.23 | 1.57 | [-0.84,  5.30] |  1.42 | 0.154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high   | low    |      -3.46 | 2.25 | [-7.86,  0.95] | -1.54 | 0.124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high   | mid    |      -5.69 | 2.03 | [-9.67, -1.70] | -2.80 | 0.005</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: phq4_within, phq4_between</span></span>

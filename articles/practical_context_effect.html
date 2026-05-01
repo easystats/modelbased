@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -437,17 +437,156 @@ points from Time 1 to Time 2).</p>
 <p>However, looking at the statistics, we can see that none of the
 differences between the time points are statistically significant (all
 p-values = 0.183).</p>
+<p>This lack of significant differences between time points is not
+surprising, as our model assumes a <em>strictly linear time trend</em>.
+Under a linear assumption, the rate of change (the slope) is constrained
+to be constant from one time point to the next. These point-to-point
+comparisons would only differ if we had modeled time non-linearly (e.g.,
+by adding a quadratic term).</p>
+<p>Therefore, to test whether the context effect meaningfully changes
+over time in a linear model, it is more appropriate to evaluate the
+overall average contrast of the slopes across the entire study period.
+To do this, we calculate the contrast between the within- and
+between-effects without stratifying by time.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Difference |   SE |       95% CI |    z |      p</span></span>
+<span><span class="co">#&gt; ------------------------------------------------</span></span>
+<span><span class="co">#&gt; 2.31       | 0.66 | [1.01, 3.60] | 3.48 | &lt; .001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: QoL</span></span>
+<span><span class="co">#&gt; Predictors contrasted: phq4_within, phq4_between</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <p><strong>What does this mean practically?</strong></p>
-<p>Although our previous analysis showed the context effect becoming
-locally significant at Time 2 and Time 3, and descriptively appearing to
-grow, we do not have enough statistical evidence to claim that the
-context effect changes over time. The widening gap we observed is not
-robust enough to rule out random sampling variation.</p>
-<p>Therefore, the most accurate conclusion is that the “penalty” of
-having a chronically high baseline burden (the context effect) is
-consistently present across the later stages of the study, but its
-magnitude remains relatively stable rather than strictly worsening over
-time.</p>
+<p>The highly significant overall contrast (2.31, p &lt; .001) confirms
+that a substantial context effect is at play throughout the entire
+observation period.</p>
+<p>In clinical terms, while an acute, temporary spike in psychological
+symptoms (the within-effect) definitely harms a patient’s quality of
+life, carrying a chronically high baseline burden (the between-effect)
+takes a significantly heavier toll. A patient who generally suffers from
+high psychological distress faces an overarching “trait penalty” that
+consistently depresses their quality of life more severely than mere
+day-to-day fluctuations would suggest.</p>
+</div>
+<div class="section level2">
+<h2 id="trends-of-context-effects-across-educational-levels">Trends of Context Effects Across Educational Levels<a class="anchor" aria-label="anchor" href="#trends-of-context-effects-across-educational-levels"></a>
+</h2>
+<p>To explore whether socioeconomic factors influence these dynamics, we
+can test if the context effect varies across different educational
+backgrounds. A reasonable assumption might be that highly educated
+individuals possess more resources (cognitive, financial, or social) and
+thus cope better with psychological burden.</p>
+<p>To formally test this, we extend our model to include a three-way
+interaction between <code>time</code>, <code>education</code>, and our
+centered <code>phq4</code> variables.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mixed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span></span>
+<span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="va">education</span> <span class="op">*</span> <span class="op">(</span><span class="va">phq4_within</span> <span class="op">+</span> <span class="va">phq4_between</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">qol_cancer</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"education"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; education | Difference |   SE |        95% CI |     z |      p</span></span>
+<span><span class="co">#&gt; --------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; low       |       1.69 | 1.30 | [-0.85, 4.24] |  1.30 |  0.192</span></span>
+<span><span class="co">#&gt; mid       |       3.92 | 0.87 | [ 2.21, 5.64] |  4.49 | &lt; .001</span></span>
+<span><span class="co">#&gt; high      |      -1.76 | 1.84 | [-5.36, 1.84] | -0.96 |  0.337</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: QoL</span></span>
+<span><span class="co">#&gt; Predictors contrasted: phq4_within, phq4_between</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
+<p>The marginal contrasts analysis yields nuanced results that add an
+important layer to our understanding of the context effect:</p>
+<ul>
+<li>
+<em>Low Education:</em> The contrast (1.69) is not statistically
+significant (p = 0.192). For these patients, there is no meaningful
+difference between an acute symptom spike and a chronically high
+baseline. Both states depress their quality of life similarly.</li>
+<li>
+<em>Mid Education:</em> The contrast (3.92) is large and highly
+significant (p &lt; .001). This group actually drives the overall
+context effect we observed in the previous models. For middle-educated
+patients, a chronically high psychological burden carries a massive
+additional penalty compared to a temporary acute spike.</li>
+<li>
+<em>High Education:</em> Interestingly, the contrast reverses its
+sign (-1.76) but is not statistically significant (p = 0.337). This
+indicates that for highly educated patients, the context effect
+disappears entirely.</li>
+</ul>
+<p><strong>What does this mean practically?</strong></p>
+<p>The hypothesis that highly educated people “fare better” is supported
+here, but in a very specific, mechanistic way. While we would need to
+look at the main effects to see if their <em>absolute</em> Quality of
+Life is higher, this contrast analysis tells us how they
+<em>process</em> psychological burden.</p>
+<p>Highly educated patients appear to be buffered against the specific
+“chronic penalty”. For them, carrying a chronic baseline burden is no
+more destructive to their quality of life than experiencing an acute,
+temporary spike. They likely possess the resources needed to manage a
+chronic psychological load without letting it compound into an
+overarching environmental penalty.</p>
+<p>Conversely, the middle-educated group represents a highly vulnerable
+population regarding these dynamics. They suffer disproportionately from
+a chronically high baseline burden.</p>
+</div>
+<div class="section level2">
+<h2 id="are-the-trends-of-context-effects-significantly-different-between-groups">Are the Trends of Context Effects Significantly Different Between
+Groups?<a class="anchor" aria-label="anchor" href="#are-the-trends-of-context-effects-significantly-different-between-groups"></a>
+</h2>
+<p>In the previous step, we observed that the context effect seemed to
+be entirely driven by the middle-educated group, while highly educated
+patients appeared to be buffered against it. However, to rigorously test
+whether the size of the context effect is statistically different
+<em>between</em> these groups, we need to compute pairwise comparisons
+across the educational levels.</p>
+<p>We can do this by adding the grouping variable
+(<code>education</code>) as a third term to our contrast statement.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span>, <span class="st">"education"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |         95% CI |     z |     p</span></span>
+<span><span class="co">#&gt; --------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; mid    | low    |       2.23 | 1.57 | [-0.84,  5.30] |  1.42 | 0.154</span></span>
+<span><span class="co">#&gt; high   | low    |      -3.46 | 2.25 | [-7.86,  0.95] | -1.54 | 0.124</span></span>
+<span><span class="co">#&gt; high   | mid    |      -5.69 | 2.03 | [-9.67, -1.70] | -2.80 | 0.005</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: QoL</span></span>
+<span><span class="co">#&gt; Predictors contrasted: phq4_within, phq4_between</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
+<p>The output now displays the mathematical difference in the size of
+the context effect between two specific groups.</p>
+<ul>
+<li>
+<em>Mid vs. Low (p = 0.154) &amp; High vs. Low (p = 0.124):</em> The
+differences involving the low-education group are not statistically
+significant. The confidence intervals are quite wide, suggesting high
+variance or a smaller sample size within this specific intersection of
+the data.</li>
+<li>
+<em>High vs. Mid (Difference = -5.69, p = 0.005):</em> This is the
+crucial finding. The context effect for the highly educated group is
+significantly smaller (by 5.69 points) than for the middle-educated
+group.</li>
+</ul>
+<p><strong>What does this mean practically?</strong></p>
+<p>This pairwise comparison formally solidifies our previous suspicion:
+The buffering effect of higher education is statistically robust.</p>
+<p>It proves that the “chronic penalty” for long-term psychological
+burden does not hit everyone equally. The structural or psychological
+advantages possessed by the highly educated group (such as better access
+to support networks, financial stability, or coping resources) create a
+mathematically significant difference in how chronic distress is
+processed. Compared directly to the middle-educated tier—who bear the
+full weight of the context effect—highly educated patients are
+significantly better protected from the cumulative “wear and tear” of a
+chronically high baseline burden.</p>
 </div>
 <div class="section level2">
 <h2 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>

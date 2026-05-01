@@ -1090,18 +1090,54 @@ estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
 #> p-values are uncorrected.
 #> 
 
-# is the difference of the context effect between the time points
-# statistically significant? We want pairwise comparisons of contrasts
-# of slopes to calculate this (i.e. contrasts of average slopes at pairs
-# of levels of "time")
-estimate_contrasts(model, c("phq4_within", "phq4_between", "time"))
+# is the trend of the context effect across time points statistically
+# significant? In this case, we just want the contrasts of the overall
+# average slopes (not stratfied nor contrasted by time).
+estimate_contrasts(model, c("phq4_within", "phq4_between"))
 #> Marginal Contrasts Analysis
 #> 
-#> Level1 | Level2 | Difference |   SE |        95% CI |    z |     p
-#> ------------------------------------------------------------------
-#> 2      |      1 |       0.81 | 0.74 | [-0.63, 2.25] | 1.11 | 0.269
-#> 3      |      1 |       1.63 | 1.47 | [-1.26, 4.51] | 1.11 | 0.269
-#> 3      |      2 |       0.81 | 0.74 | [-0.63, 2.25] | 1.11 | 0.269
+#> Difference |   SE |       95% CI |    z |      p
+#> ------------------------------------------------
+#> 2.54       | 0.65 | [1.27, 3.81] | 3.93 | < .001
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: phq4_within, phq4_between
+#> p-values are uncorrected.
+#> 
+
+# now we ask whether contexts effects are different for different educational
+# levels. We now need to model a 3-way interaction between time, education
+# and the centered phq4 variables.
+model <- lme4::lmer(
+  QoL ~ time * education * (phq4_within + phq4_between) + (1 + time | ID),
+  data = qol_cancer
+)
+
+# how do time trends of context effects differ between education levels?
+estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "education")
+#> Marginal Contrasts Analysis
+#> 
+#> education | Difference |   SE |        95% CI |     z |      p
+#> --------------------------------------------------------------
+#> low       |       1.69 | 1.30 | [-0.85, 4.24] |  1.30 |  0.192
+#> mid       |       3.92 | 0.87 | [ 2.21, 5.64] |  4.49 | < .001
+#> high      |      -1.76 | 1.84 | [-5.36, 1.84] | -0.96 |  0.337
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: phq4_within, phq4_between
+#> p-values are uncorrected.
+#> 
+
+# are differences in time trends of context effects statistically significant
+# between education levels?
+estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
+#> Marginal Contrasts Analysis
+#> 
+#> Level1 | Level2 | Difference |   SE |         95% CI |     z |     p
+#> --------------------------------------------------------------------
+#> mid    | low    |       2.23 | 1.57 | [-0.84,  5.30] |  1.42 | 0.154
+#> high   | low    |      -3.46 | 2.25 | [-7.86,  0.95] | -1.54 | 0.124
+#> high   | mid    |      -5.69 | 2.03 | [-9.67, -1.70] | -2.80 | 0.005
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: phq4_within, phq4_between

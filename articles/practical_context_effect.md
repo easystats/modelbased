@@ -325,18 +325,169 @@ However, looking at the statistics, we can see that none of the
 differences between the time points are statistically significant (all
 p-values = 0.183).
 
+This lack of significant differences between time points is not
+surprising, as our model assumes a *strictly linear time trend*. Under a
+linear assumption, the rate of change (the slope) is constrained to be
+constant from one time point to the next. These point-to-point
+comparisons would only differ if we had modeled time non-linearly (e.g.,
+by adding a quadratic term).
+
+Therefore, to test whether the context effect meaningfully changes over
+time in a linear model, it is more appropriate to evaluate the overall
+average contrast of the slopes across the entire study period. To do
+this, we calculate the contrast between the within- and between-effects
+without stratifying by time.
+
+``` r
+
+estimate_contrasts(mixed, c("phq4_within", "phq4_between"))
+#> Marginal Contrasts Analysis
+#> 
+#> Difference |   SE |       95% CI |    z |      p
+#> ------------------------------------------------
+#> 2.31       | 0.66 | [1.01, 3.60] | 3.48 | < .001
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: phq4_within, phq4_between
+#> p-values are uncorrected.
+```
+
 **What does this mean practically?**
 
-Although our previous analysis showed the context effect becoming
-locally significant at Time 2 and Time 3, and descriptively appearing to
-grow, we do not have enough statistical evidence to claim that the
-context effect changes over time. The widening gap we observed is not
-robust enough to rule out random sampling variation.
+The highly significant overall contrast (2.31, p \< .001) confirms that
+a substantial context effect is at play throughout the entire
+observation period.
 
-Therefore, the most accurate conclusion is that the “penalty” of having
-a chronically high baseline burden (the context effect) is consistently
-present across the later stages of the study, but its magnitude remains
-relatively stable rather than strictly worsening over time.
+In clinical terms, while an acute, temporary spike in psychological
+symptoms (the within-effect) definitely harms a patient’s quality of
+life, carrying a chronically high baseline burden (the between-effect)
+takes a significantly heavier toll. A patient who generally suffers from
+high psychological distress faces an overarching “trait penalty” that
+consistently depresses their quality of life more severely than mere
+day-to-day fluctuations would suggest.
+
+## Trends of Context Effects Across Educational Levels
+
+To explore whether socioeconomic factors influence these dynamics, we
+can test if the context effect varies across different educational
+backgrounds. A reasonable assumption might be that highly educated
+individuals possess more resources (cognitive, financial, or social) and
+thus cope better with psychological burden.
+
+To formally test this, we extend our model to include a three-way
+interaction between `time`, `education`, and our centered `phq4`
+variables.
+
+``` r
+
+mixed <- lmer(
+  QoL ~ time * education * (phq4_within + phq4_between) + (1 + time | ID),
+  data = qol_cancer
+)
+estimate_contrasts(mixed, c("phq4_within", "phq4_between"), by = "education")
+#> Marginal Contrasts Analysis
+#> 
+#> education | Difference |   SE |        95% CI |     z |      p
+#> --------------------------------------------------------------
+#> low       |       1.69 | 1.30 | [-0.85, 4.24] |  1.30 |  0.192
+#> mid       |       3.92 | 0.87 | [ 2.21, 5.64] |  4.49 | < .001
+#> high      |      -1.76 | 1.84 | [-5.36, 1.84] | -0.96 |  0.337
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: phq4_within, phq4_between
+#> p-values are uncorrected.
+```
+
+The marginal contrasts analysis yields nuanced results that add an
+important layer to our understanding of the context effect:
+
+- *Low Education:* The contrast (1.69) is not statistically significant
+  (p = 0.192). For these patients, there is no meaningful difference
+  between an acute symptom spike and a chronically high baseline. Both
+  states depress their quality of life similarly.
+- *Mid Education:* The contrast (3.92) is large and highly significant
+  (p \< .001). This group actually drives the overall context effect we
+  observed in the previous models. For middle-educated patients, a
+  chronically high psychological burden carries a massive additional
+  penalty compared to a temporary acute spike.
+- *High Education:* Interestingly, the contrast reverses its sign
+  (-1.76) but is not statistically significant (p = 0.337). This
+  indicates that for highly educated patients, the context effect
+  disappears entirely.
+
+**What does this mean practically?**
+
+The hypothesis that highly educated people “fare better” is supported
+here, but in a very specific, mechanistic way. While we would need to
+look at the main effects to see if their *absolute* Quality of Life is
+higher, this contrast analysis tells us how they *process* psychological
+burden.
+
+Highly educated patients appear to be buffered against the specific
+“chronic penalty”. For them, carrying a chronic baseline burden is no
+more destructive to their quality of life than experiencing an acute,
+temporary spike. They likely possess the resources needed to manage a
+chronic psychological load without letting it compound into an
+overarching environmental penalty.
+
+Conversely, the middle-educated group represents a highly vulnerable
+population regarding these dynamics. They suffer disproportionately from
+a chronically high baseline burden.
+
+## Are the Trends of Context Effects Significantly Different Between Groups?
+
+In the previous step, we observed that the context effect seemed to be
+entirely driven by the middle-educated group, while highly educated
+patients appeared to be buffered against it. However, to rigorously test
+whether the size of the context effect is statistically different
+*between* these groups, we need to compute pairwise comparisons across
+the educational levels.
+
+We can do this by adding the grouping variable (`education`) as a third
+term to our contrast statement.
+
+``` r
+
+estimate_contrasts(mixed, c("phq4_within", "phq4_between", "education"))
+#> Marginal Contrasts Analysis
+#> 
+#> Level1 | Level2 | Difference |   SE |         95% CI |     z |     p
+#> --------------------------------------------------------------------
+#> mid    | low    |       2.23 | 1.57 | [-0.84,  5.30] |  1.42 | 0.154
+#> high   | low    |      -3.46 | 2.25 | [-7.86,  0.95] | -1.54 | 0.124
+#> high   | mid    |      -5.69 | 2.03 | [-9.67, -1.70] | -2.80 | 0.005
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: phq4_within, phq4_between
+#> p-values are uncorrected.
+```
+
+The output now displays the mathematical difference in the size of the
+context effect between two specific groups.
+
+- *Mid vs. Low (p = 0.154) & High vs. Low (p = 0.124):* The differences
+  involving the low-education group are not statistically significant.
+  The confidence intervals are quite wide, suggesting high variance or a
+  smaller sample size within this specific intersection of the data.
+- *High vs. Mid (Difference = -5.69, p = 0.005):* This is the crucial
+  finding. The context effect for the highly educated group is
+  significantly smaller (by 5.69 points) than for the middle-educated
+  group.
+
+**What does this mean practically?**
+
+This pairwise comparison formally solidifies our previous suspicion: The
+buffering effect of higher education is statistically robust.
+
+It proves that the “chronic penalty” for long-term psychological burden
+does not hit everyone equally. The structural or psychological
+advantages possessed by the highly educated group (such as better access
+to support networks, financial stability, or coping resources) create a
+mathematically significant difference in how chronic distress is
+processed. Compared directly to the middle-educated tier—who bear the
+full weight of the context effect—highly educated patients are
+significantly better protected from the cumulative “wear and tear” of a
+chronically high baseline burden.
 
 ## Disclaimer
 
