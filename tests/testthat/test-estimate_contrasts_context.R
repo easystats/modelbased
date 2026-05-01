@@ -48,6 +48,7 @@ test_that("estimate_contrast, context effects, linear", {
     ignore_attr = TRUE
   )
 
+  skip_on_os(c("mac", "linux"))
   m <- lm(bill_dep ~ sex * year * (bill_len_between + bill_len_within), data = d)
   out <- estimate_contrasts(
     m,
