@@ -113,7 +113,8 @@ To test whether the within- and between-effects are significantly different from
 
 ```{r}
 library(modelbased)
-estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |> display(format = "tt")
+estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |>
+  display(format = "tt")
 ```
 
 The output shows a significant contrast of 2.41 between the within- and between-effects. Since the between-effect in our model (-6.13) is stronger (more negative) than the within-effect (-3.72), the context-effect (Between minus Within) is -2.41.
@@ -211,7 +212,8 @@ This uniformity is a direct mathematical consequence of our model assuming a *st
 Because a linear model yields constant step-by-step changes, testing these identical individual intervals is often less informative. To test whether the context effect meaningfully changes over time overall, it is more appropriate to evaluate the average contrast of the slopes across the entire study period. To do this, we calculate the contrast between the within- and between-effects without stratifying by time.
 
 ```{r}
-estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |> display(format = "tt")
+estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |>
+  display(format = "tt")
 ```
 
 **What does this mean practically?**
