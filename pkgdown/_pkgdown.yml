@@ -89,6 +89,8 @@ navbar:
           href: articles/practical_inequalities.html
         - text: "Context Effects: How the Environment Shapes the Individual"
           href: articles/practical_context_effect.html
+        - text: "Context Effects Table test"
+          href: articles/practical_context_effect2.html
         - text: "Interrupted Time Series Analysis"
           href: articles/practical_its.html
         - text: "An Introduction to Growth Mixture Models"
