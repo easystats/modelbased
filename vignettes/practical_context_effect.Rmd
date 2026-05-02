@@ -44,6 +44,8 @@ The context effect describes the additional influence that a broader environment
 
 To understand the underlying problem of heterogeneity bias, demeaning (person-mean centering), and within/between effects in more detail, it is highly recommended to [read this vignette first](https://easystats.github.io/parameters/articles/demean.html).
 
+> **Note:** Throughout this example, we use `display(format = "tt")` to display table output in markdown format, using the **tinytable** package as the backend. See [this vignette](https://easystats.github.io/insight/articles/display.html#displaying-tables-with-display) for more details on output displays.
+
 # Sample data used in this vignette
 
 ```{r}
@@ -63,7 +65,8 @@ data("qol_cancer")
 To calculate the within- and between-effects, we perform a special way of centering variables called [*demeaning*](https://easystats.github.io/datawizard/reference/demean.html). This "separates" the within-effect from a between-effect of a predictor.
 
 ```{r}
-qol_cancer <- datawizard::demean(qol_cancer, select = c("phq4", "QoL"), by = "ID")
+library(datawizard)
+qol_cancer <- demean(qol_cancer, select = c("phq4", "QoL"), by = "ID")
 ```
 
 Now we have:
@@ -85,7 +88,7 @@ mixed <- lmer(
 )
 # effects = "fixed" will not display random effects, but split the
 # fixed effects into its between- and within-effects components.
-model_parameters(mixed, effects = "fixed")
+model_parameters(mixed, effects = "fixed") |> display(format = "tt")
 ```
 
 Looking at the fixed effects output for the `phq4` (Patient Health Questionnaire) variable, we can interpret the coefficients as follows:
@@ -110,7 +113,8 @@ To test whether the within- and between-effects are significantly different from
 
 ```{r}
 library(modelbased)
-estimate_contrasts(mixed, c("phq4_within", "phq4_between"))
+estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |>
+  display(format = "tt")
 ```
 
 The output shows a significant contrast of 2.41 between the within- and between-effects. Since the between-effect in our model (-6.13) is stronger (more negative) than the within-effect (-3.72), the context-effect (Between minus Within) is -2.41.
@@ -128,7 +132,7 @@ mixed <- lmer(
   QoL ~ time * (phq4_within + phq4_between) + education + (1 + time | ID),
   data = qol_cancer
 )
-model_parameters(mixed, effects = "fixed")
+model_parameters(mixed, effects = "fixed") |> display(format = "tt")
 ```
 
 The results table now shows us whether time has a moderating influence on our effects. To see this, we look at the two interaction terms at the bottom of the table:
@@ -159,9 +163,9 @@ Before calculating the context effect directly, it is helpful to first look at t
 
 ```{r}
 # average marginal effect of within-effect at each time point
-estimate_slopes(mixed, "phq4_within", by = "time")
+estimate_slopes(mixed, "phq4_within", by = "time") |> display(format = "tt")
 # average marginal effect of between-effect at each time point
-estimate_slopes(mixed, "phq4_between", by = "time")
+estimate_slopes(mixed, "phq4_between", by = "time") |> display(format = "tt")
 ```
 
 Looking at these separate slopes reveals two opposing trends. The acute impact of a temporary symptom spike (`phq4_within`) slightly decreases in magnitude over time (shifting from -4.04 at Time 1 to -3.39 at Time 3). Conversely, the detrimental impact of a chronically high baseline burden (`phq4_between`) becomes progressively more severe, worsening from -5.36 to -6.68.
@@ -169,7 +173,12 @@ Looking at these separate slopes reveals two opposing trends. The acute impact o
 Because these two effects drift further apart over time, we can now formally test their difference &mdash; the context effect &mdash; by calculating the marginal contrasts at each specific time point.
 
 ```{r}
-estimate_contrasts(mixed, c("phq4_within", "phq4_between"), by = "time")
+estimate_contrasts(
+  mixed,
+  c("phq4_within", "phq4_between"),
+  by = "time"
+) |>
+  display(format = "tt")
 ```
 
 The contrast analysis reveals a clear and interesting trajectory: the context effect grows substantially stronger as time progresses.
@@ -187,7 +196,11 @@ Over time, having a chronically high baseline of psychological symptoms (the tra
 While the previous table showed the context effect at each specific time point, we also need to formally test whether the change in this effect over time is statistically significant. We can do this by computing pairwise comparisons of the context effect across the different time points.
 
 ```{r}
-estimate_contrasts(mixed, c("phq4_within", "phq4_between", "time"))
+estimate_contrasts(
+  mixed,
+  c("phq4_within", "phq4_between", "time")
+) |>
+  display(format = "tt")
 ```
 
 This pairwise comparison table adds a crucial statistical caveat to our visual and descriptive observations. The Difference column here represents the mathematical change in the size of the context effect between two specific time points (e.g., the context effect grew by 0.99 points from Time 1 to Time 2).
@@ -199,7 +212,8 @@ This uniformity is a direct mathematical consequence of our model assuming a *st
 Because a linear model yields constant step-by-step changes, testing these identical individual intervals is often less informative. To test whether the context effect meaningfully changes over time overall, it is more appropriate to evaluate the average contrast of the slopes across the entire study period. To do this, we calculate the contrast between the within- and between-effects without stratifying by time.
 
 ```{r}
-estimate_contrasts(mixed, c("phq4_within", "phq4_between"))
+estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |>
+  display(format = "tt")
 ```
 
 **What does this mean practically?**
@@ -219,7 +233,12 @@ mixed <- lmer(
   QoL ~ time * education * (phq4_within + phq4_between) + (1 + time | ID),
   data = qol_cancer
 )
-estimate_contrasts(mixed, c("phq4_within", "phq4_between"), by = "education")
+estimate_contrasts(
+  mixed,
+  c("phq4_within", "phq4_between"),
+  by = "education"
+) |>
+  display(format = "tt")
 ```
 
 The marginal contrasts analysis yields nuanced results that add an important layer to our understanding of the context effect:
@@ -243,7 +262,11 @@ In the previous step, we observed that the context effect seemed to be entirely 
 We can do this by adding the grouping variable (`education`) as a third term to our contrast statement.
 
 ```{r}
-estimate_contrasts(mixed, c("phq4_within", "phq4_between", "education"))
+estimate_contrasts(
+  mixed,
+  c("phq4_within", "phq4_between", "education")
+) |>
+  display(format = "tt")
 ```
 
 The output now displays the mathematical difference in the size of the context effect between two specific groups.
