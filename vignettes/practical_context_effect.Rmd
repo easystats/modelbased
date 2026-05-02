@@ -153,7 +153,22 @@ In the second plot (*between-effects over time*), a slight divergence of the lin
 
 # Time trends of context effects
 
-Finally, we might ask whether the context effect itself - the difference between the within- and between-effects - is stable, or if the "penalty" of a high baseline burden changes over the course of the study. We can examine this by calculating the marginal contrasts at each specific time point.
+Finally, we might ask whether the context effect itself - the difference between the within- and between-effects - is stable, or if the "penalty" of a high baseline burden changes over the course of the study.
+
+Before calculating the context effect directly, it is helpful to first look at the marginal effects (slopes) of both the within- and between-components separately at each time point. This helps us understand the underlying dynamics.
+
+```{r}
+# average marginal effect of within-effect at each time point
+estimate_slopes(mixed, "phq4_within", by = "time")
+# average marginal effect of between-effect at each time point
+estimate_slopes(mixed, "phq4_between", by = "time")
+```
+
+Looking at these separate slopes reveals two opposing trends. The acute impact of a temporary symptom spike (`phq4_within`) slightly decreases in magnitude over time (shifting from -4.04 at Time 1 to -3.39 at Time 3). Conversely, the detrimental impact of a chronically high baseline burden (`phq4_between`) becomes progressively more severe, worsening from -5.36 to -6.68.
+
+Because these two effects drift further apart over time, we can now formally test their difference &mdash; the context effect &mdash; by calculating the marginal contrasts at each specific time point.
+
+ Next, we can examine the context effect by calculating the marginal contrasts at each specific time point.
 
 ```{r}
 estimate_contrasts(mixed, c("phq4_within", "phq4_between"), by = "time")
