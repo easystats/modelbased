@@ -247,9 +247,51 @@ line) stagnates at a lower level or even drops minimally.
 
 Finally, we might ask whether the context effect itself - the difference
 between the within- and between-effects - is stable, or if the “penalty”
-of a high baseline burden changes over the course of the study. We can
-examine this by calculating the marginal contrasts at each specific time
-point.
+of a high baseline burden changes over the course of the study.
+
+Before calculating the context effect directly, it is helpful to first
+look at the marginal effects (slopes) of both the within- and
+between-components separately at each time point. This helps us
+understand the underlying dynamics.
+
+``` r
+
+# average marginal effect of within-effect at each time point
+estimate_slopes(mixed, "phq4_within", by = "time")
+#> Estimated Marginal Effects
+#> 
+#> time | Slope |   SE |         95% CI | t(552) |      p
+#> ------------------------------------------------------
+#> 1    | -4.04 | 0.70 | [-5.42, -2.66] |  -5.77 | < .001
+#> 2    | -3.71 | 0.41 | [-4.52, -2.91] |  -9.07 | < .001
+#> 3    | -3.39 | 0.76 | [-4.89, -1.88] |  -4.43 | < .001
+#> 
+#> Marginal effects estimated for phq4_within
+#> Type of slope was dY/dX
+# average marginal effect of between-effect at each time point
+estimate_slopes(mixed, "phq4_between", by = "time")
+#> Estimated Marginal Effects
+#> 
+#> time | Slope |   SE |         95% CI | t(552) |      p
+#> ------------------------------------------------------
+#> 1    | -5.36 | 0.68 | [-6.69, -4.03] |  -7.92 | < .001
+#> 2    | -6.02 | 0.52 | [-7.04, -4.99] | -11.52 | < .001
+#> 3    | -6.68 | 0.60 | [-7.87, -5.49] | -11.05 | < .001
+#> 
+#> Marginal effects estimated for phq4_between
+#> Type of slope was dY/dX
+```
+
+Looking at these separate slopes reveals two opposing trends. The acute
+impact of a temporary symptom spike (`phq4_within`) slightly decreases
+in magnitude over time (shifting from -4.04 at Time 1 to -3.39 at Time
+3). Conversely, the detrimental impact of a chronically high baseline
+burden (`phq4_between`) becomes progressively more severe, worsening
+from -5.36 to -6.68.
+
+Because these two effects drift further apart over time, we can now
+formally test their difference — the context effect — by calculating the
+marginal contrasts at each specific time point.
 
 ``` r
 

@@ -370,9 +370,46 @@ over time, the quality of life for patients with a generally high burden
 <p>Finally, we might ask whether the context effect itself - the
 difference between the within- and between-effects - is stable, or if
 the “penalty” of a high baseline burden changes over the course of the
-study. We can examine this by calculating the marginal contrasts at each
-specific time point.</p>
+study.</p>
+<p>Before calculating the context effect directly, it is helpful to
+first look at the marginal effects (slopes) of both the within- and
+between-components separately at each time point. This helps us
+understand the underlying dynamics.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># average marginal effect of within-effect at each time point</span></span>
+<span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="st">"phq4_within"</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Estimated Marginal Effects</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; time | Slope |   SE |         95% CI | t(552) |      p</span></span>
+<span><span class="co">#&gt; ------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 1    | -4.04 | 0.70 | [-5.42, -2.66] |  -5.77 | &lt; .001</span></span>
+<span><span class="co">#&gt; 2    | -3.71 | 0.41 | [-4.52, -2.91] |  -9.07 | &lt; .001</span></span>
+<span><span class="co">#&gt; 3    | -3.39 | 0.76 | [-4.89, -1.88] |  -4.43 | &lt; .001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Marginal effects estimated for phq4_within</span></span>
+<span><span class="co">#&gt; Type of slope was dY/dX</span></span>
+<span><span class="co"># average marginal effect of between-effect at each time point</span></span>
+<span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="st">"phq4_between"</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Estimated Marginal Effects</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; time | Slope |   SE |         95% CI | t(552) |      p</span></span>
+<span><span class="co">#&gt; ------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 1    | -5.36 | 0.68 | [-6.69, -4.03] |  -7.92 | &lt; .001</span></span>
+<span><span class="co">#&gt; 2    | -6.02 | 0.52 | [-7.04, -4.99] | -11.52 | &lt; .001</span></span>
+<span><span class="co">#&gt; 3    | -6.68 | 0.60 | [-7.87, -5.49] | -11.05 | &lt; .001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Marginal effects estimated for phq4_between</span></span>
+<span><span class="co">#&gt; Type of slope was dY/dX</span></span></code></pre></div>
+<p>Looking at these separate slopes reveals two opposing trends. The
+acute impact of a temporary symptom spike (<code>phq4_within</code>)
+slightly decreases in magnitude over time (shifting from -4.04 at Time 1
+to -3.39 at Time 3). Conversely, the detrimental impact of a chronically
+high baseline burden (<code>phq4_between</code>) becomes progressively
+more severe, worsening from -5.36 to -6.68.</p>
+<p>Because these two effects drift further apart over time, we can now
+formally test their difference — the context effect — by calculating the
+marginal contrasts at each specific time point.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -416,7 +453,7 @@ time point, we also need to formally test whether the change in this
 effect over time is statistically significant. We can do this by
 computing pairwise comparisons of the context effect across the
 different time points.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span>, <span class="st">"time"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -451,7 +488,7 @@ whether the context effect meaningfully changes over time overall, it is
 more appropriate to evaluate the average contrast of the slopes across
 the entire study period. To do this, we calculate the contrast between
 the within- and between-effects without stratifying by time.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -485,7 +522,7 @@ thus cope better with psychological burden.</p>
 <p>To formally test this, we extend our model to include a three-way
 interaction between <code>time</code>, <code>education</code>, and our
 centered <code>phq4</code> variables.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mixed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span></span>
 <span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="va">education</span> <span class="op">*</span> <span class="op">(</span><span class="va">phq4_within</span> <span class="op">+</span> <span class="va">phq4_between</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">qol_cancer</span></span>
@@ -550,7 +587,7 @@ whether the size of the context effect is statistically different
 across the educational levels.</p>
 <p>We can do this by adding the grouping variable
 (<code>education</code>) as a third term to our contrast statement.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span>, <span class="st">"education"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
