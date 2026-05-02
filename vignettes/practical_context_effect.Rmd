@@ -168,8 +168,6 @@ Looking at these separate slopes reveals two opposing trends. The acute impact o
 
 Because these two effects drift further apart over time, we can now formally test their difference &mdash; the context effect &mdash; by calculating the marginal contrasts at each specific time point.
 
- Next, we can examine the context effect by calculating the marginal contrasts at each specific time point.
-
 ```{r}
 estimate_contrasts(mixed, c("phq4_within", "phq4_between"), by = "time")
 ```
