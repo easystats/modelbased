@@ -21,14 +21,13 @@ articles:
   plotting: plotting.html
   practical_causality: practical_causality.html
   practical_context_effect: practical_context_effect.html
-  practical_context_effect2: practical_context_effect2.html
   practical_growthmixture: practical_growthmixture.html
   practical_inequalities: practical_inequalities.html
   practical_intersectionality: practical_intersectionality.html
   practical_its: practical_its.html
   visualisation_matrix: visualisation_matrix.html
   workflow_modelbased: workflow_modelbased.html
-last_built: 2026-05-02T12:00Z
+last_built: 2026-05-02T12:13Z
 urls:
   reference: https://easystats.github.io/modelbased/reference
   article: https://easystats.github.io/modelbased/articles
