@@ -44,6 +44,8 @@ The context effect describes the additional influence that a broader environment
 
 To understand the underlying problem of heterogeneity bias, demeaning (person-mean centering), and within/between effects in more detail, it is highly recommended to [read this vignette first](https://easystats.github.io/parameters/articles/demean.html).
 
+> **Note:** Throughout this example, we use `display(format = "tt")` to display table output in markdown format, using the **tinytable** package as the backend. See [this vignette](https://easystats.github.io/insight/articles/display.html#displaying-tables-with-display) for more details on output displays.
+
 # Sample data used in this vignette
 
 ```{r}
