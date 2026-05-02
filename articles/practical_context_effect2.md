@@ -46,7 +46,8 @@ This “separates” the within-effect from a between-effect of a predictor.
 
 ``` r
 
-qol_cancer <- datawizard::demean(qol_cancer, select = c("phq4", "QoL"), by = "ID")
+library(datawizard)
+qol_cancer <- demean(qol_cancer, select = c("phq4", "QoL"), by = "ID")
 ```
 
 Now we have:
@@ -70,19 +71,21 @@ mixed <- lmer(
 )
 # effects = "fixed" will not display random effects, but split the
 # fixed effects into its between- and within-effects components.
-model_parameters(mixed, effects = "fixed") |> display()
+model_parameters(mixed, effects = "fixed") |> display(format = "tt")
 ```
 
-| Parameter        | Coefficient |  SE  |     95% CI     | t(554) |    p    |
-|:-----------------|:-----------:|:----:|:--------------:|:------:|:-------:|
-| (Intercept)      |    67.36    | 2.48 | (62.48, 72.23) | 27.15  | \< .001 |
-| time             |    1.09     | 0.66 | (-0.21, 2.39)  |  1.65  |  0.099  |
-| phq4 within      |    -3.72    | 0.41 | (-4.52, -2.92) | -9.10  | \< .001 |
-| phq4 between     |    -6.13    | 0.52 | (-7.14, -5.11) | -11.84 | \< .001 |
-| education (mid)  |    5.01     | 2.35 |  (0.40, 9.62)  |  2.14  |  0.033  |
-| education (high) |    5.52     | 2.75 | (0.11, 10.93)  |  2.00  |  0.046  |
+| Parameter        | Coefficient | SE   | 95% CI         | t(554) | p       |
+|------------------|-------------|------|----------------|--------|---------|
+| (Intercept)      | 67.36       | 2.48 | (62.48, 72.23) | 27.15  | \< .001 |
+| time             | 1.09        | 0.66 | (-0.21, 2.39)  | 1.65   | 0.099   |
+| phq4 within      | -3.72       | 0.41 | (-4.52, -2.92) | -9.10  | \< .001 |
+| phq4 between     | -6.13       | 0.52 | (-7.14, -5.11) | -11.84 | \< .001 |
+| education (mid)  | 5.01        | 2.35 | (0.40, 9.62)   | 2.14   | 0.033   |
+| education (high) | 5.52        | 2.75 | (0.11, 10.93)  | 2.00   | 0.046   |
 
-Fixed Effects {.table}
+Model Summary {#tinytable_5y9p9f3cy8vuib7ty05p .table .tinytable
+style="width: auto; margin-left: auto; margin-right: auto;"
+quarto-disable-processing="true"}
 
 Looking at the fixed effects output for the `phq4` (Patient Health
 Questionnaire) variable, we can interpret the coefficients as follows:
@@ -138,17 +141,14 @@ different from each other, we can estimate their contrast:
 ``` r
 
 library(modelbased)
-estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |> display()
+estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |> display(format = "tt")
 ```
 
-| Difference |   SE |       95% CI |    z |       p |
-|:-----------|-----:|-------------:|-----:|--------:|
-| 2.41       | 0.66 | (1.12, 3.70) | 3.66 | \< .001 |
+[TABLE]
 
-Marginal Contrasts Analysis {.table}
-
-*Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.*
+Marginal Contrasts Analysis {#tinytable_8ekkl354istvx52htw4c .table
+.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+quarto-disable-processing="true"}
 
 The output shows a significant contrast of 2.41 between the within- and
 between-effects. Since the between-effect in our model (-6.13) is
@@ -180,21 +180,23 @@ mixed <- lmer(
   QoL ~ time * (phq4_within + phq4_between) + education + (1 + time | ID),
   data = qol_cancer
 )
-model_parameters(mixed, effects = "fixed") |> display()
+model_parameters(mixed, effects = "fixed") |> display(format = "tt")
 ```
 
-| Parameter           | Coefficient |  SE  |     95% CI     | t(552) |    p    |
-|:--------------------|:-----------:|:----:|:--------------:|:------:|:-------:|
-| (Intercept)         |    67.33    | 2.49 | (62.43, 72.23) | 26.99  | \< .001 |
-| time                |    1.04     | 0.66 | (-0.25, 2.33)  |  1.58  |  0.114  |
-| phq4 within         |    -4.37    | 1.25 | (-6.81, -1.92) | -3.50  | \< .001 |
-| phq4 between        |    -4.70    | 0.96 | (-6.58, -2.82) | -4.90  | \< .001 |
-| education (mid)     |    5.19     | 2.38 |  (0.52, 9.87)  |  2.18  |  0.029  |
-| education (high)    |    5.61     | 2.76 | (0.18, 11.04)  |  2.03  |  0.043  |
-| time × phq4 within  |    0.33     | 0.61 | (-0.87, 1.52)  |  0.54  |  0.592  |
-| time × phq4 between |    -0.66    | 0.37 | (-1.39, 0.07)  | -1.77  |  0.077  |
+| Parameter           | Coefficient | SE   | 95% CI         | t(552) | p       |
+|---------------------|-------------|------|----------------|--------|---------|
+| (Intercept)         | 67.33       | 2.49 | (62.43, 72.23) | 26.99  | \< .001 |
+| time                | 1.04        | 0.66 | (-0.25, 2.33)  | 1.58   | 0.114   |
+| phq4 within         | -4.37       | 1.25 | (-6.81, -1.92) | -3.50  | \< .001 |
+| phq4 between        | -4.70       | 0.96 | (-6.58, -2.82) | -4.90  | \< .001 |
+| education (mid)     | 5.19        | 2.38 | (0.52, 9.87)   | 2.18   | 0.029   |
+| education (high)    | 5.61        | 2.76 | (0.18, 11.04)  | 2.03   | 0.043   |
+| time × phq4 within  | 0.33        | 0.61 | (-0.87, 1.52)  | 0.54   | 0.592   |
+| time × phq4 between | -0.66       | 0.37 | (-1.39, 0.07)  | -1.77  | 0.077   |
 
-Fixed Effects {.table}
+Model Summary {#tinytable_owgxjdse3ee8szwh88fn .table .tinytable
+style="width: auto; margin-left: auto; margin-right: auto;"
+quarto-disable-processing="true"}
 
 The results table now shows us whether time has a moderating influence
 on our effects. To see this, we look at the two interaction terms at the
@@ -259,35 +261,26 @@ understand the underlying dynamics.
 ``` r
 
 # average marginal effect of within-effect at each time point
-estimate_slopes(mixed, "phq4_within", by = "time") |> display()
+estimate_slopes(mixed, "phq4_within", by = "time") |> display(format = "tt")
 ```
 
-| time | Slope |   SE |         95% CI | t(552) |       p |
-|:-----|------:|-----:|---------------:|-------:|--------:|
-| 1    | -4.04 | 0.70 | (-5.42, -2.66) |  -5.77 | \< .001 |
-| 2    | -3.71 | 0.41 | (-4.52, -2.91) |  -9.07 | \< .001 |
-| 3    | -3.39 | 0.76 | (-4.89, -1.88) |  -4.43 | \< .001 |
+[TABLE]
 
-Estimated Marginal Effects {.table}
-
-*Marginal effects estimated for phq4_within; Type of slope was dY/dX*
+Estimated Marginal Effects {#tinytable_e515lf5an0r6ki5nus7b .table
+.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+quarto-disable-processing="true"}
 
 ``` r
 
-
 # average marginal effect of between-effect at each time point
-estimate_slopes(mixed, "phq4_between", by = "time") |> display()
+estimate_slopes(mixed, "phq4_between", by = "time") |> display(format = "tt")
 ```
 
-| time | Slope |   SE |         95% CI | t(552) |       p |
-|:-----|------:|-----:|---------------:|-------:|--------:|
-| 1    | -5.36 | 0.68 | (-6.69, -4.03) |  -7.92 | \< .001 |
-| 2    | -6.02 | 0.52 | (-7.04, -4.99) | -11.52 | \< .001 |
-| 3    | -6.68 | 0.60 | (-7.87, -5.49) | -11.05 | \< .001 |
+[TABLE]
 
-Estimated Marginal Effects {.table}
-
-*Marginal effects estimated for phq4_between; Type of slope was dY/dX*
+Estimated Marginal Effects {#tinytable_4ruzykjx4c9d9hk120z9 .table
+.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+quarto-disable-processing="true"}
 
 Looking at these separate slopes reveals two opposing trends. The acute
 impact of a temporary symptom spike (`phq4_within`) slightly decreases
@@ -307,19 +300,14 @@ estimate_contrasts(
   c("phq4_within", "phq4_between"),
   by = "time"
 ) |>
-  display()
+  display(format = "tt")
 ```
 
-| time | Difference |   SE |        95% CI |    z |       p |
-|:-----|-----------:|-----:|--------------:|-----:|--------:|
-| 1    |       1.32 | 1.00 | (-0.65, 3.28) | 1.32 |   0.188 |
-| 2    |       2.31 | 0.66 | ( 1.01, 3.60) | 3.48 | \< .001 |
-| 3    |       3.29 | 0.99 | ( 1.36, 5.22) | 3.34 | \< .001 |
+[TABLE]
 
-Marginal Contrasts Analysis {.table}
-
-*Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.*
+Marginal Contrasts Analysis {#tinytable_q9touutk41n7o79i1wsi .table
+.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+quarto-disable-processing="true"}
 
 The contrast analysis reveals a clear and interesting trajectory: the
 context effect grows substantially stronger as time progresses.
@@ -355,19 +343,18 @@ points.
 
 ``` r
 
-estimate_contrasts(mixed, c("phq4_within", "phq4_between", "time")) |> display()
+estimate_contrasts(
+  mixed,
+  c("phq4_within", "phq4_between", "time")
+) |>
+  display(format = "tt")
 ```
 
-| Level1 | Level2 | Difference |   SE |        95% CI |    z |     p |
-|:-------|-------:|-----------:|-----:|--------------:|-----:|------:|
-| 2      |      1 |       0.99 | 0.74 | (-0.47, 2.44) | 1.33 | 0.183 |
-| 3      |      1 |       1.97 | 1.48 | (-0.93, 4.88) | 1.33 | 0.183 |
-| 3      |      2 |       0.99 | 0.74 | (-0.47, 2.44) | 1.33 | 0.183 |
+[TABLE]
 
-Marginal Contrasts Analysis {.table}
-
-*Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.*
+Marginal Contrasts Analysis {#tinytable_dyse2vkpin83ur7hy0pg .table
+.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+quarto-disable-processing="true"}
 
 This pairwise comparison table adds a crucial statistical caveat to our
 visual and descriptive observations. The Difference column here
@@ -396,17 +383,14 @@ the within- and between-effects without stratifying by time.
 
 ``` r
 
-estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |> display()
+estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |> display(format = "tt")
 ```
 
-| Difference |   SE |       95% CI |    z |       p |
-|:-----------|-----:|-------------:|-----:|--------:|
-| 2.31       | 0.66 | (1.01, 3.60) | 3.48 | \< .001 |
+[TABLE]
 
-Marginal Contrasts Analysis {.table}
-
-*Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.*
+Marginal Contrasts Analysis {#tinytable_njgqbx7jgaghpe806phr .table
+.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+quarto-disable-processing="true"}
 
 **What does this mean practically?**
 
@@ -445,19 +429,14 @@ estimate_contrasts(
   c("phq4_within", "phq4_between"),
   by = "education"
 ) |>
-  display()
+  display(format = "tt")
 ```
 
-| education | Difference |   SE |        95% CI |     z |       p |
-|:----------|-----------:|-----:|--------------:|------:|--------:|
-| low       |       1.69 | 1.30 | (-0.85, 4.24) |  1.30 |   0.192 |
-| mid       |       3.92 | 0.87 | ( 2.21, 5.64) |  4.49 | \< .001 |
-| high      |      -1.76 | 1.84 | (-5.36, 1.84) | -0.96 |   0.337 |
+[TABLE]
 
-Marginal Contrasts Analysis {.table}
-
-*Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.*
+Marginal Contrasts Analysis {#tinytable_ygcvqvb0upd8ltz2u8bf .table
+.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+quarto-disable-processing="true"}
 
 The marginal contrasts analysis yields nuanced results that add an
 important layer to our understanding of the context effect:
@@ -513,19 +492,14 @@ estimate_contrasts(
   mixed,
   c("phq4_within", "phq4_between", "education")
 ) |>
-  display()
+  display(format = "tt")
 ```
 
-| Level1 | Level2 | Difference |   SE |         95% CI |     z |     p |
-|:-------|:-------|-----------:|-----:|---------------:|------:|------:|
-| mid    | low    |       2.23 | 1.57 |  (-0.84, 5.30) |  1.42 | 0.154 |
-| high   | low    |      -3.46 | 2.25 |  (-7.86, 0.95) | -1.54 | 0.124 |
-| high   | mid    |      -5.69 | 2.03 | (-9.67, -1.70) | -2.80 | 0.005 |
+[TABLE]
 
-Marginal Contrasts Analysis {.table}
-
-*Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.*
+Marginal Contrasts Analysis {#tinytable_iovn3u2rzcfv1xzehka6 .table
+.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+quarto-disable-processing="true"}
 
 The output now displays the mathematical difference in the size of the
 context effect between two specific groups.

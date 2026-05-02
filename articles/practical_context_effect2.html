@@ -187,7 +187,8 @@ way of centering variables called <a href="https://easystats.github.io/datawizar
 This “separates” the within-effect from a between-effect of a
 predictor.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">qol_cancer</span> <span class="op">&lt;-</span> <span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/demean.html" class="external-link">demean</a></span><span class="op">(</span><span class="va">qol_cancer</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4"</span>, <span class="st">"QoL"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a></span><span class="op">)</span></span>
+<span><span class="va">qol_cancer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/demean.html" class="external-link">demean</a></span><span class="op">(</span><span class="va">qol_cancer</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4"</span>, <span class="st">"QoL"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span></code></pre></div>
 <p>Now we have:</p>
 <ul>
 <li><p><code>phq4_between</code>: time-varying variable with the mean of
@@ -212,76 +213,97 @@ effects.</p>
 <span><span class="op">)</span></span>
 <span><span class="co"># effects = "fixed" will not display random effects, but split the</span></span>
 <span><span class="co"># fixed effects into its between- and within-effects components.</span></span>
-<span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">mixed</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<caption>Fixed Effects</caption>
-<colgroup>
-<col width="25%">
-<col width="19%">
-<col width="8%">
-<col width="23%">
-<col width="11%">
-<col width="11%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">Parameter</th>
-<th align="center">Coefficient</th>
-<th align="center">SE</th>
-<th align="center">95% CI</th>
-<th align="center">t(554)</th>
-<th align="center">p</th>
-</tr></thead>
+<span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">mixed</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"tt"</span><span class="op">)</span></span></code></pre></div>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_5y9p9f3cy8vuib7ty05p = TinyTable.createTableFunctions("tinytable_5y9p9f3cy8vuib7ty05p");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '6', j: 1 }, { i: '6', j: 2 }, { i: '6', j: 3 }, { i: '6', j: 4 }, { i: '6', j: 5 }, { i: '6', j: 6 } ], css_id: 'tinytable_css_b4o4kxnxhsee8fcyl37p',}, 
+          { positions: [ { i: '0', j: 1 }, { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 }, { i: '0', j: 6 } ], css_id: 'tinytable_css_nuk5s696syn25xxskl4g',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_5y9p9f3cy8vuib7ty05p.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_5y9p9f3cy8vuib7ty05p td.tinytable_css_b4o4kxnxhsee8fcyl37p, #tinytable_5y9p9f3cy8vuib7ty05p th.tinytable_css_b4o4kxnxhsee8fcyl37p {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%;  }
+    #tinytable_5y9p9f3cy8vuib7ty05p td.tinytable_css_nuk5s696syn25xxskl4g, #tinytable_5y9p9f3cy8vuib7ty05p th.tinytable_css_nuk5s696syn25xxskl4g {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%;  }
+    </style>
+<div class="container">
+      <table class="table tinytable" id="tinytable_5y9p9f3cy8vuib7ty05p" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+<caption>Model Summary</caption>
+        <thead><tr>
+<th scope="col" data-row="0" data-col="1">Parameter</th>
+                <th scope="col" data-row="0" data-col="2">Coefficient</th>
+                <th scope="col" data-row="0" data-col="3">SE</th>
+                <th scope="col" data-row="0" data-col="4">95% CI</th>
+                <th scope="col" data-row="0" data-col="5">t(554)</th>
+                <th scope="col" data-row="0" data-col="6">p</th>
+              </tr></thead>
 <tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">67.36</td>
-<td align="center">2.48</td>
-<td align="center">(62.48, 72.23)</td>
-<td align="center">27.15</td>
-<td align="center">&lt; .001</td>
-</tr>
-<tr class="even">
-<td align="left">time</td>
-<td align="center">1.09</td>
-<td align="center">0.66</td>
-<td align="center">(-0.21, 2.39)</td>
-<td align="center">1.65</td>
-<td align="center">0.099</td>
-</tr>
-<tr class="odd">
-<td align="left">phq4 within</td>
-<td align="center">-3.72</td>
-<td align="center">0.41</td>
-<td align="center">(-4.52, -2.92)</td>
-<td align="center">-9.10</td>
-<td align="center">&lt; .001</td>
-</tr>
-<tr class="even">
-<td align="left">phq4 between</td>
-<td align="center">-6.13</td>
-<td align="center">0.52</td>
-<td align="center">(-7.14, -5.11)</td>
-<td align="center">-11.84</td>
-<td align="center">&lt; .001</td>
-</tr>
-<tr class="odd">
-<td align="left">education (mid)</td>
-<td align="center">5.01</td>
-<td align="center">2.35</td>
-<td align="center">(0.40, 9.62)</td>
-<td align="center">2.14</td>
-<td align="center">0.033</td>
-</tr>
-<tr class="even">
-<td align="left">education (high)</td>
-<td align="center">5.52</td>
-<td align="center">2.75</td>
-<td align="center">(0.11, 10.93)</td>
-<td align="center">2.00</td>
-<td align="center">0.046</td>
-</tr>
+<tr>
+<td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">67.36</td>
+                  <td data-row="1" data-col="3">2.48</td>
+                  <td data-row="1" data-col="4">(62.48, 72.23)</td>
+                  <td data-row="1" data-col="5">27.15</td>
+                  <td data-row="1" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="2" data-col="1">time</td>
+                  <td data-row="2" data-col="2">1.09</td>
+                  <td data-row="2" data-col="3">0.66</td>
+                  <td data-row="2" data-col="4">(-0.21, 2.39)</td>
+                  <td data-row="2" data-col="5">1.65</td>
+                  <td data-row="2" data-col="6">0.099</td>
+                </tr>
+<tr>
+<td data-row="3" data-col="1">phq4 within</td>
+                  <td data-row="3" data-col="2">-3.72</td>
+                  <td data-row="3" data-col="3">0.41</td>
+                  <td data-row="3" data-col="4">(-4.52, -2.92)</td>
+                  <td data-row="3" data-col="5">-9.10</td>
+                  <td data-row="3" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="4" data-col="1">phq4 between</td>
+                  <td data-row="4" data-col="2">-6.13</td>
+                  <td data-row="4" data-col="3">0.52</td>
+                  <td data-row="4" data-col="4">(-7.14, -5.11)</td>
+                  <td data-row="4" data-col="5">-11.84</td>
+                  <td data-row="4" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="5" data-col="1">education (mid)</td>
+                  <td data-row="5" data-col="2">5.01</td>
+                  <td data-row="5" data-col="3">2.35</td>
+                  <td data-row="5" data-col="4">(0.40, 9.62)</td>
+                  <td data-row="5" data-col="5">2.14</td>
+                  <td data-row="5" data-col="6">0.033</td>
+                </tr>
+<tr>
+<td data-row="6" data-col="1">education (high)</td>
+                  <td data-row="6" data-col="2">5.52</td>
+                  <td data-row="6" data-col="3">2.75</td>
+                  <td data-row="6" data-col="4">(0.11, 10.93)</td>
+                  <td data-row="6" data-col="5">2.00</td>
+                  <td data-row="6" data-col="6">0.046</td>
+                </tr>
 </tbody>
 </table>
+</div>
+<!-- hack to avoid NA insertion in last line -->
 <p>Looking at the fixed effects output for the <code>phq4</code>
 (Patient Health Questionnaire) variable, we can interpret the
 coefficients as follows:</p>
@@ -334,26 +356,58 @@ or the environment in which they live.</p>
 different from each other, we can estimate their contrast:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/">modelbased</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"tt"</span><span class="op">)</span></span></code></pre></div>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_8ekkl354istvx52htw4c = TinyTable.createTableFunctions("tinytable_8ekkl354istvx52htw4c");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '1', j: 2 }, { i: '1', j: 3 }, { i: '1', j: 4 }, { i: '1', j: 5 } ], css_id: 'tinytable_css_9c3l90wmlevn8021nkwx',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 } ], css_id: 'tinytable_css_nnmxs4g2xcve2c4xp11t',}, 
+          { positions: [ { i: '1', j: 1 } ], css_id: 'tinytable_css_iouwdnfxkwz20xl31t13',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_fszrx5s0h1n4vp4tp928',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_8ekkl354istvx52htw4c.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_8ekkl354istvx52htw4c td.tinytable_css_9c3l90wmlevn8021nkwx, #tinytable_8ekkl354istvx52htw4c th.tinytable_css_9c3l90wmlevn8021nkwx {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_8ekkl354istvx52htw4c td.tinytable_css_nnmxs4g2xcve2c4xp11t, #tinytable_8ekkl354istvx52htw4c th.tinytable_css_nnmxs4g2xcve2c4xp11t {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_8ekkl354istvx52htw4c td.tinytable_css_iouwdnfxkwz20xl31t13, #tinytable_8ekkl354istvx52htw4c th.tinytable_css_iouwdnfxkwz20xl31t13 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_8ekkl354istvx52htw4c td.tinytable_css_fszrx5s0h1n4vp4tp928, #tinytable_8ekkl354istvx52htw4c th.tinytable_css_fszrx5s0h1n4vp4tp928 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+<div class="container">
+      <table class="table tinytable" id="tinytable_8ekkl354istvx52htw4c" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <caption>Marginal Contrasts Analysis</caption>
-<thead><tr class="header">
-<th align="left">Difference</th>
-<th align="right">SE</th>
-<th align="right">95% CI</th>
-<th align="right">z</th>
-<th align="right">p</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="left">2.41</td>
-<td align="right">0.66</td>
-<td align="right">(1.12, 3.70)</td>
-<td align="right">3.66</td>
-<td align="right">&lt; .001</td>
-</tr></tbody>
+        <thead><tr>
+<th scope="col" data-row="0" data-col="1">Difference</th>
+                <th scope="col" data-row="0" data-col="2">SE</th>
+                <th scope="col" data-row="0" data-col="3">95% CI</th>
+                <th scope="col" data-row="0" data-col="4">z</th>
+                <th scope="col" data-row="0" data-col="5">p</th>
+              </tr></thead>
+<tfoot><tr><td colspan="5">Variable predicted: QoL<br>Predictors contrasted: phq4_within, phq4_between<br>p-values are uncorrected.</td></tr></tfoot>
+<tbody><tr>
+<td data-row="1" data-col="1">2.41</td>
+                  <td data-row="1" data-col="2">0.66</td>
+                  <td data-row="1" data-col="3">(1.12, 3.70)</td>
+                  <td data-row="1" data-col="4">3.66</td>
+                  <td data-row="1" data-col="5">&lt; .001</td>
+                </tr></tbody>
 </table>
-<p><em>Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.</em></p>
+</div>
+<!-- hack to avoid NA insertion in last line -->
 <p>The output shows a significant contrast of 2.41 between the within-
 and between-effects. Since the between-effect in our model (-6.13) is
 stronger (more negative) than the within-effect (-3.72), the
@@ -382,92 +436,113 @@ time of measurement (<code>time</code>) and our two centered variables
 <span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="op">(</span><span class="va">phq4_within</span> <span class="op">+</span> <span class="va">phq4_between</span><span class="op">)</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">qol_cancer</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">mixed</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<caption>Fixed Effects</caption>
-<colgroup>
-<col width="28%">
-<col width="18%">
-<col width="8%">
-<col width="22%">
-<col width="11%">
-<col width="11%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">Parameter</th>
-<th align="center">Coefficient</th>
-<th align="center">SE</th>
-<th align="center">95% CI</th>
-<th align="center">t(552)</th>
-<th align="center">p</th>
-</tr></thead>
+<span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">mixed</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"tt"</span><span class="op">)</span></span></code></pre></div>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_owgxjdse3ee8szwh88fn = TinyTable.createTableFunctions("tinytable_owgxjdse3ee8szwh88fn");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '8', j: 1 }, { i: '8', j: 2 }, { i: '8', j: 3 }, { i: '8', j: 4 }, { i: '8', j: 5 }, { i: '8', j: 6 } ], css_id: 'tinytable_css_oykv9jhksn2ocwmissk2',}, 
+          { positions: [ { i: '0', j: 1 }, { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 }, { i: '0', j: 6 } ], css_id: 'tinytable_css_y404unvoqm53hns1j0mv',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_owgxjdse3ee8szwh88fn.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_owgxjdse3ee8szwh88fn td.tinytable_css_oykv9jhksn2ocwmissk2, #tinytable_owgxjdse3ee8szwh88fn th.tinytable_css_oykv9jhksn2ocwmissk2 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%;  }
+    #tinytable_owgxjdse3ee8szwh88fn td.tinytable_css_y404unvoqm53hns1j0mv, #tinytable_owgxjdse3ee8szwh88fn th.tinytable_css_y404unvoqm53hns1j0mv {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%;  }
+    </style>
+<div class="container">
+      <table class="table tinytable" id="tinytable_owgxjdse3ee8szwh88fn" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+<caption>Model Summary</caption>
+        <thead><tr>
+<th scope="col" data-row="0" data-col="1">Parameter</th>
+                <th scope="col" data-row="0" data-col="2">Coefficient</th>
+                <th scope="col" data-row="0" data-col="3">SE</th>
+                <th scope="col" data-row="0" data-col="4">95% CI</th>
+                <th scope="col" data-row="0" data-col="5">t(552)</th>
+                <th scope="col" data-row="0" data-col="6">p</th>
+              </tr></thead>
 <tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">67.33</td>
-<td align="center">2.49</td>
-<td align="center">(62.43, 72.23)</td>
-<td align="center">26.99</td>
-<td align="center">&lt; .001</td>
-</tr>
-<tr class="even">
-<td align="left">time</td>
-<td align="center">1.04</td>
-<td align="center">0.66</td>
-<td align="center">(-0.25, 2.33)</td>
-<td align="center">1.58</td>
-<td align="center">0.114</td>
-</tr>
-<tr class="odd">
-<td align="left">phq4 within</td>
-<td align="center">-4.37</td>
-<td align="center">1.25</td>
-<td align="center">(-6.81, -1.92)</td>
-<td align="center">-3.50</td>
-<td align="center">&lt; .001</td>
-</tr>
-<tr class="even">
-<td align="left">phq4 between</td>
-<td align="center">-4.70</td>
-<td align="center">0.96</td>
-<td align="center">(-6.58, -2.82)</td>
-<td align="center">-4.90</td>
-<td align="center">&lt; .001</td>
-</tr>
-<tr class="odd">
-<td align="left">education (mid)</td>
-<td align="center">5.19</td>
-<td align="center">2.38</td>
-<td align="center">(0.52, 9.87)</td>
-<td align="center">2.18</td>
-<td align="center">0.029</td>
-</tr>
-<tr class="even">
-<td align="left">education (high)</td>
-<td align="center">5.61</td>
-<td align="center">2.76</td>
-<td align="center">(0.18, 11.04)</td>
-<td align="center">2.03</td>
-<td align="center">0.043</td>
-</tr>
-<tr class="odd">
-<td align="left">time × phq4 within</td>
-<td align="center">0.33</td>
-<td align="center">0.61</td>
-<td align="center">(-0.87, 1.52)</td>
-<td align="center">0.54</td>
-<td align="center">0.592</td>
-</tr>
-<tr class="even">
-<td align="left">time × phq4 between</td>
-<td align="center">-0.66</td>
-<td align="center">0.37</td>
-<td align="center">(-1.39, 0.07)</td>
-<td align="center">-1.77</td>
-<td align="center">0.077</td>
-</tr>
+<tr>
+<td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">67.33</td>
+                  <td data-row="1" data-col="3">2.49</td>
+                  <td data-row="1" data-col="4">(62.43, 72.23)</td>
+                  <td data-row="1" data-col="5">26.99</td>
+                  <td data-row="1" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="2" data-col="1">time</td>
+                  <td data-row="2" data-col="2">1.04</td>
+                  <td data-row="2" data-col="3">0.66</td>
+                  <td data-row="2" data-col="4">(-0.25, 2.33)</td>
+                  <td data-row="2" data-col="5">1.58</td>
+                  <td data-row="2" data-col="6">0.114</td>
+                </tr>
+<tr>
+<td data-row="3" data-col="1">phq4 within</td>
+                  <td data-row="3" data-col="2">-4.37</td>
+                  <td data-row="3" data-col="3">1.25</td>
+                  <td data-row="3" data-col="4">(-6.81, -1.92)</td>
+                  <td data-row="3" data-col="5">-3.50</td>
+                  <td data-row="3" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="4" data-col="1">phq4 between</td>
+                  <td data-row="4" data-col="2">-4.70</td>
+                  <td data-row="4" data-col="3">0.96</td>
+                  <td data-row="4" data-col="4">(-6.58, -2.82)</td>
+                  <td data-row="4" data-col="5">-4.90</td>
+                  <td data-row="4" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="5" data-col="1">education (mid)</td>
+                  <td data-row="5" data-col="2">5.19</td>
+                  <td data-row="5" data-col="3">2.38</td>
+                  <td data-row="5" data-col="4">(0.52, 9.87)</td>
+                  <td data-row="5" data-col="5">2.18</td>
+                  <td data-row="5" data-col="6">0.029</td>
+                </tr>
+<tr>
+<td data-row="6" data-col="1">education (high)</td>
+                  <td data-row="6" data-col="2">5.61</td>
+                  <td data-row="6" data-col="3">2.76</td>
+                  <td data-row="6" data-col="4">(0.18, 11.04)</td>
+                  <td data-row="6" data-col="5">2.03</td>
+                  <td data-row="6" data-col="6">0.043</td>
+                </tr>
+<tr>
+<td data-row="7" data-col="1">time × phq4 within</td>
+                  <td data-row="7" data-col="2">0.33</td>
+                  <td data-row="7" data-col="3">0.61</td>
+                  <td data-row="7" data-col="4">(-0.87, 1.52)</td>
+                  <td data-row="7" data-col="5">0.54</td>
+                  <td data-row="7" data-col="6">0.592</td>
+                </tr>
+<tr>
+<td data-row="8" data-col="1">time × phq4 between</td>
+                  <td data-row="8" data-col="2">-0.66</td>
+                  <td data-row="8" data-col="3">0.37</td>
+                  <td data-row="8" data-col="4">(-1.39, 0.07)</td>
+                  <td data-row="8" data-col="5">-1.77</td>
+                  <td data-row="8" data-col="6">0.077</td>
+                </tr>
 </tbody>
 </table>
+</div>
+<!-- hack to avoid NA insertion in last line -->
 <p>The results table now shows us whether time has a moderating
 influence on our effects. To see this, we look at the two interaction
 terms at the bottom of the table:</p>
@@ -520,89 +595,160 @@ between-components separately at each time point. This helps us
 understand the underlying dynamics.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># average marginal effect of within-effect at each time point</span></span>
-<span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="st">"phq4_within"</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="st">"phq4_within"</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"tt"</span><span class="op">)</span></span></code></pre></div>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_e515lf5an0r6ki5nus7b = TinyTable.createTableFunctions("tinytable_e515lf5an0r6ki5nus7b");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '3', j: 2 }, { i: '3', j: 3 }, { i: '3', j: 4 }, { i: '3', j: 5 }, { i: '3', j: 6 } ], css_id: 'tinytable_css_fw3r5wiggnhdgy4bk4xs',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '1', j: 5 }, { i: '2', j: 5 }, { i: '1', j: 6 }, { i: '2', j: 6 } ], css_id: 'tinytable_css_8w9vaobc5zwhwauktylu',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 }, { i: '0', j: 6 } ], css_id: 'tinytable_css_hps0sv58ocxu06fie91l',}, 
+          { positions: [ { i: '3', j: 1 } ], css_id: 'tinytable_css_ubkddxz2nusu2ltsvu0v',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 } ], css_id: 'tinytable_css_zyb2brr16rdg3a5kzsvs',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_zinkh4a4cbm56hcag4z5',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_e515lf5an0r6ki5nus7b.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_e515lf5an0r6ki5nus7b td.tinytable_css_fw3r5wiggnhdgy4bk4xs, #tinytable_e515lf5an0r6ki5nus7b th.tinytable_css_fw3r5wiggnhdgy4bk4xs {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_e515lf5an0r6ki5nus7b td.tinytable_css_8w9vaobc5zwhwauktylu, #tinytable_e515lf5an0r6ki5nus7b th.tinytable_css_8w9vaobc5zwhwauktylu { text-align: right }
+    #tinytable_e515lf5an0r6ki5nus7b td.tinytable_css_hps0sv58ocxu06fie91l, #tinytable_e515lf5an0r6ki5nus7b th.tinytable_css_hps0sv58ocxu06fie91l {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_e515lf5an0r6ki5nus7b td.tinytable_css_ubkddxz2nusu2ltsvu0v, #tinytable_e515lf5an0r6ki5nus7b th.tinytable_css_ubkddxz2nusu2ltsvu0v {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_e515lf5an0r6ki5nus7b td.tinytable_css_zyb2brr16rdg3a5kzsvs, #tinytable_e515lf5an0r6ki5nus7b th.tinytable_css_zyb2brr16rdg3a5kzsvs { text-align: left }
+    #tinytable_e515lf5an0r6ki5nus7b td.tinytable_css_zinkh4a4cbm56hcag4z5, #tinytable_e515lf5an0r6ki5nus7b th.tinytable_css_zinkh4a4cbm56hcag4z5 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+<div class="container">
+      <table class="table tinytable" id="tinytable_e515lf5an0r6ki5nus7b" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <caption>Estimated Marginal Effects</caption>
-<thead><tr class="header">
-<th align="left">time</th>
-<th align="right">Slope</th>
-<th align="right">SE</th>
-<th align="right">95% CI</th>
-<th align="right">t(552)</th>
-<th align="right">p</th>
-</tr></thead>
+        <thead><tr>
+<th scope="col" data-row="0" data-col="1">time</th>
+                <th scope="col" data-row="0" data-col="2">Slope</th>
+                <th scope="col" data-row="0" data-col="3">SE</th>
+                <th scope="col" data-row="0" data-col="4">95% CI</th>
+                <th scope="col" data-row="0" data-col="5">t(552)</th>
+                <th scope="col" data-row="0" data-col="6">p</th>
+              </tr></thead>
+<tfoot><tr><td colspan="6">Marginal effects estimated for phq4_within<br>Type of slope was dY/dX</td></tr></tfoot>
 <tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="right">-4.04</td>
-<td align="right">0.70</td>
-<td align="right">(-5.42, -2.66)</td>
-<td align="right">-5.77</td>
-<td align="right">&lt; .001</td>
-</tr>
-<tr class="even">
-<td align="left">2</td>
-<td align="right">-3.71</td>
-<td align="right">0.41</td>
-<td align="right">(-4.52, -2.91)</td>
-<td align="right">-9.07</td>
-<td align="right">&lt; .001</td>
-</tr>
-<tr class="odd">
-<td align="left">3</td>
-<td align="right">-3.39</td>
-<td align="right">0.76</td>
-<td align="right">(-4.89, -1.88)</td>
-<td align="right">-4.43</td>
-<td align="right">&lt; .001</td>
-</tr>
+<tr>
+<td data-row="1" data-col="1">1</td>
+                  <td data-row="1" data-col="2">-4.04</td>
+                  <td data-row="1" data-col="3">0.70</td>
+                  <td data-row="1" data-col="4">(-5.42, -2.66)</td>
+                  <td data-row="1" data-col="5">-5.77</td>
+                  <td data-row="1" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="2" data-col="1">2</td>
+                  <td data-row="2" data-col="2">-3.71</td>
+                  <td data-row="2" data-col="3">0.41</td>
+                  <td data-row="2" data-col="4">(-4.52, -2.91)</td>
+                  <td data-row="2" data-col="5">-9.07</td>
+                  <td data-row="2" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="3" data-col="1">3</td>
+                  <td data-row="3" data-col="2">-3.39</td>
+                  <td data-row="3" data-col="3">0.76</td>
+                  <td data-row="3" data-col="4">(-4.89, -1.88)</td>
+                  <td data-row="3" data-col="5">-4.43</td>
+                  <td data-row="3" data-col="6">&lt; .001</td>
+                </tr>
 </tbody>
 </table>
-<p><em>Marginal effects estimated for phq4_within; Type of slope was
-dY/dX</em></p>
+</div>
+<!-- hack to avoid NA insertion in last line -->
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co"># average marginal effect of between-effect at each time point</span></span>
-<span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="st">"phq4_between"</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<code class="sourceCode R"><span><span class="co"># average marginal effect of between-effect at each time point</span></span>
+<span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="st">"phq4_between"</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"tt"</span><span class="op">)</span></span></code></pre></div>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_4ruzykjx4c9d9hk120z9 = TinyTable.createTableFunctions("tinytable_4ruzykjx4c9d9hk120z9");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '3', j: 2 }, { i: '3', j: 3 }, { i: '3', j: 4 }, { i: '3', j: 5 }, { i: '3', j: 6 } ], css_id: 'tinytable_css_11b9b7d00dd8y1fvlnaz',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '1', j: 5 }, { i: '2', j: 5 }, { i: '1', j: 6 }, { i: '2', j: 6 } ], css_id: 'tinytable_css_wj1psp7rkx1ckshyrkup',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 }, { i: '0', j: 6 } ], css_id: 'tinytable_css_m8i4k476estky3e4cb8m',}, 
+          { positions: [ { i: '3', j: 1 } ], css_id: 'tinytable_css_tiz82jm4wkx5vedpq6sr',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 } ], css_id: 'tinytable_css_jo2ml454l77pui3hjxl8',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_1jq6g2casxiayzrcqgkf',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_4ruzykjx4c9d9hk120z9.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_4ruzykjx4c9d9hk120z9 td.tinytable_css_11b9b7d00dd8y1fvlnaz, #tinytable_4ruzykjx4c9d9hk120z9 th.tinytable_css_11b9b7d00dd8y1fvlnaz {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_4ruzykjx4c9d9hk120z9 td.tinytable_css_wj1psp7rkx1ckshyrkup, #tinytable_4ruzykjx4c9d9hk120z9 th.tinytable_css_wj1psp7rkx1ckshyrkup { text-align: right }
+    #tinytable_4ruzykjx4c9d9hk120z9 td.tinytable_css_m8i4k476estky3e4cb8m, #tinytable_4ruzykjx4c9d9hk120z9 th.tinytable_css_m8i4k476estky3e4cb8m {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_4ruzykjx4c9d9hk120z9 td.tinytable_css_tiz82jm4wkx5vedpq6sr, #tinytable_4ruzykjx4c9d9hk120z9 th.tinytable_css_tiz82jm4wkx5vedpq6sr {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_4ruzykjx4c9d9hk120z9 td.tinytable_css_jo2ml454l77pui3hjxl8, #tinytable_4ruzykjx4c9d9hk120z9 th.tinytable_css_jo2ml454l77pui3hjxl8 { text-align: left }
+    #tinytable_4ruzykjx4c9d9hk120z9 td.tinytable_css_1jq6g2casxiayzrcqgkf, #tinytable_4ruzykjx4c9d9hk120z9 th.tinytable_css_1jq6g2casxiayzrcqgkf {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+<div class="container">
+      <table class="table tinytable" id="tinytable_4ruzykjx4c9d9hk120z9" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <caption>Estimated Marginal Effects</caption>
-<thead><tr class="header">
-<th align="left">time</th>
-<th align="right">Slope</th>
-<th align="right">SE</th>
-<th align="right">95% CI</th>
-<th align="right">t(552)</th>
-<th align="right">p</th>
-</tr></thead>
+        <thead><tr>
+<th scope="col" data-row="0" data-col="1">time</th>
+                <th scope="col" data-row="0" data-col="2">Slope</th>
+                <th scope="col" data-row="0" data-col="3">SE</th>
+                <th scope="col" data-row="0" data-col="4">95% CI</th>
+                <th scope="col" data-row="0" data-col="5">t(552)</th>
+                <th scope="col" data-row="0" data-col="6">p</th>
+              </tr></thead>
+<tfoot><tr><td colspan="6">Marginal effects estimated for phq4_between<br>Type of slope was dY/dX</td></tr></tfoot>
 <tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="right">-5.36</td>
-<td align="right">0.68</td>
-<td align="right">(-6.69, -4.03)</td>
-<td align="right">-7.92</td>
-<td align="right">&lt; .001</td>
-</tr>
-<tr class="even">
-<td align="left">2</td>
-<td align="right">-6.02</td>
-<td align="right">0.52</td>
-<td align="right">(-7.04, -4.99)</td>
-<td align="right">-11.52</td>
-<td align="right">&lt; .001</td>
-</tr>
-<tr class="odd">
-<td align="left">3</td>
-<td align="right">-6.68</td>
-<td align="right">0.60</td>
-<td align="right">(-7.87, -5.49)</td>
-<td align="right">-11.05</td>
-<td align="right">&lt; .001</td>
-</tr>
+<tr>
+<td data-row="1" data-col="1">1</td>
+                  <td data-row="1" data-col="2">-5.36</td>
+                  <td data-row="1" data-col="3">0.68</td>
+                  <td data-row="1" data-col="4">(-6.69, -4.03)</td>
+                  <td data-row="1" data-col="5">-7.92</td>
+                  <td data-row="1" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="2" data-col="1">2</td>
+                  <td data-row="2" data-col="2">-6.02</td>
+                  <td data-row="2" data-col="3">0.52</td>
+                  <td data-row="2" data-col="4">(-7.04, -4.99)</td>
+                  <td data-row="2" data-col="5">-11.52</td>
+                  <td data-row="2" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="3" data-col="1">3</td>
+                  <td data-row="3" data-col="2">-6.68</td>
+                  <td data-row="3" data-col="3">0.60</td>
+                  <td data-row="3" data-col="4">(-7.87, -5.49)</td>
+                  <td data-row="3" data-col="5">-11.05</td>
+                  <td data-row="3" data-col="6">&lt; .001</td>
+                </tr>
 </tbody>
 </table>
-<p><em>Marginal effects estimated for phq4_between; Type of slope was
-dY/dX</em></p>
+</div>
+<!-- hack to avoid NA insertion in last line -->
 <p>Looking at these separate slopes reveals two opposing trends. The
 acute impact of a temporary symptom spike (<code>phq4_within</code>)
 slightly decreases in magnitude over time (shifting from -4.04 at Time 1
@@ -618,46 +764,82 @@ marginal contrasts at each specific time point.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span>,</span>
 <span>  by <span class="op">=</span> <span class="st">"time"</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"tt"</span><span class="op">)</span></span></code></pre></div>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_q9touutk41n7o79i1wsi = TinyTable.createTableFunctions("tinytable_q9touutk41n7o79i1wsi");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '3', j: 2 }, { i: '3', j: 3 }, { i: '3', j: 4 }, { i: '3', j: 5 }, { i: '3', j: 6 } ], css_id: 'tinytable_css_spu7j6bog59r8dk7ztd9',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '1', j: 5 }, { i: '2', j: 5 }, { i: '1', j: 6 }, { i: '2', j: 6 } ], css_id: 'tinytable_css_d54sf6mchy4qvlobboam',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 }, { i: '0', j: 6 } ], css_id: 'tinytable_css_trfqcbogfq2mnh33axys',}, 
+          { positions: [ { i: '3', j: 1 } ], css_id: 'tinytable_css_myhkewf93wkararnsobp',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 } ], css_id: 'tinytable_css_70s0xnr1f2dwchzvzgj4',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_uy9d9zqlm8rsl9kdeuft',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_q9touutk41n7o79i1wsi.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_q9touutk41n7o79i1wsi td.tinytable_css_spu7j6bog59r8dk7ztd9, #tinytable_q9touutk41n7o79i1wsi th.tinytable_css_spu7j6bog59r8dk7ztd9 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_q9touutk41n7o79i1wsi td.tinytable_css_d54sf6mchy4qvlobboam, #tinytable_q9touutk41n7o79i1wsi th.tinytable_css_d54sf6mchy4qvlobboam { text-align: right }
+    #tinytable_q9touutk41n7o79i1wsi td.tinytable_css_trfqcbogfq2mnh33axys, #tinytable_q9touutk41n7o79i1wsi th.tinytable_css_trfqcbogfq2mnh33axys {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_q9touutk41n7o79i1wsi td.tinytable_css_myhkewf93wkararnsobp, #tinytable_q9touutk41n7o79i1wsi th.tinytable_css_myhkewf93wkararnsobp {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_q9touutk41n7o79i1wsi td.tinytable_css_70s0xnr1f2dwchzvzgj4, #tinytable_q9touutk41n7o79i1wsi th.tinytable_css_70s0xnr1f2dwchzvzgj4 { text-align: left }
+    #tinytable_q9touutk41n7o79i1wsi td.tinytable_css_uy9d9zqlm8rsl9kdeuft, #tinytable_q9touutk41n7o79i1wsi th.tinytable_css_uy9d9zqlm8rsl9kdeuft {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+<div class="container">
+      <table class="table tinytable" id="tinytable_q9touutk41n7o79i1wsi" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <caption>Marginal Contrasts Analysis</caption>
-<thead><tr class="header">
-<th align="left">time</th>
-<th align="right">Difference</th>
-<th align="right">SE</th>
-<th align="right">95% CI</th>
-<th align="right">z</th>
-<th align="right">p</th>
-</tr></thead>
+        <thead><tr>
+<th scope="col" data-row="0" data-col="1">time</th>
+                <th scope="col" data-row="0" data-col="2">Difference</th>
+                <th scope="col" data-row="0" data-col="3">SE</th>
+                <th scope="col" data-row="0" data-col="4">95% CI</th>
+                <th scope="col" data-row="0" data-col="5">z</th>
+                <th scope="col" data-row="0" data-col="6">p</th>
+              </tr></thead>
+<tfoot><tr><td colspan="6">Variable predicted: QoL<br>Predictors contrasted: phq4_within, phq4_between<br>p-values are uncorrected.</td></tr></tfoot>
 <tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="right">1.32</td>
-<td align="right">1.00</td>
-<td align="right">(-0.65, 3.28)</td>
-<td align="right">1.32</td>
-<td align="right">0.188</td>
-</tr>
-<tr class="even">
-<td align="left">2</td>
-<td align="right">2.31</td>
-<td align="right">0.66</td>
-<td align="right">( 1.01, 3.60)</td>
-<td align="right">3.48</td>
-<td align="right">&lt; .001</td>
-</tr>
-<tr class="odd">
-<td align="left">3</td>
-<td align="right">3.29</td>
-<td align="right">0.99</td>
-<td align="right">( 1.36, 5.22)</td>
-<td align="right">3.34</td>
-<td align="right">&lt; .001</td>
-</tr>
+<tr>
+<td data-row="1" data-col="1">1</td>
+                  <td data-row="1" data-col="2">1.32</td>
+                  <td data-row="1" data-col="3">1.00</td>
+                  <td data-row="1" data-col="4">(-0.65, 3.28)</td>
+                  <td data-row="1" data-col="5">1.32</td>
+                  <td data-row="1" data-col="6">0.188</td>
+                </tr>
+<tr>
+<td data-row="2" data-col="1">2</td>
+                  <td data-row="2" data-col="2">2.31</td>
+                  <td data-row="2" data-col="3">0.66</td>
+                  <td data-row="2" data-col="4">( 1.01, 3.60)</td>
+                  <td data-row="2" data-col="5">3.48</td>
+                  <td data-row="2" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="3" data-col="1">3</td>
+                  <td data-row="3" data-col="2">3.29</td>
+                  <td data-row="3" data-col="3">0.99</td>
+                  <td data-row="3" data-col="4">( 1.36, 5.22)</td>
+                  <td data-row="3" data-col="5">3.34</td>
+                  <td data-row="3" data-col="6">&lt; .001</td>
+                </tr>
 </tbody>
 </table>
-<p><em>Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.</em></p>
+</div>
+<!-- hack to avoid NA insertion in last line -->
 <p>The contrast analysis reveals a clear and interesting trajectory: the
 context effect grows substantially stronger as time progresses.</p>
 <ul>
@@ -690,50 +872,90 @@ effect over time is statistically significant. We can do this by
 computing pairwise comparisons of the context effect across the
 different time points.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span>, <span class="st">"time"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">mixed</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span>, <span class="st">"time"</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"tt"</span><span class="op">)</span></span></code></pre></div>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_dyse2vkpin83ur7hy0pg = TinyTable.createTableFunctions("tinytable_dyse2vkpin83ur7hy0pg");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '3', j: 2 }, { i: '3', j: 3 }, { i: '3', j: 4 }, { i: '3', j: 5 }, { i: '3', j: 6 }, { i: '3', j: 7 } ], css_id: 'tinytable_css_kwmyvl6syd5kxsjqwvmc',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '1', j: 5 }, { i: '2', j: 5 }, { i: '1', j: 6 }, { i: '2', j: 6 }, { i: '1', j: 7 }, { i: '2', j: 7 } ], css_id: 'tinytable_css_1ub2f6nll1047t80lihg',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 }, { i: '0', j: 6 }, { i: '0', j: 7 } ], css_id: 'tinytable_css_s8nzajslzowsgapns449',}, 
+          { positions: [ { i: '3', j: 1 } ], css_id: 'tinytable_css_bszqd6yc8ch29xcwkj4b',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 } ], css_id: 'tinytable_css_6xl4sw7bc6hiyfwg3lb1',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_taxtvb1z9mgi7o6gnlms',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_dyse2vkpin83ur7hy0pg.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_dyse2vkpin83ur7hy0pg td.tinytable_css_kwmyvl6syd5kxsjqwvmc, #tinytable_dyse2vkpin83ur7hy0pg th.tinytable_css_kwmyvl6syd5kxsjqwvmc {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_dyse2vkpin83ur7hy0pg td.tinytable_css_1ub2f6nll1047t80lihg, #tinytable_dyse2vkpin83ur7hy0pg th.tinytable_css_1ub2f6nll1047t80lihg { text-align: right }
+    #tinytable_dyse2vkpin83ur7hy0pg td.tinytable_css_s8nzajslzowsgapns449, #tinytable_dyse2vkpin83ur7hy0pg th.tinytable_css_s8nzajslzowsgapns449 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_dyse2vkpin83ur7hy0pg td.tinytable_css_bszqd6yc8ch29xcwkj4b, #tinytable_dyse2vkpin83ur7hy0pg th.tinytable_css_bszqd6yc8ch29xcwkj4b {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_dyse2vkpin83ur7hy0pg td.tinytable_css_6xl4sw7bc6hiyfwg3lb1, #tinytable_dyse2vkpin83ur7hy0pg th.tinytable_css_6xl4sw7bc6hiyfwg3lb1 { text-align: left }
+    #tinytable_dyse2vkpin83ur7hy0pg td.tinytable_css_taxtvb1z9mgi7o6gnlms, #tinytable_dyse2vkpin83ur7hy0pg th.tinytable_css_taxtvb1z9mgi7o6gnlms {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+<div class="container">
+      <table class="table tinytable" id="tinytable_dyse2vkpin83ur7hy0pg" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <caption>Marginal Contrasts Analysis</caption>
-<thead><tr class="header">
-<th align="left">Level1</th>
-<th align="right">Level2</th>
-<th align="right">Difference</th>
-<th align="right">SE</th>
-<th align="right">95% CI</th>
-<th align="right">z</th>
-<th align="right">p</th>
-</tr></thead>
+        <thead><tr>
+<th scope="col" data-row="0" data-col="1">Level1</th>
+                <th scope="col" data-row="0" data-col="2">Level2</th>
+                <th scope="col" data-row="0" data-col="3">Difference</th>
+                <th scope="col" data-row="0" data-col="4">SE</th>
+                <th scope="col" data-row="0" data-col="5">95% CI</th>
+                <th scope="col" data-row="0" data-col="6">z</th>
+                <th scope="col" data-row="0" data-col="7">p</th>
+              </tr></thead>
+<tfoot><tr><td colspan="7">Variable predicted: QoL<br>Predictors contrasted: phq4_within, phq4_between<br>p-values are uncorrected.</td></tr></tfoot>
 <tbody>
-<tr class="odd">
-<td align="left">2</td>
-<td align="right">1</td>
-<td align="right">0.99</td>
-<td align="right">0.74</td>
-<td align="right">(-0.47, 2.44)</td>
-<td align="right">1.33</td>
-<td align="right">0.183</td>
-</tr>
-<tr class="even">
-<td align="left">3</td>
-<td align="right">1</td>
-<td align="right">1.97</td>
-<td align="right">1.48</td>
-<td align="right">(-0.93, 4.88)</td>
-<td align="right">1.33</td>
-<td align="right">0.183</td>
-</tr>
-<tr class="odd">
-<td align="left">3</td>
-<td align="right">2</td>
-<td align="right">0.99</td>
-<td align="right">0.74</td>
-<td align="right">(-0.47, 2.44)</td>
-<td align="right">1.33</td>
-<td align="right">0.183</td>
-</tr>
+<tr>
+<td data-row="1" data-col="1">2</td>
+                  <td data-row="1" data-col="2">1</td>
+                  <td data-row="1" data-col="3">0.99</td>
+                  <td data-row="1" data-col="4">0.74</td>
+                  <td data-row="1" data-col="5">(-0.47, 2.44)</td>
+                  <td data-row="1" data-col="6">1.33</td>
+                  <td data-row="1" data-col="7">0.183</td>
+                </tr>
+<tr>
+<td data-row="2" data-col="1">3</td>
+                  <td data-row="2" data-col="2">1</td>
+                  <td data-row="2" data-col="3">1.97</td>
+                  <td data-row="2" data-col="4">1.48</td>
+                  <td data-row="2" data-col="5">(-0.93, 4.88)</td>
+                  <td data-row="2" data-col="6">1.33</td>
+                  <td data-row="2" data-col="7">0.183</td>
+                </tr>
+<tr>
+<td data-row="3" data-col="1">3</td>
+                  <td data-row="3" data-col="2">2</td>
+                  <td data-row="3" data-col="3">0.99</td>
+                  <td data-row="3" data-col="4">0.74</td>
+                  <td data-row="3" data-col="5">(-0.47, 2.44)</td>
+                  <td data-row="3" data-col="6">1.33</td>
+                  <td data-row="3" data-col="7">0.183</td>
+                </tr>
 </tbody>
 </table>
-<p><em>Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.</em></p>
+</div>
+<!-- hack to avoid NA insertion in last line -->
 <p>This pairwise comparison table adds a crucial statistical caveat to
 our visual and descriptive observations. The Difference column here
 represents the mathematical change in the size of the context effect
@@ -757,26 +979,58 @@ more appropriate to evaluate the average contrast of the slopes across
 the entire study period. To do this, we calculate the contrast between
 the within- and between-effects without stratifying by time.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"tt"</span><span class="op">)</span></span></code></pre></div>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_njgqbx7jgaghpe806phr = TinyTable.createTableFunctions("tinytable_njgqbx7jgaghpe806phr");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '1', j: 2 }, { i: '1', j: 3 }, { i: '1', j: 4 }, { i: '1', j: 5 } ], css_id: 'tinytable_css_dg6ndpnlopy9qeovrzbw',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 } ], css_id: 'tinytable_css_ju0d589royt7ffwfsnaj',}, 
+          { positions: [ { i: '1', j: 1 } ], css_id: 'tinytable_css_9njaaco8drsnt681ap5j',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_m5jw0yurgvad6tnf3siu',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_njgqbx7jgaghpe806phr.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_njgqbx7jgaghpe806phr td.tinytable_css_dg6ndpnlopy9qeovrzbw, #tinytable_njgqbx7jgaghpe806phr th.tinytable_css_dg6ndpnlopy9qeovrzbw {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_njgqbx7jgaghpe806phr td.tinytable_css_ju0d589royt7ffwfsnaj, #tinytable_njgqbx7jgaghpe806phr th.tinytable_css_ju0d589royt7ffwfsnaj {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_njgqbx7jgaghpe806phr td.tinytable_css_9njaaco8drsnt681ap5j, #tinytable_njgqbx7jgaghpe806phr th.tinytable_css_9njaaco8drsnt681ap5j {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_njgqbx7jgaghpe806phr td.tinytable_css_m5jw0yurgvad6tnf3siu, #tinytable_njgqbx7jgaghpe806phr th.tinytable_css_m5jw0yurgvad6tnf3siu {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+<div class="container">
+      <table class="table tinytable" id="tinytable_njgqbx7jgaghpe806phr" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <caption>Marginal Contrasts Analysis</caption>
-<thead><tr class="header">
-<th align="left">Difference</th>
-<th align="right">SE</th>
-<th align="right">95% CI</th>
-<th align="right">z</th>
-<th align="right">p</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="left">2.31</td>
-<td align="right">0.66</td>
-<td align="right">(1.01, 3.60)</td>
-<td align="right">3.48</td>
-<td align="right">&lt; .001</td>
-</tr></tbody>
+        <thead><tr>
+<th scope="col" data-row="0" data-col="1">Difference</th>
+                <th scope="col" data-row="0" data-col="2">SE</th>
+                <th scope="col" data-row="0" data-col="3">95% CI</th>
+                <th scope="col" data-row="0" data-col="4">z</th>
+                <th scope="col" data-row="0" data-col="5">p</th>
+              </tr></thead>
+<tfoot><tr><td colspan="5">Variable predicted: QoL<br>Predictors contrasted: phq4_within, phq4_between<br>p-values are uncorrected.</td></tr></tfoot>
+<tbody><tr>
+<td data-row="1" data-col="1">2.31</td>
+                  <td data-row="1" data-col="2">0.66</td>
+                  <td data-row="1" data-col="3">(1.01, 3.60)</td>
+                  <td data-row="1" data-col="4">3.48</td>
+                  <td data-row="1" data-col="5">&lt; .001</td>
+                </tr></tbody>
 </table>
-<p><em>Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.</em></p>
+</div>
+<!-- hack to avoid NA insertion in last line -->
 <p><strong>What does this mean practically?</strong></p>
 <p>The highly significant overall contrast (2.31, p &lt; .001) confirms
 that a substantial context effect is at play throughout the entire
@@ -810,46 +1064,82 @@ centered <code>phq4</code> variables.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span><span class="op">)</span>,</span>
 <span>  by <span class="op">=</span> <span class="st">"education"</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"tt"</span><span class="op">)</span></span></code></pre></div>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_ygcvqvb0upd8ltz2u8bf = TinyTable.createTableFunctions("tinytable_ygcvqvb0upd8ltz2u8bf");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '3', j: 2 }, { i: '3', j: 3 }, { i: '3', j: 4 }, { i: '3', j: 5 }, { i: '3', j: 6 } ], css_id: 'tinytable_css_vcgcw8xd6ydgzww3knmd',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '1', j: 5 }, { i: '2', j: 5 }, { i: '1', j: 6 }, { i: '2', j: 6 } ], css_id: 'tinytable_css_te2vruxcmqsd1ylyiwtk',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 }, { i: '0', j: 6 } ], css_id: 'tinytable_css_7ibgo2vntzac9sn33s00',}, 
+          { positions: [ { i: '3', j: 1 } ], css_id: 'tinytable_css_ziwysam50ovoeqqrbltg',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 } ], css_id: 'tinytable_css_famewsdvllqwkhzsuwe9',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_2gtloermuotn8jlc3ux2',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_ygcvqvb0upd8ltz2u8bf.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_ygcvqvb0upd8ltz2u8bf td.tinytable_css_vcgcw8xd6ydgzww3knmd, #tinytable_ygcvqvb0upd8ltz2u8bf th.tinytable_css_vcgcw8xd6ydgzww3knmd {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_ygcvqvb0upd8ltz2u8bf td.tinytable_css_te2vruxcmqsd1ylyiwtk, #tinytable_ygcvqvb0upd8ltz2u8bf th.tinytable_css_te2vruxcmqsd1ylyiwtk { text-align: right }
+    #tinytable_ygcvqvb0upd8ltz2u8bf td.tinytable_css_7ibgo2vntzac9sn33s00, #tinytable_ygcvqvb0upd8ltz2u8bf th.tinytable_css_7ibgo2vntzac9sn33s00 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_ygcvqvb0upd8ltz2u8bf td.tinytable_css_ziwysam50ovoeqqrbltg, #tinytable_ygcvqvb0upd8ltz2u8bf th.tinytable_css_ziwysam50ovoeqqrbltg {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_ygcvqvb0upd8ltz2u8bf td.tinytable_css_famewsdvllqwkhzsuwe9, #tinytable_ygcvqvb0upd8ltz2u8bf th.tinytable_css_famewsdvllqwkhzsuwe9 { text-align: left }
+    #tinytable_ygcvqvb0upd8ltz2u8bf td.tinytable_css_2gtloermuotn8jlc3ux2, #tinytable_ygcvqvb0upd8ltz2u8bf th.tinytable_css_2gtloermuotn8jlc3ux2 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+<div class="container">
+      <table class="table tinytable" id="tinytable_ygcvqvb0upd8ltz2u8bf" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <caption>Marginal Contrasts Analysis</caption>
-<thead><tr class="header">
-<th align="left">education</th>
-<th align="right">Difference</th>
-<th align="right">SE</th>
-<th align="right">95% CI</th>
-<th align="right">z</th>
-<th align="right">p</th>
-</tr></thead>
+        <thead><tr>
+<th scope="col" data-row="0" data-col="1">education</th>
+                <th scope="col" data-row="0" data-col="2">Difference</th>
+                <th scope="col" data-row="0" data-col="3">SE</th>
+                <th scope="col" data-row="0" data-col="4">95% CI</th>
+                <th scope="col" data-row="0" data-col="5">z</th>
+                <th scope="col" data-row="0" data-col="6">p</th>
+              </tr></thead>
+<tfoot><tr><td colspan="6">Variable predicted: QoL<br>Predictors contrasted: phq4_within, phq4_between<br>p-values are uncorrected.</td></tr></tfoot>
 <tbody>
-<tr class="odd">
-<td align="left">low</td>
-<td align="right">1.69</td>
-<td align="right">1.30</td>
-<td align="right">(-0.85, 4.24)</td>
-<td align="right">1.30</td>
-<td align="right">0.192</td>
-</tr>
-<tr class="even">
-<td align="left">mid</td>
-<td align="right">3.92</td>
-<td align="right">0.87</td>
-<td align="right">( 2.21, 5.64)</td>
-<td align="right">4.49</td>
-<td align="right">&lt; .001</td>
-</tr>
-<tr class="odd">
-<td align="left">high</td>
-<td align="right">-1.76</td>
-<td align="right">1.84</td>
-<td align="right">(-5.36, 1.84)</td>
-<td align="right">-0.96</td>
-<td align="right">0.337</td>
-</tr>
+<tr>
+<td data-row="1" data-col="1">low</td>
+                  <td data-row="1" data-col="2">1.69</td>
+                  <td data-row="1" data-col="3">1.30</td>
+                  <td data-row="1" data-col="4">(-0.85, 4.24)</td>
+                  <td data-row="1" data-col="5">1.30</td>
+                  <td data-row="1" data-col="6">0.192</td>
+                </tr>
+<tr>
+<td data-row="2" data-col="1">mid</td>
+                  <td data-row="2" data-col="2">3.92</td>
+                  <td data-row="2" data-col="3">0.87</td>
+                  <td data-row="2" data-col="4">( 2.21, 5.64)</td>
+                  <td data-row="2" data-col="5">4.49</td>
+                  <td data-row="2" data-col="6">&lt; .001</td>
+                </tr>
+<tr>
+<td data-row="3" data-col="1">high</td>
+                  <td data-row="3" data-col="2">-1.76</td>
+                  <td data-row="3" data-col="3">1.84</td>
+                  <td data-row="3" data-col="4">(-5.36, 1.84)</td>
+                  <td data-row="3" data-col="5">-0.96</td>
+                  <td data-row="3" data-col="6">0.337</td>
+                </tr>
 </tbody>
 </table>
-<p><em>Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.</em></p>
+</div>
+<!-- hack to avoid NA insertion in last line -->
 <p>The marginal contrasts analysis yields nuanced results that add an
 important layer to our understanding of the context effect:</p>
 <ul>
@@ -903,50 +1193,86 @@ across the educational levels.</p>
 <span>  <span class="va">mixed</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4_within"</span>, <span class="st">"phq4_between"</span>, <span class="st">"education"</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
+<span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"tt"</span><span class="op">)</span></span></code></pre></div>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_iovn3u2rzcfv1xzehka6 = TinyTable.createTableFunctions("tinytable_iovn3u2rzcfv1xzehka6");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '3', j: 3 }, { i: '3', j: 4 }, { i: '3', j: 5 }, { i: '3', j: 6 }, { i: '3', j: 7 } ], css_id: 'tinytable_css_lhabkvwhgqv96nn2px1w',}, 
+          { positions: [ { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '1', j: 5 }, { i: '2', j: 5 }, { i: '1', j: 6 }, { i: '2', j: 6 }, { i: '1', j: 7 }, { i: '2', j: 7 } ], css_id: 'tinytable_css_6o9x9hqcfhmlngn8y3qh',}, 
+          { positions: [ { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 }, { i: '0', j: 6 }, { i: '0', j: 7 } ], css_id: 'tinytable_css_08oqpmnv66tzdquef1wy',}, 
+          { positions: [ { i: '3', j: 1 }, { i: '3', j: 2 } ], css_id: 'tinytable_css_g35yqofmczvj810n2fh1',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '1', j: 2 }, { i: '2', j: 2 } ], css_id: 'tinytable_css_8amuw10o1dg76o0whbyu',}, 
+          { positions: [ { i: '0', j: 1 }, { i: '0', j: 2 } ], css_id: 'tinytable_css_g2xxnriwedqv2k1ad9h8',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_iovn3u2rzcfv1xzehka6.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_iovn3u2rzcfv1xzehka6 td.tinytable_css_lhabkvwhgqv96nn2px1w, #tinytable_iovn3u2rzcfv1xzehka6 th.tinytable_css_lhabkvwhgqv96nn2px1w {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_iovn3u2rzcfv1xzehka6 td.tinytable_css_6o9x9hqcfhmlngn8y3qh, #tinytable_iovn3u2rzcfv1xzehka6 th.tinytable_css_6o9x9hqcfhmlngn8y3qh { text-align: right }
+    #tinytable_iovn3u2rzcfv1xzehka6 td.tinytable_css_08oqpmnv66tzdquef1wy, #tinytable_iovn3u2rzcfv1xzehka6 th.tinytable_css_08oqpmnv66tzdquef1wy {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: right }
+    #tinytable_iovn3u2rzcfv1xzehka6 td.tinytable_css_g35yqofmczvj810n2fh1, #tinytable_iovn3u2rzcfv1xzehka6 th.tinytable_css_g35yqofmczvj810n2fh1 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_iovn3u2rzcfv1xzehka6 td.tinytable_css_8amuw10o1dg76o0whbyu, #tinytable_iovn3u2rzcfv1xzehka6 th.tinytable_css_8amuw10o1dg76o0whbyu { text-align: left }
+    #tinytable_iovn3u2rzcfv1xzehka6 td.tinytable_css_g2xxnriwedqv2k1ad9h8, #tinytable_iovn3u2rzcfv1xzehka6 th.tinytable_css_g2xxnriwedqv2k1ad9h8 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+<div class="container">
+      <table class="table tinytable" id="tinytable_iovn3u2rzcfv1xzehka6" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <caption>Marginal Contrasts Analysis</caption>
-<thead><tr class="header">
-<th align="left">Level1</th>
-<th align="left">Level2</th>
-<th align="right">Difference</th>
-<th align="right">SE</th>
-<th align="right">95% CI</th>
-<th align="right">z</th>
-<th align="right">p</th>
-</tr></thead>
+        <thead><tr>
+<th scope="col" data-row="0" data-col="1">Level1</th>
+                <th scope="col" data-row="0" data-col="2">Level2</th>
+                <th scope="col" data-row="0" data-col="3">Difference</th>
+                <th scope="col" data-row="0" data-col="4">SE</th>
+                <th scope="col" data-row="0" data-col="5">95% CI</th>
+                <th scope="col" data-row="0" data-col="6">z</th>
+                <th scope="col" data-row="0" data-col="7">p</th>
+              </tr></thead>
+<tfoot><tr><td colspan="7">Variable predicted: QoL<br>Predictors contrasted: phq4_within, phq4_between<br>p-values are uncorrected.</td></tr></tfoot>
 <tbody>
-<tr class="odd">
-<td align="left">mid</td>
-<td align="left">low</td>
-<td align="right">2.23</td>
-<td align="right">1.57</td>
-<td align="right">(-0.84, 5.30)</td>
-<td align="right">1.42</td>
-<td align="right">0.154</td>
-</tr>
-<tr class="even">
-<td align="left">high</td>
-<td align="left">low</td>
-<td align="right">-3.46</td>
-<td align="right">2.25</td>
-<td align="right">(-7.86, 0.95)</td>
-<td align="right">-1.54</td>
-<td align="right">0.124</td>
-</tr>
-<tr class="odd">
-<td align="left">high</td>
-<td align="left">mid</td>
-<td align="right">-5.69</td>
-<td align="right">2.03</td>
-<td align="right">(-9.67, -1.70)</td>
-<td align="right">-2.80</td>
-<td align="right">0.005</td>
-</tr>
+<tr>
+<td data-row="1" data-col="1">mid</td>
+                  <td data-row="1" data-col="2">low</td>
+                  <td data-row="1" data-col="3">2.23</td>
+                  <td data-row="1" data-col="4">1.57</td>
+                  <td data-row="1" data-col="5">(-0.84,  5.30)</td>
+                  <td data-row="1" data-col="6">1.42</td>
+                  <td data-row="1" data-col="7">0.154</td>
+                </tr>
+<tr>
+<td data-row="2" data-col="1">high</td>
+                  <td data-row="2" data-col="2">low</td>
+                  <td data-row="2" data-col="3">-3.46</td>
+                  <td data-row="2" data-col="4">2.25</td>
+                  <td data-row="2" data-col="5">(-7.86,  0.95)</td>
+                  <td data-row="2" data-col="6">-1.54</td>
+                  <td data-row="2" data-col="7">0.124</td>
+                </tr>
+<tr>
+<td data-row="3" data-col="1">high</td>
+                  <td data-row="3" data-col="2">mid</td>
+                  <td data-row="3" data-col="3">-5.69</td>
+                  <td data-row="3" data-col="4">2.03</td>
+                  <td data-row="3" data-col="5">(-9.67, -1.70)</td>
+                  <td data-row="3" data-col="6">-2.80</td>
+                  <td data-row="3" data-col="7">0.005</td>
+                </tr>
 </tbody>
 </table>
-<p><em>Variable predicted: QoL; Predictors contrasted: phq4_within,
-phq4_between; p-values are uncorrected.</em></p>
+</div>
+<!-- hack to avoid NA insertion in last line -->
 <p>The output now displays the mathematical difference in the size of
 the context effect between two specific groups.</p>
 <ul>
