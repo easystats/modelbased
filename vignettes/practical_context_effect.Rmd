@@ -28,7 +28,8 @@ knitr::opts_chunk$set(
 pkgs <- c(
   "datawizard",
   "parameters",
-  "lme4"
+  "lme4",
+  "tinytable"
 )
 
 if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
