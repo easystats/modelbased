@@ -27,6 +27,11 @@ first](https://easystats.github.io/parameters/articles/demean.html).
 > vignette](https://easystats.github.io/insight/articles/display.html#displaying-tables-with-display)
 > for more details on output displays.
 
+> **Note:** Because within-effects can vary across individuals, it is
+> generally best practice to model them as random slopes. However, to
+> keep this example simple, we have only included `time` as a random
+> slope.
+
 ## Sample data used in this vignette
 
 ``` r
