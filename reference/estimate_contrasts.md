@@ -723,7 +723,7 @@ estimate_contrasts(model, contrast = "Petal.Width", by = "Species")
 #> Level1     | Level2     | Difference |   SE |        95% CI | t(144) |     p
 #> ----------------------------------------------------------------------------
 #> versicolor | setosa     |       0.22 | 0.46 | [-0.69, 1.13] |   0.47 | 0.639
-#> virginica  | setosa     |      -0.21 | 0.44 | [-1.07, 0.66] |  -0.47 | 0.637
+#> virginica  | setosa     |      -0.21 | 0.44 | [-1.07, 0.66] |  -0.47 | 0.638
 #> virginica  | versicolor |      -0.42 | 0.27 | [-0.95, 0.11] |  -1.58 | 0.116
 #> 
 #> Variable predicted: Sepal.Width
@@ -884,8 +884,8 @@ estimate_contrasts(model, "time", by = "education", integer_as_continuous = 1)
 #> Level1 | Level2 | Difference |   SE |         95% CI | t(552) |     p
 #> ---------------------------------------------------------------------
 #> mid    | low    |       2.79 | 2.60 | [-2.31,  7.90] |   1.07 | 0.283
-#> high   | low    |       4.76 | 2.98 | [-1.09, 10.60] |   1.60 | 0.111
-#> high   | mid    |       1.96 | 2.36 | [-2.68,  6.60] |   0.83 | 0.406
+#> high   | low    |       4.76 | 2.97 | [-1.07, 10.58] |   1.60 | 0.109
+#> high   | mid    |       1.96 | 2.36 | [-2.66,  6.59] |   0.83 | 0.405
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: time
@@ -905,20 +905,20 @@ estimate_contrasts(
 #> Level1        | Level2        | Difference |   SE |          95% CI | t(552) |     p
 #> ------------------------------------------------------------------------------------
 #> low, Group 2  | low, Group 1  |       9.95 | 4.48 | [  1.16, 18.75] |   2.22 | 0.027
-#> mid, Group 1  | low, Group 1  |       7.11 | 3.67 | [ -0.09, 14.31] |   1.94 | 0.053
-#> mid, Group 2  | low, Group 1  |       8.43 | 3.69 | [  1.18, 15.68] |   2.28 | 0.023
-#> high, Group 1 | low, Group 1  |       6.71 | 4.05 | [ -1.24, 14.67] |   1.66 | 0.098
+#> mid, Group 1  | low, Group 1  |       7.11 | 3.67 | [ -0.10, 14.33] |   1.94 | 0.053
+#> mid, Group 2  | low, Group 1  |       8.43 | 3.68 | [  1.20, 15.66] |   2.29 | 0.022
+#> high, Group 1 | low, Group 1  |       6.71 | 4.03 | [ -1.19, 14.62] |   1.67 | 0.096
 #> high, Group 2 | low, Group 1  |      12.75 | 4.36 | [  4.19, 21.32] |   2.92 | 0.004
-#> mid, Group 1  | low, Group 2  |      -2.84 | 3.67 | [-10.05,  4.37] |  -0.77 | 0.439
+#> mid, Group 1  | low, Group 2  |      -2.84 | 3.67 | [-10.05,  4.37] |  -0.77 | 0.440
 #> mid, Group 2  | low, Group 2  |      -1.53 | 3.68 | [ -8.75,  5.70] |  -0.41 | 0.679
-#> high, Group 1 | low, Group 2  |      -3.24 | 4.04 | [-11.17,  4.69] |  -0.80 | 0.422
-#> high, Group 2 | low, Group 2  |       2.80 | 4.37 | [ -5.77, 11.38] |   0.64 | 0.521
-#> mid, Group 2  | mid, Group 1  |       1.32 | 2.64 | [ -3.87,  6.50] |   0.50 | 0.619
-#> high, Group 1 | mid, Group 1  |      -0.40 | 3.12 | [ -6.53,  5.73] |  -0.13 | 0.898
-#> high, Group 2 | mid, Group 1  |       5.64 | 3.53 | [ -1.30, 12.58] |   1.60 | 0.111
-#> high, Group 1 | mid, Group 2  |      -1.72 | 3.13 | [ -7.87,  4.44] |  -0.55 | 0.584
-#> high, Group 2 | mid, Group 2  |       4.33 | 3.54 | [ -2.63, 11.29] |   1.22 | 0.223
-#> high, Group 2 | high, Group 1 |       6.04 | 3.91 | [ -1.64, 13.73] |   1.54 | 0.123
+#> high, Group 1 | low, Group 2  |      -3.24 | 4.03 | [-11.15,  4.67] |  -0.80 | 0.421
+#> high, Group 2 | low, Group 2  |       2.80 | 4.35 | [ -5.74, 11.34] |   0.64 | 0.520
+#> mid, Group 2  | mid, Group 1  |       1.32 | 2.64 | [ -3.88,  6.51] |   0.50 | 0.619
+#> high, Group 1 | mid, Group 1  |      -0.40 | 3.11 | [ -6.51,  5.71] |  -0.13 | 0.898
+#> high, Group 2 | mid, Group 1  |       5.64 | 3.52 | [ -1.28, 12.56] |   1.60 | 0.110
+#> high, Group 1 | mid, Group 2  |      -1.72 | 3.12 | [ -7.85,  4.41] |  -0.55 | 0.583
+#> high, Group 2 | mid, Group 2  |       4.33 | 3.53 | [ -2.61, 11.26] |   1.22 | 0.221
+#> high, Group 2 | high, Group 1 |       6.04 | 3.89 | [ -1.59, 13.68] |   1.55 | 0.121
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: time
@@ -940,12 +940,12 @@ estimate_contrasts(
 #> 
 #> Parameter  | grp     | Difference |   SE |         95% CI | t(552) |     p
 #> --------------------------------------------------------------------------
-#> mid - low  | Group 1 |       7.11 | 3.67 | [-0.09, 14.31] |   1.94 | 0.053
-#> high - low | Group 1 |       6.71 | 4.05 | [-1.24, 14.67] |   1.66 | 0.098
-#> high - mid | Group 1 |      -0.40 | 3.12 | [-6.53,  5.73] |  -0.13 | 0.898
+#> mid - low  | Group 1 |       7.11 | 3.67 | [-0.10, 14.33] |   1.94 | 0.053
+#> high - low | Group 1 |       6.71 | 4.03 | [-1.19, 14.62] |   1.67 | 0.096
+#> high - mid | Group 1 |      -0.40 | 3.11 | [-6.51,  5.71] |  -0.13 | 0.898
 #> mid - low  | Group 2 |      -1.53 | 3.68 | [-8.75,  5.70] |  -0.41 | 0.679
-#> high - low | Group 2 |       2.80 | 4.37 | [-5.77, 11.38] |   0.64 | 0.521
-#> high - mid | Group 2 |       4.33 | 3.54 | [-2.63, 11.29] |   1.22 | 0.223
+#> high - low | Group 2 |       2.80 | 4.35 | [-5.74, 11.34] |   0.64 | 0.520
+#> high - mid | Group 2 |       4.33 | 3.53 | [-2.61, 11.26] |   1.22 | 0.221
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: time
@@ -1079,11 +1079,11 @@ model <- lme4::lmer(
 estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
 #> Marginal Contrasts Analysis
 #> 
-#> time | Difference |   SE |        95% CI |    z |      p
-#> --------------------------------------------------------
-#> 1    |       1.73 | 0.99 | [-0.20, 3.66] | 1.76 |  0.079
-#> 2    |       2.54 | 0.65 | [ 1.27, 3.81] | 3.93 | < .001
-#> 3    |       3.36 | 0.97 | [ 1.45, 5.27] | 3.45 | < .001
+#> time | Difference |   SE |         95% CI |     z |      p
+#> ----------------------------------------------------------
+#> 1    |      -1.73 | 0.99 | [-3.66,  0.20] | -1.76 |  0.079
+#> 2    |      -2.54 | 0.65 | [-3.81, -1.27] | -3.93 | < .001
+#> 3    |      -3.36 | 0.97 | [-5.27, -1.45] | -3.45 | < .001
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: phq4_within, phq4_between
@@ -1096,9 +1096,9 @@ estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
 estimate_contrasts(model, c("phq4_within", "phq4_between"))
 #> Marginal Contrasts Analysis
 #> 
-#> Difference |   SE |       95% CI |    z |      p
-#> ------------------------------------------------
-#> 2.54       | 0.65 | [1.27, 3.81] | 3.93 | < .001
+#> Difference |   SE |         95% CI |     z |      p
+#> ---------------------------------------------------
+#> -2.54      | 0.65 | [-3.81, -1.27] | -3.93 | < .001
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: phq4_within, phq4_between
@@ -1117,11 +1117,11 @@ model <- lme4::lmer(
 estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "education")
 #> Marginal Contrasts Analysis
 #> 
-#> education | Difference |   SE |        95% CI |     z |      p
-#> --------------------------------------------------------------
-#> low       |       1.69 | 1.30 | [-0.85, 4.24] |  1.30 |  0.192
-#> mid       |       3.92 | 0.87 | [ 2.21, 5.64] |  4.49 | < .001
-#> high      |      -1.76 | 1.84 | [-5.36, 1.84] | -0.96 |  0.337
+#> education | Difference |   SE |         95% CI |     z |      p
+#> ---------------------------------------------------------------
+#> low       |      -1.69 | 1.30 | [-4.24,  0.85] | -1.30 |  0.192
+#> mid       |      -3.92 | 0.87 | [-5.64, -2.21] | -4.49 | < .001
+#> high      |       1.76 | 1.84 | [-1.84,  5.36] |  0.96 |  0.337
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: phq4_within, phq4_between
@@ -1133,11 +1133,11 @@ estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "education")
 estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
 #> Marginal Contrasts Analysis
 #> 
-#> Level1 | Level2 | Difference |   SE |         95% CI |     z |     p
-#> --------------------------------------------------------------------
-#> mid    | low    |       2.23 | 1.57 | [-0.84,  5.30] |  1.42 | 0.154
-#> high   | low    |      -3.46 | 2.25 | [-7.86,  0.95] | -1.54 | 0.124
-#> high   | mid    |      -5.69 | 2.03 | [-9.67, -1.70] | -2.80 | 0.005
+#> Level1 | Level2 | Difference |   SE |        95% CI |     z |     p
+#> -------------------------------------------------------------------
+#> mid    | low    |      -2.23 | 1.57 | [-5.30, 0.84] | -1.42 | 0.154
+#> high   | low    |       3.46 | 2.25 | [-0.95, 7.86] |  1.54 | 0.124
+#> high   | mid    |       5.69 | 2.03 | [ 1.70, 9.67] |  2.80 | 0.005
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: phq4_within, phq4_between

@@ -162,7 +162,7 @@ Marginal Contrasts Analysis {#tinytable_8ekkl354istvx52htw4c .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
-The output shows a significant contrast of 2.41 between the within- and
+The output shows a significant contrast of -2.41 between the within- and
 between-effects. Since the between-effect in our model (-6.13) is
 stronger (more negative) than the within-effect (-3.72), the
 context-effect (Between minus Within) is -2.41.
@@ -325,7 +325,7 @@ The contrast analysis reveals a clear and interesting trajectory: the
 context effect grows substantially stronger as time progresses.
 
 - *At Time 1 (Baseline):* The difference between the within- and
-  between-effect is relatively small (1.32) and not statistically
+  between-effect is relatively small (-1.32) and not statistically
   significant (p = 0.188). This indicates that at the beginning of the
   observations, it does not matter much whether a patient’s
   psychological burden is acute (a temporary spike) or chronic (a
@@ -333,7 +333,8 @@ context effect grows substantially stronger as time progresses.
   Life is very similar.
 
 - *At Time 2 and Time 3:* As the study progresses, the contrast becomes
-  highly significant and the gap widens (increasing to 2.31, then 3.29).
+  highly significant and the gap widens (an absolute increase to 2.31,
+  then 3.29).
 
 **What does this mean practically?**
 
@@ -371,8 +372,8 @@ quarto-disable-processing="true"}
 This pairwise comparison table adds a crucial statistical caveat to our
 visual and descriptive observations. The Difference column here
 represents the mathematical change in the size of the context effect
-between two specific time points (e.g., the context effect grew by 0.99
-points from Time 1 to Time 2).
+between two specific time points (e.g., the context effect decreased by
+0.99 points from Time 1 to Time 2).
 
 However, looking at the statistics, you will notice that the estimated
 difference between any two adjacent time points is exactly identical,
@@ -407,7 +408,7 @@ quarto-disable-processing="true"}
 
 **What does this mean practically?**
 
-The highly significant overall contrast (2.31, p \< .001) confirms that
+The highly significant overall contrast (-2.31, p \< .001) confirms that
 a substantial context effect is at play throughout the entire
 observation period.
 
@@ -454,19 +455,19 @@ quarto-disable-processing="true"}
 The marginal contrasts analysis yields nuanced results that add an
 important layer to our understanding of the context effect:
 
-- *Low Education:* The contrast (1.69) is not statistically significant
+- *Low Education:* The contrast (-1.69) is not statistically significant
   (p = 0.192). For these patients, there is no meaningful difference
   between an acute symptom spike and a chronically high baseline. Both
   states depress their quality of life similarly.
-- *Mid Education:* The contrast (3.92) is large and highly significant
+- *Mid Education:* The contrast (-3.92) is large and highly significant
   (p \< .001). This group actually drives the overall context effect we
   observed in the previous models. For middle-educated patients, a
   chronically high psychological burden carries a massive additional
-  penalty compared to a temporary acute spike.
-- *High Education:* Interestingly, the contrast reverses its sign
-  (-1.76) but is not statistically significant (p = 0.337). This
-  indicates that for highly educated patients, the context effect
-  disappears entirely.
+  penalty compared to a temporary acute spike (their quality of life is
+  decreasing by 3.92 points).
+- *High Education:* Interestingly, the contrast reverses its sign (1.76)
+  but is not statistically significant (p = 0.337). This indicates that
+  for highly educated patients, the context effect disappears entirely.
 
 **What does this mean practically?**
 
@@ -521,9 +522,9 @@ context effect between two specific groups.
   involving the low-education group are not statistically significant.
   The confidence intervals are quite wide, suggesting high variance or a
   smaller sample size within this specific intersection of the data.
-- *High vs. Mid (Difference = -5.69, p = 0.005):* This is the crucial
+- *High vs. Mid (Difference = 5.69, p = 0.005):* This is the crucial
   finding. The context effect for the highly educated group is
-  significantly smaller (by 5.69 points) than for the middle-educated
+  significantly larger (by 5.69 points) than for the middle-educated
   group.
 
 **What does this mean practically?**

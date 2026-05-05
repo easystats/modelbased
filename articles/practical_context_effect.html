@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -412,16 +412,16 @@ different from each other, we can estimate their contrast:</p>
               </tr></thead>
 <tfoot><tr><td colspan="5">Variable predicted: QoL<br>Predictors contrasted: phq4_within, phq4_between<br>p-values are uncorrected.</td></tr></tfoot>
 <tbody><tr>
-<td data-row="1" data-col="1">2.41</td>
+<td data-row="1" data-col="1">-2.41</td>
                   <td data-row="1" data-col="2">0.66</td>
-                  <td data-row="1" data-col="3">(1.12, 3.70)</td>
-                  <td data-row="1" data-col="4">3.66</td>
+                  <td data-row="1" data-col="3">(-3.70, -1.12)</td>
+                  <td data-row="1" data-col="4">-3.66</td>
                   <td data-row="1" data-col="5">&lt; .001</td>
                 </tr></tbody>
 </table>
 </div>
 <!-- hack to avoid NA insertion in last line -->
-<p>The output shows a significant contrast of 2.41 between the within-
+<p>The output shows a significant contrast of -2.41 between the within-
 and between-effects. Since the between-effect in our model (-6.13) is
 stronger (more negative) than the within-effect (-3.72), the
 context-effect (Between minus Within) is -2.41.</p>
@@ -561,18 +561,17 @@ influence on our effects. To see this, we look at the two interaction
 terms at the bottom of the table:</p>
 <ul>
 <li><p>Interaction <code>time × phq4_within</code>: The coefficient
-(0.33) is small and not statistically significant (p = 0.592). This
-means that the negative effect of individual, temporary fluctuations
-remains largely stable over time. When a patient’s psychological burden
-acutely increases, their quality of life decreases to a very similar
-extent at any given time point.</p></li>
+(0.33) is small and not statistically significant (<span class="math inline">p = 0.592</span>). This means that the negative
+effect of individual, temporary fluctuations remains largely stable over
+time. When a patient’s psychological burden acutely increases, their
+quality of life decreases to a very similar extent at any given time
+point.</p></li>
 <li><p>Interaction <code>time × phq4_between</code>: This coefficient
-(-0.66) is also not statistically significant (p = 0.077). The negative
-sign suggests that the gap between patients potentially widens slightly
-over time. The “disadvantage” in quality of life experienced by patients
-with a generally high psychological baseline burden might further
-increase over the course of the study compared to less burdened
-patients.</p></li>
+(-0.66) is also not statistically significant (<span class="math inline">p = 0.077</span>). The negative sign suggests that
+the gap between patients potentially widens slightly over time. The
+“disadvantage” in quality of life experienced by patients with a
+generally high psychological baseline burden might further increase over
+the course of the study compared to less burdened patients.</p></li>
 </ul>
 <p>These temporal dynamics can be best understood visually using
 Estimated Marginal Means. The generated plots confirm the statistical
@@ -827,26 +826,26 @@ marginal contrasts at each specific time point.</p>
 <tbody>
 <tr>
 <td data-row="1" data-col="1">1</td>
-                  <td data-row="1" data-col="2">1.32</td>
+                  <td data-row="1" data-col="2">-1.32</td>
                   <td data-row="1" data-col="3">1.00</td>
-                  <td data-row="1" data-col="4">(-0.65, 3.28)</td>
-                  <td data-row="1" data-col="5">1.32</td>
+                  <td data-row="1" data-col="4">(-3.28,  0.65)</td>
+                  <td data-row="1" data-col="5">-1.32</td>
                   <td data-row="1" data-col="6">0.188</td>
                 </tr>
 <tr>
 <td data-row="2" data-col="1">2</td>
-                  <td data-row="2" data-col="2">2.31</td>
+                  <td data-row="2" data-col="2">-2.31</td>
                   <td data-row="2" data-col="3">0.66</td>
-                  <td data-row="2" data-col="4">( 1.01, 3.60)</td>
-                  <td data-row="2" data-col="5">3.48</td>
+                  <td data-row="2" data-col="4">(-3.60, -1.01)</td>
+                  <td data-row="2" data-col="5">-3.48</td>
                   <td data-row="2" data-col="6">&lt; .001</td>
                 </tr>
 <tr>
 <td data-row="3" data-col="1">3</td>
-                  <td data-row="3" data-col="2">3.29</td>
+                  <td data-row="3" data-col="2">-3.29</td>
                   <td data-row="3" data-col="3">0.99</td>
-                  <td data-row="3" data-col="4">( 1.36, 5.22)</td>
-                  <td data-row="3" data-col="5">3.34</td>
+                  <td data-row="3" data-col="4">(-5.22, -1.36)</td>
+                  <td data-row="3" data-col="5">-3.34</td>
                   <td data-row="3" data-col="6">&lt; .001</td>
                 </tr>
 </tbody>
@@ -857,15 +856,15 @@ marginal contrasts at each specific time point.</p>
 context effect grows substantially stronger as time progresses.</p>
 <ul>
 <li><p><em>At Time 1 (Baseline):</em> The difference between the within-
-and between-effect is relatively small (1.32) and not statistically
-significant (p = 0.188). This indicates that at the beginning of the
-observations, it does not matter much whether a patient’s psychological
-burden is acute (a temporary spike) or chronic (a generally high
-baseline). The immediate impact on their Quality of Life is very
-similar.</p></li>
+and between-effect is relatively small (-1.32) and not statistically
+significant (<span class="math inline">p = 0.188</span>). This indicates
+that at the beginning of the observations, it does not matter much
+whether a patient’s psychological burden is acute (a temporary spike) or
+chronic (a generally high baseline). The immediate impact on their
+Quality of Life is very similar.</p></li>
 <li><p><em>At Time 2 and Time 3:</em> As the study progresses, the
-contrast becomes highly significant and the gap widens (increasing to
-2.31, then 3.29).</p></li>
+contrast becomes highly significant and the gap widens (an absolute
+increase to 2.31, then 3.29).</p></li>
 </ul>
 <p><strong>What does this mean practically?</strong></p>
 <p>Over time, having a chronically high baseline of psychological
@@ -941,28 +940,28 @@ different time points.</p>
 <tr>
 <td data-row="1" data-col="1">2</td>
                   <td data-row="1" data-col="2">1</td>
-                  <td data-row="1" data-col="3">0.99</td>
+                  <td data-row="1" data-col="3">-0.99</td>
                   <td data-row="1" data-col="4">0.74</td>
-                  <td data-row="1" data-col="5">(-0.47, 2.44)</td>
-                  <td data-row="1" data-col="6">1.33</td>
+                  <td data-row="1" data-col="5">(-2.44, 0.47)</td>
+                  <td data-row="1" data-col="6">-1.33</td>
                   <td data-row="1" data-col="7">0.183</td>
                 </tr>
 <tr>
 <td data-row="2" data-col="1">3</td>
                   <td data-row="2" data-col="2">1</td>
-                  <td data-row="2" data-col="3">1.97</td>
+                  <td data-row="2" data-col="3">-1.97</td>
                   <td data-row="2" data-col="4">1.48</td>
-                  <td data-row="2" data-col="5">(-0.93, 4.88)</td>
-                  <td data-row="2" data-col="6">1.33</td>
+                  <td data-row="2" data-col="5">(-4.88, 0.93)</td>
+                  <td data-row="2" data-col="6">-1.33</td>
                   <td data-row="2" data-col="7">0.183</td>
                 </tr>
 <tr>
 <td data-row="3" data-col="1">3</td>
                   <td data-row="3" data-col="2">2</td>
-                  <td data-row="3" data-col="3">0.99</td>
+                  <td data-row="3" data-col="3">-0.99</td>
                   <td data-row="3" data-col="4">0.74</td>
-                  <td data-row="3" data-col="5">(-0.47, 2.44)</td>
-                  <td data-row="3" data-col="6">1.33</td>
+                  <td data-row="3" data-col="5">(-2.44, 0.47)</td>
+                  <td data-row="3" data-col="6">-1.33</td>
                   <td data-row="3" data-col="7">0.183</td>
                 </tr>
 </tbody>
@@ -972,8 +971,8 @@ different time points.</p>
 <p>This pairwise comparison table adds a crucial statistical caveat to
 our visual and descriptive observations. The Difference column here
 represents the mathematical change in the size of the context effect
-between two specific time points (e.g., the context effect grew by 0.99
-points from Time 1 to Time 2).</p>
+between two specific time points (e.g., the context effect decreased by
+0.99 points from Time 1 to Time 2).</p>
 <p>However, looking at the statistics, you will notice that the
 estimated difference between any two adjacent time points is exactly
 identical, yielding the exact same standard error and p-value.</p>
@@ -1036,19 +1035,18 @@ the within- and between-effects without stratifying by time.</p>
               </tr></thead>
 <tfoot><tr><td colspan="5">Variable predicted: QoL<br>Predictors contrasted: phq4_within, phq4_between<br>p-values are uncorrected.</td></tr></tfoot>
 <tbody><tr>
-<td data-row="1" data-col="1">2.31</td>
+<td data-row="1" data-col="1">-2.31</td>
                   <td data-row="1" data-col="2">0.66</td>
-                  <td data-row="1" data-col="3">(1.01, 3.60)</td>
-                  <td data-row="1" data-col="4">3.48</td>
+                  <td data-row="1" data-col="3">(-3.60, -1.01)</td>
+                  <td data-row="1" data-col="4">-3.48</td>
                   <td data-row="1" data-col="5">&lt; .001</td>
                 </tr></tbody>
 </table>
 </div>
 <!-- hack to avoid NA insertion in last line -->
 <p><strong>What does this mean practically?</strong></p>
-<p>The highly significant overall contrast (2.31, p &lt; .001) confirms
-that a substantial context effect is at play throughout the entire
-observation period.</p>
+<p>The highly significant overall contrast (-2.31, <span class="math inline">p &lt; .001</span>) confirms that a substantial
+context effect is at play throughout the entire observation period.</p>
 <p>In clinical terms, while an acute, temporary spike in psychological
 symptoms (the within-effect) definitely harms a patient’s quality of
 life, carrying a chronically high baseline burden (the between-effect)
@@ -1128,26 +1126,26 @@ centered <code>phq4</code> variables.</p>
 <tbody>
 <tr>
 <td data-row="1" data-col="1">low</td>
-                  <td data-row="1" data-col="2">1.69</td>
+                  <td data-row="1" data-col="2">-1.69</td>
                   <td data-row="1" data-col="3">1.30</td>
-                  <td data-row="1" data-col="4">(-0.85, 4.24)</td>
-                  <td data-row="1" data-col="5">1.30</td>
+                  <td data-row="1" data-col="4">(-4.24,  0.85)</td>
+                  <td data-row="1" data-col="5">-1.30</td>
                   <td data-row="1" data-col="6">0.192</td>
                 </tr>
 <tr>
 <td data-row="2" data-col="1">mid</td>
-                  <td data-row="2" data-col="2">3.92</td>
+                  <td data-row="2" data-col="2">-3.92</td>
                   <td data-row="2" data-col="3">0.87</td>
-                  <td data-row="2" data-col="4">( 2.21, 5.64)</td>
-                  <td data-row="2" data-col="5">4.49</td>
+                  <td data-row="2" data-col="4">(-5.64, -2.21)</td>
+                  <td data-row="2" data-col="5">-4.49</td>
                   <td data-row="2" data-col="6">&lt; .001</td>
                 </tr>
 <tr>
 <td data-row="3" data-col="1">high</td>
-                  <td data-row="3" data-col="2">-1.76</td>
+                  <td data-row="3" data-col="2">1.76</td>
                   <td data-row="3" data-col="3">1.84</td>
-                  <td data-row="3" data-col="4">(-5.36, 1.84)</td>
-                  <td data-row="3" data-col="5">-0.96</td>
+                  <td data-row="3" data-col="4">(-1.84,  5.36)</td>
+                  <td data-row="3" data-col="5">0.96</td>
                   <td data-row="3" data-col="6">0.337</td>
                 </tr>
 </tbody>
@@ -1158,21 +1156,22 @@ centered <code>phq4</code> variables.</p>
 important layer to our understanding of the context effect:</p>
 <ul>
 <li>
-<em>Low Education:</em> The contrast (1.69) is not statistically
-significant (p = 0.192). For these patients, there is no meaningful
-difference between an acute symptom spike and a chronically high
-baseline. Both states depress their quality of life similarly.</li>
+<em>Low Education:</em> The contrast (-1.69) is not statistically
+significant (<span class="math inline">p = 0.192</span>). For these
+patients, there is no meaningful difference between an acute symptom
+spike and a chronically high baseline. Both states depress their quality
+of life similarly.</li>
 <li>
-<em>Mid Education:</em> The contrast (3.92) is large and highly
-significant (p &lt; .001). This group actually drives the overall
-context effect we observed in the previous models. For middle-educated
-patients, a chronically high psychological burden carries a massive
-additional penalty compared to a temporary acute spike.</li>
+<em>Mid Education:</em> The contrast (-3.92) is large and highly
+significant (<span class="math inline">p &lt; .001</span>). This group
+actually drives the overall context effect we observed in the previous
+models. For middle-educated patients, a chronically high psychological
+burden carries a massive additional penalty compared to a temporary
+acute spike (their quality of life is decreasing by 3.92 points).</li>
 <li>
 <em>High Education:</em> Interestingly, the contrast reverses its
-sign (-1.76) but is not statistically significant (p = 0.337). This
-indicates that for highly educated patients, the context effect
-disappears entirely.</li>
+sign (1.76) but is not statistically significant (<span class="math inline">p = 0.337</span>). This indicates that for highly
+educated patients, the context effect disappears entirely.</li>
 </ul>
 <p><strong>What does this mean practically?</strong></p>
 <p>The hypothesis that highly educated people “fare better” is supported
@@ -1259,28 +1258,28 @@ across the educational levels.</p>
 <tr>
 <td data-row="1" data-col="1">mid</td>
                   <td data-row="1" data-col="2">low</td>
-                  <td data-row="1" data-col="3">2.23</td>
+                  <td data-row="1" data-col="3">-2.23</td>
                   <td data-row="1" data-col="4">1.57</td>
-                  <td data-row="1" data-col="5">(-0.84,  5.30)</td>
-                  <td data-row="1" data-col="6">1.42</td>
+                  <td data-row="1" data-col="5">(-5.30, 0.84)</td>
+                  <td data-row="1" data-col="6">-1.42</td>
                   <td data-row="1" data-col="7">0.154</td>
                 </tr>
 <tr>
 <td data-row="2" data-col="1">high</td>
                   <td data-row="2" data-col="2">low</td>
-                  <td data-row="2" data-col="3">-3.46</td>
+                  <td data-row="2" data-col="3">3.46</td>
                   <td data-row="2" data-col="4">2.25</td>
-                  <td data-row="2" data-col="5">(-7.86,  0.95)</td>
-                  <td data-row="2" data-col="6">-1.54</td>
+                  <td data-row="2" data-col="5">(-0.95, 7.86)</td>
+                  <td data-row="2" data-col="6">1.54</td>
                   <td data-row="2" data-col="7">0.124</td>
                 </tr>
 <tr>
 <td data-row="3" data-col="1">high</td>
                   <td data-row="3" data-col="2">mid</td>
-                  <td data-row="3" data-col="3">-5.69</td>
+                  <td data-row="3" data-col="3">5.69</td>
                   <td data-row="3" data-col="4">2.03</td>
-                  <td data-row="3" data-col="5">(-9.67, -1.70)</td>
-                  <td data-row="3" data-col="6">-2.80</td>
+                  <td data-row="3" data-col="5">( 1.70, 9.67)</td>
+                  <td data-row="3" data-col="6">2.80</td>
                   <td data-row="3" data-col="7">0.005</td>
                 </tr>
 </tbody>
@@ -1291,16 +1290,17 @@ across the educational levels.</p>
 the context effect between two specific groups.</p>
 <ul>
 <li>
-<em>Mid vs. Low (p = 0.154) &amp; High vs. Low (p = 0.124):</em> The
+<em>Mid vs. Low (<span class="math inline">p = 0.154</span>) &amp;
+High vs. Low (<span class="math inline">p = 0.124</span>):</em> The
 differences involving the low-education group are not statistically
 significant. The confidence intervals are quite wide, suggesting high
 variance or a smaller sample size within this specific intersection of
 the data.</li>
 <li>
-<em>High vs. Mid (Difference = -5.69, p = 0.005):</em> This is the
-crucial finding. The context effect for the highly educated group is
-significantly smaller (by 5.69 points) than for the middle-educated
-group.</li>
+<em>High vs. Mid (Difference = 5.69, <span class="math inline">p =
+0.005</span>):</em> This is the crucial finding. The context effect for
+the highly educated group is significantly larger (by 5.69 points) than
+for the middle-educated group.</li>
 </ul>
 <p><strong>What does this mean practically?</strong></p>
 <p>This pairwise comparison formally solidifies our previous suspicion:
