@@ -120,7 +120,7 @@ estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |>
   display(format = "tt")
 ```
 
-The output shows a significant contrast of 2.41 between the within- and between-effects. Since the between-effect in our model (-6.13) is stronger (more negative) than the within-effect (-3.72), the context-effect (Between minus Within) is -2.41.
+The output shows a significant contrast of -2.41 between the within- and between-effects. Since the between-effect in our model (-6.13) is stronger (more negative) than the within-effect (-3.72), the context-effect (Between minus Within) is -2.41.
 
 **What does this mean practically?**
 
@@ -140,9 +140,9 @@ model_parameters(mixed, effects = "fixed") |> display(format = "tt")
 
 The results table now shows us whether time has a moderating influence on our effects. To see this, we look at the two interaction terms at the bottom of the table:
 
-- Interaction `time × phq4_within`: The coefficient (0.33) is small and not statistically significant (p = 0.592). This means that the negative effect of individual, temporary fluctuations remains largely stable over time. When a patient's psychological burden acutely increases, their quality of life decreases to a very similar extent at any given time point.
+- Interaction `time × phq4_within`: The coefficient (0.33) is small and not statistically significant ($p = 0.592$). This means that the negative effect of individual, temporary fluctuations remains largely stable over time. When a patient's psychological burden acutely increases, their quality of life decreases to a very similar extent at any given time point.
 
-- Interaction `time × phq4_between`: This coefficient (-0.66) is also not statistically significant (p = 0.077). The negative sign suggests that the gap between patients potentially widens slightly over time. The "disadvantage" in quality of life experienced by patients with a generally high psychological baseline burden might further increase over the course of the study compared to less burdened patients.
+- Interaction `time × phq4_between`: This coefficient (-0.66) is also not statistically significant ($p = 0.077$). The negative sign suggests that the gap between patients potentially widens slightly over time. The "disadvantage" in quality of life experienced by patients with a generally high psychological baseline burden might further increase over the course of the study compared to less burdened patients.
 
 These temporal dynamics can be best understood visually using Estimated Marginal Means. The generated plots confirm the statistical results from the table very clearly.
 
@@ -186,7 +186,7 @@ estimate_contrasts(
 
 The contrast analysis reveals a clear and interesting trajectory: the context effect grows substantially stronger as time progresses.
 
-- *At Time 1 (Baseline):* The difference between the within- and between-effect is relatively small (1.32) and not statistically significant (p = 0.188). This indicates that at the beginning of the observations, it does not matter much whether a patient's psychological burden is acute (a temporary spike) or chronic (a generally high baseline). The immediate impact on their Quality of Life is very similar.
+- *At Time 1 (Baseline):* The difference between the within- and between-effect is relatively small (-1.32) and not statistically significant ($p = 0.188$). This indicates that at the beginning of the observations, it does not matter much whether a patient's psychological burden is acute (a temporary spike) or chronic (a generally high baseline). The immediate impact on their Quality of Life is very similar.
 
 - *At Time 2 and Time 3:* As the study progresses, the contrast becomes highly significant and the gap widens (increasing to 2.31, then 3.29).
 
@@ -206,7 +206,7 @@ estimate_contrasts(
   display(format = "tt")
 ```
 
-This pairwise comparison table adds a crucial statistical caveat to our visual and descriptive observations. The Difference column here represents the mathematical change in the size of the context effect between two specific time points (e.g., the context effect grew by 0.99 points from Time 1 to Time 2).
+This pairwise comparison table adds a crucial statistical caveat to our visual and descriptive observations. The Difference column here represents the mathematical change in the size of the context effect between two specific time points (e.g., the context effect decreased by 0.99 points from Time 1 to Time 2).
 
 However, looking at the statistics, you will notice that the estimated difference between any two adjacent time points is exactly identical, yielding the exact same standard error and p-value.
 
@@ -221,7 +221,7 @@ estimate_contrasts(mixed, c("phq4_within", "phq4_between")) |>
 
 **What does this mean practically?**
 
-The highly significant overall contrast (2.31, p < .001) confirms that a substantial context effect is at play throughout the entire observation period.
+The highly significant overall contrast (-2.31, $p < .001$) confirms that a substantial context effect is at play throughout the entire observation period.
 
 In clinical terms, while an acute, temporary spike in psychological symptoms (the within-effect) definitely harms a patient's quality of life, carrying a chronically high baseline burden (the between-effect) takes a significantly heavier toll. A patient who generally suffers from high psychological distress faces an overarching "trait penalty" that consistently depresses their quality of life more severely than mere day-to-day fluctuations would suggest.
 
@@ -246,9 +246,9 @@ estimate_contrasts(
 
 The marginal contrasts analysis yields nuanced results that add an important layer to our understanding of the context effect:
 
-- *Low Education:* The contrast (1.69) is not statistically significant (p = 0.192). For these patients, there is no meaningful difference between an acute symptom spike and a chronically high baseline. Both states depress their quality of life similarly.
-- *Mid Education:* The contrast (3.92) is large and highly significant (p < .001). This group actually drives the overall context effect we observed in the previous models. For middle-educated patients, a chronically high psychological burden carries a massive additional penalty compared to a temporary acute spike.
-- *High Education:* Interestingly, the contrast reverses its sign (-1.76) but is not statistically significant (p = 0.337). This indicates that for highly educated patients, the context effect disappears entirely.
+- *Low Education:* The contrast (-1.69) is not statistically significant ($p = 0.192$). For these patients, there is no meaningful difference between an acute symptom spike and a chronically high baseline. Both states depress their quality of life similarly.
+- *Mid Education:* The contrast (-3.92) is large and highly significant ($p < .001$). This group actually drives the overall context effect we observed in the previous models. For middle-educated patients, a chronically high psychological burden carries a massive additional penalty compared to a temporary acute spike (their quality of life is decreasing by 3.92 points).
+- *High Education:* Interestingly, the contrast reverses its sign (1.76) but is not statistically significant ($p = 0.337$). This indicates that for highly educated patients, the context effect disappears entirely.
 
 **What does this mean practically?**
 
@@ -274,8 +274,8 @@ estimate_contrasts(
 
 The output now displays the mathematical difference in the size of the context effect between two specific groups.
 
-- *Mid vs. Low (p = 0.154) & High vs. Low (p = 0.124):* The differences involving the low-education group are not statistically significant. The confidence intervals are quite wide, suggesting high variance or a smaller sample size within this specific intersection of the data.
-- *High vs. Mid (Difference = -5.69, p = 0.005):* This is the crucial finding. The context effect for the highly educated group is significantly smaller (by 5.69 points) than for the middle-educated group.
+- *Mid vs. Low ($p = 0.154$) & High vs. Low ($p = 0.124$):* The differences involving the low-education group are not statistically significant. The confidence intervals are quite wide, suggesting high variance or a smaller sample size within this specific intersection of the data.
+- *High vs. Mid (Difference = -5.69, $p = 0.005$):* This is the crucial finding. The context effect for the highly educated group is significantly larger (by 5.69 points) than for the middle-educated group.
 
 **What does this mean practically?**
 

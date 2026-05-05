@@ -12,7 +12,7 @@
   # if we have stratified by another group, we need the difference between
   # contrasts at each group level
   if (is.null(my_args$by)) {
-    comparison <- stats::as.formula("~I(diff(x))")
+    comparison <- stats::as.formula("~revpairwise")
   } else if (length(my_args$by) > 2) {
     # it is not possible to have more than two by-variables for now
     insight::format_error(
@@ -20,7 +20,7 @@
     )
   } else {
     comparison <- stats::as.formula(paste(
-      "~I(diff(x)) |",
+      "~revpairwise |",
       paste(my_args$by, collapse = "+")
     ))
   }
@@ -95,6 +95,9 @@
       colnames(out) <- cn
     }
   }
+
+  # not needed
+  out$hypothesis <- NULL
 
   # save some labels for printing
   attr(out, "by") <- attr(out, "hypothesis_by") <- my_args$by
