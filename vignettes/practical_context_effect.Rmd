@@ -188,7 +188,7 @@ The contrast analysis reveals a clear and interesting trajectory: the context ef
 
 - *At Time 1 (Baseline):* The difference between the within- and between-effect is relatively small (-1.32) and not statistically significant ($p = 0.188$). This indicates that at the beginning of the observations, it does not matter much whether a patient's psychological burden is acute (a temporary spike) or chronic (a generally high baseline). The immediate impact on their Quality of Life is very similar.
 
-- *At Time 2 and Time 3:* As the study progresses, the contrast becomes highly significant and the gap widens (increasing to 2.31, then 3.29).
+- *At Time 2 and Time 3:* As the study progresses, the contrast becomes highly significant and the gap widens (an absolute increase to 2.31, then 3.29).
 
 **What does this mean practically?**
 
@@ -275,7 +275,7 @@ estimate_contrasts(
 The output now displays the mathematical difference in the size of the context effect between two specific groups.
 
 - *Mid vs. Low ($p = 0.154$) & High vs. Low ($p = 0.124$):* The differences involving the low-education group are not statistically significant. The confidence intervals are quite wide, suggesting high variance or a smaller sample size within this specific intersection of the data.
-- *High vs. Mid (Difference = -5.69, $p = 0.005$):* This is the crucial finding. The context effect for the highly educated group is significantly larger (by 5.69 points) than for the middle-educated group.
+- *High vs. Mid (Difference = 5.69, $p = 0.005$):* This is the crucial finding. The context effect for the highly educated group is significantly larger (by 5.69 points) than for the middle-educated group.
 
 **What does this mean practically?**
 
