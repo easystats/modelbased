@@ -76,7 +76,9 @@ get_marginalcontrasts <- function(
     # inequality effect summary, see Trenton D. Mize, Bing Han 2025
     # Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables
     # Sociological Science February 5, 10.15195/v12.a7
-    # this requires a special handling, because we can only use it with avg_comparisons
+    # this requires a special handling, because we can only use it with
+    # `avg_comparisons()`, where we take the mean of multiple contrasts
+    # --------------------------------------------------------------------------
     out <- .get_inequalitycontrasts(
       model,
       model_data,
@@ -88,6 +90,10 @@ get_marginalcontrasts <- function(
     )
     predict <- "response"
   } else if (isTRUE(my_args$context_effects)) {
+    # for contrasting two average slopes, we have an additional helper function
+    # and don't use the usual machinery of `estimate_means()` here, which we
+    # can use for other contrasts.
+    # -------------------------------------------------------------------------
     out <- .get_contexteffects(model, my_args, predict, transform, model_info, ...)
     # set defaults, for proper printing
     if (is.null(predict)) {
@@ -97,8 +103,12 @@ get_marginalcontrasts <- function(
       }
     }
   } else if (my_args$contrast_slopes) {
-    # sanity check - contrast for slopes only makes sense when we have a "by" argument
+    # Here, we are contrasting the slope of *one* predictor for different
+    # levels of another *categorical* predictor
+    # -------------------------------------------------------------------------
     if (is.null(my_args$by)) {
+      # sanity check - contrast for slopes only makes sense
+      # when we have a "by" argument
       insight::format_error(
         "Please specify the `by` argument to calculate contrasts of slopes."
       )
@@ -119,6 +129,7 @@ get_marginalcontrasts <- function(
     )
   } else {
     # for contrasts of categorical predictors, we call avg_predictions
+    # -------------------------------------------------------------------------
     out <- estimate_means(
       model = model,
       by = unique(c(my_args$contrast, my_args$by)),
