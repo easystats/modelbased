@@ -1,5 +1,25 @@
 # Changelog
 
+## modelbased 0.15.0
+
+CRAN release: 2026-05-10
+
+### Breaking Changes
+
+- Argument `join_dots` in the
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) method, which
+  is used to connect dots with lines, now defaults to `FALSE`.
+
+### Changes
+
+- Support for models of class `nestedLogit`.
+
+- [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  can now also calculate contrasts of average slopes, by defining two
+  numeric predictors in the `contrast` argument. This can also be useful
+  when estimating the context effects of within- and between-effects in
+  a model.
+
 ## modelbased 0.14.0
 
 CRAN release: 2026-02-17
