@@ -218,7 +218,7 @@
 #'   confidence bands: Theory, implementation, and an application to SVARs.
 #'   Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
 #'
-#' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "parameters", "datawizard", "rstanarm"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("lme4", "emmeans", "marginaleffects", "parameters", "datawizard", "rstanarm"), quietly = TRUE))
 #' \dontrun{
 #' # Basic usage --------------------------------
 #' # --------------------------------------------

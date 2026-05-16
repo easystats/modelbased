@@ -536,7 +536,7 @@ averaging across random effects groups is then more accurate.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("lme4", "marginaleffects", "parameters", "datawizard", "rstanarm"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("lme4", "emmeans", "marginaleffects", "parameters", "datawizard", "rstanarm"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 \dontrun{
 # Basic usage --------------------------------
 # --------------------------------------------
