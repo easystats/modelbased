@@ -50,18 +50,6 @@ get_emtrends <- function(
     fun_args$type <- predict
   }
 
-  # sanity check - is `trend` a factor? Then error, and refer to `estimate_contrasts()`
-  model_data <- insight::get_data(model, verbose = FALSE)
-  if (
-    my_args$trend %in% colnames(model_data) && !is.numeric(model_data[[my_args$trend]])
-  ) {
-    insight::format_error(paste0(
-      "Variable `",
-      my_args$trend,
-      "` is not numeric. Slopes can only be estimated for numeric variables when `backend = \"emmeans\". Please use `estimate_contrasts()` instead."
-    ))
-  }
-
   # Run emtrends
   estimated <- suppressMessages(do.call(emmeans::emtrends, fun_args))
 
@@ -115,7 +103,7 @@ get_emtrends <- function(
         "No numeric variable was specified for slope estimation. Selecting `trend = \"",
         trend,
         "\"`."
-      )) # nolint
+      ))
     }
   }
   if (length(trend) > 1) {
@@ -125,8 +113,16 @@ get_emtrends <- function(
         "More than one numeric variable was selected for slope estimation. Keeping only ",
         trend[1],
         "."
-      )) # nolint
+      ))
     }
+  }
+
+  if (trend %in% colnames(model_data) && !is.numeric(model_data[[trend]])) {
+    insight::format_error(paste0(
+      "Variable `",
+      trend,
+      "` is not numeric. Slopes can only be estimated for numeric variables when `backend = \"emmeans\"`. Please use `estimate_contrasts()` instead."
+    ))
   }
 
   my_args <- list(trend = trend, by = by)
