@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,7 +93,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Estimate Marginal Contrasts</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/v0.15.0/R/estimate_contrasts.R" class="external-link"><code>R/estimate_contrasts.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/R/estimate_contrasts.R" class="external-link"><code>R/estimate_contrasts.R</code></a></small>
       <div class="d-none name"><code>estimate_contrasts.Rd</code></div>
     </div>
 
@@ -139,7 +139,7 @@ and <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p>
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Other arguments passed, for instance, to <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>,
 to functions from the <strong>emmeans</strong> or <strong>marginaleffects</strong> package, or to process
-Bayesian models via <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>. Examples:</p><ul><li><p><code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>: Argument such as <code>length</code>, <code>digits</code> or <code>range</code>
+Bayesian models via <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>. Examples:</p><ul><li><p><code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>: Arguments such as <code>length</code>, <code>digits</code> or <code>range</code>
 can be used to control the (number of) representative values. For integer
 variables, <code>protect_integers</code> modulates whether these should also be
 treated as numerics, i.e. values can have fractions or not.</p></li>
@@ -156,8 +156,8 @@ supported by that model class.</p></li>
 <li><p><strong>emmeans</strong>: Internally used functions are <code>emmeans()</code> and <code>emtrends()</code>.
 Additional arguments can be passed to these functions.</p></li>
 <li><p>Bayesian models: For Bayesian models, parameters are cleaned using
-<code>describe_posterior()</code>, thus, arguments like, for example, <code>centrality</code>,
-<code>rope_range</code>, or <code>test</code> are passed to that function.</p></li>
+<code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>, thus, arguments like, for example,
+<code>centrality</code>, <code>rope_range</code>, or <code>test</code> are passed to that function.</p></li>
 <li><p>Especially for <code>estimate_contrasts()</code> with integer focal predictors, for
 which contrasts should be calculated, use argument <code>integer_as_continuous</code>
 to set the maximum number of unique values in an integer predictor to treat
@@ -847,8 +847,15 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># we set `integer_as_continuous = TRUE` to treat integer as continuous</span></span></span>
-<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"education"</span>, integer_as_continuous <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Setting `integer_as_continuous = TRUE` treats "time" as a continuous</span></span></span>
+<span class="r-in"><span><span class="co"># variable. This allows us to compare its average slope rather than making</span></span></span>
+<span class="r-in"><span><span class="co"># discrete pairwise comparisons at each time point.</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span>,</span></span>
+<span class="r-in"><span>  contrast <span class="op">=</span> <span class="st">"time"</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="st">"education"</span>,</span></span>
+<span class="r-in"><span>  integer_as_continuous <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | Difference |   SE |         95% CI | t(552) |     p</span>
@@ -939,6 +946,28 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> treatment    |  0.30 | 0.22 | [-0.15, 0.75] |  1.37 | 0.184</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for puppy_love</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Note: for the emmeans-backend, we need to use `estimate_contrasts()` for</span></span></span>
+<span class="r-in"><span><span class="co"># the above example:</span></span></span>
+<span class="r-in"><span><span class="va">cond_tx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>`no treatment` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span>,</span></span>
+<span class="r-in"><span>  contrast <span class="op">=</span> <span class="st">"puppy_love"</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="st">"dose"</span>,</span></span>
+<span class="r-in"><span>  comparison <span class="op">=</span> <span class="va">cond_tx</span>,</span></span>
+<span class="r-in"><span>  backend <span class="op">=</span> <span class="st">"emmeans"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level        | Difference |        95% CI |   SE | t(24) |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> no treatment |       0.76 | [ 0.21, 1.31] | 0.27 |  2.86 | 0.009</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> treatment    |       0.30 | [-0.15, 0.75] | 0.22 |  1.37 | 0.184</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: happiness</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: puppy_love</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Other models (mixed, Bayesian, ...) --------</span></span></span>
 <span class="r-in"><span><span class="co"># --------------------------------------------</span></span></span>

@@ -246,7 +246,7 @@ get_marginaltrends(
   Examples:
 
   - [`insight::get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html):
-    Argument such as `length`, `digits` or `range` can be used to
+    Arguments such as `length`, `digits` or `range` can be used to
     control the (number of) representative values. For integer
     variables, `protect_integers` modulates whether these should also be
     treated as numerics, i.e. values can have fractions or not.
@@ -269,8 +269,9 @@ get_marginaltrends(
     `emtrends()`. Additional arguments can be passed to these functions.
 
   - Bayesian models: For Bayesian models, parameters are cleaned using
-    `describe_posterior()`, thus, arguments like, for example,
-    `centrality`, `rope_range`, or `test` are passed to that function.
+    [`bayestestR::describe_posterior()`](https://easystats.github.io/bayestestR/reference/describe_posterior.html),
+    thus, arguments like, for example, `centrality`, `rope_range`, or
+    `test` are passed to that function.
 
   - Especially for
     [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)

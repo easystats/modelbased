@@ -48,7 +48,7 @@ estimate_contrasts(
   Examples:
 
   - [`insight::get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html):
-    Argument such as `length`, `digits` or `range` can be used to
+    Arguments such as `length`, `digits` or `range` can be used to
     control the (number of) representative values. For integer
     variables, `protect_integers` modulates whether these should also be
     treated as numerics, i.e. values can have fractions or not.
@@ -71,8 +71,9 @@ estimate_contrasts(
     `emtrends()`. Additional arguments can be passed to these functions.
 
   - Bayesian models: For Bayesian models, parameters are cleaned using
-    `describe_posterior()`, thus, arguments like, for example,
-    `centrality`, `rope_range`, or `test` are passed to that function.
+    [`bayestestR::describe_posterior()`](https://easystats.github.io/bayestestR/reference/describe_posterior.html),
+    thus, arguments like, for example, `centrality`, `rope_range`, or
+    `test` are passed to that function.
 
   - Especially for `estimate_contrasts()` with integer focal predictors,
     for which contrasts should be calculated, use argument
@@ -877,8 +878,15 @@ estimate_contrasts(model, "time", by = "education")
 #> p-values are uncorrected.
 #> 
 
-# we set `integer_as_continuous = TRUE` to treat integer as continuous
-estimate_contrasts(model, "time", by = "education", integer_as_continuous = 1)
+# Setting `integer_as_continuous = TRUE` treats "time" as a continuous
+# variable. This allows us to compare its average slope rather than making
+# discrete pairwise comparisons at each time point.
+estimate_contrasts(
+  model,
+  contrast = "time",
+  by = "education",
+  integer_as_continuous = TRUE
+)
 #> Marginal Contrasts Analysis
 #> 
 #> Level1 | Level2 | Difference |   SE |         95% CI | t(552) |     p
@@ -969,6 +977,28 @@ estimate_slopes(model, "puppy_love", by = "dose", comparison = cond_tx)
 #> treatment    |  0.30 | 0.22 | [-0.15, 0.75] |  1.37 | 0.184
 #> 
 #> Marginal effects estimated for puppy_love
+
+# Note: for the emmeans-backend, we need to use `estimate_contrasts()` for
+# the above example:
+cond_tx <- list(`no treatment` = c(1, 0, 0), treatment = c(0, 0.5, 0.5))
+estimate_contrasts(
+  model,
+  contrast = "puppy_love",
+  by = "dose",
+  comparison = cond_tx,
+  backend = "emmeans"
+)
+#> Marginal Contrasts Analysis
+#> 
+#> Level        | Difference |        95% CI |   SE | t(24) |     p
+#> ----------------------------------------------------------------
+#> no treatment |       0.76 | [ 0.21, 1.31] | 0.27 |  2.86 | 0.009
+#> treatment    |       0.30 | [-0.15, 0.75] | 0.22 |  1.37 | 0.184
+#> 
+#> Variable predicted: happiness
+#> Predictors contrasted: puppy_love
+#> p-values are uncorrected.
+#> 
 
 # Other models (mixed, Bayesian, ...) --------
 # --------------------------------------------
