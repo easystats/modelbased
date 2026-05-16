@@ -259,8 +259,15 @@
 #' # "time" only has integer values and few values, so it's treated like a factor
 #' estimate_contrasts(model, "time", by = "education")
 #'
-#' # we set `integer_as_continuous = TRUE` to treat integer as continuous
-#' estimate_contrasts(model, "time", by = "education", integer_as_continuous = 1)
+#' # Setting `integer_as_continuous = TRUE` treats "time" as a continuous
+#' # variable. This allows us to compare its average slope rather than making
+#' # discrete pairwise comparisons at each time point.
+#' estimate_contrasts(
+#'   model,
+#'   contrast = "time",
+#'   by = "education",
+#'   integer_as_continuous = TRUE
+#' )
 #'
 #' # pairwise comparisons for multiple groups
 #' estimate_contrasts(

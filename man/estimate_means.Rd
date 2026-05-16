@@ -144,7 +144,7 @@ default backend.}
 to functions from the \strong{emmeans} or \strong{marginaleffects} package, or to process
 Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}}. Examples:
 \itemize{
-\item \code{insight::get_datagrid()}: Argument such as \code{length}, \code{digits} or \code{range}
+\item \code{insight::get_datagrid()}: Arguments such as \code{length}, \code{digits} or \code{range}
 can be used to control the (number of) representative values. For integer
 variables, \code{protect_integers} modulates whether these should also be
 treated as numerics, i.e. values can have fractions or not.
@@ -161,8 +161,8 @@ supported by that model class.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
-\code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
-\code{rope_range}, or \code{test} are passed to that function.
+\code{bayestestR::describe_posterior()}, thus, arguments like, for example,
+\code{centrality}, \code{rope_range}, or \code{test} are passed to that function.
 \item Especially for \code{estimate_contrasts()} with integer focal predictors, for
 which contrasts should be calculated, use argument \code{integer_as_continuous}
 to set the maximum number of unique values in an integer predictor to treat
