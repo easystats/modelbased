@@ -131,6 +131,18 @@ test_that("estimate_slopes", {
 })
 
 
+test_that("estimate_slopes, errors for emmeans when trend is non-numeric", {
+  skip_if_not_installed("emmeans")
+  data(iris)
+  model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+  expect_error(
+    estimate_slopes(model, trend = "Species", by = "Sepal.Width", backend = "emmeans"),
+    regex = "Variable `Species` is not numeric",
+    fixed = TRUE
+  )
+})
+
+
 test_that("estimate_slopes, johnson-neyman p-adjust", {
   data(iris)
   model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)

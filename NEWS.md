@@ -1,3 +1,10 @@
+# modelbased (devel)
+
+## Changes
+
+* Informative error message when the `trend` variable in `estimate_slopes()` is
+  not numeric and `backend = "emmeans"`.
+
 # modelbased 0.15.0
 
 ## Breaking Changes
