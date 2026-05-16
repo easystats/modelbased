@@ -218,7 +218,7 @@
 #'   confidence bands: Theory, implementation, and an application to SVARs.
 #'   Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
 #'
-#' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "parameters", "datawizard", "rstanarm"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("lme4", "emmeans", "marginaleffects", "parameters", "datawizard", "rstanarm"), quietly = TRUE))
 #' \dontrun{
 #' # Basic usage --------------------------------
 #' # --------------------------------------------
@@ -259,8 +259,15 @@
 #' # "time" only has integer values and few values, so it's treated like a factor
 #' estimate_contrasts(model, "time", by = "education")
 #'
-#' # we set `integer_as_continuous = TRUE` to treat integer as continuous
-#' estimate_contrasts(model, "time", by = "education", integer_as_continuous = 1)
+#' # Setting `integer_as_continuous = TRUE` treats "time" as a continuous
+#' # variable. This allows us to compare its average slope rather than making
+#' # discrete pairwise comparisons at each time point.
+#' estimate_contrasts(
+#'   model,
+#'   contrast = "time",
+#'   by = "education",
+#'   integer_as_continuous = TRUE
+#' )
 #'
 #' # pairwise comparisons for multiple groups
 #' estimate_contrasts(
@@ -289,6 +296,17 @@
 #' cond_tx <- cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5))
 #' model <- lm(happiness ~ puppy_love * dose, data = puppy_love)
 #' estimate_slopes(model, "puppy_love", by = "dose", comparison = cond_tx)
+#'
+#' # Note: for the emmeans-backend, we need to use `estimate_contrasts()` for
+#' # the above example:
+#' cond_tx <- list(`no treatment` = c(1, 0, 0), treatment = c(0, 0.5, 0.5))
+#' estimate_contrasts(
+#'   model,
+#'   contrast = "puppy_love",
+#'   by = "dose",
+#'   comparison = cond_tx,
+#'   backend = "emmeans"
+#' )
 #'
 #' # Other models (mixed, Bayesian, ...) --------
 #' # --------------------------------------------

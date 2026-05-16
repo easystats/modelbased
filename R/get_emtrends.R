@@ -13,13 +13,15 @@
 #' get_emtrends(model)
 #' get_emtrends(model, by = "Sepal.Width")
 #' @export
-get_emtrends <- function(model,
-                         trend = NULL,
-                         by = NULL,
-                         predict = NULL,
-                         keep_iterations = FALSE,
-                         verbose = TRUE,
-                         ...) {
+get_emtrends <- function(
+  model,
+  trend = NULL,
+  by = NULL,
+  predict = NULL,
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # check if available
   insight::check_if_installed("emmeans")
 
@@ -38,7 +40,11 @@ get_emtrends <- function(model,
   ))
 
   # handle distributional parameters
-  if (!is.null(predict) && inherits(model, "brmsfit") && predict %in% .brms_aux_elements(model)) {
+  if (
+    !is.null(predict) &&
+      inherits(model, "brmsfit") &&
+      predict %in% .brms_aux_elements(model)
+  ) {
     fun_args$dpar <- predict
   } else {
     fun_args$type <- predict
@@ -70,11 +76,13 @@ get_emtrends <- function(model,
 # =========================================================================
 
 #' @keywords internal
-.guess_emtrends_arguments <- function(model,
-                                      trend = NULL,
-                                      by = NULL,
-                                      verbose = TRUE,
-                                      ...) {
+.guess_emtrends_arguments <- function(
+  model,
+  trend = NULL,
+  by = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Gather info
   model_data <- insight::get_data(model, verbose = FALSE)
   predictors <- intersect(
@@ -86,17 +94,35 @@ get_emtrends <- function(model,
   if (is.null(trend)) {
     trend <- predictors[sapply(model_data[predictors], is.numeric)][1]
     if (!length(trend) || is.na(trend)) {
-      insight::format_error("Model contains no numeric predictor. Please specify `trend`.")
+      insight::format_error(
+        "Model contains no numeric predictor. Please specify `trend`."
+      )
     }
     if (verbose) {
-      insight::format_alert(paste0("No numeric variable was specified for slope estimation. Selecting `trend = \"", trend, "\"`.")) # nolint
+      insight::format_alert(paste0(
+        "No numeric variable was specified for slope estimation. Selecting `trend = \"",
+        trend,
+        "\"`."
+      ))
     }
   }
   if (length(trend) > 1) {
     trend <- trend[1]
     if (verbose) {
-      insight::format_alert(paste0("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")) # nolint
+      insight::format_alert(paste0(
+        "More than one numeric variable was selected for slope estimation. Keeping only `",
+        trend[1],
+        "`."
+      ))
     }
+  }
+
+  if (trend %in% colnames(model_data) && !is.numeric(model_data[[trend]])) {
+    insight::format_error(paste0(
+      "Variable `",
+      trend,
+      "` is not numeric. Slopes can only be estimated for numeric variables when `backend = \"emmeans\"`. Please use `estimate_contrasts()` instead."
+    ))
   }
 
   my_args <- list(trend = trend, by = by)
