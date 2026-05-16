@@ -140,6 +140,18 @@ test_that("estimate_slopes, errors for emmeans when trend is non-numeric", {
     regex = "Variable `Species` is not numeric",
     fixed = TRUE
   )
+  model <- lm(Sepal.Length ~ Species, data = iris)
+  expect_error(
+    estimate_slopes(model, backend = "emmeans"),
+    regex = "Model contains no numeric predictor",
+    fixed = TRUE
+  )
+  model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+  expect_message(
+    estimate_slopes(model, backend = "emmeans"),
+    regex = "No numeric variable was specified",
+    fixed = TRUE
+  )
 })
 
 
