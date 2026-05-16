@@ -608,6 +608,17 @@ cond_tx <- cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5))
 model <- lm(happiness ~ puppy_love * dose, data = puppy_love)
 estimate_slopes(model, "puppy_love", by = "dose", comparison = cond_tx)
 
+# Note: for the emmeans-backend, we need to use `estimate_contrasts()` for
+# the above example:
+cond_tx <- list(`no treatment` = c(1, 0, 0), treatment = c(0, 0.5, 0.5))
+estimate_contrasts(
+  model,
+  contrast = "puppy_love",
+  by = "dose",
+  comparison = cond_tx,
+  backend = "emmeans"
+)
+
 # Other models (mixed, Bayesian, ...) --------
 # --------------------------------------------
 data <- iris
