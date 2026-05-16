@@ -110,9 +110,9 @@ get_emtrends <- function(
     trend <- trend[1]
     if (verbose) {
       insight::format_alert(paste0(
-        "More than one numeric variable was selected for slope estimation. Keeping only ",
+        "More than one numeric variable was selected for slope estimation. Keeping only `",
         trend[1],
-        "."
+        "`."
       ))
     }
   }
