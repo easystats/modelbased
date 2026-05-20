@@ -68,7 +68,8 @@
   }
 
   if (p_adjust %in% tolower(stats::p.adjust.methods)) {
-    # base R adjustments
+    # base R adjustments - need to convert BH and BY back to uppercase before
+    p_adjust <- switch(p_adjust, bh = "BH", by = "BY", p_adjust)
     params[["p"]] <- stats::p.adjust(params[["p"]], method = p_adjust)
   } else if (p_adjust == "tukey") {
     # find first occurence of one of the following columns: "t", "z", or "statistic"

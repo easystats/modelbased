@@ -618,6 +618,14 @@ test_that("estimate_contrasts - p.adjust", {
   ))
   expect_true(any(p_none$p != p_tuk$p))
 
+  # make sure upper case works
+  expect_no_error(estimate_contrasts(
+    model,
+    contrast = "Species",
+    p_adjust = "BH",
+    backend = "marginaleffects"
+  ))
+
   model <- lm(Petal.Width ~ Species, data = iris)
   expect_error(
     estimate_contrasts(model, p_adjust = "scheffe"),
