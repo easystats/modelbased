@@ -200,6 +200,9 @@
 #' [insight::get_datagrid()] (used when `data = "grid"`) and
 #' [insight::get_predicted()]. Furthermore, for count regression models that use
 #' an offset term, use `offset = <value>` to fix the offset at a specific value.
+#' For models of class `nestedLogit`, use the `submodel` argument to specify
+#' the component for which predictions should be returned (see
+#' `?insight::get_predicted` for details).
 #'
 #' @return A data frame of predicted values and uncertainty intervals, with
 #' class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted]
@@ -255,15 +258,17 @@
 #' estimate_relation(model)
 #' }
 #' @export
-estimate_expectation <- function(model,
-                                 data = NULL,
-                                 by = NULL,
-                                 predict = "expectation",
-                                 ci = 0.95,
-                                 transform = NULL,
-                                 iterations = NULL,
-                                 keep_iterations = FALSE,
-                                 ...) {
+estimate_expectation <- function(
+  model,
+  data = NULL,
+  by = NULL,
+  predict = "expectation",
+  ci = 0.95,
+  transform = NULL,
+  iterations = NULL,
+  keep_iterations = FALSE,
+  ...
+) {
   .estimate_predicted(
     model,
     data = data,
@@ -280,15 +285,17 @@ estimate_expectation <- function(model,
 
 #' @rdname estimate_expectation
 #' @export
-estimate_link <- function(model,
-                          data = "grid",
-                          by = NULL,
-                          predict = "link",
-                          ci = 0.95,
-                          transform = NULL,
-                          iterations = NULL,
-                          keep_iterations = FALSE,
-                          ...) {
+estimate_link <- function(
+  model,
+  data = "grid",
+  by = NULL,
+  predict = "link",
+  ci = 0.95,
+  transform = NULL,
+  iterations = NULL,
+  keep_iterations = FALSE,
+  ...
+) {
   # reset to NULL if only "by" was specified
   if (missing(data) && !missing(by)) {
     data <- NULL
@@ -309,15 +316,17 @@ estimate_link <- function(model,
 
 #' @rdname estimate_expectation
 #' @export
-estimate_prediction <- function(model,
-                                data = NULL,
-                                by = NULL,
-                                predict = "prediction",
-                                ci = 0.95,
-                                transform = NULL,
-                                iterations = NULL,
-                                keep_iterations = FALSE,
-                                ...) {
+estimate_prediction <- function(
+  model,
+  data = NULL,
+  by = NULL,
+  predict = "prediction",
+  ci = 0.95,
+  transform = NULL,
+  iterations = NULL,
+  keep_iterations = FALSE,
+  ...
+) {
   .estimate_predicted(
     model,
     data = data,
@@ -333,15 +342,17 @@ estimate_prediction <- function(model,
 
 #' @rdname estimate_expectation
 #' @export
-estimate_relation <- function(model,
-                              data = "grid",
-                              by = NULL,
-                              predict = "expectation",
-                              ci = 0.95,
-                              transform = NULL,
-                              iterations = NULL,
-                              keep_iterations = FALSE,
-                              ...) {
+estimate_relation <- function(
+  model,
+  data = "grid",
+  by = NULL,
+  predict = "expectation",
+  ci = 0.95,
+  transform = NULL,
+  iterations = NULL,
+  keep_iterations = FALSE,
+  ...
+) {
   # reset to NULL if only "by" was specified
   if (missing(data) && !missing(by)) {
     data <- NULL
@@ -364,15 +375,17 @@ estimate_relation <- function(model,
 # Internal ----------------------------------------------------------------
 
 #' @keywords internal
-.estimate_predicted <- function(model,
-                                data = "grid",
-                                by = NULL,
-                                predict = "expectation",
-                                ci = 0.95,
-                                transform = NULL,
-                                iterations = NULL,
-                                keep_iterations = FALSE,
-                                ...) {
+.estimate_predicted <- function(
+  model,
+  data = "grid",
+  by = NULL,
+  predict = "expectation",
+  ci = 0.95,
+  transform = NULL,
+  iterations = NULL,
+  keep_iterations = FALSE,
+  ...
+) {
   # return early for htest
   if (inherits(model, "htest")) {
     return(insight::get_predicted(model, ...))
@@ -384,7 +397,14 @@ estimate_relation <- function(model,
   }
 
   # keep_iterations cannot be larger than interations
-  if (!is.null(keep_iterations) && !is.null(iterations) && is.numeric(keep_iterations) && is.numeric(iterations) && keep_iterations > iterations) { # nolint
+  if (
+    !is.null(keep_iterations) &&
+      !is.null(iterations) &&
+      is.numeric(keep_iterations) &&
+      is.numeric(iterations) &&
+      keep_iterations > iterations
+  ) {
+    # nolint
     insight::format_error("`keep_iterations` cannot be larger than `iterations`.")
   }
 
@@ -450,7 +470,12 @@ estimate_relation <- function(model,
     data <- model_data
   } else if (!is.data.frame(data)) {
     if (is_grid) {
-      data <- insight::get_datagrid(model, reference = model_data, include_response = is_nullmodel, ...)
+      data <- insight::get_datagrid(
+        model,
+        reference = model_data,
+        include_response = is_nullmodel,
+        ...
+      )
     } else {
       insight::format_error(
         "The `data` argument must either NULL, \"grid\" or another data frame."
@@ -462,7 +487,12 @@ estimate_relation <- function(model,
   grid_specs <- attributes(data)
 
   # Get response for later residuals -------------
-  if (!is.null(model_response) && length(model_response) == 1 && model_response %in% names(data)) { # nolint
+  if (
+    !is.null(model_response) &&
+      length(model_response) == 1 &&
+      model_response %in% names(data)
+  ) {
+    # nolint
     response <- data[[model_response]]
   } else {
     response <- NULL
@@ -492,7 +522,10 @@ estimate_relation <- function(model,
   )
 
   # for predicting grouplevel random effects, add "allow.new.levels"
-  if (!is.null(grouplevel_effects) && any(grouplevel_effects %in% grid_specs$at_spec$varname)) {
+  if (
+    !is.null(grouplevel_effects) &&
+      any(grouplevel_effects %in% grid_specs$at_spec$varname)
+  ) {
     prediction_args$allow.new.levels <- TRUE
     dots$allow.new.levels <- NULL
   }
@@ -511,13 +544,22 @@ estimate_relation <- function(model,
   }
 
   # remove response variable from data frame, as this variable is predicted
-  if (!is.null(model_response) && length(model_response) == 1 && model_response %in% colnames(out)) { # nolint
+  if (
+    !is.null(model_response) &&
+      length(model_response) == 1 &&
+      model_response %in% colnames(out)
+  ) {
+    # nolint
     out[[model_response]] <- NULL
   }
 
   # keep row-column, but make sure it's integer
   if ("Row" %in% colnames(out)) {
-    out[["Row"]] <- insight::format_value(out[["Row"]], protect_integers = TRUE)
+    if (inherits(model, "nestedLogit")) {
+      out[["Row"]] <- NULL
+    } else {
+      out[["Row"]] <- insight::format_value(out[["Row"]], protect_integers = TRUE)
+    }
   }
 
   # Add residuals
@@ -557,17 +599,21 @@ estimate_relation <- function(model,
     by = grid_specs$at,
     type = "predictions",
     model = model,
-    info = c(
-      grid_specs,
-      list(predict = predict),
-      transform = !is.null(transform)
-    )
+    info = c(grid_specs, list(predict = predict), transform = !is.null(transform))
   )
 
-  attributes(out) <- c(attributes(out), grid_specs[!names(grid_specs) %in% names(attributes(out))])
+  attributes(out) <- c(
+    attributes(out),
+    grid_specs[!names(grid_specs) %in% names(attributes(out))]
+  )
 
   # Class
-  class(out) <- c(paste0("estimate_", predict), "estimate_predicted", "see_estimate_predicted", class(out))
+  class(out) <- c(
+    paste0("estimate_", predict),
+    "estimate_predicted",
+    "see_estimate_predicted",
+    class(out)
+  )
 
   out
 }

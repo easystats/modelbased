@@ -69,7 +69,7 @@ test_that("estimate_contrasts() - posterior draws", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations", "joint_test"
+      "keep_iterations", "joint_test", "context_effects"
     )
   )
   # fmt: skip
@@ -95,7 +95,7 @@ test_that("estimate_contrasts() - posterior draws", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations", "joint_test"
+      "keep_iterations", "joint_test", "context_effects"
     )
   )
   # fmt: skip
@@ -196,7 +196,12 @@ test_that("estimate_means() - posterior draws, emmeans", {
 test_that("estimate_contrasts() - posterior draws, emmeans", {
   m <- insight::download_model("brms_1")
   skip_if(is.null(m))
-  out <- estimate_contrasts(m, by = "wt=c(3,4,5)", keep_iterations = 5, backend = "emmeans")
+  out <- estimate_contrasts(
+    m,
+    by = "wt=c(3,4,5)",
+    keep_iterations = 5,
+    backend = "emmeans"
+  )
   # fmt: skip
   expect_named(
     attributes(out),
@@ -217,7 +222,12 @@ test_that("estimate_contrasts() - posterior draws, emmeans", {
   )
   expect_identical(dim(out), c(3L, 12L))
 
-  out <- estimate_contrasts(m, by = "wt=c(3,4,5)", keep_iterations = TRUE, backend = "emmeans")
+  out <- estimate_contrasts(
+    m,
+    by = "wt=c(3,4,5)",
+    keep_iterations = TRUE,
+    backend = "emmeans"
+  )
   # fmt: skip
   expect_named(
     attributes(out),

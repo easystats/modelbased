@@ -1,10 +1,9 @@
 # Clean names -------------------------------------------------------------
 
-
 #' @keywords internal
 .clean_names_frequentist <- function(means, predict = NULL, info = NULL) {
-  names(means)[names(means) == "emmean"] <- .guess_estimate_name(predict, info)
-  names(means)[names(means) == "response"] <- .guess_estimate_name(predict, info)
+  names(means)[names(means) == "emmean"] <- .guess_estimate_name(predict, info = info)
+  names(means)[names(means) == "response"] <- .guess_estimate_name(predict, info = info)
   names(means)[names(means) == "prob"] <- "Probability"
   names(means)[names(means) == "estimate"] <- "Difference"
   names(means)[names(means) == "odds.ratio"] <- "Odds_ratio"

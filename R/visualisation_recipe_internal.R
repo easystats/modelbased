@@ -279,7 +279,7 @@
   ribbon = NULL,
   facet = NULL,
   grid = NULL,
-  join_dots = TRUE,
+  join_dots = FALSE,
   numeric_as_discrete = 8,
   ...
 ) {

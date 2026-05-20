@@ -87,7 +87,15 @@ get_marginaltrends(
 
 \item{contrast}{A character vector indicating the name of the variable(s) for
 which to compute the contrasts, optionally including representative values or
-levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).}
+levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).
+\strong{Note:} It is also possible to contrast average slopes, i.e. \code{contrast} can
+be the name of two numeric predictors. However, while it is possible to
+filter data for one numeric contrast (e.g., \code{contrast = c("num_pred=c(0, 1, 3)")}),
+it is not possible to "filter" at certain values for two numeric predictors.
+For contrasting slopes, the \code{comparison} will always be \code{"pairwise"}. It is
+possible to compute pairwise comparisons of two average slopes at the levels
+of a third variable, by also adding that variable to the \code{contrast} argument,
+e.g. \code{contrast = c("num1", "num2", "factor")}. See 'Examples'.}
 
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
@@ -163,14 +171,17 @@ See an overview of applications in the related case study in the
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
-\item Formula: A formula like \code{comparison ~ pairs | group}, where the left-hand
-side indicates the type of comparison (\code{difference} or \code{ratio}), the
+\item Formula: A formula like \verb{<comparison> ~ pairs | group}, where the left-hand
+side indicates the type of \verb{<comparison>} (\code{difference} or \code{ratio}), the
 right-hand side determines the pairs of estimates to compare (\code{reference},
 \code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
 can be carried out within subsets by indicating the grouping variable
-after a vertical bar ( \code{|}).
+after a vertical bar ( \code{|}). If the left-hand side is missing, it defaults
+to \code{difference} (i.e. \code{comparison = ~pairs | group} is identical to
+\code{comparison = difference ~ pairs | group}).
 \item A custom function, e.g. \code{comparison = myfun}, or
-\code{comparison ~ I(my_fun(x)) | groups}.
+\verb{<comparison> ~ I(my_fun(x)) | groups} (where \verb{<comparison>} can be
+\code{difference} or \code{ratio}, or skipped).
 \item If contrasts should be calculated (or grouped by) factors, \code{comparison}
 can also be a matrix that specifies factor contrasts (see 'Examples').
 }
@@ -189,7 +200,7 @@ to the output. You can reshape them to a long format by running
 to functions from the \strong{emmeans} or \strong{marginaleffects} package, or to process
 Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}}. Examples:
 \itemize{
-\item \code{insight::get_datagrid()}: Argument such as \code{length}, \code{digits} or \code{range}
+\item \code{insight::get_datagrid()}: Arguments such as \code{length}, \code{digits} or \code{range}
 can be used to control the (number of) representative values. For integer
 variables, \code{protect_integers} modulates whether these should also be
 treated as numerics, i.e. values can have fractions or not.
@@ -206,8 +217,8 @@ supported by that model class.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
-\code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
-\code{rope_range}, or \code{test} are passed to that function.
+\code{bayestestR::describe_posterior()}, thus, arguments like, for example,
+\code{centrality}, \code{rope_range}, or \code{test} are passed to that function.
 \item Especially for \code{estimate_contrasts()} with integer focal predictors, for
 which contrasts should be calculated, use argument \code{integer_as_continuous}
 to set the maximum number of unique values in an integer predictor to treat

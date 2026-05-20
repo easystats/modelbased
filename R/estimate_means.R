@@ -117,7 +117,7 @@
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
 #' Bayesian models via [bayestestR::describe_posterior()]. Examples:
-#' - `insight::get_datagrid()`: Argument such as `length`, `digits` or `range`
+#' - `insight::get_datagrid()`: Arguments such as `length`, `digits` or `range`
 #'   can be used to control the (number of) representative values. For integer
 #'   variables, `protect_integers` modulates whether these should also be
 #'   treated as numerics, i.e. values can have fractions or not.
@@ -134,8 +134,8 @@
 #' - **emmeans**: Internally used functions are `emmeans()` and `emtrends()`.
 #'   Additional arguments can be passed to these functions.
 #' - Bayesian models: For Bayesian models, parameters are cleaned using
-#'   `describe_posterior()`, thus, arguments like, for example, `centrality`,
-#'   `rope_range`, or `test` are passed to that function.
+#'   `bayestestR::describe_posterior()`, thus, arguments like, for example,
+#'   `centrality`, `rope_range`, or `test` are passed to that function.
 #' - Especially for `estimate_contrasts()` with integer focal predictors, for
 #'   which contrasts should be calculated, use argument `integer_as_continuous`
 #'   to set the maximum number of unique values in an integer predictor to treat

@@ -1,3 +1,26 @@
+# modelbased (devel)
+
+## Changes
+
+* Informative error message when the `trend` variable in `estimate_slopes()` is
+  not numeric and `backend = "emmeans"`.
+
+# modelbased 0.15.0
+
+## Breaking Changes
+
+* Argument `join_dots` in the `plot()` method, which is used to connect dots
+  with lines, now defaults to `FALSE`.
+
+## Changes
+
+* Support for models of class `nestedLogit`.
+
+* `estimate_contrasts()` can now also calculate contrasts of average slopes, by
+  defining two numeric predictors in the `contrast` argument. This can also be
+  useful when estimating the context effects of within- and between-effects in a
+  model.
+
 # modelbased 0.14.0
 
 ## Changes

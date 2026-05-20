@@ -43,7 +43,11 @@ test_that("attributes_means, contrasts", {
       "comparison", "contrast", "transform", "keep_iterations", "joint_test"
     )
   )
-  estim <- suppressMessages(estimate_contrasts(model, "Species", backend = "marginaleffects"))
+  estim <- suppressMessages(estimate_contrasts(
+    model,
+    "Species",
+    backend = "marginaleffects"
+  ))
   # fmt: skip
   expect_named(
     attributes(estim),
@@ -52,7 +56,7 @@ test_that("attributes_means, contrasts", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations", "joint_test", "vcov"
+      "keep_iterations", "joint_test", "vcov", "context_effects"
     )
   )
   estim <- suppressMessages(estimate_contrasts(
@@ -68,7 +72,7 @@ test_that("attributes_means, contrasts", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations", "joint_test", "vcov"
+      "keep_iterations", "joint_test", "vcov", "context_effects"
     )
   )
   estim <- suppressMessages(estimate_contrasts(
@@ -85,7 +89,7 @@ test_that("attributes_means, contrasts", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "contrast_filter", "keep_iterations", "joint_test","vcov"
+      "contrast_filter", "keep_iterations", "joint_test","vcov", "context_effects"
     )
   )
 })
@@ -105,7 +109,11 @@ test_that("attributes_means, slopes", {
       "keep_iterations"
     )
   )
-  estim <- suppressMessages(estimate_slopes(model, "Sepal.Width", backend = "marginaleffects"))
+  estim <- suppressMessages(estimate_slopes(
+    model,
+    "Sepal.Width",
+    backend = "marginaleffects"
+  ))
   # fmt: skip
   expect_named(
     attributes(estim),

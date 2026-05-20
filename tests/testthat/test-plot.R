@@ -15,6 +15,10 @@ test_that("plots emmeans", {
     "plot-means-1",
     plot(modelbased::visualisation_recipe(x, show_data = FALSE))
   )
+  vdiffr::expect_doppelganger(
+    "plot-means-1-lines",
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE, join_dots = TRUE))
+  )
   x <- estimate_means(model, by = "Sepal.Width", backend = "emmeans")
   vdiffr::expect_doppelganger(
     "plot-means-2",
@@ -29,6 +33,10 @@ test_that("plots emmeans", {
   vdiffr::expect_doppelganger(
     "plot-means-4",
     plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+  )
+  vdiffr::expect_doppelganger(
+    "plot-means-4-lines",
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE, join_dots = TRUE))
   )
 })
 
@@ -245,6 +253,11 @@ test_that("plots, estimate_means works with Poisson", {
   x <- estimate_means(dat_glm, "fa", backend = "emmeans")
   set.seed(123)
   vdiffr::expect_doppelganger("plot-means-poisson-1", plot(x, show_data = TRUE))
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-means-poisson-1-lines",
+    plot(x, show_data = TRUE, join_dots = TRUE)
+  )
   x <- estimate_means(dat_glm, "fa", backend = "marginaleffects")
   set.seed(123)
   vdiffr::expect_doppelganger("plot-means-poisson-2", plot(x, show_data = TRUE))

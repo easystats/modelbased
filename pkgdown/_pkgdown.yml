@@ -87,6 +87,8 @@ navbar:
           href: articles/practical_intersectionality.html
         - text: "Measuring and comparing absolute and relative inequalities"
           href: articles/practical_inequalities.html
+        - text: "Context Effects: How the Environment Shapes the Individual"
+          href: articles/practical_context_effect.html
         - text: "Interrupted Time Series Analysis"
           href: articles/practical_its.html
         - text: "An Introduction to Growth Mixture Models"

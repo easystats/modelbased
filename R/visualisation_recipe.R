@@ -27,11 +27,11 @@
 #' `collapse_group` argument to "collapse" data points by random effects
 #' grouping factors. Argument `show_data` will be ignored for plotting objects
 #' returned by `estimate_slopes()` or `estimate_grouplevel()`.
-#' @param join_dots Logical, if `TRUE` (default) and for categorical focal terms
-#' in `by`, dots (estimates) are connected by lines, i.e. plots will be a
-#' combination of dots with error bars and connecting lines. If `FALSE`, only
-#' dots and error bars are shown. It is possible to set a global default value
-#' using `options()`, e.g. `options(modelbased_join_dots = FALSE)`.
+#' @param join_dots Logical, if `TRUE` and for categorical focal terms in `by`,
+#' dots (estimates) are connected by lines, i.e. plots will be a combination of
+#' dots with error bars and connecting lines. If `FALSE` (default), only dots
+#' and error bars are shown. It is possible to set a global default value using
+#' `options()`, e.g. `options(modelbased_join_dots = TRUE)`.
 #' @param numeric_as_discrete Maximum number of unique values in a numeric
 #' predictor to treat that predictor as discrete. Defaults to `8`. Numeric
 #' predictors are usually mapped to a continuous color scale, unless they have
@@ -203,7 +203,7 @@ visualisation_recipe.estimate_predicted <- function(
 
   # set defaults
   if (is.null(join_dots)) {
-    join_dots <- getOption("modelbased_join_dots", TRUE)
+    join_dots <- getOption("modelbased_join_dots", FALSE)
   }
   if (is.null(numeric_as_discrete)) {
     numeric_as_discrete <- getOption("modelbased_numeric_as_discrete", 8)

@@ -109,7 +109,10 @@ to the output. You can reshape them to a long format by running
 \item{...}{You can add all the additional control arguments from
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} (used when \code{data = "grid"}) and
 \code{\link[insight:get_predicted]{insight::get_predicted()}}. Furthermore, for count regression models that use
-an offset term, use \verb{offset = <value>} to fix the offset at a specific value.}
+an offset term, use \verb{offset = <value>} to fix the offset at a specific value.
+For models of class \code{nestedLogit}, use the \code{submodel} argument to specify
+the component for which predictions should be returned (see
+\code{?insight::get_predicted} for details).}
 }
 \value{
 A data frame of predicted values and uncertainty intervals, with

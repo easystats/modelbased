@@ -27,10 +27,6 @@
 </defs>
 <g clip-path='url(#cpNDAuNjJ8NjMxLjM5fDIyLjc4fDU0NS4xMQ==)'>
 <rect x='40.62' y='22.78' width='590.77' height='522.33' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<polyline points='181.60,263.77 450.13,284.21 ' style='stroke-width: 1.07; stroke: #F8766D; stroke-linecap: butt;' />
-<polyline points='195.03,483.91 463.56,478.68 ' style='stroke-width: 1.07; stroke: #C77CFF; stroke-linecap: butt;' />
-<polyline points='208.45,134.62 476.99,100.00 ' style='stroke-width: 1.07; stroke: #7CAE00; stroke-linecap: butt;' />
-<polyline points='221.88,419.71 490.41,439.12 ' style='stroke-width: 1.07; stroke: #00BFC4; stroke-linecap: butt;' />
 <line x1='181.60' y1='318.39' x2='181.60' y2='209.15' style='stroke-width: 1.07; stroke: #F8766D; stroke-linecap: butt;' />
 <line x1='450.13' y1='332.06' x2='450.13' y2='236.36' style='stroke-width: 1.07; stroke: #F8766D; stroke-linecap: butt;' />
 <line x1='208.45' y1='194.78' x2='208.45' y2='74.45' style='stroke-width: 1.07; stroke: #7CAE00; stroke-linecap: butt;' />
@@ -69,19 +65,15 @@
 <rect x='642.35' y='241.72' width='72.17' height='84.45' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
 <text x='642.35' y='250.43' style='font-size: 11.00px; font-family: sans;' textLength='49.55px' lengthAdjust='spacingAndGlyphs'>Response</text>
 <rect x='642.35' y='257.05' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<line x1='644.08' y1='265.69' x2='657.90' y2='265.69' style='stroke-width: 1.07; stroke: #F8766D; stroke-linecap: butt;' />
 <line x1='650.99' y1='272.61' x2='650.99' y2='258.78' style='stroke-width: 1.07; stroke: #F8766D; stroke-linecap: butt;' />
 <circle cx='650.99' cy='265.69' r='2.84' style='stroke-width: 1.42; stroke: #F8766D; fill: #F8766D;' />
 <rect x='642.35' y='274.33' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<line x1='644.08' y1='282.97' x2='657.90' y2='282.97' style='stroke-width: 1.07; stroke: #7CAE00; stroke-linecap: butt;' />
 <line x1='650.99' y1='289.89' x2='650.99' y2='276.06' style='stroke-width: 1.07; stroke: #7CAE00; stroke-linecap: butt;' />
 <circle cx='650.99' cy='282.97' r='2.84' style='stroke-width: 1.42; stroke: #7CAE00; fill: #7CAE00;' />
 <rect x='642.35' y='291.61' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<line x1='644.08' y1='300.25' x2='657.90' y2='300.25' style='stroke-width: 1.07; stroke: #00BFC4; stroke-linecap: butt;' />
 <line x1='650.99' y1='307.17' x2='650.99' y2='293.34' style='stroke-width: 1.07; stroke: #00BFC4; stroke-linecap: butt;' />
 <circle cx='650.99' cy='300.25' r='2.84' style='stroke-width: 1.42; stroke: #00BFC4; fill: #00BFC4;' />
 <rect x='642.35' y='308.89' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<line x1='644.08' y1='317.53' x2='657.90' y2='317.53' style='stroke-width: 1.07; stroke: #C77CFF; stroke-linecap: butt;' />
 <line x1='650.99' y1='324.45' x2='650.99' y2='310.62' style='stroke-width: 1.07; stroke: #C77CFF; stroke-linecap: butt;' />
 <circle cx='650.99' cy='317.53' r='2.84' style='stroke-width: 1.42; stroke: #C77CFF; fill: #C77CFF;' />
 <text x='665.11' y='268.72' style='font-size: 8.80px; font-family: sans;' textLength='34.73px' lengthAdjust='spacingAndGlyphs'>definitely</text>

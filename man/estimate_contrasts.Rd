@@ -33,7 +33,7 @@ estimate_contrasts(model, ...)
 to functions from the \strong{emmeans} or \strong{marginaleffects} package, or to process
 Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}}. Examples:
 \itemize{
-\item \code{insight::get_datagrid()}: Argument such as \code{length}, \code{digits} or \code{range}
+\item \code{insight::get_datagrid()}: Arguments such as \code{length}, \code{digits} or \code{range}
 can be used to control the (number of) representative values. For integer
 variables, \code{protect_integers} modulates whether these should also be
 treated as numerics, i.e. values can have fractions or not.
@@ -50,8 +50,8 @@ supported by that model class.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
-\code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
-\code{rope_range}, or \code{test} are passed to that function.
+\code{bayestestR::describe_posterior()}, thus, arguments like, for example,
+\code{centrality}, \code{rope_range}, or \code{test} are passed to that function.
 \item Especially for \code{estimate_contrasts()} with integer focal predictors, for
 which contrasts should be calculated, use argument \code{integer_as_continuous}
 to set the maximum number of unique values in an integer predictor to treat
@@ -67,7 +67,15 @@ average predictions over the distribution of the offset (if appropriate).
 
 \item{contrast}{A character vector indicating the name of the variable(s) for
 which to compute the contrasts, optionally including representative values or
-levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).}
+levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).
+\strong{Note:} It is also possible to contrast average slopes, i.e. \code{contrast} can
+be the name of two numeric predictors. However, while it is possible to
+filter data for one numeric contrast (e.g., \code{contrast = c("num_pred=c(0, 1, 3)")}),
+it is not possible to "filter" at certain values for two numeric predictors.
+For contrasting slopes, the \code{comparison} will always be \code{"pairwise"}. It is
+possible to compute pairwise comparisons of two average slopes at the levels
+of a third variable, by also adding that variable to the \code{contrast} argument,
+e.g. \code{contrast = c("num1", "num2", "factor")}. See 'Examples'.}
 
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
@@ -145,14 +153,17 @@ See an overview of applications in the related case study in the
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
-\item Formula: A formula like \code{comparison ~ pairs | group}, where the left-hand
-side indicates the type of comparison (\code{difference} or \code{ratio}), the
+\item Formula: A formula like \verb{<comparison> ~ pairs | group}, where the left-hand
+side indicates the type of \verb{<comparison>} (\code{difference} or \code{ratio}), the
 right-hand side determines the pairs of estimates to compare (\code{reference},
 \code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
 can be carried out within subsets by indicating the grouping variable
-after a vertical bar ( \code{|}).
+after a vertical bar ( \code{|}). If the left-hand side is missing, it defaults
+to \code{difference} (i.e. \code{comparison = ~pairs | group} is identical to
+\code{comparison = difference ~ pairs | group}).
 \item A custom function, e.g. \code{comparison = myfun}, or
-\code{comparison ~ I(my_fun(x)) | groups}.
+\verb{<comparison> ~ I(my_fun(x)) | groups} (where \verb{<comparison>} can be
+\code{difference} or \code{ratio}, or skipped).
 \item If contrasts should be calculated (or grouped by) factors, \code{comparison}
 can also be a matrix that specifies factor contrasts (see 'Examples').
 }
@@ -390,6 +401,31 @@ Examples for analysing inequalities are shown in the related
 \href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignette}.
 }
 
+\section{Context Effects - contrasting average slopes}{
+
+Calculating contrasts between average slopes can tell us about the
+"context" effects when modelling within- and between-effects. An example
+for within- and between effects is described
+\href{https://easystats.github.io/parameters/articles/demean.html}{in this vignette}.
+A context effect describes the additional influence that the social or
+regional environment (e.g., place of residence) has on an individual,
+independent of their personal characteristics. It demonstrates that people
+with identical individual circumstances (such as the same income) face
+different opportunities or risks depending on the environment in which they
+live. This can be achieved by specifying both numeric predictors in the
+\code{contrast} argument, e.g. \code{contrast = c("x_within", "x_between")}. It is
+also possible to stratify context effects at different levels of another
+variable using \code{by}. If pairwise comparisons of context effects (i.e., the
+pairwise comparisons of the difference of between within- and
+between-effects, or the difference of average slopes) at different levels
+of another variable are required, add that variable to the \code{contrast}
+argument instead, e.g. \code{contrast = c("x_within", "x_between", "factor")}.
+These contrasts can additionally be stratified by another variable using \code{by}
+again, e.g. \verb{contrast = c("x_within", "x_between", "factor1"), by = "factor2"}.
+Note that when average slopes are contrasted, the \code{comparison} argument has
+no effect and is always set to \code{"pairwise"}. See also 'Examples'.
+}
+
 \section{Effect Size}{
 
 
@@ -500,7 +536,7 @@ averaging across random effects groups is then more accurate.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("lme4", "marginaleffects", "parameters", "rstanarm"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("lme4", "emmeans", "marginaleffects", "parameters", "datawizard", "rstanarm"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 \dontrun{
 # Basic usage --------------------------------
 # --------------------------------------------
@@ -541,8 +577,15 @@ model <- lm(QoL ~ time * education * grp, data = qol_cancer)
 # "time" only has integer values and few values, so it's treated like a factor
 estimate_contrasts(model, "time", by = "education")
 
-# we set `integer_as_continuous = TRUE` to treat integer as continuous
-estimate_contrasts(model, "time", by = "education", integer_as_continuous = 1)
+# Setting `integer_as_continuous = TRUE` treats "time" as a continuous
+# variable. This allows us to compare its average slope rather than making
+# discrete pairwise comparisons at each time point.
+estimate_contrasts(
+  model,
+  contrast = "time",
+  by = "education",
+  integer_as_continuous = TRUE
+)
 
 # pairwise comparisons for multiple groups
 estimate_contrasts(
@@ -572,6 +615,17 @@ cond_tx <- cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5))
 model <- lm(happiness ~ puppy_love * dose, data = puppy_love)
 estimate_slopes(model, "puppy_love", by = "dose", comparison = cond_tx)
 
+# Note: for the emmeans-backend, we need to use `estimate_contrasts()` for
+# the above example:
+cond_tx <- list(`no treatment` = c(1, 0, 0), treatment = c(0, 0.5, 0.5))
+estimate_contrasts(
+  model,
+  contrast = "puppy_love",
+  by = "dose",
+  comparison = cond_tx,
+  backend = "emmeans"
+)
+
 # Other models (mixed, Bayesian, ...) --------
 # --------------------------------------------
 data <- iris
@@ -594,6 +648,44 @@ model <- rstanarm::stan_glm(
   refresh = 0
 )
 estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
+
+# Context effects --------------------------------------------
+# This is the difference of within- and between-effects, which
+# typically are two average slopes that are compared. It is
+# possible to calculate the context effect at different levels
+# of another variable.
+# ------------------------------------------------------------
+data("qol_cancer", package = "parameters")
+qol_cancer <- datawizard::demean(qol_cancer, select = "phq4", by = "ID")
+model <- lme4::lmer(
+  QoL ~ time * (phq4_within + phq4_between) + (1 + time | ID),
+  data = qol_cancer
+)
+
+# context effect (difference between within- and between-effect)
+# at each time point - we calculate the contrast of two average slopes
+# at different levels of "time"
+estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
+
+# is the trend of the context effect across time points statistically
+# significant? In this case, we just want the contrasts of the overall
+# average slopes (not stratfied nor contrasted by time).
+estimate_contrasts(model, c("phq4_within", "phq4_between"))
+
+# now we ask whether contexts effects are different for different educational
+# levels. We now need to model a 3-way interaction between time, education
+# and the centered phq4 variables.
+model <- lme4::lmer(
+  QoL ~ time * education * (phq4_within + phq4_between) + (1 + time | ID),
+  data = qol_cancer
+)
+
+# how do time trends of context effects differ between education levels?
+estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "education")
+
+# are differences in time trends of context effects statistically significant
+# between education levels?
+estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
 }
 \dontshow{\}) # examplesIf}
 }

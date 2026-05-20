@@ -7,6 +7,14 @@
 #' @param contrast A character vector indicating the name of the variable(s) for
 #' which to compute the contrasts, optionally including representative values or
 #' levels at which contrasts are evaluated (e.g., `contrast="x=c('a','b')"`).
+#' **Note:** It is also possible to contrast average slopes, i.e. `contrast` can
+#' be the name of two numeric predictors. However, while it is possible to
+#' filter data for one numeric contrast (e.g., `contrast = c("num_pred=c(0, 1, 3)")`),
+#' it is not possible to "filter" at certain values for two numeric predictors.
+#' For contrasting slopes, the `comparison` will always be `"pairwise"`. It is
+#' possible to compute pairwise comparisons of two average slopes at the levels
+#' of a third variable, by also adding that variable to the `contrast` argument,
+#' e.g. `contrast = c("num1", "num2", "factor")`. See 'Examples'.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
 #' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"sup-t"`,
@@ -56,14 +64,17 @@
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
-#'   * Formula: A formula like `comparison ~ pairs | group`, where the left-hand
-#'     side indicates the type of comparison (`difference` or `ratio`), the
+#'   * Formula: A formula like `<comparison> ~ pairs | group`, where the left-hand
+#'     side indicates the type of `<comparison>` (`difference` or `ratio`), the
 #'     right-hand side determines the pairs of estimates to compare (`reference`,
 #'     `sequential`, `meandev`, etc., see string-options). Optionally, comparisons
 #'     can be carried out within subsets by indicating the grouping variable
-#'     after a vertical bar ( `|`).
+#'     after a vertical bar ( `|`). If the left-hand side is missing, it defaults
+#'     to `difference` (i.e. `comparison = ~pairs | group` is identical to
+#'     `comparison = difference ~ pairs | group`).
 #'   * A custom function, e.g. `comparison = myfun`, or
-#'     `comparison ~ I(my_fun(x)) | groups`.
+#'     `<comparison> ~ I(my_fun(x)) | groups` (where `<comparison>` can be
+#'     `difference` or `ratio`, or skipped).
 #'   * If contrasts should be calculated (or grouped by) factors, `comparison`
 #'     can also be a matrix that specifies factor contrasts (see 'Examples').
 #' @param effectsize Desired measure of standardized effect size, one of
@@ -141,6 +152,29 @@
 #' Examples for analysing inequalities are shown in the related
 #' [vignette](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
 #'
+#' @section Context Effects - contrasting average slopes:
+#' Calculating contrasts between average slopes can tell us about the
+#' "context" effects when modelling within- and between-effects. An example
+#' for within- and between effects is described
+#' [in this vignette](https://easystats.github.io/parameters/articles/demean.html).
+#' A context effect describes the additional influence that the social or
+#' regional environment (e.g., place of residence) has on an individual,
+#' independent of their personal characteristics. It demonstrates that people
+#' with identical individual circumstances (such as the same income) face
+#' different opportunities or risks depending on the environment in which they
+#' live. This can be achieved by specifying both numeric predictors in the
+#' `contrast` argument, e.g. `contrast = c("x_within", "x_between")`. It is
+#' also possible to stratify context effects at different levels of another
+#' variable using `by`. If pairwise comparisons of context effects (i.e., the
+#' pairwise comparisons of the difference of between within- and
+#' between-effects, or the difference of average slopes) at different levels
+#' of another variable are required, add that variable to the `contrast`
+#' argument instead, e.g. `contrast = c("x_within", "x_between", "factor")`.
+#' These contrasts can additionally be stratified by another variable using `by`
+#' again, e.g. `contrast = c("x_within", "x_between", "factor1"), by = "factor2"`.
+#' Note that when average slopes are contrasted, the `comparison` argument has
+#' no effect and is always set to `"pairwise"`. See also 'Examples'.
+#'
 #' @section Effect Size:
 #'
 #' By default, `estimate_contrasts()` reports no standardized effect size on
@@ -184,7 +218,7 @@
 #'   confidence bands: Theory, implementation, and an application to SVARs.
 #'   Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
 #'
-#' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "parameters", "rstanarm"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("lme4", "emmeans", "marginaleffects", "parameters", "datawizard", "rstanarm"), quietly = TRUE))
 #' \dontrun{
 #' # Basic usage --------------------------------
 #' # --------------------------------------------
@@ -225,8 +259,15 @@
 #' # "time" only has integer values and few values, so it's treated like a factor
 #' estimate_contrasts(model, "time", by = "education")
 #'
-#' # we set `integer_as_continuous = TRUE` to treat integer as continuous
-#' estimate_contrasts(model, "time", by = "education", integer_as_continuous = 1)
+#' # Setting `integer_as_continuous = TRUE` treats "time" as a continuous
+#' # variable. This allows us to compare its average slope rather than making
+#' # discrete pairwise comparisons at each time point.
+#' estimate_contrasts(
+#'   model,
+#'   contrast = "time",
+#'   by = "education",
+#'   integer_as_continuous = TRUE
+#' )
 #'
 #' # pairwise comparisons for multiple groups
 #' estimate_contrasts(
@@ -256,6 +297,17 @@
 #' model <- lm(happiness ~ puppy_love * dose, data = puppy_love)
 #' estimate_slopes(model, "puppy_love", by = "dose", comparison = cond_tx)
 #'
+#' # Note: for the emmeans-backend, we need to use `estimate_contrasts()` for
+#' # the above example:
+#' cond_tx <- list(`no treatment` = c(1, 0, 0), treatment = c(0, 0.5, 0.5))
+#' estimate_contrasts(
+#'   model,
+#'   contrast = "puppy_love",
+#'   by = "dose",
+#'   comparison = cond_tx,
+#'   backend = "emmeans"
+#' )
+#'
 #' # Other models (mixed, Bayesian, ...) --------
 #' # --------------------------------------------
 #' data <- iris
@@ -278,6 +330,44 @@
 #'   refresh = 0
 #' )
 #' estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
+#'
+#' # Context effects --------------------------------------------
+#' # This is the difference of within- and between-effects, which
+#' # typically are two average slopes that are compared. It is
+#' # possible to calculate the context effect at different levels
+#' # of another variable.
+#' # ------------------------------------------------------------
+#' data("qol_cancer", package = "parameters")
+#' qol_cancer <- datawizard::demean(qol_cancer, select = "phq4", by = "ID")
+#' model <- lme4::lmer(
+#'   QoL ~ time * (phq4_within + phq4_between) + (1 + time | ID),
+#'   data = qol_cancer
+#' )
+#'
+#' # context effect (difference between within- and between-effect)
+#' # at each time point - we calculate the contrast of two average slopes
+#' # at different levels of "time"
+#' estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
+#'
+#' # is the trend of the context effect across time points statistically
+#' # significant? In this case, we just want the contrasts of the overall
+#' # average slopes (not stratfied nor contrasted by time).
+#' estimate_contrasts(model, c("phq4_within", "phq4_between"))
+#'
+#' # now we ask whether contexts effects are different for different educational
+#' # levels. We now need to model a 3-way interaction between time, education
+#' # and the centered phq4 variables.
+#' model <- lme4::lmer(
+#'   QoL ~ time * education * (phq4_within + phq4_between) + (1 + time | ID),
+#'   data = qol_cancer
+#' )
+#'
+#' # how do time trends of context effects differ between education levels?
+#' estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "education")
+#'
+#' # are differences in time trends of context effects statistically significant
+#' # between education levels?
+#' estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
 #' }
 #'
 #' @return A data frame of estimated contrasts.
