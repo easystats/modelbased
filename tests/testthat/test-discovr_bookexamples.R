@@ -12,9 +12,11 @@ test_that("estimate_contrasts - book examples 1", {
   puppy_love$dose_original <- puppy_love$dose
   contrasts(puppy_love$dose) <- cbind(treat_vs_none, short_vs_long)
 
-  puppy_love$treat_vs_none <- as.factor(
-    ifelse(puppy_love$dose == "no treatment", "no treatment", "Puppies")
-  )
+  puppy_love$treat_vs_none <- as.factor(ifelse(
+    puppy_love$dose == "no treatment",
+    "no treatment",
+    "Puppies"
+  ))
 
   puppy_love$short_vs_long <- factor(
     short_vs_long,
@@ -48,13 +50,87 @@ test_that("estimate_contrasts - book examples 2", {
 
   m1 <- lm(happiness ~ puppy_love * dose, data = puppy_love)
 
-  out1 <- marginaleffects::avg_slopes(m1, variables = "puppy_love", by = "dose", hypothesis = cond_tx)
+  out1 <- marginaleffects::avg_slopes(
+    m1,
+    variables = "puppy_love",
+    by = "dose",
+    hypothesis = cond_tx
+  )
   out2 <- estimate_slopes(m1, "puppy_love", by = "dose", hypothesis = cond_tx)
   expect_equal(out1$estimate, out2$Slope, tolerance = 1e-4)
   # we donb't officially have this argument for slopes, but we simply pass
   # it to the "hypothesis"
   out3 <- estimate_slopes(m1, "puppy_love", by = "dose", comparison = cond_tx)
   expect_equal(out3$Slope, out2$Slope, tolerance = 1e-4)
+})
+
+
+test_that("modelbased, chapter 10.3", {
+  skip_on_cran()
+  skip_if_not_installed("discovr")
+  skip_if_not_installed("datawizard")
+  skip_if_not_installed("vdiffr")
+  vids_tib <- discovr::video_games
+  vids_cent_tib <- datawizard::center(vids_tib, c("vid_game", "caunts"))
+  m <- lm(aggress ~ caunts * vid_game, data = vids_cent_tib)
+  set.seed(123)
+  out <- estimate_slopes(m, trend = "vid_game", by = "caunts", length = 100)
+
+  # summary
+  expect_identical(
+    capture.output(summary(out)),
+    c(
+      "Johnson-Neymann Intervals",
+      "",
+      "Start  |    End | Direction | Confidence     ",
+      "---------------------------------------------",
+      "-18.59 | -16.42 | negative  | Significant    ",
+      "-15.99 |  -6.43 | negative  | Not Significant",
+      "-6.00  |  -1.22 | positive  | Not Significant",
+      "-0.79  |  24.41 | positive  | Significant    ",
+      "",
+      "Marginal effects estimated for vid_game",
+      "Type of slope was dY/dX"
+    )
+  )
+
+  # plot
+  set.seed(123)
+  vdiffr::expect_doppelganger("estimate_slopes_discovr-1", plot(out))
+
+  # marginal effects
+  set.seed(123)
+  out <- estimate_slopes(m, trend = "vid_game", by = "caunts=[sd]")
+  expect_identical(
+    capture.output(out),
+    c(
+      "Estimated Marginal Effects",
+      "",
+      "caunts | Slope |   SE |        95% CI | t(438) |      p",
+      "-------------------------------------------------------",
+      "-9.62  | -0.09 | 0.10 | [-0.29, 0.10] |  -0.91 |  0.361",
+      "0.00   |  0.17 | 0.07 | [ 0.03, 0.30] |   2.48 |  0.014",
+      "9.62   |  0.43 | 0.09 | [ 0.25, 0.61] |   4.64 | < .001",
+      "",
+      "Marginal effects estimated for vid_game",
+      "Type of slope was dY/dX"
+    )
+  )
+
+  # marginal means
+  skip_if_not_installed("ggplot2")
+  set.seed(123)
+  out <- estimate_means(m, by = c("vid_game", "caunts=[sd]"))
+  p <- plot(out) +
+    ggplot2::labs(
+      x = " Video game use per week (centred) ",
+      y = "Aggression",
+      colour = "Callous traits (centred)",
+      fill = "Callous traits (centred)"
+    ) +
+    ggplot2::theme_minimal()
+  set.seed(123)
+  vdiffr::expect_doppelganger("estimate_means_discovr-1", p)
 })
 
 
@@ -90,10 +166,7 @@ withr::with_environment(
 withr::with_environment(
   new.env(),
   test_that("estimate_contrasts - custom function in 'comparison'", {
-    dat <- expand.grid(
-      treatment = 0:1,
-      week = 1:52
-    )
+    dat <- expand.grid(treatment = 0:1, week = 1:52)
     set.seed(123)
     dat$y <- rpois(nrow(dat), 5)
     mod <- glm(y ~ treatment * week, data = dat, family = poisson)
