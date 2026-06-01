@@ -145,10 +145,10 @@ model <- lmer(reaction_time ~ condition + (condition | id), data = data_rt)
 test_performance(model_full, model)
 ```
 
-    > Name       |   Model |      BF | df | df_diff |  Chi2 |      p
-    > --------------------------------------------------------------
-    > model_full | lmerMod |         |  7 |         |       |       
-    > model      | lmerMod | < 0.001 |  6 |      -1 | 36.78 | < .001
+    > Name       |   Model |      BF | df | df_diff | Criterion |  Chi2 |      p
+    > --------------------------------------------------------------------------
+    > model_full | lmerMod |         |  7 |         |  -4264.49 |       |       
+    > model      | lmerMod | < 0.001 |  6 |      -1 |  -4227.71 | 36.78 | < .001
     > Models were detected as nested (in terms of fixed parameters) and are compared in sequential order.
 
 Mmmh, it seems that the simpler model performs **a lot worse** (the

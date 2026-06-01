@@ -75,10 +75,10 @@ model2 <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
 test_performance(model, model2)
 ```
 
-    > Name   | Model |    BF | df | df_diff | Chi2 |     p
-    > ----------------------------------------------------
-    > model  |    lm |       |  7 |         |      |      
-    > model2 |    lm | 26.52 |  5 |      -2 | 3.47 | 0.177
+    > Name   | Model |    BF | df | df_diff | Criterion | Chi2 |     p
+    > ----------------------------------------------------------------
+    > model  |    lm |       |  7 |         |     92.77 |      |      
+    > model2 |    lm | 26.52 |  5 |      -2 |     96.23 | 3.47 | 0.177
     > Models were detected as nested (in terms of fixed parameters) and are compared in sequential order.
 
 Although we are satisfied with our model and its performance, imagine we
