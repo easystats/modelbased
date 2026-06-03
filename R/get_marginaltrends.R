@@ -211,6 +211,7 @@ get_marginaltrends <- function(
   ...
 ) {
   # Gather info
+  dots <- list(...)
   model_data <- insight::get_data(model, verbose = FALSE)
   predictors <- intersect(
     colnames(model_data),
