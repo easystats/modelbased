@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,6 +118,7 @@ and <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p>
 <span>  estimate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  post_process <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  effectsize <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  iterations <span class="op">=</span> <span class="fl">200</span>,</span>
@@ -346,6 +347,14 @@ posterior distribution, before computing summaries. Can also be <code>TRUE</code
 which case <code><a href="https://easystats.github.io/insight/reference/get_transformation.html" class="external-link">insight::get_transformation()</a></code> is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.</p></dd>
+
+
+<dt id="arg-post-process">post_process<a class="anchor" aria-label="anchor" href="#arg-post-process"></a></dt>
+<dd><p>Optional formula, character string or function (see
+<code>comparison</code>), or a list of formulas, string or functions, to process
+subsequent, multi-step comparisons. After the initial comparison in
+<code>comparison</code> is completed, the results are then post-processed using the
+specified post-process tests. See 'Exmaples'.</p></dd>
 
 
 <dt id="arg-keep-iterations">keep_iterations<a class="anchor" aria-label="anchor" href="#arg-keep-iterations"></a></dt>
@@ -1140,6 +1149,85 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: phq4_within, phq4_between</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Post-processing of multiple comparisons ---------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Caution! Don't expect this example to be meaningful! # It is</span></span></span>
+<span class="r-in"><span><span class="co"># just to demonstrate the usage of the `post_process` argument.</span></span></span>
+<span class="r-in"><span><span class="co"># -------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"qol_cancer"</span>, package <span class="op">=</span> <span class="st">"parameters"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">QoL</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="va">education</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">qol_cancer</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># contrasts (pairwise comparisons) by timepoints - the default</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="st">"education=c('low', 'mid')"</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | time | Difference |   SE |         95% CI | t(554) |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid    | low    |    1 |       6.03 | 3.64 | [-1.11, 13.18] |   1.66 | 0.098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid    | low    |    2 |       8.82 | 3.07 | [ 2.78, 14.86] |   2.87 | 0.004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid    | low    |    3 |      11.61 | 3.59 | [ 4.55, 18.67] |   3.23 | 0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: education=c('low', 'mid')</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: ID (1)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># contrasts (pairwise comparisons) by timepoints, the default for `comparison`</span></span></span>
+<span class="r-in"><span><span class="co"># additionally, we compare the differences of these contrasts across timepoints</span></span></span>
+<span class="r-in"><span><span class="co"># against the reference time point (contrasts at times 2 and 3 against</span></span></span>
+<span class="r-in"><span><span class="co"># contrasts at time 1)</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>,</span></span>
+<span class="r-in"><span>  contrasts <span class="op">=</span> <span class="st">"education=c('low', 'mid')"</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="st">"time"</span>,</span></span>
+<span class="r-in"><span>  post_process <span class="op">=</span> <span class="op">~</span><span class="va">reference</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `contrast=c("education")`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Post-processing ~reference...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter                     | Difference |   SE |          95% CI |     z |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high - low - mid - low, 1 - 1 |       4.22 | 3.26 | [ -2.17, 10.61] |  1.30 | 0.195</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high - mid - mid - low, 1 - 1 |      -1.81 | 5.54 | [-12.67,  9.05] | -0.33 | 0.744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid - low - mid - low, 2 - 1  |       2.79 | 1.90 | [ -0.94,  6.52] |  1.46 | 0.143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high - low - mid - low, 2 - 1 |       8.43 | 3.35 | [  1.85, 15.00] |  2.51 | 0.012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high - mid - mid - low, 2 - 1 |      -0.39 | 5.07 | [-10.34,  9.55] | -0.08 | 0.938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid - low - mid - low, 3 - 1  |       5.58 | 3.81 | [ -1.89, 13.04] |  1.46 | 0.143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high - low - mid - low, 3 - 1 |      12.63 | 4.60 | [  3.61, 21.65] |  2.74 | 0.006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high - mid - mid - low, 3 - 1 |       1.02 | 5.16 | [ -9.09, 11.13] |  0.20 | 0.843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: education</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: ID (1)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># multiple post-processing steps - same as before, but calculates</span></span></span>
+<span class="r-in"><span><span class="co"># poly-contrasts in addition to reference contrasts</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>,</span></span>
+<span class="r-in"><span>  contrasts <span class="op">=</span> <span class="st">"education=c('low', 'mid')"</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="st">"time"</span>,</span></span>
+<span class="r-in"><span>  post_process <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">~</span><span class="va">reference</span>, <span class="op">~</span><span class="va">poly</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `contrast=c("education")`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Post-processing ~reference...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Post-processing ~poly...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter | Difference |   SE |          95% CI |     z |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Linear    |       3.80 | 3.37 | [ -2.80, 10.40] |  1.13 | 0.259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Quadratic |      -1.37 | 2.09 | [ -5.46,  2.73] | -0.65 | 0.513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cubic     |      -5.40 | 1.88 | [ -9.08, -1.71] | -2.87 | 0.004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Quartic   |      -2.29 | 1.95 | [ -6.11,  1.54] | -1.17 | 0.241</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Quintic   |      -9.40 | 3.19 | [-15.66, -3.15] | -2.95 | 0.003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: education</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: ID (1)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>

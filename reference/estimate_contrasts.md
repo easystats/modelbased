@@ -22,6 +22,7 @@ estimate_contrasts(
   estimate = NULL,
   p_adjust = "none",
   transform = NULL,
+  post_process = NULL,
   keep_iterations = FALSE,
   effectsize = NULL,
   iterations = 200,
@@ -316,6 +317,14 @@ estimate_contrasts(
   [`insight::get_transformation()`](https://easystats.github.io/insight/reference/get_transformation.html)
   is called to determine the appropriate transformation-function. Note
   that no standard errors are returned when transformations are applied.
+
+- post_process:
+
+  Optional formula, character string or function (see `comparison`), or
+  a list of formulas, string or functions, to process subsequent,
+  multi-step comparisons. After the initial comparison in `comparison`
+  is completed, the results are then post-processed using the specified
+  post-process tests. See 'Exmaples'.
 
 - keep_iterations:
 
@@ -1171,6 +1180,85 @@ estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: phq4_within, phq4_between
+#> p-values are uncorrected.
+#> 
+
+# Post-processing of multiple comparisons ---------------------
+# Caution! Don't expect this example to be meaningful! # It is
+# just to demonstrate the usage of the `post_process` argument.
+# -------------------------------------------------------------
+data("qol_cancer", package = "parameters")
+model <- lme4::lmer(QoL ~ time * education + (1 + time | ID), data = qol_cancer)
+
+# contrasts (pairwise comparisons) by timepoints - the default
+estimate_contrasts(model, "education=c('low', 'mid')", by = "time")
+#> Marginal Contrasts Analysis
+#> 
+#> Level1 | Level2 | time | Difference |   SE |         95% CI | t(554) |     p
+#> ----------------------------------------------------------------------------
+#> mid    | low    |    1 |       6.03 | 3.64 | [-1.11, 13.18] |   1.66 | 0.098
+#> mid    | low    |    2 |       8.82 | 3.07 | [ 2.78, 14.86] |   2.87 | 0.004
+#> mid    | low    |    3 |      11.61 | 3.59 | [ 4.55, 18.67] |   3.23 | 0.001
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: education=c('low', 'mid')
+#> Predictors averaged: ID (1)
+#> p-values are uncorrected.
+#> 
+
+# contrasts (pairwise comparisons) by timepoints, the default for `comparison`
+# additionally, we compare the differences of these contrasts across timepoints
+# against the reference time point (contrasts at times 2 and 3 against
+# contrasts at time 1)
+estimate_contrasts(model,
+  contrasts = "education=c('low', 'mid')",
+  by = "time",
+  post_process = ~reference
+)
+#> We selected `contrast=c("education")`.
+#> Post-processing ~reference...
+#> Marginal Contrasts Analysis
+#> 
+#> Parameter                     | Difference |   SE |          95% CI |     z |     p
+#> -----------------------------------------------------------------------------------
+#> high - low - mid - low, 1 - 1 |       4.22 | 3.26 | [ -2.17, 10.61] |  1.30 | 0.195
+#> high - mid - mid - low, 1 - 1 |      -1.81 | 5.54 | [-12.67,  9.05] | -0.33 | 0.744
+#> mid - low - mid - low, 2 - 1  |       2.79 | 1.90 | [ -0.94,  6.52] |  1.46 | 0.143
+#> high - low - mid - low, 2 - 1 |       8.43 | 3.35 | [  1.85, 15.00] |  2.51 | 0.012
+#> high - mid - mid - low, 2 - 1 |      -0.39 | 5.07 | [-10.34,  9.55] | -0.08 | 0.938
+#> mid - low - mid - low, 3 - 1  |       5.58 | 3.81 | [ -1.89, 13.04] |  1.46 | 0.143
+#> high - low - mid - low, 3 - 1 |      12.63 | 4.60 | [  3.61, 21.65] |  2.74 | 0.006
+#> high - mid - mid - low, 3 - 1 |       1.02 | 5.16 | [ -9.09, 11.13] |  0.20 | 0.843
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: education
+#> Predictors averaged: ID (1)
+#> p-values are uncorrected.
+#> 
+
+# multiple post-processing steps - same as before, but calculates
+# poly-contrasts in addition to reference contrasts
+estimate_contrasts(model,
+  contrasts = "education=c('low', 'mid')",
+  by = "time",
+  post_process = list(~reference, ~poly)
+)
+#> We selected `contrast=c("education")`.
+#> Post-processing ~reference...
+#> Post-processing ~poly...
+#> Marginal Contrasts Analysis
+#> 
+#> Parameter | Difference |   SE |          95% CI |     z |     p
+#> ---------------------------------------------------------------
+#> Linear    |       3.80 | 3.37 | [ -2.80, 10.40] |  1.13 | 0.259
+#> Quadratic |      -1.37 | 2.09 | [ -5.46,  2.73] | -0.65 | 0.513
+#> Cubic     |      -5.40 | 1.88 | [ -9.08, -1.71] | -2.87 | 0.004
+#> Quartic   |      -2.29 | 1.95 | [ -6.11,  1.54] | -1.17 | 0.241
+#> Quintic   |      -9.40 | 3.19 | [-15.66, -3.15] | -2.95 | 0.003
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: education
+#> Predictors averaged: ID (1)
 #> p-values are uncorrected.
 #> 
 # }

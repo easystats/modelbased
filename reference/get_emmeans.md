@@ -53,6 +53,7 @@ get_marginalcontrasts(
   comparison = "pairwise",
   estimate = NULL,
   transform = NULL,
+  post_process = NULL,
   p_adjust = "none",
   keep_iterations = FALSE,
   verbose = TRUE,
@@ -377,6 +378,14 @@ get_marginaltrends(
   [`insight::get_transformation()`](https://easystats.github.io/insight/reference/get_transformation.html)
   is called to determine the appropriate transformation-function. Note
   that no standard errors are returned when transformations are applied.
+
+- post_process:
+
+  Optional formula, character string or function (see `comparison`), or
+  a list of formulas, string or functions, to process subsequent,
+  multi-step comparisons. After the initial comparison in `comparison`
+  is completed, the results are then post-processed using the specified
+  post-process tests. See 'Exmaples'.
 
 - p_adjust:
 
