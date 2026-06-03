@@ -77,10 +77,11 @@
 #'     `difference` or `ratio`, or skipped).
 #'   * If contrasts should be calculated (or grouped by) factors, `comparison`
 #'     can also be a matrix that specifies factor contrasts (see 'Examples').
-#' @param post_process Optional formula, or list of formulas, to process subsequent
-#' comparisons. It allows for complex, multi-step comparisons. After the initial
-#' comparison in `comparison` is completed, the results are then post-processed
-#' using the specified formula(s).
+#' @param post_process Optional formula, character string or function (see
+#' `comparison`), or a list of formulas, string or functions, to process
+#' subsequent, multi-step comparisons. After the initial comparison in
+#' `comparison` is completed, the results are then post-processed using the
+#' specified post-process tests. See 'Exmaples'.
 #' @param effectsize Desired measure of standardized effect size, one of
 #' `"emmeans"`, `"marginal"`, or `"boot"`. Default is `NULL`, i.e. no effect
 #' size will be computed.

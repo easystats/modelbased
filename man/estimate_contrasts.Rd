@@ -241,10 +241,11 @@ which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
 
-\item{post_process}{Optional formula, or list of formulas, to process subsequent
-comparisons. It allows for complex, multi-step comparisons. After the initial
-comparison in \code{comparison} is completed, the results are then post-processed
-using the specified formula(s).}
+\item{post_process}{Optional formula, character string or function (see
+\code{comparison}), or a list of formulas, string or functions, to process
+subsequent, multi-step comparisons. After the initial comparison in
+\code{comparison} is completed, the results are then post-processed using the
+specified post-process tests. See 'Exmaples'.}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns
