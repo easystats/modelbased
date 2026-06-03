@@ -5,6 +5,9 @@
 * Informative error message when the `trend` variable in `estimate_slopes()` is
   not numeric and `backend = "emmeans"`.
 
+* `estimate_contrasts()` gets a `post_process` argument, to process subsequent
+  comparisons. It allows for complex, multi-step comparisons.
+
 # modelbased 0.15.0
 
 ## Breaking Changes

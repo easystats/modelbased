@@ -77,6 +77,11 @@
 #'     `difference` or `ratio`, or skipped).
 #'   * If contrasts should be calculated (or grouped by) factors, `comparison`
 #'     can also be a matrix that specifies factor contrasts (see 'Examples').
+#' @param post_process Optional formula, character string or function (see
+#' `comparison`), or a list of formulas, string or functions, to process
+#' subsequent, multi-step comparisons. After the initial comparison in
+#' `comparison` is completed, the results are then post-processed using the
+#' specified post-process tests. See 'Exmaples'.
 #' @param effectsize Desired measure of standardized effect size, one of
 #' `"emmeans"`, `"marginal"`, or `"boot"`. Default is `NULL`, i.e. no effect
 #' size will be computed.
@@ -368,6 +373,34 @@
 #' # are differences in time trends of context effects statistically significant
 #' # between education levels?
 #' estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
+#'
+#' # Post-processing of multiple comparisons ---------------------
+#' # Caution! Don't expect this example to be meaningful! # It is
+#' # just to demonstrate the usage of the `post_process` argument.
+#' # -------------------------------------------------------------
+#' data("qol_cancer", package = "parameters")
+#' model <- lme4::lmer(QoL ~ time * education + (1 + time | ID), data = qol_cancer)
+#'
+#' # contrasts (pairwise comparisons) by timepoints - the default
+#' estimate_contrasts(model, "education=c('low', 'mid')", by = "time")
+#'
+#' # contrasts (pairwise comparisons) by timepoints, the default for `comparison`
+#' # additionally, we compare the differences of these contrasts across timepoints
+#' # against the reference time point (contrasts at times 2 and 3 against
+#' # contrasts at time 1)
+#' estimate_contrasts(model,
+#'   contrasts = "education=c('low', 'mid')",
+#'   by = "time",
+#'   post_process = ~reference
+#' )
+#'
+#' # multiple post-processing steps - same as before, but calculates
+#' # poly-contrasts in addition to reference contrasts
+#' estimate_contrasts(model,
+#'   contrasts = "education=c('low', 'mid')",
+#'   by = "time",
+#'   post_process = list(~reference, ~poly)
+#' )
 #' }
 #'
 #' @return A data frame of estimated contrasts.
@@ -389,6 +422,7 @@ estimate_contrasts.default <- function(
   estimate = NULL,
   p_adjust = "none",
   transform = NULL,
+  post_process = NULL,
   keep_iterations = FALSE,
   effectsize = NULL,
   iterations = 200,
@@ -441,6 +475,7 @@ estimate_contrasts.default <- function(
       ci = ci,
       estimate = estimate,
       transform = transform,
+      post_process = post_process,
       keep_iterations = keep_iterations,
       verbose = verbose,
       ...

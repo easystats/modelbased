@@ -50,6 +50,7 @@ get_marginalcontrasts(
   comparison = "pairwise",
   estimate = NULL,
   transform = NULL,
+  post_process = NULL,
   p_adjust = "none",
   keep_iterations = FALSE,
   verbose = TRUE,
@@ -300,6 +301,12 @@ posterior distribution, before computing summaries. Can also be \code{TRUE}, in
 which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
+
+\item{post_process}{Optional formula, character string or function (see
+\code{comparison}), or a list of formulas, string or functions, to process
+subsequent, multi-step comparisons. After the initial comparison in
+\code{comparison} is completed, the results are then post-processed using the
+specified post-process tests. See 'Exmaples'.}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for

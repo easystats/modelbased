@@ -40,6 +40,7 @@ get_marginalmeans <- function(
 
   dots <- list(...)
   comparison <- dots$hypothesis
+  post_process <- dots$post_process
   joint_test <- isTRUE(dots$.joint_test)
 
   # validate input
@@ -86,7 +87,7 @@ get_marginalmeans <- function(
   # fmt: skip
   dots[c(
     "by", "conf_level", "type", "digits", "bias_correction", "sigma",
-    "offset", ".joint_test"
+    "offset", ".joint_test", "post_process"
   )] <- NULL
 
   # model df - can be passed via `...`
@@ -184,7 +185,7 @@ get_marginalmeans <- function(
 
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
-  means <- .call_marginaleffects(fun_args)
+  means <- .call_marginaleffects(fun_args, post_process, verbose)
   vcov_means <- .safe(stats::vcov(means))
 
   # intermediate step: joint tests --------------------------------------------
@@ -253,9 +254,14 @@ get_marginalmeans <- function(
 
 # call marginaleffects and process potential errors ---------------------------
 
-.call_marginaleffects <- function(fun_args, type = "means") {
+.call_marginaleffects <- function(fun_args, post_process = NULL, verbose = TRUE) {
   out <- tryCatch(
-    suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
+    {
+      # call marginaleffects
+      result <- suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args))
+      # process subsequential comparisons, if any
+      .post_process_comparisons(result, post_process, verbose)
+    },
     error = function(e) e
   )
 
@@ -270,6 +276,75 @@ get_marginalmeans <- function(
   }
 
   out
+}
+
+# process subsequential comparisons ---------------------------
+
+.post_process_comparisons <- function(out, post_process = NULL, verbose = TRUE) {
+  if (!is.null(post_process)) {
+    # coerce to list
+    if (!is.list(post_process)) {
+      post_process <- list(post_process)
+    }
+    # save temporary parameter names
+    temp_params <- .safe(out$hypothesis)
+    # parameter names from groups
+    group_params <- .safe(out[seq_len(which(colnames(out) == "estimate") - 1)[-1]])
+    # check
+    for (i in seq_along(post_process)) {
+      if (verbose) {
+        insight::format_alert(paste0(
+          "Post-processing ",
+          deparse(post_process[[i]]),
+          "..."
+        ))
+      }
+      out <- suppressWarnings(marginaleffects::hypotheses(
+        out,
+        hypothesis = post_process[[i]]
+      ))
+      temp_params <- .update_post_process_params(out, temp_params, group_params)
+    }
+    # check if extractinb parameters worked
+    if (length(temp_params) == nrow(out)) {
+      out$hypothesis <- temp_params
+    }
+  }
+  out
+}
+
+.update_post_process_params <- function(out, temp_params, group_params) {
+  if (is.null(temp_params)) {
+    return(NULL)
+  }
+  .safe(
+    {
+      # clean current parameter names
+      temp_params <- gsub("(", "", gsub(")", "", temp_params, fixed = TRUE), fixed = TRUE)
+      # extract rownumbers (from b-cofficients) from current output
+      lhs <- as.numeric(gsub("\\(b(\\d+)\\) - \\(b(\\d+)\\)", "\\1", out$hypothesis))
+      rhs <- as.numeric(gsub("\\(b(\\d+)\\) - \\(b(\\d+)\\)", "\\2", out$hypothesis))
+      # update current parameter names
+      if (all(temp_params[lhs] == temp_params[rhs])) {
+        temp_params <- temp_params[lhs]
+      } else {
+        temp_params <- paste(temp_params[lhs], "-", temp_params[rhs])
+      }
+      if (!is.null(group_params)) {
+        for (i in colnames(group_params)) {
+          temp_params <- paste0(
+            temp_params,
+            ", ",
+            group_params[lhs, i],
+            " - ",
+            group_params[rhs, i]
+          )
+        }
+      }
+      temp_params
+    },
+    quietly = TRUE
+  )
 }
 
 
