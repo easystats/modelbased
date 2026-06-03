@@ -138,9 +138,11 @@
 
 #' @keywords internal
 #' @noRd
-.safe <- function(code, on_error = NULL) {
+.safe <- function(code, on_error = NULL, quietly = FALSE) {
   if (isTRUE(getOption("easystats_errors", FALSE)) && is.null(on_error)) {
     code
+  } else if (quietly) {
+    suppressWarnings(tryCatch(code, error = function(e) on_error))
   } else {
     tryCatch(code, error = function(e) on_error)
   }

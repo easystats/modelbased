@@ -84,7 +84,7 @@ get_marginaltrends <- function(
   }
 
   # remove user-arguments from "..." that will be used when calling marginaleffects
-  dots[c("by", "conf_level", "digits")] <- NULL
+  dots[c("by", "conf_level", "digits", "post_process")] <- NULL
 
   # handle weights - argument is named "wts" in marginal effects
   if (!is.null(dots$weights)) {
@@ -135,6 +135,10 @@ get_marginaltrends <- function(
   # Compute stuff
   estimated <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
   vcov_slopes <- .safe(stats::vcov(estimated))
+
+  # any subsequent comparisons? -----------------------------------------------
+  # ---------------------------------------------------------------------------
+  estimated <- .post_process_comparisons(estimated, myargs$post_process)
 
   # Fourth step: back-transform response --------------------------------------
   # ---------------------------------------------------------------------------
@@ -199,11 +203,13 @@ get_marginaltrends <- function(
 # =========================================================================
 
 #' @keywords internal
-.guess_marginaltrends_arguments <- function(model,
-                                            trend = NULL,
-                                            by = NULL,
-                                            verbose = TRUE,
-                                            ...) {
+.guess_marginaltrends_arguments <- function(
+  model,
+  trend = NULL,
+  by = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Gather info
   model_data <- insight::get_data(model, verbose = FALSE)
   predictors <- intersect(
@@ -215,10 +221,16 @@ get_marginaltrends <- function(
   if (is.null(trend)) {
     trend <- predictors[sapply(model_data[predictors], is.numeric)][1]
     if (!length(trend) || is.na(trend)) {
-      insight::format_error("Model contains no numeric predictor. Please specify `trend`.")
+      insight::format_error(
+        "Model contains no numeric predictor. Please specify `trend`."
+      )
     }
     if (verbose) {
-      insight::format_alert(paste0("No numeric variable was specified for slope estimation. Selecting `trend = \"", trend, "\"`.")) # nolint
+      insight::format_alert(paste0(
+        "No numeric variable was specified for slope estimation. Selecting `trend = \"",
+        trend,
+        "\"`."
+      )) # nolint
     }
   }
 
@@ -226,8 +238,16 @@ get_marginaltrends <- function(
   if (length(trend) > 1) {
     if (verbose) {
       insight::format_alert(paste0(
-        "More than one numeric variable was selected for slope estimation. Keeping only `", trend[1], "`. ", # nolint
-        "If you want to estimate the slope of `", trend[1], "` at different values of `", trend[2], "`, use `by=\"", trend[2], "\"` instead." # nolint
+        "More than one numeric variable was selected for slope estimation. Keeping only `",
+        trend[1],
+        "`. ", # nolint
+        "If you want to estimate the slope of `",
+        trend[1],
+        "` at different values of `",
+        trend[2],
+        "`, use `by=\"",
+        trend[2],
+        "\"` instead." # nolint
       ))
     }
     trend <- trend[1]
@@ -246,18 +266,28 @@ get_marginaltrends <- function(
   if (!is.null(by) && !is.null(range) && startsWith(by, trend)) {
     insight::format_error(
       paste0(
-        "To calculate average marginal effects over a range of `", trend, "` ",
-        "values, use `trend=\"", trend, "=seq(1, 3, 0.1)\"` (or similar) and omit `",
-        trend, "` from the `by` argument."
+        "To calculate average marginal effects over a range of `",
+        trend,
+        "` ",
+        "values, use `trend=\"",
+        trend,
+        "=seq(1, 3, 0.1)\"` (or similar) and omit `",
+        trend,
+        "` from the `by` argument."
       ),
       paste0(
-        "To get marginal effects at specific `", trend, "` values, use `trend=\"",
-        trend, "\"` along with `by=\"", trend, "=c(1, 3, 5)\"`."
+        "To get marginal effects at specific `",
+        trend,
+        "` values, use `trend=\"",
+        trend,
+        "\"` along with `by=\"",
+        trend,
+        "=c(1, 3, 5)\"`."
       )
     )
   }
 
-  list(trend = trend, range = range, by = NULL)
+  list(trend = trend, range = range, by = NULL, post_process = dots$post_process)
 }
 
 

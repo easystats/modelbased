@@ -9,6 +9,7 @@ get_marginalcontrasts <- function(
   comparison = "pairwise",
   estimate = NULL,
   transform = NULL,
+  post_process = NULL,
   p_adjust = "none",
   keep_iterations = FALSE,
   verbose = TRUE,
@@ -123,6 +124,7 @@ get_marginalcontrasts <- function(
       hypothesis = my_args$comparison_slopes,
       backend = "marginaleffects",
       transform = transform,
+      post_process = post_process,
       keep_iterations = keep_iterations,
       verbose = verbose,
       ...
@@ -139,6 +141,7 @@ get_marginalcontrasts <- function(
       backend = "marginaleffects",
       estimate = estimate,
       transform = transform,
+      post_process = post_process,
       keep_iterations = keep_iterations,
       verbose = verbose,
       .joint_test = my_args$joint_test,

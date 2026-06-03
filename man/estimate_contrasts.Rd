@@ -17,6 +17,7 @@ estimate_contrasts(model, ...)
   estimate = NULL,
   p_adjust = "none",
   transform = NULL,
+  post_process = NULL,
   keep_iterations = FALSE,
   effectsize = NULL,
   iterations = 200,
@@ -239,6 +240,11 @@ posterior distribution, before computing summaries. Can also be \code{TRUE}, in
 which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
+
+\item{post_process}{Optional formula, or list of formulas, to process subsequent
+comparisons. It allows for complex, multi-step comparisons. After the initial
+comparison in \code{comparison} is completed, the results are then post-processed
+using the specified formula(s).}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns
@@ -686,6 +692,34 @@ estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "education")
 # are differences in time trends of context effects statistically significant
 # between education levels?
 estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
+
+# Post-processing of multiple comparisons ---------------------
+# Caution! Don't expect this example to be meaningful! # It is
+# just to demonstrate the usage of the `post_process` argument.
+# -------------------------------------------------------------
+data("qol_cancer", package = "parameters")
+model <- lme4::lmer(QoL ~ time * education + (1 + time | ID), data = qol_cancer)
+
+# contrasts (pairwise comparisons) by timepoints - the default
+estimate_contrasts(model, "education=c('low', 'mid')", by = "time")
+
+# contrasts (pairwise comparisons) by timepoints, the default for `comparison`
+# additionally, we compare the differences of these contrasts across timepoints
+# against the reference time point (contrasts at times 2 and 3 against
+# contrasts at time 1)
+estimate_contrasts(model,
+  contrasts = "education=c('low', 'mid')",
+  by = "time",
+  post_process = ~reference
+)
+
+# multiple post-processing steps - same as before, but calculates
+# poly-contrasts in addition to reference contrasts
+estimate_contrasts(model,
+  contrasts = "education=c('low', 'mid')",
+  by = "time",
+  post_process = list(~reference, ~poly)
+)
 }
 \dontshow{\}) # examplesIf}
 }

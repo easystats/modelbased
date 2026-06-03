@@ -16,8 +16,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{datawizard}{\code{\link[datawizard]{standardize}}, \code{\link[datawizard:standardize]{unstandardize}}, \code{\link[datawizard]{visualisation_recipe}}}
+  \item{datawizard}{\code{\link[datawizard:standardize]{standardize()}}, \code{\link[datawizard:unstandardize]{unstandardize()}}, \code{\link[datawizard:visualisation_recipe]{visualisation_recipe()}}}
 
-  \item{insight}{\code{\link[insight]{display}}, \code{\link[insight:display]{print_html}}, \code{\link[insight:display]{print_md}}}
+  \item{insight}{\code{\link[insight:display]{display()}}, \code{\link[insight:print_html]{print_html()}}, \code{\link[insight:print_md]{print_md()}}}
 }}
 
