@@ -715,7 +715,9 @@ estimate_contrasts(model,
 )
 
 # multiple post-processing steps - same as before, but calculates
-# additional poly-contrasts applied to the reference contrasts
+# additional poly-contrasts applied to the reference contrasts (that
+# were applied to the default pairwise comparisons of educational levels,
+# grouped `by time`)
 estimate_contrasts(model,
   contrast = "education=c('low', 'mid')",
   by = "time",
