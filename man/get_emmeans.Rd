@@ -303,10 +303,10 @@ appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
 
 \item{post_process}{Optional formula, character string or function (see
-\code{comparison}), or a list of formulas, string or functions, to process
+\code{comparison}), or a list of formulas, strings or functions, to process
 subsequent, multi-step comparisons. After the initial comparison in
 \code{comparison} is completed, the results are then post-processed using the
-specified post-process tests. See 'Exmaples'.}
+specified post-process tests. See 'Examples'.}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
