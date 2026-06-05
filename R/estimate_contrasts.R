@@ -389,7 +389,7 @@
 #' # against the reference time point (contrasts at times 2 and 3 against
 #' # contrasts at time 1)
 #' estimate_contrasts(model,
-#'   contrasts = "education=c('low', 'mid')",
+#'   contrast = "education=c('low', 'mid')",
 #'   by = "time",
 #'   post_process = ~reference
 #' )
@@ -397,7 +397,7 @@
 #' # multiple post-processing steps - same as before, but calculates
 #' # poly-contrasts in addition to reference contrasts
 #' estimate_contrasts(model,
-#'   contrasts = "education=c('low', 'mid')",
+#'   contrast = "education=c('low', 'mid')",
 #'   by = "time",
 #'   post_process = list(~reference, ~poly)
 #' )
