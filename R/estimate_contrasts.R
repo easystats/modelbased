@@ -381,10 +381,10 @@
 #' data("qol_cancer", package = "parameters")
 #' model <- lme4::lmer(QoL ~ time * education + (1 + time | ID), data = qol_cancer)
 #'
-#' # contrasts (pairwise comparisons) by timepoints - the default
+#' # contrasts (pairwise comparisons - the default) by timepoints
 #' estimate_contrasts(model, "education=c('low', 'mid')", by = "time")
 #'
-#' # contrasts (pairwise comparisons) by timepoints, the default for `comparison`
+#' # contrasts (pairwise comparisons, the default for `comparison`) by timepoints
 #' # additionally, we compare the differences of these contrasts across timepoints
 #' # against the reference time point (contrasts at times 2 and 3 against
 #' # contrasts at time 1)
@@ -395,7 +395,7 @@
 #' )
 #'
 #' # multiple post-processing steps - same as before, but calculates
-#' # poly-contrasts in addition to reference contrasts
+#' # additional poly-contrasts applied to the reference contrasts
 #' estimate_contrasts(model,
 #'   contrast = "education=c('low', 'mid')",
 #'   by = "time",
