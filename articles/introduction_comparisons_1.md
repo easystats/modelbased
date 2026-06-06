@@ -419,7 +419,7 @@ estimate_contrasts(
 #> b2 = episode [3], grp [control]
 ```
 
-### Does difference between two levels of episode in the control group differ from difference of same two levels in the treatment group?
+### Interaction contrasts: Does difference between two levels of episode in the control group differ from difference of same two levels in the treatment group?
 
 The `comparison` argument also allows us to compare
 difference-in-differences (aka *interaction contrasts*). For example, is
@@ -494,6 +494,56 @@ Let’s replicate this step-by-step:
 7.  Our quantity of interest is the difference between these two
     differences, which is (considering rounding inaccuracy) 0.36. This
     difference is not statistically significant (p = 0.277).
+
+### Multi-step comparisons: applying further comparisons and tests on a previous comparison or test result
+
+*Interaction contrasts* are effectively pairwise comparisons of pairwise
+comparisons. Therefore, we can perform this analysis in two steps:
+first, calculate the initial pairwise comparisons, and then
+“post-process” these results to apply a subsequent pairwise comparison.
+This is accomplished using the `post_process` argument, which accepts an
+optional formula, character string, function, or a list of these, to
+process subsequent, multi-step comparisons. After the initial comparison
+is completed, the results are post-processed sequentially. The following
+example replicates our previous results, with our final comparison of
+interest located in row 8.
+
+``` r
+
+result <- estimate_contrasts(
+  model2,
+  # the `comparison` argument defaults to `~pairwise`, thus we first have
+  # a pairwise comparisons of all episode levels 1 and 2 and grp levels
+  contrast = c("episode=c(1,2)", "grp"),
+  # next, we apply another pairwise comparison on the pairs of the previous step
+  post_process = ~pairwise
+)
+# quite wide table - we find our comparison in row 8
+print(result, table_width = Inf)
+#> Marginal Contrasts Analysis
+#> 
+#> Parameter                                           |      Difference (CI) |     p
+#> ----------------------------------------------------------------------------------
+#> 2 control - 1 control - 1 treatment - 1 control     |  0.62 ( 0.16,  1.08) | 0.008
+#> 2 treatment - 1 control - 1 treatment - 1 control   |  0.57 ( 0.07,  1.06) | 0.025
+#> 2 control - 1 treatment - 1 treatment - 1 control   |  1.04 ( 0.23,  1.85) | 0.012
+#> 2 treatment - 1 treatment - 1 treatment - 1 control |  0.98 ( 0.15,  1.82) | 0.020
+#> 2 treatment - 2 control - 1 treatment - 1 control   |  0.36 (-0.29,  1.02) | 0.276
+#> 2 treatment - 1 control - 2 control - 1 control     | -0.06 (-0.52,  0.41) | 0.816
+#> 2 control - 1 treatment - 2 control - 1 control     |  0.42 (-0.04,  0.87) | 0.072
+#> 2 treatment - 1 treatment - 2 control - 1 control   |  0.36 (-0.29,  1.02) | 0.276
+#> 2 treatment - 2 control - 2 control - 1 control     | -0.26 (-1.02,  0.51) | 0.507
+#> 2 control - 1 treatment - 2 treatment - 1 control   |  0.47 (-0.18,  1.13) | 0.155
+#> 2 treatment - 1 treatment - 2 treatment - 1 control |  0.42 (-0.04,  0.87) | 0.072
+#> 2 treatment - 2 control - 2 treatment - 1 control   | -0.20 (-0.63,  0.22) | 0.349
+#> 2 treatment - 1 treatment - 2 control - 1 treatment | -0.06 (-0.52,  0.41) | 0.816
+#> 2 treatment - 2 control - 2 control - 1 treatment   | -0.68 (-1.46,  0.11) | 0.091
+#> 2 treatment - 2 control - 2 treatment - 1 treatment | -0.62 (-1.08, -0.16) | 0.008
+#> 
+#> Variable predicted: outcome
+#> Predictors contrasted: episode=c(1,2), grp
+#> p-values are uncorrected.
+```
 
 ## Conclusion
 

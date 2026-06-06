@@ -515,8 +515,9 @@ desired comparison this way:</p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="does-difference-between-two-levels-of-episode-in-the-control-group-differ-from-difference-of-same-two-levels-in-the-treatment-group">Does difference between two levels of episode in the control group
-differ from difference of same two levels in the treatment group?<a class="anchor" aria-label="anchor" href="#does-difference-between-two-levels-of-episode-in-the-control-group-differ-from-difference-of-same-two-levels-in-the-treatment-group"></a>
+<h3 id="interaction-contrasts-does-difference-between-two-levels-of-episode-in-the-control-group-differ-from-difference-of-same-two-levels-in-the-treatment-group">Interaction contrasts: Does difference between two levels of episode
+in the control group differ from difference of same two levels in the
+treatment group?<a class="anchor" aria-label="anchor" href="#interaction-contrasts-does-difference-between-two-levels-of-episode-in-the-control-group-differ-from-difference-of-same-two-levels-in-the-treatment-group"></a>
 </h3>
 <p>The <code>comparison</code> argument also allows us to compare
 difference-in-differences (aka <em>interaction contrasts</em>). For
@@ -584,6 +585,55 @@ the treatment group is 0.18.</li>
 differences, which is (considering rounding inaccuracy) 0.36. This
 difference is not statistically significant (p = 0.277).</li>
 </ol>
+</div>
+<div class="section level3">
+<h3 id="multi-step-comparisons-applying-further-comparisons-and-tests-on-a-previous-comparison-or-test-result">Multi-step comparisons: applying further comparisons and tests on a
+previous comparison or test result<a class="anchor" aria-label="anchor" href="#multi-step-comparisons-applying-further-comparisons-and-tests-on-a-previous-comparison-or-test-result"></a>
+</h3>
+<p><em>Interaction contrasts</em> are effectively pairwise comparisons
+of pairwise comparisons. Therefore, we can perform this analysis in two
+steps: first, calculate the initial pairwise comparisons, and then
+“post-process” these results to apply a subsequent pairwise comparison.
+This is accomplished using the <code>post_process</code> argument, which
+accepts an optional formula, character string, function, or a list of
+these, to process subsequent, multi-step comparisons. After the initial
+comparison is completed, the results are post-processed sequentially.
+The following example replicates our previous results, with our final
+comparison of interest located in row 8.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">model2</span>,</span>
+<span>  <span class="co"># the `comparison` argument defaults to `~pairwise`, thus we first have</span></span>
+<span>  <span class="co"># a pairwise comparisons of all episode levels 1 and 2 and grp levels</span></span>
+<span>  contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"episode=c(1,2)"</span>, <span class="st">"grp"</span><span class="op">)</span>,</span>
+<span>  <span class="co"># next, we apply another pairwise comparison on the pairs of the previous step</span></span>
+<span>  post_process <span class="op">=</span> <span class="op">~</span><span class="va">pairwise</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># quite wide table - we find our comparison in row 8</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span>, table_width <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter                                           |      Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; ----------------------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 2 control - 1 control - 1 treatment - 1 control     |  0.62 ( 0.16,  1.08) | 0.008</span></span>
+<span><span class="co">#&gt; 2 treatment - 1 control - 1 treatment - 1 control   |  0.57 ( 0.07,  1.06) | 0.025</span></span>
+<span><span class="co">#&gt; 2 control - 1 treatment - 1 treatment - 1 control   |  1.04 ( 0.23,  1.85) | 0.012</span></span>
+<span><span class="co">#&gt; 2 treatment - 1 treatment - 1 treatment - 1 control |  0.98 ( 0.15,  1.82) | 0.020</span></span>
+<span><span class="co">#&gt; 2 treatment - 2 control - 1 treatment - 1 control   |  0.36 (-0.29,  1.02) | 0.276</span></span>
+<span><span class="co">#&gt; 2 treatment - 1 control - 2 control - 1 control     | -0.06 (-0.52,  0.41) | 0.816</span></span>
+<span><span class="co">#&gt; 2 control - 1 treatment - 2 control - 1 control     |  0.42 (-0.04,  0.87) | 0.072</span></span>
+<span><span class="co">#&gt; 2 treatment - 1 treatment - 2 control - 1 control   |  0.36 (-0.29,  1.02) | 0.276</span></span>
+<span><span class="co">#&gt; 2 treatment - 2 control - 2 control - 1 control     | -0.26 (-1.02,  0.51) | 0.507</span></span>
+<span><span class="co">#&gt; 2 control - 1 treatment - 2 treatment - 1 control   |  0.47 (-0.18,  1.13) | 0.155</span></span>
+<span><span class="co">#&gt; 2 treatment - 1 treatment - 2 treatment - 1 control |  0.42 (-0.04,  0.87) | 0.072</span></span>
+<span><span class="co">#&gt; 2 treatment - 2 control - 2 treatment - 1 control   | -0.20 (-0.63,  0.22) | 0.349</span></span>
+<span><span class="co">#&gt; 2 treatment - 1 treatment - 2 control - 1 treatment | -0.06 (-0.52,  0.41) | 0.816</span></span>
+<span><span class="co">#&gt; 2 treatment - 2 control - 2 control - 1 treatment   | -0.68 (-1.46,  0.11) | 0.091</span></span>
+<span><span class="co">#&gt; 2 treatment - 2 control - 2 treatment - 1 treatment | -0.62 (-1.08, -0.16) | 0.008</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: outcome</span></span>
+<span><span class="co">#&gt; Predictors contrasted: episode=c(1,2), grp</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
