@@ -102,7 +102,15 @@ The plot shows that individuals with higher education report a higher QoL, and t
 
 ## 4. Absolute Inequality
 
-For categorical predictors with only two levels, like low vs. high income groups or male vs. female sex, the absolute inequality is straightforward to compute: it's the difference between the estimated predictions for the two levels (simple pairwise comparison). However, for nominal or ordinal variables with multiple levels, we need to consider all pairwise differences.
+For categorical predictors with only two levels, like low vs. high income groups or male vs. female sex, the absolute inequality is straightforward to compute: it's the difference between the estimated predictions for the two levels (simple pairwise comparison):
+
+```{r, eval=FALSE}
+# example code, showing how to calculate absolute inequalities
+# between male and female sex
+estimate_contrasts(model, contrast = "sex")
+```
+
+However, for nominal or ordinal variables with multiple levels, we need to consider *all* pairwise differences.
 
 The advantages of the `modelbased` package become most apparent when working with predictors that have *more than two levels*. In this case, the **absolute inequality** is the average of all absolute differences between the predicted outcomes for each pair of groups.
 
@@ -132,11 +140,32 @@ estimate_contrasts(m, contrast = "education", comparison = "inequality")
 
 **Interpretation**: The mean difference (absolute inequality) is **9.64**. This means that, on average, the Quality of Life score differs by 9.64 points between any two randomly chosen education levels, after accounting for time. The small p-value (`p < .001`) indicates that this overall inequality is statistically significant.
 
+As stated above, the absolute inequality is the average difference in predicted outcomes between all pairs of education groups. Hence, we can also reproduce the previous result using the `post_process` argument, which allows us to process subsequent, multi-step comparisons after the initial `comparison` is completed.
+
+```{r}
+# Compute the absolute inequality for the 'education' variable
+estimate_contrasts(
+  m,
+  contrast = "education",
+  # the default for comparison is "pairwise", just to make steps clear
+  comparison = "pairwise",
+  # we now take the average of all contrasts from the previous step in
+  # `comparison`, i.e. we calculate the mean of all pairs
+  post_process = ~I(mean(x))
+)
+```
+
 ## 5. Relative Inequality
 
-**Relative inequality** (or the inequality ratio) is the average of the ratios of predicted outcomes between all pairs of groups.
+**Relative inequality** (or the inequality ratio) is the average of the ratios of predicted outcomes between all pairs of groups. Again, for binary predictors, it is pretty straightforward to calculate the relative inequalities. It is the *ratio* of the estimated predictions for the two levels:
 
-It answers the question:
+```{r, eval=FALSE}
+# example code, showing how to calculate relative inequalities
+# between male and female sex
+estimate_contrasts(model, contrast = "sex", comparison = ratio ~ pairwise)
+```
+
+In our example, since we have more than two levels for our predictor `education`, we additionally take the average of all pairs. This answers the question:
 
 > "On average, by what factor does the outcome differ between *any two* education groups?"
 
@@ -161,6 +190,19 @@ estimate_contrasts(m, contrast = "education", comparison = "inequality_ratio")
 ```
 
 **Interpretation**: The mean ratio (relative inequality) is **1.14**. This means that, on average, the QoL score is 1.14 times higher (or 14% higher) when comparing a higher education group to a lower one.
+
+Again, we can calculate these inequality contrasts in several steps, using the `post_process` argument. In a first step, we want the pairwise contrasts, not expressed as difference, but as ratios. Next, we want the average of all pairs of ratios.
+
+```{r}
+estimate_contrasts(
+  m,
+  contrast = "education",
+  # pairwise comparison, but we want the ratio, not the difference
+  comparison = ratio ~ pairwise,
+  # again, we take the average of all pairs
+  post_process = ~I(mean(x))
+)
+```
 
 ## 6. Comparing Inequalities Across Groups and Time
 
