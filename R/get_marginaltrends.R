@@ -138,7 +138,11 @@ get_marginaltrends <- function(
 
   # any subsequent comparisons? -----------------------------------------------
   # ---------------------------------------------------------------------------
-  estimated <- .post_process_comparisons(estimated, myargs$post_process)
+  estimated <- .post_process_comparisons(
+    estimated,
+    post_process = myargs$post_process,
+    verbose = verbose
+  )
 
   # Fourth step: back-transform response --------------------------------------
   # ---------------------------------------------------------------------------

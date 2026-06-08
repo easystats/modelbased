@@ -56,6 +56,21 @@ test_that("estimate_contrast, marginal effects inequalities", {
   expect_equal(out$Mean_Difference, c(0.66259, 0.60411, 0.64052), tolerance = 1e-4)
   expect_named(out, c("island", "Mean_Difference", "SE", "CI_low", "CI_high", "z", "p"))
 
+  # inequality comparisons with `by` and "average", and post-processing
+  out <- estimate_contrasts(
+    m,
+    "species",
+    by = "island",
+    comparison = "inequality",
+    estimate = "average",
+    post_process = ~sequential
+  )
+  expect_equal(out$Mean_Difference, c(-0.05848034, 0.03640859), tolerance = 1e-4)
+  expect_named(
+    out,
+    c("Parameter", "Mean_Difference", "SE", "CI_low", "CI_high", "z", "p")
+  )
+
   # inequality comparisons with `by`
   out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality")
   expect_equal(out$Mean_Difference, c(0.665814, 0.538415, 0.665679), tolerance = 1e-4)

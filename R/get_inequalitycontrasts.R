@@ -8,6 +8,8 @@
   comparison,
   ci,
   estimate = NULL,
+  post_process = NULL,
+  verbose = TRUE,
   ...
 ) {
   dots <- list(...)
@@ -159,6 +161,9 @@
     }
     out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
   }
+
+  # process subsequential comparisons, if any
+  out <- .post_process_comparisons(out, post_process = post_process, verbose = verbose)
 
   attr(out, "hypothesis_by") <- group
   class(out) <- unique(c("marginaleffects_means", class(out)))
