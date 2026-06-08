@@ -48,6 +48,24 @@ test_that("estimate_contrast, context effects, linear", {
     ignore_attr = TRUE
   )
 
+  # post processing for context effects
+  out <- estimate_contrasts(
+    m,
+    c("bill_len_between", "bill_len_within", "year"),
+    post_process = ~sequential
+  )
+  expect_named(
+    out,
+    c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+  )
+  expect_equal(
+    out$Difference,
+    c(0.04317388, -0.04317388),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_identical(out$Level1, c("2009 - 2007", "2009 - 2008"))
+
   skip_on_os(c("mac", "linux"))
   m <- lm(bill_dep ~ sex * year * (bill_len_between + bill_len_within), data = d)
   out <- estimate_contrasts(

@@ -87,6 +87,8 @@ get_marginalcontrasts <- function(
       comparison,
       ci,
       estimate,
+      post_process = post_process,
+      verbose = verbose,
       ...
     )
     predict <- "response"
@@ -95,7 +97,16 @@ get_marginalcontrasts <- function(
     # and don't use the usual machinery of `estimate_means()` here, which we
     # can use for other contrasts.
     # -------------------------------------------------------------------------
-    out <- .get_contexteffects(model, my_args, predict, transform, model_info, ...)
+    out <- .get_contexteffects(
+      model,
+      my_args = my_args,
+      predict = predict,
+      transform = transform,
+      post_process = post_process,
+      model_info = model_info,
+      verbose = verbose,
+      ...
+    )
     # set defaults, for proper printing
     if (is.null(predict)) {
       predict <- "link"

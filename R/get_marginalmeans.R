@@ -260,7 +260,7 @@ get_marginalmeans <- function(
       # call marginaleffects
       result <- suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args))
       # process subsequential comparisons, if any
-      .post_process_comparisons(result, post_process, verbose)
+      .post_process_comparisons(result, post_process = post_process, verbose = verbose)
     },
     error = function(e) e
   )
