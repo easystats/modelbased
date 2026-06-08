@@ -105,9 +105,17 @@ will quantify this “average gap.”
 For categorical predictors with only two levels, like low vs. high
 income groups or male vs. female sex, the absolute inequality is
 straightforward to compute: it’s the difference between the estimated
-predictions for the two levels (simple pairwise comparison). However,
-for nominal or ordinal variables with multiple levels, we need to
-consider all pairwise differences.
+predictions for the two levels (simple pairwise comparison):
+
+``` r
+
+# example code, showing how to calculate absolute inequalities
+# between male and female sex
+estimate_contrasts(model, contrast = "sex")
+```
+
+However, for nominal or ordinal variables with multiple levels, we need
+to consider *all* pairwise differences.
 
 The advantages of the `modelbased` package become most apparent when
 working with predictors that have *more than two levels*. In this case,
@@ -174,12 +182,54 @@ by 9.64 points between any two randomly chosen education levels, after
 accounting for time. The small p-value (`p < .001`) indicates that this
 overall inequality is statistically significant.
 
+As stated above, the absolute inequality is the average difference in
+predicted outcomes between all pairs of education groups. Hence, we can
+also reproduce the previous result using the `post_process` argument,
+which allows us to process subsequent, multi-step comparisons after the
+initial `comparison` is completed.
+
+``` r
+
+# Compute the absolute inequality for the 'education' variable
+estimate_contrasts(
+  m,
+  contrast = "education",
+  # the default for comparison is "pairwise", just to make steps clear
+  comparison = "pairwise",
+  # we now take the average of all contrasts from the previous step in
+  # `comparison`, i.e. we calculate the mean of all pairs
+  post_process = ~I(mean(x))
+)
+#> Marginal Contrasts Analysis
+#> 
+#> Parameter |    Difference (CI) |      p
+#> ---------------------------------------
+#> custom    | 9.64 (6.44, 12.84) | <0.001
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: education
+#> Predictors averaged: time (2)
+#> p-values are uncorrected.
+```
+
 ## 5. Relative Inequality
 
 **Relative inequality** (or the inequality ratio) is the average of the
-ratios of predicted outcomes between all pairs of groups.
+ratios of predicted outcomes between all pairs of groups. Again, for
+binary predictors, it is pretty straightforward to calculate the
+relative inequalities. It is the *ratio* of the estimated predictions
+for the two levels:
 
-It answers the question:
+``` r
+
+# example code, showing how to calculate relative inequalities
+# between male and female sex
+estimate_contrasts(model, contrast = "sex", comparison = ratio ~ pairwise)
+```
+
+In our example, since we have more than two levels for our predictor
+`education`, we additionally take the average of all pairs. This answers
+the question:
 
 > “On average, by what factor does the outcome differ between *any two*
 > education groups?”
@@ -240,6 +290,33 @@ estimate_contrasts(m, contrast = "education", comparison = "inequality_ratio")
 This means that, on average, the QoL score is 1.14 times higher (or 14%
 higher) when comparing a higher education group to a lower one.
 
+Again, we can calculate these inequality contrasts in several steps,
+using the `post_process` argument. In a first step, we want the pairwise
+contrasts, not expressed as difference, but as ratios. Next, we want the
+average of all pairs of ratios.
+
+``` r
+
+estimate_contrasts(
+  m,
+  contrast = "education",
+  # pairwise comparison, but we want the ratio, not the difference
+  comparison = ratio ~ pairwise,
+  # again, we take the average of all pairs
+  post_process = ~I(mean(x))
+)
+#> Marginal Contrasts Analysis
+#> 
+#> Parameter |        Ratio (CI) |      p
+#> --------------------------------------
+#> custom    | 1.14 (1.09, 1.20) | <0.001
+#> 
+#> Variable predicted: QoL
+#> Predictors contrasted: education
+#> Predictors averaged: time (2)
+#> p-values are uncorrected.
+```
+
 ## 6. Comparing Inequalities Across Groups and Time
 
 A powerful application of these measures is to compare how inequality
@@ -269,7 +346,7 @@ p2 <- plot(estimate_means(m2, by = c("time", "education"))) +
 p1 + p2
 ```
 
-![](practical_inequalities_files/figure-html/unnamed-chunk-10-1.png)
+![](practical_inequalities_files/figure-html/unnamed-chunk-14-1.png)
 
 The visual gap between education levels appears larger in Group 1. Let’s
 confirm this by calculating the absolute inequality for each group.
