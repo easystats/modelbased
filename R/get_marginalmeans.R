@@ -42,6 +42,7 @@ get_marginalmeans <- function(
   comparison <- dots$hypothesis
   post_process <- dots$post_process
   joint_test <- isTRUE(dots$.joint_test)
+  omnibus_test <- isTRUE(dots$.omnibus_test)
 
   # validate input
   estimate <- .validate_estimate_arg(estimate)
@@ -87,7 +88,7 @@ get_marginalmeans <- function(
   # fmt: skip
   dots[c(
     "by", "conf_level", "type", "digits", "bias_correction", "sigma",
-    "offset", ".joint_test", "post_process"
+    "offset", ".joint_test", ".omnibus_test", "post_process"
   )] <- NULL
 
   # model df - can be passed via `...`
@@ -191,8 +192,14 @@ get_marginalmeans <- function(
   # intermediate step: joint tests --------------------------------------------
   # ---------------------------------------------------------------------------
 
-  if (joint_test) {
-    means <- .get_jointtest(means, my_args, test = c(dots$joint_test, dots$test))
+  if (joint_test || omnibus_test) {
+    means <- .get_jointtest(
+      means,
+      my_args,
+      test = c(dots$joint_test, dots$test),
+      null = dots$null,
+      is_omnibus = omnibus_test
+    )
   }
 
   # Fifth step: post-processing marginal means----------------------------------
@@ -241,6 +248,8 @@ get_marginalmeans <- function(
         transform = !is.null(transform),
         keep_iterations = keep_iterations,
         joint_test = joint_test,
+        omnibus_test = omnibus_test,
+        null = dots$null,
         vcov = vcov_means,
         equivalence = dots$equivalence
       )
@@ -605,8 +614,9 @@ get_marginalmeans <- function(
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info", "contrast_filter",
-    "keep_iterations", "joint_test", "vcov", "equivalence", "context_effects"
+    "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
+    "keep_iterations", "joint_test", "omnibus_test", "vcov", "equivalence",
+    "context_effects"
   )
 }
 

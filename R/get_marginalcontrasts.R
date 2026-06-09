@@ -156,6 +156,7 @@ get_marginalcontrasts <- function(
       keep_iterations = keep_iterations,
       verbose = verbose,
       .joint_test = my_args$joint_test,
+      .omnibus_test = my_args$omnibus_test,
       ...
     )
   }
@@ -259,7 +260,7 @@ get_marginalcontrasts <- function(
 ) {
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
-  joint_test <- FALSE
+  joint_test <- omnibus_test <- FALSE
   context_effects <- FALSE
 
   # save original `by`
@@ -438,36 +439,44 @@ get_marginalcontrasts <- function(
         comparison <- "reference"
         joint_test <- TRUE
       }
+      if (comparison == "omnibus") {
+        joint_test <- TRUE
+        omnibus_test <- TRUE
+      }
       # for some comparisons, we need an empty left-hand side. else, we default
       # to "difference".
       formula_lhs <- switch(comparison, poly = , helmert = "", "difference")
       formula_rhs <- comparison
     }
-    # we put "by" into the formula. user either provided "by", or we put the
-    # group variable from the formula into "by" (see code above), hence,
-    # "my_args$by" definitely contains the requested groups
-    formula_group <- my_args$by
-    # compose formula
-    f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
-    # for contrasts of slopes, we don *not* want the group-variable in the formula
-    comparison_slopes <- stats::as.formula(f)
-    # for contrasts of categorical, we add the group variable and update `by`
-    if (!is.null(formula_group)) {
-      f <- paste(f, "|", paste(formula_group, collapse = "+"))
-      my_args$by <- formula_group
-    }
-    comparison <- stats::as.formula(f)
-    # if user specified group in "by" *and* in formula, we keep the group
-    # for contrasts of slopes - thus,we need to update comparison_slopes
-    by_formula <- trimws(unlist(
-      strsplit(deparse(original_comparison), "|", fixed = TRUE),
-      use.names = FALSE
-    ))[2]
-    if (!is.na(by_formula) && identical(by_formula, formula_group)) {
-      # we have a group variable in the formula, which is the same as in `by`
-      # so we keep it for the slopes comparison - this is required to add
-      # grouping in (pairwise) slopes
-      comparison_slopes <- comparison
+    if (omnibus_test) {
+      comparison <- NULL
+    } else {
+      # we put "by" into the formula. user either provided "by", or we put the
+      # group variable from the formula into "by" (see code above), hence,
+      # "my_args$by" definitely contains the requested groups
+      formula_group <- my_args$by
+      # compose formula
+      f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
+      # for contrasts of slopes, we don *not* want the group-variable in the formula
+      comparison_slopes <- stats::as.formula(f)
+      # for contrasts of categorical, we add the group variable and update `by`
+      if (!is.null(formula_group)) {
+        f <- paste(f, "|", paste(formula_group, collapse = "+"))
+        my_args$by <- formula_group
+      }
+      comparison <- stats::as.formula(f)
+      # if user specified group in "by" *and* in formula, we keep the group
+      # for contrasts of slopes - thus,we need to update comparison_slopes
+      by_formula <- trimws(unlist(
+        strsplit(deparse(original_comparison), "|", fixed = TRUE),
+        use.names = FALSE
+      ))[2]
+      if (!is.na(by_formula) && identical(by_formula, formula_group)) {
+        # we have a group variable in the formula, which is the same as in `by`
+        # so we keep it for the slopes comparison - this is required to add
+        # grouping in (pairwise) slopes
+        comparison_slopes <- comparison
+      }
     }
   }
   # remove "by" from "contrast"
@@ -499,6 +508,7 @@ get_marginalcontrasts <- function(
       contrast_filter = insight::compact_list(contrast_filter),
       # in case we have a joint/omnibus test
       joint_test = joint_test,
+      omnibus_test = omnibus_test,
       # remember if we want to calculate context effects
       context_effects = context_effects,
       # cleaned `by` and `contrast`, without filtering information
@@ -538,6 +548,7 @@ get_marginalcontrasts <- function(
     "helmert",
     "trt_vs_ctrl",
     "joint",
+    "omnibus",
     "inequality",
     "inequality_pairwise",
     "inequality_ratio",

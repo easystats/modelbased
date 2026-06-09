@@ -43,8 +43,9 @@
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
 #'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test
 #'     multiple hypotheses jointly (usually used for factorial designs),
-#'     `comparison` can also be `"joint"`. In this case, use the `test` argument
-#'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
+#'     `comparison` can also be `"joint"` or `"omnibus"`. In this case, use the
+#'     `test` argument to specify which test should be conducted: `"F"`
+#'     (default) or `"Chi2"`.
 #'   * String: Special string options are `"inequality"`, `"inequality_ratio"`,
 #'     and `"inequality_pairwise"`. `comparison = "inequality"` computes the
 #'     marginal effect inequality summary of categorical predictors' overall
@@ -126,8 +127,12 @@
 #'   first, which is typically the control) against the first level. It's often
 #'   used when comparing multiple treatment groups to a single control group.
 #' - To test multiple hypotheses jointly (usually used for factorial designs),
-#'   `comparison` can also be `"joint"`. In this case, use the `test` argument
-#'   to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
+#'   `comparison` can also be `"joint"`. This option runs sequential joint tests
+#'   on the results of an initial pairwise comparison. To test for differences
+#'   between groups from an global average, use `comparison = "omnibus"`, which
+#'   conducts a global omnibus test. Use the `test` argument to specify which
+#'   test should be conducted: `"F"` (default) or `"Chi2"`. Use the `null`
+#'   argument to define a specific null-hypothesis to test against.
 #' - `comparison = "inequality"` computes the *absolute inequality* of groups,
 #'   or in other words, the marginal effect inequality summary of categorical
 #'   predictors' overall effects, respectively, the comprehensive effect of an
@@ -335,6 +340,18 @@
 #'   refresh = 0
 #' )
 #' estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
+#'
+#' # Omnibus and Joint Tests ------------------------------------
+#' #
+#' # ------------------------------------------------------------
+#' data(coffee_data, package = "modelbased")
+#' m <- lm(alertness ~ time * coffee, data = coffee_data)
+#' # joint test for simple effects of "time" for levels of "coffee".
+#' estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
+#' # global omnibus test to test for differences between "time" levels
+#' estimate_contrasts(m, contrast = "time", comparison = "omnibus")
+#' # test against a different null-hypothesis
+#' estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
 #'
 #' # Context effects --------------------------------------------
 #' # This is the difference of within- and between-effects, which

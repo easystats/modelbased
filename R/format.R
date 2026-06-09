@@ -185,6 +185,8 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     remove_columns <- setdiff(remove_columns, attributes(x)$hypothesis_by)
   } else if (is_contrast_analysis) {
     estimate_name <- "Difference"
+  } else if (inherits(x, "marginal_jointtest")) {
+    estimate_name <- "Estimate"
   } else {
     # for simple means, we don't want p-values
     remove_columns <- c(remove_columns, "p")
@@ -610,13 +612,20 @@ equivalence_columns <- c(
   # coefficient column is named, because we replace that column name with an
   # appropriate name of the predictions (e.g. "Difference", "Probability" or
   # "Mean")
-  params <- suppressWarnings(parameters::model_parameters(
+  params <- .safe(suppressWarnings(parameters::model_parameters(
     x,
     ci = ci,
     diagnostic = NULL,
     verbose = FALSE,
     ...
-  ))
+  )))
+
+  # sanity check - if we have joint tests for categorical predictors, we
+  # cannot clean using `model_parameters()`
+  if (is.null(params)) {
+    params <- insight::standardize_names(as.data.frame(x))
+  }
+
   # the different functions and models (Bayesian, frequentist) have different
   # column names for their "coefficient". We now extract the relevant one.
   possible_colnames <- c(

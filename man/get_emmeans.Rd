@@ -151,8 +151,9 @@ section \emph{Comparison options} below.
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
 \code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
 multiple hypotheses jointly (usually used for factorial designs),
-\code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
-to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
+\code{comparison} can also be \code{"joint"} or \code{"omnibus"}. In this case, use the
+\code{test} argument to specify which test should be conducted: \code{"F"}
+(default) or \code{"Chi2"}.
 \item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},
 and \code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
 marginal effect inequality summary of categorical predictors' overall
