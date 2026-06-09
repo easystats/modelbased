@@ -8,6 +8,10 @@
 * `estimate_contrasts()` gets a `post_process` argument, to process subsequent
   comparisons. It allows for complex, multi-step comparisons.
 
+* The `comparison` argument in `estimate_contrasts()` can now also be `"omnibus"`,
+  to calculate a globale omnbius test for differences between levels of a
+  predictor.
+
 # modelbased 0.15.0
 
 ## Breaking Changes
