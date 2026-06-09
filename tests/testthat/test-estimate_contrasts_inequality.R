@@ -65,7 +65,12 @@ test_that("estimate_contrast, marginal effects inequalities", {
     estimate = "average",
     post_process = ~sequential
   )
-  expect_equal(out$Mean_Difference, c(-0.05848034, 0.03640859), tolerance = 1e-4)
+  expect_equal(
+    out$Mean_Difference,
+    c(-0.05848034, 0.03640859),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
   expect_named(
     out,
     c("Parameter", "Mean_Difference", "SE", "CI_low", "CI_high", "z", "p")

@@ -98,6 +98,19 @@
     }
   }
 
+  # leave early for joint tests ----------------------------------------------
+
+  if (isTRUE(info$joint_test)) {
+    if (!is.null(info$null)) {
+      table_footer <- paste0(
+        table_footer,
+        "\nNull-hypothesis: joint comparison equals ",
+        insight::format_value(info$null)
+      )
+    }
+    return(c(paste0(table_footer, "\n"), "yellow"))
+  }
+
   # tell user about scale of predictions / contrasts -------------------------
 
   result_type <- switch(
