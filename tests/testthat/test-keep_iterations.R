@@ -16,8 +16,9 @@ test_that("estimate_means() - posterior draws", {
     c(
       "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
       "predict", "estimate", "transform", "datagrid", "preserve_range",
-      "model_info", "keep_iterations", "joint_test", "table_title",
-      "table_footer", "model", "response", "ci", "backend", "coef_name", "call"
+      "model_info", "keep_iterations", "joint_test", "omnibus_test",
+      "table_title", "table_footer", "model", "response", "ci", "backend",
+      "coef_name", "call"
     )
   )
   # fmt: skip
@@ -41,7 +42,7 @@ test_that("estimate_means() - posterior draws", {
     c(
       "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
       "predict", "estimate", "transform", "datagrid", "preserve_range",
-      "model_info", "keep_iterations", "joint_test", "table_title",
+      "model_info", "keep_iterations", "joint_test", "omnibus_test", "table_title",
       "table_footer", "model", "response", "ci", "backend", "coef_name", "call"
     )
   )
@@ -69,7 +70,7 @@ test_that("estimate_contrasts() - posterior draws", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations", "joint_test", "context_effects"
+      "keep_iterations", "joint_test", "omnibus_test", "context_effects"
     )
   )
   # fmt: skip
@@ -95,7 +96,7 @@ test_that("estimate_contrasts() - posterior draws", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations", "joint_test", "context_effects"
+      "keep_iterations", "joint_test", "omnibus_test", "context_effects"
     )
   )
   # fmt: skip
