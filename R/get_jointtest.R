@@ -116,7 +116,6 @@
 
   class(result) <- unique(c(class(means), "marginal_jointtest", "data.frame"))
   attr(result, "marginaleffects") <- me_attribute
-  attr(null, "marginaleffects") <- null
 
   result
 }
