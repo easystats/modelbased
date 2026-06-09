@@ -60,7 +60,7 @@
     # tell user to use `anova()` then.
     if (!length(by_vars)) {
       insight::format_error(
-        "Joint tests using `comparison = \"joint\"` only work when `by` is specified. If this stratification is not desired, please use `anova()` on your model object instead."
+        "Joint tests using `comparison = \"joint\"` only work when `by` is specified. If this stratification is not desired, please use `comparison = \"omnibus\"` or run `anova()` on your model object instead."
       )
     }
 
