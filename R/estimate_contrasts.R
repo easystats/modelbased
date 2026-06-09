@@ -530,7 +530,9 @@ estimate_contrasts.default <- function(
   type <- "contrasts"
 
   # Table formatting
-  if (isTRUE(info$joint_test)) {
+  if (isTRUE(info$omnibus_test)) {
+    suffix <- "Omnibus Test"
+  } else if (isTRUE(info$joint_test)) {
     suffix <- "Joint Test"
   } else if (.is_inequality_comparison(comparison)) {
     suffix <- "Inequality Analysis"
