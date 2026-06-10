@@ -182,7 +182,10 @@ estimate_contrasts(
       `"trt_vs_ctrl"`. To test multiple hypotheses jointly (usually used
       for factorial designs), `comparison` can also be `"joint"` or
       `"omnibus"`. In this case, use the `test` argument to specify
-      which test should be conducted: `"F"` (default) or `"Chi2"`.
+      which test should be conducted: `"F"` (default) or `"Chi2"`, and
+      use argument `null` to specify the null-hypothesis to test
+      against. For `"omnibus"`, `null` is set to the overall mean or
+      prevalence/proportion.
 
     - String: Special string options are `"inequality"`,
       `"inequality_ratio"`, and `"inequality_pairwise"`.
@@ -498,7 +501,8 @@ x averaged over all conditions, or instead within each condition (using
   average, use `comparison = "omnibus"`, which conducts a global omnibus
   test. Use the `test` argument to specify which test should be
   conducted: `"F"` (default) or `"Chi2"`. Use the `null` argument to
-  define a specific null-hypothesis to test against.
+  define a specific null-hypothesis to test against. For `"omnibus"`,
+  `null` is set to the overall mean or prevalence/proportion.
 
 - `comparison = "inequality"` computes the *absolute inequality* of
   groups, or in other words, the marginal effect inequality summary of
@@ -1123,12 +1127,13 @@ estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
 estimate_contrasts(m, contrast = "time", comparison = "omnibus")
 #> Marginal Omnibus Test
 #> 
-#> df1 | df2 |      F |      p
-#> ---------------------------
-#> 3   | 114 | 251.57 | < .001
+#> df1 | df2 |    F |     p
+#> ------------------------
+#> 3   | 114 | 2.35 | 0.076
 #> 
 #> Predictors averaged: coffee
 #> p-values are uncorrected.
+#> Null-hypothesis: Group mean =16.20
 #> 
 # test against a different null-hypothesis
 estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
@@ -1140,7 +1145,7 @@ estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
 #> 
 #> Predictors averaged: coffee
 #> p-values are uncorrected.
-#> Null-hypothesis: joint comparison equals 15.00
+#> Null-hypothesis: Group mean =15.00
 #> 
 
 # Context effects --------------------------------------------

@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -243,7 +243,9 @@ section <em>Comparison options</em> below.</p><ul><li><p>String: One of <code>"p
 multiple hypotheses jointly (usually used for factorial designs),
 <code>comparison</code> can also be <code>"joint"</code> or <code>"omnibus"</code>. In this case, use the
 <code>test</code> argument to specify which test should be conducted: <code>"F"</code>
-(default) or <code>"Chi2"</code>.</p></li>
+(default) or <code>"Chi2"</code>, and use argument <code>null</code> to specify the null-hypothesis
+to test against. For <code>"omnibus"</code>, <code>null</code> is set to the overall mean or
+prevalence/proportion.</p></li>
 <li><p>String: Special string options are <code>"inequality"</code>, <code>"inequality_ratio"</code>,
 and <code>"inequality_pairwise"</code>. <code>comparison = "inequality"</code> computes the
 marginal effect inequality summary of categorical predictors' overall
@@ -495,7 +497,8 @@ on the results of an initial pairwise comparison. To test for differences
 between groups from an global average, use <code>comparison = "omnibus"</code>, which
 conducts a global omnibus test. Use the <code>test</code> argument to specify which
 test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>. Use the <code>null</code>
-argument to define a specific null-hypothesis to test against.</p></li>
+argument to define a specific null-hypothesis to test against. For
+<code>"omnibus"</code>, <code>null</code> is set to the overall mean or prevalence/proportion.</p></li>
 <li><p><code>comparison = "inequality"</code> computes the <em>absolute inequality</em> of groups,
 or in other words, the marginal effect inequality summary of categorical
 predictors' overall effects, respectively, the comprehensive effect of an
@@ -1093,12 +1096,13 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"time"</span>, comparison <span class="op">=</span> <span class="st">"omnibus"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Omnibus Test</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> df1 | df2 |      F |      p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   | 114 | 251.57 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> df1 | df2 |    F |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   | 114 | 2.35 | 0.076</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: coffee</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Null-hypothesis: Group mean =16.20</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># test against a different null-hypothesis</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"time"</span>, comparison <span class="op">=</span> <span class="st">"omnibus"</span>, null <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></span>
@@ -1110,7 +1114,7 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: coffee</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Null-hypothesis: joint comparison equals 15.00</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Null-hypothesis: Group mean =15.00</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Context effects --------------------------------------------</span></span></span>
