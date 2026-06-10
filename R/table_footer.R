@@ -101,7 +101,7 @@
   # leave early for joint tests ----------------------------------------------
 
   if (isTRUE(info$joint_test)) {
-    if (!is.null(info$null)) {
+    if (!is.null(info$null) && info$omnibus_test) {
       table_footer <- paste0(
         table_footer,
         "\nNull-hypothesis: joint comparison equals ",

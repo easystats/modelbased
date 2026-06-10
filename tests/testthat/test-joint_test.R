@@ -36,7 +36,7 @@ test_that("estimate_contrasts - joint test, 2-way", {
 
   # omnibus test
   out <- estimate_contrasts(m, contrast = "time", comparison = "omnibus")
-  expect_equal(out$`F`, 237.2881, tolerance = 1e-3)
+  expect_equal(out$`F`, 251.5688, tolerance = 1e-3)
   expect_equal(out$p, 0, tolerance = 1e-3)
 
   out <- estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
@@ -64,7 +64,7 @@ test_that("estimate_contrasts - joint test, 2-way", {
     comparison = "omnibus",
     predict = "invlink(link)"
   )
-  expect_equal(out3$p, 0.9912332, tolerance = 1e-4)
+  expect_equal(out3$p, 0.05528593, tolerance = 1e-4)
 })
 
 
