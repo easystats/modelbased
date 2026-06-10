@@ -89,10 +89,10 @@ means
     > Variable predicted: Sepal.Width
     > Predictors modulated: Species
 
-Note that the means computed here are not that different than the raw
-means we created above. From which we can surmise that there are not
-many spurious influences that we need to worry about in the `iris`
-dataset. But this might not be the case for your dataset.
+Note that the means computed here are the same as the raw means we
+created above, because we just have a single, categorical predictor in
+our model. For more complex models, we can adjust the predicted means
+for other confounders and, as a result, will also get *adjusted means*.
 
 We can now add these means, as well as the [**credible interval
 (CI)**](https://easystats.github.io/bayestestR/articles/credible_interval.html)

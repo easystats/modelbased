@@ -212,11 +212,11 @@ model, and represent average of response variable (here,
 &gt; 
 &gt; Variable predicted: Sepal.Width
 &gt; Predictors modulated: Species</code></pre>
-<p>Note that the means computed here are not that different than the raw
-means we created above. From which we can surmise that there are not
-many spurious influences that we need to worry about in the
-<code>iris</code> dataset. But this might not be the case for your
-dataset.</p>
+<p>Note that the means computed here are the same as the raw means we
+created above, because we just have a single, categorical predictor in
+our model. For more complex models, we can adjust the predicted means
+for other confounders and, as a result, will also get <em>adjusted
+means</em>.</p>
 <p>We can now add these means, as well as the <a href="https://easystats.github.io/bayestestR/articles/credible_interval.html" class="external-link"><strong>credible
 interval (CI)</strong></a> representing the uncertainty of the
 estimation, as an overlay on the previous plot:</p>
