@@ -104,7 +104,7 @@
     if (!is.null(info$null) && info$omnibus_test) {
       table_footer <- paste0(
         table_footer,
-        "\nNull-hypothesis: joint comparison equals ",
+        "\nNull-hypothesis: Group mean =",
         insight::format_value(info$null)
       )
     }
