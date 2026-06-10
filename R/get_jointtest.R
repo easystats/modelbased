@@ -30,7 +30,7 @@
       null <- .safe(
         {
           model <- marginaleffects::components(means, "model")
-          mean(predict(model_male_current, type = "response"))
+          mean(predict(model, type = "response"))
         },
         0
       )
