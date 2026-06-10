@@ -37,7 +37,7 @@ test_that("estimate_contrasts - joint test, 2-way", {
   # omnibus test
   out <- estimate_contrasts(m, contrast = "time", comparison = "omnibus")
   expect_equal(out$`F`, 2.352941, tolerance = 1e-3)
-  expect_equal(out$p, 0, tolerance = 1e-3)
+  expect_equal(out$p, 0.07586666, tolerance = 1e-3)
   expect_equal(attributes(out)$null, mean(predict(m)), tolerance = 1e-3)
 
   out <- estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
