@@ -135,7 +135,9 @@ section \emph{Comparison options} below.
 multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"} or \code{"omnibus"}. In this case, use the
 \code{test} argument to specify which test should be conducted: \code{"F"}
-(default) or \code{"Chi2"}.
+(default) or \code{"Chi2"}, and use argument \code{null} to specify the null-hypothesis
+to test against. For \code{"omnibus"}, \code{null} is set to the overall mean or
+prevalence/proportion.
 \item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},
 and \code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
 marginal effect inequality summary of categorical predictors' overall
@@ -381,7 +383,8 @@ on the results of an initial pairwise comparison. To test for differences
 between groups from an global average, use \code{comparison = "omnibus"}, which
 conducts a global omnibus test. Use the \code{test} argument to specify which
 test should be conducted: \code{"F"} (default) or \code{"Chi2"}. Use the \code{null}
-argument to define a specific null-hypothesis to test against.
+argument to define a specific null-hypothesis to test against. For
+\code{"omnibus"}, \code{null} is set to the overall mean or prevalence/proportion.
 \item \code{comparison = "inequality"} computes the \emph{absolute inequality} of groups,
 or in other words, the marginal effect inequality summary of categorical
 predictors' overall effects, respectively, the comprehensive effect of an

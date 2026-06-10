@@ -14,6 +14,7 @@
   is_omnibus = FALSE,
   ...
 ) {
+  insight::check_if_installed("marginaleffects")
   cnames <- colnames(means)
   # we need to separate the "by" argument, to find out which variables
   # were used as contrasts, and which for grouping
@@ -25,7 +26,18 @@
 
   # set default for null-hypothesis
   if (is.null(null)) {
-    null <- 0
+    if (is_omnibus) {
+      null <- .safe(
+        {
+          model <- marginaleffects::components(means, "model")
+          mean(predict(model, type = "response"))
+        },
+        0
+      )
+    } else {
+      # for joint tests, default to 0
+      null <- 0
+    }
   }
 
   # sanity check
@@ -116,6 +128,7 @@
 
   class(result) <- unique(c(class(means), "marginal_jointtest", "data.frame"))
   attr(result, "marginaleffects") <- me_attribute
+  attr(result, "null") <- null
 
   result
 }

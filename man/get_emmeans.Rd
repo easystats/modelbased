@@ -153,7 +153,9 @@ section \emph{Comparison options} below.
 multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"} or \code{"omnibus"}. In this case, use the
 \code{test} argument to specify which test should be conducted: \code{"F"}
-(default) or \code{"Chi2"}.
+(default) or \code{"Chi2"}, and use argument \code{null} to specify the null-hypothesis
+to test against. For \code{"omnibus"}, \code{null} is set to the overall mean or
+prevalence/proportion.
 \item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},
 and \code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
 marginal effect inequality summary of categorical predictors' overall

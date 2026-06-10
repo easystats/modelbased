@@ -45,7 +45,9 @@
 #'     multiple hypotheses jointly (usually used for factorial designs),
 #'     `comparison` can also be `"joint"` or `"omnibus"`. In this case, use the
 #'     `test` argument to specify which test should be conducted: `"F"`
-#'     (default) or `"Chi2"`.
+#'     (default) or `"Chi2"`, and use argument `null` to specify the null-hypothesis
+#'     to test against. For `"omnibus"`, `null` is set to the overall mean or
+#'     prevalence/proportion.
 #'   * String: Special string options are `"inequality"`, `"inequality_ratio"`,
 #'     and `"inequality_pairwise"`. `comparison = "inequality"` computes the
 #'     marginal effect inequality summary of categorical predictors' overall
@@ -132,7 +134,8 @@
 #'   between groups from an global average, use `comparison = "omnibus"`, which
 #'   conducts a global omnibus test. Use the `test` argument to specify which
 #'   test should be conducted: `"F"` (default) or `"Chi2"`. Use the `null`
-#'   argument to define a specific null-hypothesis to test against.
+#'   argument to define a specific null-hypothesis to test against. For
+#'   `"omnibus"`, `null` is set to the overall mean or prevalence/proportion.
 #' - `comparison = "inequality"` computes the *absolute inequality* of groups,
 #'   or in other words, the marginal effect inequality summary of categorical
 #'   predictors' overall effects, respectively, the comprehensive effect of an

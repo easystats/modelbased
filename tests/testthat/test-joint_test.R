@@ -36,12 +36,36 @@ test_that("estimate_contrasts - joint test, 2-way", {
 
   # omnibus test
   out <- estimate_contrasts(m, contrast = "time", comparison = "omnibus")
-  expect_equal(out$`F`, 251.56883, tolerance = 1e-3)
-  expect_equal(out$p, 0, tolerance = 1e-3)
+  expect_equal(out$`F`, 2.352941, tolerance = 1e-3)
+  expect_equal(out$p, 0.07586666, tolerance = 1e-3)
+  expect_equal(attributes(out)$null, mean(predict(m)), tolerance = 1e-3)
 
   out <- estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
   expect_equal(out$`F`, 3.71661, tolerance = 1e-3)
   expect_equal(out$p, 0.01356, tolerance = 1e-3)
+
+  set.seed(5)
+  data <- data.frame(
+    outcome = rbinom(100, 1, 0.5),
+    var1 = rbinom(100, 1, 0.1),
+    var2 = rnorm(100, 10, 7)
+  )
+  m <- glm(outcome ~ var1 + var2, data = data, family = binomial(link = "logit"))
+  out1 <- estimate_contrasts(m, contrast = "var1", comparison = "omnibus")
+  out2 <- estimate_contrasts(
+    m,
+    contrast = "var1",
+    comparison = "omnibus",
+    predict = "response"
+  )
+  expect_equal(out1$p, out2$p, tolerance = 1e-4)
+  out3 <- estimate_contrasts(
+    m,
+    contrast = "var1",
+    comparison = "omnibus",
+    predict = "invlink(link)"
+  )
+  expect_equal(out3$p, 0.9956601, tolerance = 1e-4)
 })
 
 
