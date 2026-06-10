@@ -1133,7 +1133,7 @@ estimate_contrasts(m, contrast = "time", comparison = "omnibus")
 #> 
 #> Predictors averaged: coffee
 #> p-values are uncorrected.
-#> Null-hypothesis: Group mean =16.20
+#> Null-hypothesis: Group mean = 16.20
 #> 
 # test against a different null-hypothesis
 estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
@@ -1145,7 +1145,7 @@ estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
 #> 
 #> Predictors averaged: coffee
 #> p-values are uncorrected.
-#> Null-hypothesis: Group mean =15.00
+#> Null-hypothesis: Group mean = 15.00
 #> 
 
 # Context effects --------------------------------------------
