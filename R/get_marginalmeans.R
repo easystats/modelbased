@@ -62,6 +62,7 @@ get_marginalmeans <- function(
     predict,
     comparison,
     model_info,
+    omnibus_test,
     verbose,
     ...
   )
@@ -200,6 +201,8 @@ get_marginalmeans <- function(
       null = dots$null,
       is_omnibus = omnibus_test
     )
+    # update null
+    dots$null <- attr(means, "null", exact = TRUE)
   }
 
   # Fifth step: post-processing marginal means----------------------------------

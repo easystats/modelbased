@@ -4,6 +4,7 @@
   predict = NULL,
   comparison = NULL,
   model_info = NULL,
+  omnibus_test = FALSE,
   verbose = TRUE,
   ...
 ) {
@@ -21,7 +22,7 @@
 
   # extract all valid types and the default type for model class
   valid_types <- .valid_marginaleffects_types(model)
-  default_type <- .default_marginaleffects_types(model)
+  default_type <- .default_marginaleffects_types(model, omnibus_test)
 
   # find link-types - we need link-type when user wants bias-correction
   link_types <- c("link", "linear.predictor", "lp")
@@ -130,14 +131,20 @@
 # return default type argument for model class, as defined in marginaleffecs
 # we can overwrite the default, e.g. using "inverse_link" as an option when
 # not provided by marginaleffects, in the ".default_type" data frame
-.default_marginaleffects_types <- function(model) {
+.default_marginaleffects_types <- function(model, omnibus_test = FALSE) {
   model_class <- class(model)[1]
   # for unrecognized model classes, return "response"
   if (!model_class %in% .default_type$class) {
     return("response")
   }
   # extract all valid types for model class
-  .default_type$type[.default_type$class == model_class]
+  out <- .default_type$type[.default_type$class == model_class]
+  # sanity check - for omnibus test, we change the default from
+  # "invlink(link)" to "response"
+  if (isTRUE(omnibus_test) && out == "invlink(link)") {
+    out <- "response"
+  }
+  out
 }
 
 
