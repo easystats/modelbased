@@ -50,7 +50,7 @@ test_that("estimate_contrasts - joint test, 2-way", {
       "",
       "Predictors averaged: coffee",
       "p-values are uncorrected.",
-      "Null-hypothesis: Group mean = 16.20"
+      "Null-hypothesis: Group means equal 16.20"
     )
   )
 
