@@ -56,5 +56,5 @@ Global options from the modelbased package
 
 - `options(modelbased_tinyplot_dodge = <number>)` will set a default
   value for the `dodge` argument (spacing between geoms) when using
-  [`tinyplot::plt()`](https://rdrr.io/pkg/tinyplot/man/tinyplot.html).
+  [`tinyplot::plt()`](https://grantmcdermott.com/tinyplot/man/tinyplot.html).
   Should be a number between `0` and `1`.

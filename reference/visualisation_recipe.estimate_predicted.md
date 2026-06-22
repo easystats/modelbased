@@ -92,7 +92,8 @@ visualisation_recipe(
   Arguments passed from
   [`plot()`](https://rdrr.io/r/graphics/plot.default.html) to
   [`visualisation_recipe()`](https://easystats.github.io/datawizard/reference/visualisation_recipe.html),
-  or to [`tinyplot()`](https://rdrr.io/pkg/tinyplot/man/tinyplot.html)
+  or to
+  [`tinyplot()`](https://grantmcdermott.com/tinyplot/man/tinyplot.html)
   if you use that method.
 
 - type:
@@ -203,7 +204,7 @@ defaults using [`options()`](https://rdrr.io/r/base/options.html):
 - `modelbased_tinyplot_dodge`:
   `options(modelbased_tinyplot_dodge = <number>)` will set a default
   value for the `dodge` argument (spacing between geoms) when using
-  [`tinyplot::plt()`](https://rdrr.io/pkg/tinyplot/man/tinyplot.html).
+  [`tinyplot::plt()`](https://grantmcdermott.com/tinyplot/man/tinyplot.html).
   Should be a number between `0` and `1`.
 
 ## Examples
