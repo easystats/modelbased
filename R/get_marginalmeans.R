@@ -54,7 +54,7 @@ get_marginalmeans <- function(
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # inform user about appropriate use of offset-terms
-  .check_offset(model, estimate, offset = dots$offset, verbose = verbose)
+  .check_offset(model, estimate, offset = dots$offset, my_args, verbose = verbose)
 
   # find default response-type, and get information about back transformation
   predict_args <- .get_marginaleffects_type_argument(
@@ -691,9 +691,16 @@ get_marginalmeans <- function(
 }
 
 
-.check_offset <- function(model, estimate, offset = NULL, verbose = TRUE) {
+.check_offset <- function(
+  model,
+  estimate,
+  offset = NULL,
+  my_args = NULL,
+  verbose = TRUE
+) {
+  model_offset <- insight::find_offset(model)
   # check if model has an offset at all
-  if (!is.null(insight::find_offset(model)) && verbose) {
+  if (!is.null(model_offset) && !any(startsWith(my_args$by, model_offset)) && verbose) {
     msg <- NULL
     if (is.null(offset)) {
       # if no offset argument was specified, tell user what this means

@@ -57,6 +57,11 @@ test_that("verbose", {
   out2 <- estimate_means(moff, "x", estimate = "population", offset = 100)
   expect_equal(out1$estimate, out2$Mean, tolerance = 1e-4)
 
+  expect_silent({
+    out3 <- estimate_means(moff, c("x", "offset_1 = 100"), estimate = "population")
+  })
+  expect_equal(out3$Mean, out2$Mean, tolerance = 1e-4)
+
   set.seed(1)
   newdata <- data.frame(
     y = c(602, 38, 616, 256, 21, 723, 245, 176, 89, 1614, 31, 27, 313, 251, 345),
