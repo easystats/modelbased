@@ -12,6 +12,8 @@
   to calculate a globale omnbius test for differences between levels of a
   predictor.
 
+* Offsets (using the `offset` argument) now also work when `estimate = "population"`.
+
 # modelbased 0.15.0
 
 ## Breaking Changes
