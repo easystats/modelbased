@@ -145,8 +145,9 @@
 #'   `integer_as_continuous` unique values, it is treated as numeric. Defaults
 #'   to `5`. Set to `TRUE` to always treat integer predictors as continuous.
 #' - For count regression models that use an offset term, use `offset = <value>`
-#'   to fix the offset at a specific value. Or use `estimate = "average"`, to
-#'   average predictions over the distribution of the offset (if appropriate).
+#'   to fix the offset at a specific value. Or use `estimate = "average"` or
+#'   `estimate = "population"` without specifying the `offset`, to average
+#'   predictions over the distribution of the offset (if appropriate).
 #'
 #' @inheritParams parameters::model_parameters.default
 #' @inheritParams estimate_expectation

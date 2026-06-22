@@ -233,8 +233,9 @@ contrasts of slopes are calculated. If the integer has more than
 \code{integer_as_continuous} unique values, it is treated as numeric. Defaults
 to \code{5}. Set to \code{TRUE} to always treat integer predictors as continuous.
 \item For count regression models that use an offset term, use \verb{offset = <value>}
-to fix the offset at a specific value. Or use \code{estimate = "average"}, to
-average predictions over the distribution of the offset (if appropriate).
+to fix the offset at a specific value. Or use \code{estimate = "average"} or
+\code{estimate = "population"} without specifying the \code{offset}, to average
+predictions over the distribution of the offset (if appropriate).
 }}
 
 \item{trend}{A character indicating the name of the variable for which
