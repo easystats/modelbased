@@ -496,6 +496,34 @@ However, these values often differ in observational studies or trials
 with treatment non-compliance, as the groups may be systematically
 different due to factors like self-selection (Dong et al. 2023).
 
+### Assumptions for causal identification
+
+Regardless of the specific modeling approach, causal identification
+strictly relies on four central assumptions (Chatton and Rohrer 2024):
+
+- **Exchangeability (No unmeasured confounding):** Individuals in the
+  treatment and control groups must be comparable, meaning they shared
+  the same average risk for the outcome prior to the treatment. In
+  practice, this assumes the absence of unmeasured confounding or
+  selection biases, allowing the groups to be conditionally exchangeable
+  based on the included controls.
+- **Positivity:** Every individual in the population must have a
+  theoretical, greater-than-zero probability of experiencing all levels
+  of the treatment. Structural violations of positivity occur if certain
+  subgroups have zero chance of receiving a specific treatment.
+- **Consistency:** The outcomes observed in the data must be consistent
+  with the potential outcomes of interest. In practice, this requires
+  the treatment or action to be unambiguously defined and manipulable in
+  principle.
+- **Noninterference:** A given individual’s outcome must be completely
+  independent of the treatment assignments and outcomes of other
+  individuals in the sample.
+
+If any of these four assumptions are violated, the result is
+identification bias. When this happens, even the most sophisticated
+statistical estimators will fail to capture the true causal effect,
+yielding biased estimates.
+
 ### An important note on variance estimators
 
 When performing statistical inference with inverse probability weighting

@@ -596,6 +596,40 @@ with treatment non-compliance, as the groups may be systematically
 different due to factors like self-selection <span class="citation">(Dong et al. 2023)</span>.</p>
 </div>
 <div class="section level3">
+<h3 id="assumptions-for-causal-identification">Assumptions for causal identification<a class="anchor" aria-label="anchor" href="#assumptions-for-causal-identification"></a>
+</h3>
+<p>Regardless of the specific modeling approach, causal identification
+strictly relies on four central assumptions <span class="citation">(Chatton and Rohrer 2024)</span>:</p>
+<ul>
+<li>
+<strong>Exchangeability (No unmeasured confounding):</strong>
+Individuals in the treatment and control groups must be comparable,
+meaning they shared the same average risk for the outcome prior to the
+treatment. In practice, this assumes the absence of unmeasured
+confounding or selection biases, allowing the groups to be conditionally
+exchangeable based on the included controls.</li>
+<li>
+<strong>Positivity:</strong> Every individual in the population must
+have a theoretical, greater-than-zero probability of experiencing all
+levels of the treatment. Structural violations of positivity occur if
+certain subgroups have zero chance of receiving a specific
+treatment.</li>
+<li>
+<strong>Consistency:</strong> The outcomes observed in the data must
+be consistent with the potential outcomes of interest. In practice, this
+requires the treatment or action to be unambiguously defined and
+manipulable in principle.</li>
+<li>
+<strong>Noninterference:</strong> A given individual’s outcome must
+be completely independent of the treatment assignments and outcomes of
+other individuals in the sample.</li>
+</ul>
+<p>If any of these four assumptions are violated, the result is
+identification bias. When this happens, even the most sophisticated
+statistical estimators will fail to capture the true causal effect,
+yielding biased estimates.</p>
+</div>
+<div class="section level3">
 <h3 id="an-important-note-on-variance-estimators">An important note on variance estimators<a class="anchor" aria-label="anchor" href="#an-important-note-on-variance-estimators"></a>
 </h3>
 <p>When performing statistical inference with inverse probability
