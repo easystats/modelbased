@@ -407,7 +407,9 @@ get_marginalmeans <- function(
   model_offset <- insight::find_offset(model)
   needs_offset <- !is.null(dots$offset) && !is.null(model_offset)
 
-  if (needs_offset && estimate == "population" && !model_offset %in% dg_args$by) {
+  if (
+    needs_offset && estimate == "population" && !any(startsWith(dg_args$by, model_offset))
+  ) {
     dg_args$by <- c(dg_args$by, paste(model_offset, "=", dots$offset))
   }
 
@@ -707,9 +709,25 @@ get_marginalmeans <- function(
       msg <- switch(
         estimate,
         specific = ,
-        typical = "Model contains an offset-term, which is set to its mean value. If you want to average predictions over the distribution of the offset (if appropriate), use `estimate = \"average\"` or `estimate = \"population\"`. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1`. Note that fixing the offset to a specific value does not work for `estimate = \"average\"`.",
-        average = "Model contains an offset-term and you average predictions over the distribution of that offset. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1`, and set a different value for the `estimate` argument (e.g., \"population\").",
-        population = "Model contains an offset-term and you average predictions over the distribution of that offset. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1`."
+        typical = paste(
+          "Model contains an offset-term, which is set to its mean value.",
+          "If you want to average predictions over the distribution of the offset",
+          "(if appropriate), use `estimate = \"average\"` or `estimate = \"population\"`.",
+          "If you want to fix the offset to a specific value, for instance `1`,",
+          "use `offset = 1`. Note that fixing the offset to a specific value",
+          "does not work for `estimate = \"average\"`."
+        ),
+        average = paste(
+          "Model contains an offset-term and you average predictions over the",
+          "distribution of that offset. If you want to fix the offset to a",
+          "specific value, for instance `1`, use `offset = 1`, and set a",
+          "different value for the `estimate` argument (e.g., \"population\")."
+        ),
+        population = paste(
+          "Model contains an offset-term and you average predictions over the",
+          "distribution of that offset. If you want to fix the offset to a",
+          "specific value, for instance `1`, use `offset = 1`."
+        )
       )
       # if offset term is log-transformed, tell user. offset should be fixed then
       log_offset <- insight::find_transformation(insight::find_offset(
@@ -719,13 +737,21 @@ get_marginalmeans <- function(
       if (!is.null(log_offset) && startsWith(log_offset, "log")) {
         msg <- c(
           msg,
-          "We also found that the model has a log-transformed offset term. If you use the `offset` argument, the log-transformation will automatically be applied to the provided offset-value. I.e., consider using, for instance, `offset = 10` and not `offset = log(10)`."
+          paste(
+            "We also found that the model has a log-transformed offset term.",
+            "If you use the `offset` argument, the log-transformation will",
+            "automatically be applied to the provided offset-value. I.e., consider",
+            "using, for instance, `offset = 10` and not `offset = log(10)`."
+          )
         )
       }
     } else if (estimate == "average") {
       # if offset was specified, and estimate averages over predictions, tell this
-      msg <- paste0(
-        "For `estimate = \"average\"`, predictions are averaged over the distribution of the offset and the `offset` argument is ignored. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and use a different option for `estimate`."
+      msg <- paste(
+        "For `estimate = \"average\"`, predictions are averaged over the distribution",
+        "of the offset and the `offset` argument is ignored. If you want to fix the",
+        "offset to a specific value, for instance `1`, use `offset = 1` and use",
+        "a different option for `estimate`."
       )
     }
     if (!is.null(msg)) {
