@@ -12,7 +12,8 @@
   to calculate a global omnibus test for differences between levels of a
   predictor.
 
-* Offsets (using the `offset` argument) now also work when `estimate = "population"`.
+* Offsets (using the `offset` argument) now also work when `estimate` is set to
+  `"population"` or `"average"`.
 
 # modelbased 0.15.0
 

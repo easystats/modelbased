@@ -54,7 +54,8 @@ get_marginalmeans <- function(
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # inform user about appropriate use of offset-terms
-  .check_offset(model, estimate, offset = dots$offset, my_args, verbose = verbose)
+  model_offset <- dots$offset
+  .check_offset(model, estimate, offset = model_offset, my_args, verbose = verbose)
 
   # find default response-type, and get information about back transformation
   predict_args <- .get_marginaleffects_type_argument(
@@ -127,6 +128,15 @@ get_marginalmeans <- function(
       # we allow individual "newdata" options, so do not
       # # overwrite if explicitly set
       fun_args$newdata <- datagrid
+    }
+    if (!is.null(model_offset) && estimate == "average") {
+      # handling offsets for estimate = "average" is different,
+      # we need to add the specific offset-value to the "variables"
+      # argument
+      fun_args$variables <- as.list(stats::setNames(
+        model_offset,
+        insight::find_offset(model)
+      ))
     }
     fun_args$by <- datagrid_info$at_specs$varname
   }
@@ -714,15 +724,9 @@ get_marginalmeans <- function(
           "If you want to average predictions over the distribution of the offset",
           "(if appropriate), use `estimate = \"average\"` or `estimate = \"population\"`.",
           "If you want to fix the offset to a specific value, for instance `1`,",
-          "use `offset = 1`. Note that fixing the offset to a specific value",
-          "does not work for `estimate = \"average\"`."
+          "use `offset = 1`."
         ),
-        average = paste(
-          "Model contains an offset-term and you average predictions over the",
-          "distribution of that offset. If you want to fix the offset to a",
-          "specific value, for instance `1`, use `offset = 1`, and set a",
-          "different value for the `estimate` argument (e.g., \"population\")."
-        ),
+        average = ,
         population = paste(
           "Model contains an offset-term and you average predictions over the",
           "distribution of that offset. If you want to fix the offset to a",
@@ -745,14 +749,6 @@ get_marginalmeans <- function(
           )
         )
       }
-    } else if (estimate == "average") {
-      # if offset was specified, and estimate averages over predictions, tell this
-      msg <- paste(
-        "For `estimate = \"average\"`, predictions are averaged over the distribution",
-        "of the offset and the `offset` argument is ignored. If you want to fix the",
-        "offset to a specific value, for instance `1`, use `offset = 1` and use",
-        "a different option for `estimate`."
-      )
     }
     if (!is.null(msg)) {
       insight::format_alert(msg)
