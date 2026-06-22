@@ -133,7 +133,7 @@ transformation is selected (which usually is \code{"response"}). See also
 See also section \emph{Predictions on different scales}.}
 
 \item{comparison}{Specify the type of contrasts or tests that should be
-carried out.
+carried out. See also section \emph{Comparison options} below for details.
 \itemize{
 \item When \code{backend = "emmeans"}, can be one of \code{"pairwise"}, \code{"poly"},
 \code{"consec"}, \code{"eff"}, \code{"del.eff"}, \code{"mean_chg"}, \code{"trt.vs.ctrl"},
@@ -148,14 +148,14 @@ described below, see documentation of \link[marginaleffects:comparisons]{margina
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website} and
 section \emph{Comparison options} below.
 \itemize{
-\item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
-multiple hypotheses jointly (usually used for factorial designs),
-\code{comparison} can also be \code{"joint"} or \code{"omnibus"}. In this case, use the
-\code{test} argument to specify which test should be conducted: \code{"F"}
-(default) or \code{"Chi2"}, and use argument \code{null} to specify the null-hypothesis
-to test against. For \code{"omnibus"}, \code{null} is set to the overall mean or
-prevalence/proportion.
+\item String: One of \code{"pairwise"}, \code{"revpairwise"}, \code{"reference"},
+\code{"sequential"}, \code{"meandev"} \code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or
+\code{"trt_vs_ctrl"}. To test multiple hypotheses jointly (usually used for
+factorial designs), \code{comparison} can also be \code{"joint"} or \code{"omnibus"}. In
+this case, use the \code{test} argument to specify which test should be
+conducted: \code{"F"} (default) or \code{"Chi2"}, and use argument \code{null} to
+specify the null-hypothesis to test against. For \code{"omnibus"}, \code{null} is
+set to the overall mean or prevalence/proportion.
 \item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},
 and \code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
 marginal effect inequality summary of categorical predictors' overall
@@ -175,15 +175,16 @@ See an overview of applications in the related case study in the
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
-\item Formula: A formula like \verb{<comparison> ~ pairs | group}, where the left-hand
-side indicates the type of \verb{<comparison>} (\code{difference} or \code{ratio}), the
-right-hand side determines the pairs of estimates to compare (\code{reference},
-\code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
-can be carried out within subsets by indicating the grouping variable
-after a vertical bar ( \code{|}). If the left-hand side is missing, it defaults
-to \code{difference} (i.e. \code{comparison = ~pairs | group} is identical to
+\item Formula: A formula like \verb{<comparison> ~ pairs | group}, where the
+left-hand side indicates the type of \verb{<comparison>} (\code{difference} or
+\code{ratio}), the right-hand side determines the pairs of estimates to
+compare (\code{reference}, \code{pairwise}, \code{sequential}, \code{meandev}, etc., see
+string-options). Optionally, comparisons can be carried out within
+subsets by indicating the grouping variable after a vertical bar ( \code{|}).
+If the left-hand side is missing, it defaults to \code{difference} (i.e.
+\code{comparison = ~pairs | group} is identical to
 \code{comparison = difference ~ pairs | group}).
-\item A custom function, e.g. \code{comparison = myfun}, or
+\item A custom function, e.g. \code{comparison = I(my_fun(x))}, or
 \verb{<comparison> ~ I(my_fun(x)) | groups} (where \verb{<comparison>} can be
 \code{difference} or \code{ratio}, or skipped).
 \item If contrasts should be calculated (or grouped by) factors, \code{comparison}

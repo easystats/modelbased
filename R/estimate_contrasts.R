@@ -27,7 +27,7 @@
 #' `?stats::p.adjust`. Note that certain options provided by the **emmeans**
 #' package are only available if you set `backend = "emmeans"`.
 #' @param comparison Specify the type of contrasts or tests that should be
-#' carried out.
+#' carried out. See also section *Comparison options* below for details.
 #' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"poly"`,
 #'   `"consec"`, `"eff"`, `"del.eff"`, `"mean_chg"`, `"trt.vs.ctrl"`,
 #'   `"dunnett"`, `"wtcon"` and some more. To test multiple hypotheses jointly
@@ -40,14 +40,14 @@
 #'   described below, see documentation of [marginaleffects::comparisons],
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html) and
 #'   section _Comparison options_ below.
-#'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
-#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test
-#'     multiple hypotheses jointly (usually used for factorial designs),
-#'     `comparison` can also be `"joint"` or `"omnibus"`. In this case, use the
-#'     `test` argument to specify which test should be conducted: `"F"`
-#'     (default) or `"Chi2"`, and use argument `null` to specify the null-hypothesis
-#'     to test against. For `"omnibus"`, `null` is set to the overall mean or
-#'     prevalence/proportion.
+#'   * String: One of `"pairwise"`, `"revpairwise"`, `"reference"`,
+#'     `"sequential"`, `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, or
+#'     `"trt_vs_ctrl"`. To test multiple hypotheses jointly (usually used for
+#'     factorial designs), `comparison` can also be `"joint"` or `"omnibus"`. In
+#'     this case, use the `test` argument to specify which test should be
+#'     conducted: `"F"` (default) or `"Chi2"`, and use argument `null` to
+#'     specify the null-hypothesis to test against. For `"omnibus"`, `null` is
+#'     set to the overall mean or prevalence/proportion.
 #'   * String: Special string options are `"inequality"`, `"inequality_ratio"`,
 #'     and `"inequality_pairwise"`. `comparison = "inequality"` computes the
 #'     marginal effect inequality summary of categorical predictors' overall
@@ -67,15 +67,16 @@
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
-#'   * Formula: A formula like `<comparison> ~ pairs | group`, where the left-hand
-#'     side indicates the type of `<comparison>` (`difference` or `ratio`), the
-#'     right-hand side determines the pairs of estimates to compare (`reference`,
-#'     `sequential`, `meandev`, etc., see string-options). Optionally, comparisons
-#'     can be carried out within subsets by indicating the grouping variable
-#'     after a vertical bar ( `|`). If the left-hand side is missing, it defaults
-#'     to `difference` (i.e. `comparison = ~pairs | group` is identical to
+#'   * Formula: A formula like `<comparison> ~ pairs | group`, where the
+#'     left-hand side indicates the type of `<comparison>` (`difference` or
+#'     `ratio`), the right-hand side determines the pairs of estimates to
+#'     compare (`reference`, `pairwise`, `sequential`, `meandev`, etc., see
+#'     string-options). Optionally, comparisons can be carried out within
+#'     subsets by indicating the grouping variable after a vertical bar ( `|`).
+#'     If the left-hand side is missing, it defaults to `difference` (i.e.
+#'     `comparison = ~pairs | group` is identical to
 #'     `comparison = difference ~ pairs | group`).
-#'   * A custom function, e.g. `comparison = myfun`, or
+#'   * A custom function, e.g. `comparison = I(my_fun(x))`, or
 #'     `<comparison> ~ I(my_fun(x)) | groups` (where `<comparison>` can be
 #'     `difference` or `ratio`, or skipped).
 #'   * If contrasts should be calculated (or grouped by) factors, `comparison`
@@ -107,6 +108,8 @@
 #' - `comparison = "pairwise"`: This method computes all possible unique
 #'   differences between pairs of levels of the focal predictor. For example, if
 #'   a factor has levels A, B, and C, it would compute A-B, A-C, and B-C.
+#' - `comparison = "revpairwise"`: Like `"pairwise"`, but reverses the order
+#'   of levels when comparing, e.g. B-A, C-A, and C-B.
 #' - `comparison = "reference"`: This compares each level of the focal predictor
 #'   to a specified reference level (by default, the first level). For example,
 #'   if levels are A, B, C, and A is the reference, it computes B-A and C-A.
@@ -164,6 +167,8 @@
 #'
 #' Examples for analysing inequalities are shown in the related
 #' [vignette](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
+#' An introduction into pairwise comparisons and contrasts starts with this
+#' [vignette](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html).
 #'
 #' @section Context Effects - contrasting average slopes:
 #' Calculating contrasts between average slopes can tell us about the

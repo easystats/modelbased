@@ -115,7 +115,7 @@ See also section \emph{Predictions on different scales}.}
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{comparison}{Specify the type of contrasts or tests that should be
-carried out.
+carried out. See also section \emph{Comparison options} below for details.
 \itemize{
 \item When \code{backend = "emmeans"}, can be one of \code{"pairwise"}, \code{"poly"},
 \code{"consec"}, \code{"eff"}, \code{"del.eff"}, \code{"mean_chg"}, \code{"trt.vs.ctrl"},
@@ -130,14 +130,14 @@ described below, see documentation of \link[marginaleffects:comparisons]{margina
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website} and
 section \emph{Comparison options} below.
 \itemize{
-\item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
-multiple hypotheses jointly (usually used for factorial designs),
-\code{comparison} can also be \code{"joint"} or \code{"omnibus"}. In this case, use the
-\code{test} argument to specify which test should be conducted: \code{"F"}
-(default) or \code{"Chi2"}, and use argument \code{null} to specify the null-hypothesis
-to test against. For \code{"omnibus"}, \code{null} is set to the overall mean or
-prevalence/proportion.
+\item String: One of \code{"pairwise"}, \code{"revpairwise"}, \code{"reference"},
+\code{"sequential"}, \code{"meandev"} \code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or
+\code{"trt_vs_ctrl"}. To test multiple hypotheses jointly (usually used for
+factorial designs), \code{comparison} can also be \code{"joint"} or \code{"omnibus"}. In
+this case, use the \code{test} argument to specify which test should be
+conducted: \code{"F"} (default) or \code{"Chi2"}, and use argument \code{null} to
+specify the null-hypothesis to test against. For \code{"omnibus"}, \code{null} is
+set to the overall mean or prevalence/proportion.
 \item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},
 and \code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
 marginal effect inequality summary of categorical predictors' overall
@@ -157,15 +157,16 @@ See an overview of applications in the related case study in the
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
-\item Formula: A formula like \verb{<comparison> ~ pairs | group}, where the left-hand
-side indicates the type of \verb{<comparison>} (\code{difference} or \code{ratio}), the
-right-hand side determines the pairs of estimates to compare (\code{reference},
-\code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
-can be carried out within subsets by indicating the grouping variable
-after a vertical bar ( \code{|}). If the left-hand side is missing, it defaults
-to \code{difference} (i.e. \code{comparison = ~pairs | group} is identical to
+\item Formula: A formula like \verb{<comparison> ~ pairs | group}, where the
+left-hand side indicates the type of \verb{<comparison>} (\code{difference} or
+\code{ratio}), the right-hand side determines the pairs of estimates to
+compare (\code{reference}, \code{pairwise}, \code{sequential}, \code{meandev}, etc., see
+string-options). Optionally, comparisons can be carried out within
+subsets by indicating the grouping variable after a vertical bar ( \code{|}).
+If the left-hand side is missing, it defaults to \code{difference} (i.e.
+\code{comparison = ~pairs | group} is identical to
 \code{comparison = difference ~ pairs | group}).
-\item A custom function, e.g. \code{comparison = myfun}, or
+\item A custom function, e.g. \code{comparison = I(my_fun(x))}, or
 \verb{<comparison> ~ I(my_fun(x)) | groups} (where \verb{<comparison>} can be
 \code{difference} or \code{ratio}, or skipped).
 \item If contrasts should be calculated (or grouped by) factors, \code{comparison}
@@ -356,6 +357,8 @@ condition (using \code{\link[=estimate_slopes]{estimate_slopes()}}).
 \item \code{comparison = "pairwise"}: This method computes all possible unique
 differences between pairs of levels of the focal predictor. For example, if
 a factor has levels A, B, and C, it would compute A-B, A-C, and B-C.
+\item \code{comparison = "revpairwise"}: Like \code{"pairwise"}, but reverses the order
+of levels when comparing, e.g. B-A, C-A, and C-B.
 \item \code{comparison = "reference"}: This compares each level of the focal predictor
 to a specified reference level (by default, the first level). For example,
 if levels are A, B, C, and A is the reference, it computes B-A and C-A.
@@ -414,6 +417,8 @@ impact on the dependent variable in terms of inequalities.
 
 Examples for analysing inequalities are shown in the related
 \href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignette}.
+An introduction into pairwise comparisons and contrasts starts with this
+\href{https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html}{vignette}.
 }
 
 \section{Context Effects - contrasting average slopes}{
