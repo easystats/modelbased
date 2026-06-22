@@ -126,8 +126,15 @@ test_that("estimate_slopes", {
     by = "Sepal.Width = c(1, 2, 3)",
     backend = "marginaleffects"
   ))
+  # test alternative list-notation
+  estim3 <- suppressMessages(estimate_slopes(
+    model,
+    by = list(Sepal.Width = c(1, 2, 3)),
+    backend = "emmeans"
+  ))
   expect_identical(dim(estim1), c(3L, 9L))
   expect_equal(estim1$Slope, estim2$Slope, tolerance = 0.2)
+  expect_equal(estim3$Slope, estim2$Slope, tolerance = 0.2)
 })
 
 
@@ -325,9 +332,11 @@ test_that("estimate_slopes, works with glmmTMB and splines", {
   # average marginal effects of Petal.Length,
   # just for the trend within a certain range
   out <- estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
+  out2 <- estimate_slopes(model, trend = list(Petal.Length = seq(2, 4, 0.01)))
   expect_identical(dim(out), c(1L, 7L))
   expect_named(out, c("Slope", "SE", "CI_low", "CI_high", "t", "df", "p"))
   expect_equal(out$Slope, 0.06614, tolerance = 1e-3)
+  expect_equal(out$Slope, out2$Slope, tolerance = 1e-3)
 })
 
 
@@ -353,6 +362,14 @@ test_that("estimate_slopes, estimate-argument works", {
   expect_equal(out1$Slope, out2$estimate, tolerance = 1e-4)
 
   out <- estimate_slopes(m, "bill_dep", by = "island = 'Dream'", estimate = "average")
+  # test alternative list notation
+  out3 <- estimate_slopes(
+    m,
+    "bill_dep",
+    by = list(island = 'Dream'),
+    estimate = "average"
+  )
   expect_equal(out$Slope, out2$estimate[2], tolerance = 1e-4)
+  expect_equal(out$Slope, out3$Slope, tolerance = 1e-4)
   expect_identical(dim(out), c(1L, 7L))
 })
