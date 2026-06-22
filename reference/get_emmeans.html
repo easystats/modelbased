@@ -245,7 +245,7 @@ transformation is selected (which usually is <code>"response"</code>). See also
 
 <dt id="arg-comparison">comparison<a class="anchor" aria-label="anchor" href="#arg-comparison"></a></dt>
 <dd><p>Specify the type of contrasts or tests that should be
-carried out.</p><ul><li><p>When <code>backend = "emmeans"</code>, can be one of <code>"pairwise"</code>, <code>"poly"</code>,
+carried out. See also section <em>Comparison options</em> below for details.</p><ul><li><p>When <code>backend = "emmeans"</code>, can be one of <code>"pairwise"</code>, <code>"poly"</code>,
 <code>"consec"</code>, <code>"eff"</code>, <code>"del.eff"</code>, <code>"mean_chg"</code>, <code>"trt.vs.ctrl"</code>,
 <code>"dunnett"</code>, <code>"wtcon"</code> and some more. To test multiple hypotheses jointly
 (usually used for factorial designs), <code>comparison</code> can also be <code>"joint"</code>.
@@ -256,14 +256,14 @@ matrix, a string equation specifying the hypothesis to test, a string
 naming the comparison method, a formula, or a function. For options not
 described below, see documentation of <a href="https://rdrr.io/pkg/marginaleffects/man/comparisons.html" class="external-link">marginaleffects::comparisons</a>,
 <a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a> and
-section <em>Comparison options</em> below.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"reference"</code>, <code>"sequential"</code>, <code>"meandev"</code>
-<code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, or <code>"trt_vs_ctrl"</code>. To test
-multiple hypotheses jointly (usually used for factorial designs),
-<code>comparison</code> can also be <code>"joint"</code> or <code>"omnibus"</code>. In this case, use the
-<code>test</code> argument to specify which test should be conducted: <code>"F"</code>
-(default) or <code>"Chi2"</code>, and use argument <code>null</code> to specify the null-hypothesis
-to test against. For <code>"omnibus"</code>, <code>null</code> is set to the overall mean or
-prevalence/proportion.</p></li>
+section <em>Comparison options</em> below.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"revpairwise"</code>, <code>"reference"</code>,
+<code>"sequential"</code>, <code>"meandev"</code> <code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, or
+<code>"trt_vs_ctrl"</code>. To test multiple hypotheses jointly (usually used for
+factorial designs), <code>comparison</code> can also be <code>"joint"</code> or <code>"omnibus"</code>. In
+this case, use the <code>test</code> argument to specify which test should be
+conducted: <code>"F"</code> (default) or <code>"Chi2"</code>, and use argument <code>null</code> to
+specify the null-hypothesis to test against. For <code>"omnibus"</code>, <code>null</code> is
+set to the overall mean or prevalence/proportion.</p></li>
 <li><p>String: Special string options are <code>"inequality"</code>, <code>"inequality_ratio"</code>,
 and <code>"inequality_pairwise"</code>. <code>comparison = "inequality"</code> computes the
 marginal effect inequality summary of categorical predictors' overall
@@ -283,15 +283,16 @@ See an overview of applications in the related case study in the
 <li><p>String equation: To identify parameters from the output, either specify
 the term name, or <code>"b1"</code>, <code>"b2"</code> etc. to indicate rows, e.g.:<code>"hp = drat"</code>,
 <code>"b1 = b2"</code>, or <code>"b1 + b2 + b3 = 0"</code>.</p></li>
-<li><p>Formula: A formula like <code>&lt;comparison&gt; ~ pairs | group</code>, where the left-hand
-side indicates the type of <code>&lt;comparison&gt;</code> (<code>difference</code> or <code>ratio</code>), the
-right-hand side determines the pairs of estimates to compare (<code>reference</code>,
-<code>sequential</code>, <code>meandev</code>, etc., see string-options). Optionally, comparisons
-can be carried out within subsets by indicating the grouping variable
-after a vertical bar ( <code>|</code>). If the left-hand side is missing, it defaults
-to <code>difference</code> (i.e. <code>comparison = ~pairs | group</code> is identical to
+<li><p>Formula: A formula like <code>&lt;comparison&gt; ~ pairs | group</code>, where the
+left-hand side indicates the type of <code>&lt;comparison&gt;</code> (<code>difference</code> or
+<code>ratio</code>), the right-hand side determines the pairs of estimates to
+compare (<code>reference</code>, <code>pairwise</code>, <code>sequential</code>, <code>meandev</code>, etc., see
+string-options). Optionally, comparisons can be carried out within
+subsets by indicating the grouping variable after a vertical bar ( <code>|</code>).
+If the left-hand side is missing, it defaults to <code>difference</code> (i.e.
+<code>comparison = ~pairs | group</code> is identical to
 <code>comparison = difference ~ pairs | group</code>).</p></li>
-<li><p>A custom function, e.g. <code>comparison = myfun</code>, or
+<li><p>A custom function, e.g. <code>comparison = I(my_fun(x))</code>, or
 <code>&lt;comparison&gt; ~ I(my_fun(x)) | groups</code> (where <code>&lt;comparison&gt;</code> can be
 <code>difference</code> or <code>ratio</code>, or skipped).</p></li>
 <li><p>If contrasts should be calculated (or grouped by) factors, <code>comparison</code>
@@ -344,8 +345,9 @@ contrasts of slopes are calculated. If the integer has more than
 <code>integer_as_continuous</code> unique values, it is treated as numeric. Defaults
 to <code>5</code>. Set to <code>TRUE</code> to always treat integer predictors as continuous.</p></li>
 <li><p>For count regression models that use an offset term, use <code>offset = &lt;value&gt;</code>
-to fix the offset at a specific value. Or use <code>estimate = "average"</code>, to
-average predictions over the distribution of the offset (if appropriate).</p></li>
+to fix the offset at a specific value. Or use <code>estimate = "average"</code> or
+<code>estimate = "population"</code> without specifying the <code>offset</code>, to average
+predictions over the distribution of the offset (if appropriate).</p></li>
 </ul></dd>
 
 

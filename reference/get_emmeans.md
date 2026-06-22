@@ -157,7 +157,8 @@ get_marginaltrends(
 
 - comparison:
 
-  Specify the type of contrasts or tests that should be carried out.
+  Specify the type of contrasts or tests that should be carried out. See
+  also section *Comparison options* below for details.
 
   - When `backend = "emmeans"`, can be one of `"pairwise"`, `"poly"`,
     `"consec"`, `"eff"`, `"del.eff"`, `"mean_chg"`, `"trt.vs.ctrl"`,
@@ -175,15 +176,15 @@ get_marginaltrends(
     [this website](https://marginaleffects.com/bonus/hypothesis.html)
     and section *Comparison options* below.
 
-    - String: One of `"pairwise"`, `"reference"`, `"sequential"`,
-      `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, or
-      `"trt_vs_ctrl"`. To test multiple hypotheses jointly (usually used
-      for factorial designs), `comparison` can also be `"joint"` or
-      `"omnibus"`. In this case, use the `test` argument to specify
-      which test should be conducted: `"F"` (default) or `"Chi2"`, and
-      use argument `null` to specify the null-hypothesis to test
-      against. For `"omnibus"`, `null` is set to the overall mean or
-      prevalence/proportion.
+    - String: One of `"pairwise"`, `"revpairwise"`, `"reference"`,
+      `"sequential"`, `"meandev"` `"meanotherdev"`, `"poly"`,
+      `"helmert"`, or `"trt_vs_ctrl"`. To test multiple hypotheses
+      jointly (usually used for factorial designs), `comparison` can
+      also be `"joint"` or `"omnibus"`. In this case, use the `test`
+      argument to specify which test should be conducted: `"F"`
+      (default) or `"Chi2"`, and use argument `null` to specify the
+      null-hypothesis to test against. For `"omnibus"`, `null` is set to
+      the overall mean or prevalence/proportion.
 
     - String: Special string options are `"inequality"`,
       `"inequality_ratio"`, and `"inequality_pairwise"`.
@@ -212,14 +213,14 @@ get_marginaltrends(
     - Formula: A formula like `<comparison> ~ pairs | group`, where the
       left-hand side indicates the type of `<comparison>` (`difference`
       or `ratio`), the right-hand side determines the pairs of estimates
-      to compare (`reference`, `sequential`, `meandev`, etc., see
-      string-options). Optionally, comparisons can be carried out within
-      subsets by indicating the grouping variable after a vertical bar (
-      `|`). If the left-hand side is missing, it defaults to
-      `difference` (i.e. `comparison = ~pairs | group` is identical to
-      `comparison = difference ~ pairs | group`).
+      to compare (`reference`, `pairwise`, `sequential`, `meandev`,
+      etc., see string-options). Optionally, comparisons can be carried
+      out within subsets by indicating the grouping variable after a
+      vertical bar ( `|`). If the left-hand side is missing, it defaults
+      to `difference` (i.e. `comparison = ~pairs | group` is identical
+      to `comparison = difference ~ pairs | group`).
 
-    - A custom function, e.g. `comparison = myfun`, or
+    - A custom function, e.g. `comparison = I(my_fun(x))`, or
       `<comparison> ~ I(my_fun(x)) | groups` (where `<comparison>` can
       be `difference` or `ratio`, or skipped).
 
@@ -291,8 +292,9 @@ get_marginaltrends(
 
   - For count regression models that use an offset term, use
     `offset = <value>` to fix the offset at a specific value. Or use
-    `estimate = "average"`, to average predictions over the distribution
-    of the offset (if appropriate).
+    `estimate = "average"` or `estimate = "population"` without
+    specifying the `offset`, to average predictions over the
+    distribution of the offset (if appropriate).
 
 - trend:
 

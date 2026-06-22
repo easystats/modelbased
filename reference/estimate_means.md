@@ -238,8 +238,9 @@ estimate_means(
 
   - For count regression models that use an offset term, use
     `offset = <value>` to fix the offset at a specific value. Or use
-    `estimate = "average"`, to average predictions over the distribution
-    of the offset (if appropriate).
+    `estimate = "average"` or `estimate = "population"` without
+    specifying the `offset`, to average predictions over the
+    distribution of the offset (if appropriate).
 
 ## Value
 
@@ -330,8 +331,8 @@ so consult its documentation for more details.
   `contrast`, and `slope`.
 
   - For numeric focal predictors, use examples like
-    `by = "gear = c(4, 8)"`, `by = list(gear = c(4, 8))` or
-    `by = "gear = 5:10"`
+    `by = "gear = c(4, 8)"`, `by = list(gear = c(4, 8))`,
+    `by = "gear = 5:10"` or `by = list(gear = 5:10)`
 
   - For factor or character predictors, use
     `by = "Species = c('setosa', 'virginica')"` or
