@@ -346,6 +346,17 @@ It is helpful to calculate both ATT and ATU, as they can differ substantially, i
 
 In ideal randomized trials, the Average Treatment Effect (ATE), the effect on the treated (ATT), and the effect on the untreated (ATU) are expected to be the same because randomization creates comparable groups. However, these values often differ in observational studies or trials with treatment non-compliance, as the groups may be systematically different due to factors like self-selection [@dong_identifying_2023].
 
+## Assumptions for causal identification
+
+Regardless of the specific modeling approach, causal identification strictly relies on four central assumptions [@chatton_causal_2024]:
+
+* **Exchangeability (No unmeasured confounding):** Individuals in the treatment and control groups must be comparable, meaning they shared the same average risk for the outcome prior to the treatment. In practice, this assumes the absence of unmeasured confounding or selection biases, allowing the groups to be conditionally exchangeable based on the included controls.
+* **Positivity:** Every individual in the population must have a theoretical, greater-than-zero probability of experiencing all levels of the treatment. Structural violations of positivity occur if certain subgroups have zero chance of receiving a specific treatment.
+* **Consistency:** The outcomes observed in the data must be consistent with the potential outcomes of interest. In practice, this requires the treatment or action to be unambiguously defined and manipulable in principle.
+* **Noninterference:** A given individual's outcome must be completely independent of the treatment assignments and outcomes of other individuals in the sample.
+
+If any of these four assumptions are violated, the result is identification bias. When this happens, even the most sophisticated statistical estimators will fail to capture the true causal effect, yielding biased estimates.
+
 ## An important note on variance estimators
 
 When performing statistical inference with inverse probability weighting (IPW), using standard variance estimators is discouraged. These estimators often fail to account for the variance introduced by the IPW itself, resulting in conservative standard errors for the average treatment effect (ATE), especially when we have observations with large or extreme weights. For the average treatment effect on the treated (ATT), standard errors can be either over- or underestimated. More robust methods are therefore recommended, such as bootstrapping, using overlap or matching weights, or calculating robust standard errors (Huber-White sandwich estimators) [@gabriel_inverse_2024; @kostouraki_variance_2024; @reifeis_variance_2022].
