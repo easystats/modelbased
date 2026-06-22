@@ -10,9 +10,17 @@ test_that("estimate_contrasts - ATT and ATU", {
   dat$win_big <- as.factor(dat$win_big)
 
   mod <- lm(
-    earnings_post_avg ~ win_big * (
-      tickets + man + work + age + education + college + year +
-        earnings_pre_1 + earnings_pre_2 + earnings_pre_3),
+    earnings_post_avg ~ win_big *
+      (tickets +
+        man +
+        work +
+        age +
+        education +
+        college +
+        year +
+        earnings_pre_1 +
+        earnings_pre_2 +
+        earnings_pre_3),
     data = dat
   )
 
@@ -26,13 +34,31 @@ test_that("estimate_contrasts - ATT and ATU", {
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
 
   # ATT
-  out1 <- marginaleffects::avg_comparisons(mod, variables = "win_big", newdata = subset(dat, win_big == 1))
-  out2 <- estimate_contrasts(mod, "win_big", newdata = subset(dat, win_big == 1), estimate = "population")
+  out1 <- marginaleffects::avg_comparisons(
+    mod,
+    variables = "win_big",
+    newdata = subset(dat, win_big == 1)
+  )
+  out2 <- estimate_contrasts(
+    mod,
+    "win_big",
+    newdata = subset(dat, win_big == 1),
+    estimate = "population"
+  )
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
 
   # ATU
-  out1 <- marginaleffects::avg_comparisons(mod, variables = "win_big", newdata = subset(dat, win_big == 0))
-  out2 <- estimate_contrasts(mod, "win_big", newdata = subset(dat, win_big == 0), estimate = "population")
+  out1 <- marginaleffects::avg_comparisons(
+    mod,
+    variables = "win_big",
+    newdata = subset(dat, win_big == 0)
+  )
+  out2 <- estimate_contrasts(
+    mod,
+    "win_big",
+    newdata = subset(dat, win_big == 0),
+    estimate = "population"
+  )
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
 
   # error
@@ -40,4 +66,18 @@ test_that("estimate_contrasts - ATT and ATU", {
     estimate_contrasts(mod, "win_big", newdata = subset(dat, win_big == 1)),
     regex = "It seems that not all"
   )
+})
+
+test_that("estimate_contrasts - counterfactual contrasts", {
+  skip_if_not_installed("glmmTMB")
+  data(Salamanders, package = "glmmTMB")
+  m <- glmmTMB::glmmTMB(
+    count ~ spp + mined + (1 | site),
+    family = poisson(),
+    data = Salamanders
+  )
+  out1 <- estimate_contrasts(m, "spp", estimate = "population")
+  out2 <- suppressWarnings(marginaleffects::avg_comparisons(m, variables = "spp"))
+
+  expect_equal(out2$estimate, out1$Difference[c(5, 6, 2, 3, 4, 1)], tolerance = 1e-4)
 })
