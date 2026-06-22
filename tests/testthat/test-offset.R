@@ -30,11 +30,11 @@ test_that("verbose", {
   expect_equal(out1$Mean, c(295.12035, 454.3339, 654.64225), tolerance = 1e-3)
   expect_equal(out2$Mean, c(256.42016, 289.02697, 707.83022), tolerance = 1e-3)
 
+  expect_message(estimate_means(moff, "x"), regex = "We also found")
   expect_message(
-    {
-      estimate_means(moff, "x")
-    },
-    regex = "We also found"
+    estimate_means(moff, "x", estimate = "average"),
+    regex = "(e.g., \"population\")",
+    fixed = TRUE
   )
 
   expect_silent({
@@ -48,6 +48,19 @@ test_that("verbose", {
   )
   expect_equal(out1$Mean, c(664.68547, 1023.27456, 1474.41949), tolerance = 1e-3)
   expect_equal(out2$Mean, c(256.42016, 289.02697, 707.83022), tolerance = 1e-3)
+
+  # validate that offset works for estimate = "population"
+  out1 <- marginaleffects::avg_predictions(
+    moff,
+    variables = list(x = c("a", "b", "c"), offset_1 = 100)
+  )
+  out2 <- estimate_means(moff, "x", estimate = "population", offset = 100)
+  expect_equal(out1$estimate, out2$Mean, tolerance = 1e-4)
+
+  expect_silent({
+    out3 <- estimate_means(moff, c("x", "offset_1 = 100"), estimate = "population")
+  })
+  expect_equal(out3$Mean, out2$Mean, tolerance = 1e-4)
 
   set.seed(1)
   newdata <- data.frame(

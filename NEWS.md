@@ -9,8 +9,10 @@
   comparisons. It allows for complex, multi-step comparisons.
 
 * The `comparison` argument in `estimate_contrasts()` can now also be `"omnibus"`,
-  to calculate a globale omnbius test for differences between levels of a
+  to calculate a global omnibus test for differences between levels of a
   predictor.
+
+* Offsets (using the `offset` argument) now also work when `estimate = "population"`.
 
 # modelbased 0.15.0
 

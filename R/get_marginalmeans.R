@@ -54,7 +54,7 @@ get_marginalmeans <- function(
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # inform user about appropriate use of offset-terms
-  .check_offset(model, estimate, offset = dots$offset, verbose = verbose)
+  .check_offset(model, estimate, offset = dots$offset, my_args, verbose = verbose)
 
   # find default response-type, and get information about back transformation
   predict_args <- .get_marginaleffects_type_argument(
@@ -402,16 +402,24 @@ get_marginalmeans <- function(
   dots[c("by", "factors", "include_random", "verbose")] <- NULL
   dg_args <- insight::compact_list(c(dg_args, dots))
 
+  # for estimate = "population", we need the offset in `by`, thus, we have to
+  # add it before we call data grid
+  model_offset <- insight::find_offset(model)
+  needs_offset <- !is.null(dots$offset) && !is.null(model_offset)
+
+  if (
+    needs_offset && estimate == "population" && !any(startsWith(dg_args$by, model_offset))
+  ) {
+    dg_args$by <- c(dg_args$by, paste(model_offset, "=", dots$offset))
+  }
+
   # Get corresponding datagrid (and deal with particular ats)
   datagrid <- do.call(insight::get_datagrid, dg_args)
   datagrid_info <- attributes(datagrid)
 
-  # handle offsets
-  if (!is.null(dots$offset)) {
-    model_offset <- insight::find_offset(model)
-    if (!is.null(model_offset)) {
-      datagrid[[model_offset]] <- dots$offset
-    }
+  # handle offsets for other estimate-options
+  if (needs_offset && estimate != "population") {
+    datagrid[[model_offset]] <- dots$offset
   }
 
   # restore data types -  if we have defined numbers in `by`, like
@@ -685,17 +693,41 @@ get_marginalmeans <- function(
 }
 
 
-.check_offset <- function(model, estimate, offset = NULL, verbose = TRUE) {
+.check_offset <- function(
+  model,
+  estimate,
+  offset = NULL,
+  my_args = NULL,
+  verbose = TRUE
+) {
+  model_offset <- insight::find_offset(model)
   # check if model has an offset at all
-  if (!is.null(insight::find_offset(model)) && verbose) {
+  if (!is.null(model_offset) && !any(startsWith(my_args$by, model_offset)) && verbose) {
     msg <- NULL
     if (is.null(offset)) {
       # if no offset argument was specified, tell user what this means
       msg <- switch(
         estimate,
         specific = ,
-        typical = "Model contains an offset-term, which is set to its mean value. If you want to average predictions over the distribution of the offset (if appropriate), use `estimate = \"average\"`. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1`.",
-        "Model contains an offset-term and you average predictions over the distribution of that offset. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and set `estimate = \"typical\"`."
+        typical = paste(
+          "Model contains an offset-term, which is set to its mean value.",
+          "If you want to average predictions over the distribution of the offset",
+          "(if appropriate), use `estimate = \"average\"` or `estimate = \"population\"`.",
+          "If you want to fix the offset to a specific value, for instance `1`,",
+          "use `offset = 1`. Note that fixing the offset to a specific value",
+          "does not work for `estimate = \"average\"`."
+        ),
+        average = paste(
+          "Model contains an offset-term and you average predictions over the",
+          "distribution of that offset. If you want to fix the offset to a",
+          "specific value, for instance `1`, use `offset = 1`, and set a",
+          "different value for the `estimate` argument (e.g., \"population\")."
+        ),
+        population = paste(
+          "Model contains an offset-term and you average predictions over the",
+          "distribution of that offset. If you want to fix the offset to a",
+          "specific value, for instance `1`, use `offset = 1`."
+        )
       )
       # if offset term is log-transformed, tell user. offset should be fixed then
       log_offset <- insight::find_transformation(insight::find_offset(
@@ -705,19 +737,21 @@ get_marginalmeans <- function(
       if (!is.null(log_offset) && startsWith(log_offset, "log")) {
         msg <- c(
           msg,
-          "We also found that the model has a log-transformed offset term. If you use the `offset` argument, the log-transformation will automatically be applied to the provided offset-value. I.e., consider using, for instance, `offset = 10` and not `offset = log(10)`."
+          paste(
+            "We also found that the model has a log-transformed offset term.",
+            "If you use the `offset` argument, the log-transformation will",
+            "automatically be applied to the provided offset-value. I.e., consider",
+            "using, for instance, `offset = 10` and not `offset = log(10)`."
+          )
         )
       }
-    } else {
+    } else if (estimate == "average") {
       # if offset was specified, and estimate averages over predictions, tell this
-      msg <- switch(
-        estimate,
-        average = ,
-        population = paste0(
-          "For `estimate = \"",
-          estimate,
-          "\"`, predictions are averaged over the distribution of the offset and the `offset` argument is ignored. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and set `estimate = \"typical\"`."
-        )
+      msg <- paste(
+        "For `estimate = \"average\"`, predictions are averaged over the distribution",
+        "of the offset and the `offset` argument is ignored. If you want to fix the",
+        "offset to a specific value, for instance `1`, use `offset = 1` and use",
+        "a different option for `estimate`."
       )
     }
     if (!is.null(msg)) {
