@@ -15,6 +15,10 @@
 * Offsets (using the `offset` argument) now also work when `estimate` is set to
   `"population"` or `"average"`.
 
+* Argument `slope`, when specific values are defined, can now also be a list
+  instead of only a string. E.g., `slope="<variable> = seq(1, 3, 0.1)"` can now
+  also be written as `slope=list(<variable> = seq(1, 3, 0.1))`.
+
 ## Bug fixes
 
 * Minor bug fix when evaluating `slope` and `by` arguments in `estimate_slopes()`.

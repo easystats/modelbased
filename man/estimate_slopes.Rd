@@ -26,11 +26,13 @@ estimate_slopes(
 \item{slope, trend}{A character indicating the name of the variable for which
 to compute the slopes. To get marginal effects at specific values, use
 \code{slope="<variable>"} along with the \code{by} argument, e.g.
-\code{by="<variable> = c(1, 3, 5)"}, or a combination of \code{by} and \code{length}, for
-instance, \verb{by="<variable>", length=30}. To calculate average marginal
-effects over a range of values, use \code{slope="<variable> = seq(1, 3, 0.1)"} (or
-similar) and omit the variable provided in \code{slope} from the \code{by} argument.
-\code{trend} is an alias for \code{slope}, for backward compatibility.}
+\code{by="<variable> = c(1, 3, 5)"} (or \verb{by=list(<variable> = c(1, 3, 5))}), or a
+combination of \code{by} and \code{length}, for instance, \verb{by="<variable>", length=30}.
+To calculate average marginal effects over a range of values, use
+\code{slope="<variable> = seq(1, 3, 0.1)"} or similar, or
+\verb{slope=list(<variable> = seq(1, 3, 0.1))}), and omit the variable provided in
+\code{slope} from the \code{by} argument. \code{trend} is an alias for \code{slope}, for backward
+compatibility. See 'Examples'.}
 
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
@@ -367,10 +369,14 @@ estimate_slopes(model, slope = "Petal.Length", by = "Petal.Length", length = 10)
 
 # marginal effects at very specific values of Petal.Length
 estimate_slopes(model, slope = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
+# or in "classic" R syntax, using lists
+estimate_slopes(model, slope = "Petal.Length", by = list(Petal.Length = c(1, 3, 5)))
 
 # average marginal effects of Petal.Length,
 # just for the trend within a certain range
 estimate_slopes(model, slope = "Petal.Length=seq(2, 4, 0.01)")
+# "classic" R syntax, using lists
+estimate_slopes(model, slope = list(Petal.Length = seq(2, 4, 0.01)))
 }
 \dontshow{\}) # examplesIf}
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "emmeans"), quietly = TRUE)) && getRversion() >= "4.5.0") withAutoprint(\{ # examplesIf}
@@ -387,6 +393,11 @@ emmeans::emtrends(m, "island", var = "bill_dep", regrid = "response")
 # the marginaleffects default
 estimate_slopes(m, "bill_dep", by = "island", estimate = "average")
 marginaleffects::avg_slopes(m, variables = "bill_dep", by = "island")
+
+# filter by groups
+estimate_slopes(m, "bill_dep", by = "island=c('Biscoe','Dream')")
+# or in "classic" R syntax, using lists
+estimate_slopes(m, "bill_dep", by = list(island = c('Biscoe', 'Dream')))
 }
 \dontshow{\}) # examplesIf}
 }

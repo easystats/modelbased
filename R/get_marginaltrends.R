@@ -235,8 +235,11 @@ get_marginaltrends <- function(
         "No numeric variable was specified for slope estimation. Selecting `trend = \"",
         trend,
         "\"`."
-      )) # nolint
+      ))
     }
+  } else if (is.list(trend)) {
+    # convert list into a string, to simplify handling below
+    trend <- paste0(names(trend), "=", trend)
   }
 
   # check that we have only one predictor
@@ -245,14 +248,14 @@ get_marginaltrends <- function(
       insight::format_alert(paste0(
         "More than one numeric variable was selected for slope estimation. Keeping only `",
         trend[1],
-        "`. ", # nolint
+        "`. ",
         "If you want to estimate the slope of `",
         trend[1],
         "` at different values of `",
         trend[2],
         "`, use `by=\"",
         trend[2],
-        "\"` instead." # nolint
+        "\"` instead."
       ))
     }
     trend <- trend[1]

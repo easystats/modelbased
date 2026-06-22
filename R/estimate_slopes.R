@@ -18,11 +18,13 @@
 #' @param slope,trend A character indicating the name of the variable for which
 #' to compute the slopes. To get marginal effects at specific values, use
 #' `slope="<variable>"` along with the `by` argument, e.g.
-#' `by="<variable> = c(1, 3, 5)"`, or a combination of `by` and `length`, for
-#' instance, `by="<variable>", length=30`. To calculate average marginal
-#' effects over a range of values, use `slope="<variable> = seq(1, 3, 0.1)"` (or
-#' similar) and omit the variable provided in `slope` from the `by` argument.
-#' `trend` is an alias for `slope`, for backward compatibility.
+#' `by="<variable> = c(1, 3, 5)"` (or `by=list(<variable> = c(1, 3, 5))`), or a
+#' combination of `by` and `length`, for instance, `by="<variable>", length=30`.
+#' To calculate average marginal effects over a range of values, use
+#' `slope="<variable> = seq(1, 3, 0.1)"` or similar, or
+#' `slope=list(<variable> = seq(1, 3, 0.1))`), and omit the variable provided in
+#' `slope` from the `by` argument. `trend` is an alias for `slope`, for backward
+#' compatibility. See 'Examples'.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. For `estimate_slopes()`, multiple comparison only occurs for
 #' Johnson-Neyman intervals, i.e. in case of interactions with two numeric
@@ -100,10 +102,14 @@
 #'
 #' # marginal effects at very specific values of Petal.Length
 #' estimate_slopes(model, slope = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
+#' # or in "classic" R syntax, using lists
+#' estimate_slopes(model, slope = "Petal.Length", by = list(Petal.Length = c(1, 3, 5)))
 #'
 #' # average marginal effects of Petal.Length,
 #' # just for the trend within a certain range
 #' estimate_slopes(model, slope = "Petal.Length=seq(2, 4, 0.01)")
+#' # "classic" R syntax, using lists
+#' estimate_slopes(model, slope = list(Petal.Length = seq(2, 4, 0.01)))
 #' }
 #'
 #' @examplesIf all(insight::check_if_installed(c("marginaleffects", "emmeans"), quietly = TRUE)) && getRversion() >= "4.5.0"
@@ -120,6 +126,11 @@
 #' # the marginaleffects default
 #' estimate_slopes(m, "bill_dep", by = "island", estimate = "average")
 #' marginaleffects::avg_slopes(m, variables = "bill_dep", by = "island")
+#'
+#' # filter by groups
+#' estimate_slopes(m, "bill_dep", by = "island=c('Biscoe','Dream')")
+#' # or in "classic" R syntax, using lists
+#' estimate_slopes(m, "bill_dep", by = list(island = c('Biscoe', 'Dream')))
 #' }
 #' @export
 estimate_slopes <- function(
