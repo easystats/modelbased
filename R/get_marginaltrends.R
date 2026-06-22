@@ -268,7 +268,7 @@ get_marginaltrends <- function(
   }
 
   # make sure range in `trend` is not also in `by`
-  if (!is.null(by) && !is.null(range) && startsWith(by, trend)) {
+  if (!is.null(by) && !is.null(range) && any(startsWith(by, trend))) {
     insight::format_error(
       paste0(
         "To calculate average marginal effects over a range of `",

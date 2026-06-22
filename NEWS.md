@@ -15,6 +15,10 @@
 * Offsets (using the `offset` argument) now also work when `estimate` is set to
   `"population"` or `"average"`.
 
+## Bug fixes
+
+* Minor bug fix when evaluating `slope` and `by` arguments in `estimate_slopes()`.
+
 # modelbased 0.15.0
 
 ## Breaking Changes
