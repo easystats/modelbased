@@ -219,7 +219,7 @@
 #' * You can directly specify values as strings or lists for `by`, `contrast`,
 #'   and `slope`.
 #'   * For numeric focal predictors, use examples like `by = "gear = c(4, 8)"`,
-#'     `by = list(gear = c(4, 8))` or `by = "gear = 5:10"`
+#'     `by = list(gear = c(4, 8))`, `by = "gear = 5:10"` or `by = list(gear = 5:10)`
 #'   * For factor or character predictors, use `by = "Species = c('setosa', 'virginica')"`
 #'     or `by = list(Species = c('setosa', 'virginica'))`
 #' * You can use "shortcuts" within square brackets, such as `by = "Sepal.Width = [sd]"`

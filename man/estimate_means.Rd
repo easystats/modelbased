@@ -254,7 +254,7 @@ documentation for more details.
 and \code{slope}.
 \itemize{
 \item For numeric focal predictors, use examples like \code{by = "gear = c(4, 8)"},
-\code{by = list(gear = c(4, 8))} or \code{by = "gear = 5:10"}
+\code{by = list(gear = c(4, 8))}, \code{by = "gear = 5:10"} or \code{by = list(gear = 5:10)}
 \item For factor or character predictors, use \code{by = "Species = c('setosa', 'virginica')"}
 or \code{by = list(Species = c('setosa', 'virginica'))}
 }
