@@ -27,7 +27,7 @@ various examples, tutorials and use cases."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -158,11 +158,13 @@ various examples, tutorials and use cases.</p>
 <dd><p>A character indicating the name of the variable for which
 to compute the slopes. To get marginal effects at specific values, use
 <code>slope="&lt;variable&gt;"</code> along with the <code>by</code> argument, e.g.
-<code>by="&lt;variable&gt; = c(1, 3, 5)"</code>, or a combination of <code>by</code> and <code>length</code>, for
-instance, <code>by="&lt;variable&gt;", length=30</code>. To calculate average marginal
-effects over a range of values, use <code>slope="&lt;variable&gt; = seq(1, 3, 0.1)"</code> (or
-similar) and omit the variable provided in <code>slope</code> from the <code>by</code> argument.
-<code>trend</code> is an alias for <code>slope</code>, for backward compatibility.</p></dd>
+<code>by="&lt;variable&gt; = c(1, 3, 5)"</code> (or <code>by=list(&lt;variable&gt; = c(1, 3, 5))</code>), or a
+combination of <code>by</code> and <code>length</code>, for instance, <code>by="&lt;variable&gt;", length=30</code>.
+To calculate average marginal effects over a range of values, use
+<code>slope="&lt;variable&gt; = seq(1, 3, 0.1)"</code> or similar, or
+<code>slope=list(&lt;variable&gt; = seq(1, 3, 0.1))</code>), and omit the variable provided in
+<code>slope</code> from the <code>by</code> argument. <code>trend</code> is an alias for <code>slope</code>, for backward
+compatibility. See 'Examples'.</p></dd>
 
 
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
@@ -596,10 +598,32 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for Petal.Length</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
+<span class="r-in"><span><span class="co"># or in "classic" R syntax, using lists</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_slopes</span><span class="op">(</span><span class="va">model</span>, slope <span class="op">=</span> <span class="st">"Petal.Length"</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Petal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Length | Slope |   SE |        95% CI | t(143.68) |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            |  0.27 | 0.17 | [-0.06, 0.60] |      1.63 | 0.106</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            |  0.05 | 0.10 | [-0.16, 0.26] |      0.49 | 0.627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            | -0.02 | 0.18 | [-0.37, 0.33] |     -0.11 | 0.912</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># average marginal effects of Petal.Length,</span></span></span>
 <span class="r-in"><span><span class="co"># just for the trend within a certain range</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_slopes</span><span class="op">(</span><span class="va">model</span>, slope <span class="op">=</span> <span class="st">"Petal.Length=seq(2, 4, 0.01)"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slope |   SE |        95% CI | t(143.68) |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.07  | 0.07 | [-0.08, 0.21] |      0.92 | 0.359</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
+<span class="r-in"><span><span class="co"># "classic" R syntax, using lists</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_slopes</span><span class="op">(</span><span class="va">model</span>, slope <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Petal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Effects</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slope |   SE |        95% CI | t(143.68) |     p</span>
@@ -659,6 +683,29 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type: response</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Comparison: dY/dX</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># filter by groups</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_slopes</span><span class="op">(</span><span class="va">m</span>, <span class="st">"bill_dep"</span>, by <span class="op">=</span> <span class="st">"island=c('Biscoe','Dream')"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> island |    Slope |       SE |        95% CI |    z |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Biscoe | 6.07e-03 | 4.45e-03 | [ 0.00, 0.01] | 1.36 | 0.173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dream  |     0.04 |     0.03 | [-0.01, 0.10] | 1.47 | 0.141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for bill_dep</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
+<span class="r-in"><span><span class="co"># or in "classic" R syntax, using lists</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_slopes</span><span class="op">(</span><span class="va">m</span>, <span class="st">"bill_dep"</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Biscoe'</span>, <span class="st">'Dream'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> island |    Slope |       SE |        95% CI |    z |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Biscoe | 6.07e-03 | 4.45e-03 | [ 0.00, 0.01] | 1.36 | 0.173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dream  |     0.04 |     0.03 | [-0.01, 0.10] | 1.47 | 0.141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for bill_dep</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

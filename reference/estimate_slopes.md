@@ -50,12 +50,14 @@ estimate_slopes(
   A character indicating the name of the variable for which to compute
   the slopes. To get marginal effects at specific values, use
   `slope="<variable>"` along with the `by` argument, e.g.
-  `by="<variable> = c(1, 3, 5)"`, or a combination of `by` and `length`,
-  for instance, `by="<variable>", length=30`. To calculate average
-  marginal effects over a range of values, use
-  `slope="<variable> = seq(1, 3, 0.1)"` (or similar) and omit the
-  variable provided in `slope` from the `by` argument. `trend` is an
-  alias for `slope`, for backward compatibility.
+  `by="<variable> = c(1, 3, 5)"` (or
+  `by=list(<variable> = c(1, 3, 5))`), or a combination of `by` and
+  `length`, for instance, `by="<variable>", length=30`. To calculate
+  average marginal effects over a range of values, use
+  `slope="<variable> = seq(1, 3, 0.1)"` or similar, or
+  `slope=list(<variable> = seq(1, 3, 0.1))`), and omit the variable
+  provided in `slope` from the `by` argument. `trend` is an alias for
+  `slope`, for backward compatibility. See 'Examples'.
 
 - by:
 
@@ -576,10 +578,32 @@ estimate_slopes(model, slope = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
 #> 
 #> Marginal effects estimated for Petal.Length
 #> Type of slope was dY/dX
+# or in "classic" R syntax, using lists
+estimate_slopes(model, slope = "Petal.Length", by = list(Petal.Length = c(1, 3, 5)))
+#> Estimated Marginal Effects
+#> 
+#> Petal.Length | Slope |   SE |        95% CI | t(143.68) |     p
+#> ---------------------------------------------------------------
+#> 1            |  0.27 | 0.17 | [-0.06, 0.60] |      1.63 | 0.106
+#> 3            |  0.05 | 0.10 | [-0.16, 0.26] |      0.49 | 0.627
+#> 5            | -0.02 | 0.18 | [-0.37, 0.33] |     -0.11 | 0.912
+#> 
+#> Marginal effects estimated for Petal.Length
+#> Type of slope was dY/dX
 
 # average marginal effects of Petal.Length,
 # just for the trend within a certain range
 estimate_slopes(model, slope = "Petal.Length=seq(2, 4, 0.01)")
+#> Estimated Marginal Effects
+#> 
+#> Slope |   SE |        95% CI | t(143.68) |     p
+#> ------------------------------------------------
+#> 0.07  | 0.07 | [-0.08, 0.21] |      0.92 | 0.359
+#> 
+#> Marginal effects estimated for Petal.Length
+#> Type of slope was dY/dX
+# "classic" R syntax, using lists
+estimate_slopes(model, slope = list(Petal.Length = seq(2, 4, 0.01)))
 #> Estimated Marginal Effects
 #> 
 #> Slope |   SE |        95% CI | t(143.68) |     p
@@ -639,5 +663,28 @@ marginaleffects::avg_slopes(m, variables = "bill_dep", by = "island")
 #> Type: response
 #> Comparison: dY/dX
 #> 
+
+# filter by groups
+estimate_slopes(m, "bill_dep", by = "island=c('Biscoe','Dream')")
+#> Estimated Marginal Effects
+#> 
+#> island |    Slope |       SE |        95% CI |    z |     p
+#> -----------------------------------------------------------
+#> Biscoe | 6.07e-03 | 4.45e-03 | [ 0.00, 0.01] | 1.36 | 0.173
+#> Dream  |     0.04 |     0.03 | [-0.01, 0.10] | 1.47 | 0.141
+#> 
+#> Marginal effects estimated for bill_dep
+#> Type of slope was dY/dX
+# or in "classic" R syntax, using lists
+estimate_slopes(m, "bill_dep", by = list(island = c('Biscoe', 'Dream')))
+#> Estimated Marginal Effects
+#> 
+#> island |    Slope |       SE |        95% CI |    z |     p
+#> -----------------------------------------------------------
+#> Biscoe | 6.07e-03 | 4.45e-03 | [ 0.00, 0.01] | 1.36 | 0.173
+#> Dream  |     0.04 |     0.03 | [-0.01, 0.10] | 1.47 | 0.141
+#> 
+#> Marginal effects estimated for bill_dep
+#> Type of slope was dY/dX
 # }
 ```
