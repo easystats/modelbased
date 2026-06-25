@@ -63,11 +63,10 @@
 #'   permutations) within each group. This extrapolates to a hypothetical
 #'   broader population, considering "what if" scenarios. It answers: "What is
 #'   the predicted response for the 'average' observation in a broader possible
-#'   target population?" This approach entails more assumptions about the
-#'   likelihood of different combinations, but can be more apt to generalize.
-#'   This is also the option that should be used for **G-computation**
-#'   (causal inference, see _Chatton and Rohrer 2024_). `"counterfactual"` is
-#'   an alias for `"population"`.
+#'   target population?" This approach mimics a "pseudo-randomization" and hence
+#'   can be more apt to generalize, which should be used for **G-computation**
+#'   (causal inference, see _Chatton and Rohrer 2024_). `"counterfactual"` is an
+#'   alias for `"population"`.
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
 #' e.g. `options(modelbased_estimate = "average")`.
