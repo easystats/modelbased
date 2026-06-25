@@ -242,9 +242,10 @@ important for two or more focal predictors, because it doesn't generate a
 Consequently, the output may not include all the values.</p></li>
 <li><p>Filtering the output at values of continuous predictors, e.g.
 <code>by = "x=1:5"</code>, in combination with <code>estimate = "average"</code> may result in
-returning an empty data frame because of what was described above. In such
-case, you can use <code>estimate = "typical"</code> or use the <code>newdata</code> argument to
-provide a data grid of predictor values at which to evaluate predictions.</p></li>
+returning an empty data frame because the requested values may not overlap
+with existing data. In such cases, you can use <code>estimate = "typical"</code> or
+use the <code>newdata</code> argument to provide a data grid of predictor values at
+which to evaluate predictions.</p></li>
 <li><p><code>estimate = "population"</code> is not available for <code>estimate_slopes()</code>.</p></li>
 </ul></dd>
 

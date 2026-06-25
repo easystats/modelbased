@@ -161,10 +161,10 @@ estimate_slopes(
 
   - Filtering the output at values of continuous predictors, e.g.
     `by = "x=1:5"`, in combination with `estimate = "average"` may
-    result in returning an empty data frame because of what was
-    described above. In such case, you can use `estimate = "typical"` or
-    use the `newdata` argument to provide a data grid of predictor
-    values at which to evaluate predictions.
+    result in returning an empty data frame because the requested values
+    may not overlap with existing data. In such cases, you can use
+    `estimate = "typical"` or use the `newdata` argument to provide a
+    data grid of predictor values at which to evaluate predictions.
 
   - `estimate = "population"` is not available for `estimate_slopes()`.
 
