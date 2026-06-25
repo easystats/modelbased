@@ -195,11 +195,10 @@ predictions across these "counterfactual" observations (non-observed
 permutations) within each group. This extrapolates to a hypothetical
 broader population, considering "what if" scenarios. It answers: "What is
 the predicted response for the 'average' observation in a broader possible
-target population?" This approach entails more assumptions about the
-likelihood of different combinations, but can be more apt to generalize.
-This is also the option that should be used for <strong>G-computation</strong>
-(causal inference, see <em>Chatton and Rohrer 2024</em>). <code>"counterfactual"</code> is
-an alias for <code>"population"</code>.</p></li>
+target population?" This approach mimics a "pseudo-randomization" and hence
+can be more apt to generalize, which should be used for <strong>G-computation</strong>
+(causal inference, see <em>Chatton and Rohrer 2024</em>). <code>"counterfactual"</code> is an
+alias for <code>"population"</code>.</p></li>
 </ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
 e.g. <code>options(modelbased_estimate = "average")</code>.</p>
 <p>Note following limitations:</p><ul><li><p>When you set <code>estimate</code> to <code>"average"</code>, it calculates the average based

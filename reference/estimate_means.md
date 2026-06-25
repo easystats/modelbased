@@ -114,11 +114,10 @@ estimate_means(
     a hypothetical broader population, considering "what if" scenarios.
     It answers: "What is the predicted response for the 'average'
     observation in a broader possible target population?" This approach
-    entails more assumptions about the likelihood of different
-    combinations, but can be more apt to generalize. This is also the
-    option that should be used for **G-computation** (causal inference,
-    see *Chatton and Rohrer 2024*). `"counterfactual"` is an alias for
-    `"population"`.
+    mimics a "pseudo-randomization" and hence can be more apt to
+    generalize, which should be used for **G-computation** (causal
+    inference, see *Chatton and Rohrer 2024*). `"counterfactual"` is an
+    alias for `"population"`.
 
   You can set a default option for the `estimate` argument via
   [`options()`](https://rdrr.io/r/base/options.html), e.g.
