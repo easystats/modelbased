@@ -99,9 +99,10 @@ important for two or more focal predictors, because it doesn't generate a
 Consequently, the output may not include all the values.
 \item Filtering the output at values of continuous predictors, e.g.
 \code{by = "x=1:5"}, in combination with \code{estimate = "average"} may result in
-returning an empty data frame because of what was described above. In such
-case, you can use \code{estimate = "typical"} or use the \code{newdata} argument to
-provide a data grid of predictor values at which to evaluate predictions.
+returning an empty data frame because the requested values may not overlap
+with existing data. In such cases, you can use \code{estimate = "typical"} or
+use the \code{newdata} argument to provide a data grid of predictor values at
+which to evaluate predictions.
 \item \code{estimate = "population"} is not available for \code{estimate_slopes()}.
 }}
 

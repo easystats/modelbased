@@ -79,9 +79,10 @@
 #'   Consequently, the output may not include all the values.
 #' - Filtering the output at values of continuous predictors, e.g.
 #'   `by = "x=1:5"`, in combination with `estimate = "average"` may result in
-#'   returning an empty data frame because of what was described above. In such
-#'   case, you can use `estimate = "typical"` or use the `newdata` argument to
-#'   provide a data grid of predictor values at which to evaluate predictions.
+#'   returning an empty data frame because the requested values may not overlap
+#'   with existing data. In such cases, you can use `estimate = "typical"` or
+#'   use the `newdata` argument to provide a data grid of predictor values at
+#'   which to evaluate predictions.
 #' - `estimate = "population"` is not available for `estimate_slopes()`.
 #' @param backend Whether to use `"marginaleffects"` (default) or `"emmeans"` as
 #' a backend. Results are usually very similar. The major difference will be
