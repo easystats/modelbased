@@ -45,9 +45,18 @@ get_emcontrasts <- function(model,
   fun_args <- list(model)
 
   # handle distributional parameters
-  if (predict %in% .brms_aux_elements(model) && inherits(model, "brmsfit")) {
-    dpars <- TRUE
-    fun_args$dpar <- predict
+  if (inherits(model, "brmsfit")) {
+    if (identical(predict, "response")) {
+      dpars <- FALSE
+      fun_args$epred <- TRUE
+      fun_args$type <- "response"
+    } else if (predict %in% .brms_aux_elements(model)) {
+      dpars <- TRUE
+      fun_args$dpar <- predict
+    } else {
+      dpars <- FALSE
+      fun_args$type <- predict
+    }
   } else {
     dpars <- FALSE
     fun_args$type <- predict

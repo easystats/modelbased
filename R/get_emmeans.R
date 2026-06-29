@@ -63,9 +63,18 @@ get_emmeans <- function(
   fun_args <- list(model, specs = my_args$emmeans_specs, at = my_args$emmeans_at)
 
   # handle distributional parameters
-  if (predict %in% .brms_aux_elements(model) && inherits(model, "brmsfit")) {
-    dpars <- TRUE
-    fun_args$dpar <- predict
+  if (inherits(model, "brmsfit")) {
+    if (identical(predict, "response")) {
+      dpars <- FALSE
+      fun_args$epred <- TRUE
+      fun_args$type <- "response"
+    } else if (predict %in% .brms_aux_elements(model)) {
+      dpars <- TRUE
+      fun_args$dpar <- predict
+    } else {
+      dpars <- FALSE
+      fun_args$type <- predict
+    }
   } else {
     dpars <- FALSE
     fun_args$type <- predict
@@ -156,7 +165,11 @@ get_emmeans <- function(
 ## TODO: validate predict argument to make sure it only has valid options
 .get_emmeans_type_argument <- function(model, predict, type = "means", ...) {
   if (is.null(predict)) {
-    predict <- switch(type, means = "response", contrasts = "response", "none")
+    predict <- switch(type,
+      means = "response",
+      contrasts = "response",
+      "none"
+    )
   } else if (predict == "link") {
     predict <- "none"
   }
