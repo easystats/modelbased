@@ -21,8 +21,14 @@ test_that("estimate_grouplevel - lme4", {
   model <- lme4::lmer(mpg ~ wt + (1 | gear) + (1 | carb), data = mtcars)
   random <- estimate_grouplevel(model)
   expect_equal(nrow(random), length(c(unique(mtcars$gear), unique(mtcars$carb))))
-  expect_equal(nrow(reshape_grouplevel(random, group = "gear")), length(unique(mtcars$gear)))
-  expect_equal(nrow(reshape_grouplevel(random, group = "carb")), length(unique(mtcars$carb)))
+  expect_equal(
+    nrow(reshape_grouplevel(random, group = "gear")),
+    length(unique(mtcars$gear))
+  )
+  expect_equal(
+    nrow(reshape_grouplevel(random, group = "carb")),
+    length(unique(mtcars$carb))
+  )
 
   # Random slope and intercept
   model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = data)
@@ -44,7 +50,11 @@ test_that("estimate_grouplevel - lme4", {
 
   reshaped <- reshape_grouplevel(random, group = "grp")
   expect_equal(nrow(reshaped), length(unique(data$grp)))
-  ref <- insight::get_data(model, verbose = FALSE)[insight::find_random(model, split_nested = TRUE, flatten = TRUE)]
+  ref <- insight::get_data(model, verbose = FALSE)[insight::find_random(
+    model,
+    split_nested = TRUE,
+    flatten = TRUE
+  )]
   all(reshaped$Subject == ref$Subject)
   all(reshaped$grp == ref$grp)
   all(reshaped$subgrp == ref$subgrp)
@@ -61,7 +71,10 @@ test_that("estimate_grouplevel - lme4", {
 
   out <- estimate_grouplevel(m)
   expect_identical(dim(out), c(6L, 8L))
-  expect_named(out, c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high"))
+  expect_named(
+    out,
+    c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high")
+  )
 
   out <- estimate_grouplevel(m, type = "total")
   expect_identical(dim(out), c(6L, 4L))
@@ -75,14 +88,14 @@ test_that("estimate_grouplevel - glmmTMB", {
   d <- iris
   d$Group <- as.factor(rep(c("G1", "G2", "G3"), each = 50))
 
-  m1 <- glmmTMB::glmmTMB(
-    Sepal.Width ~ Petal.Width + (Petal.Width | Group),
-    data = d
-  )
+  m1 <- glmmTMB::glmmTMB(Sepal.Width ~ Petal.Width + (Petal.Width | Group), data = d)
 
   out <- estimate_grouplevel(m1)
   expect_identical(dim(out), c(6L, 8L))
-  expect_named(out, c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high"))
+  expect_named(
+    out,
+    c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high")
+  )
 
   out <- estimate_grouplevel(m1, type = "total")
   expect_identical(dim(out), c(6L, 4L))
@@ -101,7 +114,10 @@ test_that("estimate_grouplevel - Bayesian, brms", {
 
   out <- estimate_grouplevel(m)
   expect_identical(dim(out), c(6L, 8L))
-  expect_named(out, c("Group", "Level", "Parameter", "Median", "MAD", "CI", "CI_low", "CI_high"))
+  expect_named(
+    out,
+    c("Group", "Level", "Parameter", "Median", "MAD", "CI", "CI_low", "CI_high")
+  )
 
   out <- estimate_grouplevel(m, type = "total", dispersion = FALSE)
   expect_identical(dim(out), c(6L, 7L))
@@ -112,11 +128,37 @@ test_that("estimate_grouplevel - Bayesian, brms", {
 
   out <- estimate_grouplevel(m)
   expect_identical(dim(out), c(12L, 9L))
-  expect_named(out, c("Component", "Group", "Level", "Parameter", "Median", "MAD", "CI", "CI_low", "CI_high"))
+  expect_named(
+    out,
+    c(
+      "Component",
+      "Group",
+      "Level",
+      "Parameter",
+      "Median",
+      "MAD",
+      "CI",
+      "CI_low",
+      "CI_high"
+    )
+  )
 
   out <- estimate_grouplevel(m, type = "total")
   expect_identical(dim(out), c(12L, 9L))
-  expect_named(out, c("Component", "Group", "Level", "Parameter", "Median", "MAD", "CI", "CI_low", "CI_high"))
+  expect_named(
+    out,
+    c(
+      "Component",
+      "Group",
+      "Level",
+      "Parameter",
+      "Median",
+      "MAD",
+      "CI",
+      "CI_low",
+      "CI_high"
+    )
+  )
 })
 
 test_that("estimate_grouplevel - Bayesian, rstanarm", {
@@ -131,7 +173,10 @@ test_that("estimate_grouplevel - Bayesian, rstanarm", {
 
   out <- estimate_grouplevel(m)
   expect_identical(dim(out), c(3L, 8L))
-  expect_named(out, c("Group", "Level", "Parameter", "Median", "MAD", "CI", "CI_low", "CI_high"))
+  expect_named(
+    out,
+    c("Group", "Level", "Parameter", "Median", "MAD", "CI", "CI_low", "CI_high")
+  )
 
   out <- estimate_grouplevel(m, dispersion = FALSE)
   expect_identical(dim(out), c(3L, 7L))
@@ -313,10 +358,17 @@ test_that("estimate_grouplevel type='marginal' nested design", {
   sleepstudy$subgrp <- NA
   for (i in 1:5) {
     filter_group <- sleepstudy$grp == i
-    sleepstudy$subgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
+    sleepstudy$subgrp[filter_group] <- sample(
+      1:30,
+      size = sum(filter_group),
+      replace = TRUE
+    )
   }
-  model <- lme4::lmer(Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject), data = sleepstudy)
-  out <- estimate_grouplevel(model, type = "marginal")
+  model <- lme4::lmer(
+    Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
+    data = sleepstudy
+  )
+  out <- estimate_grouplevel(model, type = "marginal", estimate = "average")
   expect_identical(dim(out), c(53L, 6L))
   expect_true(all(unique(out$Group) %in% c("grp", "subgrp", "Subject")))
 })
