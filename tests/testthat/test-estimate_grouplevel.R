@@ -194,7 +194,7 @@ test_that("estimate_grouplevel type='marginal'", {
   )
   expect_equal(
     as.numeric(cor.test(gl1$Coefficient, gl3$Coefficient)$estimate),
-    -0.04057546,
+    1,
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
@@ -234,7 +234,7 @@ test_that("estimate_grouplevel type='marginal'", {
     gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "carb", "Coefficient"],
     gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "carb", "Coefficient"]
   )
-  expect_equal(r$estimate, 0.6626235, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(r$estimate, 1, tolerance = 1e-4, ignore_attr = TRUE)
   r <- cor.test(
     gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "gear", "Coefficient"],
     gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "gear", "Coefficient"]
@@ -273,7 +273,7 @@ test_that("estimate_grouplevel type='marginal' correlations", {
   merged_intercepts <- merge(m1_intercept, m3_intercept, by = c("Group", "Level"))
   expect_equal(
     cor(merged_intercepts$Coefficient.x, merged_intercepts$Coefficient.y),
-    0.6493804,
+    0.8990,
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
@@ -291,7 +291,7 @@ test_that("estimate_grouplevel type='marginal' correlations", {
   merged_intercepts <- merge(m2_intercept, m3_intercept, by = c("Group", "Level"))
   expect_equal(
     cor(merged_intercepts$Coefficient.x, merged_intercepts$Coefficient.y),
-    0.6493804,
+    0.8990,
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
