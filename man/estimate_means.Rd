@@ -30,7 +30,9 @@ is \emph{not} \code{"average"}, the \code{by} argument is used to create a "refe
 or "data grid" with representative values for the focal predictors. In this
 case, \code{by} can also be list of named elements. See details in
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
-predictors of interest.}
+predictors of interest. For \code{estimate_means()}, \code{by} defaults to \code{"auto"},
+which automatically selects the first focal predictor found in the model. If
+\code{by = NULL}, the grand mean of the response is predicted.}
 
 \item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
