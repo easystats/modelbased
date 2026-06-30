@@ -23,6 +23,8 @@
   The `type` argument can now be used in combination with the `estimate` argument,
   which is now also more explained in detail in the documentation.
 
+* `by = NULL` now also works for `backend = "emmeans"`, to predict the grand mean.
+
 ## Bug fixes
 
 * Minor bug fix when evaluating `slope` and `by` arguments in `estimate_slopes()`.
