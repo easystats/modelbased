@@ -1,5 +1,6 @@
 skip_on_cran()
 # skip_on_os("windows")
+skip_if_not_installed("cogmod")
 skip_if_not_installed("curl")
 skip_if_offline()
 skip_if_not_installed("httr2")
