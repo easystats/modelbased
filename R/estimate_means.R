@@ -17,7 +17,9 @@
 #' or "data grid" with representative values for the focal predictors. In this
 #' case, `by` can also be list of named elements. See details in
 #' [`insight::get_datagrid()`] to learn more about how to create data grids for
-#' predictors of interest.
+#' predictors of interest. For `estimate_means()`, `by` defaults to `"auto"`,
+#' which automatically selects the first focal predictor found in the model. If
+#' `by = NULL`, the grand mean of the response is predicted.
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). Valid options for `predict` are:

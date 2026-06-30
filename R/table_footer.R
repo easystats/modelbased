@@ -30,7 +30,7 @@
 
   # modulated predictors (focal terms) ---------------------------------------
 
-  if (!is.null(by) && !isTRUE(info$joint_test)) {
+  if (!is.null(by) && !isTRUE(info$joint_test) && !inherits(by, "formula")) {
     modulate_string <- switch(type, inequality = , contrasts = "contrasted", "modulated")
     table_footer <- paste0(
       table_footer,
