@@ -15,7 +15,7 @@ estimate_contrasts() and estimate_slopes().'><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -144,7 +144,9 @@ is <em>not</em> <code>"average"</code>, the <code>by</code> argument is used to 
 or "data grid" with representative values for the focal predictors. In this
 case, <code>by</code> can also be list of named elements. See details in
 <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> to learn more about how to create data grids for
-predictors of interest.</p></dd>
+predictors of interest. For <code>estimate_means()</code>, <code>by</code> defaults to <code>"auto"</code>,
+which automatically selects the first focal predictor found in the model. If
+<code>by = NULL</code>, the grand mean of the response is predicted.</p></dd>
 
 
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>

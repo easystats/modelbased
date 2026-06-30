@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,6 +92,23 @@
       <small>Source: <a href="https://github.com/easystats/modelbased/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.16.0" id="modelbased-0160">modelbased 0.16.0<a class="anchor" aria-label="anchor" href="#modelbased-0160"></a></h2>
+<div class="section level3">
+<h3 id="changes-0-16-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-16-0"></a></h3>
+<ul><li><p>Informative error message when the <code>trend</code> variable in <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code> is not numeric and <code>backend = "emmeans"</code>.</p></li>
+<li><p><code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> gets a <code>post_process</code> argument, to process subsequent comparisons. It allows for complex, multi-step comparisons.</p></li>
+<li><p>The <code>comparison</code> argument in <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> can now also be <code>"omnibus"</code>, to calculate a global omnibus test for differences between levels of a predictor.</p></li>
+<li><p>Offsets (using the <code>offset</code> argument) now also work when <code>estimate</code> is set to <code>"population"</code> or <code>"average"</code>.</p></li>
+<li><p>Argument <code>slope</code>, when specific values are defined, can now also be a list instead of only a string. E.g., <code>slope="&lt;variable&gt; = seq(1, 3, 0.1)"</code> can now also be written as <code>slope=list(&lt;variable&gt; = seq(1, 3, 0.1))</code>.</p></li>
+<li><p>Clarified usage of <code>marginal</code> group-level estimates in <code><a href="../reference/estimate_grouplevel.html">estimate_grouplevel()</a></code>. The <code>type</code> argument can now be used in combination with the <code>estimate</code> argument, which is now also more explained in detail in the documentation.</p></li>
+<li><p><code>by = NULL</code> now also works for <code>backend = "emmeans"</code>, to predict the grand mean.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-16-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-16-0"></a></h3>
+<ul><li>Minor bug fix when evaluating <code>slope</code> and <code>by</code> arguments in <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.15.0" id="modelbased-0150">modelbased 0.15.0<a class="anchor" aria-label="anchor" href="#modelbased-0150"></a></h2><p class="text-muted">CRAN release: 2026-05-10</p>
 <div class="section level3">

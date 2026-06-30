@@ -46,7 +46,9 @@ estimate_means(
   elements. See details in
   [`insight::get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html)
   to learn more about how to create data grids for predictors of
-  interest.
+  interest. For `estimate_means()`, `by` defaults to `"auto"`, which
+  automatically selects the first focal predictor found in the model. If
+  `by = NULL`, the grand mean of the response is predicted.
 
 - predict:
 
