@@ -19,6 +19,12 @@
   instead of only a string. E.g., `slope="<variable> = seq(1, 3, 0.1)"` can now
   also be written as `slope=list(<variable> = seq(1, 3, 0.1))`.
 
+* Clarified usage of `marginal` group-level estimates in `estimate_grouplevel()`.
+  The `type` argument can now be used in combination with the `estimate` argument,
+  which is now also more explained in detail in the documentation.
+
+* `by = NULL` now also works for `backend = "emmeans"`, to predict the grand mean.
+
 ## Bug fixes
 
 * Minor bug fix when evaluating `slope` and `by` arguments in `estimate_slopes()`.

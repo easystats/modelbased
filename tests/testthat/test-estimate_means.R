@@ -33,8 +33,16 @@ test_that("estimate_means() - lm", {
 
   # At specific levels
   model <- lm(Sepal.Width ~ Species, data = iris)
-  estim1 <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'virginica')", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'virginica')", backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = "Species=c('versicolor', 'virginica')",
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = "Species=c('versicolor', 'virginica')",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(2L, 5L))
   expect_identical(dim(estim2), c(2L, 7L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
@@ -49,12 +57,26 @@ test_that("estimate_means() - lm", {
 
   model <- lm(Sepal.Width ~ Species * Petal.Length_factor, data = dat)
   estim1 <- suppressMessages(estimate_means(model, by = "all", backend = "emmeans"))
-  estim2 <- suppressWarnings(suppressMessages(estimate_means(model, by = "all", backend = "marginaleffects")))
+  estim2 <- suppressWarnings(suppressMessages(estimate_means(
+    model,
+    by = "all",
+    backend = "marginaleffects"
+  )))
   expect_identical(dim(estim1), c(6L, 6L))
   expect_identical(dim(estim2), c(6L, 8L))
-  expect_equal(estim2$Mean, c(3.428, 3.79557, 2.54211, 2.90968, 2.60643, 2.974), tolerance = 1e-4)
-  expect_named(estim1, c("Species", "Petal.Length_factor", "Mean", "SE", "CI_low", "CI_high"))
-  expect_named(estim2, c("Species", "Petal.Length_factor", "Mean", "SE", "CI_low", "CI_high", "t", "df"))
+  expect_equal(
+    estim2$Mean,
+    c(3.428, 3.79557, 2.54211, 2.90968, 2.60643, 2.974),
+    tolerance = 1e-4
+  )
+  expect_named(
+    estim1,
+    c("Species", "Petal.Length_factor", "Mean", "SE", "CI_low", "CI_high")
+  )
+  expect_named(
+    estim2,
+    c("Species", "Petal.Length_factor", "Mean", "SE", "CI_low", "CI_high", "t", "df")
+  )
 
   # No interaction (two factors)
   model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
@@ -67,8 +89,16 @@ test_that("estimate_means() - lm", {
   expect_named(estim2, c("Species", "Mean", "SE", "CI_low", "CI_high", "t", "df"))
 
   # At specific levels of continuous
-  estim1 <- suppressMessages(estimate_means(model, by = "Sepal.Width", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = "Sepal.Width", backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = "Sepal.Width",
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = "Sepal.Width",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(10L, 5L))
   expect_identical(dim(estim2), c(10L, 7L))
   # Note that the absolute values are different here... for unclear reasons
@@ -84,7 +114,11 @@ test_that("estimate_means() - lm", {
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
   estim1 <- suppressMessages(estimate_means(model, by = "all", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = "all", backend = "marginaleffects"))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = "all",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(30L, 6L))
   expect_identical(dim(estim2), c(30L, 8L))
   expect_equal(estim1$Mean[order(estim1$Sepal.Width)], estim2$Mean, tolerance = 1e-4)
@@ -110,57 +144,125 @@ test_that("estimate_means() - lm", {
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
-  estim1 <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width"), length = 2, backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width"), length = 2, backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = c("Species", "Sepal.Width"),
+    length = 2,
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = c("Species", "Sepal.Width"),
+    length = 2,
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(6L, 6L))
   expect_identical(dim(estim2), c(6L, 8L))
   expect_equal(estim1$Mean[order(estim1$Species)], estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low[order(estim1$Species)], estim2$CI_low, tolerance = 1e-3)
 
-  estim1 <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'setosa')", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'setosa')", backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = "Species=c('versicolor', 'setosa')",
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = "Species=c('versicolor', 'setosa')",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(2L, 5L))
   expect_identical(dim(estim2), c(2L, 7L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
-  estim1 <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)", backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = "Sepal.Width=c(2, 4)",
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = "Sepal.Width=c(2, 4)",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(2L, 5L))
   expect_identical(dim(estim2), c(2L, 7L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
-  estim1 <- suppressMessages(estimate_means(model, by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa")), backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa")), backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa")),
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa")),
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(4L, 6L))
   expect_identical(dim(estim2), c(4L, 8L))
   expect_equal(estim1$Mean, estim2$Mean[order(estim2$Species)], tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low[order(estim2$Species)], tolerance = 1e-3)
 
-  estim1 <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width=0"), backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width=0"), backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = c("Species", "Sepal.Width=0"),
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = c("Species", "Sepal.Width=0"),
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(3L, 6L))
   expect_identical(dim(estim2), c(3L, 8L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
-  estim1 <- suppressMessages(estimate_means(model, by = "Sepal.Width", length = 5, backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = "Sepal.Width", length = 5, backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = "Sepal.Width",
+    length = 5,
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = "Sepal.Width",
+    length = 5,
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(5L, 5L))
   expect_identical(dim(estim2), c(5L, 7L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
-  estim1 <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)", backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = "Sepal.Width=c(2, 4)",
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = "Sepal.Width=c(2, 4)",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(2L, 5L))
   expect_identical(dim(estim2), c(2L, 7L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
-  estim1 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"),
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"),
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(4L, 6L))
   expect_identical(dim(estim2), c(4L, 8L))
   expect_equal(estim1$Mean, estim2$Mean[order(estim2$Sepal.Width)], tolerance = 1e-4)
@@ -173,18 +275,38 @@ test_that("estimate_means() - lm", {
   model <- lm(Petal.Length ~ Species * Petal.Length_factor, data = dat)
 
   estim1 <- suppressMessages(estimate_means(model, by = "all", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = "all", backend = "marginaleffects"))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = "all",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(6L, 6L))
   expect_identical(dim(estim2), c(6L, 8L))
-  expect_equal(estim2$Mean, c(1.462, 2.24638, 3.77368, 4.55806, 4.76762, 5.552), tolerance = 1e-4)
+  expect_equal(
+    estim2$Mean,
+    c(1.462, 2.24638, 3.77368, 4.55806, 4.76762, 5.552),
+    tolerance = 1e-4
+  )
 
-  estim1 <- suppressMessages(estimate_means(model, by = "Petal.Length_factor", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = "Petal.Length_factor", backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = "Petal.Length_factor",
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = "Petal.Length_factor",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(2L, 5L))
   expect_identical(dim(estim2), c(2L, 7L))
   expect_equal(estim2$Mean, c(3.33443, 4.11881), tolerance = 1e-4)
 
-  estim <- suppressMessages(estimate_means(model, by = "Petal.Length_factor='B'", backend = "marginaleffects"))
+  estim <- suppressMessages(estimate_means(
+    model,
+    by = "Petal.Length_factor='B'",
+    backend = "marginaleffects"
+  ))
   expect_equal(estim$Mean, 4.11882, tolerance = 1e-4)
 
   # Three factors
@@ -200,14 +322,32 @@ test_that("estimate_means() - lm", {
   expect_equal(
     estim2$Mean,
     c(
-      15.05, 22.03333, 20.33333, 27.31667, 14.01667, 21, 21.05, 28.03333,
-      12.14167, 19.125, 23.41667, 30.4
+      15.05,
+      22.03333,
+      20.33333,
+      27.31667,
+      14.01667,
+      21,
+      21.05,
+      28.03333,
+      12.14167,
+      19.125,
+      23.41667,
+      30.4
     ),
     tolerance = 1e-4
   )
 
-  estim1 <- suppressMessages(estimate_means(model, by = c("gear", "vs", "am='1'"), backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = c("gear", "vs", "am='1'"), backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = c("gear", "vs", "am='1'"),
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = c("gear", "vs", "am='1'"),
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(6L, 7L))
   expect_identical(dim(estim2), c(6L, 9L))
   expect_equal(
@@ -216,8 +356,16 @@ test_that("estimate_means() - lm", {
     tolerance = 1e-4
   )
 
-  estim1 <- suppressMessages(estimate_means(model, by = c("gear='5'", "vs"), backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = c("gear='5'", "vs"), backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = c("gear='5'", "vs"),
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = c("gear='5'", "vs"),
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(2L, 7L))
   expect_identical(dim(estim2), c(2L, 8L))
   expect_equal(estim2$Mean, c(15.63333, 26.90833), tolerance = 1e-4)
@@ -239,14 +387,45 @@ test_that("estimate_means() - lm", {
     tolerance = 1e-4
   )
 
-  estim1 <- suppressMessages(estimate_means(model, by = c("factor1", "factor2", "factor3='E'"), backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = c("factor1", "factor2", "factor3='E'"), backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(
+    model,
+    by = c("factor1", "factor2", "factor3='E'"),
+    backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    by = c("factor1", "factor2", "factor3='E'"),
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(4L, 7L))
   expect_identical(dim(estim2), c(4L, 9L))
-  expect_equal(estim1$Mean, estim2$Mean[order(estim2$factor2, decreasing = TRUE)], tolerance = 1e-4)
-  expect_equal(estim1$CI_low, estim2$CI_low[order(estim2$factor2, decreasing = TRUE)], tolerance = 1e-3)
+  expect_equal(
+    estim1$Mean,
+    estim2$Mean[order(estim2$factor2, decreasing = TRUE)],
+    tolerance = 1e-4
+  )
+  expect_equal(
+    estim1$CI_low,
+    estim2$CI_low[order(estim2$factor2, decreasing = TRUE)],
+    tolerance = 1e-3
+  )
 })
 
+test_that("estimate_means() - predict grand mean", {
+  data(mtcars)
+  m <- lm(mpg ~ 1, data = mtcars)
+  expect_error(
+    estimate_means(m, backend = "emmeans"),
+    regex = "the grand mean",
+    fixed = TRUE
+  )
+  out <- estimate_means(m, by = NULL, backend = "emmeans")
+  expect_equal(out$Mean, 20.09062, tolerance = 1e-3)
+
+  expect_error(estimate_means(m), regex = "the grand mean", fixed = TRUE)
+  out <- estimate_means(m, by = NULL)
+  expect_equal(out$Mean, 20.09062, tolerance = 1e-3)
+})
 
 test_that("estimate_means() - lm, protect integers", {
   skip_if(packageVersion("insight") <= "1.1.0")
@@ -262,9 +441,21 @@ test_that("estimate_means() - lm, protect integers", {
 test_that("estimate_expectation() - at specific values", {
   data(iris)
   m <- lm(Sepal.Width ~ Petal.Length + Species * Petal.Width, data = iris)
-  expect_silent(estimate_expectation(m, by = c("Species", "Petal.Width = [fivenum]"), preserve_range = FALSE))
-  estim1 <- estimate_expectation(m, by = c("Species", "Petal.Width = [fivenum]"), preserve_range = FALSE)
-  estim2 <- estimate_expectation(m, by = c("Species", "Petal.Width = [fivenum]"), preserve_range = FALSE)
+  expect_silent(estimate_expectation(
+    m,
+    by = c("Species", "Petal.Width = [fivenum]"),
+    preserve_range = FALSE
+  ))
+  estim1 <- estimate_expectation(
+    m,
+    by = c("Species", "Petal.Width = [fivenum]"),
+    preserve_range = FALSE
+  )
+  estim2 <- estimate_expectation(
+    m,
+    by = c("Species", "Petal.Width = [fivenum]"),
+    preserve_range = FALSE
+  )
   expect_equal(estim1$Predicted, estim2$Predicted, tolerance = 1e-4)
   expect_equal(
     estim1$Petal.Width,
@@ -303,14 +494,23 @@ test_that("estimate_means() - glm", {
   model <- glm(Petal.Length_factor ~ Species, data = dat, family = "binomial")
 
   estim1 <- suppressMessages(estimate_means(model, backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects", verbose = FALSE))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    backend = "marginaleffects",
+    verbose = FALSE
+  ))
   expect_identical(dim(estim1), c(3L, 5L))
   expect_identical(dim(estim2), c(3L, 4L))
   expect_equal(estim1$Probability, estim2$Probability, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-2)
 
   estim1 <- suppressMessages(estimate_means(model, predict = "link", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, predict = "link", verbose = FALSE, backend = "marginaleffects"))
+  estim2 <- suppressMessages(estimate_means(
+    model,
+    predict = "link",
+    verbose = FALSE,
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim1), c(3L, 5L))
   expect_identical(dim(estim2), c(3L, 6L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
@@ -349,18 +549,33 @@ test_that("get_marginaleffects, value definition in `by`", {
 
   predictions <- estimate_means(model2, c("time = 2", "grp"), backend = "marginaleffects")
   expect_equal(predictions$Mean, c(0.23165, 0.17628), tolerance = 1e-4)
-  expect_identical(predictions$time, structure(c(2L, 2L), levels = c("1", "2", "3"), class = "factor"))
+  expect_identical(
+    predictions$time,
+    structure(c(2L, 2L), levels = c("1", "2", "3"), class = "factor")
+  )
 
-  predictions <- estimate_means(model2, c("time = factor(2)", "grp"), backend = "marginaleffects")
+  predictions <- estimate_means(
+    model2,
+    c("time = factor(2)", "grp"),
+    backend = "marginaleffects"
+  )
   expect_equal(predictions$Mean, c(0.23165, 0.17628), tolerance = 1e-4)
   expect_identical(predictions$time, structure(c(1L, 1L), levels = "2", class = "factor"))
 
-  difference <- estimate_contrasts(model2, c("time = factor(2)", "grp"), backend = "marginaleffects")
+  difference <- estimate_contrasts(
+    model2,
+    c("time = factor(2)", "grp"),
+    backend = "marginaleffects"
+  )
   expect_equal(difference$Difference, -0.05536674, tolerance = 1e-4)
   expect_identical(as.character(difference$Level1), "treatment")
   expect_identical(as.character(difference$Level2), "control")
 
-  difference <- estimate_contrasts(model2, c("time = 2", "grp"), backend = "marginaleffects")
+  difference <- estimate_contrasts(
+    model2,
+    c("time = 2", "grp"),
+    backend = "marginaleffects"
+  )
   expect_equal(difference$Difference, -0.05536674, tolerance = 1e-4)
   expect_identical(as.character(difference$Level1), "treatment")
   expect_identical(as.character(difference$Level2), "control")
@@ -370,7 +585,6 @@ test_that("get_marginaleffects, value definition in `by`", {
   #   estimate_contrasts(model2, "time = factor(2)", by = "grp", backend = "marginaleffects"),
   #   regex = "No contrasts"
   # )
-
 
   set.seed(123)
   n <- 200
@@ -385,7 +599,11 @@ test_that("get_marginaleffects, value definition in `by`", {
   expect_equal(predictions$Mean, c(0.23165, 0.17628), tolerance = 1e-4)
   expect_identical(predictions$time, c(2, 2))
 
-  difference <- estimate_contrasts(model2, c("time = 2", "grp"), backend = "marginaleffects")
+  difference <- estimate_contrasts(
+    model2,
+    c("time = 2", "grp"),
+    backend = "marginaleffects"
+  )
   expect_equal(difference$Difference, -0.05536674, tolerance = 1e-4)
   expect_identical(difference$Parameter, "treatment - control")
 })
@@ -401,11 +619,7 @@ test_that("estimate_means, values inside correct bounds", {
     var2 = rnorm(100, 10, 7)
   )
 
-  m <- glm(
-    outcome ~ var1 * var2,
-    data = data,
-    family = binomial(link = "logit")
-  )
+  m <- glm(outcome ~ var1 * var2, data = data, family = binomial(link = "logit"))
 
   out1 <- estimate_means(m, c("var2 = [sd]", "var1"), backend = "marginaleffects")
   out2 <- estimate_means(m, c("var2 = [sd]", "var1"), backend = "emmeans")
@@ -437,7 +651,11 @@ test_that("estimate_means, full averaging", {
   # in the data grid, this, `newdata = "balanced"` gives slightly different results
   # we therefor calculate the data grid manually here
   d <- insight::get_datagrid(m, by = c("c161sex", "c172code"), factors = "all")
-  estim1 <- marginaleffects::avg_predictions(m, newdata = d, by = c("c161sex", "c172code"))
+  estim1 <- marginaleffects::avg_predictions(
+    m,
+    newdata = d,
+    by = c("c161sex", "c172code")
+  )
   estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "typical")
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
@@ -483,27 +701,13 @@ test_that("estimate_means, coxph-survival", {
     c("dtime=c(1000, 2000, 3000, 4000)", "hormon"),
     predict = "survival"
   )
-  expect_named(
-    emm,
-    c("dtime", "hormon", "Probability", "SE", "CI_low", "CI_high", "z")
-  )
+  expect_named(emm, c("dtime", "hormon", "Probability", "SE", "CI_low", "CI_high", "z"))
   expect_equal(
     emm$Probability,
     c(0.8982, 0.86121, 0.7775, 0.70451, 0.68016, 0.58485, 0.58174, 0.47051),
     tolerance = 1e-4
   )
-  emm <- estimate_means(
-    model,
-    "hormon",
-    predict = "risk"
-  )
-  expect_named(
-    emm,
-    c("hormon", "Mean", "SE", "CI_low", "CI_high", "z")
-  )
-  expect_equal(
-    emm$Mean,
-    c(0.82661, 1.15039),
-    tolerance = 1e-4
-  )
+  emm <- estimate_means(model, "hormon", predict = "risk")
+  expect_named(emm, c("hormon", "Mean", "SE", "CI_low", "CI_high", "z"))
+  expect_equal(emm$Mean, c(0.82661, 1.15039), tolerance = 1e-4)
 })

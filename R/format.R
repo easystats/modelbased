@@ -60,6 +60,11 @@ format.estimate_contrasts <- function(
   if ("group" %in% colnames(x)) {
     by <- unique("group", by)
   }
+  # for emmeans, when we predict the grand mean, by is `~1` to avoid errors when
+  # selecting "by" from the data below, we set it to NULL here
+  if (is.language(by)) {
+    by <- NULL
+  }
   # check which columns actually exist
   if (!is.null(by)) {
     by <- intersect(by, colnames(x))

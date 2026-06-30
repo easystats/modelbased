@@ -63,9 +63,18 @@ get_emmeans <- function(
   fun_args <- list(model, specs = my_args$emmeans_specs, at = my_args$emmeans_at)
 
   # handle distributional parameters
-  if (predict %in% .brms_aux_elements(model) && inherits(model, "brmsfit")) {
-    dpars <- TRUE
-    fun_args$dpar <- predict
+  if (inherits(model, "brmsfit")) {
+    if (identical(predict, "response")) {
+      dpars <- FALSE
+      fun_args$epred <- TRUE
+      fun_args$type <- "response"
+    } else if (predict %in% .brms_aux_elements(model)) {
+      dpars <- TRUE
+      fun_args$dpar <- predict
+    } else {
+      dpars <- FALSE
+      fun_args$type <- predict
+    }
   } else {
     dpars <- FALSE
     fun_args$type <- predict
@@ -134,18 +143,20 @@ get_emmeans <- function(
       # if still no factors found, throw error
       if (is.null(factors)) {
         insight::format_error(
-          "Model contains no categorical factor. Please specify `by`."
+          "Model contains no categorical factor. Please specify `by`, or use `by = NULL` to predict the grand mean."
         )
       }
       by <- factors
     }
-    if (verbose) {
+    if (verbose && !identical(deparse(by), "~1")) {
       insight::format_alert(paste0(
         "We selected `by = c(",
         toString(paste0('"', by, '"')),
         ")`."
       ))
     }
+  } else if (is.null(by)) {
+    by <- ~1
   }
 
   my_args <- list(by = by)
@@ -245,8 +256,12 @@ get_emmeans <- function(
     args$data_matrix <- expand.grid(args$by)
     args$by <- names(args$data_matrix)
   } else if (inherits(args$by, "formula")) {
-    args$data_matrix <- stats::model.frame(args$by, data = data)
-    args$by <- names(args$data_matrix)
+    if (identical(deparse(args$by), "~1")) {
+      args$data_matrix <- NULL
+    } else {
+      args$data_matrix <- stats::model.frame(args$by, data = data)
+      args$by <- names(args$data_matrix)
+    }
   } else {
     if (!is.null(args$by) && all(args$by == "all")) {
       target <- intersect(predictors, colnames(data))
