@@ -329,7 +329,11 @@ estimate_grouplevel.stanreg <- function(
 
     params$Parameter <- insight::trim_ws(sub(":.*", "", clean_parameters$Group))
     params$Group <- insight::trim_ws(sub("^[^:]*:", "", clean_parameters$Group))
-    params$Level <- insight::trim_ws(sub("^[^:]*:", "", clean_parameters$Cleaned_Parameter))
+    params$Level <- insight::trim_ws(sub(
+      "^[^:]*:",
+      "",
+      clean_parameters$Cleaned_Parameter
+    ))
   }
 
   # TODO: improve / add new printing that groups by group/level?
@@ -359,7 +363,10 @@ estimate_grouplevel.stanreg <- function(
   attr(random, "type") <- type
   attr(random, "model") <- model
   attr(random, "parameters") <- params
-  attr(random, "coef_name") <- intersect(.valid_coefficient_names(model), colnames(random))
+  attr(random, "coef_name") <- intersect(
+    .valid_coefficient_names(model),
+    colnames(random)
+  )
   attr(random, "data") <- .safe(model_data[model_random])
 
   class(random) <- c("estimate_grouplevel", class(random))
@@ -370,9 +377,11 @@ estimate_grouplevel.stanreg <- function(
 .clean_grouplevel <- function(random) {
   row.names(random) <- NULL
   random$Effects <- NULL
-  if ("Component" %in% names(random) &&
-    insight::has_single_value(random$Component, remove_na = TRUE) &&
-    unique(random$Component) == "conditional"
+  if (
+    "Component" %in%
+      names(random) &&
+      insight::has_single_value(random$Component, remove_na = TRUE) &&
+      unique(random$Component) == "conditional"
   ) {
     random$Component <- NULL
   }
@@ -436,7 +445,13 @@ estimate_grouplevel.stanreg <- function(
 
   # Extract coefs
   for (g in randomgroups) {
-    intercepts <- estimate_means(model, by = g, include_random = TRUE, estimate = estimate, ...)
+    intercepts <- estimate_means(
+      model,
+      by = g,
+      include_random = TRUE,
+      estimate = estimate,
+      ...
+    )
     out[[g]] <- data.frame(
       Group = g,
       Level = intercepts[[g]],
@@ -449,7 +464,14 @@ estimate_grouplevel.stanreg <- function(
 
     if (g %in% names(randomslopes)) {
       for (s in randomslopes[[g]]) {
-        slopes <- estimate_slopes(model, by = g, trend = s, include_random = TRUE, estimate = estimate, ...)
+        slopes <- estimate_slopes(
+          model,
+          by = g,
+          trend = s,
+          include_random = TRUE,
+          estimate = estimate,
+          ...
+        )
         out[[paste(g, s, sep = "_")]] <- data.frame(
           Group = g,
           Level = slopes[[g]],
