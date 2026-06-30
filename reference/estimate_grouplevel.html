@@ -13,7 +13,7 @@ which can be useful to add the random effects to the original data."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -138,34 +138,42 @@ which can be useful to add the random effects to the original data.</p>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Other arguments passed to <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>.</p></dd>
+<dd><p>Other arguments passed to <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code> or <code><a href="estimate_means.html">estimate_means()</a></code>.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>String, describing the type of estimates that should be returned.
 Can be <code>"random"</code>, <code>"total"</code>, or <code>"marginal"</code> (experimental).</p><ul><li><p>If <code>"random"</code> (default), the coefficients correspond to the conditional
-estimates of  the random effects (as they are returned by <code><a href="https://rdrr.io/pkg/nlme/man/random.effects.html" class="external-link">lme4::ranef()</a></code>).
+estimates of the random effects (as they are returned by <code><a href="https://rdrr.io/pkg/nlme/man/random.effects.html" class="external-link">lme4::ranef()</a></code>).
 They typically correspond to the deviation of each individual group from
 their fixed effect (assuming the random effect is also included as a fixed
 effect). As such, a coefficient close to 0 means that the participants'
 effect is the same as the population-level effect (in other words, it is
-"in the norm").</p></li>
+"in the norm"). These estimates are typically the same as the "total" ones,
+but are simply expressed on a different scale: <em>relative</em> to the fixed effect
+vs. <em>absolute</em> coefficient values.</p></li>
 <li><p>If <code>"total"</code>, it will return the sum of the random effect and its
 corresponding fixed effects, which internally relies on the <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> method
 (see <code><a href="https://rdrr.io/pkg/lme4/man/merMod-class.html" class="external-link">?coef.merMod</a></code>). Note that <code>type = "total"</code> yet does not return
 uncertainty indices (such as SE and CI) for models from <em>lme4</em> or
 <em>glmmTMB</em>, as the necessary information to compute them is not yet
 available. However, for Bayesian models, it is possible to compute them.</p></li>
-<li><p>If <code>"marginal"</code> (experimental), it returns marginal group-levels
+<li><p>If <code>"marginal"</code> (experimental), it returns marginal group-level
 estimates. The random intercepts are computed using marginal means (see
 <code><a href="estimate_means.html">estimate_means()</a></code>), and the random slopes using marginal effects (see
 <code><a href="estimate_slopes.html">estimate_slopes()</a></code>). This method does not directly extract the parameters
-estimated by the model, but recomputes them using model predictions. While
-this is more computationally intensive, one of the benefits include
-interpretability: the random intercepts correspond to the "mean" value of
-the outcome for each group, and the random slopes correspond to the direct
-average "effect" of the predictor for each random group. Note that in this
-case, the group-level estimates are not technically "intercepts" or model
+estimated by the model, but recomputes them using model predictions.
+By default, the function uses "typical" marginalization (<code>estimate = "typical"</code>).
+This results in estimates closely comparable to that when
+<code>type = "total"</code> (and identical to it when continuous predictors are
+mean-centered). Setting <code>estimate = "average"</code> instead returns each
+group's <em>actual</em> average predicted outcome, based on that group's own
+observed predictor distribution rather than a shared reference point
+(see below for details on this distinction). One
+benefit of <code>"marginal"</code> over <code>"total"</code>/<code>"random"</code> is interpretability for
+non-linear models (e.g. logistic or count GLMMs), since predictions are
+expressed on the response scale rather than the link scale. Note that
+group-level estimates here are not technically "intercepts" or model
 parameters, but marginal average levels and effects.</p></li>
 </ul></dd>
 
@@ -193,9 +201,70 @@ columns) to extract (e.g., "Coefficient", "Median").</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Unlike raw group means, BLUPs apply shrinkage: they are a compromise between
+    <p><strong>Benefits of model-based group-level estimates:</strong></p>
+<p>Unlike raw group means, BLUPs apply shrinkage: they are a compromise between
 the group estimate and the population estimate. This improves generalizability
 and prevents overfitting.</p>
+<p><strong>What group-level estimates tell you:</strong></p>
+<p>Imagine the two following scenarios:</p><ul><li><p>Scenario 1: A reaction time task where each trial is assigned to a
+difficulty condition. It is a manipulated, balanced experimental condition.
+We have model like <code>rt ~ Condition + (Condition | Participant)</code>, where
+<code>Condition</code> (1-5) is assigned by the experiment, so every participant
+completes the same set of levels in the same proportions.</p></li>
+<li><p>Scenario 2: A reaction time task where participants rate each trial
+according to their own self-reported confidence - e.g.
+<code>rt ~ Confidence + (Confidence | Participant)</code>, where <code>Confidence</code> (1-5)
+is generated by the participant, and so varies by participant both in
+its average level (some participants report high confidence overall,
+some low) and in how strongly it relates to RT (some have strong
+metacognition - a steep slope - others don't).</p></li>
+</ul><p>In <strong>Scenario 1</strong>, interpretation is straightforward and largely
+insensitive to which method is used (<code>"random"</code>, <code>"total"</code>, or
+<code>"marginal"</code>, with either <code>estimate</code> option). Because every participant
+is exposed to the same balanced set of <code>Condition</code> levels, each
+participant's own mean <code>Condition</code> already equals the grand mean. There
+is no meaningful difference between evaluating at a shared reference
+point versus at each participant's own observed values, so all
+approaches converge on essentially the same answer: the random intercept
+values tell us how fast or slow each participant is overall, and the random
+slopes of Condition tell us how strongly each
+participant's RT is affected by increasing difficulty, relative to the
+population-level effect of Condition.</p>
+<p>In <strong>Scenario 2</strong>, this is no longer true, and the choice of method
+changes what the random intercepts and slopes mean. Two
+families of estimates emerge:</p><ul><li><p><code>type = "total"</code>/<code>"random"</code>, and <code>type = "marginal"</code> with
+<code>estimate = "typical"</code> (default), all evaluate every participant at
+one <em>shared</em> reference point (the model's intercept, or the grand mean of
+<code>Confidence</code>, respectively). These target each participant's
+<em>intrinsic</em> characteristics - their personal regression line itself -
+independently of how often they happened to report a given confidence
+level. The trade-off is that this can be a counterfactual quantity:
+for a participant whose confidence ratings rarely approach the grand
+mean, "their predicted RT at average confidence" extrapolates beyond
+what they actually reported. The random intercept tells us how fast or
+slow this participant would intrinsically be at the same (hypothetical)
+confidence level, and the random slope of Confidence tells us how strongly
+their RT is intrinsically tied to their own confidence ratings - both
+independent of how often they happen to report high or low confidence.</p></li>
+<li><p><code>type = "marginal"</code> with <code>estimate = "average"</code> instead evaluates each
+participant using <em>their own</em> observed distribution of <code>Confidence</code>.
+This avoids extrapolation, but it now conflates the participant's
+intrinsic regression parameters with their personal response style: a
+chronically high-confidence participant with a steep slope will get a
+marginal intercept reflecting <em>both</em> their baseline speed <em>and</em> their
+tendency to report high confidence, entangled into a single number. It
+is no longer a controlled, like-for-like comparison across
+participants. The random intercept tells us how fast or slow this
+participant actually was, on average, across the confidence levels
+they actually reported while the random slope tells us how strongly
+their RT tracks their own confidence ratings.</p></li>
+</ul><p>As a rule of thumb: use <code>"total"</code>, <code>"random"</code>, or <code>"marginal"</code> with
+<code>estimate = "typical"</code> when you want each group's <em>intrinsic</em>
+characteristics, comparable on equal footing across groups. Use
+<code>"marginal"</code> with <code>estimate = "average"</code> when you want each group's
+<em>actual, as-observed</em> outcome, accepting that it may reflect a mix of
+intrinsic effect and exposure or response style, especially when the predictors
+values vary across random factor levels.</p>
     </div>
 
     <div class="section level2">
@@ -227,15 +296,14 @@ and prevents overfitting.</p>
 <span class="r-in"><span><span class="va">alldata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">reshaped</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># overall coefficients</span></span></span>
-<span class="r-in"><span><span class="fu">estimate_grouplevel</span><span class="op">(</span><span class="va">model</span>, type <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Group | Level | Parameter   | Coefficient</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 1     | (Intercept) |       30.18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 2     | (Intercept) |       29.88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 3     | (Intercept) |       29.45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 4     | (Intercept) |       28.99</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 6     | (Intercept) |       29.87</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 8     | (Intercept) |       30.27</span>
+<span class="r-in"><span><span class="va">r_tot</span> <span class="op">&lt;-</span> <span class="fu">estimate_grouplevel</span><span class="op">(</span><span class="va">model</span>, type <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">r_tot</span><span class="op">$</span><span class="va">Coefficient</span>, <span class="va">random</span><span class="op">$</span><span class="va">Coefficient</span><span class="op">)</span> <span class="co"># r = 1 (just a scale difference)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># marginal coefficients</span></span></span>
+<span class="r-in"><span><span class="va">r_mar</span> <span class="op">&lt;-</span> <span class="fu">estimate_grouplevel</span><span class="op">(</span><span class="va">model</span>, type <span class="op">=</span> <span class="st">"marginal"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">r_mar</span><span class="op">$</span><span class="va">Coefficient</span>, <span class="va">r_tot</span><span class="op">$</span><span class="va">Coefficient</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
