@@ -673,11 +673,17 @@ get_marginalmeans <- function(
         factors <- attributes(model_frame)$factors
         # if still no factors found, throw error
         if (is.null(factors)) {
-          insight::format_error(paste0(
+          # tell user to specify argument
+          msg <- paste0(
             "Model contains no categorical predictor. Please specify `",
             spec_name,
             "`."
-          ))
+          )
+          # for `by`, we also allow NULL - tell user
+          if (identical(spec_name, "by")) {
+            msg <- paste(msg, "Or use `by = NULL` to predict the grand mean.")
+          }
+          insight::format_error(msg)
         }
         spec_value <- factors
       }

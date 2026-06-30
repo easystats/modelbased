@@ -143,18 +143,20 @@ get_emmeans <- function(
       # if still no factors found, throw error
       if (is.null(factors)) {
         insight::format_error(
-          "Model contains no categorical factor. Please specify `by`."
+          "Model contains no categorical factor. Please specify `by`, or use `by = NULL` to predict the grand mean."
         )
       }
       by <- factors
     }
-    if (verbose) {
+    if (verbose && !identical(deparse(by), "~1")) {
       insight::format_alert(paste0(
         "We selected `by = c(",
         toString(paste0('"', by, '"')),
         ")`."
       ))
     }
+  } else if (is.null(by)) {
+    by <- ~1
   }
 
   my_args <- list(by = by)
@@ -165,11 +167,7 @@ get_emmeans <- function(
 ## TODO: validate predict argument to make sure it only has valid options
 .get_emmeans_type_argument <- function(model, predict, type = "means", ...) {
   if (is.null(predict)) {
-    predict <- switch(type,
-      means = "response",
-      contrasts = "response",
-      "none"
-    )
+    predict <- switch(type, means = "response", contrasts = "response", "none")
   } else if (predict == "link") {
     predict <- "none"
   }
@@ -258,8 +256,12 @@ get_emmeans <- function(
     args$data_matrix <- expand.grid(args$by)
     args$by <- names(args$data_matrix)
   } else if (inherits(args$by, "formula")) {
-    args$data_matrix <- stats::model.frame(args$by, data = data)
-    args$by <- names(args$data_matrix)
+    if (identical(deparse(args$by), "~1")) {
+      args$data_matrix <- NULL
+    } else {
+      args$data_matrix <- stats::model.frame(args$by, data = data)
+      args$by <- names(args$data_matrix)
+    }
   } else {
     if (!is.null(args$by) && all(args$by == "all")) {
       target <- intersect(predictors, colnames(data))
