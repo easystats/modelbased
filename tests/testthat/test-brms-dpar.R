@@ -11,7 +11,7 @@ skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
 
 
-test_that("estimate_means - brms, multivariate", {
+test_that("estimate_means - brms, chocomini dpars", {
   m <- insight::download_model("brms_chocomini_2")
   skip_if(is.null(m))
 
