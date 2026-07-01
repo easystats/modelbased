@@ -88,6 +88,12 @@ test_that("estimate_slopes", {
   )
   expect_named(estim2, c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "z", "p"))
 
+  # suppress CI
+  out <- suppressMessages(estimate_slopes(model, ci = NULL))
+  expect_named(out, "Slope")
+  out <- suppressMessages(estimate_slopes(model, ci = NA))
+  expect_named(out, "Slope")
+
   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 
   estim1 <- suppressMessages(estimate_slopes(

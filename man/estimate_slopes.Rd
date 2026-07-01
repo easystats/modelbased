@@ -70,7 +70,9 @@ transformation is selected (which usually is \code{"response"}). See also
 
 See also section \emph{Predictions on different scales}.}
 
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+\item{ci}{Confidence Interval (CI) level. Must be numeric between 0 and 1.
+Defaults to \code{0.95}. Use \code{NULL} to suppress calculation of standard errors and
+confidence intervals.}
 
 \item{estimate}{The \code{estimate} argument determines how predictions are
 averaged ("marginalized") over variables not specified in \code{by} or \code{contrast}

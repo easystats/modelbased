@@ -83,7 +83,9 @@ you are directly predicting the value of some distributional parameter), and
 the corresponding functions will then only differ in the default value of
 their \code{data} argument.}
 
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+\item{ci}{Confidence Interval (CI) level. Must be numeric between 0 and 1.
+Defaults to \code{0.95}. Use \code{NULL} to suppress calculation of standard errors and
+confidence intervals.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression

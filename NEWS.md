@@ -1,3 +1,10 @@
+# modelbased (devel)
+
+## Changes
+
+* `ci = NULL` now suppresses calculation of standard errors and confidence
+  intervals.
+
 # modelbased 0.16.0
 
 ## Changes

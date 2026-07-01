@@ -129,6 +129,12 @@ get_marginaltrends <- function(
     fun_args$type <- predict
   }
 
+  # missing or NA for conf_level? If so, we want to suppress SE and CI
+  if (is.null(fun_args$conf_level) || is.na(fun_args$conf_level)) {
+    fun_args$conf_level <- NULL # for NA
+    fun_args$vcov <- FALSE
+  }
+
   # Third step: compute marginal slopes ---------------------------------------
   # ---------------------------------------------------------------------------
 

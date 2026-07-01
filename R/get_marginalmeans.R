@@ -184,6 +184,12 @@ get_marginalmeans <- function(
     fun_args$re.form <- NULL
   }
 
+  # missing or NA for conf_level? If so, we want to suppress SE and CI
+  if (is.null(fun_args$conf_level) || is.na(fun_args$conf_level)) {
+    fun_args$conf_level <- NULL # for NA
+    fun_args$vcov <- FALSE
+  }
+
   # transform reponse?
   if (isTRUE(transform)) {
     transform <- insight::get_transformation(model, verbose = FALSE)$inverse
