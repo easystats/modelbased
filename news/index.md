@@ -2,6 +2,8 @@
 
 ## modelbased 0.16.0
 
+CRAN release: 2026-06-30
+
 ### Changes
 
 - Informative error message when the `trend` variable in
