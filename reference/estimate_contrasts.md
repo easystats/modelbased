@@ -160,7 +160,9 @@ estimate_contrasts(
 
 - ci:
 
-  Confidence Interval (CI) level. Default to `0.95` (`95%`).
+  Confidence Interval (CI) level. Must be numeric between 0 and 1.
+  Defaults to `0.95`. Use `NULL` to suppress calculation of standard
+  errors and confidence intervals.
 
 - comparison:
 
