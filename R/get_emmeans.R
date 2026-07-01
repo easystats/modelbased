@@ -238,13 +238,63 @@ get_emmeans <- function(
 
 # Bring arguments in shape for emmeans ----------------------------------------
 
+# extract variable names referenced by "by" / "contrast" / "trend" arguments,
+# regardless of whether these were provided as character, formula, list or
+# data frame
+#' @keywords internal
+.get_emmeans_arg_vars <- function(x) {
+  if (is.null(x)) {
+    character(0)
+  } else if (is.character(x)) {
+    x
+  } else if (inherits(x, "formula")) {
+    all.vars(x)
+  } else if (is.list(x) || is.data.frame(x)) {
+    names(x)
+  } else {
+    character(0)
+  }
+}
+
 #' @keywords internal
 .process_emmeans_arguments <- function(model, args, data, ...) {
   # Create the data_matrix
   # ---------------------------
   # data <- insight::get_data(model, verbose = FALSE)
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
-  data <- data[intersect(predictors, colnames(data))]
+
+  # `by` / `contrast` / `trend` may refer to variables that are not part of
+  # the fixed effects (e.g., random effects grouping factors, see #798).
+  # Make sure these are not dropped from `data`, else `insight::get_datagrid()`
+  # fails to find them later.
+  extra_vars <- unique(c(
+    .get_emmeans_arg_vars(args$by),
+    .get_emmeans_arg_vars(args$contrast),
+    .get_emmeans_arg_vars(args$trend)
+  ))
+
+  # `emmeans` builds its reference grid from the fixed effects part of the
+  # model only. Thus, variables that are exclusively used as random effects
+  # grouping factors (e.g., "Subject" in `(1 | Subject)`) can never be part
+  # of that grid, unlike for the "marginaleffects" backend, which builds the
+  # data grid directly from the data and can therefore handle such variables.
+  # We detect this situation early and give an informative error message
+  # instead of letting this fail downstream with a cryptic error (#798).
+  random_predictors <- setdiff(
+    insight::find_predictors(model, effects = "random", flatten = TRUE, ...),
+    predictors
+  )
+  unsupported <- intersect(extra_vars, random_predictors)
+  if (length(unsupported)) {
+    insight::format_error(paste0(
+      "Variable ",
+      datawizard::text_concatenate(unsupported, enclose = "`"),
+      " only used as random effects grouping factor and cannot be used ",
+      "with `backend = \"emmeans\"`. Please use `backend = \"marginaleffects\"` instead."
+    ))
+  }
+
+  data <- data[intersect(union(predictors, extra_vars), colnames(data))]
 
   # Deal with 'at'
   if (is.null(args$by)) {

@@ -29,6 +29,13 @@
 
 * Minor bug fix when evaluating `slope` and `by` arguments in `estimate_slopes()`.
 
+* `get_emcontrasts()`, `get_emmeans()` and `get_emtrends()` (i.e., functions
+  using `backend = "emmeans"`) now give an informative error message when
+  `by` or `contrast` refer to a variable that is only used as random effects
+  grouping factor (e.g., `Subject` in `(1 | Subject)`), instead of failing
+  with a cryptic error. Such variables can only be used with
+  `backend = "marginaleffects"`.
+
 # modelbased 0.15.0
 
 ## Breaking Changes
