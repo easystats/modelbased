@@ -711,3 +711,25 @@ test_that("estimate_means, coxph-survival", {
   expect_named(emm, c("hormon", "Mean", "SE", "CI_low", "CI_high", "z"))
   expect_equal(emm$Mean, c(0.82661, 1.15039), tolerance = 1e-4)
 })
+
+
+test_that("estimate_means, backend emmeans, errors when predicting RE", {
+  skip_if_not_installed("lme4")
+  data(mtcars)
+  m1 <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)
+  expect_error(
+    estimate_means(m1, "carb", backend = "emmeans"),
+    regex = "Variable `carb` only used",
+    fixed = TRUE
+  )
+  expect_error(
+    estimate_means(m1, "carb=c(2,4)", backend = "emmeans"),
+    regex = "Variable `carb` only used",
+    fixed = TRUE
+  )
+  expect_error(
+    estimate_means(m1, c("hp", "carb"), backend = "emmeans"),
+    regex = "Variable `carb` only used",
+    fixed = TRUE
+  )
+})
