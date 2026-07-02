@@ -115,6 +115,9 @@
 #' number, only as many columns as indicated in `keep_iterations` will be added
 #' to the output. You can reshape them to a long format by running
 #' [`bayestestR::reshape_iterations()`].
+#' @param ci Confidence Interval (CI) level. Must be numeric between 0 and 1.
+#' Defaults to `0.95`. Use `NULL` to suppress calculation of standard errors and
+#' confidence intervals.
 #' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
@@ -150,9 +153,6 @@
 #'   to fix the offset at a specific value. Or use `estimate = "average"` or
 #'   `estimate = "population"` without specifying the `offset`, to average
 #'   predictions over the distribution of the offset (if appropriate).
-#'
-#' @inheritParams parameters::model_parameters.default
-#' @inheritParams estimate_expectation
 #'
 #' @details
 #' The [estimate_slopes()], [estimate_means()] and [estimate_contrasts()]

@@ -248,7 +248,9 @@ instance, \verb{by="<variable>", length=30}. To calculate average marginal
 effects over a range of values, use \code{trend="<variable> = seq(1, 3, 0.1)"} (or
 similar) and omit the variable provided in \code{trend} from the \code{by} argument.}
 
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+\item{ci}{Confidence Interval (CI) level. Must be numeric between 0 and 1.
+Defaults to \code{0.95}. Use \code{NULL} to suppress calculation of standard errors and
+confidence intervals.}
 
 \item{estimate}{The \code{estimate} argument determines how predictions are
 averaged ("marginalized") over variables not specified in \code{by} or \code{contrast}
