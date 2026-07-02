@@ -179,6 +179,9 @@ get_marginalmeans <- function(
   # cleanup
   fun_args <- insight::compact_list(c(fun_args, dots))
 
+  # handle remaining arguments ---------------------------------------
+  # ------------------------------------------------------------------
+
   ## TODO: need to check against different mixed models results from other packages
   # set to NULL
   if (!"re.form" %in% names(dots)) {
@@ -649,8 +652,8 @@ get_marginalmeans <- function(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
     "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
-    "keep_iterations", "joint_test", "omnibus_test", "vcov", "equivalence",
-    "context_effects"
+    "iterations", "keep_iterations", "joint_test", "omnibus_test", "vcov",
+    "equivalence", "context_effects"
   )
 }
 
