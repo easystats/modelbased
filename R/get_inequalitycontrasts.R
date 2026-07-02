@@ -9,6 +9,7 @@
   ci,
   estimate = NULL,
   post_process = NULL,
+  iterations = NULL,
   verbose = TRUE,
   ...
 ) {
@@ -75,13 +76,15 @@
     # named list, which we need to specify the pairwise-contrasts. However, we
     # can use the hypothesis argument to specify the pairwise contrasts first, and
     # then calculate the marginal effects inequalities in the second step.
-    out <- marginaleffects::avg_slopes(
+    slopes_args <- insight::compact_list(list(
       model = model,
       variables = my_args$contrast,
       by = my_args$by,
       newdata = datagrid,
-      hypothesis = formulas$f1
-    )
+      hypothesis = formulas$f1,
+      ndraws = iterations
+    ))
+    out <- do.call(marginaleffects::avg_slopes, slopes_args)
     out <- marginaleffects::hypotheses(out, hypothesis = formulas$f2)
     # save some labels for printing
     attr(out, "by") <- my_args$by
@@ -111,12 +114,14 @@
 
       formulas <- .inequality_formula(comparison, group)
 
-      out <- marginaleffects::avg_predictions(
+      predictions_args <- insight::compact_list(list(
         model = model,
         variables = c(my_args$contrast, my_args$by),
         newdata = datagrid,
-        hypothesis = formulas$f1
-      )
+        hypothesis = formulas$f1,
+        ndraws = iterations
+      ))
+      out <- do.call(marginaleffects::avg_predictions, predictions_args)
       out <- marginaleffects::hypotheses(out, hypothesis = formulas$f2)
     } else {
       # ----------------------------------------------
@@ -136,7 +141,7 @@
       }
       # for this special case, we need "avg_comparisons()", else we cannot specify
       # the "variables" argument as named list
-      out <- marginaleffects::avg_comparisons(
+      comparisons_args <- insight::compact_list(list(
         model = model,
         variables = as.list(stats::setNames(
           rep_len("pairwise", length(my_args$contrast)),
@@ -145,8 +150,9 @@
         by = my_args$by,
         newdata = datagrid,
         hypothesis = formulas$f2,
-        ...
-      )
+        ndraws = iterations
+      ))
+      out <- do.call(marginaleffects::avg_comparisons, c(comparisons_args, list(...)))
     }
   }
 
