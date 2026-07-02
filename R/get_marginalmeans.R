@@ -28,6 +28,7 @@ get_marginalmeans <- function(
   ci = 0.95,
   estimate = NULL,
   transform = NULL,
+  iterations = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -198,6 +199,11 @@ get_marginalmeans <- function(
     fun_args$transform <- transform
   }
 
+  # bayesian models: number of posterior draws to use, passed to `ndraws`
+  if (!is.null(iterations)) {
+    fun_args$ndraws <- iterations
+  }
+
   # Fourth step: compute marginal means ---------------------------------------
   # ---------------------------------------------------------------------------
 
@@ -265,6 +271,7 @@ get_marginalmeans <- function(
         estimate = estimate,
         datagrid = datagrid,
         transform = !is.null(transform),
+        iterations = iterations,
         keep_iterations = keep_iterations,
         joint_test = joint_test,
         omnibus_test = omnibus_test,

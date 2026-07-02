@@ -11,6 +11,7 @@ get_marginalcontrasts <- function(
   transform = NULL,
   post_process = NULL,
   p_adjust = "none",
+  iterations = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -88,6 +89,7 @@ get_marginalcontrasts <- function(
       ci,
       estimate,
       post_process = post_process,
+      iterations = iterations,
       verbose = verbose,
       ...
     )
@@ -104,6 +106,7 @@ get_marginalcontrasts <- function(
       transform = transform,
       post_process = post_process,
       model_info = model_info,
+      iterations = iterations,
       verbose = verbose,
       ...
     )
@@ -136,6 +139,7 @@ get_marginalcontrasts <- function(
       backend = "marginaleffects",
       transform = transform,
       post_process = post_process,
+      iterations = iterations,
       keep_iterations = keep_iterations,
       verbose = verbose,
       ...
@@ -153,6 +157,7 @@ get_marginalcontrasts <- function(
       estimate = estimate,
       transform = transform,
       post_process = post_process,
+      iterations = iterations,
       keep_iterations = keep_iterations,
       verbose = verbose,
       .joint_test = my_args$joint_test,
@@ -183,6 +188,7 @@ get_marginalcontrasts <- function(
       p_adjust = p_adjust,
       contrast_filter = my_args$contrast_filter,
       context_effects = my_args$context_effects,
+      iterations = iterations,
       keep_iterations = keep_iterations
     )
   )

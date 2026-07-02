@@ -16,6 +16,7 @@ get_marginaltrends <- function(
   estimate = NULL,
   transform = NULL,
   p_adjust = "none",
+  iterations = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -135,6 +136,11 @@ get_marginaltrends <- function(
     fun_args$vcov <- FALSE
   }
 
+  # bayesian models: number of posterior draws to use, passed to `ndraws`
+  if (!is.null(iterations)) {
+    fun_args$ndraws <- iterations
+  }
+
   # Third step: compute marginal slopes ---------------------------------------
   # ---------------------------------------------------------------------------
 
@@ -191,6 +197,7 @@ get_marginaltrends <- function(
         p_adjust = p_adjust,
         ci = ci,
         transform = !is.null(transform),
+        iterations = iterations,
         keep_iterations = keep_iterations,
         vcov = vcov_slopes,
         equivalence = dots$equivalence

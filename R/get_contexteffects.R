@@ -8,6 +8,7 @@
   transform = NULL,
   post_process = NULL,
   model_info,
+  iterations = NULL,
   verbose = TRUE,
   ...
 ) {
@@ -51,6 +52,11 @@
       fun_args$type <- predict
       fun_args$transform <- transform
     }
+  }
+
+  # bayesian models: number of posterior draws to use, passed to `ndraws`
+  if (!is.null(iterations)) {
+    fun_args$ndraws <- iterations
   }
 
   out <- do.call(marginaleffects::avg_comparisons, c(fun_args, dots))

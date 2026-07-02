@@ -94,7 +94,15 @@
 #' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See `effect.type`
 #' argument of [`bootES::bootES()`] for details. If not specified, defaults to
 #' `"cohens.d"`.
-#' @param iterations The number of bootstrap resamples to perform.
+#' @param iterations This argument has two distinct effects, depending on
+#' context. When `effectsize = "boot"`, it defines the number of bootstrap
+#' resamples used to calculate the effect size (via [bootES::bootES()]), and
+#' defaults to `200` in this case. For Bayesian models estimated with the
+#' `"marginaleffects"` backend, it is passed to the `ndraws` argument of the
+#' related `marginaleffects` functions, and defines the number of posterior
+#' draws to sample from. If `NULL` (the default), all draws are used. Note
+#' that `ndraws` currently only has an effect for Bayesian models fit with
+#' **brms** or **MCMCglmm**.
 #' @inheritParams estimate_means
 #'
 #' @inherit estimate_means details
@@ -452,7 +460,7 @@ estimate_contrasts.default <- function(
   post_process = NULL,
   keep_iterations = FALSE,
   effectsize = NULL,
-  iterations = 200,
+  iterations = NULL,
   es_type = NULL,
   backend = NULL,
   verbose = TRUE,
@@ -503,6 +511,7 @@ estimate_contrasts.default <- function(
       estimate = estimate,
       transform = transform,
       post_process = post_process,
+      iterations = iterations,
       keep_iterations = keep_iterations,
       verbose = verbose,
       ...
@@ -512,12 +521,14 @@ estimate_contrasts.default <- function(
 
   # add effect size ----------------------------------------------------------
   if (!is.null(effectsize)) {
+    # default number of bootstrap resamples, if not specified
+    bootstraps <- if (is.null(iterations)) 200 else iterations
     out <- .estimate_contrasts_effectsize(
       model = model,
       estimated = estimated,
       contrasts_results = out,
       effectsize = effectsize,
-      bootstraps = iterations,
+      bootstraps = bootstraps,
       bootES_type = es_type,
       backend = backend
     )
