@@ -13,7 +13,8 @@
   verbose = TRUE,
   ...
 ) {
-  dots <- list(...)
+  dots <- .check_dots_data(list(...), verbose)
+
   # extract datagrid?
   if (!is.null(dots$newdata)) {
     datagrid <- dots$newdata

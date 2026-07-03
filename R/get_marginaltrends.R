@@ -108,6 +108,9 @@ get_marginaltrends <- function(
     dots$df <- insight::get_df(model, type = "wald", verbose = FALSE)
   }
 
+  # was "data" argument used? if so, it replaces "newdata" in dots
+  dots <- .check_dots_data(dots, verbose)
+
   # setup arguments again
   fun_args <- insight::compact_list(c(
     list(model, variables = myargs$trend, by = myargs$by, conf_level = ci),

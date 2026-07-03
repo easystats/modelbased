@@ -113,6 +113,9 @@ get_marginalmeans <- function(
   # handle variables/by/newdata
   # ---------------------------
 
+  # was "data" argument used? if so, it replaces "newdata" in dots
+  dots <- .check_dots_data(dots, verbose)
+
   # counterfactual predictions - we need the "variables" argument
   if (estimate == "population") {
     # sanity check
@@ -457,6 +460,22 @@ get_marginalmeans <- function(
   )
 
   list(datagrid = datagrid, datagrid_info = datagrid_info, dots = dots)
+}
+
+
+# handle dots argument -----------------------------------------
+#
+.check_dots_data <- function(dots, verbose) {
+  if (!is.null(dots$data)) {
+    if (!is.null(dots$newdata) && verbose) {
+      insight::format_alert(
+        "Both 'data' and 'newdata' were provided. Please specify only one. Ignoring 'newdata' and using 'data' instead."
+      )
+    }
+    dots$newdata <- dots$data
+    dots$data <- NULL
+  }
+  dots
 }
 
 
