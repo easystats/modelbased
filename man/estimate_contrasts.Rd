@@ -20,7 +20,7 @@ estimate_contrasts(model, ...)
   post_process = NULL,
   keep_iterations = FALSE,
   effectsize = NULL,
-  iterations = 200,
+  iterations = NULL,
   es_type = NULL,
   backend = NULL,
   verbose = TRUE,
@@ -267,7 +267,15 @@ to the output. You can reshape them to a long format by running
 \code{"emmeans"}, \code{"marginal"}, or \code{"boot"}. Default is \code{NULL}, i.e. no effect
 size will be computed.}
 
-\item{iterations}{The number of bootstrap resamples to perform.}
+\item{iterations}{This argument has two distinct effects, depending on
+context. When \code{effectsize = "boot"}, it defines the number of bootstrap
+resamples used to calculate the effect size (via \code{\link[bootES:bootES]{bootES::bootES()}}), and
+defaults to \code{200} in this case. For Bayesian models estimated with the
+\code{"marginaleffects"} backend, it is passed to the \code{ndraws} argument of the
+related \code{marginaleffects} functions, and defines the number of posterior
+draws to sample from. If \code{NULL} (the default), all draws are used. Note
+that \code{ndraws} currently only has an effect for Bayesian models fit with
+\strong{brms} or \strong{MCMCglmm}.}
 
 \item{es_type}{Specifies the type of effect-size measure to estimate when
 using \code{effectsize = "boot"}. One of \code{"unstandardized"}, \code{"cohens.d"},
