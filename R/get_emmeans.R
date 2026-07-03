@@ -289,9 +289,13 @@ get_emmeans <- function(
   unsupported <- intersect(extra_vars, random_predictors)
   if (length(unsupported)) {
     insight::format_error(paste0(
-      "Variable ",
+      if (length(unsupported) == 1) "Variable " else "Variables ",
       datawizard::text_concatenate(unsupported, enclose = "`"),
-      " only used as random effects grouping factor and cannot be used ",
+      if (length(unsupported) == 1) {
+        " is only used as a random-effects grouping factor and cannot be used "
+      } else {
+        " are only used as random-effects grouping factors and cannot be used "
+      },
       "with `backend = \"emmeans\"`. Please use `backend = \"marginaleffects\"` instead."
     ))
   }
