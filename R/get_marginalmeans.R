@@ -69,6 +69,9 @@ get_marginalmeans <- function(
     ...
   )
 
+  # was "data" argument used? if so, it replaces "newdata" in dots
+  dots <- .check_dots_data(dots, verbose)
+
   # Second step: create a data grid -------------------------------------------
   # ---------------------------------------------------------------------------
 
@@ -112,9 +115,6 @@ get_marginalmeans <- function(
 
   # handle variables/by/newdata
   # ---------------------------
-
-  # was "data" argument used? if so, it replaces "newdata" in dots
-  dots <- .check_dots_data(dots, verbose)
 
   # counterfactual predictions - we need the "variables" argument
   if (estimate == "population") {

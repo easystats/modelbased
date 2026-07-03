@@ -23,7 +23,9 @@ get_marginaltrends <- function(
 ) {
   # check if available
   insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
-  dots <- list(...)
+
+  # was "data" argument used? if so, it replaces "newdata" in dots
+  dots <- .check_dots_data(list(...), verbose)
 
   # set defaults
   estimate <- .validate_estimate_arg(estimate)
@@ -107,9 +109,6 @@ get_marginaltrends <- function(
   if (is.null(dots$df) && !model_info$is_bayesian) {
     dots$df <- insight::get_df(model, type = "wald", verbose = FALSE)
   }
-
-  # was "data" argument used? if so, it replaces "newdata" in dots
-  dots <- .check_dots_data(dots, verbose)
 
   # setup arguments again
   fun_args <- insight::compact_list(c(
