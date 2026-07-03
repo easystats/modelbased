@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -383,11 +383,12 @@ size will be computed.</p></dd>
 
 
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
-<dd><p>This argument has two distinct effects, depending on
+<dd><p>This argument has two distinct effects, depending on the
 context. When <code>effectsize = "boot"</code>, it defines the number of bootstrap
 resamples used to calculate the effect size (via <code><a href="https://rdrr.io/pkg/bootES/man/bootES.html" class="external-link">bootES::bootES()</a></code>), and
-defaults to <code>200</code> in this case. For Bayesian models estimated with the
-<code>"marginaleffects"</code> backend, it is passed to the <code>ndraws</code> argument of the
+defaults to <code>200</code> in this case. For Bayesian models used in <code><a href="estimate_means.html">estimate_means()</a></code>,
+<code><a href="estimate_slopes.html">estimate_slopes()</a></code>, or <code>estimate_contrasts()</code> (and when
+<code>backend = "marginaleffects"</code>), it is passed to the <code>ndraws</code> argument of the
 related <code>marginaleffects</code> functions, and defines the number of posterior
 draws to sample from. If <code>NULL</code> (the default), all draws are used. Note
 that <code>ndraws</code> currently only has an effect for Bayesian models fit with

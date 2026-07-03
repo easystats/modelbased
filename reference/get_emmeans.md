@@ -417,16 +417,20 @@ get_marginaltrends(
 
 - iterations:
 
-  This argument has two distinct effects, depending on context. When
+  This argument has two distinct effects, depending on the context. When
   `effectsize = "boot"`, it defines the number of bootstrap resamples
   used to calculate the effect size (via
   [`bootES::bootES()`](https://rdrr.io/pkg/bootES/man/bootES.html)), and
-  defaults to `200` in this case. For Bayesian models estimated with the
-  `"marginaleffects"` backend, it is passed to the `ndraws` argument of
-  the related `marginaleffects` functions, and defines the number of
-  posterior draws to sample from. If `NULL` (the default), all draws are
-  used. Note that `ndraws` currently only has an effect for Bayesian
-  models fit with **brms** or **MCMCglmm**.
+  defaults to `200` in this case. For Bayesian models used in
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md),
+  or
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  (and when `backend = "marginaleffects"`), it is passed to the `ndraws`
+  argument of the related `marginaleffects` functions, and defines the
+  number of posterior draws to sample from. If `NULL` (the default), all
+  draws are used. Note that `ndraws` currently only has an effect for
+  Bayesian models fit with **brms** or **MCMCglmm**.
 
 ## Examples
 
