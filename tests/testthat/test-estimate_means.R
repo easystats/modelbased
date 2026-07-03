@@ -719,17 +719,33 @@ test_that("estimate_means, backend emmeans, errors when predicting RE", {
   m1 <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)
   expect_error(
     estimate_means(m1, "carb", backend = "emmeans"),
-    regex = "Variable `carb` only used",
+    regex = "Variable `carb` is only used",
     fixed = TRUE
   )
   expect_error(
     estimate_means(m1, "carb=c(2,4)", backend = "emmeans"),
-    regex = "Variable `carb` only used",
+    regex = "Variable `carb` is only used",
     fixed = TRUE
   )
   expect_error(
     estimate_means(m1, c("hp", "carb"), backend = "emmeans"),
-    regex = "Variable `carb` only used",
+    regex = "Variable `carb` is only used",
+    fixed = TRUE
+  )
+  m1 <- lme4::lmer(mpg ~ hp + (1 | carb) + (1 | cyl), data = mtcars)
+  expect_error(
+    estimate_means(m1, c("carb", "cyl"), backend = "emmeans"),
+    regex = "Variables `carb` and `cyl` are only",
+    fixed = TRUE
+  )
+  expect_error(
+    estimate_means(m1, c("carb=c(2,4)", "cyl"), backend = "emmeans"),
+    regex = "Variables `carb` and `cyl` are only",
+    fixed = TRUE
+  )
+  expect_error(
+    estimate_means(m1, c("hp", "carb", "cyl"), backend = "emmeans"),
+    regex = "Variables `carb` and `cyl` are only",
     fixed = TRUE
   )
 })
