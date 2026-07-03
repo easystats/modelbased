@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,7 +106,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-16-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-16-0"></a></h3>
-<ul><li>Minor bug fix when evaluating <code>slope</code> and <code>by</code> arguments in <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code>.</li>
+<ul><li><p>Minor bug fix when evaluating <code>slope</code> and <code>by</code> arguments in <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code>.</p></li>
+<li><p><code><a href="../reference/get_emmeans.html">get_emcontrasts()</a></code>, <code><a href="../reference/get_emmeans.html">get_emmeans()</a></code> and <code><a href="../reference/get_emmeans.html">get_emtrends()</a></code> (i.e., functions using <code>backend = "emmeans"</code>) now give an informative error message when <code>by</code>, <code>contrast</code>, or <code>trend</code> refer to a variable that is only used as random effects grouping factor (e.g., <code>Subject</code> in <code>(1 | Subject)</code>), instead of failing with a cryptic error. Such variables can only be used with <code>backend = "marginaleffects"</code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">

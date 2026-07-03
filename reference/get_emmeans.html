@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -155,6 +155,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  post_process <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -167,6 +168,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -181,6 +183,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  estimate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -443,6 +446,18 @@ one of <code>"none"</code> (default), <code>"hochberg"</code>, <code>"hommel"</c
 <code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code>, <code>"sidak"</code>, or <code>"holm"</code>. <code>"sup-t"</code> computes
 simultaneous confidence bands, also called sup-t confidence band (Montiel
 Olea &amp; Plagborg-Møller, 2019).</p></dd>
+
+
+<dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
+<dd><p>This argument has two distinct effects, depending on
+context. When <code>effectsize = "boot"</code>, it defines the number of bootstrap
+resamples used to calculate the effect size (via <code><a href="https://rdrr.io/pkg/bootES/man/bootES.html" class="external-link">bootES::bootES()</a></code>), and
+defaults to <code>200</code> in this case. For Bayesian models estimated with the
+<code>"marginaleffects"</code> backend, it is passed to the <code>ndraws</code> argument of the
+related <code>marginaleffects</code> functions, and defines the number of posterior
+draws to sample from. If <code>NULL</code> (the default), all draws are used. Note
+that <code>ndraws</code> currently only has an effect for Bayesian models fit with
+<strong>brms</strong> or <strong>MCMCglmm</strong>.</p></dd>
 
 </dl></div>
 

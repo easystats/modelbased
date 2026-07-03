@@ -55,6 +55,7 @@ get_marginalcontrasts(
   transform = NULL,
   post_process = NULL,
   p_adjust = "none",
+  iterations = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -67,6 +68,7 @@ get_marginalmeans(
   ci = 0.95,
   estimate = NULL,
   transform = NULL,
+  iterations = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -81,6 +83,7 @@ get_marginaltrends(
   estimate = NULL,
   transform = NULL,
   p_adjust = "none",
+  iterations = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -410,6 +413,19 @@ get_marginaltrends(
   `"fdr"`, `"tukey"`, `"sidak"`, or `"holm"`. `"sup-t"` computes
   simultaneous confidence bands, also called sup-t confidence band
   (Montiel Olea & Plagborg-Møller, 2019).
+
+- iterations:
+
+  This argument has two distinct effects, depending on context. When
+  `effectsize = "boot"`, it defines the number of bootstrap resamples
+  used to calculate the effect size (via
+  [`bootES::bootES()`](https://rdrr.io/pkg/bootES/man/bootES.html)), and
+  defaults to `200` in this case. For Bayesian models estimated with the
+  `"marginaleffects"` backend, it is passed to the `ndraws` argument of
+  the related `marginaleffects` functions, and defines the number of
+  posterior draws to sample from. If `NULL` (the default), all draws are
+  used. Note that `ndraws` currently only has an effect for Bayesian
+  models fit with **brms** or **MCMCglmm**.
 
 ## Examples
 

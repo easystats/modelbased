@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,7 +121,7 @@ and <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p>
 <span>  post_process <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  effectsize <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  iterations <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  es_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  backend <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -382,7 +382,15 @@ size will be computed.</p></dd>
 
 
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
-<dd><p>The number of bootstrap resamples to perform.</p></dd>
+<dd><p>This argument has two distinct effects, depending on
+context. When <code>effectsize = "boot"</code>, it defines the number of bootstrap
+resamples used to calculate the effect size (via <code><a href="https://rdrr.io/pkg/bootES/man/bootES.html" class="external-link">bootES::bootES()</a></code>), and
+defaults to <code>200</code> in this case. For Bayesian models estimated with the
+<code>"marginaleffects"</code> backend, it is passed to the <code>ndraws</code> argument of the
+related <code>marginaleffects</code> functions, and defines the number of posterior
+draws to sample from. If <code>NULL</code> (the default), all draws are used. Note
+that <code>ndraws</code> currently only has an effect for Bayesian models fit with
+<strong>brms</strong> or <strong>MCMCglmm</strong>.</p></dd>
 
 
 <dt id="arg-es-type">es_type<a class="anchor" aria-label="anchor" href="#arg-es-type"></a></dt>

@@ -41,6 +41,16 @@ CRAN release: 2026-06-30
 - Minor bug fix when evaluating `slope` and `by` arguments in
   [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md).
 
+- [`get_emcontrasts()`](https://easystats.github.io/modelbased/reference/get_emmeans.md),
+  [`get_emmeans()`](https://easystats.github.io/modelbased/reference/get_emmeans.md)
+  and
+  [`get_emtrends()`](https://easystats.github.io/modelbased/reference/get_emmeans.md)
+  (i.e., functions using `backend = "emmeans"`) now give an informative
+  error message when `by`, `contrast`, or `trend` refer to a variable
+  that is only used as random effects grouping factor (e.g., `Subject`
+  in `(1 | Subject)`), instead of failing with a cryptic error. Such
+  variables can only be used with `backend = "marginaleffects"`.
+
 ## modelbased 0.15.0
 
 CRAN release: 2026-05-10

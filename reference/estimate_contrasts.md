@@ -25,7 +25,7 @@ estimate_contrasts(
   post_process = NULL,
   keep_iterations = FALSE,
   effectsize = NULL,
-  iterations = 200,
+  iterations = NULL,
   es_type = NULL,
   backend = NULL,
   verbose = TRUE,
@@ -353,7 +353,16 @@ estimate_contrasts(
 
 - iterations:
 
-  The number of bootstrap resamples to perform.
+  This argument has two distinct effects, depending on context. When
+  `effectsize = "boot"`, it defines the number of bootstrap resamples
+  used to calculate the effect size (via
+  [`bootES::bootES()`](https://rdrr.io/pkg/bootES/man/bootES.html)), and
+  defaults to `200` in this case. For Bayesian models estimated with the
+  `"marginaleffects"` backend, it is passed to the `ndraws` argument of
+  the related `marginaleffects` functions, and defines the number of
+  posterior draws to sample from. If `NULL` (the default), all draws are
+  used. Note that `ndraws` currently only has an effect for Bayesian
+  models fit with **brms** or **MCMCglmm**.
 
 - es_type:
 
