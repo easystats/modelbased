@@ -58,12 +58,13 @@ estimate_contrasts(
     `avg_predictions()` for means and contrasts, and `avg_slope()` for
     slopes. Therefore, arguments for instance like `vcov`,
     `equivalence`, `df`, `slope`, `hypothesis` or even `newdata` can be
-    passed to those functions. A `weights` argument is passed to the
-    `wts` argument in `avg_predictions()` or `avg_slopes()`, however,
-    weights can only be applied when `estimate` is `"average"` or
-    `"population"` (i.e. for those marginalization options that do not
-    use data grids). Other arguments, such as `re.form` or
-    `allow.new.levels`, may be passed to
+    passed to those functions (note that `data` is supported as an alias
+    for `newdata` for consistency across the *easystats* ecosystem). A
+    `weights` argument is passed to the `wts` argument in
+    `avg_predictions()` or `avg_slopes()`, however, weights can only be
+    applied when `estimate` is `"average"` or `"population"` (i.e. for
+    those marginalization options that do not use data grids). Other
+    arguments, such as `re.form` or `allow.new.levels`, may be passed to
     [`predict()`](https://rdrr.io/r/stats/predict.html) (which is
     internally used by *marginaleffects*) if supported by that model
     class.

@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -549,7 +549,7 @@ already receive it.</p>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m4</span>,</span>
 <span>  <span class="st">"treatment"</span>,</span>
-<span>  newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">model_data</span>, <span class="va">treatment</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">model_data</span>, <span class="va">treatment</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
 <span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span></span>
@@ -568,7 +568,7 @@ already receive it.</p>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m4</span>,</span>
 <span>  <span class="st">"treatment"</span>,</span>
-<span>  newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">model_data</span>, <span class="va">treatment</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">model_data</span>, <span class="va">treatment</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
 <span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span></span>

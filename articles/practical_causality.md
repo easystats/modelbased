@@ -447,7 +447,7 @@ model_data <- get_data(m4)
 estimate_contrasts(
   m4,
   "treatment",
-  newdata = subset(model_data, treatment == 1),
+  data = subset(model_data, treatment == 1),
   estimate = "population",
   weights = "ipw"
 )
@@ -466,7 +466,7 @@ estimate_contrasts(
 estimate_contrasts(
   m4,
   "treatment",
-  newdata = subset(model_data, treatment == 0),
+  data = subset(model_data, treatment == 0),
   estimate = "population",
   weights = "ipw"
 )
