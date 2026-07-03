@@ -29,7 +29,7 @@
   }
 
   # prepare arguments
-  dots <- list(...)
+  dots <- .check_dots_data(list(...), verbose)
   fun_args <- insight::compact_list(list(
     model,
     variables = my_args$contrast,
