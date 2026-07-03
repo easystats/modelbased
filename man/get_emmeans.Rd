@@ -331,11 +331,12 @@ one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonfe
 simultaneous confidence bands, also called sup-t confidence band (Montiel
 Olea & Plagborg-Møller, 2019).}
 
-\item{iterations}{This argument has two distinct effects, depending on
+\item{iterations}{This argument has two distinct effects, depending on the
 context. When \code{effectsize = "boot"}, it defines the number of bootstrap
 resamples used to calculate the effect size (via \code{\link[bootES:bootES]{bootES::bootES()}}), and
-defaults to \code{200} in this case. For Bayesian models estimated with the
-\code{"marginaleffects"} backend, it is passed to the \code{ndraws} argument of the
+defaults to \code{200} in this case. For Bayesian models used in \code{estimate_means()},
+\code{estimate_slopes()}, or \code{estimate_contrasts()} (and when
+\code{backend = "marginaleffects"}), it is passed to the \code{ndraws} argument of the
 related \code{marginaleffects} functions, and defines the number of posterior
 draws to sample from. If \code{NULL} (the default), all draws are used. Note
 that \code{ndraws} currently only has an effect for Bayesian models fit with

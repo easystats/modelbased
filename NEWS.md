@@ -2,8 +2,17 @@
 
 ## Changes
 
+* The `iterations` argument can now also be used for Bayesian model in
+  `estimate_means()`, `estimate_slopes()`, and `estimate_contrasts()`, which
+  is then passed to the `ndraws` argument and controls how many samples are
+  drawn from the posterior when calculating marginal means, effects or contrasts.
+
 * `ci = NULL` now suppresses calculation of standard errors and confidence
   intervals.
+
+* The `data` argument can be used as an alias for `newdata` in `estimate_means()`,
+  `estimate_slopes()`, and `estimate_contrasts()`, and is passed to the related
+  *marginaleffects*  functions.
 
 # modelbased 0.16.0
 
