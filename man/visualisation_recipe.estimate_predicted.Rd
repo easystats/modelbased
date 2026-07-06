@@ -141,6 +141,12 @@ There are two options to remove the confidence bands or errors bars
 from the plot. To remove error bars, simply set the \code{pointrange} geom to
 \code{point}, e.g. \code{plot(..., pointrange = list(geom = "point"))}. To remove the
 confidence bands from line geoms, use \code{ribbon = "none"}.
+
+For the \code{tinyplot()} method, the x-axis now automatically adjusts its limits
+when categorical predictors are used (by setting \code{xlim} to \code{c(0.5, n + 0.5)},
+the geoms are moved closer together, resulting in a more compact appearance).
+If appearance is too compact, specify different values for \code{xlim}, for
+instance, \code{xlim = c(1, n)} (where \code{n} is the number of unique categories).
 }
 \section{Global Options to Customize Plots}{
 
@@ -201,7 +207,12 @@ tinytheme()
 data(efc, package = "modelbased")
 m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
 em <- estimate_means(m, c("c172code", "e42dep"))
-plt(em, facet = ~e42dep, dodge = 0, theme = "flat")
+
+# for facets, it can be useful to remove dodging
+plt(em, facet = ~e42dep, dodge = 0, theme = "float")
+
+# remove x-axis limits adjustments with `xlim`
+plt(em, facet = ~e42dep, dodge = 0, theme = "float", xlim = c(1, 4))
 }
 \dontshow{\}) # examplesIf}
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2", "lme4"), quietly = TRUE)) && getRversion() >= "4.1.0") withAutoprint(\{ # examplesIf}

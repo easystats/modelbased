@@ -47,7 +47,12 @@
 #' data(efc, package = "modelbased")
 #' m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
 #' em <- estimate_means(m, c("c172code", "e42dep"))
-#' plt(em, facet = ~e42dep, dodge = 0, theme = "flat")
+#'
+#' # for facets, it can be useful to remove dodging
+#' plt(em, facet = ~e42dep, dodge = 0, theme = "float")
+#'
+#' # remove x-axis limits adjustments with `xlim`
+#' plt(em, facet = ~e42dep, dodge = 0, theme = "float", xlim = c(1, 4))
 #' }
 #' @exportS3Method tinyplot::tinyplot
 tinyplot.estimate_means <- function(
