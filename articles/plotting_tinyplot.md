@@ -7,16 +7,16 @@ however, here we use the
 [`{tinyplot}`](https://grantmcdermott.com/tinyplot/) package instead of
 [ggplot2](https://ggplot2.tidyverse.org) to create the plots.
 
-> Note: The x-axis automatically adjusts its limits when categorical
+> **Note:** The x-axis automatically adjusts its limits when categorical
 > predictors are used (by setting `xlim` to `c(0.5, n + 0.5)`, the geoms
 > are moved closer together, resulting in a more compact appearance). If
 > appearance is too compact, specify different values for `xlim`, for
 > instance, `xlim = c(1, n)` (where `n` is the number of unique
 > categories).
 
-> Note: When `facet`s are used, it might be useful to remove dodging, to
-> harmonize the position of geoms across facets. To do so, set
-> `dodge = 0`.
+> **Note:** When `facet`s are used, it might be useful to remove
+> dodging, to harmonize the position of geoms across facets. To do so,
+> set `dodge = 0`.
 
 ## One predictor - categorical
 

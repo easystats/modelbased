@@ -268,8 +268,15 @@ em <- estimate_means(m, c("c172code", "e42dep"))
 plt(em, facet = ~e42dep, dodge = 0, theme = "float")
 
 
-# remove x-axis limits adjustments with `xlim`
-plt(em, facet = ~e42dep, dodge = 0, theme = "float", xlim = c(1, 4))
+# remove x-axis limits adjustments with `xlim`, remove legend
+plt(
+  em,
+  facet = ~e42dep,
+  dodge = 0,
+  theme = "float",
+  xlim = c(1, 3),
+  legend = FALSE
+)
 
 # }
 library(ggplot2)
