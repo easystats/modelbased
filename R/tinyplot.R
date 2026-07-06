@@ -51,8 +51,15 @@
 #' # for facets, it can be useful to remove dodging
 #' plt(em, facet = ~e42dep, dodge = 0, theme = "float")
 #'
-#' # remove x-axis limits adjustments with `xlim`
-#' plt(em, facet = ~e42dep, dodge = 0, theme = "float", xlim = c(1, 4))
+#' # remove x-axis limits adjustments with `xlim`, remove legend
+#' plt(
+#'   em,
+#'   facet = ~e42dep,
+#'   dodge = 0,
+#'   theme = "float",
+#'   xlim = c(1, 3),
+#'   legend = FALSE
+#' )
 #' }
 #' @exportS3Method tinyplot::tinyplot
 tinyplot.estimate_means <- function(

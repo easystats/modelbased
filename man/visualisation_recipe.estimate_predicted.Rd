@@ -211,8 +211,15 @@ em <- estimate_means(m, c("c172code", "e42dep"))
 # for facets, it can be useful to remove dodging
 plt(em, facet = ~e42dep, dodge = 0, theme = "float")
 
-# remove x-axis limits adjustments with `xlim`
-plt(em, facet = ~e42dep, dodge = 0, theme = "float", xlim = c(1, 4))
+# remove x-axis limits adjustments with `xlim`, remove legend
+plt(
+  em,
+  facet = ~e42dep,
+  dodge = 0,
+  theme = "float",
+  xlim = c(1, 3),
+  legend = FALSE
+)
 }
 \dontshow{\}) # examplesIf}
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2", "lme4"), quietly = TRUE)) && getRversion() >= "4.1.0") withAutoprint(\{ # examplesIf}
