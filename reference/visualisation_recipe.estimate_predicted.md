@@ -249,6 +249,13 @@ plt_add(type = "l", lty = 2)
 
 # Reset to default theme
 tinytheme()
+
+# facets
+data(efc, package = "modelbased")
+m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
+em <- estimate_means(m, c("c172code", "e42dep"))
+plt(em, facet = ~e42dep, dodge = 0, theme = "flat")
+#> Error: `theme` must be one of: default, basic, dynamic, clean, clean2, bw, linedraw, classic, minimal, ipsum, ipsum2, dark, socviz, broadsheet, nber, web, ridge, ridge2, tufte, float, void
 # }
 library(ggplot2)
 library(see)
