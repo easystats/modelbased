@@ -43,8 +43,9 @@
 #' # Reset to default theme
 #' tinytheme()
 #'
-#' # facets
+#' # facets, grids, legends
 #' data(efc, package = "modelbased")
+#' efc$c172code <- factor(efc$c172code, labels = c("low", "mid", "high"))
 #' m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
 #' em <- estimate_means(m, c("c172code", "e42dep"))
 #'
@@ -58,6 +59,7 @@
 #'   dodge = 0,
 #'   theme = "float",
 #'   xlim = c(1, 3),
+#'   grid = TRUE,
 #'   legend = FALSE
 #' )
 #' }
