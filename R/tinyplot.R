@@ -42,6 +42,11 @@
 #'
 #' # Reset to default theme
 #' tinytheme()
+#'
+#' # faceting
+#' m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
+#' em <- estimate_means(m, c("c172code", "e42dep"))
+#' plt(em, facet = ~e42dep, dodge = 0, theme = "classic", grid = TRUE)
 #' }
 #' @exportS3Method tinyplot::tinyplot
 tinyplot.estimate_means <- function(
@@ -121,6 +126,10 @@ tinyplot.estimate_means <- function(
   if (is.null(dots$facet) && !is.null(aes$facet)) {
     dots$facet <- stats::as.formula(paste("~", aes$facet, collapse = " + "))
   }
+  # remove redundant middle axes in facets
+  if (!is.null(dots$facet) && is.null(dots$frame)) {
+    dots$frame <- FALSE
+  }
 
   # add remaining aesthetics to the plot description as symbols
   elements <- c("xmin", "xmax", "ymin", "ymax")
@@ -160,17 +169,17 @@ tinyplot.estimate_means <- function(
 
   # we also need to account for custom legend options passed through dots
   if (is.null(dots$legend)) {
-    dots$legend = list(title = aes$labs$colour)
+    dots$legend <- list(title = aes$labs$colour)
   } else if (inherits(dots$legend, "list")) {
     if (!("title" %in% names(dots$legend))) {
-      dots$legend = utils::modifyList(
+      dots$legend <- utils::modifyList(
         dots$legend,
         list(title = aes$labs$colour),
         keep.null = TRUE
       )
     }
   } else if (!isFALSE(dots$legend)) {
-    dots$legend = tryCatch(
+    dots$legend <- tryCatch(
       utils::modifyList(
         as.list(dots$legend),
         list(title = aes$labs$colour),
