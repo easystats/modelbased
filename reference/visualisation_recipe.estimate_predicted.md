@@ -182,6 +182,15 @@ the plot. To remove error bars, simply set the `pointrange` geom to
 `point`, e.g. `plot(..., pointrange = list(geom = "point"))`. To remove
 the confidence bands from line geoms, use `ribbon = "none"`.
 
+For the
+[`tinyplot()`](https://grantmcdermott.com/tinyplot/man/tinyplot.html)
+method, the x-axis automatically adjusts its limits when categorical
+predictors are used (by setting `xlim` to `c(0.5, n + 0.5)`, the geoms
+are moved closer together, resulting in a more compact appearance). If
+appearance is too compact, specify different values for `xlim`, for
+instance, `xlim = c(1, n)` (where `n` is the number of unique
+categories).
+
 ## Global Options to Customize Plots
 
 Some arguments for
@@ -254,8 +263,14 @@ tinytheme()
 data(efc, package = "modelbased")
 m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
 em <- estimate_means(m, c("c172code", "e42dep"))
-plt(em, facet = ~e42dep, dodge = 0, theme = "flat")
-#> Error: `theme` must be one of: default, basic, dynamic, clean, clean2, bw, linedraw, classic, minimal, ipsum, ipsum2, dark, socviz, broadsheet, nber, web, ridge, ridge2, tufte, float, void
+
+# for facets, it can be useful to remove dodging
+plt(em, facet = ~e42dep, dodge = 0, theme = "float")
+
+
+# remove x-axis limits adjustments with `xlim`
+plt(em, facet = ~e42dep, dodge = 0, theme = "float", xlim = c(1, 4))
+
 # }
 library(ggplot2)
 library(see)

@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -140,6 +140,20 @@
 show how to plot estimated marginal means, like <a href="https://easystats.github.io/modelbased/articles/plotting.html">in
 this vignette</a>, however, here we use the <a href="https://grantmcdermott.com/tinyplot/" class="external-link"><code>{tinyplot}</code></a>
 package instead of <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> to create the plots.</p>
+<blockquote>
+<p>Note: The x-axis automatically adjusts its limits when categorical
+predictors are used (by setting <code>xlim</code> to
+<code>c(0.5, n + 0.5)</code>, the geoms are moved closer together,
+resulting in a more compact appearance). If appearance is too compact,
+specify different values for <code>xlim</code>, for instance,
+<code>xlim = c(1, n)</code> (where <code>n</code> is the number of
+unique categories).</p>
+</blockquote>
+<blockquote>
+<p>Note: When <code>facet</code>s are used, it might be useful to remove
+dodging, to harmonize the position of geoms across facets. To do so, set
+<code>dodge = 0</code>.</p>
+</blockquote>
 <div class="section level2">
 <h2 id="one-predictor---categorical">One predictor - categorical<a class="anchor" aria-label="anchor" href="#one-predictor---categorical"></a>
 </h2>
@@ -218,7 +232,7 @@ names, since these are rather long.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"barthtot"</span>, <span class="st">"c172code"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">within</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>    <span class="va">c172code</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">" of education$"</span>, <span class="st">"\nof education"</span>, <span class="va">c172code</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">plt</a></span><span class="op">(</span>facet <span class="op">=</span> <span class="st">"by"</span>, legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_tinyplot_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="100%"></p>
 </div>
