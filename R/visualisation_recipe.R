@@ -62,11 +62,11 @@
 #' `point`, e.g. `plot(..., pointrange = list(geom = "point"))`. To remove the
 #' confidence bands from line geoms, use `ribbon = "none"`.
 #'
-#' For the `tinyplot()` method, the x-axis now automatically adjusts its limits
-#' when categorical predictors are used (by setting `xlim` to `c(0.5, n + 0.5)`,
-#' the geoms are moved closer together, resulting in a more compact appearance).
-#' If appearance is too compact, specify different values for `xlim`, for
-#' instance, `xlim = c(1, n)` (where `n` is the number of unique categories).
+#' For the `tinyplot()` method, the x-axis automatically adjusts its limits when
+#' categorical predictors are used (by setting `xlim` to `c(0.5, n + 0.5)`, the
+#' geoms are moved closer together, resulting in a more compact appearance). If
+#' appearance is too compact, specify different values for `xlim`, for instance,
+#' `xlim = c(1, n)` (where `n` is the number of unique categories).
 #'
 #' @return An object of class `visualisation_recipe` that describes the layers
 #' used to create a plot based on `{ggplot2}`. The related `plot()` method is in

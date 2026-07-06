@@ -142,11 +142,11 @@ from the plot. To remove error bars, simply set the \code{pointrange} geom to
 \code{point}, e.g. \code{plot(..., pointrange = list(geom = "point"))}. To remove the
 confidence bands from line geoms, use \code{ribbon = "none"}.
 
-For the \code{tinyplot()} method, the x-axis now automatically adjusts its limits
-when categorical predictors are used (by setting \code{xlim} to \code{c(0.5, n + 0.5)},
-the geoms are moved closer together, resulting in a more compact appearance).
-If appearance is too compact, specify different values for \code{xlim}, for
-instance, \code{xlim = c(1, n)} (where \code{n} is the number of unique categories).
+For the \code{tinyplot()} method, the x-axis automatically adjusts its limits when
+categorical predictors are used (by setting \code{xlim} to \code{c(0.5, n + 0.5)}, the
+geoms are moved closer together, resulting in a more compact appearance). If
+appearance is too compact, specify different values for \code{xlim}, for instance,
+\code{xlim = c(1, n)} (where \code{n} is the number of unique categories).
 }
 \section{Global Options to Customize Plots}{
 
