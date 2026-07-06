@@ -196,6 +196,12 @@ plt_add(type = "l", lty = 2)
 
 # Reset to default theme
 tinytheme()
+
+# facets
+data(efc, package = "modelbased")
+m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
+em <- estimate_means(m, c("c172code", "e42dep"))
+plt(em, facet = ~e42dep, dodge = 0, theme = "flat")
 }
 \dontshow{\}) # examplesIf}
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2", "lme4"), quietly = TRUE)) && getRversion() >= "4.1.0") withAutoprint(\{ # examplesIf}

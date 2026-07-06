@@ -14,6 +14,13 @@
   `estimate_slopes()`, and `estimate_contrasts()`, and is passed to the related
   *marginaleffects*  functions.
 
+* Improved default settings for plots using `tidyplot()`:
+  - `facet` now removes redundant x- and y-axes. Use `frame = TRUE` to add
+    back the axes.
+  - When the x-axis display a categorical predictors, the x-axis is slightly
+    shrunken (i.e., `xlim` is set to `c(0.5, <number of categories + 0.5)`)
+    to move geoms closer together.
+
 # modelbased 0.16.0
 
 ## Changes
