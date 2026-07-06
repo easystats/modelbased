@@ -133,7 +133,7 @@ tinyplot.estimate_means <- function(
   }
 
   # move geoms on x-axis closer together
-  if (is.null(dots$xlim) && is.numeric(data[[aes$x]])) {
+  if (is.null(dots$xlim) && !is.numeric(data[[aes$x]])) {
     n_categories <- insight::n_unique(data[[aes$x]])
     if (!is.null(n_categories)) {
       dots$xlim <- c(0.5, n_categories + 0.5)
