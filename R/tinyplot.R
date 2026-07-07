@@ -7,11 +7,11 @@
 #' `getOption("modelbased_tinyplot_dodge")`.
 #' @param size_title,size_axis_title,size_axis_text Numeric, set the size of
 #' plot title, axis title or axis labels. If not `NULL`, `par()` is called
-#' temporarily to set `cex.main`, `cex.axis` and `cex.lab`. These values are set
-#' back to their default before the plot-method was called. The default size is
-#' `1`. Larger values increase text sizes and vice versa.
-#' @param size_point,linewidth Size of points and lines in the plot. Default is
-#' `1`. Larger values increase text sizes and vice versa.
+#' temporarily to set `cex.main`, `cex.axis` and `cex.lab`. The original values
+#' are restored afterwards. The default size is `1`. Larger values increase text
+#' sizes and vice versa.
+#' @param size_point,size_line Size of points and lines in the plot. Default is
+#' `1`. Larger values increase point/line sizes and vice versa.
 #' @param ... Other arguments passed to \code{\link[tinyplot]{tinyplot}}.
 #'
 #' @examplesIf all(insight::check_if_installed(c("tinyplot", "marginaleffects"), quietly = TRUE))
@@ -95,7 +95,7 @@ tinyplot.estimate_means <- function(
   size_axis_title = NULL,
   size_axis_text = NULL,
   size_point = NULL,
-  linewidth = NULL,
+  size_line = NULL,
   ...
 ) {
   insight::check_if_installed("tinyplot")
@@ -197,8 +197,8 @@ tinyplot.estimate_means <- function(
     dots$cex <- size_point
   }
 
-  if (is.null(dots$lwd) && !is.null(linewidth)) {
-    dots$lwd <- linewidth
+  if (is.null(dots$lwd) && !is.null(size_line)) {
+    dots$lwd <- size_line
   }
 
   # dodging -------------------------------
@@ -233,6 +233,7 @@ tinyplot.estimate_means <- function(
     if (
       !is.null(dots$facet) &&
         !is.null(aes$color) &&
+        length(all.vars(dots$facet)) > 0 &&
         all(all.vars(dots$facet) %in% aes$color)
     ) {
       dots$legend <- FALSE
@@ -306,9 +307,9 @@ tinyplot.estimate_means <- function(
     cex.lab = size_axis_title
   ))
 
-  if (!is.null(text_sizes)) {
+  if (!is.null(text_sizes) && length(text_sizes)) {
     old_pars <- graphics::par(text_sizes)
-    on.exit(graphics::par(old_pars))
+    on.exit(graphics::par(old_pars), add = TRUE)
   }
 
   # plot it!
