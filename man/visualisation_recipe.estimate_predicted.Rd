@@ -20,6 +20,12 @@
   show_data = FALSE,
   collapse_group = NULL,
   numeric_as_discrete = NULL,
+  colors = NULL,
+  size_title = NULL,
+  size_axis_title = NULL,
+  size_axis_text = NULL,
+  size_point = NULL,
+  size_line = NULL,
   ...
 )
 
@@ -96,6 +102,30 @@ predictor. Use \code{FALSE} to always use continuous color scales for numeric
 predictors. It is possible to set a global default value using \code{options()},
 e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
 
+\item{colors}{Colors or color palette used for plotting. Following options
+are allowed:
+\itemize{
+\item A string corresponding to one of the many palettes listed by either
+\code{palette.pals()} or \code{hcl.pals()}.
+\item The \code{palette.colors()} function, e.g.
+\code{palette.colors(palette = "Okabe-Ito", alpha = 0.5)}.
+\item A vector or list of colours, e.g. \code{c("darkorange", "purple", "cyan4")}. If
+too few colours are provided, they will be recycled (for discrete palettes)
+or a gradient palette will be interpolated for continuous palettes.
+If the \code{palette} argument is used, \code{colors} will be ignored.
+}}
+
+\item{size_title, size_axis_title, size_axis_text}{Numeric, set the size of
+plot title, axis title or axis labels. If not \code{NULL}, \code{par()} is called
+temporarily to set \code{cex.main}, \code{cex.axis} and \code{cex.lab}. The original values
+are restored afterwards. The default size is \code{1}. Larger values increase text
+sizes and vice versa.}
+
+\item{size_point, size_line}{Size of points and lines in the plot. Default is
+\code{1}. Larger values increase point/line sizes and vice versa. If argument
+\code{cex} is used, \code{size_point} will be ignored. Same for argument \code{lwd}, which
+overrides \code{size_line}.}
+
 \item{show_residuals}{Logical, if \code{TRUE}, display residuals of the model as a
 background to the model-based estimation. Residuals will be computed for the
 predictors in the data grid, using \code{\link[=residualize_over_grid]{residualize_over_grid()}}. For mixed
@@ -114,7 +144,9 @@ and error bars are shown. It is possible to set a global default value using
 \value{
 An object of class \code{visualisation_recipe} that describes the layers
 used to create a plot based on \code{{ggplot2}}. The related \code{plot()} method is in
-the \code{{see}} package.
+the \code{{see}} package. For \code{tinyplot()} (or its alias \code{plt()}), a base graphics
+R plot is created, which can be modified further using classic R graphics
+code.
 }
 \description{
 Most \strong{modelbased} objects can be visualized using either the \code{plot()}
@@ -203,25 +235,38 @@ plt_add(type = "l", lty = 2)
 # Reset to default theme
 tinytheme()
 
-# facets, grids, legends
+# facets
+# ----------------------
+# when using facets, the `tinyplot()` method checks if the legend is
+# redundant (because it already appears in the facets), and if so, it
+# removes the legend. Set `legend = TRUE` to add it back.
+
 data(efc, package = "modelbased")
+# convert to factors, assign labels. we use datawizard::to_factor() in
+# the second row to automatically assign value labels as factor levels.
+# because labels are too long for `c172code`, we assign new labels using
+# `as.factor()`
 efc$c172code <- factor(efc$c172code, labels = c("low", "mid", "high"))
+efc$e42dep <- datawizard::to_factor(efc$e42dep)
+# fit model
 m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
 em <- estimate_means(m, c("c172code", "e42dep"))
 
 # for facets, it can be useful to remove dodging
 plt(em, facet = ~e42dep, dodge = 0, theme = "float")
 
-# remove x-axis limits adjustments with `xlim`, remove legend
+# remove x-axis limits adjustments with `xlim`
 plt(
   em,
   facet = ~e42dep,
   dodge = 0,
   theme = "float",
   xlim = c(1, 3),
-  grid = TRUE,
-  legend = FALSE
+  grid = TRUE
 )
+
+# add back legend
+plt(em, facet = ~e42dep, legend = TRUE)
 }
 \dontshow{\}) # examplesIf}
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2", "lme4"), quietly = TRUE)) && getRversion() >= "4.1.0") withAutoprint(\{ # examplesIf}

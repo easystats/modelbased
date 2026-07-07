@@ -70,7 +70,9 @@
 #'
 #' @return An object of class `visualisation_recipe` that describes the layers
 #' used to create a plot based on `{ggplot2}`. The related `plot()` method is in
-#' the `{see}` package.
+#' the `{see}` package. For `tinyplot()` (or its alias `plt()`), a base graphics
+#' R plot is created, which can be modified further using classic R graphics
+#' code.
 #'
 #' @section Global Options to Customize Plots:
 #' Some arguments for `plot()` can get global defaults using `options()`:

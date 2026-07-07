@@ -5,6 +5,25 @@
 #' @param dodge Dodge value for grouped plots. If `NULL` (the default), then
 #' the dodging behavior is determined by the number of groups and
 #' `getOption("modelbased_tinyplot_dodge")`.
+#' @param size_title,size_axis_title,size_axis_text Numeric, set the size of
+#' plot title, axis title or axis labels. If not `NULL`, `par()` is called
+#' temporarily to set `cex.main`, `cex.axis` and `cex.lab`. The original values
+#' are restored afterwards. The default size is `1`. Larger values increase text
+#' sizes and vice versa.
+#' @param size_point,size_line Size of points and lines in the plot. Default is
+#' `1`. Larger values increase point/line sizes and vice versa. If argument
+#' `cex` is used, `size_point` will be ignored. Same for argument `lwd`, which
+#' overrides `size_line`.
+#' @param colors Colors or color palette used for plotting. Following options
+#' are allowed:
+#' - A string corresponding to one of the many palettes listed by either
+#'   `palette.pals()` or `hcl.pals()`.
+#' - The `palette.colors()` function, e.g.
+#'   `palette.colors(palette = "Okabe-Ito", alpha = 0.5)`.
+#' - A vector or list of colours, e.g. `c("darkorange", "purple", "cyan4")`. If
+#'   too few colours are provided, they will be recycled (for discrete palettes)
+#'   or a gradient palette will be interpolated for continuous palettes.
+#' If the `palette` argument is used, `colors` will be ignored.
 #' @param ... Other arguments passed to \code{\link[tinyplot]{tinyplot}}.
 #'
 #' @examplesIf all(insight::check_if_installed(c("tinyplot", "marginaleffects"), quietly = TRUE))
@@ -43,25 +62,38 @@
 #' # Reset to default theme
 #' tinytheme()
 #'
-#' # facets, grids, legends
+#' # facets
+#' # ----------------------
+#' # when using facets, the `tinyplot()` method checks if the legend is
+#' # redundant (because it already appears in the facets), and if so, it
+#' # removes the legend. Set `legend = TRUE` to add it back.
+#'
 #' data(efc, package = "modelbased")
+#' # convert to factors, assign labels. we use datawizard::to_factor() in
+#' # the second row to automatically assign value labels as factor levels.
+#' # because labels are too long for `c172code`, we assign new labels using
+#' # `as.factor()`
 #' efc$c172code <- factor(efc$c172code, labels = c("low", "mid", "high"))
+#' efc$e42dep <- datawizard::to_factor(efc$e42dep)
+#' # fit model
 #' m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
 #' em <- estimate_means(m, c("c172code", "e42dep"))
 #'
 #' # for facets, it can be useful to remove dodging
 #' plt(em, facet = ~e42dep, dodge = 0, theme = "float")
 #'
-#' # remove x-axis limits adjustments with `xlim`, remove legend
+#' # remove x-axis limits adjustments with `xlim`
 #' plt(
 #'   em,
 #'   facet = ~e42dep,
 #'   dodge = 0,
 #'   theme = "float",
 #'   xlim = c(1, 3),
-#'   grid = TRUE,
-#'   legend = FALSE
+#'   grid = TRUE
 #' )
+#'
+#' # add back legend
+#' plt(em, facet = ~e42dep, legend = TRUE)
 #' }
 #' @exportS3Method tinyplot::tinyplot
 tinyplot.estimate_means <- function(
@@ -71,6 +103,12 @@ tinyplot.estimate_means <- function(
   show_data = FALSE,
   collapse_group = NULL,
   numeric_as_discrete = NULL,
+  colors = NULL,
+  size_title = NULL,
+  size_axis_title = NULL,
+  size_axis_text = NULL,
+  size_point = NULL,
+  size_line = NULL,
   ...
 ) {
   insight::check_if_installed("tinyplot")
@@ -146,14 +184,6 @@ tinyplot.estimate_means <- function(
     dots$frame <- FALSE
   }
 
-  # move geoms on x-axis closer together
-  if (is.null(dots$xlim) && !is.numeric(data[[aes$x]])) {
-    n_categories <- insight::n_unique(data[[aes$x]])
-    if (!is.null(n_categories)) {
-      dots$xlim <- c(0.5, n_categories + 0.5)
-    }
-  }
-
   # add remaining aesthetics to the plot description as symbols
   elements <- c("xmin", "xmax", "ymin", "ymax")
   plot_args <- lapply(elements, function(el) {
@@ -163,6 +193,26 @@ tinyplot.estimate_means <- function(
     as.symbol(aes[[el]])
   })
   names(plot_args) <- elements
+
+  # margins -------------------------------
+
+  # move geoms on x-axis closer together
+  if (is.null(dots$xlim) && !is.numeric(data[[aes$x]])) {
+    n_categories <- insight::n_unique(data[[aes$x]])
+    if (!is.null(n_categories)) {
+      dots$xlim <- c(0.5, n_categories + 0.5)
+    }
+  }
+
+  # geom sizes -------------------------------
+
+  if (is.null(dots$cex) && !is.null(size_point)) {
+    dots$cex <- size_point
+  }
+
+  if (is.null(dots$lwd) && !is.null(size_line)) {
+    dots$lwd <- size_line
+  }
 
   # dodging -------------------------------
 
@@ -188,11 +238,27 @@ tinyplot.estimate_means <- function(
   dots$xlab <- aes$labs$x
   dots$ylab <- aes$labs$y
 
+  # color palette --------------------------------
+
+  if (is.null(dots$palette) && !is.null(colors)) {
+    dots$palette <- colors
+  }
+
   # legend labels --------------------------------
 
   # we also need to account for custom legend options passed through dots
   if (is.null(dots$legend)) {
-    dots$legend <- list(title = aes$labs$colour)
+    # check if legend is already in facets - if so, we don't need a legend
+    if (
+      !is.null(dots$facet) &&
+        !is.null(aes$color) &&
+        length(all.vars(dots$facet)) > 0 &&
+        all(all.vars(dots$facet) %in% aes$color)
+    ) {
+      dots$legend <- FALSE
+    } else {
+      dots$legend <- list(title = aes$labs$colour)
+    }
   } else if (inherits(dots$legend, "list")) {
     if (!("title" %in% names(dots$legend))) {
       dots$legend <- utils::modifyList(
@@ -251,6 +317,18 @@ tinyplot.estimate_means <- function(
         alpha = dots$alpha
       )
     }
+  }
+
+  # set text sizes --------------------------------
+  text_sizes <- insight::compact_list(list(
+    cex.axis = size_axis_text,
+    cex.main = size_title,
+    cex.lab = size_axis_title
+  ))
+
+  if (!is.null(text_sizes) && length(text_sizes)) {
+    old_pars <- graphics::par(text_sizes)
+    on.exit(graphics::par(old_pars), add = TRUE)
   }
 
   # plot it!
