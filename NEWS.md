@@ -21,9 +21,9 @@
     are used. By setting `xlim` to `c(0.5, n + 0.5)`, the geoms are moved closer
     together, resulting in a more compact appearance.
 
-* `tinyplot`() now supports standard arguments following easystats conventions,
-  allowing for more fine-grained plot customizations (e.g., text/line sizes, color
-  palettes, and axis title sizes).
+* `tinyplot`() for *modelbased* objects now supports standard arguments following
+  easystats conventions, allowing for more fine-grained plot customizations
+  (e.g., text/line sizes, color palettes, and axis title sizes).
 
 # modelbased 0.16.0
 
