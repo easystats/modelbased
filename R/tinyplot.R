@@ -84,6 +84,8 @@ tinyplot.estimate_means <- function(
   show_data = FALSE,
   collapse_group = NULL,
   numeric_as_discrete = NULL,
+  size_point = NULL,
+  linewidth = NULL,
   ...
 ) {
   insight::check_if_installed("tinyplot")
@@ -159,14 +161,6 @@ tinyplot.estimate_means <- function(
     dots$frame <- FALSE
   }
 
-  # move geoms on x-axis closer together
-  if (is.null(dots$xlim) && !is.numeric(data[[aes$x]])) {
-    n_categories <- insight::n_unique(data[[aes$x]])
-    if (!is.null(n_categories)) {
-      dots$xlim <- c(0.5, n_categories + 0.5)
-    }
-  }
-
   # add remaining aesthetics to the plot description as symbols
   elements <- c("xmin", "xmax", "ymin", "ymax")
   plot_args <- lapply(elements, function(el) {
@@ -176,6 +170,26 @@ tinyplot.estimate_means <- function(
     as.symbol(aes[[el]])
   })
   names(plot_args) <- elements
+
+  # margins -------------------------------
+
+  # move geoms on x-axis closer together
+  if (is.null(dots$xlim) && !is.numeric(data[[aes$x]])) {
+    n_categories <- insight::n_unique(data[[aes$x]])
+    if (!is.null(n_categories)) {
+      dots$xlim <- c(0.5, n_categories + 0.5)
+    }
+  }
+
+  # geom sizes -------------------------------
+
+  if (is.null(dots$cex) && !is.null(size_point)) {
+    dots$cex <- size_point
+  }
+
+  if (is.null(dots$lwd) && !is.null(linewidth)) {
+    dots$lwd <- linewidth
+  }
 
   # dodging -------------------------------
 

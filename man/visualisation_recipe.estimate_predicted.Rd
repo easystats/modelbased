@@ -20,6 +20,8 @@
   show_data = FALSE,
   collapse_group = NULL,
   numeric_as_discrete = NULL,
+  size_point = NULL,
+  linewidth = NULL,
   ...
 )
 
