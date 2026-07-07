@@ -38,6 +38,12 @@ tinyplot(
   show_data = FALSE,
   collapse_group = NULL,
   numeric_as_discrete = NULL,
+  colors = NULL,
+  size_title = NULL,
+  size_axis_title = NULL,
+  size_axis_text = NULL,
+  size_point = NULL,
+  size_line = NULL,
   ...
 )
 
@@ -143,6 +149,39 @@ visualisation_recipe(
   using [`options()`](https://rdrr.io/r/base/options.html), e.g.
   `options(modelbased_numeric_as_discrete = 10)`.
 
+- colors:
+
+  Colors or color palette used for plotting. Following options are
+  allowed:
+
+  - A string corresponding to one of the many palettes listed by either
+    [`palette.pals()`](https://rdrr.io/r/grDevices/palette.html) or
+    [`hcl.pals()`](https://rdrr.io/r/grDevices/palettes.html).
+
+  - The [`palette.colors()`](https://rdrr.io/r/grDevices/palette.html)
+    function, e.g. `palette.colors(palette = "Okabe-Ito", alpha = 0.5)`.
+
+  - A vector or list of colours, e.g.
+    `c("darkorange", "purple", "cyan4")`. If too few colours are
+    provided, they will be recycled (for discrete palettes) or a
+    gradient palette will be interpolated for continuous palettes. If
+    the `palette` argument is used, `colors` will be ignored.
+
+- size_title, size_axis_title, size_axis_text:
+
+  Numeric, set the size of plot title, axis title or axis labels. If not
+  `NULL`, [`par()`](https://rdrr.io/r/graphics/par.html) is called
+  temporarily to set `cex.main`, `cex.axis` and `cex.lab`. The original
+  values are restored afterwards. The default size is `1`. Larger values
+  increase text sizes and vice versa.
+
+- size_point, size_line:
+
+  Size of points and lines in the plot. Default is `1`. Larger values
+  increase point/line sizes and vice versa. If argument `cex` is used,
+  `size_point` will be ignored. Same for argument `lwd`, which overrides
+  `size_line`.
+
 - show_residuals:
 
   Logical, if `TRUE`, display residuals of the model as a background to
@@ -173,7 +212,12 @@ visualisation_recipe(
 An object of class `visualisation_recipe` that describes the layers used
 to create a plot based on `{ggplot2}`. The related
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) method is in
-the `{see}` package.
+the `{see}` package. For
+[`tinyplot()`](https://grantmcdermott.com/tinyplot/man/tinyplot.html)
+(or its alias
+[`plt()`](https://grantmcdermott.com/tinyplot/man/tinyplot.html)), a
+base graphics R plot is created, which can be modified further using
+classic R graphics code.
 
 ## Details
 
@@ -259,9 +303,20 @@ plt_add(type = "l", lty = 2)
 # Reset to default theme
 tinytheme()
 
-# facets, grids, legends
+# facets
+# ----------------------
+# when using facets, the `tinyplot()` method checks if the legend is
+# redundant (because it already appears in the facets), and if so, it
+# removes the legend. Set `legend = TRUE` to add it back.
+
 data(efc, package = "modelbased")
+# convert to factors, assign labels. we use datawizard::to_factor() in
+# the second row to automatically assign value labels as factor levels.
+# because labels are too long for `c172code`, we assign new labels using
+# `as.factor()`
 efc$c172code <- factor(efc$c172code, labels = c("low", "mid", "high"))
+efc$e42dep <- datawizard::to_factor(efc$e42dep)
+# fit model
 m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
 em <- estimate_means(m, c("c172code", "e42dep"))
 
@@ -269,16 +324,19 @@ em <- estimate_means(m, c("c172code", "e42dep"))
 plt(em, facet = ~e42dep, dodge = 0, theme = "float")
 
 
-# remove x-axis limits adjustments with `xlim`, remove legend
+# remove x-axis limits adjustments with `xlim`
 plt(
   em,
   facet = ~e42dep,
   dodge = 0,
   theme = "float",
   xlim = c(1, 3),
-  grid = TRUE,
-  legend = FALSE
+  grid = TRUE
 )
+
+
+# add back legend
+plt(em, facet = ~e42dep, legend = TRUE)
 
 # }
 library(ggplot2)
