@@ -128,7 +128,9 @@ and error bars are shown. It is possible to set a global default value using
 \value{
 An object of class \code{visualisation_recipe} that describes the layers
 used to create a plot based on \code{{ggplot2}}. The related \code{plot()} method is in
-the \code{{see}} package.
+the \code{{see}} package. For \code{tinyplot()} (or its alias \code{plt()}), a base graphics
+R plot is created, which can be modified further using classic R graphics
+code.
 }
 \description{
 Most \strong{modelbased} objects can be visualized using either the \code{plot()}
