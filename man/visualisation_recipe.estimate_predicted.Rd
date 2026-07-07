@@ -203,25 +203,38 @@ plt_add(type = "l", lty = 2)
 # Reset to default theme
 tinytheme()
 
-# facets, grids, legends
+# facets
+# ----------------------
+# when using facets, the `tinyplot()` method checks if the legend is
+# redundant (because it already appears in the facets), and if so, it
+# removes the legend. Set `legend = TRUE` to add it back.
+
 data(efc, package = "modelbased")
+# convert to factors, assign labels. we use datawizard::to_factor() in
+# the second row to automatically assign value labels as factor levels.
+# because labels are too long for `c172code`, we assign new labels using
+# `as.factor()`
 efc$c172code <- factor(efc$c172code, labels = c("low", "mid", "high"))
+efc$e42dep <- datawizard::to_factor(efc$e42dep)
+# fit model
 m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
 em <- estimate_means(m, c("c172code", "e42dep"))
 
 # for facets, it can be useful to remove dodging
 plt(em, facet = ~e42dep, dodge = 0, theme = "float")
 
-# remove x-axis limits adjustments with `xlim`, remove legend
+# remove x-axis limits adjustments with `xlim`
 plt(
   em,
   facet = ~e42dep,
   dodge = 0,
   theme = "float",
   xlim = c(1, 3),
-  grid = TRUE,
-  legend = FALSE
+  grid = TRUE
 )
+
+# add back legend
+plt(em, facet = ~e42dep, legend = TRUE)
 }
 \dontshow{\}) # examplesIf}
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2", "lme4"), quietly = TRUE)) && getRversion() >= "4.1.0") withAutoprint(\{ # examplesIf}
