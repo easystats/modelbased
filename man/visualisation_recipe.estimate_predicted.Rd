@@ -20,6 +20,7 @@
   show_data = FALSE,
   collapse_group = NULL,
   numeric_as_discrete = NULL,
+  colors = NULL,
   size_title = NULL,
   size_axis_title = NULL,
   size_axis_text = NULL,
@@ -101,6 +102,19 @@ predictor. Use \code{FALSE} to always use continuous color scales for numeric
 predictors. It is possible to set a global default value using \code{options()},
 e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
 
+\item{colors}{Colors or color palette used for plotting. Following options
+are allowed:
+\itemize{
+\item A string corresponding to one of the many palettes listed by either
+\code{palette.pals()} or \code{hcl.pals()}.
+\item The \code{palette.colors()} function, e.g.
+\code{palette.colors(palette = "Okabe-Ito", alpha = 0.5)}.
+\item A vector or list of colours, e.g. \code{c("darkorange", "purple", "cyan4")}. If
+too few colours are provided, they will be recycled (for discrete palettes)
+or a gradient palette will be interpolated for continuous palettes.
+If the \code{palette} argument is used, \code{colors} will be ignored.
+}}
+
 \item{size_title, size_axis_title, size_axis_text}{Numeric, set the size of
 plot title, axis title or axis labels. If not \code{NULL}, \code{par()} is called
 temporarily to set \code{cex.main}, \code{cex.axis} and \code{cex.lab}. The original values
@@ -108,7 +122,9 @@ are restored afterwards. The default size is \code{1}. Larger values increase te
 sizes and vice versa.}
 
 \item{size_point, size_line}{Size of points and lines in the plot. Default is
-\code{1}. Larger values increase point/line sizes and vice versa.}
+\code{1}. Larger values increase point/line sizes and vice versa. If argument
+\code{cex} is used, \code{size_point} will be ignored. Same for argument \code{lwd}, which
+overrides \code{size_line}.}
 
 \item{show_residuals}{Logical, if \code{TRUE}, display residuals of the model as a
 background to the model-based estimation. Residuals will be computed for the

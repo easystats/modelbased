@@ -11,7 +11,19 @@
 #' are restored afterwards. The default size is `1`. Larger values increase text
 #' sizes and vice versa.
 #' @param size_point,size_line Size of points and lines in the plot. Default is
-#' `1`. Larger values increase point/line sizes and vice versa.
+#' `1`. Larger values increase point/line sizes and vice versa. If argument
+#' `cex` is used, `size_point` will be ignored. Same for argument `lwd`, which
+#' overrides `size_line`.
+#' @param colors Colors or color palette used for plotting. Following options
+#' are allowed:
+#' - A string corresponding to one of the many palettes listed by either
+#'   `palette.pals()` or `hcl.pals()`.
+#' - The `palette.colors()` function, e.g.
+#'   `palette.colors(palette = "Okabe-Ito", alpha = 0.5)`.
+#' - A vector or list of colours, e.g. `c("darkorange", "purple", "cyan4")`. If
+#'   too few colours are provided, they will be recycled (for discrete palettes)
+#'   or a gradient palette will be interpolated for continuous palettes.
+#' If the `palette` argument is used, `colors` will be ignored.
 #' @param ... Other arguments passed to \code{\link[tinyplot]{tinyplot}}.
 #'
 #' @examplesIf all(insight::check_if_installed(c("tinyplot", "marginaleffects"), quietly = TRUE))
@@ -91,6 +103,7 @@ tinyplot.estimate_means <- function(
   show_data = FALSE,
   collapse_group = NULL,
   numeric_as_discrete = NULL,
+  colors = NULL,
   size_title = NULL,
   size_axis_title = NULL,
   size_axis_text = NULL,
@@ -224,6 +237,12 @@ tinyplot.estimate_means <- function(
   # x/y labels --------------------------------
   dots$xlab <- aes$labs$x
   dots$ylab <- aes$labs$y
+
+  # color palette --------------------------------
+
+  if (is.null(dots$palette) && !is.null(colors)) {
+    dots$palette <- colors
+  }
 
   # legend labels --------------------------------
 
