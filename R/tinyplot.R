@@ -220,7 +220,11 @@ tinyplot.estimate_means <- function(
   # we also need to account for custom legend options passed through dots
   if (is.null(dots$legend)) {
     # check if legend is already in facets - if so, we don't need a legend
-    if (!is.null(dots$facet) && all(all.vars(dots$facet) %in% aes$color)) {
+    if (
+      !is.null(dots$facet) &&
+        !is.null(aes$color) &&
+        all(all.vars(dots$facet) %in% aes$color)
+    ) {
       dots$legend <- FALSE
     } else {
       dots$legend <- list(title = aes$labs$colour)
