@@ -5,6 +5,13 @@
 #' @param dodge Dodge value for grouped plots. If `NULL` (the default), then
 #' the dodging behavior is determined by the number of groups and
 #' `getOption("modelbased_tinyplot_dodge")`.
+#' @param size_title,size_axis_title,size_axis_text Numeric, set the size of
+#' plot title, axis title or axis labels. If not `NULL`, `par()` is called
+#' temporarily to set `cex.main`, `cex.axis` and `cex.lab`. These values are set
+#' back to their default before the plot-method was called. The default size is
+#' `1`. Larger values increase text sizes and vice versa.
+#' @param size_point,linewidth Size of points and lines in the plot. Default is
+#' `1`. Larger values increase text sizes and vice versa.
 #' @param ... Other arguments passed to \code{\link[tinyplot]{tinyplot}}.
 #'
 #' @examplesIf all(insight::check_if_installed(c("tinyplot", "marginaleffects"), quietly = TRUE))
@@ -84,6 +91,9 @@ tinyplot.estimate_means <- function(
   show_data = FALSE,
   collapse_group = NULL,
   numeric_as_discrete = NULL,
+  size_title = NULL,
+  size_axis_title = NULL,
+  size_axis_text = NULL,
   size_point = NULL,
   linewidth = NULL,
   ...
@@ -287,6 +297,18 @@ tinyplot.estimate_means <- function(
         alpha = dots$alpha
       )
     }
+  }
+
+  # set text sizes --------------------------------
+  text_sizes <- insight::compact_list(list(
+    cex.axis = size_axis_text,
+    cex.main = size_title,
+    cex.lab = size_axis_title
+  ))
+
+  if (!is.null(text_sizes)) {
+    old_pars <- graphics::par(text_sizes)
+    on.exit(graphics::par(old_pars))
   }
 
   # plot it!

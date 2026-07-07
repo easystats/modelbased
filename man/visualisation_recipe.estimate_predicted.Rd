@@ -20,6 +20,9 @@
   show_data = FALSE,
   collapse_group = NULL,
   numeric_as_discrete = NULL,
+  size_title = NULL,
+  size_axis_title = NULL,
+  size_axis_text = NULL,
   size_point = NULL,
   linewidth = NULL,
   ...
@@ -97,6 +100,15 @@ deviation around the mean are chosen as representative values for that
 predictor. Use \code{FALSE} to always use continuous color scales for numeric
 predictors. It is possible to set a global default value using \code{options()},
 e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
+
+\item{size_title, size_axis_title, size_axis_text}{Numeric, set the size of
+plot title, axis title or axis labels. If not \code{NULL}, \code{par()} is called
+temporarily to set \code{cex.main}, \code{cex.axis} and \code{cex.lab}. These values are set
+back to their default before the plot-method was called. The default size is
+\code{1}. Larger values increase text sizes and vice versa.}
+
+\item{size_point, linewidth}{Size of points and lines in the plot. Default is
+\code{1}. Larger values increase text sizes and vice versa.}
 
 \item{show_residuals}{Logical, if \code{TRUE}, display residuals of the model as a
 background to the model-based estimation. Residuals will be computed for the
