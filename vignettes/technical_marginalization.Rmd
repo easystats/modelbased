@@ -44,7 +44,7 @@ This vignette explores the `estimate_means()` function, providing a practical gu
 
 First, let's load the necessary packages and dataset.
 
-```{r setup, message=FALSE, warning=FALSE}
+```{r}
 library(easystats)
 data(penguins)
 ```
