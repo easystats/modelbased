@@ -46,7 +46,7 @@ First, let's load the necessary packages and dataset.
 
 ```{r setup, message=FALSE, warning=FALSE}
 library(easystats)
-data(penguins, package = "palmerpenguins")
+data(penguins)
 ```
 
 We fit a simple linear model with a continuous outcome (`flipper_len`), a categorical focal predictor (`sex`), and a categorical non-focal predictor (`species`).
