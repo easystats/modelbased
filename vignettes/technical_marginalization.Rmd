@@ -1,0 +1,210 @@
+---
+title: "Understanding marginalization methods"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Understanding marginalization methods}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "png",
+  out.width = "100%",
+  dpi = 300,
+  message = FALSE,
+  warning = FALSE,
+  package.startup.message = FALSE
+)
+
+options(
+  modelbased_join_dots = FALSE,
+  modelbased_estimate = "typical",
+  modelbased_select = "minimal"
+)
+
+pkgs <- c(
+  "datawizard",
+  "parameters",
+  "marginaleffects"
+)
+
+if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+
+if (getRversion() < "4.1.0") {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+This vignette explores the `estimate_means()` function, providing a practical guide to calculating and interpreting estimated marginal means. Using the *penguins* dataset, we will demonstrate how different estimation methods (triggered via the `estimate` argument) - `"specific"`, `"typical"`, `"average"`, and `"counterfactual"` - change the assumptions behind your model predictions. By manually recreating these calculations alongside the automated functions, you will gain a much clearer understanding of what actually happens under the hood when interpreting (linear) models and their estimated marginal means.
+
+First, let's load the necessary packages and dataset.
+
+```{r setup, message=FALSE, warning=FALSE}
+library(easystats)
+data(penguins, package = "palmerpenguins")
+```
+
+We fit a simple linear model with a continuous outcome (`flipper_len`), a categorical focal predictor (`sex`), and a categorical non-focal predictor (`species`).
+
+```{r}
+m <- lm(flipper_length_mm ~ sex + species, data = penguins)
+```
+
+Next, we extract the data used to fit the model. This does not perfectly correspond to the original dataset because a few cases with missing values were removed via list-wise deletion. We will need this data later. Let's also print the regression coefficients.
+
+```{r}
+model_data <- get_data(m)
+
+mp <- model_parameters(m)
+mp
+```
+
+## 1. "Specific" Observation
+
+What happens here? Numeric variables are set to their mean, and factors are set to their reference level. Thus, a prediction is made for a very "specific" observation in the dataset (here: `species = Adelie`).
+
+```{r}
+estimate_means(m, "sex", estimate = "specific")
+
+# Alternative code (same result, different wrapper)
+estimate_relation(m, by = "sex")
+```
+
+To illustrate, we can calculate this manually. "Female" is the reference level for `sex` here. Since `species` is kept at its reference level (Adelie), the estimated marginal mean corresponds exactly to the intercept.
+
+```{r}
+# female (reference)
+mp$Coefficient[1]
+```
+
+For "male", we add the main effect for `sexmale` to the intercept. `species` still remains at the reference level (Adelie).
+
+```{r}
+# male
+mp$Coefficient[1] + mp$Coefficient[2]
+```
+
+### Excursus: How does `predict()` work in comparison?
+
+Let's compare this logic to the standard `predict()` function.
+
+```{r}
+pred <- predict(m)
+
+# Let's look at the real data of the 1st observation in the dataset:
+penguins[1, c("species", "sex")] # Adelie, male
+
+# Predicted value (predicted mean) for this 1st observation:
+pred[1]
+
+# Manual calculation: Intercept + effect for "male" (since Adelie is the reference)
+mp$Coefficient[1] + mp$Coefficient[2]
+
+# Let's look at the real data of the 221st observation in the dataset:
+penguins[221, c("species", "sex")] # Gentoo, female
+
+# Predicted value (predicted mean) for this 221st observation:
+pred[221]
+
+# Manual calculation:
+# Intercept (female is reference) + effect for species "Gentoo" (4th coefficient)
+mp$Coefficient[1] + mp$Coefficient[4]
+```
+
+## 2. "Typical" Observation
+
+What happens here? A data grid is created across all combinations of predictors. The predictions are then averaged across the levels of the non-focal terms (here: `species`). Each level of `species` is weighted *equally* in the calculation, regardless of how often it occurs in the actual empirical data.
+
+```{r}
+# We manually create a reference grid with evenly distributed levels
+# of our non-focal ("controlled for") term "species".
+d <- rbind(
+  get_datagrid(m, c("sex", "species = 'Adelie'")),
+  get_datagrid(m, c("sex", "species = 'Chinstrap'")),
+  get_datagrid(m, c("sex", "species = 'Gentoo'"))
+)
+
+# Now we calculate the predicted values for this balanced grid.
+# The non-focal terms are weighted exactly equally here
+# (1/3 Adelie, 1/3 Chinstrap, 1/3 Gentoo).
+d$predicted <- predict(m, newdata = d)
+
+# Manual calculation of the means grouped by "sex":
+means_by_group(d, "predicted", "sex")
+
+# This corresponds to the easystats default (estimate = "typical").
+estimate_means(m, "sex")
+```
+
+## 3. "Average" Observation
+
+What happens here? The prediction is made for *every* single observation in the real dataset. Afterwards, the average of these predictions is calculated per focal group. By doing this, the non-focal terms retain their exact empirical distribution.
+
+```{r}
+d <- model_data
+
+# We use the predict() function for the entire original dataset
+d$predicted <- predict(m)
+
+# Afterwards, we calculate the mean of the predictions, grouped by "sex"
+means_by_group(d, "predicted", "sex")
+
+# The corresponding easystats call:
+estimate_means(m, "sex", estimate = "average")
+```
+
+## 4. "Counterfactual" Observation (also "Population")
+
+What happens here? To resolve confounding and simulate a pseudo-randomization (G-Computation), we replicate the entire dataset for each level of our focal predictor (`sex`).
+
+We basically force every penguin to be female once, and male once, but we retain its original `species` (and de facto all other unobserved characteristics/confounding that we want to equalize through randomization).
+
+```{r}
+# We duplicate ("clone") our dataset to imitate randomization.
+d <- do.call(rbind, replicate(2, model_data, simplify = FALSE))
+
+# For each cloned dataset, we set our focal term to one of the two levels.
+# The first half of the dataset becomes entirely "female", the second half entirely "male".
+d$sex <- as.factor(rep(levels(model_data$sex), each = nrow(model_data)))
+
+# We calculate the predicted values for this new "what-if" scenario,
+# i.e., for our pseudo-randomized sample.
+d$predicted <- predict(m, newdata = d)
+
+# Now we calculate the average predicted value for the levels of "sex".
+# The non-focal terms are weighted exactly proportional to their actual
+# occurrence in the real data here.
+means_by_group(d, "predicted", "sex")
+
+# The corresponding easystats call:
+estimate_means(m, "sex", estimate = "counterfactual")
+```
+
+---
+
+## Summary
+
+### 1. Specific Observation (`estimate = "specific"`)
+
+* **Calculation:** Numeric values are set to their mean. Factors are set to their reference level.
+* **Meaning:** The estimated means represent a rather "theoretical" view of the data. A prediction is made for a specific individual from the sample (i.e., a very specific combination of predictor values). This answers the question about the expected average value of the target variable for a *specific* observation.
+
+### 2. Typical Observation (`estimate = "typical"`, the default)
+
+* **Calculation:** Predictions are made for observations represented by a data grid. This grid is formed from all combinations of the predictor levels of the focal terms. For non-focal numeric predictors, the mean is taken, and we marginalize over the factor levels of the non-focal terms (a kind of weighted average is calculated).
+* **Meaning:** These predictions are useful to compare defined "groups" and represent the sample well. It answers the question: *"What would the average outcome be for a 'typical' observation?"*, where 'typical' refers to subjects represented by the balanced data grid.
+
+### 3. Average Observation (`estimate = "average"`)
+
+* **Calculation:** Predictions are made for every observation in the sample. Afterwards, the average of all predictions within all groups (or levels) of the focal terms defined in `by` is calculated.
+* **Meaning:** These predictions are the closest representation of the actual sample, as the average is taken over the entire dataset. The groups are not represented by a balanced data grid here, but by the empirical distributions of the sample characteristics. It answers the question about the predicted value for an average observation from a specific group within your own data.
+
+### 4. Counterfactual Observation (`estimate = "population"` / `"counterfactual"`)
+
+* **Calculation:** Non-focal predictors are marginalized over the observations of the sample, with the sample being replicated multiple times to create "counterfactuals" (what-if scenarios). Then, the average of these predicted values is calculated (aggregated/grouped by the focal terms).
+* **Meaning:** This can be viewed as an extrapolation to a hypothetical target population. Counterfactual predictions are useful because the results can also be transferred to other contexts (G-Computation, causal inference). It answers the question: *"What is the predicted response value for the average observation in the broader target population?"* (or for my "pseudo-randomized" sample). Due to the pseudo-randomization approach, we're allowed to make causal inferences even for observational data (note that there are certain assumptions that need to be fulfilled for causal inference; see section **Assumptions for causal identification** in [this vignette](https://easystats.github.io/modelbased/articles/practical_causality.html)).
