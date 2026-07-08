@@ -49,6 +49,8 @@
   Framework](https://easystats.github.io/modelbased/articles/practical_intersectionality.md):
 - [Interrupted Time Series
   Analysis](https://easystats.github.io/modelbased/articles/practical_its.md):
+- [Understanding marginalization
+  methods](https://easystats.github.io/modelbased/articles/technical_marginalization.md):
 - [Data
   grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.md):
 - [Case Study: Understanding your

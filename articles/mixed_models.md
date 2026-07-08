@@ -192,8 +192,8 @@ marginal and conditional predictions are still similar.
 
 ``` r
 
-data(penguins, package = "palmerpenguins")
-model <- lme4::lmer(bill_length_mm ~ sex + island + (1 | species), data = penguins)
+data(penguins)
+model <- lme4::lmer(bill_len ~ sex + island + (1 | species), data = penguins)
 
 # marginal predictions
 estimate_means(model, "sex")
@@ -204,7 +204,7 @@ estimate_means(model, "sex")
 #> female | 43.29 (37.00, 49.58)
 #> male   | 46.99 (40.70, 53.28)
 #> 
-#> Variable predicted: bill_length_mm
+#> Variable predicted: bill_len
 #> Predictors modulated: sex
 #> Predictors averaged: island, species
 
@@ -217,7 +217,7 @@ estimate_means(model, "sex", backend = "emmeans")
 #> female | 43.29 (29.54, 57.04)
 #> male   | 46.99 (33.24, 60.74)
 #> 
-#> Variable predicted: bill_length_mm
+#> Variable predicted: bill_len
 #> Predictors modulated: sex
 ```
 
@@ -227,7 +227,8 @@ the default `estimate` setting for the `"marginaleffects"` backend
 produce “data grid based” predictions, which do not average across all
 observations (see also [the
 documentation](https://easystats.github.io/modelbased/reference/estimate_means.html)
-of the `estimate` argument for further details).
+of the `estimate` argument for further details, or [this
+vignette](https://easystats.github.io/modelbased/articles/technical_marginalization.html)).
 
 Furthermore, for imbalanced data, conditional and marginal predictions
 will differ when they are averaged across all observations.
@@ -243,7 +244,7 @@ estimate_means(model, "sex", estimate = "average")
 #> female | 42.10 (35.81, 48.39)
 #> male   | 45.85 (39.57, 52.14)
 #> 
-#> Variable predicted: bill_length_mm
+#> Variable predicted: bill_len
 #> Predictors modulated: sex
 
 # average conditional predictions
@@ -255,7 +256,7 @@ estimate_means(model, "sex", estimate = "average", re.form = NA)
 #> female | 43.26 (36.97, 49.54)
 #> male   | 46.95 (40.66, 53.24)
 #> 
-#> Variable predicted: bill_length_mm
+#> Variable predicted: bill_len
 #> Predictors modulated: sex
 ```
 
