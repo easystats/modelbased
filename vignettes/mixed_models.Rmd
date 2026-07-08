@@ -28,7 +28,7 @@ options(
   modelbased_join_dots = FALSE,
   modelbased_select = "minimal"
 )
-pkgs <- c("lme4", "marginaleffects", "collapse", "Formula", "palmerpenguins")
+pkgs <- c("lme4", "marginaleffects", "collapse", "Formula")
 successfully_loaded <- suppressPackageStartupMessages(vapply(pkgs, requireNamespace, FUN.VALUE = logical(1L), quietly = TRUE))
 can_evaluate <- all(successfully_loaded)
 
@@ -111,8 +111,8 @@ estimate_means(model, "Days", estimate = "average")
 This section explores the impact of imbalanced data on EMM calculations in linear mixed models. We'll use the `penguins` dataset, which has imbalanced groups that we use as higher-level unit, as well as imbalanced predictors. Since we have still a linear mixed model, marginal and conditional predictions are still similar.
 
 ```{r}
-data(penguins, package = "palmerpenguins")
-model <- lme4::lmer(bill_length_mm ~ sex + island + (1 | species), data = penguins)
+data(penguins)
+model <- lme4::lmer(bill_length ~ sex + island + (1 | species), data = penguins)
 
 # marginal predictions
 estimate_means(model, "sex")
@@ -121,7 +121,7 @@ estimate_means(model, "sex")
 estimate_means(model, "sex", backend = "emmeans")
 ```
 
-Since we have imbalanced data, results for "average" predictions will differ from the results above, because both the `"emmeans"` backend and the default `estimate` setting for the `"marginaleffects"` backend produce "data grid based" predictions, which do not average across all observations (see also [the documentation](https://easystats.github.io/modelbased/reference/estimate_means.html) of the `estimate` argument for further details).
+Since we have imbalanced data, results for "average" predictions will differ from the results above, because both the `"emmeans"` backend and the default `estimate` setting for the `"marginaleffects"` backend produce "data grid based" predictions, which do not average across all observations (see also [the documentation](https://easystats.github.io/modelbased/reference/estimate_means.html) of the `estimate` argument for further details, or [this vignette](https://easystats.github.io/modelbased/articles/technical_marginalization.html)).
 
 Furthermore, for imbalanced data, conditional and marginal predictions will differ when they are averaged across all observations.
 
