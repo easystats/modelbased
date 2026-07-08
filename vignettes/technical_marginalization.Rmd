@@ -52,7 +52,7 @@ data(penguins)
 We fit a simple linear model with a continuous outcome (`flipper_len`), a categorical focal predictor (`sex`), and a categorical non-focal predictor (`species`).
 
 ```{r}
-m <- lm(flipper_length_mm ~ sex + species, data = penguins)
+m <- lm(flipper_len ~ sex + species, data = penguins)
 ```
 
 Next, we extract the data used to fit the model. This does not perfectly correspond to the original dataset because a few cases with missing values were removed via list-wise deletion. We will need this data later. Let's also print the regression coefficients.
