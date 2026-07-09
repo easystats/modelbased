@@ -98,7 +98,7 @@ format.estimate_contrasts <- function(
   if (!is.null(format) && format %in% c("md", "markdown", "html")) {
     insight::format_table(
       x,
-      ci_brackets = c("(", ")"),
+      ci_brackets = getOption("easystats_ci_brackets", c("(", ")")),
       select = select,
       format = format,
       ...
