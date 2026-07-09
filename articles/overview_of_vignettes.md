@@ -74,3 +74,8 @@ All package vignettes are available at
   models](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
 - [Contrasts and comparisons for zero-inflation
   models](https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html)
+
+### Technical Details
+
+- [Understanding marginalization
+  methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html)
