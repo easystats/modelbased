@@ -42,6 +42,16 @@
 #'   will set the default format for the `display()` methods. Can be one of
 #'   `"markdown"`, `"html"`, or `"tt"`.
 #'
+#' - `options(easystats_ci_separator = <value>)` defines the separator string
+#'   used between the lower and upper CI limits. Defaults to `", "`, resulting
+#'   in an output like `[0.3, 0.8]`.
+#'
+#' - `options(easystats_ci_brackets = <value>)` determines whether brackets or
+#'   parentheses are used to enclose formatted CIs. Can be `FALSE` to omit them,
+#'   `TRUE` to include them (defaults to `[` and `]` for text output), or a
+#'   character vector of length 2 to define custom opening and closing symbols
+#'   (e.g., `c("(", ")")`).
+#'
 #' @note Use `print_html()` and `print_md()` to create tables in HTML or
 #' markdown format, respectively.
 #'
@@ -64,11 +74,13 @@
 #' print(out, full_labels = FALSE, select = "{estimate} ({se})")
 #'
 #' @export
-print.estimate_contrasts <- function(x,
-                                     select = NULL,
-                                     include_grid = NULL,
-                                     full_labels = NULL,
-                                     ...) {
+print.estimate_contrasts <- function(
+  x,
+  select = NULL,
+  include_grid = NULL,
+  full_labels = NULL,
+  ...
+) {
   # Process argument ---------------------------------------------------------
   # --------------------------------------------------------------------------
 

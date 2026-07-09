@@ -37,6 +37,14 @@ by default or not.
 \item \verb{options(easystats_display_format = <value>)} will set the default format
 for the \code{display()} methods. Can be one of \code{"markdown"}, \code{"html"}, or
 \code{"tt"}. See \code{\link[=display.estimate_contrasts]{display.estimate_contrasts()}} for details.
+\item \verb{options(easystats_ci_separator = <value>)} defines the separator string
+used between the lower and upper CI limits. Defaults to \code{", "}, resulting
+in an output like \verb{[0.3, 0.8]}.
+\item \verb{options(easystats_ci_brackets = <value>)} determines whether brackets or
+parentheses are used to enclose formatted CIs. Can be \code{FALSE} to omit them,
+\code{TRUE} to include them (defaults to \code{[} and \verb{]} for text output), or a
+character vector of length 2 to define custom opening and closing symbols
+(e.g., \code{c("(", ")")}).
 }
 
 \strong{For plotting}
