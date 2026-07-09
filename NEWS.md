@@ -25,7 +25,8 @@
   easystats conventions, allowing for more fine-grained plot customizations
   (e.g., text/line sizes, color palettes, and axis title sizes).
 
-* New options for printing (in particular, formatting CIs), see also documentation.
+* New options for printing (in particular, formatting CIs), see also documentation
+  (`?modelbased::"modelbased-options"`).
 
 # modelbased 0.16.0
 
