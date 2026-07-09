@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,6 +128,14 @@ by default or not.</p></li>
 <li><p><code>options(easystats_display_format = &lt;value&gt;)</code> will set the default format
 for the <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code> methods. Can be one of <code>"markdown"</code>, <code>"html"</code>, or
 <code>"tt"</code>. See <code><a href="print.estimate_contrasts.html">display.estimate_contrasts()</a></code> for details.</p></li>
+<li><p><code>options(easystats_ci_separator = &lt;value&gt;)</code> defines the separator string
+used between the lower and upper CI limits. Defaults to <code>", "</code>, resulting
+in an output like <code>[0.3, 0.8]</code>.</p></li>
+<li><p><code>options(easystats_ci_brackets = &lt;value&gt;)</code> determines whether brackets or
+parentheses are used to enclose formatted CIs. Can be <code>FALSE</code> to omit them,
+<code>TRUE</code> to include them (defaults to <code>[</code> and <code>]</code> for text output), or a
+character vector of length 2 to define custom opening and closing symbols
+(e.g., <code>c("(", ")")</code>).</p></li>
 </ul><p><strong>For plotting</strong></p><ul><li><p><code>options(modelbased_join_dots = &lt;logical&gt;)</code> will set a default value for
 the <code>join_dots</code>.</p></li>
 <li><p><code>options(modelbased_numeric_as_discrete = &lt;number&gt;)</code> will set a default

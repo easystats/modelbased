@@ -9,7 +9,7 @@ of tables."><meta property="og:image" content="https://easystats.github.io/model
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -226,6 +226,14 @@ remove redundant (duplicated) labels from rows.</p></li>
 <li><p><code>easystats_display_format</code>: <code>options(easystats_display_format = &lt;value&gt;)</code>
 will set the default format for the <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code> methods. Can be one of
 <code>"markdown"</code>, <code>"html"</code>, or <code>"tt"</code>.</p></li>
+<li><p><code>options(easystats_ci_separator = &lt;value&gt;)</code> defines the separator string
+used between the lower and upper CI limits. Defaults to <code>", "</code>, resulting
+in an output like <code>[0.3, 0.8]</code>.</p></li>
+<li><p><code>options(easystats_ci_brackets = &lt;value&gt;)</code> determines whether brackets or
+parentheses are used to enclose formatted CIs. Can be <code>FALSE</code> to omit them,
+<code>TRUE</code> to include them (defaults to <code>[</code> and <code>]</code> for text output), or a
+character vector of length 2 to define custom opening and closing symbols
+(e.g., <code>c("(", ")")</code>).</p></li>
 </ul></div>
 
     <div class="section level2">
