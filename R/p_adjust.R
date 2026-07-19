@@ -204,7 +204,7 @@
   if (!inherits(x, c("estimate_slopes", "marginaleffects_slopes"))) {
     insight::format_error(
       "The `esarey` p-value adjustment is only available for Johnson-Neyman intervals, i.e. when calling `estimate_slopes()` with an interaction term of two numeric predictors."
-    ) # nolint
+    )
   }
   # get names of interaction terms
   pred <- attributes(x)$trend
@@ -214,7 +214,7 @@
   if (!all(vapply(attributes(x)$datagrid[c(pred, mod)], is.numeric, logical(1)))) {
     insight::format_error(
       "The `esarey` p-value adjustment is only available for Johnson-Neyman intervals, i.e. when calling `estimate_slopes()` with an interaction term of two numeric predictors."
-    ) # nolint
+    )
   }
 
   int <- paste0(pred, ":", mod)

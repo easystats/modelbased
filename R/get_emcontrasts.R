@@ -79,7 +79,7 @@ get_emcontrasts <- function(
     if (is.null(my_args$by)) {
       insight::format_error(
         "Please specify the `by` argument to calculate contrasts of slopes."
-      ) # nolint
+      )
     }
     # Run emmeans
     fun_args <- c(fun_args, list(specs = my_args$by, var = my_args$contrast))
@@ -168,7 +168,7 @@ get_emcontrasts <- function(
         "No variable was specified for contrast estimation. Selecting `contrast = \"",
         contrast,
         "\"`."
-      )) # nolint
+      ))
     }
   } else if (all(contrast == "all")) {
     contrast <- predictors

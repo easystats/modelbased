@@ -529,7 +529,7 @@ get_marginalmeans <- function(
         toString(paste0("\"", fun_args$by, "\"")),
         "), backend = \"emmeans\")`, or use `estimate_relation(model, by = c(",
         toString(paste0("\"", fun_args$by, "\"")),
-        "))` instead. For contrasts or pairwise comparisons, save the output of `estimate_relation()` and pass it to `estimate_contrasts()`, e.g.\n" # nolint
+        "))` instead. For contrasts or pairwise comparisons, save the output of `estimate_relation()` and pass it to `estimate_contrasts()`, e.g.\n"
       ),
       paste0(
         "out <- estimate_relation(model, by = c(",

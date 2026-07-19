@@ -886,7 +886,7 @@
       Predictors contrasted: grp, time=2
       p-values are uncorrected.
 
-# estimate_contrast, slopes with emmeans
+# estimate_contrast, slopes with emmeans-2
 
     Code
       print(out, table_width = Inf)

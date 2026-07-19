@@ -404,7 +404,6 @@ estimate_relation <- function(
       is.numeric(iterations) &&
       keep_iterations > iterations
   ) {
-    # nolint
     insight::format_error("`keep_iterations` cannot be larger than `iterations`.")
   }
 
@@ -492,7 +491,6 @@ estimate_relation <- function(
       length(model_response) == 1 &&
       model_response %in% names(data)
   ) {
-    # nolint
     response <- data[[model_response]]
   } else {
     response <- NULL
@@ -549,7 +547,6 @@ estimate_relation <- function(
       length(model_response) == 1 &&
       model_response %in% colnames(out)
   ) {
-    # nolint
     out[[model_response]] <- NULL
   }
 

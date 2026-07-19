@@ -236,7 +236,7 @@ estimate_grouplevel.brmsfit <- function(
   # match parameters
   if (!is.null(clean_parameters)) {
     # fmt: skip
-    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE] # nolint
+    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE]
   }
 
   # Re-add info
@@ -323,9 +323,9 @@ estimate_grouplevel.stanreg <- function(
   if (!is.null(clean_parameters)) {
     # fix for rstanarm, which contains a sigma columns
     # fmt: skip
-    clean_parameters <- clean_parameters[clean_parameters$Component != "sigma" & !startsWith(clean_parameters$Parameter, "Sigma["), , drop = FALSE] # nolint
+    clean_parameters <- clean_parameters[clean_parameters$Component != "sigma" & !startsWith(clean_parameters$Parameter, "Sigma["), , drop = FALSE]
     # fmt: skip
-    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE] # nolint
+    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE]
 
     params$Parameter <- insight::trim_ws(sub(":.*", "", clean_parameters$Group))
     params$Group <- insight::trim_ws(sub("^[^:]*:", "", clean_parameters$Group))

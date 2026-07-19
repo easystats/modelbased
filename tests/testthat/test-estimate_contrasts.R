@@ -782,8 +782,8 @@ test_that("estimate_contrasts - dfs", {
   ))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
-  expect_equal(estim1$CI_low, c(2.43, 2.25692, 2.89384), tolerance = 1e-4)
-  expect_equal(estim2$CI_low, c(2.62766, 2.53389, 2.98196), tolerance = 1e-4)
+  expect_equal(estim1$CI_high, c(2.43, 2.25692, 2.89384), tolerance = 1e-4)
+  expect_equal(estim2$CI_high, c(2.62766, 2.53389, 2.98196), tolerance = 1e-4)
 
   estim1 <- suppressMessages(estimate_contrasts(
     model,
@@ -797,8 +797,8 @@ test_that("estimate_contrasts - dfs", {
   ))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
-  expect_equal(estim1$CI_low, c(0.22624, 0.33383, 1.0109), tolerance = 1e-4)
-  expect_equal(estim2$CI_low, c(0.29193, 0.4364, 1.04019), tolerance = 1e-4)
+  expect_equal(estim1$CI_high, c(0.22624, 0.33383, 1.0109), tolerance = 1e-4)
+  expect_equal(estim2$CI_high, c(0.29193, 0.4364, 1.04019), tolerance = 1e-4)
 })
 
 
@@ -913,7 +913,7 @@ test_that("estimate_contrasts - marginaleffects vs emmeans", {
     backend = "emmeans"
   ))
   expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
-  expect_equal(out1$Difference, c(-0.68, -0.5, 0.18), tolerance = 1e-4)
+  expect_equal(out1$Difference, c(0.68, 0.5, -0.18), tolerance = 1e-4)
 
   ## marginaleffects backend works and has proper default
   out4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
@@ -928,7 +928,7 @@ test_that("estimate_contrasts - marginaleffects vs emmeans", {
   out_emm <- emmeans::emmeans(model, "Species", type = "response")
   out_emm <- emmeans::regrid(out_emm)
   out6 <- as.data.frame(emmeans::contrast(out_emm, method = "pairwise"))
-  expect_equal(out6$estimate, out1$Difference, tolerance = 1e-3)
+  expect_equal(out6$estimate, out1$Difference * -1, tolerance = 1e-3)
 
   # validate against marginaleffects
   out7 <- marginaleffects::avg_predictions(model, by = "Species", hypothesis = ~pairwise)
@@ -954,7 +954,7 @@ test_that("estimate_contrasts - on-the-fly factors", {
 
   expect_identical(nrow(out1), 3L)
   expect_identical(nrow(out2), 3L)
-  expect_equal(out1$Difference, out2$Difference * -1, tolerance = 1e-4) # swicthed sign
+  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4) # swicthed sign
 
   mtcars2 <- mtcars
   mtcars2$cyl <- as.factor(mtcars2$cyl)
@@ -964,7 +964,7 @@ test_that("estimate_contrasts - on-the-fly factors", {
 
   expect_identical(nrow(out3), 3L)
   expect_identical(nrow(out4), 3L)
-  expect_equal(out3$Difference, out4$Difference * -1, tolerance = 1e-4) # switched sign
+  expect_equal(out3$Difference, out4$Difference, tolerance = 1e-4) # switched sign
 })
 
 
@@ -1474,12 +1474,12 @@ test_that("estimate_contrast, slopes with emmeans", {
     backend = "emmeans"
   )
   expect_identical(dim(out), c(3L, 9L))
-  expect_equal(out$Difference, c(-0.12981, 0.04095, 0.17076), tolerance = 1e-4)
-  expect_identical(as.character(out$Level1), c("setosa", "setosa", "versicolor"))
+  expect_equal(out$Difference, c(0.12981, -0.04095, -0.17076), tolerance = 1e-4)
+  expect_identical(as.character(out$Level2), c("setosa", "setosa", "versicolor"))
 })
 
 
-test_that("estimate_contrast, slopes with emmeans", {
+test_that("estimate_contrast, slopes with emmeans-2", {
   set.seed(123)
   dat <- data.frame(
     outcome = rbinom(n = 100, size = 1, prob = 0.35),
@@ -1584,7 +1584,17 @@ test_that("estimate_contrast, filter by numeric values", {
   )
   expect_equal(
     out2$Difference,
-    c(0.23635, -0.25985, -0.75604, -0.2129, 0.06644, 0.34579, -0.44924, 0.32629, 1.10183),
+    c(
+      -0.23635,
+      0.25985,
+      0.75604,
+      0.2129,
+      -0.06644,
+      -0.34579,
+      0.44924,
+      -0.32629,
+      -1.10183
+    ),
     tolerance = 1e-4
   )
 
@@ -1602,7 +1612,7 @@ test_that("estimate_contrast, filter by numeric values", {
   )
   expect_identical(dim(out1), c(3L, 10L))
   expect_identical(dim(out2), c(3L, 10L))
-  expect_equal(out1$Difference, -1 * out2$Difference, tolerance = 1e-4)
+  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
 
   data(CO2)
   mod <- suppressWarnings(lme4::lmer(uptake ~ conc * Plant + (1 | Type), data = CO2))
@@ -1635,7 +1645,7 @@ test_that("estimate_contrast, filter by numeric values", {
   )
   expect_identical(dim(out1), c(6L, 10L))
   expect_identical(dim(out2), c(6L, 10L))
-  expect_equal(out1$Difference[c(1, 6)], -1 * out2$Difference[c(1, 6)], tolerance = 1e-4)
+  expect_equal(out1$Difference[c(1, 6)], out2$Difference[c(1, 6)], tolerance = 1e-4)
 
   out1 <- estimate_contrasts(
     mod,

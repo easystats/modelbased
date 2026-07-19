@@ -498,7 +498,6 @@
           model_info$is_multinomial
       )
   ) {
-    # nolint
     layers[[paste0("l", l)]] <- list(
       geom = "scale_y_continuous",
       labels = insight::format_value(
