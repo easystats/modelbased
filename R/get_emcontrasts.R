@@ -17,14 +17,16 @@
 #' get_emcontrasts(model, by = "Petal.Width", length = 4)
 #' }
 #' @export
-get_emcontrasts <- function(model,
-                            contrast = NULL,
-                            by = NULL,
-                            predict = NULL,
-                            comparison = "pairwise",
-                            keep_iterations = FALSE,
-                            verbose = TRUE,
-                            ...) {
+get_emcontrasts <- function(
+  model,
+  contrast = NULL,
+  by = NULL,
+  predict = NULL,
+  comparison = "revpairwise",
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # check if available
   insight::check_if_installed("emmeans")
 
@@ -67,13 +69,17 @@ get_emcontrasts <- function(model,
   fun_args <- insight::compact_list(c(fun_args, dots))
 
   # if first focal term is numeric, we contrast slopes
-  if (is.numeric(model_data[[first_focal]]) &&
-    !first_focal %in% on_the_fly_factors &&
-    # if these are identical, only slopes are contrasted - we need emmeans then
-    !identical(my_args$by, my_args$contrast)) {
+  if (
+    is.numeric(model_data[[first_focal]]) &&
+      !first_focal %in% on_the_fly_factors &&
+      # if these are identical, only slopes are contrasted - we need emmeans then
+      !identical(my_args$by, my_args$contrast)
+  ) {
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
-      insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
+      insight::format_error(
+        "Please specify the `by` argument to calculate contrasts of slopes."
+      ) # nolint
     }
     # Run emmeans
     fun_args <- c(fun_args, list(specs = my_args$by, var = my_args$contrast))
@@ -137,11 +143,13 @@ get_emcontrasts <- function(model,
 # =========================================================================
 
 #' @keywords internal
-.guess_emcontrasts_arguments <- function(model,
-                                         contrast = NULL,
-                                         by = NULL,
-                                         verbose = TRUE,
-                                         ...) {
+.guess_emcontrasts_arguments <- function(
+  model,
+  contrast = NULL,
+  by = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Gather info
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
   predictors <- intersect(
@@ -156,7 +164,11 @@ get_emcontrasts <- function(model,
       contrast <- predictors[1]
     }
     if (verbose) {
-      insight::format_alert(paste0("No variable was specified for contrast estimation. Selecting `contrast = \"", contrast, "\"`.")) # nolint
+      insight::format_alert(paste0(
+        "No variable was specified for contrast estimation. Selecting `contrast = \"",
+        contrast,
+        "\"`."
+      )) # nolint
     }
   } else if (all(contrast == "all")) {
     contrast <- predictors
@@ -169,7 +181,6 @@ get_emcontrasts <- function(model,
 
 # Table formatting emmeans ----------------------------------------------------
 
-
 .format_emmeans_contrasts <- function(model, estimated, ci, p_adjust, ...) {
   predict <- attributes(estimated)$predict
   m_info <- insight::model_info(model, response = 1)
@@ -178,7 +189,13 @@ get_emcontrasts <- function(model,
   if (m_info$is_bayesian) {
     out <- cbind(
       estimated@grid,
-      bayestestR::describe_posterior(estimated, ci = ci, diagnostic = NULL, verbose = FALSE, ...)
+      bayestestR::describe_posterior(
+        estimated,
+        ci = ci,
+        diagnostic = NULL,
+        verbose = FALSE,
+        ...
+      )
     )
     out <- .clean_names_bayesian(out, model, predict, type = "contrast")
   } else {
@@ -202,7 +219,6 @@ get_emcontrasts <- function(model,
       after = c("Difference", "Odds_ratio", "Ratio")
     )
   }
-
 
   # Format contrasts names
   # Split by either " - " or "/"
