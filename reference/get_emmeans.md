@@ -19,7 +19,7 @@ get_emcontrasts(
   contrast = NULL,
   by = NULL,
   predict = NULL,
-  comparison = "pairwise",
+  comparison = "revpairwise",
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -441,9 +441,9 @@ get_emcontrasts(model)
 #> No variable was specified for contrast estimation. Selecting `contrast =
 #>   "Species"`.
 #>  contrast               estimate     SE  df t.ratio p.value
-#>  setosa - versicolor       0.658 0.0679 147   9.685 <0.0001
-#>  setosa - virginica        0.454 0.0679 147   6.683 <0.0001
-#>  versicolor - virginica   -0.204 0.0679 147  -3.003  0.0088
+#>  versicolor - setosa      -0.658 0.0679 147  -9.685 <0.0001
+#>  virginica - setosa       -0.454 0.0679 147  -6.683 <0.0001
+#>  virginica - versicolor    0.204 0.0679 147   3.003  0.0088
 #> 
 #> P value adjustment: tukey method for comparing a family of 3 estimates 
 
@@ -455,79 +455,79 @@ get_emcontrasts(model)
 #> No variable was specified for contrast estimation. Selecting `contrast =
 #>   "Species"`.
 #>  contrast               estimate    SE  df t.ratio p.value
-#>  setosa - versicolor       1.590 0.394 144   4.039  0.0003
-#>  setosa - virginica        1.774 0.413 144   4.293 <0.0001
-#>  versicolor - virginica    0.184 0.145 144   1.272  0.4131
+#>  versicolor - setosa      -1.590 0.394 144  -4.039  0.0003
+#>  virginica - setosa       -1.774 0.413 144  -4.293 <0.0001
+#>  virginica - versicolor   -0.184 0.145 144  -1.272  0.4131
 #> 
 #> P value adjustment: tukey method for comparing a family of 3 estimates 
 # Or both
 get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 #>  contrast                                              estimate    SE  df
-#>  setosa Petal.Width0.1 - versicolor Petal.Width0.1       1.8275 0.279 144
-#>  setosa Petal.Width0.1 - virginica Petal.Width0.1        1.5479 0.312 144
-#>  setosa Petal.Width0.1 - setosa Petal.Width2.5          -2.0093 0.977 144
-#>  setosa Petal.Width0.1 - versicolor Petal.Width2.5      -0.7012 0.268 144
-#>  setosa Petal.Width0.1 - virginica Petal.Width2.5        0.0325 0.112 144
-#>  versicolor Petal.Width0.1 - virginica Petal.Width0.1   -0.2797 0.406 144
-#>  versicolor Petal.Width0.1 - setosa Petal.Width2.5      -3.8368 0.957 144
-#>  versicolor Petal.Width0.1 - versicolor Petal.Width2.5  -2.5288 0.521 144
-#>  versicolor Petal.Width0.1 - virginica Petal.Width2.5   -1.7951 0.282 144
-#>  virginica Petal.Width0.1 - setosa Petal.Width2.5       -3.5571 0.967 144
-#>  virginica Petal.Width0.1 - versicolor Petal.Width2.5   -2.2491 0.399 144
-#>  virginica Petal.Width0.1 - virginica Petal.Width2.5    -1.5154 0.375 144
-#>  setosa Petal.Width2.5 - versicolor Petal.Width2.5       1.3080 0.954 144
-#>  setosa Petal.Width2.5 - virginica Petal.Width2.5        2.0417 0.922 144
-#>  versicolor Petal.Width2.5 - virginica Petal.Width2.5    0.7337 0.272 144
+#>  versicolor Petal.Width0.1 - setosa Petal.Width0.1      -1.8275 0.279 144
+#>  virginica Petal.Width0.1 - setosa Petal.Width0.1       -1.5479 0.312 144
+#>  virginica Petal.Width0.1 - versicolor Petal.Width0.1    0.2797 0.406 144
+#>  setosa Petal.Width2.5 - setosa Petal.Width0.1           2.0093 0.977 144
+#>  setosa Petal.Width2.5 - versicolor Petal.Width0.1       3.8368 0.957 144
+#>  setosa Petal.Width2.5 - virginica Petal.Width0.1        3.5571 0.967 144
+#>  versicolor Petal.Width2.5 - setosa Petal.Width0.1       0.7012 0.268 144
+#>  versicolor Petal.Width2.5 - versicolor Petal.Width0.1   2.5288 0.521 144
+#>  versicolor Petal.Width2.5 - virginica Petal.Width0.1    2.2491 0.399 144
+#>  versicolor Petal.Width2.5 - setosa Petal.Width2.5      -1.3080 0.954 144
+#>  virginica Petal.Width2.5 - setosa Petal.Width0.1       -0.0325 0.112 144
+#>  virginica Petal.Width2.5 - versicolor Petal.Width0.1    1.7951 0.282 144
+#>  virginica Petal.Width2.5 - virginica Petal.Width0.1     1.5154 0.375 144
+#>  virginica Petal.Width2.5 - setosa Petal.Width2.5       -2.0417 0.922 144
+#>  virginica Petal.Width2.5 - versicolor Petal.Width2.5   -0.7337 0.272 144
 #>  t.ratio p.value
-#>    6.550 <0.0001
-#>    4.955 <0.0001
-#>   -2.057  0.3158
-#>   -2.614  0.1005
-#>    0.289  0.9997
-#>   -0.689  0.9829
-#>   -4.009  0.0013
-#>   -4.858 <0.0001
-#>   -6.355 <0.0001
-#>   -3.678  0.0044
-#>   -5.642 <0.0001
-#>   -4.043  0.0012
-#>    1.371  0.7441
-#>    2.214  0.2379
-#>    2.699  0.0817
+#>   -6.550 <0.0001
+#>   -4.955 <0.0001
+#>    0.689  0.9829
+#>    2.057  0.3158
+#>    4.009  0.0013
+#>    3.678  0.0044
+#>    2.614  0.1005
+#>    4.858 <0.0001
+#>    5.642 <0.0001
+#>   -1.371  0.7441
+#>   -0.289  0.9997
+#>    6.355 <0.0001
+#>    4.043  0.0012
+#>   -2.214  0.2379
+#>   -2.699  0.0817
 #> 
 #> P value adjustment: tukey method for comparing a family of 6 estimates 
 # Or with custom specifications
 get_emcontrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 #>  contrast                                          estimate     SE  df t.ratio
-#>  setosa Petal.Width1 - versicolor Petal.Width1        1.633 0.3210 144   5.093
-#>  setosa Petal.Width1 - virginica Petal.Width1         1.733 0.3510 144   4.933
-#>  setosa Petal.Width1 - setosa Petal.Width2           -0.837 0.4070 144  -2.057
-#>  setosa Petal.Width1 - versicolor Petal.Width2        0.579 0.3450 144   1.678
-#>  setosa Petal.Width1 - virginica Petal.Width2         1.102 0.3130 144   3.523
-#>  versicolor Petal.Width1 - virginica Petal.Width1     0.100 0.1850 144   0.542
-#>  versicolor Petal.Width1 - setosa Petal.Width2       -2.470 0.7200 144  -3.431
-#>  versicolor Petal.Width1 - versicolor Petal.Width2   -1.054 0.2170 144  -4.858
-#>  versicolor Petal.Width1 - virginica Petal.Width2    -0.531 0.0928 144  -5.720
-#>  virginica Petal.Width1 - setosa Petal.Width2        -2.570 0.7340 144  -3.501
-#>  virginica Petal.Width1 - versicolor Petal.Width2    -1.154 0.2250 144  -5.128
-#>  virginica Petal.Width1 - virginica Petal.Width2     -0.631 0.1560 144  -4.043
-#>  setosa Petal.Width2 - versicolor Petal.Width2        1.416 0.7310 144   1.937
-#>  setosa Petal.Width2 - virginica Petal.Width2         1.939 0.7160 144   2.706
-#>  versicolor Petal.Width2 - virginica Petal.Width2     0.523 0.1580 144   3.306
+#>  versicolor Petal.Width1 - setosa Petal.Width1       -1.633 0.3210 144  -5.093
+#>  virginica Petal.Width1 - setosa Petal.Width1        -1.733 0.3510 144  -4.933
+#>  virginica Petal.Width1 - versicolor Petal.Width1    -0.100 0.1850 144  -0.542
+#>  setosa Petal.Width2 - setosa Petal.Width1            0.837 0.4070 144   2.057
+#>  setosa Petal.Width2 - versicolor Petal.Width1        2.470 0.7200 144   3.431
+#>  setosa Petal.Width2 - virginica Petal.Width1         2.570 0.7340 144   3.501
+#>  versicolor Petal.Width2 - setosa Petal.Width1       -0.579 0.3450 144  -1.678
+#>  versicolor Petal.Width2 - versicolor Petal.Width1    1.054 0.2170 144   4.858
+#>  versicolor Petal.Width2 - virginica Petal.Width1     1.154 0.2250 144   5.128
+#>  versicolor Petal.Width2 - setosa Petal.Width2       -1.416 0.7310 144  -1.937
+#>  virginica Petal.Width2 - setosa Petal.Width1        -1.102 0.3130 144  -3.523
+#>  virginica Petal.Width2 - versicolor Petal.Width1     0.531 0.0928 144   5.720
+#>  virginica Petal.Width2 - virginica Petal.Width1      0.631 0.1560 144   4.043
+#>  virginica Petal.Width2 - setosa Petal.Width2        -1.939 0.7160 144  -2.706
+#>  virginica Petal.Width2 - versicolor Petal.Width2    -0.523 0.1580 144  -3.306
 #>  p.value
 #>  <0.0001
 #>  <0.0001
-#>   0.3158
-#>   0.5487
-#>   0.0074
 #>   0.9943
+#>   0.3158
 #>   0.0100
-#>  <0.0001
-#>  <0.0001
 #>   0.0080
+#>   0.5487
+#>  <0.0001
+#>  <0.0001
+#>   0.3840
+#>   0.0074
 #>  <0.0001
 #>   0.0012
-#>   0.3840
 #>   0.0802
 #>   0.0149
 #> 
@@ -538,27 +538,27 @@ get_emcontrasts(model, by = "Petal.Width", length = 4)
 #>   "Species"`.
 #> Petal.Width = 0.1:
 #>  contrast               estimate    SE  df t.ratio p.value
-#>  setosa - versicolor      1.8275 0.279 144   6.550 <0.0001
-#>  setosa - virginica       1.5479 0.312 144   4.955 <0.0001
-#>  versicolor - virginica  -0.2797 0.406 144  -0.689  0.7703
+#>  versicolor - setosa     -1.8275 0.279 144  -6.550 <0.0001
+#>  virginica - setosa      -1.5479 0.312 144  -4.955 <0.0001
+#>  virginica - versicolor   0.2797 0.406 144   0.689  0.7703
 #> 
 #> Petal.Width = 0.9:
 #>  contrast               estimate    SE  df t.ratio p.value
-#>  setosa - versicolor      1.6544 0.288 144   5.743 <0.0001
-#>  setosa - virginica       1.7125 0.325 144   5.276 <0.0001
-#>  versicolor - virginica   0.0581 0.208 144   0.280  0.9577
+#>  versicolor - setosa     -1.6544 0.288 144  -5.743 <0.0001
+#>  virginica - setosa      -1.7125 0.325 144  -5.276 <0.0001
+#>  virginica - versicolor  -0.0581 0.208 144  -0.280  0.9577
 #> 
 #> Petal.Width = 1.7:
 #>  contrast               estimate    SE  df t.ratio p.value
-#>  setosa - versicolor      1.4812 0.600 144   2.467  0.0390
-#>  setosa - virginica       1.8771 0.597 144   3.144  0.0057
-#>  versicolor - virginica   0.3959 0.113 144   3.502  0.0018
+#>  versicolor - setosa     -1.4812 0.600 144  -2.467  0.0390
+#>  virginica - setosa      -1.8771 0.597 144  -3.144  0.0057
+#>  virginica - versicolor  -0.3959 0.113 144  -3.502  0.0018
 #> 
 #> Petal.Width = 2.5:
 #>  contrast               estimate    SE  df t.ratio p.value
-#>  setosa - versicolor      1.3080 0.954 144   1.371  0.3587
-#>  setosa - virginica       2.0417 0.922 144   2.214  0.0722
-#>  versicolor - virginica   0.7337 0.272 144   2.699  0.0212
+#>  versicolor - setosa     -1.3080 0.954 144  -1.371  0.3587
+#>  virginica - setosa      -2.0417 0.922 144  -2.214  0.0722
+#>  virginica - versicolor  -0.7337 0.272 144  -2.699  0.0212
 #> 
 #> P value adjustment: tukey method for comparing a family of 3 estimates 
 # }
@@ -826,8 +826,8 @@ get_marginaltrends(model, trend = "Petal.Length", by = "Species")
 #> 
 #>     Species Estimate Std. Error    t Pr(>|t|)    S   2.5 % 97.5 %  Df
 #>  setosa        0.388     0.2602 1.49  0.13825  2.9 -0.1264  0.902 144
-#>  versicolor    0.374     0.0963 3.89  < 0.001 12.7  0.1840  0.565 144
-#>  virginica     0.234     0.0819 2.86  0.00483  7.7  0.0725  0.396 144
+#>  versicolor    0.374     0.0963 3.89  < 0.001 12.7  0.1839  0.565 144
+#>  virginica     0.234     0.0818 2.86  0.00482  7.7  0.0726  0.396 144
 #> 
 #> Term: Petal.Length
 #> Type: response
@@ -836,16 +836,16 @@ get_marginaltrends(model, trend = "Petal.Length", by = "Species")
 get_marginaltrends(model, trend = "Petal.Length", by = "Petal.Length")
 #> 
 #>  Petal.Length Estimate Std. Error    t Pr(>|t|)    S 2.5 % 97.5 %  Df
-#>          1.00    0.332     0.0964 3.44   <0.001 10.4 0.142  0.523 144
+#>          1.00    0.332     0.0964 3.45   <0.001 10.4 0.142  0.523 144
 #>          1.66    0.332     0.0963 3.45   <0.001 10.4 0.142  0.523 144
-#>          2.31    0.332     0.0963 3.45   <0.001 10.4 0.142  0.522 144
-#>          2.97    0.332     0.0963 3.45   <0.001 10.4 0.142  0.522 144
+#>          2.31    0.332     0.0966 3.44   <0.001 10.4 0.141  0.523 144
+#>          2.97    0.332     0.0966 3.44   <0.001 10.4 0.141  0.523 144
 #>          3.62    0.332     0.0963 3.45   <0.001 10.4 0.142  0.523 144
 #>          4.28    0.332     0.0963 3.45   <0.001 10.4 0.142  0.523 144
-#>          4.93    0.332     0.0966 3.44   <0.001 10.4 0.141  0.523 144
+#>          4.93    0.332     0.0965 3.44   <0.001 10.4 0.141  0.523 144
 #>          5.59    0.332     0.0963 3.45   <0.001 10.4 0.142  0.523 144
 #>          6.24    0.332     0.0963 3.45   <0.001 10.4 0.142  0.522 144
-#>          6.90    0.332     0.0965 3.44   <0.001 10.4 0.141  0.523 144
+#>          6.90    0.332     0.0966 3.44   <0.001 10.4 0.141  0.523 144
 #> 
 #> Term: Petal.Length
 #> Type: response
@@ -855,13 +855,13 @@ get_marginaltrends(model, trend = "Petal.Length", by = c("Species", "Petal.Lengt
 #> 
 #>     Species Petal.Length Estimate Std. Error    t Pr(>|t|)    S   2.5 % 97.5 %
 #>  setosa             1.00    0.388     0.2602 1.49  0.13820  2.9 -0.1264  0.902
-#>  setosa             1.66    0.388     0.2602 1.49  0.13820  2.9 -0.1264  0.902
+#>  setosa             1.66    0.388     0.2601 1.49  0.13815  2.9 -0.1263  0.902
 #>  versicolor         3.62    0.374     0.0963 3.89  < 0.001 12.7  0.1839  0.565
 #>  versicolor         4.28    0.374     0.0963 3.89  < 0.001 12.7  0.1840  0.565
-#>  versicolor         4.93    0.374     0.0959 3.90  < 0.001 12.7  0.1847  0.564
-#>  virginica          4.93    0.234     0.0819 2.86  0.00483  7.7  0.0725  0.396
-#>  virginica          5.59    0.234     0.0819 2.86  0.00482  7.7  0.0726  0.396
-#>  virginica          6.24    0.234     0.0819 2.86  0.00484  7.7  0.0725  0.396
+#>  versicolor         4.93    0.374     0.0960 3.90  < 0.001 12.7  0.1846  0.564
+#>  virginica          4.93    0.234     0.0819 2.86  0.00482  7.7  0.0726  0.396
+#>  virginica          5.59    0.234     0.0819 2.86  0.00484  7.7  0.0725  0.396
+#>  virginica          6.24    0.234     0.0819 2.86  0.00482  7.7  0.0726  0.396
 #>  virginica          6.90    0.234     0.0819 2.86  0.00482  7.7  0.0726  0.396
 #>   Df
 #>  144
