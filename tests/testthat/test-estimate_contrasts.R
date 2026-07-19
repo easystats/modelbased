@@ -3,6 +3,14 @@ skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 skip_on_os("mac")
 
+test_that("estimate_contrasts - same sign of contrasts for both backends", {
+  data(iris)
+  m <- lm(Sepal.Length ~ Species, data = iris)
+  out1 <- estimate_contrasts(m, contrast = "Species", backend = "emmeans")
+  out2 <- estimate_contrasts(m, contrast = "Species", backend = "marginaleffects")
+  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
+})
+
 test_that("estimate_contrasts - Frequentist, one factor", {
   data(iris)
   # One factor
