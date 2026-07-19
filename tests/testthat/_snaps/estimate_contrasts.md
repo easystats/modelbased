@@ -158,9 +158,9 @@
       
       Level1     | Level2     | Difference |         95% CI |   SE |     z |      p
       -----------------------------------------------------------------------------
-      setosa     | versicolor |      -0.68 | [-0.82, -0.54] | 0.07 | -9.27 | < .001
-      setosa     | virginica  |      -0.50 | [-0.67, -0.33] | 0.08 | -5.90 | < .001
-      versicolor | virginica  |       0.18 | [ 0.01,  0.35] | 0.08 |  2.12 |  0.034
+      versicolor | setosa     |       0.68 | [ 0.54,  0.82] | 0.07 |  9.27 | < .001
+      virginica  | setosa     |       0.50 | [ 0.33,  0.67] | 0.08 |  5.90 | < .001
+      virginica  | versicolor |      -0.18 | [-0.35, -0.01] | 0.08 | -2.12 |  0.034
       
       Variable predicted: y
       Predictors contrasted: Species
@@ -197,11 +197,11 @@
     Output
       Marginal Contrasts Analysis
       
-      Level1     | Level2     | Difference |         95% CI |   SE |     z |      p
-      -----------------------------------------------------------------------------
-      setosa     | versicolor |      -0.68 | [-0.86, -0.50] | 0.07 | -9.27 | < .001
-      setosa     | virginica  |      -0.50 | [-0.70, -0.30] | 0.08 | -5.90 | < .001
-      versicolor | virginica  |       0.18 | [-0.02,  0.38] | 0.08 |  2.12 |  0.034
+      Level1     | Level2     | Difference |        95% CI |   SE |     z |      p
+      ----------------------------------------------------------------------------
+      versicolor | setosa     |       0.68 | [ 0.50, 0.86] | 0.07 |  9.27 | < .001
+      virginica  | setosa     |       0.50 | [ 0.30, 0.70] | 0.08 |  5.90 | < .001
+      virginica  | versicolor |      -0.18 | [-0.38, 0.02] | 0.08 | -2.12 |  0.034
       
       Variable predicted: y
       Predictors contrasted: Species
