@@ -28,11 +28,13 @@
 #' package are only available if you set `backend = "emmeans"`.
 #' @param comparison Specify the type of contrasts or tests that should be
 #' carried out. See also section *Comparison options* below for details.
-#' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"poly"`,
-#'   `"consec"`, `"eff"`, `"del.eff"`, `"mean_chg"`, `"trt.vs.ctrl"`,
-#'   `"dunnett"`, `"wtcon"` and some more. To test multiple hypotheses jointly
-#'   (usually used for factorial designs), `comparison` can also be `"joint"`.
-#'   See also `method` argument in [emmeans::contrast] and the
+#' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"revpairwise"`,
+#'   `"poly"`, `"consec"`, `"eff"`, `"del.eff"`, `"mean_chg"`, `"trt.vs.ctrl"`,
+#'   `"dunnett"`, `"wtcon"` and some more. Defaults to `"revpairwise"`, to
+#'   return consistent results (regarding the sign) with the default
+#'   `backend = "marginaleffects"`. To test multiple hypotheses jointly (usually
+#'   used for factorial designs), `comparison` can also be `"joint"`. See also
+#'   `method` argument in [emmeans::contrast] and the
 #'   `?emmeans::emmc-functions`.
 #' * For `backend = "marginaleffects"`, can be a numeric value, vector, or
 #'   matrix, a string equation specifying the hypothesis to test, a string
@@ -477,7 +479,15 @@ estimate_contrasts.default <- function(
 
   # validate input
   estimate <- .validate_estimate_arg(estimate)
+  backend <- insight::validate_argument(backend, c("marginaleffects", "emmeans"))
+
+  # for emmeans, we default to revpairwise, to get consistent signs of contrasts
+  # for both backends, see #645
+  if (missing(comparison) && backend == "emmeans") {
+    comparison <- "revpairwise"
+  }
   comparison <- .check_for_inequality_comparison(comparison)
+
   # Validate es_type usage
   if (is.null(effectsize) && !is.null(es_type)) {
     insight::format_error(

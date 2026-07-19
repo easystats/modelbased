@@ -67,7 +67,7 @@ get_marginalcontrasts <- function(
         all(my_args$cleaned_contrast %in% my_args$cleaned_by))
   ) {
     insight::format_error(
-      "You cannot specifiy the same variables in `contrast` and `by`. Either omit `by`, or choose a different variable for `contrast` or `by`." # nolint
+      "You cannot specifiy the same variables in `contrast` and `by`. Either omit `by`, or choose a different variable for `contrast` or `by`."
     )
   }
 

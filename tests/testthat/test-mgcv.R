@@ -21,8 +21,11 @@ test_that("estimate_contrasts - mgcv gam", {
   expect_identical(dim(estim), c(3L, 9L))
   estim2 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
   expect_identical(dim(estim2), c(3L, 9L))
-  expect_named(estim2, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
-  expect_equal(estim$Difference, estim2$Difference * -1, tolerance = 1e-4) # switched signs
+  expect_named(
+    estim2,
+    c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
+  expect_equal(estim$Difference, estim2$Difference, tolerance = 1e-4) # switched signs
 })
 
 
@@ -44,7 +47,11 @@ test_that("estimate_link - mgcv gam", {
 # estim <- estimate_link(model)
 
 test_that("estimate_expectation - mgcv gamm", {
-  model <- mgcv::gamm(Sepal.Length ~ Petal.Length + s(Sepal.Width), random = list(Species = ~1), data = iris)
+  model <- mgcv::gamm(
+    Sepal.Length ~ Petal.Length + s(Sepal.Width),
+    random = list(Species = ~1),
+    data = iris
+  )
   estim <- suppressMessages(estimate_expectation(model))
   expect_equal(dim(estim), c(150, 8))
 })
@@ -52,11 +59,14 @@ test_that("estimate_expectation - mgcv gamm", {
 
 test_that("estimate_link - mgcv gamm", {
   skip_on_os("mac")
-  model <- mgcv::gamm(Sepal.Length ~ Petal.Length + s(Sepal.Width), random = list(Species = ~1), data = iris)
+  model <- mgcv::gamm(
+    Sepal.Length ~ Petal.Length + s(Sepal.Width),
+    random = list(Species = ~1),
+    data = iris
+  )
   estim <- estimate_link(model, length = 4, verbose = FALSE)
   expect_identical(dim(estim), as.integer(c(16, 6)))
 })
-
 
 # Gamm4 -------------------------------------------------------------------
 

@@ -10,9 +10,9 @@
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
-      setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | < .001
-      setosa     | virginica  |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | < .001
-      versicolor | virginica  |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 |  0.003
+      versicolor | setosa     |      -0.66 | [-0.79, -0.52] | 0.07 |  -9.69 | < .001
+      virginica  | setosa     |      -0.45 | [-0.59, -0.32] | 0.07 |  -6.68 | < .001
+      virginica  | versicolor |       0.20 | [ 0.07,  0.34] | 0.07 |   3.00 |  0.003
       
       Variable predicted: Sepal.Width
       Predictors contrasted: Species
@@ -30,9 +30,9 @@
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
-      setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | < .001
-      setosa     | virginica  |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | < .001
-      versicolor | virginica  |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 |  0.003
+      versicolor | setosa     |      -0.66 | [-0.79, -0.52] | 0.07 |  -9.69 | < .001
+      virginica  | setosa     |      -0.45 | [-0.59, -0.32] | 0.07 |  -6.68 | < .001
+      virginica  | versicolor |       0.20 | [ 0.07,  0.34] | 0.07 |   3.00 |  0.003
       
       Variable predicted: Sepal.Width
       Predictors contrasted: Species
@@ -50,15 +50,15 @@
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
-      setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | < .001
-      setosa     | virginica  |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | < .001
-      versicolor | virginica  |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 |  0.003
+      versicolor | setosa     |      -0.66 | [-0.79, -0.52] | 0.07 |  -9.69 | < .001
+      virginica  | setosa     |      -0.45 | [-0.59, -0.32] | 0.07 |  -6.68 | < .001
+      virginica  | versicolor |       0.20 | [ 0.07,  0.34] | 0.07 |   3.00 |  0.003
       
       Level1     | partial_d |      es 95% CI
       ---------------------------------------
-      setosa     |      1.94 | [ 1.48,  2.39]
-      setosa     |      1.34 | [ 0.91,  1.76]
-      versicolor |     -0.60 | [-1.00, -0.20]
+      versicolor |     -1.94 | [-2.39, -1.48]
+      virginica  |     -1.34 | [-1.76, -0.91]
+      virginica  |      0.60 | [ 0.20,  1.00]
       
       Variable predicted: Sepal.Width
       Predictors contrasted: Species
@@ -76,9 +76,9 @@
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p | marginal_d
       -------------------------------------------------------------------------------------------
-      setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | < .001 |       1.16
-      setosa     | virginica  |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | < .001 |       0.80
-      versicolor | virginica  |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 |  0.003 |      -0.36
+      versicolor | setosa     |      -0.66 | [-0.79, -0.52] | 0.07 |  -9.69 | < .001 |      -1.16
+      virginica  | setosa     |      -0.45 | [-0.59, -0.32] | 0.07 |  -6.68 | < .001 |      -0.80
+      virginica  | versicolor |       0.20 | [ 0.07,  0.34] | 0.07 |   3.00 |  0.003 |       0.36
       
       Variable predicted: Sepal.Width
       Predictors contrasted: Species
@@ -96,15 +96,15 @@
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
-      setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | < .001
-      setosa     | virginica  |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | < .001
-      versicolor | virginica  |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 |  0.003
+      versicolor | setosa     |      -0.66 | [-0.79, -0.52] | 0.07 |  -9.69 | < .001
+      virginica  | setosa     |      -0.45 | [-0.59, -0.32] | 0.07 |  -6.68 | < .001
+      virginica  | versicolor |       0.20 | [ 0.07,  0.34] | 0.07 |   3.00 |  0.003
       
       Level1     | Cohen's d | Cohen's d 95% CI
       -----------------------------------------
-      setosa     |      1.94 |   [ 1.52,  2.39]
-      setosa     |      1.34 |   [ 0.82,  1.72]
-      versicolor |     -0.60 |   [-0.92, -0.22]
+      versicolor |     -1.94 |   [-2.39, -1.52]
+      virginica  |     -1.34 |   [-1.72, -0.82]
+      virginica  |      0.60 |   [ 0.22,  0.92]
       
       Variable predicted: Sepal.Width
       Predictors contrasted: Species
@@ -123,15 +123,15 @@
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
-      setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | < .001
-      setosa     | virginica  |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | < .001
-      versicolor | virginica  |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 |  0.003
+      versicolor | setosa     |      -0.66 | [-0.79, -0.52] | 0.07 |  -9.69 | < .001
+      virginica  | setosa     |      -0.45 | [-0.59, -0.32] | 0.07 |  -6.68 | < .001
+      virginica  | versicolor |       0.20 | [ 0.07,  0.34] | 0.07 |   3.00 |  0.003
       
       Level1     | Robust Cohen's d | Robust Cohen's d 95% CI
       -------------------------------------------------------
-      setosa     |             1.88 |          [ 1.42,  2.49]
-      setosa     |             1.37 |          [ 0.92,  1.78]
-      versicolor |            -0.51 |          [-0.90, -0.17]
+      versicolor |            -1.88 |          [-2.49, -1.42]
+      virginica  |            -1.37 |          [-1.78, -0.92]
+      virginica  |             0.51 |          [ 0.17,  0.90]
       
       Variable predicted: Sepal.Width
       Predictors contrasted: Species
@@ -149,15 +149,15 @@
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
-      setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | < .001
-      setosa     | virginica  |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | < .001
-      versicolor | virginica  |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 |  0.003
+      versicolor | setosa     |      -0.66 | [-0.79, -0.52] | 0.07 |  -9.69 | < .001
+      virginica  | setosa     |      -0.45 | [-0.59, -0.32] | 0.07 |  -6.68 | < .001
+      virginica  | versicolor |       0.20 | [ 0.07,  0.34] | 0.07 |   3.00 |  0.003
       
       Level1     | Hedges' g | Hedges' g 95% CI
       -----------------------------------------
-      setosa     |      1.93 |   [ 1.51,  2.38]
-      setosa     |      1.33 |   [ 0.82,  1.71]
-      versicolor |     -0.60 |   [-0.91, -0.22]
+      versicolor |     -1.93 |   [-2.38, -1.51]
+      virginica  |     -1.33 |   [-1.71, -0.82]
+      virginica  |      0.60 |   [ 0.22,  0.91]
       
       Variable predicted: Sepal.Width
       Predictors contrasted: Species

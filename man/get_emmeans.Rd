@@ -16,7 +16,7 @@ get_emcontrasts(
   contrast = NULL,
   by = NULL,
   predict = NULL,
-  comparison = "pairwise",
+  comparison = "revpairwise",
   keep_iterations = FALSE,
   verbose = TRUE,
   ...

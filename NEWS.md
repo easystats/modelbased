@@ -1,5 +1,11 @@
 # modelbased (devel)
 
+## Breaking Changes
+
+* The `comparison` argument in `estimate_contrasts()` for `backend = "emmeans"`
+  now defaults to `"revpairwise"`, to return consistent results regarding the
+  sign of contrasts with the `"marginaleffects"` backend.
+
 ## Changes
 
 * The `iterations` argument can now also be used for Bayesian model in
