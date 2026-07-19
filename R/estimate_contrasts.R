@@ -479,7 +479,15 @@ estimate_contrasts.default <- function(
 
   # validate input
   estimate <- .validate_estimate_arg(estimate)
+  backend <- insight::validate_argument(backend, c("marginaleffects", "emmeans"))
+
+  # for emmeans, we default to revpairwise, to get consistent signs of contrasts
+  # for both backends, see #645
+  if (missing(comparison) && backend == "emmeans") {
+    comparison <- "revpairwise"
+  }
   comparison <- .check_for_inequality_comparison(comparison)
+
   # Validate es_type usage
   if (is.null(effectsize) && !is.null(es_type)) {
     insight::format_error(

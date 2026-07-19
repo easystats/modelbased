@@ -441,6 +441,7 @@ estimate_means <- function(
 
   # validate input
   estimate <- .validate_estimate_arg(estimate)
+  backend <- insight::validate_argument(backend, c("marginaleffects", "emmeans"))
 
   if (backend == "emmeans") {
     # Emmeans ----------------------------------------------------------------

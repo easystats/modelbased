@@ -152,6 +152,7 @@ estimate_slopes <- function(
   if (is.null(backend)) {
     backend <- getOption("modelbased_backend", "marginaleffects")
   }
+  backend <- insight::validate_argument(backend, c("marginaleffects", "emmeans"))
 
   # ----------------------
   # Important: do not touch (i.e. remove) the `trend` argument, as it would
