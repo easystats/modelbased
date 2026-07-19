@@ -19,7 +19,7 @@ test_that("estimate_contrasts - Frequentist, one factor", {
 
   estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
-  expect_equal(estim$Difference, c(0.658, 0.454, -0.204), tolerance = 1e-4)
+  expect_equal(estim$Difference, c(-0.658, -0.454, 0.204), tolerance = 1e-4)
 
   estim <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
   expect_identical(dim(estim), c(3L, 9L))
@@ -438,13 +438,13 @@ test_that("estimate_contrasts - Frequentist, GLM", {
     model,
     backend = "marginaleffects"
   )))
-  expect_identical(estim3$Difference, estim1$Difference * -1)
+  expect_identical(estim3$Difference, estim1$Difference)
   estim4 <- suppressWarnings(suppressMessages(estimate_contrasts(
     model,
     predict = "link",
     backend = "marginaleffects"
   )))
-  expect_identical(estim4$Difference, estim2$Difference * -1)
+  expect_identical(estim4$Difference, estim2$Difference)
 
   # GLM - poisson
   dat <- data.frame(counts = c(18, 17, 15, 20, 10, 20, 25, 13, 12), treatment = gl(3, 3))
@@ -782,8 +782,8 @@ test_that("estimate_contrasts - dfs", {
   ))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
-  expect_equal(estim1$CI_low, c(-2.43, -2.25692, -2.89384), tolerance = 1e-4)
-  expect_equal(estim2$CI_low, c(-2.62766, -2.53389, -2.98196), tolerance = 1e-4)
+  expect_equal(estim1$CI_low, c(2.43, 2.25692, 2.89384), tolerance = 1e-4)
+  expect_equal(estim2$CI_low, c(2.62766, 2.53389, 2.98196), tolerance = 1e-4)
 
   estim1 <- suppressMessages(estimate_contrasts(
     model,
@@ -797,8 +797,8 @@ test_that("estimate_contrasts - dfs", {
   ))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
-  expect_equal(estim1$CI_low, c(-0.22624, -0.33383, -1.0109), tolerance = 1e-4)
-  expect_equal(estim2$CI_low, c(-0.29193, -0.4364, -1.04019), tolerance = 1e-4)
+  expect_equal(estim1$CI_low, c(0.22624, 0.33383, 1.0109), tolerance = 1e-4)
+  expect_equal(estim2$CI_low, c(0.29193, 0.4364, 1.04019), tolerance = 1e-4)
 })
 
 
