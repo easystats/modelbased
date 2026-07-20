@@ -1815,3 +1815,26 @@ test_that("estimate_contrast, p-adjust tukey works for contrasting slopes", {
   # here to avoid fragile tests while still ensuring close agreement.
   expect_equal(out1$p.value, out2$p, tolerance = 1e-2)
 })
+
+
+test_that("estimate_contrast, categorical/multinomial response models split off Response levels", {
+  skip_if_not_installed("nnet")
+
+  data(iris)
+  m <- nnet::multinom(Species ~ Sepal.Width, data = iris, trace = FALSE)
+  out <- estimate_contrasts(m, contrast = "Sepal.Width = c(2, 3)", backend = "marginaleffects")
+
+  # Level1/Response1/Level2/Response2 columns, in that order
+  expect_named(
+    out,
+    c(
+      "Level1", "Response1", "Level2", "Response2", "Difference", "SE",
+      "CI_low", "CI_high", "t", "df", "p"
+    )
+  )
+  # contrasted levels no longer contain the response category label
+  expect_true(all(as.character(out$Level1) %in% c("2", "3")))
+  expect_true(all(as.character(out$Level2) %in% c("2", "3")))
+  expect_true(all(as.character(out$Response1) %in% levels(iris$Species)))
+  expect_true(all(as.character(out$Response2) %in% levels(iris$Species)))
+})
