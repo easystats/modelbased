@@ -538,7 +538,9 @@ format.marginaleffects_contrasts <- function(
 
       # make sure terms are factors, for data_arrange later
       for (i in contrast) {
-        x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
+        if (!is.factor(x[[i]])) {
+          x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
+        }
       }
 
       # filter contrast-predictor levels, if requested (e.g., `contrast = "x=c('a', 'b')"`)
