@@ -662,7 +662,8 @@ format.marginaleffects_contrasts <- function(
   x_chr <- as.character(x)
   out <- data.frame(Response = NA_character_, Level = x_chr, stringsAsFactors = FALSE)
   for (i in response_levels) {
-    pattern <- paste0("^", i, "[[:space:]]+")
+    i_esc <- gsub("([][{}()+*^$|\\\\?.])", "\\\\\\1", i, perl = TRUE)
+    pattern <- paste0("^", i_esc, "[[:space:]]+")
     matches <- is.na(out$Response) & grepl(pattern, x_chr)
     if (any(matches)) {
       out$Response[matches] <- i
