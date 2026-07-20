@@ -646,7 +646,10 @@ format.marginaleffects_contrasts <- function(
   # both columns, otherwise keep the original (unsplit) columns
   if (all(!is.na(split1$Response)) && all(!is.na(split2$Response))) {
     level_order <- unique(c(split1$Level, split2$Level))
-    response_order <- intersect(response_levels, unique(c(split1$Response, split2$Response)))
+    response_order <- intersect(
+      response_levels,
+      unique(c(split1$Response, split2$Response))
+    )
     params$Level1 <- factor(split1$Level, levels = level_order)
     params$Response1 <- factor(split1$Response, levels = response_order)
     params$Level2 <- factor(split2$Level, levels = level_order)
