@@ -1837,4 +1837,20 @@ test_that("estimate_contrast, categorical/multinomial response models split off 
   expect_true(all(as.character(out$Level2) %in% c("2", "3")))
   expect_true(all(as.character(out$Response1) %in% levels(iris$Species)))
   expect_true(all(as.character(out$Response2) %in% levels(iris$Species)))
+
+  # contrasts within the same response category should match the difference
+  # between the corresponding marginal means for that category
+  means <- estimate_means(m, by = "Sepal.Width = c(2, 3)", backend = "marginaleffects")
+  for (resp in levels(iris$Species)) {
+    row <- out[
+      as.character(out$Level1) == "3" &
+        as.character(out$Level2) == "2" &
+        as.character(out$Response1) == resp &
+        as.character(out$Response2) == resp,
+    ]
+    expect_identical(nrow(row), 1L)
+    mean_3 <- means$Probability[means$Sepal.Width == "3" & means$Response == resp]
+    mean_2 <- means$Probability[means$Sepal.Width == "2" & means$Response == resp]
+    expect_equal(row$Difference, mean_3 - mean_2, tolerance = 1e-4)
+  }
 })
