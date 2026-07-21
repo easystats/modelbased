@@ -114,7 +114,7 @@ VignetteBuilder:
 Encoding: UTF-8
 Language: en-US
 Config/testthat/edition: 3
-Config/testthat/parallel: true
+Config/testthat/parallel: false
 Roxygen: list(markdown = TRUE)
 Config/Needs/check: stan-dev/cmdstanr
 Config/Needs/website: easystats/easystatstemplate
