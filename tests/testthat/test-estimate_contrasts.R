@@ -1815,3 +1815,78 @@ test_that("estimate_contrast, p-adjust tukey works for contrasting slopes", {
   # here to avoid fragile tests while still ensuring close agreement.
   expect_equal(out1$p.value, out2$p, tolerance = 1e-2)
 })
+
+
+test_that("estimate_contrast, categorical/multinomial response models split off Response levels", {
+  skip_if_not_installed("nnet")
+
+  data(iris)
+  m <- nnet::multinom(Species ~ Sepal.Width, data = iris, trace = FALSE)
+  out <- estimate_contrasts(
+    m,
+    contrast = "Sepal.Width = c(2, 3)",
+    backend = "marginaleffects"
+  )
+
+  # Level1/Response1/Level2/Response2 columns, in that order
+  expect_named(
+    out,
+    c(
+      "Level1",
+      "Response1",
+      "Level2",
+      "Response2",
+      "Difference",
+      "SE",
+      "CI_low",
+      "CI_high",
+      "t",
+      "df",
+      "p"
+    )
+  )
+  # contrasted levels no longer contain the response category label
+  expect_true(all(as.character(out$Level1) %in% c("2", "3")))
+  expect_true(all(as.character(out$Level2) %in% c("2", "3")))
+  expect_true(all(as.character(out$Response1) %in% levels(iris$Species)))
+  expect_true(all(as.character(out$Response2) %in% levels(iris$Species)))
+
+  out2 <- marginaleffects::avg_predictions(
+    m,
+    by = "Sepal.Width",
+    newdata = data.frame(Sepal.Width = c(2, 3)),
+    hypothesis = ~pairwise
+  )
+
+  expect_identical(
+    paste0(
+      "(",
+      out$Response1,
+      " ",
+      out$Level1,
+      ") - (",
+      out$Response2,
+      " ",
+      out$Level2,
+      ")"
+    ),
+    out2$hypothesis
+  )
+  expect_equal(out$Difference, out2$estimate, tolerance = 1e-4)
+
+  # contrasts within the same response category should match the difference
+  # between the corresponding marginal means for that category
+  means <- estimate_means(m, by = "Sepal.Width = c(2, 3)", backend = "marginaleffects")
+  for (resp in levels(iris$Species)) {
+    row <- out[
+      as.character(out$Level1) == "3" &
+        as.character(out$Level2) == "2" &
+        as.character(out$Response1) == resp &
+        as.character(out$Response2) == resp,
+    ]
+    expect_identical(nrow(row), 1L)
+    mean_3 <- means$Probability[means$Sepal.Width == "3" & means$Response == resp]
+    mean_2 <- means$Probability[means$Sepal.Width == "2" & means$Response == resp]
+    expect_equal(row$Difference, mean_3 - mean_2, tolerance = 1e-4)
+  }
+})

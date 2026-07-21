@@ -8,6 +8,12 @@
 
 ## Changes
 
+* For contrasts of models where predictions vary by response category
+  (e.g., categorical, ordinal/cumulative or multinomial models, as well as
+  multivariate response models), `estimate_contrasts()` now returns separate
+  `Response1` and `Response2` columns instead of merging the response
+  category label into the `Level1` and `Level2` columns (#646).
+
 * The `iterations` argument can now also be used for Bayesian model in
   `estimate_means()`, `estimate_slopes()`, and `estimate_contrasts()`, which
   is then passed to the `ndraws` argument and controls how many samples are

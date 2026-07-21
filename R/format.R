@@ -512,9 +512,23 @@ format.marginaleffects_contrasts <- function(
         }
       }
 
+      # for models where predictions are made for each level of the response
+      # (e.g., categorical, ordinal/cumulative or multinomial models, as well
+      # as multivariate response models), marginaleffects merges the response
+      # level and the contrasted factor level into the same string (e.g.,
+      # "setosa 3"). We split those into separate "Response1" and "Response2"
+      # columns, so contrasted factor levels and response levels are not
+      # confounded
+      params <- .split_contrast_response_levels(params, model, x)
+
       # we need to update these variables, because these are the new column
-      # names for contrasts and focal terms
-      contrast <- c("Level1", "Level2")
+      # names for contrasts and focal terms. We use `intersect()` here because
+      # "Response1"/"Response2" are only present if the contrasted factor and
+      # response category levels were successfully split above
+      contrast <- intersect(
+        c("Level1", "Response1", "Level2", "Response2"),
+        colnames(params)
+      )
 
       # remove old column
       x$Parameter <- NULL
@@ -524,7 +538,9 @@ format.marginaleffects_contrasts <- function(
 
       # make sure terms are factors, for data_arrange later
       for (i in contrast) {
-        x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
+        if (!is.factor(x[[i]])) {
+          x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
+        }
       }
 
       # filter contrast-predictor levels, if requested (e.g., `contrast = "x=c('a', 'b')"`)
@@ -569,6 +585,99 @@ format.marginaleffects_contrasts <- function(
 # sure levels are unique across different terms. If not, paste
 # variable names to levels. We first find the intersection of all
 # levels from all current contrast terms
+
+# for models where predictions are made separately for each level of the
+# response (categorical, ordinal/cumulative, multinomial or multivariate
+# models), marginaleffects merges the response level and the contrasted
+# factor level into the same string, e.g. "setosa 3". This function splits
+# "Level1" and "Level2" into "Response1"/"Level1" and "Response2"/"Level2",
+# so response levels and contrasted factor levels are not confounded. If
+# splitting isn't possible (e.g., not a response-level model, or the response
+# levels cannot be unambiguously detected), `params` is returned unchanged.
+
+.split_contrast_response_levels <- function(params, model, x = NULL) {
+  if (is.null(model) || !all(c("Level1", "Level2") %in% colnames(params))) {
+    return(params)
+  }
+
+  # prefer the model info already stored as attribute (consistent with how
+  # other format-methods retrieve model information), and only compute it
+  # ourselves as a fallback
+  model_info <- attr(x, "model_info", exact = TRUE)
+  if (is.null(model_info)) {
+    model_info <- .safe(insight::model_info(model, verbose = FALSE))
+  }
+  is_multivariate <- isTRUE(.safe(insight::is_multivariate(model)))
+  is_response_model <- isTRUE(model_info$is_multinomial) ||
+    isTRUE(model_info$is_categorical) ||
+    isTRUE(model_info$is_ordinal) ||
+    isTRUE(model_info$is_cumulative) ||
+    is_multivariate
+
+  if (!is_response_model) {
+    return(params)
+  }
+
+  # response levels, used to detect and split off the response-category
+  # label from the contrasted factor level. We keep the original order of
+  # the response levels (e.g., factor level order), so that "Response1" and
+  # "Response2" use a meaningful, consistent level order
+  response <- .safe(insight::get_response(model, verbose = FALSE))
+  if (is.factor(response)) {
+    response_levels <- levels(response)
+  } else {
+    response_levels <- unique(as.character(response))
+  }
+  if (is_multivariate) {
+    response_levels <- unique(c(response_levels, insight::find_response(model)))
+  }
+  if (!length(response_levels)) {
+    return(params)
+  }
+
+  # sort by length, descending, to avoid partial matches for levels that are
+  # substrings of other levels (used for pattern matching only)
+  search_levels <- response_levels[order(nchar(response_levels), decreasing = TRUE)]
+
+  split1 <- .split_response_prefix(params$Level1, search_levels)
+  split2 <- .split_response_prefix(params$Level2, search_levels)
+
+  # sanity check - only split if we found a response label for *all* rows, in
+  # both columns, otherwise keep the original (unsplit) columns
+  if (all(!is.na(split1$Response)) && all(!is.na(split2$Response))) {
+    level_order <- unique(c(split1$Level, split2$Level))
+    response_order <- intersect(
+      response_levels,
+      unique(c(split1$Response, split2$Response))
+    )
+    params$Level1 <- factor(split1$Level, levels = level_order)
+    params$Response1 <- factor(split1$Response, levels = response_order)
+    params$Level2 <- factor(split2$Level, levels = level_order)
+    params$Response2 <- factor(split2$Response, levels = response_order)
+  }
+
+  params
+}
+
+
+# split off a known "response level" prefix from a vector of strings, e.g.
+# "setosa 3" -> Response = "setosa", Level = "3"
+
+.split_response_prefix <- function(x, response_levels) {
+  x_chr <- as.character(x)
+  out <- data.frame(Response = NA_character_, Level = x_chr, stringsAsFactors = FALSE)
+  for (i in response_levels) {
+    i_esc <- gsub("([][{}()+*^$|\\\\?.])", "\\\\\\1", i, perl = TRUE)
+    pattern <- paste0("^", i_esc, "[[:space:]]+")
+    matches <- is.na(out$Response) & grepl(pattern, x_chr)
+    if (any(matches)) {
+      out$Response[matches] <- i
+      out$Level[matches] <- insight::trim_ws(sub(pattern, "", x_chr[matches]))
+    }
+  }
+  out
+}
+
 
 .fix_duplicated_contrastlevels <- function(params, contrast_names) {
   multiple_levels <- Reduce(
