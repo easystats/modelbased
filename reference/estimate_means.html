@@ -15,7 +15,7 @@ estimate_contrasts() and estimate_slopes().'><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -212,7 +212,9 @@ e.g. <code>options(modelbased_estimate = "average")</code>.</p>
 only on the data points that actually exist. This is in particular
 important for two or more focal predictors, because it doesn't generate a
 <em>complete</em> grid of all theoretical combinations of predictor values.
-Consequently, the output may not include all the values.</p></li>
+Consequently, the output may not include all the values. To resolve this,
+you may provide a defined data grid via the <code>data</code> argument containing
+the values of interest.</p></li>
 <li><p>Filtering the output at values of continuous predictors, e.g.
 <code>by = "x=1:5"</code>, in combination with <code>estimate = "average"</code> may result in
 returning an empty data frame because the requested values may not overlap

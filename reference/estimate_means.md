@@ -134,7 +134,8 @@ estimate_means(
     particular important for two or more focal predictors, because it
     doesn't generate a *complete* grid of all theoretical combinations
     of predictor values. Consequently, the output may not include all
-    the values.
+    the values. To resolve this, you may provide a defined data grid via
+    the `data` argument containing the values of interest.
 
   - Filtering the output at values of continuous predictors, e.g.
     `by = "x=1:5"`, in combination with `estimate = "average"` may

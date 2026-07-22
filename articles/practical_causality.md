@@ -1,5 +1,10 @@
 # Case Study: Causal inference for observational data using modelbased
 
+    ## Warning in check_dep_version(dep_pkg = "TMB"): package version mismatch: 
+    ## glmmTMB was built with TMB package version 1.9.21
+    ## Current TMB package version is 1.9.22
+    ## Please re-install glmmTMB from source or restore original 'TMB' package (see '?reinstalling' for more information)
+
 This vignette demonstrates how to perform causal inference with
 observational data using the `modelbased` package. While the examples
 below use the terms “treatment” and “control” groups, these labels are
@@ -590,7 +595,7 @@ estimate_contrasts(m5, "treatment", estimate = "population", weights = "ipw")
 #> 
 #> Level1 | Level2 |       Median (CI) |     pd
 #> --------------------------------------------
-#> 1      | 0      | 5.68 (1.74, 9.45) | 99.65%
+#> 1      | 0      | 5.57 (1.79, 9.73) | 99.80%
 #> 
 #> Variable predicted: QoL, ipw
 #> Predictors contrasted: treatment
