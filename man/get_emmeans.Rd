@@ -140,11 +140,13 @@ See also section \emph{Predictions on different scales}.}
 \item{comparison}{Specify the type of contrasts or tests that should be
 carried out. See also section \emph{Comparison options} below for details.
 \itemize{
-\item When \code{backend = "emmeans"}, can be one of \code{"pairwise"}, \code{"poly"},
-\code{"consec"}, \code{"eff"}, \code{"del.eff"}, \code{"mean_chg"}, \code{"trt.vs.ctrl"},
-\code{"dunnett"}, \code{"wtcon"} and some more. To test multiple hypotheses jointly
-(usually used for factorial designs), \code{comparison} can also be \code{"joint"}.
-See also \code{method} argument in \link[emmeans:contrast]{emmeans::contrast} and the
+\item When \code{backend = "emmeans"}, can be one of \code{"pairwise"}, \code{"revpairwise"},
+\code{"poly"}, \code{"consec"}, \code{"eff"}, \code{"del.eff"}, \code{"mean_chg"}, \code{"trt.vs.ctrl"},
+\code{"dunnett"}, \code{"wtcon"} and some more. Defaults to \code{"revpairwise"}, to
+return consistent results (regarding the sign) with the default
+\code{backend = "marginaleffects"}. To test multiple hypotheses jointly (usually
+used for factorial designs), \code{comparison} can also be \code{"joint"}. See also
+\code{method} argument in \link[emmeans:contrast]{emmeans::contrast} and the
 \code{?emmeans::emmc-functions}.
 \item For \code{backend = "marginaleffects"}, can be a numeric value, vector, or
 matrix, a string equation specifying the hypothesis to test, a string
@@ -296,7 +298,9 @@ Note following limitations:
 only on the data points that actually exist. This is in particular
 important for two or more focal predictors, because it doesn't generate a
 \emph{complete} grid of all theoretical combinations of predictor values.
-Consequently, the output may not include all the values.
+Consequently, the output may not include all the values. To resolve this,
+you may provide a defined data grid via the \code{data} argument containing
+the values of interest.
 \item Filtering the output at values of continuous predictors, e.g.
 \code{by = "x=1:5"}, in combination with \code{estimate = "average"} may result in
 returning an empty data frame because the requested values may not overlap

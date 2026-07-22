@@ -231,7 +231,7 @@ get_marginalcontrasts <- function(
           "None of the values specified for the predictor `",
           i,
           "` are available in the data. This is required for `estimate=\"average\"`.",
-          " Either use a different option for the `estimate` argument, or use values that",
+          " To resolve this, either select a different option for the `estimate` argument, supply a defined data grid via the `data` argument, or use values that",
           " are present in the data, such as ",
           datawizard::text_concatenate(example_values, last = " or ", enclose = "`"),
           "."

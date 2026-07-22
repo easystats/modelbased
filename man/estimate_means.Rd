@@ -100,7 +100,9 @@ Note following limitations:
 only on the data points that actually exist. This is in particular
 important for two or more focal predictors, because it doesn't generate a
 \emph{complete} grid of all theoretical combinations of predictor values.
-Consequently, the output may not include all the values.
+Consequently, the output may not include all the values. To resolve this,
+you may provide a defined data grid via the \code{data} argument containing
+the values of interest.
 \item Filtering the output at values of continuous predictors, e.g.
 \code{by = "x=1:5"}, in combination with \code{estimate = "average"} may result in
 returning an empty data frame because the requested values may not overlap
