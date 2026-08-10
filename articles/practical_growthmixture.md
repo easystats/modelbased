@@ -20,12 +20,7 @@ First, we load the necessary packages. `brms` is for model fitting, and
 `easystats` is a suite of packages that simplifies the entire process of
 statistical analysis and visualization.
 
-``` r
-
-library(easystats)
-library(brms)
-library(ggplot2)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`brms`](https://github.com/paul-buerkner/brms)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`
 
 ### The Dataset
 
@@ -47,13 +42,7 @@ The dataset includes the following variables:
 Let’s prepare the data by converting the `time` and `hospital` variables
 to factors.
 
-``` r
-
-data(qol_cancer)
-
-qol_cancer$time <- as.factor(qol_cancer$time)
-qol_cancer$hospital <- as.factor(qol_cancer$hospital)
-```
+[`data`](https://rdrr.io/r/utils/data.html)`(``qol_cancer``)`` `` ``qol_cancer``$``time`` ``<-`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(``qol_cancer``$``time``)`` ``qol_cancer``$``hospital`` ``<-`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(``qol_cancer``$``hospital``)`
 
 ## Fitting the Growth Mixture Model
 
@@ -78,37 +67,12 @@ Fitting a Bayesian mixture model can be computationally intensive. For
 the purposes of this vignette, we will download a pre-fitted model from
 the `easystats` repository.
 
-``` r
-
-# Download the pre-fitted model
-brms_mixture_2 <- download_model("brms_mixture_2")
-```
+`# Download the pre-fitted model`` ``brms_mixture_2`` ``<-`` `[`download_model`](https://easystats.github.io/insight/reference/download_model.html)`(``"brms_mixture_2"``)`
 
 If you wish to fit the model yourself, you can use the following code.
 Be aware that it may take several minutes to run.
 
-``` r
-
-# In case of convergence issues, specifying priors can help. The priors are
-# set for the population-level intercept of each mixture component (mu1, mu2).
-# prior <- c(
-#   prior(normal(0, 10), class = Intercept, dpar = mu1),
-#   prior(normal(0, 10), class = Intercept, dpar = mu2)
-# )
-
-set.seed(1234)
-brms_mixture_2 <- brms::brm(
-  formula = QoL ~ time + hospital + education + age + (1 + time | ID),
-  data = qol_cancer,
-  family = mixture(gaussian, nmix = 2), # Gaussian mixture with 2 classes
-  chains = 4,      # Number of MCMC chains
-  iter = 2000,     # Total iterations per chain
-  cores = 4,       # Use 4 CPU cores
-  seed = 1234,     # For reproducibility
-  silent = 2,      # Suppress Stan progress
-  refresh = 0
-)
-```
+`# In case of convergence issues, specifying priors can help. The priors are`` ``# set for the population-level intercept of each mixture component (mu1, mu2).`` ``# prior <- c(`` ``# prior(normal(0, 10), class = Intercept, dpar = mu1),`` ``# prior(normal(0, 10), class = Intercept, dpar = mu2)`` ``# )`` `` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``1234``)`` ``brms_mixture_2`` ``<-`` ``brms``::`[`brm`](https://paulbuerkner.com/brms/reference/brm.html)`(`` `` formula ``=`` ``QoL`` ``~`` ``time`` ``+`` ``hospital`` ``+`` ``education`` ``+`` ``age`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`` `` data ``=`` ``qol_cancer``,`` `` family ``=`` `[`mixture`](https://paulbuerkner.com/brms/reference/mixture.html)`(``gaussian``, nmix ``=`` ``2``)``, ``# Gaussian mixture with 2 classes`` `` chains ``=`` ``4``, ``# Number of MCMC chains`` `` iter ``=`` ``2000``, ``# Total iterations per chain`` `` cores ``=`` ``4``, ``# Use 4 CPU cores`` `` seed ``=`` ``1234``, ``# For reproducibility`` `` silent ``=`` ``2``, ``# Suppress Stan progress`` `` refresh ``=`` ``0`` ``)`
 
 > You can use different factors to predict the outcome for each group in
 > your data. To do this, simply create a separate prediction formula for
@@ -131,64 +95,20 @@ to at each time point. We can use the
 function from the `modelbased` package with
 `predict = "classification"`.
 
-``` r
-
-out <- estimate_prediction(brms_mixture_2, predict = "classification")
-head(out)
-#> Model-based Predictions
-#> 
-#> time | hospital | education |   age | ID | Predicted | Probability
-#> ------------------------------------------------------------------
-#> 3    | 1        | mid       | -3.60 | 1  |         1 |        0.72
-#> 1    | 1        | mid       | -3.60 | 1  |         2 |        0.51
-#> 2    | 1        | mid       | -3.60 | 1  |         1 |        0.50
-#> 1    | 1        | mid       |  1.40 | 10 |         2 |        0.97
-#> 2    | 1        | mid       |  1.40 | 10 |         2 |        0.97
-#> 3    | 1        | mid       |  1.40 | 10 |         2 |        0.97
-#> 
-#> time |       95% CI | Residuals
-#> -------------------------------
-#> 3    | [0.00, 1.00] |     40.67
-#> 1    | [0.00, 1.00] |     39.67
-#> 2    | [0.00, 1.00] |     32.33
-#> 1    | [0.86, 1.00] |     81.33
-#> 2    | [0.85, 1.00] |     81.33
-#> 3    | [0.89, 1.00] |     81.33
-#> 
-#> Variable predicted: QoL
-#> Predictions are on the classification-scale.
-```
+`out`` ``<-`` `[`estimate_prediction`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``brms_mixture_2``, predict ``=`` ``"classification"``)`` `[`head`](https://rdrr.io/r/utils/head.html)`(``out``)`` ``#> Model-based Predictions`` ``#> `` ``#> time | hospital | education | age | ID | Predicted | Probability`` ``#> ------------------------------------------------------------------`` ``#> 3 | 1 | mid | -3.60 | 1 | 1 | 0.72`` ``#> 1 | 1 | mid | -3.60 | 1 | 2 | 0.51`` ``#> 2 | 1 | mid | -3.60 | 1 | 1 | 0.50`` ``#> 1 | 1 | mid | 1.40 | 10 | 2 | 0.97`` ``#> 2 | 1 | mid | 1.40 | 10 | 2 | 0.97`` ``#> 3 | 1 | mid | 1.40 | 10 | 2 | 0.97`` ``#> `` ``#> time | 95% CI | Residuals`` ``#> -------------------------------`` ``#> 3 | [0.00, 1.00] | 40.67`` ``#> 1 | [0.00, 1.00] | 39.67`` ``#> 2 | [0.00, 1.00] | 32.33`` ``#> 1 | [0.86, 1.00] | 81.33`` ``#> 2 | [0.85, 1.00] | 81.33`` ``#> 3 | [0.89, 1.00] | 81.33`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictions are on the classification-scale.`
 
 The output table shows the `Predicted` class for each observation, along
 with the `Probability` of that classification. Now, let’s join these
 predicted classes back to our original dataset for visualization.
 
-``` r
-
-# we also keep ID and time for joining, to match observations in the original dataset
-d <- data_join(qol_cancer, out[c("time", "ID", "Predicted")], by = c("ID", "time"))
-d$class <- as.factor(d$Predicted)
-```
+`# we also keep ID and time for joining, to match observations in the original dataset`` ``d`` ``<-`` `[`data_join`](https://easystats.github.io/datawizard/reference/data_merge.html)`(``qol_cancer``, ``out``[`[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"ID"``, ``"Predicted"``)``]``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"ID"``, ``"time"``)``)`` ``d``$``class`` ``<-`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(``d``$``Predicted``)`
 
 ### Visualizing Latent Class Trajectories
 
 Now we can visualize the average QoL trajectories for each latent class.
 This is the most intuitive way to understand the results of a GMM.
 
-``` r
-
-ggplot(d, aes(x = as.numeric(time), y = QoL, color = class, fill = class)) +
-  geom_smooth(method = "lm") +
-  geom_point(alpha = 0.3, position = position_jitter(width = 0.1)) +
-  labs(
-    title = "Average Latent Class Trajectories of Quality of Life",
-    x = "Time (1=pre-op, 2=6m, 3=12m)",
-    y = "Quality of Life (QoL)"
-  ) +
-  theme_modern(show.ticks = TRUE) +
-  scale_color_material() +
-  scale_fill_material()
-```
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``d``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`as.numeric`](https://rdrr.io/r/base/numeric.html)`(``time``)``, y ``=`` ``QoL``, color ``=`` ``class``, fill ``=`` ``class``)``)`` ``+`` `` `[`geom_smooth`](https://ggplot2.tidyverse.org/reference/geom_smooth.html)`(``method ``=`` ``"lm"``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``alpha ``=`` ``0.3``, position ``=`` `[`position_jitter`](https://ggplot2.tidyverse.org/reference/position_jitter.html)`(``width ``=`` ``0.1``)``)`` ``+`` `` `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`` `` title ``=`` ``"Average Latent Class Trajectories of Quality of Life"``,`` `` x ``=`` ``"Time (1=pre-op, 2=6m, 3=12m)"``,`` `` y ``=`` ``"Quality of Life (QoL)"`` `` ``)`` ``+`` `` `[`theme_modern`](https://easystats.github.io/see/reference/theme_modern.html)`(``show.ticks ``=`` ``TRUE``)`` ``+`` `` `[`scale_color_material`](https://easystats.github.io/see/reference/scale_color_material.html)`(``)`` ``+`` `` `[`scale_fill_material`](https://easystats.github.io/see/reference/scale_color_material.html)`(``)`
 
 ![](practical_growthmixture_files/figure-html/unnamed-chunk-8-1.png)
 
@@ -206,29 +126,7 @@ inspect the model parameters using
 [`model_parameters()`](https://easystats.github.io/parameters/reference/model_parameters.html)
 from the `parameters` package.
 
-``` r
-
-model_parameters(brms_mixture_2, diagnostic = NULL, drop = "time")
-#> # Class 1
-#> 
-#> Parameter     | Median |          95% CI |     pd
-#> -------------------------------------------------
-#> (Intercept)   |  48.16 | [ 18.63, 63.83] | 99.70%
-#> hospital1     |   3.82 | [-17.62, 19.56] | 56.20%
-#> educationmid  |   9.32 | [  3.04, 24.36] | 98.65%
-#> educationhigh |  13.04 | [ -3.75, 24.99] | 94.10%
-#> age           |   0.48 | [ -0.83,  1.20] | 84.00%
-#> 
-#> # Class 2
-#> 
-#> Parameter     | Median |          95% CI |     pd
-#> -------------------------------------------------
-#> (Intercept)   |  75.51 | [ 63.81, 81.50] |   100%
-#> hospital1     |  -1.29 | [-10.41,  8.28] | 56.70%
-#> educationmid  |   3.98 | [  0.14, 10.17] | 97.65%
-#> educationhigh |  11.53 | [  5.79, 19.47] |   100%
-#> age           |  -0.37 | [ -0.65,  0.29] | 86.25%
-```
+[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``brms_mixture_2``, diagnostic ``=`` ``NULL``, drop ``=`` ``"time"``)`` ``#> # Class 1`` ``#> `` ``#> Parameter | Median | 95% CI | pd`` ``#> -------------------------------------------------`` ``#> (Intercept) | 48.16 | [ 18.63, 63.83] | 99.70%`` ``#> hospital1 | 3.82 | [-17.62, 19.56] | 56.20%`` ``#> educationmid | 9.32 | [ 3.04, 24.36] | 98.65%`` ``#> educationhigh | 13.04 | [ -3.75, 24.99] | 94.10%`` ``#> age | 0.48 | [ -0.83, 1.20] | 84.00%`` ``#> `` ``#> # Class 2`` ``#> `` ``#> Parameter | Median | 95% CI | pd`` ``#> -------------------------------------------------`` ``#> (Intercept) | 75.51 | [ 63.81, 81.50] | 100%`` ``#> hospital1 | -1.29 | [-10.41, 8.28] | 56.70%`` ``#> educationmid | 3.98 | [ 0.14, 10.17] | 97.65%`` ``#> educationhigh | 11.53 | [ 5.79, 19.47] | 100%`` ``#> age | -0.37 | [ -0.65, 0.29] | 86.25%`
 
 The output is neatly separated by class. We can see, for example, that
 higher education (`educationmid`, `educationhigh`) is associated with a
@@ -241,24 +139,7 @@ different predictor levels within each class. Let’s look at the effect
 of `education`. The `predict = "link"` argument is essential for mixture
 models, as it computes the means for each class separately.
 
-``` r
-
-estimate_means(brms_mixture_2, by = "education", predict = "link")
-#> Average Predictions
-#> 
-#> education |          Median (CI) | pd   | Class
-#> -----------------------------------------------
-#> low       | 57.06 (38.01, 59.73) | 100% |     1
-#> low       | 73.48 (70.12, 78.09) | 100% |     2
-#> mid       | 67.48 (52.25, 69.19) | 100% |     1
-#> mid       | 79.19 (75.50, 81.05) | 100% |     2
-#> high      | 68.89 (46.29, 74.84) | 100% |     1
-#> high      | 85.52 (82.70, 86.94) | 100% |     2
-#> 
-#> Variable predicted: QoL
-#> Predictors modulated: education
-#> Predictions are on the FALSE-transformed link-scale.
-```
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``brms_mixture_2``, by ``=`` ``"education"``, predict ``=`` ``"link"``)`` ``#> Average Predictions`` ``#> `` ``#> education | Median (CI) | pd | Class`` ``#> -----------------------------------------------`` ``#> low | 57.06 (38.01, 59.73) | 100% | 1`` ``#> low | 73.48 (70.12, 78.09) | 100% | 2`` ``#> mid | 67.48 (52.25, 69.19) | 100% | 1`` ``#> mid | 79.19 (75.50, 81.05) | 100% | 2`` ``#> high | 68.89 (46.29, 74.84) | 100% | 1`` ``#> high | 85.52 (82.70, 86.94) | 100% | 2`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors modulated: education`` ``#> Predictions are on the FALSE-transformed link-scale.`
 
 This table gives us the expected mean `QoL` for each education level,
 conditional on class membership. For instance, a patient with “low”
@@ -275,59 +156,12 @@ If we compute contrasts without `predict = "link"`,
 averages the effects across both classes, giving a general sense of
 inequality.
 
-``` r
-
-estimate_contrasts(
-  brms_mixture_2,
-  contrast = "education"
-)
-#> Averaged Contrasts Analysis
-#> 
-#> Level1 | Level2 |         Median (CI) |     pd
-#> ----------------------------------------------
-#> mid    | low    |  7.26 (4.85, 10.05) |   100%
-#> high   | low    | 12.73 (9.31, 14.99) |   100%
-#> high   | mid    |  5.01 (2.22,  7.02) | 99.95%
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> Contrasts are on the response-scale.
-```
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``brms_mixture_2``,`` `` contrast ``=`` ``"education"`` ``)`` ``#> Averaged Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Median (CI) | pd`` ``#> ----------------------------------------------`` ``#> mid | low | 7.26 (4.85, 10.05) | 100%`` ``#> high | low | 12.73 (9.31, 14.99) | 100%`` ``#> high | mid | 5.01 (2.22, 7.02) | 99.95%`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> Contrasts are on the response-scale.`
 
 More interestingly, we can set `predict = "link"` to get contrasts both
 *within* and *between* classes. This provides a very detailed picture.
 
-``` r
-
-estimate_contrasts(
-  brms_mixture_2,
-  contrast = "education",
-  predict = "link"
-)
-#> Averaged Contrasts Analysis
-#> 
-#> Level1 | Level2 |           Median (CI) |     pd
-#> ------------------------------------------------
-#> 1 mid  | 1 low  | 11.53 (  3.15, 23.66) | 98.75%
-#> 1 high | 1 low  | 15.02 (  0.73, 23.60) | 98.00%
-#> 2 low  | 1 low  | 20.95 ( 12.17, 34.64) |   100%
-#> 2 mid  | 1 low  | 23.95 ( 18.32, 39.03) |   100%
-#> 2 high | 1 low  | 29.84 ( 25.77, 45.80) |   100%
-#> 1 high | 1 mid  |  2.62 (-12.90,  8.16) | 69.80%
-#> 2 low  | 1 mid  |  9.38 (  2.59, 19.67) | 99.95%
-#> 2 mid  | 1 mid  | 12.39 (  8.73, 25.17) |   100%
-#> 2 high | 1 mid  | 18.27 ( 16.16, 31.48) |   100%
-#> 2 low  | 1 high |  4.00 (  1.23, 24.70) | 99.55%
-#> 2 mid  | 1 high | 10.21 (  6.19, 30.21) |   100%
-#> 2 high | 1 high | 16.68 ( 12.08, 37.17) |   100%
-#> 2 mid  | 2 low  |  5.78 (  2.78,  7.47) | 99.90%
-#> 2 high | 2 low  | 11.73 (  8.50, 14.03) |   100%
-#> 2 high | 2 mid  |  5.90 (  4.29,  8.18) |   100%
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> Contrasts are on the FALSE-transformed link-scale.
-```
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``brms_mixture_2``,`` `` contrast ``=`` ``"education"``,`` `` predict ``=`` ``"link"`` ``)`` ``#> Averaged Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Median (CI) | pd`` ``#> ------------------------------------------------`` ``#> 1 mid | 1 low | 11.53 ( 3.15, 23.66) | 98.75%`` ``#> 1 high | 1 low | 15.02 ( 0.73, 23.60) | 98.00%`` ``#> 2 low | 1 low | 20.95 ( 12.17, 34.64) | 100%`` ``#> 2 mid | 1 low | 23.95 ( 18.32, 39.03) | 100%`` ``#> 2 high | 1 low | 29.84 ( 25.77, 45.80) | 100%`` ``#> 1 high | 1 mid | 2.62 (-12.90, 8.16) | 69.80%`` ``#> 2 low | 1 mid | 9.38 ( 2.59, 19.67) | 99.95%`` ``#> 2 mid | 1 mid | 12.39 ( 8.73, 25.17) | 100%`` ``#> 2 high | 1 mid | 18.27 ( 16.16, 31.48) | 100%`` ``#> 2 low | 1 high | 4.00 ( 1.23, 24.70) | 99.55%`` ``#> 2 mid | 1 high | 10.21 ( 6.19, 30.21) | 100%`` ``#> 2 high | 1 high | 16.68 ( 12.08, 37.17) | 100%`` ``#> 2 mid | 2 low | 5.78 ( 2.78, 7.47) | 99.90%`` ``#> 2 high | 2 low | 11.73 ( 8.50, 14.03) | 100%`` ``#> 2 high | 2 mid | 5.90 ( 4.29, 8.18) | 100%`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> Contrasts are on the FALSE-transformed link-scale.`
 
 The output is rich with information. For example, `2 high | 2 low` shows
 the contrast between high and low education *within Class 2* (an
@@ -345,24 +179,7 @@ a single number that quantifies the overall disparity associated with
 that variable. Let’s compare the inequality associated with `education`
 versus `hospital`.
 
-``` r
-
-estimate_contrasts(
-  brms_mixture_2,
-  contrast = c("education", "hospital"),
-  comparison = "inequality"
-)
-#> Averaged Inequality Analysis
-#> 
-#> Parameter |        Median (CI) |   pd
-#> -------------------------------------
-#> education | 8.46 (4.85, 11.42) | 100%
-#> hospital  | 1.40 (0.11,  8.87) | 100%
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education, hospital
-#> Differences are on the response-scale.
-```
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``brms_mixture_2``,`` `` contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"education"``, ``"hospital"``)``,`` `` comparison ``=`` ``"inequality"`` ``)`` ``#> Averaged Inequality Analysis`` ``#> `` ``#> Parameter | Median (CI) | pd`` ``#> -------------------------------------`` ``#> education | 8.46 (4.85, 11.42) | 100%`` ``#> hospital | 1.40 (0.11, 8.87) | 100%`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education, hospital`` ``#> Differences are on the response-scale.`
 
 The results are striking. The inequality median for `education` is
 `8.46`, while for `hospital` it is only `1.40`. This suggests that a
@@ -410,47 +227,4 @@ Example `brms` Formula Syntax for Common Mixture Model Scenarios
 
 ### Example Codes
 
-``` r
-
-# this model is actually equivalent to the one we used in the vignette
-# but it allows for different predictors for each class
-brms::brm(
-  bf(
-    # formula for individual trajectories
-    QoL ~ 1 + (1 + time | ID),
-    # predictors for class 1
-    mu1 ~ time + hospital + education + age + (1 + time | ID),
-    # predictors for class 2
-    mu2 ~ time + hospital + education + age + (1 + time | ID),
-    family = mixture(gaussian, nmix = 2)
-  ),
-  data = qol_cancer,
-  chains = 4,      # Number of MCMC chains
-  iter = 1000,     # Total iterations per chain
-  cores = 4,       # Use 4 CPU cores
-  seed = 1234,     # For reproducibility
-  refresh = 0
-)
-
-# in this example, we also model the class membership probabilities
-brms::brm(
-  bf(
-    # formula for individual trajectories
-    QoL ~ 1 + (1 + time | ID),
-    # predictors for class 1
-    mu1 ~ time + hospital + education + age + (1 + time | ID),
-    # predictors for class 2
-    mu2 ~ time + hospital + education + age + (1 + time | ID),
-    # predictors for class membership probabilities
-    theta1 ~ hospital + education,
-    theta2 ~ hospital + education + age,
-    family = mixture(gaussian, nmix = 2)
-  ),
-  data = qol_cancer,
-  chains = 4,      # Number of MCMC chains
-  iter = 1000,     # Total iterations per chain
-  cores = 4,       # Use 4 CPU cores
-  seed = 1234,     # For reproducibility
-  refresh = 0
-)
-```
+`# this model is actually equivalent to the one we used in the vignette`` ``# but it allows for different predictors for each class`` ``brms``::`[`brm`](https://paulbuerkner.com/brms/reference/brm.html)`(`` `` `[`bf`](https://paulbuerkner.com/brms/reference/brmsformula.html)`(`` `` ``# formula for individual trajectories`` `` ``QoL`` ``~`` ``1`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`` `` ``# predictors for class 1`` `` ``mu1`` ``~`` ``time`` ``+`` ``hospital`` ``+`` ``education`` ``+`` ``age`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`` `` ``# predictors for class 2`` `` ``mu2`` ``~`` ``time`` ``+`` ``hospital`` ``+`` ``education`` ``+`` ``age`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`` `` family ``=`` `[`mixture`](https://paulbuerkner.com/brms/reference/mixture.html)`(``gaussian``, nmix ``=`` ``2``)`` `` ``)``,`` `` data ``=`` ``qol_cancer``,`` `` chains ``=`` ``4``, ``# Number of MCMC chains`` `` iter ``=`` ``1000``, ``# Total iterations per chain`` `` cores ``=`` ``4``, ``# Use 4 CPU cores`` `` seed ``=`` ``1234``, ``# For reproducibility`` `` refresh ``=`` ``0`` ``)`` `` ``# in this example, we also model the class membership probabilities`` ``brms``::`[`brm`](https://paulbuerkner.com/brms/reference/brm.html)`(`` `` `[`bf`](https://paulbuerkner.com/brms/reference/brmsformula.html)`(`` `` ``# formula for individual trajectories`` `` ``QoL`` ``~`` ``1`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`` `` ``# predictors for class 1`` `` ``mu1`` ``~`` ``time`` ``+`` ``hospital`` ``+`` ``education`` ``+`` ``age`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`` `` ``# predictors for class 2`` `` ``mu2`` ``~`` ``time`` ``+`` ``hospital`` ``+`` ``education`` ``+`` ``age`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`` `` ``# predictors for class membership probabilities`` `` ``theta1`` ``~`` ``hospital`` ``+`` ``education``,`` `` ``theta2`` ``~`` ``hospital`` ``+`` ``education`` ``+`` ``age``,`` `` family ``=`` `[`mixture`](https://paulbuerkner.com/brms/reference/mixture.html)`(``gaussian``, nmix ``=`` ``2``)`` `` ``)``,`` `` data ``=`` ``qol_cancer``,`` `` chains ``=`` ``4``, ``# Number of MCMC chains`` `` iter ``=`` ``1000``, ``# Total iterations per chain`` `` cores ``=`` ``4``, ``# Use 4 CPU cores`` `` seed ``=`` ``1234``, ``# For reproducibility`` `` refresh ``=`` ``0`` ``)`

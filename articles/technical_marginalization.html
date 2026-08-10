@@ -475,6 +475,148 @@ vignette</a>).</li>
 </ul>
 </div>
 </div>
+<div class="section level2">
+<h2 id="appendix-code-equivalent-in-different-r-packages">Appendix: Code equivalent in different R packages<a class="anchor" aria-label="anchor" href="#appendix-code-equivalent-in-different-r-packages"></a>
+</h2>
+<p>While this vignette focuses on the <strong>easystats</strong>
+ecosystem, it is helpful to see how these concepts translate to other
+popular packages. Below, we provide the equivalent R code to calculate
+the <code>"specific"</code>, <code>"typical"</code>,
+<code>"average"</code>, and <code>"counterfactual"</code> marginal means
+using the <em>marginaleffects</em> and <em>emmeans</em> packages. Notice
+how different packages use different terminology - such as varying
+<code>newdata</code> arguments or specific weighting schemes - to
+achieve the exact same conceptual estimates under the hood.</p>
+<p>We use the <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters()</a></code> function to ensure the
+output displays enough decimal places for a precise comparison.</p>
+<div class="section level3">
+<h3 id="specific-observation-1">Specific Observation<a class="anchor" aria-label="anchor" href="#specific-observation-1"></a>
+</h3>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># easystats: Sets numeric variables to their mean and factors</span></span>
+<span><span class="co"># to their reference level.</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"specific"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Model-based Predictions</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
+<span><span class="co">#&gt; --------------------------------</span></span>
+<span><span class="co">#&gt; female | 186.68 (185.56, 187.80)</span></span>
+<span><span class="co">#&gt; male   | 193.53 (192.41, 194.65)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
+<span><span class="co">#&gt; Predictors modulated: sex</span></span>
+<span><span class="co">#&gt; Predictors controlled: species (Adelie)</span></span>
+<span></span>
+<span><span class="co"># marginaleffects: The 'newdata = "mean"' argument replicates this</span></span>
+<span><span class="co"># "theoretical" observation behavior.</span></span>
+<span><span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html" class="external-link">avg_predictions</a></span><span class="op">(</span><span class="va">m</span>, by <span class="op">=</span> <span class="st">"sex"</span>, newdata <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Predicted |    sex |   SE |           95% CI | Statistic |      p</span></span>
+<span><span class="co">#&gt; -----------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 186.68    | female | 0.57 | [185.56, 187.79] |    328.44 | &lt; .001</span></span>
+<span><span class="co">#&gt; 193.53    |   male | 0.57 | [192.41, 194.64] |    340.49 | &lt; .001</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="typical-observation-1">Typical Observation<a class="anchor" aria-label="anchor" href="#typical-observation-1"></a>
+</h3>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># easystats: Builds a balanced reference grid and weights each group</span></span>
+<span><span class="co"># equally (the default).</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"typical"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
+<span><span class="co">#&gt; --------------------------------</span></span>
+<span><span class="co">#&gt; female | 197.60 (196.70, 198.50)</span></span>
+<span><span class="co">#&gt; male   | 204.45 (203.56, 205.34)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
+<span><span class="co">#&gt; Predictors modulated: sex</span></span>
+<span><span class="co">#&gt; Predictors averaged: species</span></span>
+<span></span>
+<span><span class="co"># marginaleffects: 'newdata = "grid"' creates a similar balanced</span></span>
+<span><span class="co"># data grid.</span></span>
+<span><span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html" class="external-link">avg_predictions</a></span><span class="op">(</span><span class="va">m</span>, by <span class="op">=</span> <span class="st">"sex"</span>, newdata <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Predicted |    sex |   SE |           95% CI | Statistic |      p</span></span>
+<span><span class="co">#&gt; -----------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 197.60    | female | 0.46 | [196.70, 198.50] |    431.93 | &lt; .001</span></span>
+<span><span class="co">#&gt; 204.45    |   male | 0.45 | [203.56, 205.34] |    450.48 | &lt; .001</span></span>
+<span></span>
+<span><span class="co"># emmeans: Equal weighting across a reference grid is the default</span></span>
+<span><span class="co"># behavior in emmeans.</span></span>
+<span><span class="fu">emmeans</span><span class="fu">::</span><span class="fu"><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; sex    | Marginal Means |   SE |           95% CI | t(329) |      p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; female |         197.60 | 0.46 | [196.70, 198.50] | 431.93 | &lt; .001</span></span>
+<span><span class="co">#&gt; male   |         204.45 | 0.45 | [203.56, 205.34] | 450.48 | &lt; .001</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="average-observation-1">Average Observation<a class="anchor" aria-label="anchor" href="#average-observation-1"></a>
+</h3>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># easystats: Calculates predictions for every observation in the</span></span>
+<span><span class="co"># empirical data and averages them.</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Average Predictions</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
+<span><span class="co">#&gt; --------------------------------</span></span>
+<span><span class="co">#&gt; female | 197.36 (196.49, 198.24)</span></span>
+<span><span class="co">#&gt; male   | 204.51 (203.64, 205.38)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
+<span><span class="co">#&gt; Predictors modulated: sex</span></span>
+<span></span>
+<span><span class="co"># marginaleffects: Using 'by' without modifying 'newdata' averages</span></span>
+<span><span class="co"># predictions over the original empirical dataset.</span></span>
+<span><span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html" class="external-link">avg_predictions</a></span><span class="op">(</span><span class="va">m</span>, by <span class="op">=</span> <span class="st">"sex"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Predicted |    sex |   SE |           95% CI | Statistic |      p</span></span>
+<span><span class="co">#&gt; -----------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 197.36    | female | 0.45 | [196.49, 198.24] |    442.74 | &lt; .001</span></span>
+<span><span class="co">#&gt; 204.51    |   male | 0.44 | [203.64, 205.37] |    462.92 | &lt; .001</span></span>
+<span></span>
+<span><span class="co"># emmeans: 'weights = "cell"' weights the reference grid based on</span></span>
+<span><span class="co"># actual cell frequencies in the data.</span></span>
+<span><span class="fu">emmeans</span><span class="fu">::</span><span class="fu"><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, weights <span class="op">=</span> <span class="st">"cell"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; sex    | Marginal Means |   SE |           95% CI | t(329) |      p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; female |         197.36 | 0.45 | [196.49, 198.24] | 442.75 | &lt; .001</span></span>
+<span><span class="co">#&gt; male   |         204.51 | 0.44 | [203.64, 205.38] | 462.92 | &lt; .001</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="counterfactual-population-observation">Counterfactual / Population Observation<a class="anchor" aria-label="anchor" href="#counterfactual-population-observation"></a>
+</h3>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># easystats: Uses G-computation (cloning the dataset to</span></span>
+<span><span class="co"># simulate pseudo-randomization).</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Average Counterfactual Predictions</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
+<span><span class="co">#&gt; --------------------------------</span></span>
+<span><span class="co">#&gt; female | 197.51 (196.63, 198.39)</span></span>
+<span><span class="co">#&gt; male   | 204.36 (203.49, 205.23)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
+<span><span class="co">#&gt; Predictors modulated: sex</span></span>
+<span><span class="co">#&gt; Predictors averaged: species</span></span>
+<span></span>
+<span><span class="co"># marginaleffects: Using the 'variables' argument automatically</span></span>
+<span><span class="co"># triggers this counterfactual approach.</span></span>
+<span><span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/marginaleffects/man/predictions.html" class="external-link">avg_predictions</a></span><span class="op">(</span><span class="va">m</span>, variables <span class="op">=</span> <span class="st">"sex"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Predicted |    sex |   SE |           95% CI | Statistic |      p</span></span>
+<span><span class="co">#&gt; -----------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 197.51    | female | 0.45 | [196.64, 198.38] |    443.06 | &lt; .001</span></span>
+<span><span class="co">#&gt; 204.36    |   male | 0.44 | [203.50, 205.23] |    462.58 | &lt; .001</span></span>
+<span></span>
+<span><span class="co"># emmeans: 'weights = "proportional"' weights the means</span></span>
+<span><span class="co"># proportionally to the marginal frequencies of the sample.</span></span>
+<span><span class="fu">emmeans</span><span class="fu">::</span><span class="fu"><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, weights <span class="op">=</span> <span class="st">"proportional"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; sex    | Marginal Means |   SE |           95% CI | t(329) |      p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; female |         197.51 | 0.45 | [196.63, 198.39] | 443.06 | &lt; .001</span></span>
+<span><span class="co">#&gt; male   |         204.36 | 0.44 | [203.49, 205.23] | 462.57 | &lt; .001</span></span></code></pre></div>
+</div>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>

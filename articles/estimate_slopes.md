@@ -22,28 +22,14 @@ Let’s see some examples.
 Let’s fit a linear model with a factor interacting with a continuous
 predictor and visualize it.
 
-``` r
-
-library(ggplot2)
-library(parameters)
-library(performance)
-library(modelbased)
-
-model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
-
-estimate_relation(model) |>
-  plot()
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`parameters`](https://easystats.github.io/parameters/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`performance`](https://easystats.github.io/performance/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` `` ``model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Length`` ``*`` ``Species``, data ``=`` ``iris``)`` `` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
 ![](estimate_slopes_files/figure-html/unnamed-chunk-2-1.png)
 
 It seems like the slope of the effect is roughly similar (in the same
 direction) across the different factor levels.
 
-``` r
-
-parameters(model)
-```
+[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``)`
 
     > Parameter                           | Coefficient |   SE |         95% CI
     > -------------------------------------------------------------------------
@@ -68,12 +54,7 @@ removing the interaction does not *substantially* improve the model’s
 performance. So, for the sake of the demonstration, let’s say we want to
 keep the maximal effect structure.
 
-``` r
-
-model2 <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
-
-test_performance(model, model2)
-```
+`model2`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Length`` ``+`` ``Species``, data ``=`` ``iris``)`` `` `[`test_performance`](https://easystats.github.io/performance/reference/test_performance.html)`(``model``, ``model2``)`
 
     > Name   | Model |    BF | df | df_diff | Criterion | Chi2 |     p
     > ----------------------------------------------------------------
@@ -89,12 +70,7 @@ which corresponds to its slope *averaged* (it’s a bit more complex than
 a simple averaging but that’s the idea) over the different factor
 levels.
 
-``` r
-
-slopes <- estimate_slopes(model, trend = "Petal.Length")
-
-slopes
-```
+`slopes`` ``<-`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model``, trend ``=`` ``"Petal.Length"``)`` `` ``slopes`
 
     > Estimated Marginal Effects
     > 
@@ -110,12 +86,7 @@ Species**, is positive and significant.
 
 ## Effects for each factor’s levels
 
-``` r
-
-slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
-
-slopes
-```
+`slopes`` ``<-`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model``, trend ``=`` ``"Petal.Length"``, by ``=`` ``"Species"``)`` `` ``slopes`
 
     > Estimated Marginal Effects
     > 
@@ -128,10 +99,7 @@ slopes
     > Marginal effects estimated for Petal.Length
     > Type of slope was dY/dX
 
-``` r
-
-plot(slopes)
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``slopes``)`
 
 ![](estimate_slopes_files/figure-html/unnamed-chunk-6-1.png)
 
@@ -152,16 +120,7 @@ for further details.
 For instance, the plot below shows that the effect of `hp` (the y-axis)
 is significantly negative only when `wt` is low (`< ~4`).
 
-``` r
-
-model <- lm(mpg ~ hp * wt, data = mtcars)
-
-slopes <- estimate_slopes(model, trend = "hp", by = "wt")
-
-plot(slopes) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-  theme_minimal()
-```
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``mpg`` ``~`` ``hp`` ``*`` ``wt``, data ``=`` ``mtcars``)`` `` ``slopes`` ``<-`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model``, trend ``=`` ``"hp"``, by ``=`` ``"wt"``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``slopes``)`` ``+`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``, color ``=`` ``"red"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_slopes_files/figure-html/unnamed-chunk-7-1.png)
 
@@ -175,14 +134,7 @@ able to parsimoniously model possibly non-linear relationship.
 
 Let’s take for instance the following model:
 
-``` r
-
-# Fit a non-linear General Additive Model (GAM)
-model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
-
-estimate_relation(model, length = 50) |>
-  plot()
-```
+`# Fit a non-linear General Additive Model (GAM)`` ``model`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``Sepal.Width`` ``~`` `[`s`](https://rdrr.io/pkg/mgcv/man/s.html)`(``Petal.Length``)``, data ``=`` ``iris``)`` `` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, length ``=`` ``50``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
 ![](estimate_slopes_files/figure-html/unnamed-chunk-8-1.png)
 
@@ -195,10 +147,7 @@ simply paste the figure right? Right? Reviewers will want some
 statistics, some numbers between brackets, otherwise it doesn’t look
 serious does it.
 
-``` r
-
-parameters::parameters(model)
-```
+`parameters``::`[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``)`
 
     > # Fixed Effects
     > 
@@ -225,20 +174,7 @@ our need for relationship understanding, another possibility is to
 compute the **marginal linear effect** of the smooth term, i.e., the
 “derivative”, using `estimate_slopes`.
 
-``` r
-
-# Compute derivative
-deriv <- estimate_slopes(model,
-  trend = "Petal.Length",
-  by = "Petal.Length",
-  length = 100
-)
-
-# Visualise
-plot(deriv) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-  theme_minimal()
-```
+`# Compute derivative`` ``deriv`` ``<-`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model``,`` `` trend ``=`` ``"Petal.Length"``,`` `` by ``=`` ``"Petal.Length"``,`` `` length ``=`` ``100`` ``)`` `` ``# Visualise`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``)`` ``+`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``, color ``=`` ``"red"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_slopes_files/figure-html/unnamed-chunk-10-1.png)
 
@@ -253,10 +189,7 @@ chunks and obtain a summary for the trend of each chunk, including the
 direction of the effects and whether it is statistically significant or
 not.
 
-``` r
-
-summary(deriv)
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``deriv``)`
 
     > Johnson-Neymann Intervals
     > 

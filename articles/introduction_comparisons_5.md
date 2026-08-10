@@ -1,10 +1,5 @@
 # Contrasts and comparisons for zero-inflation models
 
-    ## Warning in check_dep_version(dep_pkg = "TMB"): package version mismatch: 
-    ## glmmTMB was built with TMB package version 1.9.21
-    ## Current TMB package version is 1.9.22
-    ## Please re-install glmmTMB from source or restore original 'TMB' package (see '?reinstalling' for more information)
-
 This vignette is the last in a 5-part series:
 
 1.  [**Contrasts and Pairwise
@@ -101,18 +96,7 @@ can be made for the different model components:
   `predict = "zero"`. These predictions only related to the
   zero-inflation component of the model.
 
-``` r
-
-library(modelbased)
-library(glmmTMB)
-
-data(Salamanders)
-m <- glmmTMB(count ~ mined + (1 | site),
-  ziformula = ~mined,
-  family = poisson(),
-  data = Salamanders
-)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`glmmTMB`](https://github.com/glmmTMB/glmmTMB)`)`` `` `[`data`](https://rdrr.io/r/utils/data.html)`(``Salamanders``)`` ``m`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(``count`` ``~`` ``mined`` ``+`` ``(``1`` ``|`` ``site``)``,`` `` ziformula ``=`` ``~``mined``,`` `` family ``=`` `[`poisson`](https://rdrr.io/r/stats/family.html)`(``)``,`` `` data ``=`` ``Salamanders`` ``)`
 
 ### Contrasts and comparisons for the conditional model
 
@@ -121,35 +105,7 @@ conditional mean is predicted using `predict = "conditional"`. This is
 the average count of the response, excluding the zero-inflation
 component.
 
-``` r
-
-# predicting the conditional mean
-estimate_means(m, "mined", predict = "conditional")
-#> Estimated Marginal Means
-#> 
-#> mined | Mean |   SE |       95% CI |     z
-#> ------------------------------------------
-#> yes   | 1.12 | 0.26 | [0.61, 1.63] |  4.29
-#> no    | 3.51 | 0.32 | [2.89, 4.14] | 11.00
-#> 
-#> Variable predicted: count
-#> Predictors modulated: mined
-#> Predictors averaged: site
-#> Predictions are on the conditional-scale.
-
-estimate_contrasts(m, "mined", predict = "conditional")
-#> Marginal Contrasts Analysis
-#> 
-#> Level1 | Level2 | Difference |   SE |       95% CI |    z |      p
-#> ------------------------------------------------------------------
-#> no     | yes    |       2.39 | 0.40 | [1.60, 3.18] | 5.93 | < .001
-#> 
-#> Variable predicted: count
-#> Predictors contrasted: mined
-#> Predictors averaged: site
-#> p-values are uncorrected.
-#> Contrasts are on the conditional-scale.
-```
+`# predicting the conditional mean`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"mined"``, predict ``=`` ``"conditional"``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> mined | Mean | SE | 95% CI | z`` ``#> ------------------------------------------`` ``#> yes | 1.12 | 0.26 | [0.61, 1.63] | 4.29`` ``#> no | 3.51 | 0.32 | [2.89, 4.14] | 11.00`` ``#> `` ``#> Variable predicted: count`` ``#> Predictors modulated: mined`` ``#> Predictors averaged: site`` ``#> Predictions are on the conditional-scale.`` `` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, ``"mined"``, predict ``=`` ``"conditional"``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference | SE | 95% CI | z | p`` ``#> ------------------------------------------------------------------`` ``#> no | yes | 2.39 | 0.40 | [1.60, 3.18] | 5.93 | < .001`` ``#> `` ``#> Variable predicted: count`` ``#> Predictors contrasted: mined`` ``#> Predictors averaged: site`` ``#> p-values are uncorrected.`` ``#> Contrasts are on the conditional-scale.`
 
 ### Contrasts and comparisons for the full model
 
@@ -157,67 +113,11 @@ By default, adjusted predictions are returned for the full model,
 i.e. the average expected count of the *response*, including the
 zero-inflation component.
 
-``` r
-
-# predicting the expected value of the response
-estimate_means(m, "mined")
-#> Estimated Marginal Means
-#> 
-#> mined | Mean |   SE |       95% CI |     z
-#> ------------------------------------------
-#> yes   | 0.27 | 0.05 | [0.17, 0.37] |  5.47
-#> no    | 2.27 | 0.22 | [1.83, 2.70] | 10.19
-#> 
-#> Variable predicted: count
-#> Predictors modulated: mined
-#> Predictors averaged: site
-#> Predictions are on the response-scale.
-
-estimate_contrasts(m, "mined")
-#> Marginal Contrasts Analysis
-#> 
-#> Level1 | Level2 | Difference |   SE |       95% CI |    z |      p
-#> ------------------------------------------------------------------
-#> no     | yes    |       1.99 | 0.23 | [1.55, 2.44] | 8.78 | < .001
-#> 
-#> Variable predicted: count
-#> Predictors contrasted: mined
-#> Predictors averaged: site
-#> p-values are uncorrected.
-#> Contrasts are on the response-scale.
-```
+`# predicting the expected value of the response`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"mined"``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> mined | Mean | SE | 95% CI | z`` ``#> ------------------------------------------`` ``#> yes | 0.27 | 0.05 | [0.17, 0.37] | 5.47`` ``#> no | 2.27 | 0.22 | [1.83, 2.70] | 10.19`` ``#> `` ``#> Variable predicted: count`` ``#> Predictors modulated: mined`` ``#> Predictors averaged: site`` ``#> Predictions are on the response-scale.`` `` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, ``"mined"``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference | SE | 95% CI | z | p`` ``#> ------------------------------------------------------------------`` ``#> no | yes | 1.99 | 0.23 | [1.55, 2.44] | 8.78 | < .001`` ``#> `` ``#> Variable predicted: count`` ``#> Predictors contrasted: mined`` ``#> Predictors averaged: site`` ``#> p-values are uncorrected.`` ``#> Contrasts are on the response-scale.`
 
 ### Contrasts and comparisons for the zero-inflation probabilities
 
 If you’re interested in the probabilities of being a “true zero” or not,
 use `predict = "zprob"`.
 
-``` r
-
-# predicting the zero-inflation probabilities
-estimate_means(m, "mined", predict = "zprob")
-#> Estimated Marginal Means
-#> 
-#> mined | Probability |   SE |       95% CI |     z
-#> -------------------------------------------------
-#> yes   |        0.76 | 0.04 | [0.67, 0.84] | 17.54
-#> no    |        0.36 | 0.03 | [0.30, 0.41] | 12.75
-#> 
-#> Variable predicted: count
-#> Predictors modulated: mined
-#> Predictors averaged: site
-#> Predictions are on the zprob-scale.
-
-estimate_contrasts(m, "mined", predict = "zprob")
-#> Marginal Contrasts Analysis
-#> 
-#> Level1 | Level2 | Difference |   SE |         95% CI |     z |      p
-#> ---------------------------------------------------------------------
-#> no     | yes    |      -0.40 | 0.05 | [-0.50, -0.30] | -7.92 | < .001
-#> 
-#> Variable predicted: count
-#> Predictors contrasted: mined
-#> Predictors averaged: site
-#> p-values are uncorrected.
-#> Contrasts are on the zprob-scale.
-```
+`# predicting the zero-inflation probabilities`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"mined"``, predict ``=`` ``"zprob"``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> mined | Probability | SE | 95% CI | z`` ``#> -------------------------------------------------`` ``#> yes | 0.76 | 0.04 | [0.67, 0.84] | 17.54`` ``#> no | 0.36 | 0.03 | [0.30, 0.41] | 12.75`` ``#> `` ``#> Variable predicted: count`` ``#> Predictors modulated: mined`` ``#> Predictors averaged: site`` ``#> Predictions are on the zprob-scale.`` `` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, ``"mined"``, predict ``=`` ``"zprob"``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference | SE | 95% CI | z | p`` ``#> ---------------------------------------------------------------------`` ``#> no | yes | -0.40 | 0.05 | [-0.50, -0.30] | -7.92 | < .001`` ``#> `` ``#> Variable predicted: count`` ``#> Predictors contrasted: mined`` ``#> Predictors averaged: site`` ``#> p-values are uncorrected.`` ``#> Contrasts are on the zprob-scale.`

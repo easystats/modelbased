@@ -16,20 +16,7 @@ contains information on the effect of coffee consumption on alertness
 over time. The outcome variable is binary (alertness), and the predictor
 variables are coffee consumption (treatment) and time.
 
-``` r
-
-library(datawizard) # for data management, e.g. recodings
-
-data(coffee_data, package = "modelbased")
-
-# dichotomize outcome variable
-coffee_data$alertness <- categorize(coffee_data$alertness, lowest = 0)
-# rename variable
-coffee_data <- data_rename(coffee_data, select = c(treatment = "coffee"))
-
-# model
-model <- glm(alertness ~ treatment * time, data = coffee_data, family = binomial())
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`datawizard`](https://easystats.github.io/datawizard/)`)`` ``# for data management, e.g. recodings`` `` `[`data`](https://rdrr.io/r/utils/data.html)`(``coffee_data``, package ``=`` ``"modelbased"``)`` `` ``# dichotomize outcome variable`` ``coffee_data``$``alertness`` ``<-`` `[`categorize`](https://easystats.github.io/datawizard/reference/categorize.html)`(``coffee_data``$``alertness``, lowest ``=`` ``0``)`` ``# rename variable`` ``coffee_data`` ``<-`` `[`data_rename`](https://easystats.github.io/datawizard/reference/data_rename.html)`(``coffee_data``, select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``treatment ``=`` ``"coffee"``)``)`` `` ``# model`` ``model`` ``<-`` `[`glm`](https://rdrr.io/r/stats/glm.html)`(``alertness`` ``~`` ``treatment`` ``*`` ``time``, data ``=`` ``coffee_data``, family ``=`` `[`binomial`](https://rdrr.io/r/stats/family.html)`(``)``)`
 
 ## Exploring the model - model coefficients
 
@@ -41,23 +28,7 @@ function to extract the coefficients from the model. By setting
 `exponentiate = TRUE`, we can obtain the odds ratios for the
 coefficients.
 
-``` r
-
-library(parameters)
-
-# coefficients
-model_parameters(model, exponentiate = TRUE)
-#> Parameter                              | Odds Ratio |   SE |        95% CI |         z |      p
-#> -----------------------------------------------------------------------------------------------
-#> (Intercept)                            |       1.00 | 0.45 | [0.41,  2.44] | -1.54e-15 | > .999
-#> treatment [control]                    |       0.33 | 0.23 | [0.08,  1.23] |     -1.61 | 0.108 
-#> time [noon]                            |       0.54 | 0.35 | [0.15,  1.90] |     -0.96 | 0.339 
-#> time [afternoon]                       |       3.00 | 2.05 | [0.81, 12.24] |      1.61 | 0.108 
-#> treatment [control] × time [noon]      |      10.35 | 9.85 | [1.66, 70.73] |      2.45 | 0.014 
-#> treatment [control] × time [afternoon] |       1.00 | 0.97 | [0.15,  6.74] | -6.10e-16 | > .999
-#> 
-#> Uncertainty intervals (profile-likelihood) and p-values (two-tailed) computed using a Wald z-distribution approximation.
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`parameters`](https://easystats.github.io/parameters/)`)`` `` ``# coefficients`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``, exponentiate ``=`` ``TRUE``)`` ``#> Parameter | Odds Ratio | SE | 95% CI | z | p`` ``#> -----------------------------------------------------------------------------------------------`` ``#> (Intercept) | 1.00 | 0.45 | [0.41, 2.44] | -1.54e-15 | > .999`` ``#> treatment [control] | 0.33 | 0.23 | [0.08, 1.23] | -1.61 | 0.108 `` ``#> time [noon] | 0.54 | 0.35 | [0.15, 1.90] | -0.96 | 0.339 `` ``#> time [afternoon] | 3.00 | 2.05 | [0.81, 12.24] | 1.61 | 0.108 `` ``#> treatment [control] × time [noon] | 10.35 | 9.85 | [1.66, 70.73] | 2.45 | 0.014 `` ``#> treatment [control] × time [afternoon] | 1.00 | 0.97 | [0.15, 6.74] | -6.10e-16 | > .999`` ``#> `` ``#> Uncertainty intervals (profile-likelihood) and p-values (two-tailed) computed using a Wald z-distribution approximation.`
 
 The model coefficients are difficult to interpret directly, in
 particular since we have an interaction effect. Instead, we should use
@@ -83,28 +54,7 @@ probabilities* are calculated. These refer to the adjusted probabilities
 of the outcome (higher alertness) depending on the predictor variables
 (treatment and time).
 
-``` r
-
-library(modelbased)
-
-# predicted probabilities
-predictions <- estimate_means(model, c("time", "treatment"))
-predictions
-#> Estimated Marginal Means
-#> 
-#> time      | treatment | Probability |       95% CI
-#> --------------------------------------------------
-#> morning   | coffee    |        0.50 | [0.29, 0.71]
-#> noon      | coffee    |        0.35 | [0.18, 0.57]
-#> afternoon | coffee    |        0.75 | [0.52, 0.89]
-#> morning   | control   |        0.25 | [0.11, 0.48]
-#> noon      | control   |        0.65 | [0.43, 0.82]
-#> afternoon | control   |        0.50 | [0.29, 0.71]
-#> 
-#> Variable predicted: alertness
-#> Predictors modulated: time, treatment
-#> Predictions are on the response-scale.
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` `` ``# predicted probabilities`` ``predictions`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"treatment"``)``)`` ``predictions`` ``#> Estimated Marginal Means`` ``#> `` ``#> time | treatment | Probability | 95% CI`` ``#> --------------------------------------------------`` ``#> morning | coffee | 0.50 | [0.29, 0.71]`` ``#> noon | coffee | 0.35 | [0.18, 0.57]`` ``#> afternoon | coffee | 0.75 | [0.52, 0.89]`` ``#> morning | control | 0.25 | [0.11, 0.48]`` ``#> noon | control | 0.65 | [0.43, 0.82]`` ``#> afternoon | control | 0.50 | [0.29, 0.71]`` ``#> `` ``#> Variable predicted: alertness`` ``#> Predictors modulated: time, treatment`` ``#> Predictions are on the response-scale.`
 
 We now see that high `alertness` was most likely for the `coffee` group
 in the `afternoon` time (about 75% probability of high alertness for the
@@ -114,11 +64,7 @@ We can also visualize these results, using the
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) method. In
 short, this will give us a visual interpretation of the model.
 
-``` r
-
-# plot predicted probabilities
-plot(predictions)
-```
+`# plot predicted probabilities`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``predictions``)`
 
 ![](workflow_modelbased_files/figure-html/unnamed-chunk-4-1.png)
 
@@ -138,57 +84,13 @@ This function needs to know the variables that should be compared, or
 variables involved in our interaction term (our *focal terms* from
 above).
 
-``` r
-
-# pairwise comparisons - quite long table
-estimate_contrasts(model, c("time", "treatment"))
-#> Marginal Contrasts Analysis
-#> 
-#> Level1             | Level2            | Difference |   SE |        95% CI |        z |      p
-#> ----------------------------------------------------------------------------------------------
-#> morning, control   | morning, coffee   |      -0.25 | 0.15 | [-0.54, 0.04] |    -1.69 |  0.091
-#> noon, coffee       | morning, coffee   |      -0.15 | 0.15 | [-0.45, 0.15] |    -0.97 |  0.332
-#> noon, control      | morning, coffee   |       0.15 | 0.15 | [-0.15, 0.45] |     0.97 |  0.332
-#> afternoon, coffee  | morning, coffee   |       0.25 | 0.15 | [-0.04, 0.54] |     1.69 |  0.091
-#> afternoon, control | morning, coffee   |   1.11e-16 | 0.16 | [-0.31, 0.31] | 7.02e-16 | > .999
-#> noon, coffee       | morning, control  |       0.10 | 0.14 | [-0.18, 0.38] |     0.69 |  0.488
-#> noon, control      | morning, control  |       0.40 | 0.14 | [ 0.12, 0.68] |     2.78 |  0.005
-#> afternoon, coffee  | morning, control  |       0.50 | 0.14 | [ 0.23, 0.77] |     3.65 | < .001
-#> afternoon, control | morning, control  |       0.25 | 0.15 | [-0.04, 0.54] |     1.69 |  0.091
-#> noon, control      | noon, coffee      |       0.30 | 0.15 | [ 0.00, 0.60] |     1.99 |  0.047
-#> afternoon, coffee  | noon, coffee      |       0.40 | 0.14 | [ 0.12, 0.68] |     2.78 |  0.005
-#> afternoon, control | noon, coffee      |       0.15 | 0.15 | [-0.15, 0.45] |     0.97 |  0.332
-#> afternoon, coffee  | noon, control     |       0.10 | 0.14 | [-0.18, 0.38] |     0.69 |  0.488
-#> afternoon, control | noon, control     |      -0.15 | 0.15 | [-0.45, 0.15] |    -0.97 |  0.332
-#> afternoon, control | afternoon, coffee |      -0.25 | 0.15 | [-0.54, 0.04] |    -1.69 |  0.091
-#> 
-#> Variable predicted: alertness
-#> Predictors contrasted: time, treatment
-#> p-values are uncorrected.
-#> Contrasts are on the response-scale.
-```
+`# pairwise comparisons - quite long table`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"treatment"``)``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference | SE | 95% CI | z | p`` ``#> ----------------------------------------------------------------------------------------------`` ``#> morning, control | morning, coffee | -0.25 | 0.15 | [-0.54, 0.04] | -1.69 | 0.091`` ``#> noon, coffee | morning, coffee | -0.15 | 0.15 | [-0.45, 0.15] | -0.97 | 0.332`` ``#> noon, control | morning, coffee | 0.15 | 0.15 | [-0.15, 0.45] | 0.97 | 0.332`` ``#> afternoon, coffee | morning, coffee | 0.25 | 0.15 | [-0.04, 0.54] | 1.69 | 0.091`` ``#> afternoon, control | morning, coffee | 1.11e-16 | 0.16 | [-0.31, 0.31] | 7.02e-16 | > .999`` ``#> noon, coffee | morning, control | 0.10 | 0.14 | [-0.18, 0.38] | 0.69 | 0.488`` ``#> noon, control | morning, control | 0.40 | 0.14 | [ 0.12, 0.68] | 2.78 | 0.005`` ``#> afternoon, coffee | morning, control | 0.50 | 0.14 | [ 0.23, 0.77] | 3.65 | < .001`` ``#> afternoon, control | morning, control | 0.25 | 0.15 | [-0.04, 0.54] | 1.69 | 0.091`` ``#> noon, control | noon, coffee | 0.30 | 0.15 | [ 0.00, 0.60] | 1.99 | 0.047`` ``#> afternoon, coffee | noon, coffee | 0.40 | 0.14 | [ 0.12, 0.68] | 2.78 | 0.005`` ``#> afternoon, control | noon, coffee | 0.15 | 0.15 | [-0.15, 0.45] | 0.97 | 0.332`` ``#> afternoon, coffee | noon, control | 0.10 | 0.14 | [-0.18, 0.38] | 0.69 | 0.488`` ``#> afternoon, control | noon, control | -0.15 | 0.15 | [-0.45, 0.15] | -0.97 | 0.332`` ``#> afternoon, control | afternoon, coffee | -0.25 | 0.15 | [-0.54, 0.04] | -1.69 | 0.091`` ``#> `` ``#> Variable predicted: alertness`` ``#> Predictors contrasted: time, treatment`` ``#> p-values are uncorrected.`` ``#> Contrasts are on the response-scale.`
 
 In the above output, we see all possible pairwise comparisons of the
 predicted probabilities. The table is quite long, but we can also group
 the comparisons, e.g. by the variable *time*.
 
-``` r
-
-# group comparisons by "time"
-estimate_contrasts(model, "treatment", by = "time")
-#> Marginal Contrasts Analysis
-#> 
-#> Level1  | Level2 | time      | Difference |   SE |        95% CI |     z |     p
-#> --------------------------------------------------------------------------------
-#> control | coffee | morning   |      -0.25 | 0.15 | [-0.54, 0.04] | -1.69 | 0.091
-#> control | coffee | noon      |       0.30 | 0.15 | [ 0.00, 0.60] |  1.99 | 0.047
-#> control | coffee | afternoon |      -0.25 | 0.15 | [-0.54, 0.04] | -1.69 | 0.091
-#> 
-#> Variable predicted: alertness
-#> Predictors contrasted: treatment
-#> p-values are uncorrected.
-#> Contrasts are on the response-scale.
-```
+`# group comparisons by "time"`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, ``"treatment"``, by ``=`` ``"time"``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | time | Difference | SE | 95% CI | z | p`` ``#> --------------------------------------------------------------------------------`` ``#> control | coffee | morning | -0.25 | 0.15 | [-0.54, 0.04] | -1.69 | 0.091`` ``#> control | coffee | noon | 0.30 | 0.15 | [ 0.00, 0.60] | 1.99 | 0.047`` ``#> control | coffee | afternoon | -0.25 | 0.15 | [-0.54, 0.04] | -1.69 | 0.091`` ``#> `` ``#> Variable predicted: alertness`` ``#> Predictors contrasted: treatment`` ``#> p-values are uncorrected.`` ``#> Contrasts are on the response-scale.`
 
 The output shows that the differences between the *coffee* and the
 *control* group are statistically significant only in the noon time.

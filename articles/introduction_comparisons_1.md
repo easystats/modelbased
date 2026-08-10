@@ -51,52 +51,13 @@ We display a simple table of regression coefficients, created with
 [`model_parameters()`](https://easystats.github.io/parameters/reference/model_parameters.html)
 from the *parameters* package.
 
-``` r
-
-library(modelbased)
-library(parameters)
-library(ggplot2)
-
-set.seed(123)
-n <- 200
-d <- data.frame(
-  outcome = rnorm(n),
-  grp = as.factor(sample(c("treatment", "control"), n, TRUE)),
-  episode = as.factor(sample(1:3, n, TRUE)),
-  sex = as.factor(sample(c("female", "male"), n, TRUE, prob = c(0.4, 0.6)))
-)
-model1 <- lm(outcome ~ grp + episode, data = d)
-model_parameters(model1)
-#> Parameter       | Coefficient |   SE |        95% CI | t(196) |     p
-#> ---------------------------------------------------------------------
-#> (Intercept)     |       -0.08 | 0.13 | [-0.33, 0.18] |  -0.60 | 0.552
-#> grp [treatment] |       -0.17 | 0.13 | [-0.44, 0.09] |  -1.30 | 0.197
-#> episode [2]     |        0.36 | 0.16 | [ 0.03, 0.68] |   2.18 | 0.031
-#> episode [3]     |        0.10 | 0.16 | [-0.22, 0.42] |   0.62 | 0.538
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`parameters`](https://easystats.github.io/parameters/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` `` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``123``)`` ``n`` ``<-`` ``200`` ``d`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`` `` outcome ``=`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(``n``)``,`` `` grp ``=`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(`[`sample`](https://rdrr.io/r/base/sample.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"treatment"``, ``"control"``)``, ``n``, ``TRUE``)``)``,`` `` episode ``=`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(`[`sample`](https://rdrr.io/r/base/sample.html)`(``1``:``3``, ``n``, ``TRUE``)``)``,`` `` sex ``=`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(`[`sample`](https://rdrr.io/r/base/sample.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"female"``, ``"male"``)``, ``n``, ``TRUE``, prob ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0.4``, ``0.6``)``)``)`` ``)`` ``model1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``outcome`` ``~`` ``grp`` ``+`` ``episode``, data ``=`` ``d``)`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model1``)`` ``#> Parameter | Coefficient | SE | 95% CI | t(196) | p`` ``#> ---------------------------------------------------------------------`` ``#> (Intercept) | -0.08 | 0.13 | [-0.33, 0.18] | -0.60 | 0.552`` ``#> grp [treatment] | -0.17 | 0.13 | [-0.44, 0.09] | -1.30 | 0.197`` ``#> episode [2] | 0.36 | 0.16 | [ 0.03, 0.68] | 2.18 | 0.031`` ``#> episode [3] | 0.10 | 0.16 | [-0.22, 0.42] | 0.62 | 0.538`
 
 #### Predictions
 
 Let us look at the adjusted predictions.
 
-``` r
-
-my_predictions <- estimate_means(model1, "episode")
-my_predictions
-#> Estimated Marginal Means
-#> 
-#> episode |           Mean (CI)
-#> -----------------------------
-#> 1       | -0.16 (-0.39, 0.07)
-#> 2       |  0.20 (-0.04, 0.43)
-#> 3       | -0.06 (-0.28, 0.16)
-#> 
-#> Variable predicted: outcome
-#> Predictors modulated: episode
-#> Predictors averaged: grp
-
-plot(my_predictions)
-```
+`my_predictions`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model1``, ``"episode"``)`` ``my_predictions`` ``#> Estimated Marginal Means`` ``#> `` ``#> episode | Mean (CI)`` ``#> -----------------------------`` ``#> 1 | -0.16 (-0.39, 0.07)`` ``#> 2 | 0.20 (-0.04, 0.43)`` ``#> 3 | -0.06 (-0.28, 0.16)`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors modulated: episode`` ``#> Predictors averaged: grp`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``my_predictions``)`
 
 ![](introduction_comparisons_1_files/figure-html/unnamed-chunk-2-1.png)
 
@@ -117,23 +78,7 @@ specify other comparisons as well, using the `comparison` argument. For
 now, we go on with the simpler example of contrasts or pairwise
 comparisons.
 
-``` r
-
-# argument `comparison` defaults to "pairwise"
-estimate_contrasts(model1, "episode")
-#> Marginal Contrasts Analysis
-#> 
-#> Level1 | Level2 |     Difference (CI) |     p
-#> ---------------------------------------------
-#> 2      | 1      |  0.36 ( 0.03, 0.68) | 0.031
-#> 3      | 1      |  0.10 (-0.22, 0.42) | 0.538
-#> 3      | 2      | -0.26 (-0.58, 0.06) | 0.112
-#> 
-#> Variable predicted: outcome
-#> Predictors contrasted: episode
-#> Predictors averaged: grp
-#> p-values are uncorrected.
-```
+`` # argument `comparison` defaults to "pairwise" ``` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model1``, ``"episode"``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> ---------------------------------------------`` ``#> 2 | 1 | 0.36 ( 0.03, 0.68) | 0.031`` ``#> 3 | 1 | 0.10 (-0.22, 0.42) | 0.538`` ``#> 3 | 2 | -0.26 (-0.58, 0.06) | 0.112`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors contrasted: episode`` ``#> Predictors averaged: grp`` ``#> p-values are uncorrected.`
 
 For our quantity of interest, the contrast between episode levels 2 and
 1, we see the value 0.36, which is exactly the difference between the
@@ -146,65 +91,21 @@ We can also define “representative values” via the `contrast` or `by`
 arguments. For example, we could specify the levels of `episode`
 directly, to simplify the output:
 
-``` r
-
-estimate_contrasts(model1, contrast = "episode=c(1,2)")
-#> Marginal Contrasts Analysis
-#> 
-#> Level1 | Level2 |   Difference (CI) |     p
-#> -------------------------------------------
-#> 2      | 1      | 0.36 (0.03, 0.68) | 0.031
-#> 
-#> Variable predicted: outcome
-#> Predictors contrasted: episode=c(1,2)
-#> Predictors averaged: grp
-#> p-values are uncorrected.
-```
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model1``, contrast ``=`` ``"episode=c(1,2)"``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> -------------------------------------------`` ``#> 2 | 1 | 0.36 (0.03, 0.68) | 0.031`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors contrasted: episode=c(1,2)`` ``#> Predictors averaged: grp`` ``#> p-values are uncorrected.`
 
 ### Does same level of episode differ between groups?
 
 The next example includes a pairwise comparison of an interaction
 between two categorical predictors.
 
-``` r
-
-model2 <- lm(outcome ~ grp * episode, data = d)
-model_parameters(model2)
-#> Parameter                     | Coefficient |   SE |        95% CI | t(194) |     p
-#> -----------------------------------------------------------------------------------
-#> (Intercept)                   |        0.03 | 0.15 | [-0.27, 0.33] |   0.18 | 0.853
-#> grp [treatment]               |       -0.42 | 0.23 | [-0.88, 0.04] |  -1.80 | 0.074
-#> episode [2]                   |        0.20 | 0.22 | [-0.23, 0.63] |   0.94 | 0.350
-#> episode [3]                   |       -0.07 | 0.22 | [-0.51, 0.37] |  -0.32 | 0.750
-#> grp [treatment] × episode [2] |        0.36 | 0.33 | [-0.29, 1.02] |   1.09 | 0.277
-#> grp [treatment] × episode [3] |        0.37 | 0.32 | [-0.27, 1.00] |   1.14 | 0.254
-```
+`model2`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``outcome`` ``~`` ``grp`` ``*`` ``episode``, data ``=`` ``d``)`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model2``)`` ``#> Parameter | Coefficient | SE | 95% CI | t(194) | p`` ``#> -----------------------------------------------------------------------------------`` ``#> (Intercept) | 0.03 | 0.15 | [-0.27, 0.33] | 0.18 | 0.853`` ``#> grp [treatment] | -0.42 | 0.23 | [-0.88, 0.04] | -1.80 | 0.074`` ``#> episode [2] | 0.20 | 0.22 | [-0.23, 0.63] | 0.94 | 0.350`` ``#> episode [3] | -0.07 | 0.22 | [-0.51, 0.37] | -0.32 | 0.750`` ``#> grp [treatment] × episode [2] | 0.36 | 0.33 | [-0.29, 1.02] | 1.09 | 0.277`` ``#> grp [treatment] × episode [3] | 0.37 | 0.32 | [-0.27, 1.00] | 1.14 | 0.254`
 
 #### Predictions
 
 First, we look at the predicted values of *outcome* for all combinations
 of the involved interaction term.
 
-``` r
-
-my_predictions <- estimate_means(model2, by = c("episode", "grp"))
-my_predictions
-#> Estimated Marginal Means
-#> 
-#> episode | grp       |            Mean (CI)
-#> ------------------------------------------
-#> 1       | control   |  0.03 (-0.27,  0.33)
-#> 2       | control   |  0.23 (-0.08,  0.54)
-#> 3       | control   | -0.04 (-0.36,  0.28)
-#> 1       | treatment | -0.39 (-0.74, -0.04)
-#> 2       | treatment |  0.18 (-0.18,  0.53)
-#> 3       | treatment | -0.09 (-0.39,  0.21)
-#> 
-#> Variable predicted: outcome
-#> Predictors modulated: episode, grp
-
-plot(my_predictions)
-```
+`my_predictions`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model2``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``)`` ``my_predictions`` ``#> Estimated Marginal Means`` ``#> `` ``#> episode | grp | Mean (CI)`` ``#> ------------------------------------------`` ``#> 1 | control | 0.03 (-0.27, 0.33)`` ``#> 2 | control | 0.23 (-0.08, 0.54)`` ``#> 3 | control | -0.04 (-0.36, 0.28)`` ``#> 1 | treatment | -0.39 (-0.74, -0.04)`` ``#> 2 | treatment | 0.18 (-0.18, 0.53)`` ``#> 3 | treatment | -0.09 (-0.39, 0.21)`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors modulated: episode, grp`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``my_predictions``)`
 
 ![](introduction_comparisons_1_files/figure-html/unnamed-chunk-7-1.png)
 
@@ -221,34 +122,7 @@ i.e. the comparison (or test for differences) between all combinations
 of our *focal predictors*. The focal predictors we’re interested here
 are our two variables used for the interaction.
 
-``` r
-
-# we want "episode = 2-2" and "grp = control-treatment"
-estimate_contrasts(model2, contrast = c("episode", "grp"))
-#> Marginal Contrasts Analysis
-#> 
-#> Level1       | Level2       |     Difference (CI) |     p
-#> ---------------------------------------------------------
-#> 1, treatment | 1, control   | -0.42 (-0.88, 0.04) | 0.074
-#> 2, control   | 1, control   |  0.20 (-0.23, 0.63) | 0.350
-#> 2, treatment | 1, control   |  0.15 (-0.32, 0.61) | 0.529
-#> 3, control   | 1, control   | -0.07 (-0.51, 0.37) | 0.750
-#> 3, treatment | 1, control   | -0.12 (-0.54, 0.30) | 0.573
-#> 2, control   | 1, treatment |  0.62 ( 0.16, 1.09) | 0.009
-#> 2, treatment | 1, treatment |  0.57 ( 0.07, 1.06) | 0.026
-#> 3, control   | 1, treatment |  0.35 (-0.13, 0.82) | 0.150
-#> 3, treatment | 1, treatment |  0.30 (-0.16, 0.76) | 0.203
-#> 2, treatment | 2, control   | -0.06 (-0.52, 0.41) | 0.816
-#> 3, control   | 2, control   | -0.27 (-0.72, 0.17) | 0.225
-#> 3, treatment | 2, control   | -0.32 (-0.75, 0.10) | 0.137
-#> 3, control   | 2, treatment | -0.22 (-0.70, 0.26) | 0.368
-#> 3, treatment | 2, treatment | -0.27 (-0.73, 0.19) | 0.254
-#> 3, treatment | 3, control   | -0.05 (-0.49, 0.39) | 0.821
-#> 
-#> Variable predicted: outcome
-#> Predictors contrasted: episode, grp
-#> p-values are uncorrected.
-```
+`# we want "episode = 2-2" and "grp = control-treatment"`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model2``, contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> ---------------------------------------------------------`` ``#> 1, treatment | 1, control | -0.42 (-0.88, 0.04) | 0.074`` ``#> 2, control | 1, control | 0.20 (-0.23, 0.63) | 0.350`` ``#> 2, treatment | 1, control | 0.15 (-0.32, 0.61) | 0.529`` ``#> 3, control | 1, control | -0.07 (-0.51, 0.37) | 0.750`` ``#> 3, treatment | 1, control | -0.12 (-0.54, 0.30) | 0.573`` ``#> 2, control | 1, treatment | 0.62 ( 0.16, 1.09) | 0.009`` ``#> 2, treatment | 1, treatment | 0.57 ( 0.07, 1.06) | 0.026`` ``#> 3, control | 1, treatment | 0.35 (-0.13, 0.82) | 0.150`` ``#> 3, treatment | 1, treatment | 0.30 (-0.16, 0.76) | 0.203`` ``#> 2, treatment | 2, control | -0.06 (-0.52, 0.41) | 0.816`` ``#> 3, control | 2, control | -0.27 (-0.72, 0.17) | 0.225`` ``#> 3, treatment | 2, control | -0.32 (-0.75, 0.10) | 0.137`` ``#> 3, control | 2, treatment | -0.22 (-0.70, 0.26) | 0.368`` ``#> 3, treatment | 2, treatment | -0.27 (-0.73, 0.19) | 0.254`` ``#> 3, treatment | 3, control | -0.05 (-0.49, 0.39) | 0.821`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors contrasted: episode, grp`` ``#> p-values are uncorrected.`
 
 For our quantity of interest, the contrast between groups `treatment`
 and `control` when `episode = 2` is 0.06. We find this comparison in row
@@ -267,23 +141,7 @@ specific comparison, we have two options to simplify the output:
 
 ##### Option 1: Directly specify the comparison
 
-``` r
-
-estimate_means(model2, by = c("episode", "grp"))
-#> Estimated Marginal Means
-#> 
-#> episode | grp       |            Mean (CI)
-#> ------------------------------------------
-#> 1       | control   |  0.03 (-0.27,  0.33)
-#> 2       | control   |  0.23 (-0.08,  0.54)
-#> 3       | control   | -0.04 (-0.36,  0.28)
-#> 1       | treatment | -0.39 (-0.74, -0.04)
-#> 2       | treatment |  0.18 (-0.18,  0.53)
-#> 3       | treatment | -0.09 (-0.39,  0.21)
-#> 
-#> Variable predicted: outcome
-#> Predictors modulated: episode, grp
-```
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model2``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> episode | grp | Mean (CI)`` ``#> ------------------------------------------`` ``#> 1 | control | 0.03 (-0.27, 0.33)`` ``#> 2 | control | 0.23 (-0.08, 0.54)`` ``#> 3 | control | -0.04 (-0.36, 0.28)`` ``#> 1 | treatment | -0.39 (-0.74, -0.04)`` ``#> 2 | treatment | 0.18 (-0.18, 0.53)`` ``#> 3 | treatment | -0.09 (-0.39, 0.21)`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors modulated: episode, grp`
 
 In the above output, each row is considered as one coefficient of
 interest. Our groups we want to include in our comparison are rows two
@@ -294,44 +152,14 @@ i.e. `comparison = "b5 = b2"` (we could also specify `"b2 = b5"`,
 results would be the same, just signs are switched). We can now
 calculate the desired comparison directly:
 
-``` r
-
-# compute specific contrast directly
-estimate_contrasts(model2, contrast = c("episode", "grp"), comparison = "b2 = b5")
-#> Marginal Contrasts Analysis
-#> 
-#> Parameter |    Difference (CI) |     p
-#> --------------------------------------
-#> b2=b5     | 0.06 (-0.41, 0.52) | 0.816
-#> 
-#> Variable predicted: outcome
-#> Predictors contrasted: episode, grp
-#> p-values are uncorrected.
-#> Parameters:
-#> b2 = episode [2], grp [control]
-#> b5 = episode [2], grp [treatment]
-```
+`# compute specific contrast directly`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model2``, contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``, comparison ``=`` ``"b2 = b5"``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Parameter | Difference (CI) | p`` ``#> --------------------------------------`` ``#> b2=b5 | 0.06 (-0.41, 0.52) | 0.816`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors contrasted: episode, grp`` ``#> p-values are uncorrected.`` ``#> Parameters:`` ``#> b2 = episode [2], grp [control]`` ``#> b5 = episode [2], grp [treatment]`
 
 ##### Option 2: Specify values or levels
 
 Again, using representative values for the `contrast` argument, we can
 also simplify the output using an alternative syntax:
 
-``` r
-
-# return pairwise comparisons for specific values, in
-# this case for episode = 2 in both groups
-estimate_contrasts(model2, contrast = c("episode=2", "grp"))
-#> Marginal Contrasts Analysis
-#> 
-#> Level1    | Level2  |     Difference (CI) |     p
-#> -------------------------------------------------
-#> treatment | control | -0.06 (-0.52, 0.41) | 0.816
-#> 
-#> Variable predicted: outcome
-#> Predictors contrasted: episode=2, grp
-#> p-values are uncorrected.
-```
+`# return pairwise comparisons for specific values, in`` ``# this case for episode = 2 in both groups`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model2``, contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode=2"``, ``"grp"``)``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> -------------------------------------------------`` ``#> treatment | control | -0.06 (-0.52, 0.41) | 0.816`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors contrasted: episode=2, grp`` ``#> p-values are uncorrected.`
 
 This is equivalent to the above example, where we directly specified the
 comparison we’re interested in. However, the `comparison` argument might
@@ -356,68 +184,20 @@ The contrast we are interested in is between `episode = 1` in the
 the predicted values in rows three and four (c.f. above table of
 predicted values), thus we `comparison` whether `"b4 = b3"`.
 
-``` r
-
-estimate_contrasts(model2, contrast = c("episode", "grp"), comparison = "b4 = b3")
-#> Marginal Contrasts Analysis
-#> 
-#> Parameter |     Difference (CI) |     p
-#> ---------------------------------------
-#> b4=b3     | -0.35 (-0.82, 0.13) | 0.150
-#> 
-#> Variable predicted: outcome
-#> Predictors contrasted: episode, grp
-#> p-values are uncorrected.
-#> Parameters:
-#> b4 = episode [1], grp [treatment]
-#> b3 = episode [3], grp [control]
-```
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model2``, contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``, comparison ``=`` ``"b4 = b3"``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Parameter | Difference (CI) | p`` ``#> ---------------------------------------`` ``#> b4=b3 | -0.35 (-0.82, 0.13) | 0.150`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors contrasted: episode, grp`` ``#> p-values are uncorrected.`` ``#> Parameters:`` ``#> b4 = episode [1], grp [treatment]`` ``#> b3 = episode [3], grp [control]`
 
 Another way to produce this pairwise comparison, we can reduce the table
 of predicted values by providing [specific values or
 levels](https://easystats.github.io/insight/reference/get_datagrid.html)
 in the `by` or `contrast` argument:
 
-``` r
-
-estimate_means(model2, by = c("episode=c(1,3)", "grp"))
-#> Estimated Marginal Means
-#> 
-#> episode | grp       |            Mean (CI)
-#> ------------------------------------------
-#> 1       | control   |  0.03 (-0.27,  0.33)
-#> 3       | control   | -0.04 (-0.36,  0.28)
-#> 1       | treatment | -0.39 (-0.74, -0.04)
-#> 3       | treatment | -0.09 (-0.39,  0.21)
-#> 
-#> Variable predicted: outcome
-#> Predictors modulated: episode=c(1,3), grp
-```
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model2``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode=c(1,3)"``, ``"grp"``)``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> episode | grp | Mean (CI)`` ``#> ------------------------------------------`` ``#> 1 | control | 0.03 (-0.27, 0.33)`` ``#> 3 | control | -0.04 (-0.36, 0.28)`` ``#> 1 | treatment | -0.39 (-0.74, -0.04)`` ``#> 3 | treatment | -0.09 (-0.39, 0.21)`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors modulated: episode=c(1,3), grp`
 
 `episode = 1` in the `treatment` group and `episode = 3` in the
 `control` group refer now to rows two and three in the reduced output,
 thus we also can obtain the desired comparison this way:
 
-``` r
-
-estimate_contrasts(
-  model2,
-  contrast = c("episode = c(1, 3)", "grp"),
-  comparison = "b3 = b2"
-)
-#> Marginal Contrasts Analysis
-#> 
-#> Parameter |     Difference (CI) |     p
-#> ---------------------------------------
-#> b3=b2     | -0.35 (-0.82, 0.13) | 0.150
-#> 
-#> Variable predicted: outcome
-#> Predictors contrasted: episode = c(1, 3), grp
-#> p-values are uncorrected.
-#> Parameters:
-#> b3 = episode [1], grp [treatment]
-#> b2 = episode [3], grp [control]
-```
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``model2``,`` `` contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode = c(1, 3)"``, ``"grp"``)``,`` `` comparison ``=`` ``"b3 = b2"`` ``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Parameter | Difference (CI) | p`` ``#> ---------------------------------------`` ``#> b3=b2 | -0.35 (-0.82, 0.13) | 0.150`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors contrasted: episode = c(1, 3), grp`` ``#> p-values are uncorrected.`` ``#> Parameters:`` ``#> b3 = episode [1], grp [treatment]`` ``#> b2 = episode [3], grp [control]`
 
 ### Interaction contrasts: Does difference between two levels of episode in the control group differ from difference of same two levels in the treatment group?
 
@@ -431,23 +211,7 @@ other group?
 
 As a reminder, we look at the table of predictions again:
 
-``` r
-
-estimate_means(model2, c("episode", "grp"))
-#> Estimated Marginal Means
-#> 
-#> episode | grp       |            Mean (CI)
-#> ------------------------------------------
-#> 1       | control   |  0.03 (-0.27,  0.33)
-#> 2       | control   |  0.23 (-0.08,  0.54)
-#> 3       | control   | -0.04 (-0.36,  0.28)
-#> 1       | treatment | -0.39 (-0.74, -0.04)
-#> 2       | treatment |  0.18 (-0.18,  0.53)
-#> 3       | treatment | -0.09 (-0.39,  0.21)
-#> 
-#> Variable predicted: outcome
-#> Predictors modulated: episode, grp
-```
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model2``, `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> episode | grp | Mean (CI)`` ``#> ------------------------------------------`` ``#> 1 | control | 0.03 (-0.27, 0.33)`` ``#> 2 | control | 0.23 (-0.08, 0.54)`` ``#> 3 | control | -0.04 (-0.36, 0.28)`` ``#> 1 | treatment | -0.39 (-0.74, -0.04)`` ``#> 2 | treatment | 0.18 (-0.18, 0.53)`` ``#> 3 | treatment | -0.09 (-0.39, 0.21)`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors modulated: episode, grp`
 
 The first difference of episode levels 1 and 2 in the control group
 refer to rows one and two in the above table (`b1` and `b2`). The
@@ -456,28 +220,7 @@ the difference between rows four and five (`b4` and `b5`). Thus, we have
 `b1 - b2` and `b4 - b5`, and our null hypothesis is that these two
 differences are equal: `comparison = "(b1 - b2) = (b4 - b5)"`.
 
-``` r
-
-estimate_contrasts(
-  model2,
-  c("episode", "grp"),
-  comparison = "(b1 - b2) = (b4 - b5)"
-)
-#> Marginal Contrasts Analysis
-#> 
-#> Parameter   |    Difference (CI) |     p
-#> ----------------------------------------
-#> b1-b2=b4-b5 | 0.36 (-0.29, 1.02) | 0.277
-#> 
-#> Variable predicted: outcome
-#> Predictors contrasted: episode, grp
-#> p-values are uncorrected.
-#> Parameters:
-#> b1 = episode [1], grp [control]
-#> b2 = episode [2], grp [control]
-#> b4 = episode [1], grp [treatment]
-#> b5 = episode [2], grp [treatment]
-```
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``model2``,`` `` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``,`` `` comparison ``=`` ``"(b1 - b2) = (b4 - b5)"`` ``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Parameter | Difference (CI) | p`` ``#> ----------------------------------------`` ``#> b1-b2=b4-b5 | 0.36 (-0.29, 1.02) | 0.277`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors contrasted: episode, grp`` ``#> p-values are uncorrected.`` ``#> Parameters:`` ``#> b1 = episode [1], grp [control]`` ``#> b2 = episode [2], grp [control]`` ``#> b4 = episode [1], grp [treatment]`` ``#> b5 = episode [2], grp [treatment]`
 
 Let’s replicate this step-by-step:
 
@@ -508,42 +251,7 @@ is completed, the results are post-processed sequentially. The following
 example replicates our previous results, with our final comparison of
 interest located in row 8.
 
-``` r
-
-result <- estimate_contrasts(
-  model2,
-  # the `comparison` argument defaults to `~pairwise`, thus we first have
-  # a pairwise comparisons of all episode levels 1 and 2 and grp levels
-  contrast = c("episode=c(1,2)", "grp"),
-  # next, we apply another pairwise comparison on the pairs of the previous step
-  post_process = ~pairwise
-)
-# quite wide table - we find our comparison in row 8
-print(result, table_width = Inf)
-#> Marginal Contrasts Analysis
-#> 
-#> Parameter                                           |      Difference (CI) |     p
-#> ----------------------------------------------------------------------------------
-#> 2 control - 1 control - 1 treatment - 1 control     |  0.62 ( 0.16,  1.08) | 0.008
-#> 2 treatment - 1 control - 1 treatment - 1 control   |  0.57 ( 0.07,  1.06) | 0.025
-#> 2 control - 1 treatment - 1 treatment - 1 control   |  1.04 ( 0.23,  1.85) | 0.012
-#> 2 treatment - 1 treatment - 1 treatment - 1 control |  0.98 ( 0.15,  1.82) | 0.020
-#> 2 treatment - 2 control - 1 treatment - 1 control   |  0.36 (-0.29,  1.02) | 0.276
-#> 2 treatment - 1 control - 2 control - 1 control     | -0.06 (-0.52,  0.41) | 0.816
-#> 2 control - 1 treatment - 2 control - 1 control     |  0.42 (-0.04,  0.87) | 0.072
-#> 2 treatment - 1 treatment - 2 control - 1 control   |  0.36 (-0.29,  1.02) | 0.276
-#> 2 treatment - 2 control - 2 control - 1 control     | -0.26 (-1.02,  0.51) | 0.507
-#> 2 control - 1 treatment - 2 treatment - 1 control   |  0.47 (-0.18,  1.13) | 0.155
-#> 2 treatment - 1 treatment - 2 treatment - 1 control |  0.42 (-0.04,  0.87) | 0.072
-#> 2 treatment - 2 control - 2 treatment - 1 control   | -0.20 (-0.63,  0.22) | 0.349
-#> 2 treatment - 1 treatment - 2 control - 1 treatment | -0.06 (-0.52,  0.41) | 0.816
-#> 2 treatment - 2 control - 2 control - 1 treatment   | -0.68 (-1.46,  0.11) | 0.091
-#> 2 treatment - 2 control - 2 treatment - 1 treatment | -0.62 (-1.08, -0.16) | 0.008
-#> 
-#> Variable predicted: outcome
-#> Predictors contrasted: episode=c(1,2), grp
-#> p-values are uncorrected.
-```
+`result`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``model2``,`` `` ``` # the `comparison` argument defaults to `~pairwise`, thus we first have ``` `` ``# a pairwise comparisons of all episode levels 1 and 2 and grp levels`` `` contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode=c(1,2)"``, ``"grp"``)``,`` `` ``# next, we apply another pairwise comparison on the pairs of the previous step`` `` post_process ``=`` ``~``pairwise`` ``)`` ``# quite wide table - we find our comparison in row 8`` `[`print`](https://rdrr.io/r/base/print.html)`(``result``, table_width ``=`` ``Inf``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Parameter | Difference (CI) | p`` ``#> ----------------------------------------------------------------------------------`` ``#> 2 control - 1 control - 1 treatment - 1 control | 0.62 ( 0.16, 1.08) | 0.008`` ``#> 2 treatment - 1 control - 1 treatment - 1 control | 0.57 ( 0.07, 1.06) | 0.025`` ``#> 2 control - 1 treatment - 1 treatment - 1 control | 1.04 ( 0.23, 1.85) | 0.012`` ``#> 2 treatment - 1 treatment - 1 treatment - 1 control | 0.98 ( 0.15, 1.82) | 0.020`` ``#> 2 treatment - 2 control - 1 treatment - 1 control | 0.36 (-0.29, 1.02) | 0.276`` ``#> 2 treatment - 1 control - 2 control - 1 control | -0.06 (-0.52, 0.41) | 0.816`` ``#> 2 control - 1 treatment - 2 control - 1 control | 0.42 (-0.04, 0.87) | 0.072`` ``#> 2 treatment - 1 treatment - 2 control - 1 control | 0.36 (-0.29, 1.02) | 0.276`` ``#> 2 treatment - 2 control - 2 control - 1 control | -0.26 (-1.02, 0.51) | 0.507`` ``#> 2 control - 1 treatment - 2 treatment - 1 control | 0.47 (-0.18, 1.13) | 0.155`` ``#> 2 treatment - 1 treatment - 2 treatment - 1 control | 0.42 (-0.04, 0.87) | 0.072`` ``#> 2 treatment - 2 control - 2 treatment - 1 control | -0.20 (-0.63, 0.22) | 0.349`` ``#> 2 treatment - 1 treatment - 2 control - 1 treatment | -0.06 (-0.52, 0.41) | 0.816`` ``#> 2 treatment - 2 control - 2 control - 1 treatment | -0.68 (-1.46, 0.11) | 0.091`` ``#> 2 treatment - 2 control - 2 treatment - 1 treatment | -0.62 (-1.08, -0.16) | 0.008`` ``#> `` ``#> Variable predicted: outcome`` ``#> Predictors contrasted: episode=c(1,2), grp`` ``#> p-values are uncorrected.`
 
 ## Conclusion
 

@@ -13,15 +13,7 @@ expected predictions (read
 
 ### Linear relationship
 
-``` r
-
-library(modelbased)
-
-model <- lm(Sepal.Length ~ Sepal.Width, data = iris)
-
-visualization_data <- estimate_relation(model)
-head(visualization_data)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` `` ``model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Sepal.Width``, data ``=`` ``iris``)`` `` ``visualization_data`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``)`` `[`head`](https://rdrr.io/r/utils/head.html)`(``visualization_data``)`
 
     > Model-based Predictions
     > 
@@ -37,12 +29,7 @@ head(visualization_data)
     > Variable predicted: Sepal.Length
     > Predictors modulated: Sepal.Width
 
-``` r
-
-library(ggplot2)
-plot(visualization_data, line = list(color = "red")) +
-  theme_minimal()
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``visualization_data``, line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"red"``)``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_relation_files/figure-html/unnamed-chunk-3-1.png)
 
@@ -50,32 +37,19 @@ plot(visualization_data, line = list(color = "red")) +
 
 ### Polynomial
 
-``` r
-
-lm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris) |>
-  modelbased::estimate_relation(length = 50) |>
-  plot()
-```
+[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` `[`poly`](https://rdrr.io/r/stats/poly.html)`(``Sepal.Width``, ``2``)``, data ``=`` ``iris``)`` ``|>`` `` ``modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``length ``=`` ``50``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
 ![](estimate_relation_files/figure-html/unnamed-chunk-4-1.png)
 
 ### Additive Models
 
-``` r
-
-library(mgcv)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(``mgcv``)`
 
     > Loading required package: nlme
 
     > This is mgcv 1.9-4. For overview type '?mgcv'.
 
-``` r
-
-mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris) |>
-  modelbased::estimate_relation(length = 50) |>
-  plot()
-```
+`mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``Sepal.Length`` ``~`` `[`s`](https://rdrr.io/pkg/mgcv/man/s.html)`(``Sepal.Width``)``, data ``=`` ``iris``)`` ``|>`` `` ``modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``length ``=`` ``50``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
 ![](estimate_relation_files/figure-html/unnamed-chunk-5-1.png)
 

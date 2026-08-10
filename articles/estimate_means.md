@@ -17,14 +17,7 @@ for each of the three species**.
 We can compute the means very easily by grouping the observations by
 species, and then computing the mean and the standard deviation (SD):
 
-``` r
-
-library(easystats)
-
-iris |>
-  data_group("Species") |>
-  describe_distribution(select = "Sepal.Width")
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`` `` ``iris`` ``|>`` `` ``data_group``(``"Species"``)`` ``|>`` `` ``describe_distribution``(``select ``=`` ``"Sepal.Width"``)`
 
     > Species    |    Variable | Mean |   SD |  IQR |        Range | Skewness
     > -----------------------------------------------------------------------
@@ -40,14 +33,7 @@ iris |>
 
 We can also visualize it with a plot:
 
-``` r
-
-library(ggplot2)
-ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
-  geom_violin() +
-  geom_jitter(width = 0.05) +
-  theme_modern()
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Species``, y ``=`` ``Sepal.Width``, fill ``=`` ``Species``)``)`` ``+`` `` `[`geom_violin`](https://ggplot2.tidyverse.org/reference/geom_violin.html)`(``)`` ``+`` `` `[`geom_jitter`](https://ggplot2.tidyverse.org/reference/geom_jitter.html)`(``width ``=`` ``0.05``)`` ``+`` `` `[`theme_modern`](https://easystats.github.io/see/reference/theme_modern.html)`(``)`
 
 ![](estimate_means_files/figure-html/unnamed-chunk-3-1.png)
 
@@ -70,13 +56,7 @@ Marginal means are basically means extracted from a statistical model,
 and represent average of response variable (here, `Sepal.Width`) for
 each level of predictor variable (here, `Species`).
 
-``` r
-
-library(modelbased)
-model <- lm(Sepal.Width ~ Species, data = iris)
-means <- estimate_means(model, by = "Species")
-means
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` ``model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species``, data ``=`` ``iris``)`` ``means`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, by ``=`` ``"Species"``)`` ``means`
 
     > Estimated Marginal Means
     > 
@@ -99,31 +79,14 @@ We can now add these means, as well as the [**credible interval
 representing the uncertainty of the estimation, as an overlay on the
 previous plot:
 
-``` r
-
-p <- ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
-  geom_violin() +
-  geom_jitter(width = 0.05) +
-  geom_line(data = means, aes(y = Mean, group = 1)) +
-  geom_pointrange(
-    data = means,
-    aes(y = Mean, ymin = CI_low, ymax = CI_high),
-    size = 1,
-    color = "white"
-  ) +
-  theme_minimal()
-p
-```
+`p`` ``<-`` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Species``, y ``=`` ``Sepal.Width``, fill ``=`` ``Species``)``)`` ``+`` `` `[`geom_violin`](https://ggplot2.tidyverse.org/reference/geom_violin.html)`(``)`` ``+`` `` `[`geom_jitter`](https://ggplot2.tidyverse.org/reference/geom_jitter.html)`(``width ``=`` ``0.05``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``means``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Mean``, group ``=`` ``1``)``)`` ``+`` `` `[`geom_pointrange`](https://ggplot2.tidyverse.org/reference/geom_linerange.html)`(`` `` data ``=`` ``means``,`` `` `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Mean``, ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``)``,`` `` size ``=`` ``1``,`` `` color ``=`` ``"white"`` `` ``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``p`
 
 ![](estimate_means_files/figure-html/unnamed-chunk-5-1.png)
 
 Note that *modelbased* provides some automated plotting capabilities for
 quick visual checks:
 
-``` r
-
-plot(means)
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``means``)`
 
 ![](estimate_means_files/figure-html/unnamed-chunk-6-1.png)
 
@@ -135,13 +98,7 @@ model that takes into account the interaction with the other variable,
 `Petal.Width`. The estimated means will be “adjusted” (or will take into
 account) for variations of these other components.
 
-``` r
-
-model <- lm(Sepal.Width ~ Species + Petal.Width, data = iris)
-means_complex <- estimate_means(model, by = "Species")
-
-means_complex
-```
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species`` ``+`` ``Petal.Width``, data ``=`` ``iris``)`` ``means_complex`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, by ``=`` ``"Species"``)`` `` ``means_complex`
 
     > Estimated Marginal Means
     > 
@@ -159,17 +116,7 @@ Now let’s add to our previous plot the marginal means from the more
 complex model (shown in purple) next to each other, which should help us
 notice how the adjusted means change depending on the predictors.
 
-``` r
-
-p +
-  geom_line(data = means_complex, aes(y = Mean, group = 1), color = "purple") +
-  geom_pointrange(
-    data = means_complex,
-    aes(y = Mean, ymin = CI_low, ymax = CI_high),
-    size = 1,
-    color = "purple"
-  )
-```
+`p`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``means_complex``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Mean``, group ``=`` ``1``)``, color ``=`` ``"purple"``)`` ``+`` `` `[`geom_pointrange`](https://ggplot2.tidyverse.org/reference/geom_linerange.html)`(`` `` data ``=`` ``means_complex``,`` `` `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Mean``, ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``)``,`` `` size ``=`` ``1``,`` `` color ``=`` ``"purple"`` `` ``)`
 
 ![](estimate_means_files/figure-html/unnamed-chunk-8-1.png)
 

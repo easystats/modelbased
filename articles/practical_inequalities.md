@@ -1,10 +1,5 @@
 # Case Study: Measuring and comparing absolute and relative inequalities in R
 
-    ## Warning in check_dep_version(dep_pkg = "TMB"): package version mismatch: 
-    ## glmmTMB was built with TMB package version 1.9.21
-    ## Current TMB package version is 1.9.22
-    ## Please re-install glmmTMB from source or restore original 'TMB' package (see '?reinstalling' for more information)
-
 ## 1. Introduction: Why Summarize Effects?
 
 In the social sciences, many key variables are nominal (like race or
@@ -38,11 +33,7 @@ will use its functions to calculate inequality measures.
 
 First, let’s load the necessary libraries.
 
-``` r
-
-library(easystats)
-library(patchwork)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`patchwork`](https://patchwork.data-imaginist.com)`)`
 
 ### Example Data: Quality of Life for Cancer Patients
 
@@ -55,24 +46,7 @@ key socioeconomic variable.
 Our goal is to compute absolute and relative inequality measures for the
 `education` variable to understand its overall impact on patients’ QoL.
 
-``` r
-
-# Load the data
-data(qol_cancer)
-
-# The 'ID' variable should be a factor for the model, but we'll make it numeric
-# for a later example of splitting the data.
-qol_cancer$ID <- as.numeric(qol_cancer$ID)
-
-head(qol_cancer)
-#>   ID      QoL time  age  phq4 hospital education
-#> 1  1 41.66667    3 -3.6  7.16        1       mid
-#> 2  1 41.66667    1 -3.6  8.55        1       mid
-#> 3  1 33.33333    2 -3.6  3.28        1       mid
-#> 4  9 83.33333    1  1.4 -2.45        1       mid
-#> 5  9 83.33333    2  1.4 -1.72        1       mid
-#> 6  9 83.33333    3  1.4 -1.84        1       mid
-```
+`# Load the data`` `[`data`](https://rdrr.io/r/utils/data.html)`(``qol_cancer``)`` `` ``# The 'ID' variable should be a factor for the model, but we'll make it numeric`` ``# for a later example of splitting the data.`` ``qol_cancer``$``ID`` ``<-`` `[`as.numeric`](https://rdrr.io/r/base/numeric.html)`(``qol_cancer``$``ID``)`` `` `[`head`](https://rdrr.io/r/utils/head.html)`(``qol_cancer``)`` ``#> ID QoL time age phq4 hospital education`` ``#> 1 1 41.66667 3 -3.6 7.16 1 mid`` ``#> 2 1 41.66667 1 -3.6 8.55 1 mid`` ``#> 3 1 33.33333 2 -3.6 3.28 1 mid`` ``#> 4 9 83.33333 1 1.4 -2.45 1 mid`` ``#> 5 9 83.33333 2 1.4 -1.72 1 mid`` ``#> 6 9 83.33333 3 1.4 -1.84 1 mid`
 
 ## 3. Modeling and Visualizing the Data
 
@@ -80,24 +54,13 @@ We begin by fitting a linear model to predict Quality of Life (`QoL`)
 based on `time`, `education`, and their interaction. This allows the
 effect of education to vary over time.
 
-``` r
-
-# Fit a linear model
-m <- lm(QoL ~ time * education, data = qol_cancer)
-```
+`# Fit a linear model`` ``m`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``QoL`` ``~`` ``time`` ``*`` ``education``, data ``=`` ``qol_cancer``)`
 
 Before calculating inequality, let’s visualize the estimated marginal
 means from our model. This plot shows how the average QoL changes over
 time for each education level. We can see clear gaps between the groups.
 
-``` r
-
-# Get estimated marginal means for each combination of time and education
-p <- estimate_means(m, by = c("time", "education"))
-
-# Plot the means
-plot(p)
-```
+`# Get estimated marginal means for each combination of time and education`` ``p`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"education"``)``)`` `` ``# Plot the means`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``p``)`
 
 ![](practical_inequalities_files/figure-html/unnamed-chunk-5-1.png)
 
@@ -112,12 +75,7 @@ income groups or male vs. female sex, the absolute inequality is
 straightforward to compute: it’s the difference between the estimated
 predictions for the two levels (simple pairwise comparison):
 
-``` r
-
-# example code, showing how to calculate absolute inequalities
-# between male and female sex
-estimate_contrasts(model, contrast = "sex")
-```
+`# example code, showing how to calculate absolute inequalities`` ``# between male and female sex`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, contrast ``=`` ``"sex"``)`
 
 However, for nominal or ordinal variables with multiple levels, we need
 to consider *all* pairwise differences.
@@ -137,23 +95,7 @@ It answers the question:
 First, let’s look at the simple pairwise differences, averaged across
 the three time points.
 
-``` r
-
-# Estimate the average difference between each pair of education levels
-estimate_contrasts(m, contrast = "education")
-#> Marginal Contrasts Analysis
-#> 
-#> Level1 | Level2 |     Difference (CI) |      p
-#> ----------------------------------------------
-#> mid    | low    |  8.82 (4.58, 13.06) | <0.001
-#> high   | low    | 14.46 (9.65, 19.27) | <0.001
-#> high   | mid    |  5.64 (1.83,  9.44) |  0.004
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> Predictors averaged: time (2)
-#> p-values are uncorrected.
-```
+`# Estimate the average difference between each pair of education levels`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, contrast ``=`` ``"education"``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> ----------------------------------------------`` ``#> mid | low | 8.82 (4.58, 13.06) | <0.001`` ``#> high | low | 14.46 (9.65, 19.27) | <0.001`` ``#> high | mid | 5.64 (1.83, 9.44) | 0.004`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> Predictors averaged: time (2)`` ``#> p-values are uncorrected.`
 
 This table shows three specific comparisons. To get a single summary
 measure, we can compute the mean of these differences.
@@ -166,20 +108,7 @@ function can directly compute the absolute inequality by setting
 `comparison = "inequality"`. This calculates the mean of the absolute
 values of all pairwise differences.
 
-``` r
-
-# Compute the absolute inequality for the 'education' variable
-estimate_contrasts(m, contrast = "education", comparison = "inequality")
-#> Marginal Inequality Analysis
-#> 
-#> Parameter | Mean Difference (CI) |      p
-#> -----------------------------------------
-#> education |   9.64 (6.44, 12.84) | <0.001
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> p-values are uncorrected.
-```
+`# Compute the absolute inequality for the 'education' variable`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, contrast ``=`` ``"education"``, comparison ``=`` ``"inequality"``)`` ``#> Marginal Inequality Analysis`` ``#> `` ``#> Parameter | Mean Difference (CI) | p`` ``#> -----------------------------------------`` ``#> education | 9.64 (6.44, 12.84) | <0.001`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> p-values are uncorrected.`
 
 **Interpretation**: The mean difference (absolute inequality) is
 **9.64**. This means that, on average, the Quality of Life score differs
@@ -193,29 +122,7 @@ also reproduce the previous result using the `post_process` argument,
 which allows us to process subsequent, multi-step comparisons after the
 initial `comparison` is completed.
 
-``` r
-
-# Compute the absolute inequality for the 'education' variable
-estimate_contrasts(
-  m,
-  contrast = "education",
-  # the default for comparison is "pairwise", just to make steps clear
-  comparison = "pairwise",
-  # we now take the average of all contrasts from the previous step in
-  # `comparison`, i.e. we calculate the mean of all pairs
-  post_process = ~I(mean(x))
-)
-#> Marginal Contrasts Analysis
-#> 
-#> Parameter |    Difference (CI) |      p
-#> ---------------------------------------
-#> custom    | 9.64 (6.44, 12.84) | <0.001
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> Predictors averaged: time (2)
-#> p-values are uncorrected.
-```
+`# Compute the absolute inequality for the 'education' variable`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m``,`` `` contrast ``=`` ``"education"``,`` `` ``# the default for comparison is "pairwise", just to make steps clear`` `` comparison ``=`` ``"pairwise"``,`` `` ``# we now take the average of all contrasts from the previous step in`` `` ``` # `comparison`, i.e. we calculate the mean of all pairs ``` `` post_process ``=`` ``~`[`I`](https://rdrr.io/r/base/AsIs.html)`(`[`mean`](https://rdrr.io/r/base/mean.html)`(``x``)``)`` ``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Parameter | Difference (CI) | p`` ``#> ---------------------------------------`` ``#> custom | 9.64 (6.44, 12.84) | <0.001`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> Predictors averaged: time (2)`` ``#> p-values are uncorrected.`
 
 ## 5. Relative Inequality
 
@@ -225,12 +132,7 @@ binary predictors, it is pretty straightforward to calculate the
 relative inequalities. It is the *ratio* of the estimated predictions
 for the two levels:
 
-``` r
-
-# example code, showing how to calculate relative inequalities
-# between male and female sex
-estimate_contrasts(model, contrast = "sex", comparison = ratio ~ pairwise)
-```
+`# example code, showing how to calculate relative inequalities`` ``# between male and female sex`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, contrast ``=`` ``"sex"``, comparison ``=`` ``ratio`` ``~`` ``pairwise``)`
 
 In our example, since we have more than two levels for our predictor
 `education`, we additionally take the average of all pairs. This answers
@@ -253,43 +155,14 @@ higher compared to those with low education, while the difference
 between middle and high education is 1.08 times. All differences are
 statistically significant.
 
-``` r
-
-# Estimate the ratio of means for each pair of education levels
-estimate_contrasts(m, contrast = "education", comparison = ratio ~ pairwise)
-#> Marginal Contrasts Analysis
-#> 
-#> Level1 | Level2 |        Ratio (CI) |      p
-#> --------------------------------------------
-#> mid    | low    | 1.13 (1.06, 1.21) | <0.001
-#> high   | low    | 1.22 (1.14, 1.30) | <0.001
-#> high   | mid    | 1.08 (1.02, 1.13) |  0.005
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> Predictors averaged: time (2)
-#> p-values are uncorrected.
-```
+`# Estimate the ratio of means for each pair of education levels`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, contrast ``=`` ``"education"``, comparison ``=`` ``ratio`` ``~`` ``pairwise``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Ratio (CI) | p`` ``#> --------------------------------------------`` ``#> mid | low | 1.13 (1.06, 1.21) | <0.001`` ``#> high | low | 1.22 (1.14, 1.30) | <0.001`` ``#> high | mid | 1.08 (1.02, 1.13) | 0.005`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> Predictors averaged: time (2)`` ``#> p-values are uncorrected.`
 
 ### Calculating the Inequality Ratio
 
 To summarize these information and to calculate the relative inequality,
 we set `comparison = "inequality_ratio"`.
 
-``` r
-
-# Compute the relative inequality (inequality ratio)
-estimate_contrasts(m, contrast = "education", comparison = "inequality_ratio")
-#> Marginal Inequality Analysis
-#> 
-#> Parameter |   Mean Ratio (CI) |      p
-#> --------------------------------------
-#> custom    | 1.14 (1.09, 1.20) | <0.001
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> p-values are uncorrected.
-```
+`# Compute the relative inequality (inequality ratio)`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, contrast ``=`` ``"education"``, comparison ``=`` ``"inequality_ratio"``)`` ``#> Marginal Inequality Analysis`` ``#> `` ``#> Parameter | Mean Ratio (CI) | p`` ``#> --------------------------------------`` ``#> custom | 1.14 (1.09, 1.20) | <0.001`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> p-values are uncorrected.`
 
 **Interpretation**: The mean ratio (relative inequality) is **1.14**.
 This means that, on average, the QoL score is 1.14 times higher (or 14%
@@ -300,27 +173,7 @@ using the `post_process` argument. In a first step, we want the pairwise
 contrasts, not expressed as difference, but as ratios. Next, we want the
 average of all pairs of ratios.
 
-``` r
-
-estimate_contrasts(
-  m,
-  contrast = "education",
-  # pairwise comparison, but we want the ratio, not the difference
-  comparison = ratio ~ pairwise,
-  # again, we take the average of all pairs
-  post_process = ~I(mean(x))
-)
-#> Marginal Contrasts Analysis
-#> 
-#> Parameter |        Ratio (CI) |      p
-#> --------------------------------------
-#> custom    | 1.14 (1.09, 1.20) | <0.001
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> Predictors averaged: time (2)
-#> p-values are uncorrected.
-```
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m``,`` `` contrast ``=`` ``"education"``,`` `` ``# pairwise comparison, but we want the ratio, not the difference`` `` comparison ``=`` ``ratio`` ``~`` ``pairwise``,`` `` ``# again, we take the average of all pairs`` `` post_process ``=`` ``~`[`I`](https://rdrr.io/r/base/AsIs.html)`(`[`mean`](https://rdrr.io/r/base/mean.html)`(``x``)``)`` ``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Parameter | Ratio (CI) | p`` ``#> --------------------------------------`` ``#> custom | 1.14 (1.09, 1.20) | <0.001`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> Predictors averaged: time (2)`` ``#> p-values are uncorrected.`
 
 ## 6. Comparing Inequalities Across Groups and Time
 
@@ -333,55 +186,14 @@ Let’s randomly split our data into two groups based on patient `ID` to
 simulate comparing inequality between, for example, two different
 treatment centers or demographic groups.
 
-``` r
-
-# Split data and fit separate models
-m1 <- lm(QoL ~ time * education, data = data_filter(qol_cancer, ID < 100))
-m2 <- lm(QoL ~ time * education, data = data_filter(qol_cancer, ID >= 100))
-
-# Visualize the patterns in each group
-p1 <- plot(estimate_means(m1, by = c("time", "education"))) +
-  ggplot2::theme(legend.position = "none") +
-  ggplot2::labs(title = "Group 1 (ID < 100)")
-
-p2 <- plot(estimate_means(m2, by = c("time", "education"))) +
-  ggplot2::labs(title = "Group 2 (ID >= 100)")
-
-# Show plots side-by-side
-p1 + p2
-```
+`# Split data and fit separate models`` ``m1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``QoL`` ``~`` ``time`` ``*`` ``education``, data ``=`` `[`data_filter`](https://easystats.github.io/datawizard/reference/data_match.html)`(``qol_cancer``, ``ID`` ``<`` ``100``)``)`` ``m2`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``QoL`` ``~`` ``time`` ``*`` ``education``, data ``=`` `[`data_filter`](https://easystats.github.io/datawizard/reference/data_match.html)`(``qol_cancer``, ``ID`` ``>=`` ``100``)``)`` `` ``# Visualize the patterns in each group`` ``p1`` ``<-`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(`[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m1``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"education"``)``)``)`` ``+`` `` ``ggplot2``::`[`theme`](https://ggplot2.tidyverse.org/reference/theme.html)`(``legend.position ``=`` ``"none"``)`` ``+`` `` ``ggplot2``::`[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(``title ``=`` ``"Group 1 (ID < 100)"``)`` `` ``p2`` ``<-`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(`[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m2``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"education"``)``)``)`` ``+`` `` ``ggplot2``::`[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(``title ``=`` ``"Group 2 (ID >= 100)"``)`` `` ``# Show plots side-by-side`` ``p1`` ``+`` ``p2`
 
 ![](practical_inequalities_files/figure-html/unnamed-chunk-14-1.png)
 
 The visual gap between education levels appears larger in Group 1. Let’s
 confirm this by calculating the absolute inequality for each group.
 
-``` r
-
-# Absolute inequality in Group 1
-estimate_contrasts(m1, contrast = "education", comparison = "inequality")
-#> Marginal Inequality Analysis
-#> 
-#> Parameter | Mean Difference (CI) |      p
-#> -----------------------------------------
-#> education |  11.05 (6.72, 15.38) | <0.001
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> p-values are uncorrected.
-
-# Absolute inequality in Group 2
-estimate_contrasts(m2, contrast = "education", comparison = "inequality")
-#> Marginal Inequality Analysis
-#> 
-#> Parameter | Mean Difference (CI) |     p
-#> ----------------------------------------
-#> education |   7.27 (2.66, 11.89) | 0.002
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> p-values are uncorrected.
-```
+`# Absolute inequality in Group 1`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m1``, contrast ``=`` ``"education"``, comparison ``=`` ``"inequality"``)`` ``#> Marginal Inequality Analysis`` ``#> `` ``#> Parameter | Mean Difference (CI) | p`` ``#> -----------------------------------------`` ``#> education | 11.05 (6.72, 15.38) | <0.001`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> p-values are uncorrected.`` `` ``# Absolute inequality in Group 2`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m2``, contrast ``=`` ``"education"``, comparison ``=`` ``"inequality"``)`` ``#> Marginal Inequality Analysis`` ``#> `` ``#> Parameter | Mean Difference (CI) | p`` ``#> ----------------------------------------`` ``#> education | 7.27 (2.66, 11.89) | 0.002`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> p-values are uncorrected.`
 
 As suspected, the absolute inequality in QoL due to education is larger
 in Group 1 (Mean Difference = 11.05) than in Group 2 (Mean Difference =
@@ -391,31 +203,7 @@ for differences in inequality across populations.
 It is also possible to compare the absolute inequalities across groups
 directly:
 
-``` r
-
-# create a new variable to distinguish groups
-qol_cancer$grp <- as.factor(ifelse(qol_cancer$ID < 100, "Group 1", "Group 2"))
-# fit a model with the group variable
-m <- lm(QoL ~ time * education * grp, data = qol_cancer)
-
-# Estimate the absolute inequality for each group
-estimate_contrasts(
-  m,
-  contrast = "education",
-  by = "grp",
-  comparison = "inequality"
-)
-#> Marginal Inequality Analysis
-#> 
-#> Mean Difference (CI) |      p |     grp
-#> ---------------------------------------
-#> 11.05 (6.75, 15.34)  | <0.001 | Group 1
-#> 7.27 (2.62, 11.93)   |  0.002 | Group 2
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> p-values are uncorrected.
-```
+`# create a new variable to distinguish groups`` ``qol_cancer``$``grp`` ``<-`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(`[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(``qol_cancer``$``ID`` ``<`` ``100``, ``"Group 1"``, ``"Group 2"``)``)`` ``# fit a model with the group variable`` ``m`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``QoL`` ``~`` ``time`` ``*`` ``education`` ``*`` ``grp``, data ``=`` ``qol_cancer``)`` `` ``# Estimate the absolute inequality for each group`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m``,`` `` contrast ``=`` ``"education"``,`` `` by ``=`` ``"grp"``,`` `` comparison ``=`` ``"inequality"`` ``)`` ``#> Marginal Inequality Analysis`` ``#> `` ``#> Mean Difference (CI) | p | grp`` ``#> ---------------------------------------`` ``#> 11.05 (6.75, 15.34) | <0.001 | Group 1`` ``#> 7.27 (2.62, 11.93) | 0.002 | Group 2`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> p-values are uncorrected.`
 
 We can even test if the difference in absolute inequality between the
 two groups is statistically significant. To do so, we perform a
@@ -425,25 +213,7 @@ i.e. we simply replace `comparison = "inequality"` with
 [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
 function:
 
-``` r
-
-# Estimate the absolute inequality for each group, and compare them
-estimate_contrasts(
-  m,
-  contrast = "education",
-  by = "grp",
-  comparison = "inequality_pairwise"
-)
-#> Marginal Inequality Analysis
-#> 
-#> Parameter         | Mean Difference (CI) |     p
-#> ------------------------------------------------
-#> Group 1 - Group 2 |  3.77 (-2.56, 10.11) | 0.243
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> p-values are uncorrected.
-```
+`# Estimate the absolute inequality for each group, and compare them`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m``,`` `` contrast ``=`` ``"education"``,`` `` by ``=`` ``"grp"``,`` `` comparison ``=`` ``"inequality_pairwise"`` ``)`` ``#> Marginal Inequality Analysis`` ``#> `` ``#> Parameter | Mean Difference (CI) | p`` ``#> ------------------------------------------------`` ``#> Group 1 - Group 2 | 3.77 (-2.56, 10.11) | 0.243`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> p-values are uncorrected.`
 
 As can be seen, the mean difference in absolute inequality between the
 two groups is 3.77, however, the p-value indicates that this difference
@@ -452,43 +222,7 @@ education are not significantly different between the two groups.
 
 The same can be done for relative inequality:
 
-``` r
-
-# Estimate the relative inequality for each group
-estimate_contrasts(
-  m,
-  contrast = "education",
-  by = "grp",
-  comparison = "inequality_ratio"
-)
-#> Marginal Inequality Analysis
-#> 
-#> Mean Ratio (CI)   |      p |     grp
-#> ------------------------------------
-#> 1.16 (1.09, 1.23) | <0.001 | Group 1
-#> 1.11 (1.03, 1.19) | <0.001 | Group 2
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> p-values are uncorrected.
-
-# and compare if the difference in relative inequality is statistically significant
-estimate_contrasts(
-  m,
-  contrast = "education",
-  by = "grp",
-  comparison = "inequality_ratio_pairwise"
-)
-#> Marginal Inequality Analysis
-#> 
-#> Parameter         | Mean Ratio Difference (CI) |     p
-#> ------------------------------------------------------
-#> Group 1 - Group 2 |         0.05 (-0.05, 0.16) | 0.334
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: education
-#> p-values are uncorrected.
-```
+`# Estimate the relative inequality for each group`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m``,`` `` contrast ``=`` ``"education"``,`` `` by ``=`` ``"grp"``,`` `` comparison ``=`` ``"inequality_ratio"`` ``)`` ``#> Marginal Inequality Analysis`` ``#> `` ``#> Mean Ratio (CI) | p | grp`` ``#> ------------------------------------`` ``#> 1.16 (1.09, 1.23) | <0.001 | Group 1`` ``#> 1.11 (1.03, 1.19) | <0.001 | Group 2`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> p-values are uncorrected.`` `` ``# and compare if the difference in relative inequality is statistically significant`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m``,`` `` contrast ``=`` ``"education"``,`` `` by ``=`` ``"grp"``,`` `` comparison ``=`` ``"inequality_ratio_pairwise"`` ``)`` ``#> Marginal Inequality Analysis`` ``#> `` ``#> Parameter | Mean Ratio Difference (CI) | p`` ``#> ------------------------------------------------------`` ``#> Group 1 - Group 2 | 0.05 (-0.05, 0.16) | 0.334`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: education`` ``#> p-values are uncorrected.`
 
 The mean difference in the relative inequality is 0.05, indicating that
 the QoL in Group 1 is, on average, 5% higher than in Group 2 when
@@ -503,80 +237,14 @@ in inequality by contrasting the slopes of the `time` variable across
 the different `education` groups. The results below are essentially
 shown in the two plots above.
 
-``` r
-
-# Estimate the slope of 'time' for each education level in the first group
-# see also left panel of the plot above
-estimate_slopes(m1, trend = "time", by = "education")
-#> Estimated Marginal Effects
-#> 
-#> education |            Slope (CI) |      p
-#> ------------------------------------------
-#> low       | -6.71 (-12.99, -0.44) |  0.036
-#> mid       |  0.40 ( -3.29,  4.09) |  0.831
-#> high      |  0.00 ( -4.95,  4.95) | > .999
-#> 
-#> Marginal effects estimated for time
-#> Type of slope was dY/dX
-
-# And for the second group
-# see also right panel of the plot above
-estimate_slopes(m2, trend = "time", by = "education")
-#> Estimated Marginal Effects
-#> 
-#> education |          Slope (CI) |     p
-#> ---------------------------------------
-#> low       | 3.24 (-2.93,  9.41) | 0.302
-#> mid       | 1.72 (-1.95,  5.38) | 0.358
-#> high      | 6.04 ( 0.19, 11.90) | 0.043
-#> 
-#> Marginal effects estimated for time
-#> Type of slope was dY/dX
-
-# or integrated in the same call
-estimate_slopes(m, trend = "time", by = c("education", "grp"))
-#> Estimated Marginal Effects
-#> 
-#> education | grp     |               Slope (CI) |      p
-#> -------------------------------------------------------
-#> low       | Group 1 |    -6.71 (-12.92, -0.50) |  0.034
-#> mid       | Group 1 |     0.40 ( -3.25,  4.06) |  0.830
-#> high      | Group 1 | 1.42e-10 ( -4.92,  4.92) | > .999
-#> low       | Group 2 |     3.24 ( -2.98,  9.46) |  0.306
-#> mid       | Group 2 |     1.72 ( -1.98,  5.41) |  0.362
-#> high      | Group 2 |     6.04 (  0.14, 11.94) |  0.045
-#> 
-#> Marginal effects estimated for time
-#> Type of slope was dY/dX
-```
+`# Estimate the slope of 'time' for each education level in the first group`` ``# see also left panel of the plot above`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``m1``, trend ``=`` ``"time"``, by ``=`` ``"education"``)`` ``#> Estimated Marginal Effects`` ``#> `` ``#> education | Slope (CI) | p`` ``#> ------------------------------------------`` ``#> low | -6.71 (-12.99, -0.44) | 0.036`` ``#> mid | 0.40 ( -3.29, 4.09) | 0.831`` ``#> high | 0.00 ( -4.95, 4.95) | > .999`` ``#> `` ``#> Marginal effects estimated for time`` ``#> Type of slope was dY/dX`` `` ``# And for the second group`` ``# see also right panel of the plot above`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``m2``, trend ``=`` ``"time"``, by ``=`` ``"education"``)`` ``#> Estimated Marginal Effects`` ``#> `` ``#> education | Slope (CI) | p`` ``#> ---------------------------------------`` ``#> low | 3.24 (-2.93, 9.41) | 0.302`` ``#> mid | 1.72 (-1.95, 5.38) | 0.358`` ``#> high | 6.04 ( 0.19, 11.90) | 0.043`` ``#> `` ``#> Marginal effects estimated for time`` ``#> Type of slope was dY/dX`` `` ``# or integrated in the same call`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``m``, trend ``=`` ``"time"``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"education"``, ``"grp"``)``)`` ``#> Estimated Marginal Effects`` ``#> `` ``#> education | grp | Slope (CI) | p`` ``#> -------------------------------------------------------`` ``#> low | Group 1 | -6.71 (-12.92, -0.50) | 0.034`` ``#> mid | Group 1 | 0.40 ( -3.25, 4.06) | 0.830`` ``#> high | Group 1 | 1.42e-10 ( -4.92, 4.92) | > .999`` ``#> low | Group 2 | 3.24 ( -2.98, 9.46) | 0.306`` ``#> mid | Group 2 | 1.72 ( -1.98, 5.41) | 0.362`` ``#> high | Group 2 | 6.04 ( 0.14, 11.94) | 0.045`` ``#> `` ``#> Marginal effects estimated for time`` ``#> Type of slope was dY/dX`
 
 In Group 1, the QoL for the ‘low’ education group is decreasing over
 time (Slope = -6.71), while it is stable for the ‘mid’ and ‘high’
 groups. This suggests the gap is widening. We can quantify this change
 in inequality directly.
 
-``` r
-
-# Calculate the inequality in the *slopes* of time
-# This tells us if the rate of change in QoL is unequal across groups
-estimate_contrasts(
-  m,
-  contrast = "time",
-  by = c("education", "grp"),
-  comparison = "inequality",
-  integer_as_continuous = TRUE
-)
-#> Marginal Inequality Analysis
-#> 
-#> Parameter          | Mean Difference (CI) |     p
-#> -------------------------------------------------
-#> education: Group 1 |   4.74 (-0.05, 9.53) | 0.052
-#> education: Group 2 |   2.88 (-1.75, 7.51) | 0.222
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: time
-#> p-values are uncorrected.
-```
+`# Calculate the inequality in the *slopes* of time`` ``# This tells us if the rate of change in QoL is unequal across groups`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m``,`` `` contrast ``=`` ``"time"``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"education"``, ``"grp"``)``,`` `` comparison ``=`` ``"inequality"``,`` `` integer_as_continuous ``=`` ``TRUE`` ``)`` ``#> Marginal Inequality Analysis`` ``#> `` ``#> Parameter | Mean Difference (CI) | p`` ``#> -------------------------------------------------`` ``#> education: Group 1 | 4.74 (-0.05, 9.53) | 0.052`` ``#> education: Group 2 | 2.88 (-1.75, 7.51) | 0.222`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: time`` ``#> p-values are uncorrected.`
 
 In the above example, we set `integer_as_continuous = TRUE` to ensure
 that the time variable is treated as continuous, allowing us to
@@ -597,26 +265,7 @@ uniform change over time.
 To test if the difference in slopes is statistically significant, we can
 perform a pairwise comparison of the slopes across groups:
 
-``` r
-
-# Calculate the pairwise inequality in the *slopes* of time
-estimate_contrasts(
-  m,
-  contrast = "time",
-  by = c("education", "grp"),
-  comparison = "inequality_pairwise",
-  integer_as_continuous = TRUE
-)
-#> Marginal Inequality Analysis
-#> 
-#> Parameter         | Mean Difference (CI) |     p
-#> ------------------------------------------------
-#> Group 1 - Group 2 |   1.86 (-4.82, 8.53) | 0.585
-#> 
-#> Variable predicted: QoL
-#> Predictors contrasted: time
-#> p-values are uncorrected.
-```
+`# Calculate the pairwise inequality in the *slopes* of time`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m``,`` `` contrast ``=`` ``"time"``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"education"``, ``"grp"``)``,`` `` comparison ``=`` ``"inequality_pairwise"``,`` `` integer_as_continuous ``=`` ``TRUE`` ``)`` ``#> Marginal Inequality Analysis`` ``#> `` ``#> Parameter | Mean Difference (CI) | p`` ``#> ------------------------------------------------`` ``#> Group 1 - Group 2 | 1.86 (-4.82, 8.53) | 0.585`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: time`` ``#> p-values are uncorrected.`
 
 As we see, the difference in average slopes (i.e. we have a pairwise
 comparison of absolute inequalities of *trends* or *slopes*) is not

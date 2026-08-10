@@ -10,21 +10,12 @@ function and its visualisation spinoff,
 
 Let’s start by fitting a linear regression.
 
-``` r
-
-library(modelbased)
-
-model <- lm(Petal.Length ~ Sepal.Length, data = iris)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` `` ``model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Petal.Length`` ``~`` ``Sepal.Length``, data ``=`` ``iris``)`
 
 We might be interested in comparing the values predicted by the model to
 the actual “true” values. This can be done by generating predictions:
 
-``` r
-
-pred_data <- estimate_expectation(model)
-head(pred_data)
-```
+`pred_data`` ``<-`` `[`estimate_expectation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``)`` `[`head`](https://rdrr.io/r/utils/head.html)`(``pred_data``)`
 
     > Model-based Predictions
     > 
@@ -46,45 +37,19 @@ add the original response column (`Petal.Length`) to this data and plot
 the original against the predicted data (on top of the identity line,
 representing the perfect relationship).
 
-``` r
-
-library(ggplot2)
-
-pred_data$Petal.Length <- iris$Petal.Length
-
-pred_data |>
-  ggplot(aes(x = Petal.Length, y = Predicted)) +
-  geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
-  geom_point() +
-  ylab("Petal.Length (predicted)") +
-  theme_minimal()
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` `` ``pred_data``$``Petal.Length`` ``<-`` ``iris``$``Petal.Length`` `` ``pred_data`` ``|>`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Predicted``)``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Petal.Length``)``, linetype ``=`` ``"dashed"``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`` `` `[`ylab`](https://ggplot2.tidyverse.org/reference/labs.html)`(``"Petal.Length (predicted)"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_response_files/figure-html/unnamed-chunk-4-1.png)
 
 It seems like our model does not perform too bad. What if we added
 information about the `Species` in the model?
 
-``` r
-
-model <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
-
-pred_data$Predicted_2 <- estimate_expectation(model)$Predicted
-```
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Petal.Length`` ``~`` ``Sepal.Length`` ``*`` ``Species``, data ``=`` ``iris``)`` `` ``pred_data``$``Predicted_2`` ``<-`` `[`estimate_expectation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``)``$``Predicted`
 
 We could now plot the second observations, based on a more complex
 model, as a red overlay to the previous points:
 
-``` r
-
-pred_data |>
-  ggplot() +
-  geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
-  geom_point(aes(x = Petal.Length, y = Predicted), color = "grey") +
-  geom_point(aes(x = Petal.Length, y = Predicted_2), color = "red") +
-  ylab("Petal.Length (predicted)") +
-  theme_minimal()
-```
+`pred_data`` ``|>`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Petal.Length``)``, linetype ``=`` ``"dashed"``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Predicted``)``, color ``=`` ``"grey"``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Predicted_2``)``, color ``=`` ``"red"``)`` ``+`` `` `[`ylab`](https://ggplot2.tidyverse.org/reference/labs.html)`(``"Petal.Length (predicted)"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_response_files/figure-html/unnamed-chunk-6-1.png)
 
@@ -103,17 +68,7 @@ of the model’s data instead of the original dataset.
 We will do that to visualise the relationship between the response
 (`Petal.Length`) and the predictors (`Sepal.Length` and `Species`).
 
-``` r
-
-predicted <- estimate_expectation(model, data = "grid")
-
-iris |>
-  ggplot(aes(x = Sepal.Length)) +
-  geom_point(aes(y = Petal.Length, color = Species)) +
-  geom_ribbon(data = predicted, aes(ymin = CI_low, ymax = CI_high, fill = Species), alpha = 0.3) +
-  geom_line(data = predicted, aes(y = Predicted, color = Species), linewidth = 1) +
-  theme_minimal()
-```
+`predicted`` ``<-`` `[`estimate_expectation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, data ``=`` ``"grid"``)`` `` ``iris`` ``|>`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Petal.Length``, color ``=`` ``Species``)``)`` ``+`` `` `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(``data ``=`` ``predicted``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``, fill ``=`` ``Species``)``, alpha ``=`` ``0.3``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``predicted``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, color ``=`` ``Species``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_response_files/figure-html/unnamed-chunk-7-1.png)
 
@@ -139,17 +94,7 @@ existing or new data, whereas
 [`estimate_relation()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)
 is more relevant in the context of visualization and plotting.
 
-``` r
-
-predicted <- estimate_relation(model)
-
-iris |>
-  ggplot(aes(x = Sepal.Length)) +
-  geom_point(aes(y = Petal.Length, color = Species)) +
-  geom_ribbon(data = predicted, aes(ymin = CI_low, ymax = CI_high, fill = Species), alpha = 0.3) +
-  geom_line(data = predicted, aes(y = Predicted, color = Species), linewidth = 1) +
-  theme_minimal()
-```
+`predicted`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``)`` `` ``iris`` ``|>`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Petal.Length``, color ``=`` ``Species``)``)`` ``+`` `` `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(``data ``=`` ``predicted``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``, fill ``=`` ``Species``)``, alpha ``=`` ``0.3``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``predicted``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, color ``=`` ``Species``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_response_files/figure-html/unnamed-chunk-8-1.png)
 
@@ -161,19 +106,7 @@ intervals are directly related to the shape of the posterior
 distribution. Thus, showing different CI levels (for instance, 69%, 89%
 and 99%).
 
-``` r
-
-predicted <- estimate_relation(model, ci = c(0.69, 0.89, 0.99))
-
-iris |>
-  ggplot(aes(x = Sepal.Length)) +
-  geom_point(aes(y = Petal.Length, color = Species)) +
-  geom_ribbon(data = predicted, aes(ymin = CI_low_0.99, ymax = CI_high_0.99, fill = Species), alpha = 0.2) +
-  geom_ribbon(data = predicted, aes(ymin = CI_low_0.89, ymax = CI_high_0.89, fill = Species), alpha = 0.3) +
-  geom_ribbon(data = predicted, aes(ymin = CI_low_0.69, ymax = CI_high_0.69, fill = Species), alpha = 0.3) +
-  geom_line(data = predicted, aes(y = Predicted, color = Species), linewidth = 1) +
-  theme_minimal()
-```
+`predicted`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, ci ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0.69``, ``0.89``, ``0.99``)``)`` `` ``iris`` ``|>`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Petal.Length``, color ``=`` ``Species``)``)`` ``+`` `` `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(``data ``=`` ``predicted``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``ymin ``=`` ``CI_low_0.99``, ymax ``=`` ``CI_high_0.99``, fill ``=`` ``Species``)``, alpha ``=`` ``0.2``)`` ``+`` `` `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(``data ``=`` ``predicted``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``ymin ``=`` ``CI_low_0.89``, ymax ``=`` ``CI_high_0.89``, fill ``=`` ``Species``)``, alpha ``=`` ``0.3``)`` ``+`` `` `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(``data ``=`` ``predicted``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``ymin ``=`` ``CI_low_0.69``, ymax ``=`` ``CI_high_0.69``, fill ``=`` ``Species``)``, alpha ``=`` ``0.3``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``predicted``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, color ``=`` ``Species``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_response_files/figure-html/unnamed-chunk-9-1.png)
 
@@ -185,15 +118,7 @@ Let’s now fit the same model under the Bayesian framework.
 recommend starting with [**this gentle
 introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
 
-``` r
-
-library(rstanarm)
-
-model <- stan_glm(Petal.Length ~ Sepal.Length * Species,
-  refresh = 0, seed = 3,
-  data = iris
-)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`rstanarm`](https://mc-stan.org/rstanarm/)`)`` `` ``model`` ``<-`` `[`stan_glm`](https://mc-stan.org/rstanarm/reference/stan_glm.html)`(``Petal.Length`` ``~`` ``Sepal.Length`` ``*`` ``Species``,`` `` refresh ``=`` ``0``, seed ``=`` ``3``,`` `` data ``=`` ``iris`` ``)`
 
 The `refresh` and `seed` arguments are included for reproducibility and
 readability, but they are not critical to the model.
@@ -203,22 +128,7 @@ also represent every individual **posterior draw**, which correspond to
 a random selection of all possible links compatible with the observed
 data. It is a nice insight into the “true” underlying probabilities.
 
-``` r
-
-# Keep only 100 draws (keeping all the draws is slower)
-predicted <- estimate_relation(model, keep_iterations = TRUE, iterations = 100)
-
-# Format draws for plotting
-iterations <- bayestestR::reshape_iterations(predicted)
-iterations$group <- paste0(iterations$iter_group, iterations$Species)
-
-iris |>
-  ggplot(aes(x = Sepal.Length)) +
-  geom_point(aes(y = Petal.Length, color = Species)) +
-  geom_line(data = iterations, aes(y = iter_value, color = Species, group = group), alpha = 0.1) +
-  geom_line(data = predicted, aes(y = Predicted, color = Species), linewidth = 1) +
-  theme_minimal()
-```
+`# Keep only 100 draws (keeping all the draws is slower)`` ``predicted`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, keep_iterations ``=`` ``TRUE``, iterations ``=`` ``100``)`` `` ``# Format draws for plotting`` ``iterations`` ``<-`` ``bayestestR``::`[`reshape_iterations`](https://easystats.github.io/bayestestR/reference/reshape_iterations.html)`(``predicted``)`` ``iterations``$``group`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``iterations``$``iter_group``, ``iterations``$``Species``)`` `` ``iris`` ``|>`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Petal.Length``, color ``=`` ``Species``)``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``iterations``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``iter_value``, color ``=`` ``Species``, group ``=`` ``group``)``, alpha ``=`` ``0.1``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``predicted``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, color ``=`` ``Species``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_response_files/figure-html/unnamed-chunk-11-1.png)
 
@@ -226,25 +136,7 @@ Note that it is also possible to obtain similar plots without Bayesian
 models, by **bootstrapping** the predictions. This can be done by
 setting the iterations argument to some number (e.g., 50).
 
-``` r
-
-model <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
-
-# Bootstrap with n=50 iterations
-predicted <- estimate_relation(model, keep_iterations = TRUE, iterations = 50)
-
-# Format draws for plotting
-iterations <- bayestestR::reshape_iterations(predicted)
-iterations$group <- paste0(iterations$iter_group, iterations$Species)
-
-p <- iris |>
-  ggplot(aes(x = Sepal.Length)) +
-  geom_point(aes(y = Petal.Length, color = Species)) +
-  geom_line(data = iterations, aes(y = iter_value, color = Species, group = group), alpha = 0.1) +
-  geom_line(data = predicted, aes(y = Predicted, color = Species), linewidth = 1) +
-  theme_minimal()
-p
-```
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Petal.Length`` ``~`` ``Sepal.Length`` ``*`` ``Species``, data ``=`` ``iris``)`` `` ``# Bootstrap with n=50 iterations`` ``predicted`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, keep_iterations ``=`` ``TRUE``, iterations ``=`` ``50``)`` `` ``# Format draws for plotting`` ``iterations`` ``<-`` ``bayestestR``::`[`reshape_iterations`](https://easystats.github.io/bayestestR/reference/reshape_iterations.html)`(``predicted``)`` ``iterations``$``group`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``iterations``$``iter_group``, ``iterations``$``Species``)`` `` ``p`` ``<-`` ``iris`` ``|>`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Petal.Length``, color ``=`` ``Species``)``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``iterations``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``iter_value``, color ``=`` ``Species``, group ``=`` ``group``)``, alpha ``=`` ``0.1``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``predicted``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, color ``=`` ``Species``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``p`
 
 ![](estimate_response_files/figure-html/unnamed-chunk-12-1.png)
 

@@ -21,22 +21,7 @@ compared to the speed condition.
 In the following, we will load the necessary packages and clean the data
 by removing outliers and out-of-scope data.
 
-``` r
-
-library(easystats)
-library(rtdists)
-
-# Remove outliers &  Keep only word condition
-data <- rtdists::speed_acc |>
-  data_filter(rt < 1.5 & stim_cat == "word" & frequency == "low") |>
-  data_rename(select = c(reaction_time = "rt"))
-
-# Add new 'error' column that is 1 if the response doesn't match the category
-data <- data_modify(
-  data,
-  error = ifelse(as.character(response) != as.character(stim_cat), 1, 0)
-)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`rtdists`](https://github.com/rtdists/rtdists/)`)`` `` ``# Remove outliers & Keep only word condition`` ``data`` ``<-`` ``rtdists``::`[`speed_acc`](https://rdrr.io/pkg/rtdists/man/speed_acc.html)` ``|>`` `` ``data_filter``(``rt`` ``<`` ``1.5`` ``&`` ``stim_cat`` ``==`` ``"word"`` ``&`` ``frequency`` ``==`` ``"low"``)`` ``|>`` `` ``data_rename``(``select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``reaction_time ``=`` ``"rt"``)``)`` `` ``# Add new 'error' column that is 1 if the response doesn't match the category`` ``data`` ``<-`` ``data_modify``(`` `` ``data``,`` `` error ``=`` `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(`[`as.character`](https://rdrr.io/r/base/character.html)`(``response``)`` ``!=`` `[`as.character`](https://rdrr.io/r/base/character.html)`(``stim_cat``)``, ``1``, ``0``)`` ``)`
 
 ## Speed (RT)
 
@@ -47,14 +32,7 @@ responses, since they are not reflective of a “successful” cognitive
 process. Then, and we will plot the RT according to the condition and
 stimulus category.
 
-``` r
-
-library(ggplot2)
-data_rt <- data_filter(data, error == 0)
-
-ggplot(data = data_rt, aes(y = reaction_time, x = condition, fill = condition)) +
-  geom_violin()
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` ``data_rt`` ``<-`` ``data_filter``(``data``, ``error`` ``==`` ``0``)`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``data ``=`` ``data_rt``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``reaction_time``, x ``=`` ``condition``, fill ``=`` ``condition``)``)`` ``+`` `` `[`geom_violin`](https://ggplot2.tidyverse.org/reference/geom_violin.html)`(``)`
 
 ![](estimate_grouplevel_files/figure-html/unnamed-chunk-3-1.png)
 
@@ -65,14 +43,7 @@ condition. And there could also be a slight effect of **frequency**.
 Let’s verify that using the [**modelisation
 approach**](https://easystats.github.io/modelbased/articles/modelisation_approach.html).
 
-``` r
-
-library(lme4)
-model_full <- lmer(
-  reaction_time ~ condition + (1 + condition | id) + (1 | stim),
-  data = data_rt
-)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`lme4`](https://github.com/lme4/lme4/)`)`` ``model_full`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(`` `` ``reaction_time`` ``~`` ``condition`` ``+`` ``(``1`` ``+`` ``condition`` ``|`` ``id``)`` ``+`` ``(``1`` ``|`` ``stim``)``,`` `` data ``=`` ``data_rt`` ``)`
 
 Let’s unpack the formula of this model. We’re tying to predict
 `reaction_time` using different terms. These can be separated into two
@@ -87,10 +58,7 @@ it is added automatically).
 
 Let’s investigate these two fixed parameters first:
 
-``` r
-
-parameters(model_full, effects = "fixed")
-```
+`parameters``(``model_full``, effects ``=`` ``"fixed"``)`
 
     > # Fixed Effects
     > 
@@ -115,13 +83,7 @@ Let’s visualize the [marginal
 means](https://easystats.github.io/modelbased/articles/estimate_means.html)
 estimated by the model:
 
-``` r
-
-means <- estimate_means(model_full, by = "condition", backend = "marginaleffects")
-
-plot(means, point = list(alpha = 0.1, width = 0.1)) +
-  theme_minimal()
-```
+`means`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model_full``, by ``=`` ``"condition"``, backend ``=`` ``"marginaleffects"``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``means``, point ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``alpha ``=`` ``0.1``, width ``=`` ``0.1``)``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_grouplevel_files/figure-html/unnamed-chunk-6-1.png)
 
@@ -138,12 +100,7 @@ condition** computed.
 But do we need such a complex model? Let’s compare it to a model without
 specifying random intercepts for the stimuli.
 
-``` r
-
-model <- lmer(reaction_time ~ condition + (condition | id), data = data_rt)
-
-test_performance(model_full, model)
-```
+`model`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``reaction_time`` ``~`` ``condition`` ``+`` ``(``condition`` ``|`` ``id``)``, data ``=`` ``data_rt``)`` `` ``test_performance``(``model_full``, ``model``)`
 
     > Name       |   Model |      BF | df | df_diff | Criterion |  Chi2 |      p
     > --------------------------------------------------------------------------
@@ -165,11 +122,7 @@ group-level scores. We can use the
 [`estimate_grouplevel()`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)
 function to retrieve them.
 
-``` r
-
-random <- estimate_grouplevel(model)
-random
-```
+`random`` ``<-`` `[`estimate_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``model``)`` ``random`
 
     > Group | Level | Parameter         | Coefficient |   SE |         95% CI
     > -----------------------------------------------------------------------
@@ -214,12 +167,7 @@ the **intercept** and **condition effect**.
 
 We can easily visualize the random effects:
 
-``` r
-
-plot(random) +
-  geom_hline(yintercept = 0, linetype = "dashed") +
-  theme_lucid()
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``random``)`` ``+`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`` ``+`` `` `[`theme_lucid`](https://easystats.github.io/see/reference/theme_lucid.html)`(``)`
 
 ![](estimate_grouplevel_files/figure-html/unnamed-chunk-9-1.png)
 
@@ -234,12 +182,7 @@ match the original data. The resulting table has the same length as the
 original dataset and can be merged with it: **it’s a convenient way to
 re-incorporate the random effects into the data for further re-use**.
 
-``` r
-
-reshaped <- reshape_grouplevel(random, indices = "Coefficient")
-
-head(reshaped)
-```
+`reshaped`` ``<-`` `[`reshape_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``random``, indices ``=`` ``"Coefficient"``)`` `` `[`head`](https://rdrr.io/r/utils/head.html)`(``reshaped``)`
 
     >   id Intercept conditionspeed
     > 1  1    -0.097         0.0941
@@ -251,10 +194,7 @@ head(reshaped)
 
 Let’s merge it with the original data.
 
-``` r
-
-data_rt <- data_join(data_rt, reshaped, join = "full", by = "id")
-```
+`data_rt`` ``<-`` ``data_join``(``data_rt``, ``reshaped``, join ``=`` ``"full"``, by ``=`` ``"id"``)`
 
 ### Correlation with empirical scores
 
@@ -277,17 +217,7 @@ the same - and overwrite it - to keep it concise), in which we will only
 keep the mean RT in the **accuracy** condition, and the difference with
 the **speed** condition *(reminds you of something?)*.
 
-``` r
-
-data_sub <- aggregate(reaction_time ~ id + condition, data_rt, mean)
-data_sub <- data_rt |>
-  data_summary(reaction_time = mean(reaction_time), by = c("id", "condition")) |>
-  reshape_wider(
-    names_from = "condition", values_from = "reaction_time", names_prefix = "empirical_"
-  ) |>
-  data_modify(empirical_speed = empirical_accuracy - empirical_speed)
-data_sub
-```
+`data_sub`` ``<-`` `[`aggregate`](https://rdrr.io/r/stats/aggregate.html)`(``reaction_time`` ``~`` ``id`` ``+`` ``condition``, ``data_rt``, ``mean``)`` ``data_sub`` ``<-`` ``data_rt`` ``|>`` `` ``data_summary``(``reaction_time ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``reaction_time``)``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"id"``, ``"condition"``)``)`` ``|>`` `` ``reshape_wider``(`` `` names_from ``=`` ``"condition"``, values_from ``=`` ``"reaction_time"``, names_prefix ``=`` ``"empirical_"`` `` ``)`` ``|>`` `` ``data_modify``(``empirical_speed ``=`` ``empirical_accuracy`` ``-`` ``empirical_speed``)`` ``data_sub`
 
     >    id empirical_accuracy empirical_speed
     > 1   1               0.59           0.053
@@ -318,11 +248,7 @@ per participant, so that it matches the format of `data_sub`).
 We can now reshape the random effects to have the same format as
 `data_sub` and merge them.
 
-``` r
-
-data_sub <- data_join(data_sub, summary(reshaped), by = "id")
-data_sub
-```
+`data_sub`` ``<-`` ``data_join``(``data_sub``, `[`summary`](https://rdrr.io/r/base/summary.html)`(``reshaped``)``, by ``=`` ``"id"``)`` ``data_sub`
 
     >    id empirical_accuracy empirical_speed Intercept conditionspeed
     > 1   1               0.59           0.053  -0.09676         0.0941
@@ -346,13 +272,7 @@ data_sub
 Let’s run a correlation between the model-based scores and the empirical
 scores.
 
-``` r
-
-correlation(data_sub) |>
-  summary(redundant = TRUE) |>
-  cor_sort() |>
-  plot()
-```
+`correlation``(``data_sub``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``redundant ``=`` ``TRUE``)`` ``|>`` `` ``cor_sort``(``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
 ![](estimate_grouplevel_files/figure-html/unnamed-chunk-14-1.png)
 
@@ -371,13 +291,7 @@ Finally, we can observe that there is a strong and negative correlation
 (which is even more salient with model-based indices) between the RT in
 the accuracy condition and the effect of the speed condition:
 
-``` r
-
-ggplot(data_sub, aes(x = Intercept, y = conditionspeed)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  theme_minimal()
-```
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``data_sub``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Intercept``, y ``=`` ``conditionspeed``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`` `` `[`geom_smooth`](https://ggplot2.tidyverse.org/reference/geom_smooth.html)`(``method ``=`` ``"lm"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_grouplevel_files/figure-html/unnamed-chunk-15-1.png)
 
@@ -394,12 +308,7 @@ intra-individual variability in the data (Williams et al., 2020).
 For that, we first need to compute the variability (SD) of the
 point-estimates across participants.
 
-``` r
-
-reliability <- random |>
-  data_summary(sd_between = sd(Coefficient), by = "Parameter")
-reliability
-```
+`reliability`` ``<-`` ``random`` ``|>`` `` ``data_summary``(``sd_between ``=`` `[`sd`](https://rdrr.io/r/stats/sd.html)`(``Coefficient``)``, by ``=`` ``"Parameter"``)`` ``reliability`
 
     > Parameter      | sd_between
     > ---------------------------
@@ -409,13 +318,7 @@ reliability
 Then, we compute the average variability (SE) of the random effects
 within participants, and add it to the previous table.
 
-``` r
-
-reliability <- random |>
-  data_summary(sd_within = mean(SE), by = "Parameter") |>
-  data_join(reliability)
-reliability
-```
+`reliability`` ``<-`` ``random`` ``|>`` `` ``data_summary``(``sd_within ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``SE``)``, by ``=`` ``"Parameter"``)`` ``|>`` `` ``data_join``(``reliability``)`` ``reliability`
 
     > Parameter      | sd_within | sd_between
     > ---------------------------------------
@@ -427,11 +330,7 @@ variability to the within-participants variability. The more any
 estimate varies in-between participants compared to within participants,
 the more reliable it is.
 
-``` r
-
-reliability |>
-  data_modify(reliability = sd_between / sd_within)
-```
+`reliability`` ``|>`` `` ``data_modify``(``reliability ``=`` ``sd_between`` ``/`` ``sd_within``)`
 
     > Parameter      | sd_within | sd_between | reliability
     > -----------------------------------------------------
@@ -453,16 +352,7 @@ We will fit a logistic mixed model to predict the likelihood of making
 error depending on the condition. Similarly, we specified a random
 intercept and random effect of condition for the participants.
 
-``` r
-
-model <- glmer(
-  error ~ condition + (1 + condition | id),
-  data = data,
-  family = "binomial"
-)
-
-parameters(model, effects = "fixed")
-```
+`model`` ``<-`` `[`glmer`](https://rdrr.io/pkg/lme4/man/glmer.html)`(`` `` ``error`` ``~`` ``condition`` ``+`` ``(``1`` ``+`` ``condition`` ``|`` ``id``)``,`` `` data ``=`` ``data``,`` `` family ``=`` ``"binomial"`` ``)`` `` ``parameters``(``model``, effects ``=`` ``"fixed"``)`
 
     > # Fixed Effects
     > 
@@ -476,10 +366,7 @@ errors in the speed condition as compared to the accuracy condition. We
 can visualize the average probability (i.e., the **marginal means**) of
 making errors in the two conditions.
 
-``` r
-
-plot(estimate_means(model, by = "condition"), show_data = FALSE)
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(`[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, by ``=`` ``"condition"``)``, show_data ``=`` ``FALSE``)`
 
 ![](estimate_grouplevel_files/figure-html/unnamed-chunk-20-1.png)
 
@@ -487,12 +374,7 @@ Similarly, we can extract the group-level effects, clean them (rename
 the columns, otherwise it will be the same names as for the RT model),
 and merge them with the previous ones.
 
-``` r
-
-random <- estimate_grouplevel(model)
-
-plot(random)
-```
+`random`` ``<-`` `[`estimate_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``model``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``random``)`
 
 ![](estimate_grouplevel_files/figure-html/unnamed-chunk-21-1.png)
 
