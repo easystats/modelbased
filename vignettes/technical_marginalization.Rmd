@@ -208,3 +208,69 @@ estimate_means(m, "sex", estimate = "counterfactual")
 
 * **Calculation:** Non-focal predictors are marginalized over the observations of the sample, with the sample being replicated multiple times to create "counterfactuals" (what-if scenarios). Then, the average of these predicted values is calculated (aggregated/grouped by the focal terms).
 * **Meaning:** This can be viewed as an extrapolation to a hypothetical target population. Counterfactual predictions are useful because the results can also be transferred to other contexts (G-Computation, causal inference). It answers the question: *"What is the predicted response value for the average observation in the broader target population?"* (or for my "pseudo-randomized" sample). Due to the pseudo-randomization approach, we're allowed to make causal inferences even for observational data (note that there are certain assumptions that need to be fulfilled for causal inference; see section **Assumptions for causal identification** in [this vignette](https://easystats.github.io/modelbased/articles/practical_causality.html)).
+
+## Appendix: Code equivalent in different R packages
+
+While this vignette focuses on the **easystats** ecosystem, it is helpful to see how these concepts translate to other popular packages. Below, we provide the equivalent R code to calculate the `"specific"`, `"typical"`, `"average"`, and `"counterfactual"` marginal means using the *marginaleffects* and *emmeans* packages. Notice how different packages use different terminology - such as varying `newdata` arguments or specific weighting schemes - to achieve the exact same conceptual estimates under the hood.
+
+We use the `model_parameters()` function to ensure the output displays enough decimal places for a precise comparison.
+
+### Specific Observation
+
+```{r}
+# easystats: Sets numeric variables to their mean and factors
+# to their reference level.
+estimate_means(m, "sex", estimate = "specific")
+
+# marginaleffects: The 'newdata = "mean"' argument replicates this
+# "theoretical" observation behavior.
+marginaleffects::avg_predictions(m, by = "sex", newdata = "mean") |> model_parameters()
+```
+
+### Typical Observation
+
+```{r}
+# easystats: Builds a balanced reference grid and weights each group
+# equally (the default).
+estimate_means(m, "sex", estimate = "typical")
+
+# marginaleffects: 'newdata = "grid"' creates a similar balanced
+# data grid.
+marginaleffects::avg_predictions(m, by = "sex", newdata = "grid") |> model_parameters()
+
+# emmeans: Equal weighting across a reference grid is the default
+# behavior in emmeans.
+emmeans::emmeans(m, "sex") |> model_parameters()
+```
+
+### Average Observation
+
+```{r}
+# easystats: Calculates predictions for every observation in the
+# empirical data and averages them.
+estimate_means(m, "sex", estimate = "average")
+
+# marginaleffects: Using 'by' without modifying 'newdata' averages
+# predictions over the original empirical dataset.
+marginaleffects::avg_predictions(m, by = "sex") |> model_parameters()
+
+# emmeans: 'weights = "cell"' weights the reference grid based on
+# actual cell frequencies in the data.
+emmeans::emmeans(m, "sex", weights = "cell") |> model_parameters()
+```
+
+### Counterfactual / Population Observation
+
+```{r}
+# easystats: Uses G-computation (cloning the dataset to
+# simulate pseudo-randomization).
+estimate_means(m, "sex", estimate = "population")
+
+# marginaleffects: Using the 'variables' argument automatically
+# triggers this counterfactual approach.
+marginaleffects::avg_predictions(m, variables = "sex") |> model_parameters()
+
+# emmeans: 'weights = "proportional"' weights the means
+# proportionally to the marginal frequencies of the sample.
+emmeans::emmeans(m, "sex", weights = "proportional") |> model_parameters()
+```
