@@ -40,6 +40,9 @@
 * New options for printing (in particular, formatting CIs), see also documentation
   (`?modelbased::"modelbased-options"`).
 
+* Improved documentation for `estimate_means()` and vignettes about technical
+  details of marginalization.
+
 # modelbased 0.16.0
 
 ## Changes
