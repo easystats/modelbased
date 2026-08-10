@@ -15,7 +15,7 @@ estimate_contrasts() and estimate_slopes().'><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -181,9 +181,17 @@ confidence intervals.</p></dd>
 <dt id="arg-estimate">estimate<a class="anchor" aria-label="anchor" href="#arg-estimate"></a></dt>
 <dd><p>The <code>estimate</code> argument determines how predictions are
 averaged ("marginalized") over variables not specified in <code>by</code> or <code>contrast</code>
-(non-focal predictors). It controls whether predictions represent a "typical"
-individual, an "average" individual from the sample, or an "average"
-individual from a broader population.</p><ul><li><p><code>"typical"</code> (Default): Calculates predictions for a balanced data grid
+(non-focal predictors). It controls whether predictions represent a
+"specific" or "typical" individual (<em>conditional</em>, <em>individual-level</em>
+predictions), or an "average" individual from the sample, or an
+"counterfactual" individual from a broader population (<em>marginal</em>,
+<em>population-level</em> predictions).</p>
+<p><strong>Conditional Predictions based on artificially constructed reference grids</strong></p><ul><li><p><code>"specific"</code>: The estimated means represent a rather "theoretical" view of
+the data. A prediction is made for a specific individual from the sample
+(i.e., a very specific combination of predictor values). This answers the
+question about the expected average value of the target variable for a
+<em>specific</em> observation.</p></li>
+<li><p><code>"typical"</code> (Default): Calculates predictions for a balanced data grid
 representing all combinations of focal predictor levels (specified in <code>by</code>).
 For non-focal numeric predictors, it uses the mean; for non-focal
 categorical predictors, it marginalizes (averages) over the levels. This
@@ -191,7 +199,7 @@ represents a "typical" observation based on the data grid and is useful for
 comparing groups. It answers: "What would the average outcome be for a
 'typical' observation?". This is the default approach when estimating
 marginal means using the <em>emmeans</em> package.</p></li>
-<li><p><code>"average"</code>: Calculates predictions for each observation in the sample and
+</ul><p><strong>Marginal predictions based on actual empirical observations</strong></p><ul><li><p><code>"average"</code>: Calculates predictions for each observation in the sample and
 then averages these predictions within each group defined by the focal
 predictors. This reflects the sample's actual distribution of non-focal
 predictors, not a balanced grid. It answers: "What is the predicted value

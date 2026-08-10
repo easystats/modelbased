@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -397,6 +397,14 @@ randomization).</p>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
+<p>Broadly speaking, these four methods can be grouped into two
+conceptual categories: <em>conditional</em> predictions and
+<em>marginal</em> predictions. The first two approaches rely on
+artificially constructed reference grids, providing predictions
+<em>conditional</em> on specific, theoretical individual levels. In
+contrast, the latter two approaches calculate predictions for the actual
+empirical observations before averaging, thus reflecting
+<em>marginal</em> predictions at the sample or population level.</p>
 <div class="section level3">
 <h3 id="specific-observation-estimate-specific">1. Specific Observation (<code>estimate = "specific"</code>)<a class="anchor" aria-label="anchor" href="#specific-observation-estimate-specific"></a>
 </h3>
@@ -473,6 +481,21 @@ assumptions that need to be fulfilled for causal inference; see section
 <strong>Assumptions for causal identification</strong> in <a href="https://easystats.github.io/modelbased/articles/practical_causality.html">this
 vignette</a>).</li>
 </ul>
+</div>
+<div class="section level3">
+<h3 id="conclusion-conditional-vs--marginal-predictions">Conclusion: Conditional vs. Marginal Predictions<a class="anchor" aria-label="anchor" href="#conclusion-conditional-vs--marginal-predictions"></a>
+</h3>
+<p>When deciding which method to use, the core question is whether your
+estimand relates to a theoretical individual or the population as a
+whole. Use <em>conditional</em> predictions (<code>"specific"</code>,
+<code>"typical"</code>) when you want to evaluate expected outcomes for
+predefined, fixed combinations of covariates (using a reference grid).
+Use <em>marginal</em> predictions (<code>"average"</code>,
+<code>"ounterfactual"</code>) when you want to account for the actual
+empirical distribution of your sample. Marginal methods average over the
+real-world variability of your subjects, making them the recommended
+choice for making population-level generalizations or drawing causal
+inferences.</p>
 </div>
 </div>
 <div class="section level2">

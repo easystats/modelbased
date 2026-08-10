@@ -91,8 +91,19 @@ estimate_means(
   The `estimate` argument determines how predictions are averaged
   ("marginalized") over variables not specified in `by` or `contrast`
   (non-focal predictors). It controls whether predictions represent a
-  "typical" individual, an "average" individual from the sample, or an
-  "average" individual from a broader population.
+  "specific" or "typical" individual (*conditional*, *individual-level*
+  predictions), or an "average" individual from the sample, or an
+  "counterfactual" individual from a broader population (*marginal*,
+  *population-level* predictions).
+
+  **Conditional Predictions based on artificially constructed reference
+  grids**
+
+  - `"specific"`: The estimated means represent a rather "theoretical"
+    view of the data. A prediction is made for a specific individual
+    from the sample (i.e., a very specific combination of predictor
+    values). This answers the question about the expected average value
+    of the target variable for a *specific* observation.
 
   - `"typical"` (Default): Calculates predictions for a balanced data
     grid representing all combinations of focal predictor levels
@@ -103,6 +114,8 @@ estimate_means(
     answers: "What would the average outcome be for a 'typical'
     observation?". This is the default approach when estimating marginal
     means using the *emmeans* package.
+
+  **Marginal predictions based on actual empirical observations**
 
   - `"average"`: Calculates predictions for each observation in the
     sample and then averages these predictions within each group defined

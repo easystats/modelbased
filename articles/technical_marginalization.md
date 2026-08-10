@@ -92,6 +92,14 @@ randomization).
 
 ## Summary
 
+Broadly speaking, these four methods can be grouped into two conceptual
+categories: *conditional* predictions and *marginal* predictions. The
+first two approaches rely on artificially constructed reference grids,
+providing predictions *conditional* on specific, theoretical individual
+levels. In contrast, the latter two approaches calculate predictions for
+the actual empirical observations before averaging, thus reflecting
+*marginal* predictions at the sample or population level.
+
 ### 1. Specific Observation (`estimate = "specific"`)
 
 - **Calculation:** Numeric values are set to their mean. Factors are set
@@ -144,6 +152,19 @@ randomization).
   that need to be fulfilled for causal inference; see section
   **Assumptions for causal identification** in [this
   vignette](https://easystats.github.io/modelbased/articles/practical_causality.html)).
+
+### Conclusion: Conditional vs. Marginal Predictions
+
+When deciding which method to use, the core question is whether your
+estimand relates to a theoretical individual or the population as a
+whole. Use *conditional* predictions (`"specific"`, `"typical"`) when
+you want to evaluate expected outcomes for predefined, fixed
+combinations of covariates (using a reference grid). Use *marginal*
+predictions (`"average"`, `"ounterfactual"`) when you want to account
+for the actual empirical distribution of your sample. Marginal methods
+average over the real-world variability of your subjects, making them
+the recommended choice for making population-level generalizations or
+drawing causal inferences.
 
 ## Appendix: Code equivalent in different R packages
 
