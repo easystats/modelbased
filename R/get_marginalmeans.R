@@ -155,6 +155,22 @@ get_marginalmeans <- function(
     fun_args$type <- predict_args$predict
   }
 
+  ## TODO: document "fast" argument?
+
+  # fast mode?
+  # ---------------------------
+
+  # create weighted (reduced) data grid, if "fast = TRUE"
+  tmp <- .create_weighted_datagrid(
+    model = model,
+    estimate = estimate,
+    fun_args = fun_args,
+    dots = dots
+  )
+  # if we made any changes, update arguments
+  fun_args <- tmp$fun_args
+  dots <- tmp$dots
+
   # weights?
   # ---------------------------
 
@@ -795,4 +811,48 @@ get_marginalmeans <- function(
       insight::format_alert(msg)
     }
   }
+}
+
+
+# create weighted data grid, for faster computation of predictions. Works best
+# if reduced data grid is considerably smaller than the original model data,
+# and is more efficient if model contains fewer categorical predictors.
+
+.create_weighted_datagrid <- function(model, estimate, fun_args, dots) {
+  if (isTRUE(dots$fast) || is.numeric(dots$fast)) {
+    # this overrides the existing data grid, if any. this means, "fast = TRUE"
+    # only works with marginal predictions (when `estimate` is "average" or
+    # "population"), not conditional, datagrid-based predictions (when
+    # `estimate` is "specific" or "typical")
+    if (estimate %in% c("specific", "typical")) {
+      insight::format_error(
+        "`fast` only works for marginal predictions, i.e. when `estimate` is set to \"average\" or \"population\"."
+      )
+    }
+    # do we have bins?
+    n_bins <- dots$n_bins
+    # if not specified, we default to 5 bins, or to the value provided in "fast"
+    if (is.null(n_bins)) {
+      if (is.numeric(dots$fast)) {
+        n_bins <- dots$fast
+      } else {
+        n_bins <- 5
+      }
+    }
+    # does model have weights?
+    model_weights <- insight::find_weights(model)
+    # if not, we default to TRUE to trigger weighted data grid. Else, we
+    # pass the name of the weights variable
+    if (is.null(model_weights)) {
+      model_weights <- TRUE
+    }
+    # create weighted (reduced) data grid
+    fast_grid <- insight::get_datagrid(model, n_bins = n_bins, weighted = model_weights)
+    # update newdata with reduced data grid for faster computation
+    fun_args$newdata <- fast_grid
+    dots$weights <- fast_grid$Weight
+    # clean-up dots
+    dots$fast <- dots$n_bins <- NULL
+  }
+  list(fun_args = fun_args, dots = dots)
 }
