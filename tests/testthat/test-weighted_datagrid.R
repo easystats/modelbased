@@ -2,7 +2,6 @@ skip_on_cran()
 skip_if_not_installed("marginaleffects")
 skip_if_not_installed("insight", minimum_version = "1.5.3")
 
-
 test_that("weighted data grids work for average", {
   data(penguins)
 
