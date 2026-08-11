@@ -61,6 +61,18 @@ test_that("weighted data grids work for average, binning of numerics", {
   # due to more precise binning
   expect_equal(emm1$Mean, emm2$Mean, tolerance = 1e-4)
   expect_equal(emm2$Mean, emm3$Mean, tolerance = 1e-5)
+
+  # no binning of numerics - imitated if "fast = NA"
+  dg <- insight::get_datagrid(model, n_bins = NULL, weighted = TRUE)
+  emm2 <- estimate_means(
+    model,
+    "species",
+    estimate = "average",
+    data = dg,
+    weights = dg$Weight
+  )
+  emm3 <- estimate_means(model, "species", estimate = "average", fast = NA)
+  expect_equal(emm2$Mean, emm3$Mean, tolerance = 1e-5)
 })
 
 

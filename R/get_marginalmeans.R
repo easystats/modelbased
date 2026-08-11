@@ -160,7 +160,16 @@ get_marginalmeans <- function(
   # fast mode?
   # ---------------------------
 
-  # create weighted (reduced) data grid, if "fast = TRUE"
+  # we have several options for "fast"
+  # fast = NULL:    nothing happens
+  # fast = TRUE:    creates a weighted (reduced) data frame, binning numerics
+  #                 into 5 groups
+  # fast = NA:      creates a weighted (reduced) data frame, setting numerics
+  #                 to their mean value
+  # fast = <value>: creates a weighted (reduced) data frame, binning
+  #                 numerics into <value> groups
+
+  # create weighted (reduced) data grid
   tmp <- .create_weighted_datagrid(
     model = model,
     estimate = estimate,
@@ -819,7 +828,10 @@ get_marginalmeans <- function(
 # and is more efficient if model contains fewer categorical predictors.
 
 .create_weighted_datagrid <- function(model, estimate, fun_args, dots) {
-  if (isTRUE(dots$fast) || is.numeric(dots$fast)) {
+  if (
+    !is.null(dots$fast) &&
+      (isTRUE(dots$fast) || is.numeric(dots$fast) || is.na(dots$fast))
+  ) {
     # this overrides the existing data grid, if any. this means, "fast = TRUE"
     # only works with marginal predictions (when `estimate` is "average" or
     # "population"), not conditional, datagrid-based predictions (when
@@ -834,8 +846,14 @@ get_marginalmeans <- function(
     # if not specified, we default to 5 bins, or to the value provided in "fast"
     if (is.null(n_bins)) {
       if (is.numeric(dots$fast)) {
+        # use given number for bins
         n_bins <- dots$fast
+      } else if (is.na(dots$fast)) {
+        # if "NA", set n_bins to NULL, meaning we just take the mean for
+        # numerics and only bin categorical predictors
+        n_bins <- NULL
       } else {
+        # if fast = TRUE, use the default (5 bins for numerics)
         n_bins <- 5
       }
     }
