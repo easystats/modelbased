@@ -132,10 +132,7 @@ test_that("weighted data grids work for population", {
 
 test_that("weighted data grids errors for other estimate options", {
   data(penguins)
-
-  # one factor
   model <- lm(bill_len ~ species + sex + island, data = penguins)
-  dg <- insight::get_datagrid(model, weighted = TRUE)
 
   expect_error(
     estimate_means(model, "species", fast = TRUE),
