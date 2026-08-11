@@ -155,6 +155,26 @@ get_marginalmeans <- function(
     fun_args$type <- predict_args$predict
   }
 
+  ## TODO: document "fast" argument?
+
+  # fast mode?
+  # ---------------------------
+  if (isTRUE(dots$fast)) {
+    # this overrides the existing data grid, if any. this means, "fast = TRUE"
+    # only works with marginal predictions (when `estimate` is "average" or
+    # "population"), not conditional, datagrid-based predictions (when
+    # `estimate` is "specific" or "typical")
+    if (estimate %in% c("specific", "typical")) {
+      insight::format_error(
+        "`fast` only works for marginal predictions, i.e. when `estimate` is set to \"average\" or \"population\"."
+      )
+    }
+    fast_grid <- insight::get_datagrid(model, weighted = TRUE)
+    fun_args$newdata <- fast_grid
+    dots$weights <- fast_grid$Weight
+    dots$fast <- NULL
+  }
+
   # weights?
   # ---------------------------
 
