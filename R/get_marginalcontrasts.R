@@ -537,6 +537,16 @@ get_marginalcontrasts <- function(
 }
 
 
+# small helper to extract the pure variable names from the "by" argument
+
+.grep_cleaned_by_vars <- function(string) {
+  matches <- gregexpr('(?<=")[a-zA-Z_]\\w*(?=\\s*=|")', string, perl = TRUE)
+  start_pos <- matches[[1]]
+  match_lengths <- attr(start_pos, "match.length")
+  substring(string, start_pos, start_pos + match_lengths - 1)
+}
+
+
 # supported comparison strings  --------------------------------------
 # --------------------------------------------------------------------
 
