@@ -42,6 +42,16 @@ if (getRversion() < "4.1.0") {
 }
 ```
 
+```{css, echo=FALSE, eval = TRUE}
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+```
+
 This vignette explores the `estimate_means()` function, providing a practical guide to calculating and interpreting estimated marginal means. Using the *penguins* dataset, we will demonstrate how different estimation methods (triggered via the `estimate` argument) - `"specific"`, `"typical"`, `"average"`, and `"counterfactual"` - change the assumptions behind your model predictions. By manually recreating these calculations alongside the automated functions, you will gain a much clearer understanding of what actually happens under the hood when interpreting (linear) models and their estimated marginal means.
 
 First, let's load the necessary packages and dataset.

@@ -39,15 +39,26 @@ if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
 set.seed(333)
 ```
 
+```{css, echo=FALSE, eval = TRUE}
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+```
+
 When analyzing longitudinal or clustered data, a standard mixed-effects model often blends two completely different processes into a single coefficient: the overall differences between individuals (or groups) and the acute fluctuations within an individual. However, separating these effects is just the first step. By evaluating them side-by-side, we can uncover a third, crucial piece of the puzzle: the *context effect*.
 
 The context effect describes the additional influence that a broader environment or a chronic baseline trait has on an individual, independent of their immediate, momentary state ([@bell_understanding_2018, @rohrer_these_2023]). By using the `demean()` function to separate our time-varying predictors, we can isolate the within- and between-components, evaluate them independently, and formally test how the overarching context shapes individual outcomes.
 
 To understand the underlying problem of heterogeneity bias, demeaning (person-mean centering), and within/between effects in more detail, it is highly recommended to [read this vignette first](https://easystats.github.io/parameters/articles/demean.html).
 
-> **Note:** Throughout this example, we use `display(format = "tt")` to display table output in markdown format, using the **tinytable** package as the backend. See [this vignette](https://easystats.github.io/insight/articles/display.html#displaying-tables-with-display) for more details on output displays.
-
-> **Note:** Because within-effects can vary across individuals, it is generally best practice to model them as random slopes. However, to keep this example simple, we have only included `time` as a random slope.
+::: custom_note
+<p>**Note:** Throughout this example, we use `display(format = "tt")` to display table output in markdown format, using the **tinytable** package as the backend. See [this vignette](https://easystats.github.io/insight/articles/display.html#displaying-tables-with-display) for more details on output displays.</p>
+<p>**Note:** Because within-effects can vary across individuals, it is generally best practice to model them as random slopes. However, to keep this example simple, we have only included `time` as a random slope.</p>
+:::
 
 # Sample data used in this vignette
 
