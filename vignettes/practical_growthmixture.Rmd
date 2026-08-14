@@ -33,6 +33,16 @@ if (getRversion() < "4.1.0") {
 }
 ```
 
+```{css, echo=FALSE, eval = TRUE}
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+```
+
 ## Introduction
 
 Growth Mixture Models (GMMs) are a powerful statistical technique used to identify unobserved subgroups (latent classes) within a population that exhibit different developmental trajectories over time. They are a subclass of latent class analysis and are particularly useful in longitudinal research to understand heterogeneity in how individuals change.
@@ -110,7 +120,9 @@ brms_mixture_2 <- brms::brm(
 )
 ```
 
-> You can use different factors to predict the outcome for each group in your data. To do this, simply create a separate prediction formula for each part of your model. For instance, you could use one set of factors to predict the quality of life for "Group 1" and a different set for "Group 2". You can even use factors to predict which group someone is likely to belong to. While this guide won't cover the details, a code example at the end shows you how.
+::: custom_note
+<p>You can use different factors to predict the outcome for each group in your data. To do this, simply create a separate prediction formula for each part of your model. For instance, you could use one set of factors to predict the quality of life for "Group 1" and a different set for "Group 2". You can even use factors to predict which group someone is likely to belong to. While this guide won't cover the details, a code example at the end shows you how.</p>
+:::
 
 ## Interpreting the Model
 

@@ -41,11 +41,23 @@ if (getRversion() < "4.1.0") {
 }
 ```
 
+```{css, echo=FALSE, eval = TRUE}
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+```
+
 This vignette demonstrate how to use *modelbased* in the context of an intersectional multilevel analysis of individual heterogeneity, using the MAIHDA framework. The general approach of the MAIHDA framework (sometimes also _I-MAIHDA_) is described in _Axelsson Fisk et al. 2018_ and _Evans et al. 2024_.
 
 Intersectionality analysis is a new approach in social epidemiology, which attempts to move away from looking at relevant social indicators in isolation.
 
-> "The advantage of incorporating an intersectional framework in social epidemiology is that it goes beyond the unidimensional study of socioeconomic and demographic categorizations by considering the effect of belonging to specific strata simultaneously defined by multiple social, economic and demographic dimensions."
+::: custom_note
+<p>"The advantage of incorporating an intersectional framework in social epidemiology is that it goes beyond the unidimensional study of socioeconomic and demographic categorizations by considering the effect of belonging to specific strata simultaneously defined by multiple social, economic and demographic dimensions."</p>
+:::
 
 The steps we are showing here are:
 
@@ -133,7 +145,9 @@ The ICC with a value of about 4% is rather low. Usually, this indicates that our
 
 In the next step we want to find out, which intersectional dimension contributes most to possible inequalities, i.e. which of our group factors `gender`, `employed` and `age` explains most of the between-stratum variance of the random effects. This is achieved by fitting partially-adjusted intersectional models.
 
-> "The purpose of the partially adjusted model was to quantify to what degree the different dimensions used to construct the intersectional strata contributed to the between stratum variance seen in the previous model."
+::: custom_note
+<p>"The purpose of the partially adjusted model was to quantify to what degree the different dimensions used to construct the intersectional strata contributed to the between stratum variance seen in the previous model."</p>
+:::
 
 For each of the intersectional dimensions, a multilevel model including this dimension as fixed effect is fitted. We can then both look at the ICCs of the partially-adjusted models, as well as at the proportional change in the between-stratum variance, the so-called _PCV_ coefficients.
 

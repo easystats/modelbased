@@ -40,6 +40,16 @@ if (can_evaluate) {
 }
 ```
 
+```{css, echo=FALSE, eval = TRUE}
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+```
+
 ## Estimated Marginal Means in Mixed Effects Models: Navigating Conditional and Marginal Effects
 
 Mixed models, with their ability to account for hierarchical or clustered data, offer powerful tools for understanding complex relationships. A key aspect of interpreting these models is understanding **estimated marginal means (EMMs)**, which represent the predicted outcome for specific groups or conditions, while holding other variables constant. However, calculating EMMs in mixed models is not always straightforward, and the results can vary depending on the approach taken.
@@ -59,17 +69,19 @@ When working with mixed models, the `modelbased` package offers flexibility in c
 - ... are usually different for generalized linear mixed models
 - ... are usually different for both linear and generalized linear models, when the data is "imbalanced" and "average" predictions are requested (i.e., `estimate = "average"`); by _imbalanced_ we mean not equally distributed levels.
 
-> **Note:**
->
-> If you request unit-level predictions - that is, predictions specific to the individual levels of the random effects (achieved by including random effect variables in `by`) - conditional and marginal predictions will also differ in linear mixed models. We will not delve into unit-level predictions in this vignette.
+::: custom_note
+<p>**Note:** If you request unit-level predictions - that is, predictions specific to the individual levels of the random effects (achieved by including random effect variables in `by`) - conditional and marginal predictions will also differ in linear mixed models. We will not delve into unit-level predictions in this vignette.</p>
+:::
 
 In essence, the choice of backend and the understanding of whether we are looking at conditional or marginal predictions are critical for correctly interpreting the results of mixed models. Carefully considering the research question and the nature of the random effects will guide the selection of the appropriate approach.
 
-> **Technical Notes:**
->
-> - For `backend = "marginaleffects"`, the `re.form` argument is set to `NULL` for mixed models by default, to calculate _marginal predictions_. You can use for instance `re.form = NA` in your `estimate_means()` call to change the default value (`NA` will produce _conditional predictions_).
->
-> - By default, both backends calculate predictions for a balanced data grid representing all combinations of focal predictor levels (specified in `by`). This represents a "typical" observation based on the data grid and is useful for comparing groups. Setting `estimate = "average"` can be useful to calculate the average expected outcome from those observations _from the sample_ at hand, however, this option is only available for `backend = "marginaleffects"`.
+::: custom_note
+<p>**Technical Notes:**
+
+- For `backend = "marginaleffects"`, the `re.form` argument is set to `NULL` for mixed models by default, to calculate _marginal predictions_. You can use for instance `re.form = NA` in your `estimate_means()` call to change the default value (`NA` will produce _conditional predictions_).
+
+- By default, both backends calculate predictions for a balanced data grid representing all combinations of focal predictor levels (specified in `by`). This represents a "typical" observation based on the data grid and is useful for comparing groups. Setting `estimate = "average"` can be useful to calculate the average expected outcome from those observations _from the sample_ at hand, however, this option is only available for `backend = "marginaleffects"`.
+:::
 
 This vignette shows some examples to demonstrate where results are similar and where they differ.
 
