@@ -416,6 +416,9 @@ can be more apt to generalize, which should be used for <strong>G-computation</s
 alias for <code>"population"</code>.</p></li>
 </ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
 e.g. <code>options(modelbased_estimate = "average")</code>.</p>
+<p><strong>Important note:</strong> For <strong>visualizations</strong>, <em>conditional</em> predictions
+typically yield smoother curves for continuous focal predictors, whereas
+<em>marginal</em> predictions may introduce noisy visual artifacts.</p>
 <p>Note following limitations:</p><ul><li><p>When you set <code>estimate</code> to <code>"average"</code>, it calculates the average based
 only on the data points that actually exist. This is in particular
 important for two or more focal predictors, because it doesn't generate a
