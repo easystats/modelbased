@@ -139,6 +139,15 @@
 
     
     
+<style type="text/css">
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+</style>
 <p>When analyzing longitudinal or clustered data, a standard
 mixed-effects model often blends two completely different processes into
 a single coefficient: the overall differences between individuals (or
@@ -157,19 +166,21 @@ individual outcomes.</p>
 (person-mean centering), and within/between effects in more detail, it
 is highly recommended to <a href="https://easystats.github.io/parameters/articles/demean.html" class="external-link">read
 this vignette first</a>.</p>
-<blockquote>
-<p><strong>Note:</strong> Throughout this example, we use
+<div class="custom_note">
+<p>
+<strong>Note:</strong> Throughout this example, we use
 <code>display(format = "tt")</code> to display table output in markdown
 format, using the <strong>tinytable</strong> package as the backend. See
 <a href="https://easystats.github.io/insight/articles/display.html#displaying-tables-with-display" class="external-link">this
-vignette</a> for more details on output displays.</p>
-</blockquote>
-<blockquote>
-<p><strong>Note:</strong> Because within-effects can vary across
+vignette</a> for more details on output displays.
+</p>
+<p>
+<strong>Note:</strong> Because within-effects can vary across
 individuals, it is generally best practice to model them as random
 slopes. However, to keep this example simple, we have only included
-<code>time</code> as a random slope.</p>
-</blockquote>
+<code>time</code> as a random slope.
+</p>
+</div>
 <div class="section level2">
 <h2 id="sample-data-used-in-this-vignette">Sample data used in this vignette<a class="anchor" aria-label="anchor" href="#sample-data-used-in-this-vignette"></a>
 </h2>
@@ -581,7 +592,7 @@ Estimated Marginal Means. The generated plots confirm the statistical
 results from the table very clearly.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"phq4_within=[sd]"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_context_effect_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="100%"></p>
+<p><img src="practical_context_effect_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="100%"></p>
 <p>In the first plot (<em>within-effects over time</em>), the lines for
 the different levels of <code>phq4_within</code> (mean as well as +/-
 one standard deviation) run almost parallel. The constant distance
@@ -590,7 +601,7 @@ in psychological symptoms (shifting to the blue line) depresses the
 quality of life uniformly across all time points.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"phq4_between=[sd]"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_context_effect_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="100%"></p>
+<p><img src="practical_context_effect_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="100%"></p>
 <p>In the second plot (<em>between-effects over time</em>), a slight
 divergence of the lines is visible. While patients with a generally low
 burden (red line) experience a slight increase in their quality of life

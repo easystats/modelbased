@@ -21,16 +21,15 @@ To understand the underlying problem of heterogeneity bias, demeaning
 is highly recommended to [read this vignette
 first](https://easystats.github.io/parameters/articles/demean.html).
 
-> **Note:** Throughout this example, we use `display(format = "tt")` to
-> display table output in markdown format, using the **tinytable**
-> package as the backend. See [this
-> vignette](https://easystats.github.io/insight/articles/display.html#displaying-tables-with-display)
-> for more details on output displays.
+**Note:** Throughout this example, we use `display(format = "tt")` to
+display table output in markdown format, using the **tinytable** package
+as the backend. See [this
+vignette](https://easystats.github.io/insight/articles/display.html#displaying-tables-with-display)
+for more details on output displays.
 
-> **Note:** Because within-effects can vary across individuals, it is
-> generally best practice to model them as random slopes. However, to
-> keep this example simple, we have only included `time` as a random
-> slope.
+**Note:** Because within-effects can vary across individuals, it is
+generally best practice to model them as random slopes. However, to keep
+this example simple, we have only included `time` as a random slope.
 
 ## Sample data used in this vignette
 
@@ -204,7 +203,7 @@ the table very clearly.
 
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``mixed``, `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"phq4_within=[sd]"``)``)`` ``|>`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
-![](practical_context_effect_files/figure-html/unnamed-chunk-7-1.png)
+![](practical_context_effect_files/figure-html/unnamed-chunk-8-1.png)
 
 In the first plot (*within-effects over time*), the lines for the
 different levels of `phq4_within` (mean as well as +/- one standard
@@ -215,7 +214,7 @@ uniformly across all time points.
 
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``mixed``, `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"phq4_between=[sd]"``)``)`` ``|>`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
-![](practical_context_effect_files/figure-html/unnamed-chunk-8-1.png)
+![](practical_context_effect_files/figure-html/unnamed-chunk-9-1.png)
 
 In the second plot (*between-effects over time*), a slight divergence of
 the lines is visible. While patients with a generally low burden (red
