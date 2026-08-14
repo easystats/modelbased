@@ -507,9 +507,14 @@ choice for making population-level generalizations or drawing causal
 inferences.</p>
 <div class="custom_note">
 <p>
-For <strong>visualizations</strong>, <em>conditional</em> predictions
-typically yield smoother curves for continuous focal predictors, whereas
-<em>marginal</em> predictions may introduce noisy visual artifacts.
+For <strong>visualizations</strong>, <em>conditional</em> predictions or
+<code>estimate = "population"</code> typically yield smoother curves for
+continuous focal predictors, whereas <em>marginal</em> predictions with
+<code>estimate = "average"</code> may introduce noisy visual artifacts.
+<code>estimate = "average"</code> calculates the average based only on
+the data points that actually exist and doesn’t generate a
+<em>complete</em> grid of all theoretical combinations of predictor
+values. Consequently, the output may not include all the values.
 </p>
 </div>
 </div>

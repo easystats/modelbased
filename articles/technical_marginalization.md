@@ -166,9 +166,14 @@ average over the real-world variability of your subjects, making them
 the recommended choice for making population-level generalizations or
 drawing causal inferences.
 
-For **visualizations**, *conditional* predictions typically yield
-smoother curves for continuous focal predictors, whereas *marginal*
-predictions may introduce noisy visual artifacts.
+For **visualizations**, *conditional* predictions or
+`estimate = "population"` typically yield smoother curves for continuous
+focal predictors, whereas *marginal* predictions with
+`estimate = "average"` may introduce noisy visual artifacts.
+`estimate = "average"` calculates the average based only on the data
+points that actually exist and doesn’t generate a *complete* grid of all
+theoretical combinations of predictor values. Consequently, the output
+may not include all the values.
 
 ## Appendix: Code equivalent in different R packages
 

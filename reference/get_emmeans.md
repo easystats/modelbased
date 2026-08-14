@@ -377,19 +377,22 @@ get_marginaltrends(
   [`options()`](https://rdrr.io/r/base/options.html), e.g.
   `options(modelbased_estimate = "average")`.
 
-  **Important note:** For **visualizations**, *conditional* predictions
-  typically yield smoother curves for continuous focal predictors,
-  whereas *marginal* predictions may introduce noisy visual artifacts.
+  **Note following limitations:**
 
-  Note following limitations:
-
-  - When you set `estimate` to `"average"`, it calculates the average
+  - Especially for continuous predictors, `estimate = "average"` may
+    produce erratic-looking outputs, because it calculates the average
     based only on the data points that actually exist. This is in
     particular important for two or more focal predictors, because it
     doesn't generate a *complete* grid of all theoretical combinations
     of predictor values. Consequently, the output may not include all
     the values. To resolve this, you may provide a defined data grid via
     the `data` argument containing the values of interest.
+
+  - For the same reason, *conditional* predictions or
+    `estimate = "population"` typically yield smoother curves in
+    **visualizations** for continuous focal predictors, whereas
+    *marginal* predictions with `estimate = "average"` may introduce
+    noisy visual artifacts.
 
   - Filtering the output at values of continuous predictors, e.g.
     `by = "x=1:5"`, in combination with `estimate = "average"` may
