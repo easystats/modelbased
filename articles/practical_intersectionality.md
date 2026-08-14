@@ -10,11 +10,11 @@ Intersectionality analysis is a new approach in social epidemiology,
 which attempts to move away from looking at relevant social indicators
 in isolation.
 
-> “The advantage of incorporating an intersectional framework in social
-> epidemiology is that it goes beyond the unidimensional study of
-> socioeconomic and demographic categorizations by considering the
-> effect of belonging to specific strata simultaneously defined by
-> multiple social, economic and demographic dimensions.”
+“The advantage of incorporating an intersectional framework in social
+epidemiology is that it goes beyond the unidimensional study of
+socioeconomic and demographic categorizations by considering the effect
+of belonging to specific strata simultaneously defined by multiple
+social, economic and demographic dimensions.”
 
 The steps we are showing here are:
 
@@ -108,10 +108,10 @@ factors `gender`, `employed` and `age` explains most of the
 between-stratum variance of the random effects. This is achieved by
 fitting partially-adjusted intersectional models.
 
-> “The purpose of the partially adjusted model was to quantify to what
-> degree the different dimensions used to construct the intersectional
-> strata contributed to the between stratum variance seen in the
-> previous model.”
+“The purpose of the partially adjusted model was to quantify to what
+degree the different dimensions used to construct the intersectional
+strata contributed to the between stratum variance seen in the previous
+model.”
 
 For each of the intersectional dimensions, a multilevel model including
 this dimension as fixed effect is fitted. We can then both look at the
@@ -173,7 +173,7 @@ for the different groups.
 
 `predictions`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``m_null``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``, ``"age"``)``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``predictions``)`
 
-![](practical_intersectionality_files/figure-html/unnamed-chunk-9-1.png)
+![](practical_intersectionality_files/figure-html/unnamed-chunk-10-1.png)
 
 According to these results, employed male family carers, who are not
 older than 40 years, show on average the highest quality of life. On the

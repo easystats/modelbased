@@ -139,6 +139,15 @@
 
     
     
+<style type="text/css">
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+</style>
 <div class="section level3">
 <h3 id="estimated-marginal-means-in-mixed-effects-models-navigating-conditional-and-marginal-effects">Estimated Marginal Means in Mixed Effects Models: Navigating
 Conditional and Marginal Effects<a class="anchor" aria-label="anchor" href="#estimated-marginal-means-in-mixed-effects-models-navigating-conditional-and-marginal-effects"></a>
@@ -192,20 +201,23 @@ models, when the data is “imbalanced” and “average” predictions are
 requested (i.e., <code>estimate = "average"</code>); by
 <em>imbalanced</em> we mean not equally distributed levels.</li>
 </ul>
-<blockquote>
-<p><strong>Note:</strong></p>
-<p>If you request unit-level predictions - that is, predictions specific
-to the individual levels of the random effects (achieved by including
-random effect variables in <code>by</code>) - conditional and marginal
-predictions will also differ in linear mixed models. We will not delve
-into unit-level predictions in this vignette.</p>
-</blockquote>
+<div class="custom_note">
+<p>
+<strong>Note:</strong> If you request unit-level predictions - that is,
+predictions specific to the individual levels of the random effects
+(achieved by including random effect variables in <code>by</code>) -
+conditional and marginal predictions will also differ in linear mixed
+models. We will not delve into unit-level predictions in this vignette.
+</p>
+</div>
 <p>In essence, the choice of backend and the understanding of whether we
 are looking at conditional or marginal predictions are critical for
 correctly interpreting the results of mixed models. Carefully
 considering the research question and the nature of the random effects
 will guide the selection of the appropriate approach.</p>
-<blockquote>
+<div class="custom_note">
+<p>
+</p>
 <p><strong>Technical Notes:</strong></p>
 <ul>
 <li><p>For <code>backend = "marginaleffects"</code>, the
@@ -224,10 +236,9 @@ expected outcome from those observations <em>from the sample</em> at
 hand, however, this option is only available for
 <code>backend = "marginaleffects"</code>.</p></li>
 </ul>
-</blockquote>
+<p>:::</p>
 <p>This vignette shows some examples to demonstrate where results are
 similar and where they differ.</p>
-</div>
 <div class="section level3">
 <h3 id="linear-mixed-models">Linear mixed models<a class="anchor" aria-label="anchor" href="#linear-mixed-models"></a>
 </h3>
@@ -525,8 +536,10 @@ the population-level effects, making it a preferred strategy for
 interpreting mixed model results.</p>
 </div>
 <div class="section level2">
-<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
+</div>
+</div>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-heiss_marginal_2022" class="csl-entry">
 Heiss, Andrew. 2022. <span>“Marginal and Conditional Effects for

@@ -74,13 +74,13 @@ Be aware that it may take several minutes to run.
 
 `# In case of convergence issues, specifying priors can help. The priors are`` ``# set for the population-level intercept of each mixture component (mu1, mu2).`` ``# prior <- c(`` ``# prior(normal(0, 10), class = Intercept, dpar = mu1),`` ``# prior(normal(0, 10), class = Intercept, dpar = mu2)`` ``# )`` `` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``1234``)`` ``brms_mixture_2`` ``<-`` ``brms``::`[`brm`](https://paulbuerkner.com/brms/reference/brm.html)`(`` `` formula ``=`` ``QoL`` ``~`` ``time`` ``+`` ``hospital`` ``+`` ``education`` ``+`` ``age`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`` `` data ``=`` ``qol_cancer``,`` `` family ``=`` `[`mixture`](https://paulbuerkner.com/brms/reference/mixture.html)`(``gaussian``, nmix ``=`` ``2``)``, ``# Gaussian mixture with 2 classes`` `` chains ``=`` ``4``, ``# Number of MCMC chains`` `` iter ``=`` ``2000``, ``# Total iterations per chain`` `` cores ``=`` ``4``, ``# Use 4 CPU cores`` `` seed ``=`` ``1234``, ``# For reproducibility`` `` silent ``=`` ``2``, ``# Suppress Stan progress`` `` refresh ``=`` ``0`` ``)`
 
-> You can use different factors to predict the outcome for each group in
-> your data. To do this, simply create a separate prediction formula for
-> each part of your model. For instance, you could use one set of
-> factors to predict the quality of life for “Group 1” and a different
-> set for “Group 2”. You can even use factors to predict which group
-> someone is likely to belong to. While this guide won’t cover the
-> details, a code example at the end shows you how.
+You can use different factors to predict the outcome for each group in
+your data. To do this, simply create a separate prediction formula for
+each part of your model. For instance, you could use one set of factors
+to predict the quality of life for “Group 1” and a different set for
+“Group 2”. You can even use factors to predict which group someone is
+likely to belong to. While this guide won’t cover the details, a code
+example at the end shows you how.
 
 ## Interpreting the Model
 
@@ -110,7 +110,7 @@ This is the most intuitive way to understand the results of a GMM.
 
 [`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``d``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` `[`as.numeric`](https://rdrr.io/r/base/numeric.html)`(``time``)``, y ``=`` ``QoL``, color ``=`` ``class``, fill ``=`` ``class``)``)`` ``+`` `` `[`geom_smooth`](https://ggplot2.tidyverse.org/reference/geom_smooth.html)`(``method ``=`` ``"lm"``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``alpha ``=`` ``0.3``, position ``=`` `[`position_jitter`](https://ggplot2.tidyverse.org/reference/position_jitter.html)`(``width ``=`` ``0.1``)``)`` ``+`` `` `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`` `` title ``=`` ``"Average Latent Class Trajectories of Quality of Life"``,`` `` x ``=`` ``"Time (1=pre-op, 2=6m, 3=12m)"``,`` `` y ``=`` ``"Quality of Life (QoL)"`` `` ``)`` ``+`` `` `[`theme_modern`](https://easystats.github.io/see/reference/theme_modern.html)`(``show.ticks ``=`` ``TRUE``)`` ``+`` `` `[`scale_color_material`](https://easystats.github.io/see/reference/scale_color_material.html)`(``)`` ``+`` `` `[`scale_fill_material`](https://easystats.github.io/see/reference/scale_color_material.html)`(``)`
 
-![](practical_growthmixture_files/figure-html/unnamed-chunk-8-1.png)
+![](practical_growthmixture_files/figure-html/unnamed-chunk-9-1.png)
 
 The plot clearly reveals two distinct groups:
 

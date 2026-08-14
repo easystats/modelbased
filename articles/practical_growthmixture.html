@@ -142,6 +142,15 @@ team</h4>
 
     
     
+<style type="text/css">
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+</style>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -251,15 +260,17 @@ code. Be aware that it may take several minutes to run.</p>
 <span>  silent <span class="op">=</span> <span class="fl">2</span>,      <span class="co"># Suppress Stan progress</span></span>
 <span>  refresh <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<blockquote>
-<p>You can use different factors to predict the outcome for each group
-in your data. To do this, simply create a separate prediction formula
-for each part of your model. For instance, you could use one set of
-factors to predict the quality of life for “Group 1” and a different set
-for “Group 2”. You can even use factors to predict which group someone
-is likely to belong to. While this guide won’t cover the details, a code
-example at the end shows you how.</p>
-</blockquote>
+<div class="custom_note">
+<p>
+You can use different factors to predict the outcome for each group in
+your data. To do this, simply create a separate prediction formula for
+each part of your model. For instance, you could use one set of factors
+to predict the quality of life for “Group 1” and a different set for
+“Group 2”. You can even use factors to predict which group someone is
+likely to belong to. While this guide won’t cover the details, a code
+example at the end shows you how.
+</p>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -327,7 +338,7 @@ GMM.</p>
 <span>  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span>show.ticks <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/see/reference/scale_color_material.html" class="external-link">scale_color_material</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/see/reference/scale_color_material.html" class="external-link">scale_fill_material</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_growthmixture_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="practical_growthmixture_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <p>The plot clearly reveals two distinct groups:</p>
 <ul>
 <li>

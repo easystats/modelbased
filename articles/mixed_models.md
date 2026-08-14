@@ -49,13 +49,11 @@ predictors…
   (i.e., `estimate = "average"`); by *imbalanced* we mean not equally
   distributed levels.
 
-> **Note:**
->
-> If you request unit-level predictions - that is, predictions specific
-> to the individual levels of the random effects (achieved by including
-> random effect variables in `by`) - conditional and marginal
-> predictions will also differ in linear mixed models. We will not delve
-> into unit-level predictions in this vignette.
+**Note:** If you request unit-level predictions - that is, predictions
+specific to the individual levels of the random effects (achieved by
+including random effect variables in `by`) - conditional and marginal
+predictions will also differ in linear mixed models. We will not delve
+into unit-level predictions in this vignette.
 
 In essence, the choice of backend and the understanding of whether we
 are looking at conditional or marginal predictions are critical for
@@ -63,23 +61,24 @@ correctly interpreting the results of mixed models. Carefully
 considering the research question and the nature of the random effects
 will guide the selection of the appropriate approach.
 
-> **Technical Notes:**
->
-> - For `backend = "marginaleffects"`, the `re.form` argument is set to
->   `NULL` for mixed models by default, to calculate *marginal
->   predictions*. You can use for instance `re.form = NA` in your
->   [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
->   call to change the default value (`NA` will produce *conditional
->   predictions*).
->
-> - By default, both backends calculate predictions for a balanced data
->   grid representing all combinations of focal predictor levels
->   (specified in `by`). This represents a “typical” observation based
->   on the data grid and is useful for comparing groups. Setting
->   `estimate = "average"` can be useful to calculate the average
->   expected outcome from those observations *from the sample* at hand,
->   however, this option is only available for
->   `backend = "marginaleffects"`.
+**Technical Notes:**
+
+- For `backend = "marginaleffects"`, the `re.form` argument is set to
+  `NULL` for mixed models by default, to calculate *marginal
+  predictions*. You can use for instance `re.form = NA` in your
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+  call to change the default value (`NA` will produce *conditional
+  predictions*).
+
+- By default, both backends calculate predictions for a balanced data
+  grid representing all combinations of focal predictor levels
+  (specified in `by`). This represents a “typical” observation based on
+  the data grid and is useful for comparing groups. Setting
+  `estimate = "average"` can be useful to calculate the average expected
+  outcome from those observations *from the sample* at hand, however,
+  this option is only available for `backend = "marginaleffects"`.
+
+:::
 
 This vignette shows some examples to demonstrate where results are
 similar and where they differ.

@@ -139,6 +139,15 @@
 
     
     
+<style type="text/css">
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+</style>
 <p>This vignette demonstrate how to use <em>modelbased</em> in the
 context of an intersectional multilevel analysis of individual
 heterogeneity, using the MAIHDA framework. The general approach of the
@@ -147,13 +156,15 @@ MAIHDA framework (sometimes also <em>I-MAIHDA</em>) is described in
 <p>Intersectionality analysis is a new approach in social epidemiology,
 which attempts to move away from looking at relevant social indicators
 in isolation.</p>
-<blockquote>
-<p>“The advantage of incorporating an intersectional framework in social
+<div class="custom_note">
+<p>
+“The advantage of incorporating an intersectional framework in social
 epidemiology is that it goes beyond the unidimensional study of
 socioeconomic and demographic categorizations by considering the effect
 of belonging to specific strata simultaneously defined by multiple
-social, economic and demographic dimensions.”</p>
-</blockquote>
+social, economic and demographic dimensions.”
+</p>
+</div>
 <p>The steps we are showing here are:</p>
 <ol style="list-style-type: decimal">
 <li><p>Defining the intersectional strata.</p></li>
@@ -312,12 +323,14 @@ factors <code>gender</code>, <code>employed</code> and <code>age</code>
 explains most of the between-stratum variance of the random effects.
 This is achieved by fitting partially-adjusted intersectional
 models.</p>
-<blockquote>
-<p>“The purpose of the partially adjusted model was to quantify to what
+<div class="custom_note">
+<p>
+“The purpose of the partially adjusted model was to quantify to what
 degree the different dimensions used to construct the intersectional
 strata contributed to the between stratum variance seen in the previous
-model.”</p>
-</blockquote>
+model.”
+</p>
+</div>
 <p>For each of the intersectional dimensions, a multilevel model
 including this dimension as fixed effect is fitted. We can then both
 look at the ICCs of the partially-adjusted models, as well as at the
@@ -408,7 +421,7 @@ for the different groups.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">m_null</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"employed"</span>, <span class="st">"age"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_intersectionality_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="100%"></p>
+<p><img src="practical_intersectionality_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="100%"></p>
 <p>According to these results, employed male family carers, who are not
 older than 40 years, show on average the highest quality of life. On the
 other hand, unemployed female carers aged 65 or older have the lowest
