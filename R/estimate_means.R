@@ -86,6 +86,10 @@
 #' You can set a default option for the `estimate` argument via `options()`,
 #' e.g. `options(modelbased_estimate = "average")`.
 #'
+#' **Important note:** For **visualizations**, *conditional* predictions
+#' typically yield smoother curves for continuous focal predictors, whereas
+#' *marginal* predictions may introduce noisy visual artifacts.
+#'
 #' Note following limitations:
 #' - When you set `estimate` to `"average"`, it calculates the average based
 #'   only on the data points that actually exist. This is in particular

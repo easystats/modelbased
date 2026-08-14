@@ -229,6 +229,10 @@ alias for \code{"population"}.
 You can set a default option for the \code{estimate} argument via \code{options()},
 e.g. \code{options(modelbased_estimate = "average")}.
 
+\strong{Important note:} For \strong{visualizations}, \emph{conditional} predictions
+typically yield smoother curves for continuous focal predictors, whereas
+\emph{marginal} predictions may introduce noisy visual artifacts.
+
 Note following limitations:
 \itemize{
 \item When you set \code{estimate} to \code{"average"}, it calculates the average based

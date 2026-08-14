@@ -217,6 +217,10 @@ Broadly speaking, these four methods can be grouped into two conceptual categori
 
 When deciding which method to use, the core question is whether your estimand relates to a theoretical individual or the population as a whole. Use *conditional* predictions (`"specific"`, `"typical"`) when you want to evaluate expected outcomes for predefined, fixed combinations of covariates (using a reference grid). Use *marginal* predictions (`"average"`, `"ounterfactual"`) when you want to account for the actual empirical distribution of your sample. Marginal methods average over the real-world variability of your subjects, making them the recommended choice for making population-level generalizations or drawing causal inferences.
 
+::: custom_note
+<p>For **visualizations**, *conditional* predictions typically yield smoother curves for continuous focal predictors, whereas *marginal* predictions may introduce noisy visual artifacts.</p>
+:::
+
 ## Appendix: Code equivalent in different R packages
 
 While this vignette focuses on the **easystats** ecosystem, it is helpful to see how these concepts translate to other popular packages. Below, we provide the equivalent R code to calculate the `"specific"`, `"typical"`, `"average"`, and `"counterfactual"` marginal means using the *marginaleffects* and *emmeans* packages. Notice how different packages use different terminology - such as varying `newdata` arguments or specific weighting schemes - to achieve the exact same conceptual estimates under the hood.
