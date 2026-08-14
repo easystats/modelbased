@@ -305,19 +305,20 @@ alias for \code{"population"}.
 You can set a default option for the \code{estimate} argument via \code{options()},
 e.g. \code{options(modelbased_estimate = "average")}.
 
-\strong{Important note:} For \strong{visualizations}, \emph{conditional} predictions
-typically yield smoother curves for continuous focal predictors, whereas
-\emph{marginal} predictions may introduce noisy visual artifacts.
-
-Note following limitations:
+\strong{Note following limitations:}
 \itemize{
-\item When you set \code{estimate} to \code{"average"}, it calculates the average based
-only on the data points that actually exist. This is in particular
-important for two or more focal predictors, because it doesn't generate a
-\emph{complete} grid of all theoretical combinations of predictor values.
-Consequently, the output may not include all the values. To resolve this,
-you may provide a defined data grid via the \code{data} argument containing
-the values of interest.
+\item Especially for continuous predictors, \code{estimate = "average"} may produce
+erratic-looking outputs, because it calculates the average based only on
+the data points that actually exist. This is in particular important for
+two or more focal predictors, because it doesn't generate a \emph{complete} grid
+of all theoretical combinations of predictor values. Consequently, the
+output may not include all the values. To resolve this, you may provide a
+defined data grid via the \code{data} argument containing the values of
+interest.
+\item For the same reason, \emph{conditional} predictions or \code{estimate = "population"}
+typically yield smoother curves in \strong{visualizations} for continuous focal
+predictors, whereas \emph{marginal} predictions with \code{estimate = "average"} may
+introduce noisy visual artifacts.
 \item Filtering the output at values of continuous predictors, e.g.
 \code{by = "x=1:5"}, in combination with \code{estimate = "average"} may result in
 returning an empty data frame because the requested values may not overlap
