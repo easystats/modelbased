@@ -81,7 +81,7 @@ In essence, the choice of backend and the understanding of whether we are lookin
 
 - For `backend = "marginaleffects"`, the `re.form` argument is set to `NULL` for mixed models by default, to calculate _marginal predictions_. You can use for instance `re.form = NA` in your `estimate_means()` call to change the default value (`NA` will produce _conditional predictions_).
 
-- By default, both backends calculate predictions for a balanced data grid representing all combinations of focal predictor levels (specified in `by`). This represents a "typical" observation based on the data grid and is useful for comparing groups. Setting `estimate = "average"` can be useful to calculate the average expected outcome from those observations _from the sample_ at hand, however, this option is only available for `backend = "marginaleffects"`.
+- By default, both backends calculate predictions for a balanced data grid representing all combinations of focal predictor levels (specified in `by`). This represents a "typical" observation based on the data grid and is useful for comparing groups. Setting `estimate = "average"` or `estimate = "population"` can be useful to calculate the average expected outcome from those observations _from the sample_ at hand, however, these options is only available for `backend = "marginaleffects"`.
 :::
 
 This vignette shows some examples to demonstrate where results are similar and where they differ.
