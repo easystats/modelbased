@@ -74,9 +74,10 @@ will guide the selection of the appropriate approach.
   grid representing all combinations of focal predictor levels
   (specified in `by`). This represents a “typical” observation based on
   the data grid and is useful for comparing groups. Setting
-  `estimate = "average"` can be useful to calculate the average expected
-  outcome from those observations *from the sample* at hand, however,
-  this option is only available for `backend = "marginaleffects"`.
+  `estimate = "average"` or `estimate = "population"` can be useful to
+  calculate the average expected outcome from those observations *from
+  the sample* at hand, however, these options is only available for
+  `backend = "marginaleffects"`.
 
 This vignette shows some examples to demonstrate where results are
 similar and where they differ.
