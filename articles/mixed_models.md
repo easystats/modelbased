@@ -22,15 +22,15 @@ generalize to the population (Heiss 2022).
 
 Based on the definitions from Heiss (2022), we can say:
 
-> This conditional vs. marginal distinction applies to any sort of
-> hierarchical structure in multilevel models:
->
-> - **Conditional effect** = the effect of a variable in an *average
->   cluster* (i.e., group-specific, subject-specific or cluster-specific
->   effect, or an average or a typical cluster)
-> - **Marginal effect** = effect of a variable *across clusters on
->   average* (i.e., global/population-level effect, or clusters on
->   average).
+This conditional vs. marginal distinction applies to any sort of
+hierarchical structure in multilevel models:
+
+- **Conditional effect** = the effect of a variable in an *average
+  cluster* (i.e., group-specific, subject-specific or cluster-specific
+  effect, or an average or a typical cluster)
+- **Marginal effect** = effect of a variable *across clusters on
+  average* (i.e., global/population-level effect, or clusters on
+  average).
 
 When working with mixed models, the `modelbased` package offers
 flexibility in calculating EMMs through different backends. The
@@ -46,8 +46,8 @@ predictors…
 - … are usually different for generalized linear mixed models
 - … are usually different for both linear and generalized linear models,
   when the data is “imbalanced” and “average” predictions are requested
-  (i.e., `estimate = "average"`); by *imbalanced* we mean not equally
-  distributed levels.
+  (i.e., `estimate = "average"` or `estimate = "population"`); by
+  *imbalanced* we mean not equally distributed levels.
 
 **Note:** If you request unit-level predictions - that is, predictions
 specific to the individual levels of the random effects (achieved by
@@ -77,8 +77,6 @@ will guide the selection of the appropriate approach.
   `estimate = "average"` can be useful to calculate the average expected
   outcome from those observations *from the sample* at hand, however,
   this option is only available for `backend = "marginaleffects"`.
-
-:::
 
 This vignette shows some examples to demonstrate where results are
 similar and where they differ.
@@ -181,13 +179,14 @@ results even in linear mixed models in comparison to average predictions
 
 **Therefore, we recommend combining marginal predictions (using the
 default `backend = "marginaleffects"`) with averaging across all
-observations (by setting `estimate = "average"`) when working with mixed
-models.** This approach effectively incorporates the variation inherent
-in the random effects (higher-level units) and provides EMMs that more
-accurately reflect the overall patterns observed within the actual
-sample data. By averaging over the observed data, we obtain a more
-robust and representative estimate of the population-level effects,
-making it a preferred strategy for interpreting mixed model results.
+observations (by setting `estimate = "average"` or
+`estimate = "population"`) when working with mixed models.** This
+approach effectively incorporates the variation inherent in the random
+effects (higher-level units) and provides EMMs that more accurately
+reflect the overall patterns observed within the actual sample data. By
+averaging over the observed data, we obtain a more robust and
+representative estimate of the population-level effects, making it a
+preferred strategy for interpreting mixed model results.
 
 ## References
 

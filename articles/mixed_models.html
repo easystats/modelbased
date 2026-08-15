@@ -168,10 +168,14 @@ Marginal predictions, on the other hand, average over the random
 effects, providing an overall estimate of the effect in the population.
 This is a crucial difference, as the marginal effect is often the
 quantity of interest when we want to generalize to the population <span class="citation">(Heiss 2022)</span>.</p>
-<p>Based on the definitions from Heiss (2022), we can say:</p>
-<blockquote>
-<p>This conditional vs. marginal distinction applies to any sort of
-hierarchical structure in multilevel models:</p>
+<div class="custom_note">
+<p>
+Based on the definitions from Heiss (2022), we can say:
+</p>
+<p>
+This conditional vs. marginal distinction applies to any sort of
+hierarchical structure in multilevel models:
+</p>
 <ul>
 <li>
 <strong>Conditional effect</strong> = the effect of a variable in an
@@ -182,7 +186,7 @@ cluster-specific effect, or an average or a typical cluster)</li>
 clusters on average</em> (i.e., global/population-level effect, or
 clusters on average).</li>
 </ul>
-</blockquote>
+</div>
 <p>When working with mixed models, the <code>modelbased</code> package
 offers flexibility in calculating EMMs through different backends. The
 <code>"marginaleffects"</code> backend and the <code>"emmeans"</code>
@@ -198,8 +202,9 @@ predictors…</p>
 <li>… are usually different for generalized linear mixed models</li>
 <li>… are usually different for both linear and generalized linear
 models, when the data is “imbalanced” and “average” predictions are
-requested (i.e., <code>estimate = "average"</code>); by
-<em>imbalanced</em> we mean not equally distributed levels.</li>
+requested (i.e., <code>estimate = "average"</code> or
+<code>estimate = "population"</code>); by <em>imbalanced</em> we mean
+not equally distributed levels.</li>
 </ul>
 <div class="custom_note">
 <p>
@@ -217,8 +222,8 @@ considering the research question and the nature of the random effects
 will guide the selection of the appropriate approach.</p>
 <div class="custom_note">
 <p>
+<strong>Technical Notes:</strong>
 </p>
-<p><strong>Technical Notes:</strong></p>
 <ul>
 <li><p>For <code>backend = "marginaleffects"</code>, the
 <code>re.form</code> argument is set to <code>NULL</code> for mixed
@@ -236,9 +241,10 @@ expected outcome from those observations <em>from the sample</em> at
 hand, however, this option is only available for
 <code>backend = "marginaleffects"</code>.</p></li>
 </ul>
-<p>:::</p>
+</div>
 <p>This vignette shows some examples to demonstrate where results are
 similar and where they differ.</p>
+</div>
 <div class="section level3">
 <h3 id="linear-mixed-models">Linear mixed models<a class="anchor" aria-label="anchor" href="#linear-mixed-models"></a>
 </h3>
@@ -526,20 +532,18 @@ results even in linear mixed models in comparison to average predictions
 (using <code>estimate = "average"</code>).</p>
 <p><strong>Therefore, we recommend combining marginal predictions (using
 the default <code>backend = "marginaleffects"</code>) with averaging
-across all observations (by setting <code>estimate = "average"</code>)
-when working with mixed models.</strong> This approach effectively
-incorporates the variation inherent in the random effects (higher-level
-units) and provides EMMs that more accurately reflect the overall
-patterns observed within the actual sample data. By averaging over the
-observed data, we obtain a more robust and representative estimate of
-the population-level effects, making it a preferred strategy for
-interpreting mixed model results.</p>
+across all observations (by setting <code>estimate = "average"</code> or
+<code>estimate = "population"</code>) when working with mixed
+models.</strong> This approach effectively incorporates the variation
+inherent in the random effects (higher-level units) and provides EMMs
+that more accurately reflect the overall patterns observed within the
+actual sample data. By averaging over the observed data, we obtain a
+more robust and representative estimate of the population-level effects,
+making it a preferred strategy for interpreting mixed model results.</p>
 </div>
 <div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-</div>
-</div>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-heiss_marginal_2022" class="csl-entry">
 Heiss, Andrew. 2022. <span>“Marginal and Conditional Effects for
