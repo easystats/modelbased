@@ -160,7 +160,7 @@ estimand relates to a theoretical individual or the population as a
 whole. Use *conditional* predictions (`"specific"`, `"typical"`) when
 you want to evaluate expected outcomes for predefined, fixed
 combinations of covariates (using a reference grid). Use *marginal*
-predictions (`"average"`, `"ounterfactual"`) when you want to account
+predictions (`"average"`, `"counterfactual"`) when you want to account
 for the actual empirical distribution of your sample. Marginal methods
 average over the real-world variability of your subjects, making them
 the recommended choice for making population-level generalizations or
