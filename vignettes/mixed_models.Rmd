@@ -57,34 +57,21 @@ Mixed models, with their ability to account for hierarchical or clustered data, 
 One crucial distinction is between **conditional** and **marginal** predictions (or effects). Conditional predictions are specific to a particular level of the random effect (e.g., the predicted outcome for a specific individual in a study). Marginal predictions, on the other hand, average over the random effects, providing an overall estimate of the effect in the population. This is a crucial difference, as the marginal effect is often the quantity of interest when we want to generalize to the population [@heiss_marginal_2022].
 
 ::: custom_note
-<p>Based on the definitions from Heiss (2022), we can say:</p>
-<p>This conditional vs. marginal distinction applies to any sort of hierarchical structure in multilevel models:</p>
+<p>Based on the definitions from Heiss (2022), we can say that the conditional vs. marginal distinction applies to any sort of hierarchical structure (<em>clusters</em>) in multilevel models:</p>
 
-- **Conditional effect** = the effect of a variable in an *average cluster* (i.e., group-specific, subject-specific or cluster-specific effect, or an average or a typical cluster)
-- **Marginal effect** = effect of a variable *across clusters on average* (i.e., global/population-level effect, or clusters on average).
+- **Conditional effect** = the effect of a variable in an *average cluster* (i.e., group-specific, subject-specific or cluster-specific effect, or an average or a typical cluster, `re.form = NA`)
+- **Marginal effect** = effect of a variable *across clusters on average* (i.e., global/population-level effect, or clusters on average, `re.form = NULL`)
+
+For `backend = "marginaleffects"`, the `re.form` argument is set to `NULL` for mixed models by default, to calculate _marginal predictions_. You can use for instance `re.form = NA` in your `estimate_means()` call to change the default value (`NA` will produce _conditional predictions_).
+
+As outlined in the [vignette on marginalization methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html), marginalization in mixed models involves two distinct dimensions: marginalizing across *random effects (clusters)* and marginalizing across *covariates (observations)*.
+
+We can produce *marginal predictions* regarding the higher-level units (random effects) *conditioned on* a "typical" observation based on a balanced data grid, or generate predictions that are *fully marginalized* across both clusters and observations.
+
+The default (`estimate = "typical"`) calculates predictions for a balanced data grid representing all combinations of focal predictor levels (specified in `by`), which is particularly useful for comparing groups. Setting `estimate = "average"` or `estimate = "population"` is useful when you want to calculate the average expected outcome across the actual observations from the sample at hand.
+
+Note that for *linear* mixed models, `re.form = NA` will only have an effect when `estimate = "average"` or `estimate = "population"`.
 :::
-
-When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend employ different underlying methodologies. **marginaleffects** typically focuses on marginal predictions by averaging over the random effects, while **emmeans** provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ. As we will see, conditional and marginal predictions for _fixed effects_ focal predictors...
-
-- ... are usually similar for linear mixed models
-- ... are usually different for generalized linear mixed models
-- ... are usually different for both linear and generalized linear models, when the data is "imbalanced" and "average" predictions are requested (i.e., `estimate = "average"` or `estimate = "population"`); by _imbalanced_ we mean not equally distributed levels.
-
-::: custom_note
-<p>**Note:** If you request unit-level predictions - that is, predictions specific to the individual levels of the random effects (achieved by including random effect variables in `by`) - conditional and marginal predictions will also differ in linear mixed models. We will not delve into unit-level predictions in this vignette.</p>
-:::
-
-In essence, the choice of backend and the understanding of whether we are looking at conditional or marginal predictions are critical for correctly interpreting the results of mixed models. Carefully considering the research question and the nature of the random effects will guide the selection of the appropriate approach.
-
-::: custom_note
-<p>**Technical Notes:**</p>
-
-- For `backend = "marginaleffects"`, the `re.form` argument is set to `NULL` for mixed models by default, to calculate _marginal predictions_. You can use for instance `re.form = NA` in your `estimate_means()` call to change the default value (`NA` will produce _conditional predictions_).
-
-- By default, both backends calculate predictions for a balanced data grid representing all combinations of focal predictor levels (specified in `by`). This represents a "typical" observation based on the data grid and is useful for comparing groups. Setting `estimate = "average"` or `estimate = "population"` can be useful to calculate the average expected outcome from those observations _from the sample_ at hand, however, these options is only available for `backend = "marginaleffects"`.
-:::
-
-This vignette shows some examples to demonstrate where results are similar and where they differ.
 
 ## Linear mixed models
 
@@ -92,7 +79,7 @@ This vignette shows some examples to demonstrate where results are similar and w
 
 This section demonstrates the calculation of estimated marginal means (EMMs) in a linear mixed model using balanced data. We'll use the `sleepstudy` dataset from the **lme4** package.
 
-In this example, we fit a linear mixed model predicting `Reaction` based on `Days`, with random intercepts and slopes for `Subject`. We then calculate the EMMs for `Days` using both the default `"marginaleffects"` backend and the `"emmeans"` backend. Because the data is balanced and we have a linear, the results are similar (**exception:** we find small differences for the confidence intervals, but ignore this for now...).
+In this example, we fit a linear mixed model predicting `Reaction` based on `Days`, with random intercepts and slopes for `Subject`. Because the data is balanced and we have a linear model, results are identical for all marginalization methods.
 
 ```{r}
 library(modelbased)
@@ -103,52 +90,43 @@ sleepstudy$x <- as.factor(sample.int(3, nrow(sleepstudy), replace = TRUE))
 
 model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 
-# default, marginaleffects backend (marginal predictions)
-# in this case, same result as for conditional predictions
+# `estimate = "typical"`, `re.form = NULL`: a "typical" observation
+# across clusters on average
 estimate_means(model, "Days")
 
-# emmeans backend, always conditional predictions
-estimate_means(model, "Days", backend = "emmeans")
-```
+# `estimate = "typical"`, `re.form = NA`: a "typical" observation
+# for a "typical" (average) cluster - `re.form = NA` has no effect here
+estimate_means(model, "Days", re.form = NA)
 
-Here, we calculate the marginal predictions for the `Days` variable using the `estimate = "average"` argument. In this case, because the model is linear and the data is balanced, the predictions are again the same as the previous results, i.e., averaging across all observations makes no difference here.
-
-```{r}
-# marginal predictions, averaged across all observations,
-# same as conditional predictions above
+# fully marginalized predictions, still same result as above
 estimate_means(model, "Days", estimate = "average")
 ```
 
 ### Imbalanced Data
 
-This section explores the impact of imbalanced data on EMM calculations in linear mixed models. We'll use the `penguins` dataset, which has imbalanced groups that we use as higher-level unit, as well as imbalanced predictors. Since we have still a linear mixed model, marginal and conditional predictions are still similar.
+This section explores the impact of imbalanced data on EMM calculations in linear mixed models. We'll use the `penguins` dataset, which has imbalanced groups that we use as higher-level unit, as well as imbalanced predictors.
+
+Since `estimate = "typical"` creates a balanced data grid, *including* the levels of the random effects, we get a "typical" observation marginalized over a *balanced* grid of random effects levels. In this case, setting `re.form = NA` has no effect when we have *linear* mixed models.
 
 ```{r}
 data(penguins)
-model <- lme4::lmer(bill_len ~ sex + island + (1 | species), data = penguins)
+penguins$body_mass <- as.factor(datawizard::categorize(penguins$body_mass))
+model <- lme4::lmer(bill_len ~ sex + body_mass + (1 | species), data = penguins)
 
-# marginal predictions
+# conditional predictions marginalized over
+# a "balanced" grid of random effects
 estimate_means(model, "sex")
 
-# conditional predictions
-estimate_means(model, "sex", backend = "emmeans")
-```
-
-Since we have imbalanced data, results for "average" predictions will differ from the results above, because both the `"emmeans"` backend and the default `estimate` setting for the `"marginaleffects"` backend produce "data grid based" predictions, which do not average across all observations (see also [the documentation](https://easystats.github.io/modelbased/reference/estimate_means.html) of the `estimate` argument for further details, or [this vignette](https://easystats.github.io/modelbased/articles/technical_marginalization.html)).
-
-Furthermore, for imbalanced data, conditional and marginal predictions will differ when they are averaged across all observations.
-
-```{r}
-# average marginal predictions
+# (fully) marginal predictions
 estimate_means(model, "sex", estimate = "average")
 
-# average conditional predictions
+# marginal predictions conditioning on a "typical" cluster
 estimate_means(model, "sex", estimate = "average", re.form = NA)
 ```
 
 ## Generalized linear mixed models
 
-The generalized linear mixed model (GLMM) example, using a Poisson distribution to model fish counts, demonstrates the substantial differences between marginal and conditional predictions in non-linear models. When examining the effect of the `camper` variable, marginal predictions yield higher estimated means (1.26 for `camper = 0` and 3.21 for `camper = 1`) compared to conditional predictions (using `re.form = NA` or the `"emmeans"` backend), which are lower (0.66 for `camper = 0` and 1.68 for `camper = 1`).
+The generalized linear mixed model (GLMM) example, using a Poisson distribution to model fish counts, demonstrates the substantial differences between marginal and conditional predictions in non-linear models. When examining the effect of the `camper` variable, marginal predictions yield higher estimated means (1.26 for `camper = 0` and 3.21 for `camper = 1`) compared to conditional predictions (using `re.form = NA`), which are lower (0.66 for `camper = 0` and 1.68 for `camper = 1`).
 
 ```{r}
 data("fish", package = "insight")
@@ -158,27 +136,25 @@ model <- lme4::glmer(
   family = poisson()
 )
 
-# marginal predictions
+# conditional predictions marginalized over
+# a "balanced" grid of random effects
 estimate_means(model, "camper")
 
-# conditional predictions
+# conditional predictions for a "typical" cluster
 estimate_means(model, "camper", re.form = NA)
-
-# conditional predictions
-estimate_means(model, "camper", backend = "emmeans")
 ```
 
-Furthermore, when using `estimate = "average"` to average across all observations, the differences between marginal and conditional predictions persist, with marginal predictions showing higher means (1.52 and 4.54) than conditional predictions (1.20 and 3.19), but both results differ from the predictions for "typical" observations based on the default `estimate` option (or `"emmeans"` backend), as shown in the previous output.
+When using `estimate = "average"` to average across all observations and clusters, the differences between marginal and conditional predictions (regarding random effects) persist, with marginal predictions showing higher means (1.52 and 4.54) than conditional predictions (1.20 and 3.19), but both results differ from the predictions for "typical" observations based on the default `estimate` option, as shown in the previous output.
 
 ```{r}
-# average marginal predictions
+# (fully) marginal predictions
 estimate_means(model, "camper", estimate = "average")
 
-# average conditional predictions
+# marginal predictions, conditioning on a "typical" cluster
 estimate_means(model, "camper", estimate = "average", re.form = NA)
 ```
 
-This highlights that in GLMMs, the choice between marginal and conditional predictions significantly impacts the estimated means and, consequently, the interpretation of the model's results. In this case, the marginal predictions are higher than the conditional predictions.
+This highlights that in GLMMs, the choice between marginal and conditional predictions significantly impacts the estimated means and, consequently, the interpretation of the model's results.
 
 ## Conclusion
 
