@@ -62,29 +62,15 @@ One crucial distinction is between **conditional** and **marginal** predictions 
 
 - **Conditional effect** = the effect of a variable in an *average cluster* (i.e., group-specific, subject-specific or cluster-specific effect, or an average or a typical cluster)
 - **Marginal effect** = effect of a variable *across clusters on average* (i.e., global/population-level effect, or clusters on average).
+
+For `backend = "marginaleffects"`, the `re.form` argument is set to `NULL` for mixed models by default, to calculate _marginal predictions_. You can use for instance `re.form = NA` in your `estimate_means()` call to change the default value (`NA` will produce _conditional predictions_).
+
+As outlined in the [vignette on marginalization methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html), marginalization in mixed models involves two distinct dimensions: marginalizing across *random effects (clusters)* and marginalizing across *covariates (observations)*.
+
+We can produce *marginal predictions* regarding the higher-level units (random effects) *conditioned on* a "typical" observation based on a balanced data grid, or generate predictions that are *fully marginalized* across both clusters and observations.
+
+The default (`estimate = "typical"`) calculates predictions for a balanced data grid representing all combinations of focal predictor levels (specified in `by`), which is particularly useful for comparing groups. Setting `estimate = "average"` or `estimate = "population"` is useful when you want to calculate the average expected outcome across the actual observations from the sample at hand.
 :::
-
-When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend employ different underlying methodologies. **marginaleffects** typically focuses on marginal predictions by averaging over the random effects, while **emmeans** provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ. As we will see, conditional and marginal predictions for _fixed effects_ focal predictors...
-
-- ... are usually similar for linear mixed models
-- ... are usually different for generalized linear mixed models
-- ... are usually different for both linear and generalized linear models, when the data is "imbalanced" and "average" predictions are requested (i.e., `estimate = "average"` or `estimate = "population"`); by _imbalanced_ we mean not equally distributed levels.
-
-::: custom_note
-<p>**Note:** If you request unit-level predictions - that is, predictions specific to the individual levels of the random effects (achieved by including random effect variables in `by`) - conditional and marginal predictions will also differ in linear mixed models. We will not delve into unit-level predictions in this vignette.</p>
-:::
-
-In essence, the choice of backend and the understanding of whether we are looking at conditional or marginal predictions are critical for correctly interpreting the results of mixed models. Carefully considering the research question and the nature of the random effects will guide the selection of the appropriate approach.
-
-::: custom_note
-<p>**Technical Notes:**</p>
-
-- For `backend = "marginaleffects"`, the `re.form` argument is set to `NULL` for mixed models by default, to calculate _marginal predictions_. You can use for instance `re.form = NA` in your `estimate_means()` call to change the default value (`NA` will produce _conditional predictions_).
-
-- By default, both backends calculate predictions for a balanced data grid representing all combinations of focal predictor levels (specified in `by`). This represents a "typical" observation based on the data grid and is useful for comparing groups. Setting `estimate = "average"` or `estimate = "population"` can be useful to calculate the average expected outcome from those observations _from the sample_ at hand, however, these options is only available for `backend = "marginaleffects"`.
-:::
-
-This vignette shows some examples to demonstrate where results are similar and where they differ.
 
 ## Linear mixed models
 
