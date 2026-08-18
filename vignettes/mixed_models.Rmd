@@ -138,7 +138,7 @@ Technically, `estimate_means(model, "sex")` is equivalent to
 ```{r}
 dg <- insight::get_datagrid(model, "sex", factors = "all", include_random = TRUE)
 out <- cbind(predicted = predict(model, newdata = dg), dg)
-aggregate(out$predicted, list(out$sex), mean)
+aggregate(out$predicted, list(sex = out$sex), mean)
 ```
 
 `estimate_means(model, "sex", estimate = "average")` is equivalent to
@@ -148,7 +148,7 @@ aggregate(out$predicted, list(out$sex), mean)
 
 ```{r}
 out <- cbind(predicted = predict(model), insight::get_data(model))
-aggregate(out$predicted, list(out$sex), mean)
+aggregate(out$predicted, list(sex = out$sex), mean)
 ```
 :::
 
