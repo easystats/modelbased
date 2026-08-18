@@ -105,7 +105,7 @@ Technically, `estimate_means(model, "sex")` is equivalent to
 3.  followed by averaging the predictions by the levels of the focal
     predictors.
 
-`dg`` ``<-`` ``insight``::`[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, ``"sex"``, factors ``=`` ``"all"``, include_random ``=`` ``TRUE``)`` ``out`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``predicted ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``, newdata ``=`` ``dg``)``, ``dg``)`` `[`aggregate`](https://rdrr.io/r/stats/aggregate.html)`(``out``$``predicted``, `[`list`](https://rdrr.io/r/base/list.html)`(``out``$``sex``)``, ``mean``)`` ``#> Group.1 x`` ``#> 1 female 43`` ``#> 2 male 47`
+`dg`` ``<-`` ``insight``::`[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, ``"sex"``, factors ``=`` ``"all"``, include_random ``=`` ``TRUE``)`` ``out`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``predicted ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``, newdata ``=`` ``dg``)``, ``dg``)`` `[`aggregate`](https://rdrr.io/r/stats/aggregate.html)`(``out``$``predicted``, `[`list`](https://rdrr.io/r/base/list.html)`(``sex ``=`` ``out``$``sex``)``, ``mean``)`` ``#> sex x`` ``#> 1 female 43`` ``#> 2 male 47`
 
 `estimate_means(model, "sex", estimate = "average")` is equivalent to
 
@@ -113,7 +113,7 @@ Technically, `estimate_means(model, "sex")` is equivalent to
 2.  followed by averaging the predictions by the levels of the focal
     predictors.
 
-`out`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``predicted ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``)``, ``insight``::`[`get_data`](https://easystats.github.io/insight/reference/get_data.html)`(``model``)``)`` `[`aggregate`](https://rdrr.io/r/stats/aggregate.html)`(``out``$``predicted``, `[`list`](https://rdrr.io/r/base/list.html)`(``out``$``sex``)``, ``mean``)`` ``#> Group.1 x`` ``#> 1 female 42`` ``#> 2 male 46`
+`out`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``predicted ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``)``, ``insight``::`[`get_data`](https://easystats.github.io/insight/reference/get_data.html)`(``model``)``)`` `[`aggregate`](https://rdrr.io/r/stats/aggregate.html)`(``out``$``predicted``, `[`list`](https://rdrr.io/r/base/list.html)`(``sex ``=`` ``out``$``sex``)``, ``mean``)`` ``#> sex x`` ``#> 1 female 42`` ``#> 2 male 46`
 
 ### Generalized linear mixed models
 
