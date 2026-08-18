@@ -124,6 +124,34 @@ estimate_means(model, "sex", estimate = "average")
 estimate_means(model, "sex", estimate = "average", re.form = NA)
 ```
 
+### Excourse: Technical Details
+
+To better understand how these predictions are computed under the hood, let's break down the underlying workflow. The code below illustrates the manual step-by-step procedures for grid-based versus sample-averaged predictions.
+
+::: custom_note
+Technically, `estimate_means(model, "sex")` is equivalent to
+
+1. creating a balanced data grid of all combinations of predictor levels including random effect levels
+2. predicting the outcome for the artificial observations represented by that data grid
+3. followed by averaging the predictions by the levels of the focal predictors.
+
+```{r}
+dg <- insight::get_datagrid(model, "sex", factors = "all", include_random = TRUE)
+out <- cbind(predicted = predict(model, newdata = dg), dg)
+aggregate(out$predicted, list(out$sex), mean)
+```
+
+`estimate_means(model, "sex", estimate = "average")` is equivalent to
+
+1. predicting the outcome for each observation in the data
+2. followed by averaging the predictions by the levels of the focal predictors.
+
+```{r}
+out <- cbind(predicted = predict(model), insight::get_data(model))
+aggregate(out$predicted, list(out$sex), mean)
+```
+:::
+
 ## Generalized linear mixed models
 
 The generalized linear mixed model (GLMM) example, using a Poisson distribution to model fish counts, demonstrates the substantial differences between marginal and conditional predictions in non-linear models. When examining the effect of the `camper` variable, marginal predictions yield higher estimated means (1.26 for `camper = 0` and 3.21 for `camper = 1`) compared to conditional predictions (using `re.form = NA`), which are lower (0.66 for `camper = 0` and 1.68 for `camper = 1`).
