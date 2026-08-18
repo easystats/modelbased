@@ -357,6 +357,46 @@ when we have <em>linear</em> mixed models.</p>
 <span><span class="co">#&gt; Variable predicted: bill_len</span></span>
 <span><span class="co">#&gt; Predictors modulated: sex</span></span></code></pre></div>
 </div>
+<div class="section level4">
+<h4 id="excourse-technical-details">Excourse: Technical Details<a class="anchor" aria-label="anchor" href="#excourse-technical-details"></a>
+</h4>
+<p>To better understand how these predictions are computed under the
+hood, let’s break down the underlying workflow. The code below
+illustrates the manual step-by-step procedures for grid-based versus
+sample-averaged predictions.</p>
+<div class="custom_note">
+<p>Technically, <code>estimate_means(model, "sex")</code> is equivalent
+to</p>
+<ol style="list-style-type: decimal">
+<li>creating a balanced data grid of all combinations of predictor
+levels including random effect levels</li>
+<li>predicting the outcome for the artificial observations represented
+by that data grid</li>
+<li>followed by averaging the predictions by the levels of the focal
+predictors.</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dg</span> <span class="op">&lt;-</span> <span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"sex"</span>, factors <span class="op">=</span> <span class="st">"all"</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>predicted <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span>, newdata <span class="op">=</span> <span class="va">dg</span><span class="op">)</span>, <span class="va">dg</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">predicted</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Group.1  x</span></span>
+<span><span class="co">#&gt; 1  female 43</span></span>
+<span><span class="co">#&gt; 2    male 47</span></span></code></pre></div>
+<p><code>estimate_means(model, "sex", estimate = "average")</code> is
+equivalent to</p>
+<ol style="list-style-type: decimal">
+<li>predicting the outcome for each observation in the data</li>
+<li>followed by averaging the predictions by the levels of the focal
+predictors.</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>predicted <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>, <span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/insight/reference/get_data.html" class="external-link">get_data</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">predicted</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Group.1  x</span></span>
+<span><span class="co">#&gt; 1  female 42</span></span>
+<span><span class="co">#&gt; 2    male 46</span></span></code></pre></div>
+</div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="generalized-linear-mixed-models">Generalized linear mixed models<a class="anchor" aria-label="anchor" href="#generalized-linear-mixed-models"></a>
@@ -370,7 +410,7 @@ marginal predictions yield higher estimated means (1.26 for
 to conditional predictions (using <code>re.form = NA</code>), which are
 lower (0.66 for <code>camper = 0</code> and 1.68 for
 <code>camper = 1</code>).</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"fish"</span>, package <span class="op">=</span> <span class="st">"insight"</span><span class="op">)</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span></span>
 <span>  <span class="va">count</span> <span class="op">~</span> <span class="va">child</span> <span class="op">+</span> <span class="va">camper</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">persons</span><span class="op">)</span>,</span>
@@ -413,7 +453,7 @@ marginal predictions showing higher means (1.52 and 4.54) than
 conditional predictions (1.20 and 3.19), but both results differ from
 the predictions for “typical” observations based on the default
 <code>estimate</code> option, as shown in the previous output.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># (fully) marginal predictions</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, estimate <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Average Predictions</span></span>

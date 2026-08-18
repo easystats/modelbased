@@ -89,6 +89,32 @@ models.
 
 [`data`](https://rdrr.io/r/utils/data.html)`(``penguins``)`` ``penguins``$``body_mass`` ``<-`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(``datawizard``::`[`categorize`](https://easystats.github.io/datawizard/reference/categorize.html)`(``penguins``$``body_mass``)``)`` ``model`` ``<-`` ``lme4``::`[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``bill_len`` ``~`` ``sex`` ``+`` ``body_mass`` ``+`` ``(``1`` ``|`` ``species``)``, data ``=`` ``penguins``)`` `` ``# conditional predictions marginalized over`` ``# a "balanced" grid of random effects`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> sex | Mean (CI)`` ``#> -----------------------------`` ``#> female | 43.34 (37.28, 49.39)`` ``#> male | 46.81 (40.75, 52.86)`` ``#> `` ``#> Variable predicted: bill_len`` ``#> Predictors modulated: sex`` ``#> Predictors averaged: body_mass, species`` `` ``# (fully) marginal predictions`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``, estimate ``=`` ``"average"``)`` ``#> Average Predictions`` ``#> `` ``#> sex | Mean (CI)`` ``#> -----------------------------`` ``#> female | 42.10 (36.04, 48.15)`` ``#> male | 45.85 (39.80, 51.91)`` ``#> `` ``#> Variable predicted: bill_len`` ``#> Predictors modulated: sex`` `` ``# marginal predictions conditioning on a "typical" cluster`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``, estimate ``=`` ``"average"``, re.form ``=`` ``NA``)`` ``#> Average Predictions`` ``#> `` ``#> sex | Mean (CI)`` ``#> -----------------------------`` ``#> female | 43.22 (37.17, 49.28)`` ``#> male | 46.92 (40.87, 52.98)`` ``#> `` ``#> Variable predicted: bill_len`` ``#> Predictors modulated: sex`
 
+#### Excourse: Technical Details
+
+To better understand how these predictions are computed under the hood,
+let’s break down the underlying workflow. The code below illustrates the
+manual step-by-step procedures for grid-based versus sample-averaged
+predictions.
+
+Technically, `estimate_means(model, "sex")` is equivalent to
+
+1.  creating a balanced data grid of all combinations of predictor
+    levels including random effect levels
+2.  predicting the outcome for the artificial observations represented
+    by that data grid
+3.  followed by averaging the predictions by the levels of the focal
+    predictors.
+
+`dg`` ``<-`` ``insight``::`[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, ``"sex"``, factors ``=`` ``"all"``, include_random ``=`` ``TRUE``)`` ``out`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``predicted ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``, newdata ``=`` ``dg``)``, ``dg``)`` `[`aggregate`](https://rdrr.io/r/stats/aggregate.html)`(``out``$``predicted``, `[`list`](https://rdrr.io/r/base/list.html)`(``out``$``sex``)``, ``mean``)`` ``#> Group.1 x`` ``#> 1 female 43`` ``#> 2 male 47`
+
+`estimate_means(model, "sex", estimate = "average")` is equivalent to
+
+1.  predicting the outcome for each observation in the data
+2.  followed by averaging the predictions by the levels of the focal
+    predictors.
+
+`out`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``predicted ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``)``, ``insight``::`[`get_data`](https://easystats.github.io/insight/reference/get_data.html)`(``model``)``)`` `[`aggregate`](https://rdrr.io/r/stats/aggregate.html)`(``out``$``predicted``, `[`list`](https://rdrr.io/r/base/list.html)`(``out``$``sex``)``, ``mean``)`` ``#> Group.1 x`` ``#> 1 female 42`` ``#> 2 male 46`
+
 ### Generalized linear mixed models
 
 The generalized linear mixed model (GLMM) example, using a Poisson
