@@ -12,6 +12,11 @@ automated functions, you will gain a much clearer understanding of what
 actually happens under the hood when interpreting (linear) models and
 their estimated marginal means.
 
+One crucial distinction is between *conditional* and *marginal*
+predictions. This becomes even more important for mixed-effects models,
+[as outlined in this
+vignette](https://easystats.github.io/modelbased/articles/mixed_models.html).
+
 First, let’s load the necessary packages and dataset.
 
 [`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`` `[`data`](https://rdrr.io/r/utils/data.html)`(``penguins``)`
