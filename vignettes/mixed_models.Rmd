@@ -84,10 +84,6 @@ In this example, we fit a linear mixed model predicting `Reaction` based on `Day
 ```{r}
 library(modelbased)
 data(sleepstudy, package = "lme4")
-# for later, create a slightly imbalanced distributed predictor
-set.seed(1234)
-sleepstudy$x <- as.factor(sample.int(3, nrow(sleepstudy), replace = TRUE))
-
 model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 
 # `estimate = "typical"`, `re.form = NULL`: a "typical" observation
@@ -110,6 +106,8 @@ Since `estimate = "typical"` creates a balanced data grid, *including* the level
 
 ```{r}
 data(penguins)
+# Add a non-focal categorical covariate to illustrate differences
+# in marginalization
 penguins$body_mass <- as.factor(datawizard::categorize(penguins$body_mass))
 model <- lme4::lmer(bill_len ~ sex + body_mass + (1 | species), data = penguins)
 
