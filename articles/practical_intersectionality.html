@@ -583,6 +583,12 @@ and 65+.</p>
 <div class="section level3">
 <h3 id="maihda-and-logistic-regression-models">6. MAIHDA and logistic regression models<a class="anchor" aria-label="anchor" href="#maihda-and-logistic-regression-models"></a>
 </h3>
+<p>Compared to a MAIHDA analysis using <em>linear</em> regression
+models, there are two important aspects to consider when using
+<em>binary logistic</em> regression models.</p>
+<div class="section level4">
+<h4 id="additive-and-multiplicatice-effects">6.1 Additive and multiplicatice effects<a class="anchor" aria-label="anchor" href="#additive-and-multiplicatice-effects"></a>
+</h4>
 <p>When applying this framework to dichotomous outcomes using logistic
 multilevel models, two important distinctions must be considered. First,
 the within-strata (level 1) variance is not estimated, as the variance
@@ -597,8 +603,29 @@ primary goal is to estimate strata-level effects to explore the overall
 patterning of inequalities across society <span class="citation">(Evans
 et al. 2018)</span>.</p>
 </div>
+<div class="section level4">
+<h4 id="discriminatory-accuracy">6.2 Discriminatory Accuracy<a class="anchor" aria-label="anchor" href="#discriminatory-accuracy"></a>
+</h4>
+<p>In the case of <em>linear</em> models, the ICC (VPC) works as measure
+of discriminatory accuracy. However, since the ICC relies on the
+<em>estimated</em> variances on level-1 and the higher levels and the
+level-1 variance is not estimable in logistic regression models, we need
+a different measure for the discriminatory accuracy.</p>
+<p>In the context of <em>logistic</em> regression for dichotomous
+outcomes, the Area Under the Curve (AUC) serves as a measure of
+discriminatory accuracy. It evaluates how accurately knowing an
+individual’s intersectional stratum can discriminate between those who
+experience the outcome and those who do not. Formally, the AUC
+represents the probability that a randomly selected individual with the
+outcome will have a higher predicted probability than a randomly
+selected individual without it. The AUC ranges from 0.5 to 1.0 (or 50%
+to 100%), where 0.5 indicates that the intersectional strata provide no
+discriminatory accuracy, and 1.0 denotes perfect discriminatory accuracy
+<span class="citation">(Evans et al. 2024)</span>.</p>
+</div>
+</div>
 <div class="section level3">
-<h3 id="conclusion">7. Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
+<h3 id="conclusion">8. Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h3>
 <p>Intersectional multilevel analysis of individual heterogeneity, using
 the MAIHDA framework, is a new approach in social epidemiology, which

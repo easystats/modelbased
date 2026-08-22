@@ -242,6 +242,12 @@ for the two groups of non-employed females in the age of 41-64 and 65+.
 
 ### 6. MAIHDA and logistic regression models
 
+Compared to a MAIHDA analysis using *linear* regression models, there
+are two important aspects to consider when using *binary logistic*
+regression models.
+
+#### 6.1 Additive and multiplicatice effects
+
 When applying this framework to dichotomous outcomes using logistic
 multilevel models, two important distinctions must be considered. First,
 the within-strata (level 1) variance is not estimated, as the variance
@@ -256,7 +262,27 @@ interactions. However, logistic models remain fully appropriate if the
 primary goal is to estimate strata-level effects to explore the overall
 patterning of inequalities across society (Evans et al. 2018).
 
-### 7. Conclusion
+#### 6.2 Discriminatory Accuracy
+
+In the case of *linear* models, the ICC (VPC) works as measure of
+discriminatory accuracy. However, since the ICC relies on the
+*estimated* variances on level-1 and the higher levels and the level-1
+variance is not estimable in logistic regression models, we need a
+different measure for the discriminatory accuracy.
+
+In the context of *logistic* regression for dichotomous outcomes, the
+Area Under the Curve (AUC) serves as a measure of discriminatory
+accuracy. It evaluates how accurately knowing an individual’s
+intersectional stratum can discriminate between those who experience the
+outcome and those who do not. Formally, the AUC represents the
+probability that a randomly selected individual with the outcome will
+have a higher predicted probability than a randomly selected individual
+without it. The AUC ranges from 0.5 to 1.0 (or 50% to 100%), where 0.5
+indicates that the intersectional strata provide no discriminatory
+accuracy, and 1.0 denotes perfect discriminatory accuracy (Evans et al.
+2024).
+
+### 8. Conclusion
 
 Intersectional multilevel analysis of individual heterogeneity, using
 the MAIHDA framework, is a new approach in social epidemiology, which
