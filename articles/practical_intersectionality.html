@@ -394,6 +394,11 @@ proportion of explained variance by the strata can be explained by a
 single dimension that define those strata. The PCV ranges from 0 to 1,
 and the closer to 1, the more this particular dimension explains social
 inequalities.</p>
+<p>Additionally, a PCV close to 1 suggests that the differences between
+intersectional strata are primarily driven by additive main effects.
+Conversely, a PCV substantially below 1 indicates that these main
+effects cannot fully explain the strata-level variance, pointing to the
+presence of multiplicative interaction effects.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># extract random effect variances from all models</span></span>
 <span><span class="va">v_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance</a></span><span class="op">(</span><span class="va">m_null</span><span class="op">)</span></span>
@@ -423,7 +428,7 @@ intersectionality (“are there additive or multiplicative effects and
 which characteristic contributes most to inequalities?”). There is also
 an additional <em>specific</em> measure of intersectionality (“which
 intersections may show multiplicative effects?”), the strata-level
-residuals, which will be introduced in section 6.</p>
+residuals, which will be introduced below.</p>
 </div>
 </div>
 <div class="section level3">

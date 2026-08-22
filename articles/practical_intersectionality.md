@@ -162,6 +162,12 @@ variance by the strata can be explained by a single dimension that
 define those strata. The PCV ranges from 0 to 1, and the closer to 1,
 the more this particular dimension explains social inequalities.
 
+Additionally, a PCV close to 1 suggests that the differences between
+intersectional strata are primarily driven by additive main effects.
+Conversely, a PCV substantially below 1 indicates that these main
+effects cannot fully explain the strata-level variance, pointing to the
+presence of multiplicative interaction effects.
+
 `# extract random effect variances from all models`` ``v_null`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_null``)`` ``v_gender`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_gender``)`` ``v_employment`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_employment``)`` ``v_age`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_age``)`` `` ``# PCV (proportional change in between-stratum variance)`` ``# from null-model to gender-model`` ``(``v_null``$``var.random`` ``-`` ``v_gender``$``var.random``)`` ``/`` ``v_null``$``var.random`` ``#> [1] 0.3202535`` `` ``# PCV from null-model to employment-model`` ``(``v_null``$``var.random`` ``-`` ``v_employment``$``var.random``)`` ``/`` ``v_null``$``var.random`` ``#> [1] 0.3859538`` `` ``# PCV from null-model to age-model`` ``(``v_null``$``var.random`` ``-`` ``v_age``$``var.random``)`` ``/`` ``v_null``$``var.random`` ``#> [1] 0.8809532`
 
 Again, we see that the PCV is in line with the models’ ICC’s and
@@ -174,7 +180,7 @@ The ICC (or VPC) and the PCV are *global* measures of intersectionality
 contributes most to inequalities?”). There is also an additional
 *specific* measure of intersectionality (“which intersections may show
 multiplicative effects?”), the strata-level residuals, which will be
-introduced in section 6.
+introduced below.
 
 ### 4. Predict between-stratum variance and test for significant differences
 
