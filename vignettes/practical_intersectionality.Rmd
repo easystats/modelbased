@@ -132,7 +132,7 @@ m_null <- glmmTMB(qol ~ 1 + (1 | gender:employed:age), data = efc)
 # m_null <- glmmTMB(qol ~ 1 + (1 | strata), data = efc)
 ```
 
-The purpose of this model is to quantify the "discriminatory accuracy", which is achieved by calculating the ICC (see [`performance::icc()`](https://easystats.github.io/performance/reference/icc.html)) of this model (sometimes also calles the _VPC_, the variance partition coefficient). The higher the ICC, the greater the degree of similarity _within the strata_ (regarding quality of life) and the greater the difference in quality of life _between the intersectional strata_. I.e., the higher the ICC, the better the model is at discriminating individuals with higher or lower quality of life score, as opposed to models with lower ICC.
+The purpose of this model - which is sometimes also called *null model* or *base model* - is to quantify the "discriminatory accuracy", which is achieved by calculating the ICC (see [`performance::icc()`](https://easystats.github.io/performance/reference/icc.html)) of this model (sometimes also calles the _VPC_, the variance partition coefficient). The higher the ICC, the greater the degree of similarity _within the strata_ (regarding quality of life) and the greater the difference in quality of life _between the intersectional strata_. I.e., the higher the ICC, the better the model is at discriminating individuals with higher or lower quality of life score, as opposed to models with lower ICC.
 
 We now look at the model parameters and the ICC of our simple intersectional model.
 
@@ -202,9 +202,9 @@ v_age <- get_variance(m_age)
 
 Again, we see that the PCV is in line with the models' ICC's and regression coefficients. We see the highest proportional change for `age`, meaning that - although gender and education can contribute to inequalities - age is the most relevant predictor.
 
-## 4. PCV in the full model: global additive or multiplicative effects
+## 4. PCV in the full (intersectional interaction) model: global additive or multiplicative effects
 
-Finally, a "full" model is fit, which includes all group level variables as level-1 *additive* fixed effects. Then, the PCV is again calculated. This allows us to see how much of the variability of the additive effects will be absorbed by the intersectional strata characteristics. A PCV close to 1 suggests that the differences between intersectional strata are primarily driven by additive main effects. Conversely, a PCV substantially below 1 indicates that these main effects cannot fully explain the strata-level variance, pointing to the presence of multiplicative interaction effects.
+Finally, a "full" model (aka *intersectional interaction* or *main effects* model) is fit, which includes all group level variables as level-1 *additive* fixed effects. Then, the PCV is again calculated. This allows us to see how much of the variability of the additive effects will be absorbed by the intersectional strata characteristics. A PCV close to 1 suggests that the differences between intersectional strata are primarily driven by additive main effects. Conversely, a PCV substantially below 1 indicates that these main effects cannot fully explain the strata-level variance, pointing to the presence of multiplicative interaction effects.
 
 ```{r}
 m_full <- glmmTMB(
@@ -297,7 +297,7 @@ options(
 
 In the MAIHDA framework, a specific measure of intersectionality is the _strata-level residual_, which corresponds to the random effects of the intersectional interaction model. Examining these residuals allows us to distinguish between additive and multiplicative effects: if there are no interactions, the inclusion of main effects would fully explain the variance between intersectional strata and all random effects would be (close to) zero. A positive strata-level residual indicates that a stratum's mean outcome is higher than expected from the additive main effects, whereas a negative strata-level residual indicates a lower mean outcome than expected for this stratum. Consequently, when the credible or confidence interval of a strata-level residual does not include zero, this points to a statistically significant interaction effect – or a multiplicative effect – in that specific stratum [@keller_educational_2023].
 
-We can easily compute the strata-level residuals using the `estimate_grouplevel()` function. **Important**: We need to calculate these residuals for the *main effects* (full) model, not for the *null* model.
+We can easily compute the strata-level residuals using the `estimate_grouplevel()` function. **Important**: We need to calculate these residuals for the *intersectional interaction* (full) model, not for the *null* model.
 
 ```{r}
 strata_residuals <- estimate_grouplevel(m_full)
