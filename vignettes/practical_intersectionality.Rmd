@@ -64,13 +64,15 @@ The steps we are showing here are:
 
 1. Defining the intersectional strata.
 
-2. Fitting a multilevel model to see whether intersectional strata contribute to between-stratum variance (which can be considered as "inequalities", whether social or health related - also known as _discriminatory accucarcy_).
+2. Fitting a *simple intersectional* model to see whether intersectional strata contribute to between-stratum variance (which can be considered as "inequalities", whether social or health related - also known as _discriminatory accucarcy_).
 
-3. Fitting partially adjusted multilevel models and calculating proportional change in the between-stratum variance (PCVs) to quantify to what degree the different intersectional dimensions contribute to the between-stratum variance (inequalities), which also indicates *global* additive or multiplicative effects.
+3. Fitting *partially-adjusted intersectional* models and calculating proportional change in the between-stratum variance (PCVs) to quantify to what degree the different intersectional dimensions contribute to the between-stratum variance (inequalities)
 
-4. Calculate adjusted / ranked predictions (estimated marginal means) of the outcome by intersectional strata, to get a clearer picture of the variation between intersectional dimensions, as well as testing specific strata for significant differences.
+4. Fitting an *intersectional interaction* model to look for *global* additive or multiplicative effects.
 
-5. Look at group-level estimates (BLUPs), which represent the group-level residuals (also called _strata-level residuals_, see @keller_educational_2023), to see whether we find *specific* additive or multiplicative effects for strata.
+5. Calculate adjusted / ranked predictions (estimated marginal means) of the outcome (of the *simple intersectional* model) by intersectional strata, to get a clearer picture of the variation between intersectional dimensions, as well as testing specific strata for significant differences.
+
+6. Look at group-level estimates (BLUPs) of the *intersectional interaction* model, which represent the group-level residuals (also called _strata-level residuals_, see @keller_educational_2023), to see whether we find *specific* additive or multiplicative effects for strata.
 
 ## 1. Preparing the data and defining intersectional strata
 
@@ -202,7 +204,7 @@ v_age <- get_variance(m_age)
 
 Again, we see that the PCV is in line with the models' ICC's and regression coefficients. We see the highest proportional change for `age`, meaning that - although gender and education can contribute to inequalities - age is the most relevant predictor.
 
-## 4. PCV in the full (intersectional interaction) model: global additive or multiplicative effects
+## 4. PCV in the intersectional interaction model: global additive or multiplicative effects
 
 Finally, a "full" model (aka *intersectional interaction* or *main effects* model) is fit, which includes all group level variables as level-1 *additive* fixed effects. Then, the PCV is again calculated. This allows us to see how much of the variability of the additive effects will be absorbed by the intersectional strata characteristics. A PCV close to 1 suggests that the differences between intersectional strata are primarily driven by additive main effects. Conversely, a PCV substantially below 1 indicates that these main effects cannot fully explain the strata-level variance, pointing to the presence of multiplicative interaction effects.
 
