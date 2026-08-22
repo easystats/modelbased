@@ -170,19 +170,22 @@ social, economic and demographic dimensions.”
 <li><p>Defining the intersectional strata.</p></li>
 <li><p>Fitting a multilevel model to see whether intersectional strata
 contribute to between-stratum variance (which can be considered as
-“inequalities”, whether social or health related).</p></li>
+“inequalities”, whether social or health related - also known as
+<em>discriminatory accucarcy</em>).</p></li>
 <li><p>Fitting partially adjusted multilevel models and calculating
 proportional change in the between-stratum variance (PCVs) to quantify
 to what degree the different intersectional dimensions contribute to the
-between-stratum variance (inequalities).</p></li>
-<li><p>Calculate adjusted predictions (estimated marginal means) of the
-outcome by intersectional strata, to get a clearer picture of the
-variation between intersectional dimensions, as well as testing specific
-strata for significant differences.</p></li>
+between-stratum variance (inequalities), which also indicates
+<em>global</em> additive or multiplicative effects.</p></li>
+<li><p>Calculate adjusted / ranked predictions (estimated marginal
+means) of the outcome by intersectional strata, to get a clearer picture
+of the variation between intersectional dimensions, as well as testing
+specific strata for significant differences.</p></li>
 <li><p>Look at group-level estimates (BLUPs), which represent the
 group-level residuals (also called <em>strata-level residuals</em>, see
 <span class="citation">Keller et al. (2023)</span>), to see whether we
-find additive or multiplicative effects for strata.</p></li>
+find <em>specific</em> additive or multiplicative effects for
+strata.</p></li>
 </ol>
 <div class="section level3">
 <h3 id="preparing-the-data-and-defining-intersectional-strata">1. Preparing the data and defining intersectional strata<a class="anchor" aria-label="anchor" href="#preparing-the-data-and-defining-intersectional-strata"></a>
@@ -264,7 +267,8 @@ variable as group factor for our random effects, or
 of the integrated <code>strata</code> factor.</p>
 </div>
 <div class="section level3">
-<h3 id="fitting-the-simple-intersectional-model">2. Fitting the simple intersectional model<a class="anchor" aria-label="anchor" href="#fitting-the-simple-intersectional-model"></a>
+<h3 id="fitting-the-simple-intersectional-model-discriminatory-accuracy">2. Fitting the simple intersectional model: discriminatory
+accuracy<a class="anchor" aria-label="anchor" href="#fitting-the-simple-intersectional-model-discriminatory-accuracy"></a>
 </h3>
 <p>Intersectionality analysis aims at recognizing effects of belonging
 to specific strata simultaneously. In the context of the MAIHDA
@@ -320,7 +324,8 @@ we ignore this fact for now, as the purpose of demonstrating the
 analysis approach is rarely affected.</p>
 </div>
 <div class="section level3">
-<h3 id="partially-adjusted-intersectional-model-and-pcv">3. Partially-adjusted intersectional model and PCV<a class="anchor" aria-label="anchor" href="#partially-adjusted-intersectional-model-and-pcv"></a>
+<h3 id="partially-adjusted-intersectional-model-and-pcv-global-additive-or-multiplicative-effects">3. Partially-adjusted intersectional model and PCV: global additive
+or multiplicative effects<a class="anchor" aria-label="anchor" href="#partially-adjusted-intersectional-model-and-pcv-global-additive-or-multiplicative-effects"></a>
 </h3>
 <p>In the next step we want to find out, which intersectional dimension
 contributes most to possible inequalities, i.e. which of our group
@@ -537,7 +542,8 @@ following code:</p>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="additive-vs--multiplicative-effects">5. Additive vs. multiplicative effects<a class="anchor" aria-label="anchor" href="#additive-vs--multiplicative-effects"></a>
+<h3 id="strata-level-residuals-specific-additive-vs--multiplicative-effects">5. Strata-level residuals: Specific additive vs. multiplicative
+effects<a class="anchor" aria-label="anchor" href="#strata-level-residuals-specific-additive-vs--multiplicative-effects"></a>
 </h3>
 <p>In the MAIHDA framework, a specific measure of intersectionality is
 the <em>strata-level residual</em>, which corresponds to the random

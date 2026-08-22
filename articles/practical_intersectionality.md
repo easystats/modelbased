@@ -22,21 +22,23 @@ The steps we are showing here are:
 
 2.  Fitting a multilevel model to see whether intersectional strata
     contribute to between-stratum variance (which can be considered as
-    “inequalities”, whether social or health related).
+    “inequalities”, whether social or health related - also known as
+    *discriminatory accucarcy*).
 
 3.  Fitting partially adjusted multilevel models and calculating
     proportional change in the between-stratum variance (PCVs) to
     quantify to what degree the different intersectional dimensions
-    contribute to the between-stratum variance (inequalities).
+    contribute to the between-stratum variance (inequalities), which
+    also indicates *global* additive or multiplicative effects.
 
-4.  Calculate adjusted predictions (estimated marginal means) of the
-    outcome by intersectional strata, to get a clearer picture of the
-    variation between intersectional dimensions, as well as testing
+4.  Calculate adjusted / ranked predictions (estimated marginal means)
+    of the outcome by intersectional strata, to get a clearer picture of
+    the variation between intersectional dimensions, as well as testing
     specific strata for significant differences.
 
 5.  Look at group-level estimates (BLUPs), which represent the
     group-level residuals (also called *strata-level residuals*, see
-    Keller et al. (2023)), to see whether we find additive or
+    Keller et al. (2023)), to see whether we find *specific* additive or
     multiplicative effects for strata.
 
 ### 1. Preparing the data and defining intersectional strata
@@ -69,7 +71,7 @@ plotting predictions (see section 4), we get clearer plots when we
 include the three factors `gender`, `employed` and `age` instead of the
 integrated `strata` factor.
 
-### 2. Fitting the simple intersectional model
+### 2. Fitting the simple intersectional model: discriminatory accuracy
 
 Intersectionality analysis aims at recognizing effects of belonging to
 specific strata simultaneously. In the context of the MAIHDA framework,
@@ -106,7 +108,7 @@ suggest larger social inequalities regarding quality of life. But we
 ignore this fact for now, as the purpose of demonstrating the analysis
 approach is rarely affected.
 
-### 3. Partially-adjusted intersectional model and PCV
+### 3. Partially-adjusted intersectional model and PCV: global additive or multiplicative effects
 
 In the next step we want to find out, which intersectional dimension
 contributes most to possible inequalities, i.e. which of our group
@@ -213,7 +215,7 @@ following code:
 
 `# Compare levels employment status by gender and age groups`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m_null``,`` `` contrast ``=`` ``"employed"``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"age"``)``,`` `` estimate ``=`` ``"average"`` ``)`` ``#> Averaged Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | gender | age | Difference (CI) | p`` ``#> -------------------------------------------------------------`` ``#> yes | no | Male | -40 | 0.88 (0.88, 0.88) | <0.001`` ``#> yes | no | Female | -40 | 0.86 (0.86, 0.86) | <0.001`` ``#> yes | no | Male | 41-64 | 0.53 (0.53, 0.53) | <0.001`` ``#> yes | no | Female | 41-64 | 0.34 (0.34, 0.34) | <0.001`` ``#> yes | no | Male | 65+ | 0.93 (0.93, 0.93) | <0.001`` ``#> yes | no | Female | 65+ | 1.32 (1.32, 1.32) | <0.001`` ``#> `` ``#> Variable predicted: qol`` ``#> Predictors contrasted: employed`` ``#> p-values are uncorrected.`
 
-### 5. Additive vs. multiplicative effects
+### 5. Strata-level residuals: Specific additive vs. multiplicative effects
 
 In the MAIHDA framework, a specific measure of intersectionality is the
 *strata-level residual*, which corresponds to the random effects of the
