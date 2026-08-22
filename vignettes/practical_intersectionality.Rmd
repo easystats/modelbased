@@ -144,7 +144,7 @@ icc(m_null)
 
 The ICC with a value of about 4% is rather low. Usually, this indicates that our dimensions used to define the intersectional strata do not suggest larger social inequalities regarding quality of life. But we ignore this fact for now, as the purpose of demonstrating the analysis approach is rarely affected.
 
-## 3. Partially-adjusted intersectional model and PCV: global additive or multiplicative effects
+## 3. Partially-adjusted intersectional model and PCV
 
 In the next step we want to find out, which intersectional dimension contributes most to possible inequalities, i.e. which of our group factors `gender`, `employed` and `age` explains most of the between-stratum variance of the random effects. This is achieved by fitting partially-adjusted intersectional models.
 
@@ -182,8 +182,6 @@ Indeed, the ICC correlates with the fixed effects coefficients, i.e. the larger 
 
 Next, we want to quantify the degree the different dimensions contribute to the variance between groups more accurately. To do so, we calculate the _proportional change in between-stratum variance_, or _PCV_. This coefficient explains how much of the total proportion of explained variance by the strata can be explained by a single dimension that define those strata. The PCV ranges from 0 to 1, and the closer to 1, the more this particular dimension explains social inequalities.
 
-Additionally, a PCV close to 1 suggests that the differences between intersectional strata are primarily driven by additive main effects. Conversely, a PCV substantially below 1 indicates that these main effects cannot fully explain the strata-level variance, pointing to the presence of multiplicative interaction effects.
-
 ```{r}
 # extract random effect variances from all models
 v_null <- get_variance(m_null)
@@ -204,11 +202,37 @@ v_age <- get_variance(m_age)
 
 Again, we see that the PCV is in line with the models' ICC's and regression coefficients. We see the highest proportional change for `age`, meaning that - although gender and education can contribute to inequalities - age is the most relevant predictor.
 
+## 4. PCV in the full model: global additive or multiplicative effects
+
+Finally, a "full" model is fit, which includes all group level variables as level-1 *additive* fixed effects. Then, the PCV is again calculated. This allows us to see how much of the variability of the additive effects will be absorbed by the intersectional strata characteristics. A PCV close to 1 suggests that the differences between intersectional strata are primarily driven by additive main effects. Conversely, a PCV substantially below 1 indicates that these main effects cannot fully explain the strata-level variance, pointing to the presence of multiplicative interaction effects.
+
+```{r}
+m_full <- glmmTMB(
+  qol ~ gender + employed + age + (1 | gender:employed:age),
+  data = efc
+)
+
+# investigate random effects parameters
+random_parameters(m_full)
+```
+
+We see that the between-group variance is literally zero, which means, no variation is left between the intersectional strata after adding those predictors as additive fixed effects. This suggests that the PCV will be (close to) 1, indicating we have no multiplicative interaction effects.
+
+```{r}
+v_full <- get_variance(m_full)
+
+# PCV (proportional change in between-stratum variance)
+# from null-model to full-model
+(v_null$var.random - v_full$var.random) / v_null$var.random
+```
+
+Indeed, the PCV for the full model is 1.
+
 ::: custom_note
  The ICC (or VPC) and the PCV are *global* measures of intersectionality ("are there additive or multiplicative effects and which characteristic contributes most to inequalities?"). There is also an additional *specific* measure of intersectionality ("which intersections may show multiplicative effects?"), the strata-level residuals, which will be introduced below.
 :::
 
-## 4. Predict between-stratum variance and test for significant differences
+## 5. Predict between-stratum variance and test for significant differences
 
 Finally, we may want to have a clearer picture of how the different strata vary, which combination of characteristics defines the highest or maybe lowest risk group. To do so, we calculate predictions of the random effects (*unit-level* predictions).
 
@@ -260,7 +284,7 @@ estimate_contrasts(
 )
 ```
 
-## 5. Strata-level residuals: Specific additive vs. multiplicative effects
+## 6. Strata-level residuals: Specific additive vs. multiplicative effects
 
 ```{r echo=FALSE}
 # reset options
@@ -285,15 +309,15 @@ plot(strata_residuals)
 
 According to the plot and table output, we find multiplicative effects for the two groups of non-employed females in the age of 41-64 and 65+.
 
-## 6. MAIHDA and logistic regression models
+## 7. MAIHDA and logistic regression models
 
 Compared to a MAIHDA analysis using *linear* regression models, there are two important aspects to consider when using *binary logistic* regression models.
 
-### 6.1 Additive and multiplicatice effects
+### 7.1 Additive and multiplicatice effects
 
 When applying this framework to dichotomous outcomes using logistic multilevel models, two important distinctions must be considered. First, the within-strata (level 1) variance is not estimated, as the variance of the binomial distribution is already known (and fixed, see [`?insight::get_variance`](https://easystats.github.io/insight/reference/get_variance.html) for Bernoulli models). Second, logistic models operate on a multiplicative scale rather than an additive one. Accodring to evans et al. (2018), it is inappropriate to use logistic models to examine strata-level residuals for additive interaction effects, since the inclusion of main effects may already account for some of these interactions. However, logistic models remain fully appropriate if the primary goal is to estimate strata-level effects to explore the overall patterning of inequalities across society [@evans_multilevel_2018].
 
-### 6.2 Discriminatory Accuracy
+### 7.2 Discriminatory Accuracy
 
 In the case of *linear* models, the ICC (VPC) works as measure of discriminatory accuracy. However, since the ICC relies on the *estimated* variances on level-1 and the higher levels and the level-1 variance is not estimable in logistic regression models, we need a different measure for the discriminatory accuracy.
 
