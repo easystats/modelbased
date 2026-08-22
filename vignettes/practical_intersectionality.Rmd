@@ -182,6 +182,8 @@ Indeed, the ICC correlates with the fixed effects coefficients, i.e. the larger 
 
 Next, we want to quantify the degree the different dimensions contribute to the variance between groups more accurately. To do so, we calculate the _proportional change in between-stratum variance_, or _PCV_. This coefficient explains how much of the total proportion of explained variance by the strata can be explained by a single dimension that define those strata. The PCV ranges from 0 to 1, and the closer to 1, the more this particular dimension explains social inequalities.
 
+Additionally, a PCV close to 1 suggests that the differences between intersectional strata are primarily driven by additive main effects. Conversely, a PCV substantially below 1 indicates that these main effects cannot fully explain the strata-level variance, pointing to the presence of multiplicative interaction effects.
+
 ```{r}
 # extract random effect variances from all models
 v_null <- get_variance(m_null)
@@ -203,7 +205,7 @@ v_age <- get_variance(m_age)
 Again, we see that the PCV is in line with the models' ICC's and regression coefficients. We see the highest proportional change for `age`, meaning that - although gender and education can contribute to inequalities - age is the most relevant predictor.
 
 ::: custom_note
- The ICC (or VPC) and the PCV are *global* measures of intersectionality ("are there additive or multiplicative effects and which characteristic contributes most to inequalities?"). There is also an additional *specific* measure of intersectionality ("which intersections may show multiplicative effects?"), the strata-level residuals, which will be introduced in section 6.
+ The ICC (or VPC) and the PCV are *global* measures of intersectionality ("are there additive or multiplicative effects and which characteristic contributes most to inequalities?"). There is also an additional *specific* measure of intersectionality ("which intersections may show multiplicative effects?"), the strata-level residuals, which will be introduced below.
 :::
 
 ## 4. Predict between-stratum variance and test for significant differences
