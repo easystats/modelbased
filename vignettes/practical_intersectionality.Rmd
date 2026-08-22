@@ -72,7 +72,7 @@ The steps we are showing here are:
 
 5. Calculate adjusted / ranked predictions (estimated marginal means) of the outcome (of the *simple intersectional* model) by intersectional strata, to get a clearer picture of the variation between intersectional dimensions, as well as testing specific strata for significant differences.
 
-6. Look at group-level estimates (BLUPs) of the *intersectional interaction* model, which represent the group-level residuals (also called _strata-level residuals_, see @keller_educational_2023), to see whether we find *specific* additive or multiplicative effects for strata.
+6. Look at group-level estimates (BLUPs) of the *intersectional interaction* model, which represent the group-level residuals (also called _strata-level residuals_, see @axelsson_fisk_chronic_2018 or @keller_educational_2023), to see whether we find *specific* additive or multiplicative effects for strata.
 
 ## 1. Preparing the data and defining intersectional strata
 
@@ -297,7 +297,7 @@ options(
 )
 ```
 
-In the MAIHDA framework, a specific measure of intersectionality is the _strata-level residual_, which corresponds to the random effects of the intersectional interaction model. Examining these residuals allows us to distinguish between additive and multiplicative effects: if there are no interactions, the inclusion of main effects would fully explain the variance between intersectional strata and all random effects would be (close to) zero. A positive strata-level residual indicates that a stratum's mean outcome is higher than expected from the additive main effects, whereas a negative strata-level residual indicates a lower mean outcome than expected for this stratum. Consequently, when the credible or confidence interval of a strata-level residual does not include zero, this points to a statistically significant interaction effect – or a multiplicative effect – in that specific stratum [@keller_educational_2023].
+In the MAIHDA framework, a specific measure of intersectionality is the _strata-level residual_, which corresponds to the random effects of the intersectional interaction model. Examining these residuals allows us to distinguish between additive and multiplicative effects: if there are no interactions, the inclusion of main effects would fully explain the variance between intersectional strata and all random effects would be (close to) zero. A positive strata-level residual indicates that a stratum's mean outcome is higher than expected from the additive main effects, whereas a negative strata-level residual indicates a lower mean outcome than expected for this stratum. Consequently, when the credible or confidence interval of a strata-level residual does not include zero, this points to a statistically significant interaction effect – or a multiplicative effect – in that specific stratum [@axelsson_fisk_chronic_2018; @keller_educational_2023].
 
 We can easily compute the strata-level residuals using the `estimate_grouplevel()` function. **Important**: We need to calculate these residuals for the *intersectional interaction* (full) model, not for the *null* model.
 
