@@ -260,6 +260,15 @@ estimate_contrasts(
 
 ## 5. Additive vs. multiplicative effects
 
+```{r echo=FALSE}
+# reset options
+options(
+  modelbased_join_dots = NULL,
+  modelbased_estimate = NULL,
+  modelbased_select = NULL
+)
+```
+
 In the MAIHDA framework, a specific measure of intersectionality is the _strata-level residual_, which corresponds to the random effects of the intersectional interaction model. Examining these residuals allows us to distinguish between additive and multiplicative effects: if there are no interactions, the inclusion of main effects would fully explain the variance between intersectional strata and all random effects would be (close to) zero. A positive strata-level residual indicates that a stratum's mean outcome is higher than expected from the additive main effects, whereas a negative strata-level residual indicates a lower mean outcome than expected for this stratum. Consequently, when the credible or confidence interval of a strata-level residual does not include zero, this points to a statistically significant interaction effect – or a multiplicative effect – in that specific stratum [@keller_educational_2023].
 
 We can easily compute the strata-level residuals using the `estimate_grouplevel()` function.
@@ -272,6 +281,8 @@ strata_residuals
 plot(strata_residuals)
 ```
 
+According to the plot and table output, we find multiplicative effects for the two groups of non-employed females in the age of 41-64 and 65+.
+
 ## 6. MAIHDA and logistic regression models
 
 When applying this framework to dichotomous outcomes using logistic multilevel models, two important distinctions must be considered. First, the within-strata (level 1) variance is not estimated, as the variance of the binomial distribution is already known (and fixed, see [`?insight::get_variance`](https://easystats.github.io/insight/reference/get_variance.html) for Bernoulli models). Second, logistic models operate on a multiplicative scale rather than an additive one. Accodring to evans et al. (2018), it is inappropriate to use logistic models to examine strata-level residuals for additive interaction effects, since the inclusion of main effects may already account for some of these interactions. However, logistic models remain fully appropriate if the primary goal is to estimate strata-level effects to explore the overall patterning of inequalities across society [@evans_multilevel_2018].
@@ -283,14 +294,5 @@ Intersectional multilevel analysis of individual heterogeneity, using the MAIHDA
 This approach requires the application of multilevel models, where ICC and PCV are relevant coefficients. The *modelbased* package allows to go beyond quantifying to what degree different intersectional dimensions contribute to inequalities by predicting the average outcome by group, thereby explicitly showing the differences between those groups (strata).
 
 Furthermore, with *modelbased* it is possible to compare differences between groups and test whether these differences are statistically significant or not, i.e. whether we find "evidence" for social inequalities in our data for certain groups (at risk).
-
-```{r echo=FALSE}
-# reset options
-options(
-  modelbased_join_dots = NULL,
-  modelbased_estimate = NULL,
-  modelbased_select = NULL
-)
-```
 
 # References
