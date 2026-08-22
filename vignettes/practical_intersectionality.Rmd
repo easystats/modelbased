@@ -268,7 +268,11 @@ strata_residuals
 plot(strata_residuals)
 ```
 
-## 6. Conclusion
+## 6. MAIHDA and logistic regression models
+
+When applying this framework to dichotomous outcomes using logistic multilevel models, two important distinctions must be considered. First, the within-strata (level 1) variance is not estimated, as the variance of the binomial distribution is already known (and fixed, see [`?insight::get_variance`](https://easystats.github.io/insight/reference/get_variance.html) for Bernoulli models). Second, logistic models operate on a multiplicative scale rather than an additive one. Accodring to evans et al. (2018), it is inappropriate to use logistic models to examine strata-level residuals for additive interaction effects, since the inclusion of main effects may already account for some of these interactions. However, logistic models remain fully appropriate if the primary goal is to estimate strata-level effects to explore the overall patterning of inequalities across society [@evans_multilevel_2018].
+
+## 7. Conclusion
 
 Intersectional multilevel analysis of individual heterogeneity, using the MAIHDA framework, is a new approach in social epidemiology, which helps to understand the interaction of social indicators with regard to social inequalities.
 
