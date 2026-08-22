@@ -203,7 +203,7 @@ v_age <- get_variance(m_age)
 Again, we see that the PCV is in line with the models' ICC's and regression coefficients. We see the highest proportional change for `age`, meaning that - although gender and education can contribute to inequalities - age is the most relevant predictor.
 
 ::: custom_note
- The ICC (or VPC) and the PCV are *global* measures of intersectionality. There is also an additional *specific* measure of intersectionality, the strata-level residuals, which will be introduced in section 6.
+ The ICC (or VPC) and the PCV are *global* measures of intersectionality ("are there additive or multiplicative effects and which characteristic contributes most to inequalities?"). There is also an additional *specific* measure of intersectionality ("which intersections may show multiplicative effects?"), the strata-level residuals, which will be introduced in section 6.
 :::
 
 ## 4. Predict between-stratum variance and test for significant differences
