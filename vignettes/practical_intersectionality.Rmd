@@ -297,17 +297,17 @@ options(
 
 In the MAIHDA framework, a specific measure of intersectionality is the _strata-level residual_, which corresponds to the random effects of the intersectional interaction model. Examining these residuals allows us to distinguish between additive and multiplicative effects: if there are no interactions, the inclusion of main effects would fully explain the variance between intersectional strata and all random effects would be (close to) zero. A positive strata-level residual indicates that a stratum's mean outcome is higher than expected from the additive main effects, whereas a negative strata-level residual indicates a lower mean outcome than expected for this stratum. Consequently, when the credible or confidence interval of a strata-level residual does not include zero, this points to a statistically significant interaction effect – or a multiplicative effect – in that specific stratum [@keller_educational_2023].
 
-We can easily compute the strata-level residuals using the `estimate_grouplevel()` function.
+We can easily compute the strata-level residuals using the `estimate_grouplevel()` function. **Important**: We need to calculate these residuals for the *main effects* (full) model, not for the *null* model.
 
 ```{r}
-strata_residuals <- estimate_grouplevel(m_null)
+strata_residuals <- estimate_grouplevel(m_full)
 
 strata_residuals
 
 plot(strata_residuals)
 ```
 
-According to the plot and table output, we find multiplicative effects for the two groups of non-employed females in the age of 41-64 and 65+.
+As expected (because the PCV is 1, indicating we found no multiplicative effects), als strata-level residuals are close to zero.
 
 ## 7. MAIHDA and logistic regression models
 
