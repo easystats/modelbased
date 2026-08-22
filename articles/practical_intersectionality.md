@@ -108,7 +108,7 @@ suggest larger social inequalities regarding quality of life. But we
 ignore this fact for now, as the purpose of demonstrating the analysis
 approach is rarely affected.
 
-### 3. Partially-adjusted intersectional model and PCV: global additive or multiplicative effects
+### 3. Partially-adjusted intersectional model and PCV
 
 In the next step we want to find out, which intersectional dimension
 contributes most to possible inequalities, i.e. which of our group
@@ -162,18 +162,36 @@ variance by the strata can be explained by a single dimension that
 define those strata. The PCV ranges from 0 to 1, and the closer to 1,
 the more this particular dimension explains social inequalities.
 
-Additionally, a PCV close to 1 suggests that the differences between
-intersectional strata are primarily driven by additive main effects.
-Conversely, a PCV substantially below 1 indicates that these main
-effects cannot fully explain the strata-level variance, pointing to the
-presence of multiplicative interaction effects.
-
 `# extract random effect variances from all models`` ``v_null`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_null``)`` ``v_gender`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_gender``)`` ``v_employment`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_employment``)`` ``v_age`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_age``)`` `` ``# PCV (proportional change in between-stratum variance)`` ``# from null-model to gender-model`` ``(``v_null``$``var.random`` ``-`` ``v_gender``$``var.random``)`` ``/`` ``v_null``$``var.random`` ``#> [1] 0.3202535`` `` ``# PCV from null-model to employment-model`` ``(``v_null``$``var.random`` ``-`` ``v_employment``$``var.random``)`` ``/`` ``v_null``$``var.random`` ``#> [1] 0.3859538`` `` ``# PCV from null-model to age-model`` ``(``v_null``$``var.random`` ``-`` ``v_age``$``var.random``)`` ``/`` ``v_null``$``var.random`` ``#> [1] 0.8809532`
 
 Again, we see that the PCV is in line with the models’ ICC’s and
 regression coefficients. We see the highest proportional change for
 `age`, meaning that - although gender and education can contribute to
 inequalities - age is the most relevant predictor.
+
+### 4. PCV in the full model: global additive or multiplicative effects
+
+Finally, a “full” model is fit, which includes all group level variables
+as level-1 *additive* fixed effects. Then, the PCV is again calculated.
+This allows us to see how much of the variability of the additive
+effects will be absorbed by the intersectional strata characteristics. A
+PCV close to 1 suggests that the differences between intersectional
+strata are primarily driven by additive main effects. Conversely, a PCV
+substantially below 1 indicates that these main effects cannot fully
+explain the strata-level variance, pointing to the presence of
+multiplicative interaction effects.
+
+`m_full`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`` `` ``qol`` ``~`` ``gender`` ``+`` ``employed`` ``+`` ``age`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``,`` `` data ``=`` ``efc`` ``)`` `` ``# investigate random effects parameters`` `[`random_parameters`](https://easystats.github.io/parameters/reference/random_parameters.html)`(``m_full``)`` ``#> # Random Effects`` ``#> `` ``#> Within-Group Variance 27.1 (5.21)`` ``#> Between-Group Variance`` ``#> Random Intercept (gender:employed:age) 0 (0)`` ``#> N (groups per factor)`` ``#> gender 2`` ``#> employed 2`` ``#> age 3`` ``#> Observations 895`
+
+We see that the between-group variance is literally zero, which means,
+no variation is left between the intersectional strata after adding
+those predictors as additive fixed effects. This suggests that the PCV
+will be (close to) 1, indicating we have no multiplicative interaction
+effects.
+
+`v_full`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_full``)`` `` ``# PCV (proportional change in between-stratum variance)`` ``# from null-model to full-model`` ``(``v_null``$``var.random`` ``-`` ``v_full``$``var.random``)`` ``/`` ``v_null``$``var.random`` ``#> [1] 1`
+
+Indeed, the PCV for the full model is 1.
 
 The ICC (or VPC) and the PCV are *global* measures of intersectionality
 (“are there additive or multiplicative effects and which characteristic
@@ -182,7 +200,7 @@ contributes most to inequalities?”). There is also an additional
 multiplicative effects?”), the strata-level residuals, which will be
 introduced below.
 
-### 4. Predict between-stratum variance and test for significant differences
+### 5. Predict between-stratum variance and test for significant differences
 
 Finally, we may want to have a clearer picture of how the different
 strata vary, which combination of characteristics defines the highest or
@@ -194,7 +212,7 @@ for the different groups.
 
 `predictions`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(`` `` ``m_null``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``, ``"age"``)``,`` `` estimate ``=`` ``"average"`` ``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``predictions``)`
 
-![](practical_intersectionality_files/figure-html/unnamed-chunk-10-1.png)
+![](practical_intersectionality_files/figure-html/unnamed-chunk-12-1.png)
 
 According to these results, employed male family carers, who are not
 older than 40 years, show on average the highest quality of life. On the
@@ -221,7 +239,7 @@ following code:
 
 `# Compare levels employment status by gender and age groups`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m_null``,`` `` contrast ``=`` ``"employed"``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"age"``)``,`` `` estimate ``=`` ``"average"`` ``)`` ``#> Averaged Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | gender | age | Difference (CI) | p`` ``#> -------------------------------------------------------------`` ``#> yes | no | Male | -40 | 0.88 (0.88, 0.88) | <0.001`` ``#> yes | no | Female | -40 | 0.86 (0.86, 0.86) | <0.001`` ``#> yes | no | Male | 41-64 | 0.53 (0.53, 0.53) | <0.001`` ``#> yes | no | Female | 41-64 | 0.34 (0.34, 0.34) | <0.001`` ``#> yes | no | Male | 65+ | 0.93 (0.93, 0.93) | <0.001`` ``#> yes | no | Female | 65+ | 1.32 (1.32, 1.32) | <0.001`` ``#> `` ``#> Variable predicted: qol`` ``#> Predictors contrasted: employed`` ``#> p-values are uncorrected.`
 
-### 5. Strata-level residuals: Specific additive vs. multiplicative effects
+### 6. Strata-level residuals: Specific additive vs. multiplicative effects
 
 In the MAIHDA framework, a specific measure of intersectionality is the
 *strata-level residual*, which corresponds to the random effects of the
@@ -243,18 +261,18 @@ function.
 
 `strata_residuals`` ``<-`` `[`estimate_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``m_null``)`` `` ``strata_residuals`` ``#> Group | Level | Parameter | Coefficient | SE | 95% CI`` ``#> ------------------------------------------------------------------------------------------`` ``#> gender:employed:age | Female:no:-40 | (Intercept) | 0.26 | 0.70 | [-1.11, 1.63]`` ``#> gender:employed:age | Female:no:41-64 | (Intercept) | -1.16 | 0.50 | [-2.14, -0.18]`` ``#> gender:employed:age | Female:no:65+ | (Intercept) | -1.38 | 0.57 | [-2.50, -0.27]`` ``#> gender:employed:age | Female:yes:-40 | (Intercept) | 1.12 | 0.63 | [-0.12, 2.37]`` ``#> gender:employed:age | Female:yes:41-64 | (Intercept) | -0.82 | 0.50 | [-1.81, 0.17]`` ``#> gender:employed:age | Female:yes:65+ | (Intercept) | -0.06 | 0.98 | [-1.98, 1.86]`` ``#> gender:employed:age | Male:no:-40 | (Intercept) | 0.33 | 0.84 | [-1.32, 1.97]`` ``#> gender:employed:age | Male:no:41-64 | (Intercept) | 0.02 | 0.69 | [-1.32, 1.37]`` ``#> gender:employed:age | Male:no:65+ | (Intercept) | -0.50 | 0.68 | [-1.83, 0.83]`` ``#> gender:employed:age | Male:yes:-40 | (Intercept) | 1.21 | 0.76 | [-0.29, 2.70]`` ``#> gender:employed:age | Male:yes:41-64 | (Intercept) | 0.55 | 0.61 | [-0.63, 1.74]`` ``#> gender:employed:age | Male:yes:65+ | (Intercept) | 0.43 | 1.00 | [-1.54, 2.40]`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``strata_residuals``)`
 
-![](practical_intersectionality_files/figure-html/unnamed-chunk-15-1.png)
+![](practical_intersectionality_files/figure-html/unnamed-chunk-17-1.png)
 
 According to the plot and table output, we find multiplicative effects
 for the two groups of non-employed females in the age of 41-64 and 65+.
 
-### 6. MAIHDA and logistic regression models
+### 7. MAIHDA and logistic regression models
 
 Compared to a MAIHDA analysis using *linear* regression models, there
 are two important aspects to consider when using *binary logistic*
 regression models.
 
-#### 6.1 Additive and multiplicatice effects
+#### 7.1 Additive and multiplicatice effects
 
 When applying this framework to dichotomous outcomes using logistic
 multilevel models, two important distinctions must be considered. First,
@@ -270,7 +288,7 @@ interactions. However, logistic models remain fully appropriate if the
 primary goal is to estimate strata-level effects to explore the overall
 patterning of inequalities across society (Evans et al. 2018).
 
-#### 6.2 Discriminatory Accuracy
+#### 7.2 Discriminatory Accuracy
 
 In the case of *linear* models, the ICC (VPC) works as measure of
 discriminatory accuracy. However, since the ICC relies on the

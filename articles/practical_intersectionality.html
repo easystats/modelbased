@@ -324,8 +324,7 @@ we ignore this fact for now, as the purpose of demonstrating the
 analysis approach is rarely affected.</p>
 </div>
 <div class="section level3">
-<h3 id="partially-adjusted-intersectional-model-and-pcv-global-additive-or-multiplicative-effects">3. Partially-adjusted intersectional model and PCV: global additive
-or multiplicative effects<a class="anchor" aria-label="anchor" href="#partially-adjusted-intersectional-model-and-pcv-global-additive-or-multiplicative-effects"></a>
+<h3 id="partially-adjusted-intersectional-model-and-pcv">3. Partially-adjusted intersectional model and PCV<a class="anchor" aria-label="anchor" href="#partially-adjusted-intersectional-model-and-pcv"></a>
 </h3>
 <p>In the next step we want to find out, which intersectional dimension
 contributes most to possible inequalities, i.e. which of our group
@@ -394,11 +393,6 @@ proportion of explained variance by the strata can be explained by a
 single dimension that define those strata. The PCV ranges from 0 to 1,
 and the closer to 1, the more this particular dimension explains social
 inequalities.</p>
-<p>Additionally, a PCV close to 1 suggests that the differences between
-intersectional strata are primarily driven by additive main effects.
-Conversely, a PCV substantially below 1 indicates that these main
-effects cannot fully explain the strata-level variance, pointing to the
-presence of multiplicative interaction effects.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># extract random effect variances from all models</span></span>
 <span><span class="va">v_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance</a></span><span class="op">(</span><span class="va">m_null</span><span class="op">)</span></span>
@@ -422,6 +416,51 @@ presence of multiplicative interaction effects.</p>
 regression coefficients. We see the highest proportional change for
 <code>age</code>, meaning that - although gender and education can
 contribute to inequalities - age is the most relevant predictor.</p>
+</div>
+<div class="section level3">
+<h3 id="pcv-in-the-full-model-global-additive-or-multiplicative-effects">4. PCV in the full model: global additive or multiplicative
+effects<a class="anchor" aria-label="anchor" href="#pcv-in-the-full-model-global-additive-or-multiplicative-effects"></a>
+</h3>
+<p>Finally, a “full” model is fit, which includes all group level
+variables as level-1 <em>additive</em> fixed effects. Then, the PCV is
+again calculated. This allows us to see how much of the variability of
+the additive effects will be absorbed by the intersectional strata
+characteristics. A PCV close to 1 suggests that the differences between
+intersectional strata are primarily driven by additive main effects.
+Conversely, a PCV substantially below 1 indicates that these main
+effects cannot fully explain the strata-level variance, pointing to the
+presence of multiplicative interaction effects.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">m_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
+<span>  <span class="va">qol</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">employed</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gender</span><span class="op">:</span><span class="va">employed</span><span class="op">:</span><span class="va">age</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">efc</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># investigate random effects parameters</span></span>
+<span><span class="fu"><a href="https://easystats.github.io/parameters/reference/random_parameters.html" class="external-link">random_parameters</a></span><span class="op">(</span><span class="va">m_full</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # Random Effects</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Within-Group Variance                     27.1 (5.21)</span></span>
+<span><span class="co">#&gt; Between-Group Variance</span></span>
+<span><span class="co">#&gt;   Random Intercept (gender:employed:age)     0    (0)</span></span>
+<span><span class="co">#&gt; N (groups per factor)</span></span>
+<span><span class="co">#&gt;   gender                                     2</span></span>
+<span><span class="co">#&gt;   employed                                   2</span></span>
+<span><span class="co">#&gt;   age                                        3</span></span>
+<span><span class="co">#&gt; Observations                               895</span></span></code></pre></div>
+<p>We see that the between-group variance is literally zero, which
+means, no variation is left between the intersectional strata after
+adding those predictors as additive fixed effects. This suggests that
+the PCV will be (close to) 1, indicating we have no multiplicative
+interaction effects.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">v_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance</a></span><span class="op">(</span><span class="va">m_full</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># PCV (proportional change in between-stratum variance)</span></span>
+<span><span class="co"># from null-model to full-model</span></span>
+<span><span class="op">(</span><span class="va">v_null</span><span class="op">$</span><span class="va">var.random</span> <span class="op">-</span> <span class="va">v_full</span><span class="op">$</span><span class="va">var.random</span><span class="op">)</span> <span class="op">/</span> <span class="va">v_null</span><span class="op">$</span><span class="va">var.random</span></span>
+<span><span class="co">#&gt; [1] 1</span></span></code></pre></div>
+<p>Indeed, the PCV for the full model is 1.</p>
 <div class="custom_note">
 <p>The ICC (or VPC) and the PCV are <em>global</em> measures of
 intersectionality (“are there additive or multiplicative effects and
@@ -432,7 +471,7 @@ residuals, which will be introduced below.</p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="predict-between-stratum-variance-and-test-for-significant-differences">4. Predict between-stratum variance and test for significant
+<h3 id="predict-between-stratum-variance-and-test-for-significant-differences">5. Predict between-stratum variance and test for significant
 differences<a class="anchor" aria-label="anchor" href="#predict-between-stratum-variance-and-test-for-significant-differences"></a>
 </h3>
 <p>Finally, we may want to have a clearer picture of how the different
@@ -441,14 +480,14 @@ maybe lowest risk group. To do so, we calculate predictions of the
 random effects (<em>unit-level</em> predictions).</p>
 <p>The following code shows the predicted average quality of life scores
 for the different groups.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span></span>
 <span>  <span class="va">m_null</span>,</span>
 <span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"employed"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_intersectionality_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="100%"></p>
+<p><img src="practical_intersectionality_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="100%"></p>
 <p>According to these results, employed male family carers, who are not
 older than 40 years, show on average the highest quality of life. On the
 other hand, unemployed female carers aged 65 or older have the lowest
@@ -457,7 +496,7 @@ quality of life.</p>
 between groups are statistically significant. Since all combinations of
 pairwise comparisons would return 66 rows in total, we just show the
 first ten rows for demonstrating purpose.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># just show first 10 rows of output...</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m_null</span>,</span>
@@ -486,7 +525,7 @@ first ten rows for demonstrating purpose.</p>
 within the levels of the other groups, we can use the <code>by</code>
 argument. This reduces the output and only compares the focal term(s)
 within the levels of the remaining predictors.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compare levels of gender and employment status for age groups</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m_null</span>,</span>
@@ -523,7 +562,7 @@ within the levels of the remaining predictors.</p>
 <p>E.g., if we look at the plot and want to know whether female persons
 aged 65+ differ depending on their employment status, we can use the
 following code:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compare levels employment status by gender and age groups</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m_null</span>,</span>
@@ -547,7 +586,7 @@ following code:</p>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="strata-level-residuals-specific-additive-vs--multiplicative-effects">5. Strata-level residuals: Specific additive vs. multiplicative
+<h3 id="strata-level-residuals-specific-additive-vs--multiplicative-effects">6. Strata-level residuals: Specific additive vs. multiplicative
 effects<a class="anchor" aria-label="anchor" href="#strata-level-residuals-specific-additive-vs--multiplicative-effects"></a>
 </h3>
 <p>In the MAIHDA framework, a specific measure of intersectionality is
@@ -566,7 +605,7 @@ significant interaction effect – or a multiplicative effect – in that
 specific stratum <span class="citation">(Keller et al. 2023)</span>.</p>
 <p>We can easily compute the strata-level residuals using the
 <code><a href="../reference/estimate_grouplevel.html">estimate_grouplevel()</a></code> function.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">strata_residuals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">m_null</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">strata_residuals</span></span>
@@ -586,19 +625,19 @@ specific stratum <span class="citation">(Keller et al. 2023)</span>.</p>
 <span><span class="co">#&gt; gender:employed:age | Male:yes:65+     | (Intercept) |        0.43 | 1.00 | [-1.54,  2.40]</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">strata_residuals</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_intersectionality_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="100%"></p>
+<p><img src="practical_intersectionality_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="100%"></p>
 <p>According to the plot and table output, we find multiplicative
 effects for the two groups of non-employed females in the age of 41-64
 and 65+.</p>
 </div>
 <div class="section level3">
-<h3 id="maihda-and-logistic-regression-models">6. MAIHDA and logistic regression models<a class="anchor" aria-label="anchor" href="#maihda-and-logistic-regression-models"></a>
+<h3 id="maihda-and-logistic-regression-models">7. MAIHDA and logistic regression models<a class="anchor" aria-label="anchor" href="#maihda-and-logistic-regression-models"></a>
 </h3>
 <p>Compared to a MAIHDA analysis using <em>linear</em> regression
 models, there are two important aspects to consider when using
 <em>binary logistic</em> regression models.</p>
 <div class="section level4">
-<h4 id="additive-and-multiplicatice-effects">6.1 Additive and multiplicatice effects<a class="anchor" aria-label="anchor" href="#additive-and-multiplicatice-effects"></a>
+<h4 id="additive-and-multiplicatice-effects">7.1 Additive and multiplicatice effects<a class="anchor" aria-label="anchor" href="#additive-and-multiplicatice-effects"></a>
 </h4>
 <p>When applying this framework to dichotomous outcomes using logistic
 multilevel models, two important distinctions must be considered. First,
@@ -615,7 +654,7 @@ patterning of inequalities across society <span class="citation">(Evans
 et al. 2018)</span>.</p>
 </div>
 <div class="section level4">
-<h4 id="discriminatory-accuracy">6.2 Discriminatory Accuracy<a class="anchor" aria-label="anchor" href="#discriminatory-accuracy"></a>
+<h4 id="discriminatory-accuracy">7.2 Discriminatory Accuracy<a class="anchor" aria-label="anchor" href="#discriminatory-accuracy"></a>
 </h4>
 <p>In the case of <em>linear</em> models, the ICC (VPC) works as measure
 of discriminatory accuracy. However, since the ICC relies on the
