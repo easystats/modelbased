@@ -194,11 +194,11 @@ effects.
 Indeed, the PCV for the full model is 1.
 
 The ICC (or VPC) and the PCV are *global* measures of intersectionality
-(“are there additive or multiplicative effects and which characteristic
-contributes most to inequalities?”). There is also an additional
-*specific* measure of intersectionality (“which intersections may show
-multiplicative effects?”), the strata-level residuals, which will be
-introduced below.
+(“are there differences between intersectional strata” and “are there
+additive or multiplicative effects and which characteristic contributes
+most to inequalities?”). There is also an additional *specific* measure
+of intersectionality (“which intersections may show multiplicative
+effects?”), the strata-level residuals, which will be introduced below.
 
 ### 5. Predict between-stratum variance and test for significant differences
 
@@ -257,14 +257,15 @@ multiplicative effect – in that specific stratum (Keller et al. 2023).
 
 We can easily compute the strata-level residuals using the
 [`estimate_grouplevel()`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)
-function.
+function. **Important**: We need to calculate these residuals for the
+*main effects* (full) model, not for the *null* model.
 
-`strata_residuals`` ``<-`` `[`estimate_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``m_null``)`` `` ``strata_residuals`` ``#> Group | Level | Parameter | Coefficient | SE | 95% CI`` ``#> ------------------------------------------------------------------------------------------`` ``#> gender:employed:age | Female:no:-40 | (Intercept) | 0.26 | 0.70 | [-1.11, 1.63]`` ``#> gender:employed:age | Female:no:41-64 | (Intercept) | -1.16 | 0.50 | [-2.14, -0.18]`` ``#> gender:employed:age | Female:no:65+ | (Intercept) | -1.38 | 0.57 | [-2.50, -0.27]`` ``#> gender:employed:age | Female:yes:-40 | (Intercept) | 1.12 | 0.63 | [-0.12, 2.37]`` ``#> gender:employed:age | Female:yes:41-64 | (Intercept) | -0.82 | 0.50 | [-1.81, 0.17]`` ``#> gender:employed:age | Female:yes:65+ | (Intercept) | -0.06 | 0.98 | [-1.98, 1.86]`` ``#> gender:employed:age | Male:no:-40 | (Intercept) | 0.33 | 0.84 | [-1.32, 1.97]`` ``#> gender:employed:age | Male:no:41-64 | (Intercept) | 0.02 | 0.69 | [-1.32, 1.37]`` ``#> gender:employed:age | Male:no:65+ | (Intercept) | -0.50 | 0.68 | [-1.83, 0.83]`` ``#> gender:employed:age | Male:yes:-40 | (Intercept) | 1.21 | 0.76 | [-0.29, 2.70]`` ``#> gender:employed:age | Male:yes:41-64 | (Intercept) | 0.55 | 0.61 | [-0.63, 1.74]`` ``#> gender:employed:age | Male:yes:65+ | (Intercept) | 0.43 | 1.00 | [-1.54, 2.40]`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``strata_residuals``)`
+`strata_residuals`` ``<-`` `[`estimate_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``m_full``)`` `` ``strata_residuals`` ``#> Group | Level | Parameter | Coefficient | SE | 95% CI`` ``#> ---------------------------------------------------------------------------------------------`` ``#> gender:employed:age | Female:no:-40 | (Intercept) | -2.23e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:no:41-64 | (Intercept) | 1.58e-08 | 1.49e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:no:65+ | (Intercept) | 1.80e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:yes:-40 | (Intercept) | 1.95e-08 | 1.50e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:yes:41-64 | (Intercept) | -3.58e-08 | 1.60e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:yes:65+ | (Intercept) | 9.71e-10 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:no:-40 | (Intercept) | -9.86e-09 | 1.47e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:no:41-64 | (Intercept) | 6.36e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:no:65+ | (Intercept) | -1.19e-08 | 1.47e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:yes:-40 | (Intercept) | -7.41e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:yes:41-64 | (Intercept) | 1.37e-08 | 1.48e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:yes:65+ | (Intercept) | 9.11e-09 | 1.47e-04 | [ 0.00, 0.00]`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``strata_residuals``)`
 
 ![](practical_intersectionality_files/figure-html/unnamed-chunk-17-1.png)
 
-According to the plot and table output, we find multiplicative effects
-for the two groups of non-employed females in the age of 41-64 and 65+.
+As expected (because the PCV is 1, indicating we found no multiplicative
+effects), als strata-level residuals are close to zero.
 
 ### 7. MAIHDA and logistic regression models
 
