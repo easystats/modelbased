@@ -229,7 +229,7 @@ v_full <- get_variance(m_full)
 Indeed, the PCV for the full model is 1.
 
 ::: custom_note
- The ICC (or VPC) and the PCV are *global* measures of intersectionality ("are there additive or multiplicative effects and which characteristic contributes most to inequalities?"). There is also an additional *specific* measure of intersectionality ("which intersections may show multiplicative effects?"), the strata-level residuals, which will be introduced below.
+ The ICC (or VPC) and the PCV are *global* measures of intersectionality ("are there differences between intersectional strata" and "are there additive or multiplicative effects and which characteristic contributes most to inequalities?"). There is also an additional *specific* measure of intersectionality ("which intersections may show multiplicative effects?"), the strata-level residuals, which will be introduced below.
 :::
 
 ## 5. Predict between-stratum variance and test for significant differences
