@@ -272,15 +272,18 @@ different measure for the discriminatory accuracy.
 
 In the context of *logistic* regression for dichotomous outcomes, the
 Area Under the Curve (AUC) serves as a measure of discriminatory
-accuracy. It evaluates how accurately knowing an individual’s
-intersectional stratum can discriminate between those who experience the
-outcome and those who do not. Formally, the AUC represents the
-probability that a randomly selected individual with the outcome will
-have a higher predicted probability than a randomly selected individual
-without it. The AUC ranges from 0.5 to 1.0 (or 50% to 100%), where 0.5
-indicates that the intersectional strata provide no discriminatory
-accuracy, and 1.0 denotes perfect discriminatory accuracy (Evans et al.
-2024).
+accuracy (which can be calculated using
+[`performance::performance_roc()`](https://easystats.github.io/performance/reference/performance_roc.html)
+or
+[`performance::performance_accuracy()`](https://easystats.github.io/performance/reference/performance_accuracy.html)).
+It evaluates how accurately knowing an individual’s intersectional
+stratum can discriminate between those who experience the outcome and
+those who do not. Formally, the AUC represents the probability that a
+randomly selected individual with the outcome will have a higher
+predicted probability than a randomly selected individual without it.
+The AUC ranges from 0.5 to 1.0 (or 50% to 100%), where 0.5 indicates
+that the intersectional strata provide no discriminatory accuracy, and
+1.0 denotes perfect discriminatory accuracy (Evans et al. 2024).
 
 ### 8. Conclusion
 
