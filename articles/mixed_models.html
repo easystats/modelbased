@@ -509,6 +509,16 @@ that more accurately reflect the overall patterns observed within the
 actual sample data. By averaging over the observed data, we obtain a
 more robust and representative estimate of the population-level effects,
 making it a preferred strategy for interpreting mixed model results.</p>
+<div class="custom_note">
+<p>One exception for using <code>estimate = "average"</code> can be when
+continuous focal predictors are involved, see the <a href="https://easystats.github.io/modelbased/articles/technical_marginalization.html">vignette
+on marginalization methods</a>. Especially for
+<strong>visualizations</strong>, <em>conditional</em> predictions or
+<code>estimate = "population"</code> typically yield smoother curves for
+continuous focal predictors, whereas <em>marginal</em> predictions with
+<code>estimate = "average"</code> may introduce noisy visual
+artifacts.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

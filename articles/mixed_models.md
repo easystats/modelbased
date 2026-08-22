@@ -172,6 +172,14 @@ averaging over the observed data, we obtain a more robust and
 representative estimate of the population-level effects, making it a
 preferred strategy for interpreting mixed model results.
 
+One exception for using `estimate = "average"` can be when continuous
+focal predictors are involved, see the [vignette on marginalization
+methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html).
+Especially for **visualizations**, *conditional* predictions or
+`estimate = "population"` typically yield smoother curves for continuous
+focal predictors, whereas *marginal* predictions with
+`estimate = "average"` may introduce noisy visual artifacts.
+
 ## References
 
 Heiss, Andrew. 2022. “Marginal and Conditional Effects for GLMMs with
