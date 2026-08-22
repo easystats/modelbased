@@ -3,8 +3,8 @@
 This vignette demonstrate how to use *modelbased* in the context of an
 intersectional multilevel analysis of individual heterogeneity, using
 the MAIHDA framework. The general approach of the MAIHDA framework
-(sometimes also *I-MAIHDA*) is described in *Axelsson Fisk et al. 2018*
-and *Evans et al. 2024*.
+(sometimes also *I-MAIHDA*) is described in Axelsson Fisk et al. (2018)
+and Evans et al. (2024).
 
 Intersectionality analysis is a new approach in social epidemiology,
 which attempts to move away from looking at relevant social indicators
@@ -33,6 +33,11 @@ The steps we are showing here are:
     outcome by intersectional strata, to get a clearer picture of the
     variation between intersectional dimensions, as well as testing
     specific strata for significant differences.
+
+5.  Look at group-level estimates (BLUPs), which represent the
+    group-level residuals (also called *strata-level residuals*, see
+    Keller et al. (2023)), to see whether we find additive or
+    multiplicative effects for strata.
 
 ### 1. Preparing the data and defining intersectional strata
 
@@ -82,7 +87,8 @@ fixed effects, but only our different intersectional dimensions:
 The purpose of this model is to quantify the “discriminatory accuracy”,
 which is achieved by calculating the ICC (see
 [`performance::icc()`](https://easystats.github.io/performance/reference/icc.html))
-of this model. The higher the ICC, the greater the degree of similarity
+of this model (sometimes also calles the *VPC*, the variance partition
+coefficient). The higher the ICC, the greater the degree of similarity
 *within the strata* (regarding quality of life) and the greater the
 difference in quality of life *between the intersectional strata*. I.e.,
 the higher the ICC, the better the model is at discriminating
@@ -161,6 +167,13 @@ regression coefficients. We see the highest proportional change for
 `age`, meaning that - although gender and education can contribute to
 inequalities - age is the most relevant predictor.
 
+The ICC (or VPC) and the PCV are *global* measures of intersectionality
+(“are there additive or multiplicative effects and which characteristic
+contributes most to inequalities?”). There is also an additional
+*specific* measure of intersectionality (“which intersections may show
+multiplicative effects?”), the strata-level residuals, which will be
+introduced in section 6.
+
 ### 4. Predict between-stratum variance and test for significant differences
 
 Finally, we may want to have a clearer picture of how the different
@@ -171,7 +184,7 @@ random effects (*unit-level* predictions).
 The following code shows the predicted average quality of life scores
 for the different groups.
 
-`predictions`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``m_null``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``, ``"age"``)``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``predictions``)`
+`predictions`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(`` `` ``m_null``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``, ``"age"``)``,`` `` estimate ``=`` ``"average"`` ``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``predictions``)`
 
 ![](practical_intersectionality_files/figure-html/unnamed-chunk-10-1.png)
 
@@ -185,22 +198,62 @@ between groups are statistically significant. Since all combinations of
 pairwise comparisons would return 66 rows in total, we just show the
 first ten rows for demonstrating purpose.
 
-`# just show first 10 rows of output...`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``predictions``, contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``, ``"age"``)``)``[``1``:``10``, ``]`` ``#> Model-based Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> -----------------------------------------------------------------`` ``#> Male, no, -40 | Female, no, -40 | 0.07 (-2.11, 2.25) | 0.951`` ``#> Male, no, -40 | Male, yes, -40 | -0.88 (-3.18, 1.43) | 0.455`` ``#> Female, no, -40 | Male, yes, -40 | -0.95 (-2.99, 1.10) | 0.364`` ``#> Male, no, -40 | Female, yes, -40 | -0.79 (-2.89, 1.30) | 0.457`` ``#> Female, no, -40 | Female, yes, -40 | -0.86 (-2.67, 0.94) | 0.348`` ``#> Male, yes, -40 | Female, yes, -40 | 0.08 (-1.86, 2.03) | 0.932`` ``#> Male, no, -40 | Male, no, 41-64 | 0.30 (-1.84, 2.45) | 0.781`` ``#> Female, no, -40 | Male, no, 41-64 | 0.24 (-1.63, 2.10) | 0.805`` ``#> Male, yes, -40 | Male, no, 41-64 | 1.18 (-0.83, 3.19) | 0.248`` ``#> Female, yes, -40 | Male, no, 41-64 | 1.10 (-0.66, 2.86) | 0.221`` ``#> `` ``#> Variable predicted: qol`` ``#> Predictors contrasted: gender, employed, age`
+`# just show first 10 rows of output...`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m_null``,`` `` contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``, ``"age"``)``,`` `` estimate ``=`` ``"average"`` ``)``[``1``:``10``, ``]`` ``#> Averaged Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> ------------------------------------------------------------------`` ``#> Male, no, 41-64 | Male, no, -40 | -0.30 (-0.30, -0.30) | <0.001`` ``#> Male, no, 65++ | Male, no, -40 | -0.83 (-0.83, -0.83) | <0.001`` ``#> Male, yes, -40 | Male, no, -40 | 0.88 ( 0.88, 0.88) | <0.001`` ``#> Male, yes, 41-64 | Male, no, -40 | 0.23 ( 0.23, 0.23) | <0.001`` ``#> Male, yes, 65++ | Male, no, -40 | 0.10 ( 0.10, 0.10) | <0.001`` ``#> Female, no, -40 | Male, no, -40 | -0.07 (-0.07, -0.07) | <0.001`` ``#> Female, no, 41-64 | Male, no, -40 | -1.49 (-1.49, -1.49) | <0.001`` ``#> Female, no, 65++ | Male, no, -40 | -1.71 (-1.71, -1.71) | <0.001`` ``#> Female, yes, -40 | Male, no, -40 | 0.79 ( 0.79, 0.79) | <0.001`` ``#> Female, yes, 41-64 | Male, no, -40 | -1.15 (-1.15, -1.15) | <0.001`` ``#> `` ``#> Variable predicted: qol`` ``#> Predictors contrasted: gender, employed, age`` ``#> p-values are uncorrected.`
 
 If we only want to modulate one factor and compare those groups within
 the levels of the other groups, we can use the `by` argument. This
 reduces the output and only compares the focal term(s) within the levels
 of the remaining predictors.
 
-`# Compare levels of gender and employment status for age groups`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``predictions``, contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``)``, by ``=`` ``"age"``)`` ``#> Model-based Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | age | Difference (CI) | p`` ``#> ---------------------------------------------------------------`` ``#> Male, no | Female, no | -40 | 0.07 (-2.11, 2.25) | 0.951`` ``#> Male, no | Male, yes | -40 | -0.88 (-3.18, 1.43) | 0.455`` ``#> Female, no | Male, yes | -40 | -0.95 (-2.99, 1.10) | 0.364`` ``#> Male, no | Female, yes | -40 | -0.79 (-2.89, 1.30) | 0.457`` ``#> Female, no | Female, yes | -40 | -0.86 (-2.67, 0.94) | 0.348`` ``#> Male, yes | Female, yes | -40 | 0.08 (-1.86, 2.03) | 0.932`` ``#> Male, no | Female, no | 41-64 | 1.18 (-0.26, 2.63) | 0.109`` ``#> Male, no | Male, yes | 41-64 | -0.53 (-2.22, 1.16) | 0.538`` ``#> Female, no | Male, yes | 41-64 | -1.71 (-2.98, -0.44) | 0.008`` ``#> Male, no | Female, yes | 41-64 | 0.84 (-0.62, 2.30) | 0.258`` ``#> Female, no | Female, yes | 41-64 | -0.34 (-1.28, 0.60) | 0.476`` ``#> Male, yes | Female, yes | 41-64 | 1.37 ( 0.09, 2.66) | 0.036`` ``#> Male, no | Female, no | 65+ | 0.88 (-0.62, 2.38) | 0.250`` ``#> Male, no | Male, yes | 65+ | -0.93 (-3.39, 1.53) | 0.459`` ``#> Female, no | Male, yes | 65+ | -1.81 (-4.10, 0.48) | 0.122`` ``#> Male, no | Female, yes | 65+ | -0.44 (-2.82, 1.94) | 0.717`` ``#> Female, no | Female, yes | 65+ | -1.32 (-3.53, 0.89) | 0.241`` ``#> Male, yes | Female, yes | 65+ | 0.49 (-2.45, 3.43) | 0.745`` ``#> `` ``#> Variable predicted: qol`` ``#> Predictors contrasted: gender, employed`
+`# Compare levels of gender and employment status for age groups`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m_null``,`` `` contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``)``,`` `` by ``=`` ``"age"``,`` `` estimate ``=`` ``"average"`` ``)`` ``#> Averaged Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | age | Difference (CI) | p`` ``#> ----------------------------------------------------------------`` ``#> Male, yes | Male, no | -40 | 0.88 ( 0.88, 0.88) | <0.001`` ``#> Female, no | Male, no | -40 | -0.07 (-0.07, -0.07) | <0.001`` ``#> Female, yes | Male, no | -40 | 0.79 ( 0.79, 0.79) | <0.001`` ``#> Female, no | Male, yes | -40 | -0.95 (-0.95, -0.95) | <0.001`` ``#> Female, yes | Male, yes | -40 | -0.08 (-0.08, -0.08) | <0.001`` ``#> Female, yes | Female, no | -40 | 0.86 ( 0.86, 0.86) | <0.001`` ``#> Male, yes | Male, no | 41-64 | 0.53 ( 0.53, 0.53) | <0.001`` ``#> Female, no | Male, no | 41-64 | -1.18 (-1.18, -1.18) | <0.001`` ``#> Female, yes | Male, no | 41-64 | -0.84 (-0.84, -0.84) | <0.001`` ``#> Female, no | Male, yes | 41-64 | -1.71 (-1.71, -1.71) | <0.001`` ``#> Female, yes | Male, yes | 41-64 | -1.37 (-1.37, -1.37) | <0.001`` ``#> Female, yes | Female, no | 41-64 | 0.34 ( 0.34, 0.34) | <0.001`` ``#> Male, yes | Male, no | 65+ | 0.93 ( 0.93, 0.93) | <0.001`` ``#> Female, no | Male, no | 65+ | -0.88 (-0.88, -0.88) | <0.001`` ``#> Female, yes | Male, no | 65+ | 0.44 ( 0.44, 0.44) | <0.001`` ``#> Female, no | Male, yes | 65+ | -1.81 (-1.81, -1.81) | <0.001`` ``#> Female, yes | Male, yes | 65+ | -0.49 (-0.49, -0.49) | <0.001`` ``#> Female, yes | Female, no | 65+ | 1.32 ( 1.32, 1.32) | <0.001`` ``#> `` ``#> Variable predicted: qol`` ``#> Predictors contrasted: gender, employed`` ``#> p-values are uncorrected.`
 
 E.g., if we look at the plot and want to know whether female persons
 aged 65+ differ depending on their employment status, we can use the
 following code:
 
-`# Compare levels employment status by gender and age groups`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``predictions``, contrast ``=`` ``"employed"``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"age"``)``)`` ``#> Model-based Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | gender | age | Difference (CI) | p`` ``#> --------------------------------------------------------------`` ``#> no | yes | Female | -40 | -0.86 (-2.67, 0.94) | 0.348`` ``#> no | yes | Male | -40 | -0.88 (-3.18, 1.43) | 0.455`` ``#> no | yes | Female | 41-64 | -0.34 (-1.28, 0.60) | 0.476`` ``#> no | yes | Male | 41-64 | -0.53 (-2.22, 1.16) | 0.538`` ``#> no | yes | Female | 65+ | -1.32 (-3.53, 0.89) | 0.241`` ``#> no | yes | Male | 65+ | -0.93 (-3.39, 1.53) | 0.459`` ``#> `` ``#> Variable predicted: qol`` ``#> Predictors contrasted: employed`
+`# Compare levels employment status by gender and age groups`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m_null``,`` `` contrast ``=`` ``"employed"``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"age"``)``,`` `` estimate ``=`` ``"average"`` ``)`` ``#> Averaged Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | gender | age | Difference (CI) | p`` ``#> -------------------------------------------------------------`` ``#> yes | no | Male | -40 | 0.88 (0.88, 0.88) | <0.001`` ``#> yes | no | Female | -40 | 0.86 (0.86, 0.86) | <0.001`` ``#> yes | no | Male | 41-64 | 0.53 (0.53, 0.53) | <0.001`` ``#> yes | no | Female | 41-64 | 0.34 (0.34, 0.34) | <0.001`` ``#> yes | no | Male | 65+ | 0.93 (0.93, 0.93) | <0.001`` ``#> yes | no | Female | 65+ | 1.32 (1.32, 1.32) | <0.001`` ``#> `` ``#> Variable predicted: qol`` ``#> Predictors contrasted: employed`` ``#> p-values are uncorrected.`
 
-### 5. Conclusion
+### 5. Additive vs. multiplicative effects
+
+In the MAIHDA framework, a specific measure of intersectionality is the
+*strata-level residual*, which corresponds to the random effects of the
+intersectional interaction model. Examining these residuals allows us to
+distinguish between additive and multiplicative effects: if there are no
+interactions, the inclusion of main effects would fully explain the
+variance between intersectional strata and all random effects would be
+(close to) zero. A positive strata-level residual indicates that a
+stratum’s mean outcome is higher than expected from the additive main
+effects, whereas a negative strata-level residual indicates a lower mean
+outcome than expected for this stratum. Consequently, when the credible
+or confidence interval of a strata-level residual does not include zero,
+this points to a statistically significant interaction effect – or a
+multiplicative effect – in that specific stratum (Keller et al. 2023).
+
+We can easily compute the strata-level residuals using the
+[`estimate_grouplevel()`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)
+function.
+
+`strata_residuals`` ``<-`` `[`estimate_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``m_null``)`` `` ``strata_residuals`` ``#> Parameter | Coefficient (CI) | Group | Level`` ``#> ---------------------------------------------------------------------------`` ``#> (Intercept) | 0.26 (-1.11, 1.63) | gender:employed:age | Female:no:-40`` ``#> (Intercept) | -1.16 (-2.14, -0.18) | gender:employed:age | Female:no:41-64`` ``#> (Intercept) | -1.38 (-2.50, -0.27) | gender:employed:age | Female:no:65+`` ``#> (Intercept) | 1.12 (-0.12, 2.37) | gender:employed:age | Female:yes:-40`` ``#> (Intercept) | -0.82 (-1.81, 0.17) | gender:employed:age | Female:yes:41-64`` ``#> (Intercept) | -0.06 (-1.98, 1.86) | gender:employed:age | Female:yes:65+`` ``#> (Intercept) | 0.33 (-1.32, 1.97) | gender:employed:age | Male:no:-40`` ``#> (Intercept) | 0.02 (-1.32, 1.37) | gender:employed:age | Male:no:41-64`` ``#> (Intercept) | -0.50 (-1.83, 0.83) | gender:employed:age | Male:no:65+`` ``#> (Intercept) | 1.21 (-0.29, 2.70) | gender:employed:age | Male:yes:-40`` ``#> (Intercept) | 0.55 (-0.63, 1.74) | gender:employed:age | Male:yes:41-64`` ``#> (Intercept) | 0.43 (-1.54, 2.40) | gender:employed:age | Male:yes:65+`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``strata_residuals``)`
+
+![](practical_intersectionality_files/figure-html/unnamed-chunk-14-1.png)
+
+### 6. MAIHDA and logistic regression models
+
+When applying this framework to dichotomous outcomes using logistic
+multilevel models, two important distinctions must be considered. First,
+the within-strata (level 1) variance is not estimated, as the variance
+of the binomial distribution is already known (and fixed, see
+[`?insight::get_variance`](https://easystats.github.io/insight/reference/get_variance.html)
+for Bernoulli models). Second, logistic models operate on a
+multiplicative scale rather than an additive one. Accodring to evans et
+al. (2018), it is inappropriate to use logistic models to examine
+strata-level residuals for additive interaction effects, since the
+inclusion of main effects may already account for some of these
+interactions. However, logistic models remain fully appropriate if the
+primary goal is to estimate strata-level effects to explore the overall
+patterning of inequalities across society (Evans et al. 2018).
+
+### 7. Conclusion
 
 Intersectional multilevel analysis of individual heterogeneity, using
 the MAIHDA framework, is a new approach in social epidemiology, which
@@ -221,13 +274,27 @@ inequalities in our data for certain groups (at risk).
 
 ## References
 
-1.  Axelsson Fisk S, Mulinari S, Wemrell M, Leckie G, Perez Vicente R,
-    Merlo J. Chronic Obstructive Pulmonary Disease in Sweden: An
-    intersectional multilevel analysis of individual heterogeneity and
-    discriminatory accuracy. SSM - Population Health (2018) 4:334-346.
-    doi: 10.1016/j.ssmph.2018.03.005
+Axelsson Fisk, Sten, Shai Mulinari, Maria Wemrell, George Leckie, Raquel
+Perez Vicente, and Juan Merlo. 2018. “Chronic Obstructive Pulmonary
+Disease in Sweden: An Intersectional Multilevel Analysis of Individual
+Heterogeneity and Discriminatory Accuracy.” *SSM - Population Health* 4
+(April): 334–46. <https://doi.org/10.1016/j.ssmph.2018.03.005>.
 
-2.  Evans CR, Leckie G, Subramanian SV, Bell A, Merlo J. A tutorial for
-    conducting intersectional multilevel analysis of individual
-    heterogeneity and discriminatory accuracy (MAIHDA). SSM - Population
-    Health (2024) 26; doi: 10.1016/j.ssmph.2024.101664
+Evans, Clare R., George Leckie, S. V. Subramanian, Andrew Bell, and Juan
+Merlo. 2024. “A Tutorial for Conducting Intersectional Multilevel
+Analysis of Individual Heterogeneity and Discriminatory Accuracy
+(MAIHDA).” *SSM - Population Health* 26 (June): 101664.
+<https://doi.org/10.1016/j.ssmph.2024.101664>.
+
+Evans, Clare R., David R. Williams, Jukka-Pekka Onnela, and S. V.
+Subramanian. 2018. “A Multilevel Approach to Modeling Health
+Inequalities at the Intersection of Multiple Social Identities.” *Social
+Science & Medicine* 203 (April): 64–73.
+<https://doi.org/10.1016/j.socscimed.2017.11.011>.
+
+Keller, Lena, Oliver Lüdtke, Franzis Preckel, and Martin Brunner. 2023.
+“Educational Inequalities at the Intersection of Multiple Social
+Categories: A n Introduction and Systematic Review of the Multilevel
+Analysis of Individual Heterogeneity and Discriminatory Accuracy
+(MAIHDA) Approach.” *Educational Psychology Review* 35 (1): 31.
+<https://doi.org/10.1007/s10648-023-09733-5>.

@@ -152,7 +152,7 @@
 context of an intersectional multilevel analysis of individual
 heterogeneity, using the MAIHDA framework. The general approach of the
 MAIHDA framework (sometimes also <em>I-MAIHDA</em>) is described in
-<em>Axelsson Fisk et al. 2018</em> and <em>Evans et al. 2024</em>.</p>
+<span class="citation">Axelsson Fisk et al. (2018)</span> and <span class="citation">Evans et al. (2024)</span>.</p>
 <p>Intersectionality analysis is a new approach in social epidemiology,
 which attempts to move away from looking at relevant social indicators
 in isolation.</p>
@@ -179,6 +179,10 @@ between-stratum variance (inequalities).</p></li>
 outcome by intersectional strata, to get a clearer picture of the
 variation between intersectional dimensions, as well as testing specific
 strata for significant differences.</p></li>
+<li><p>Look at group-level estimates (BLUPs), which represent the
+group-level residuals (also called <em>strata-level residuals</em>, see
+<span class="citation">Keller et al. (2023)</span>), to see whether we
+find additive or multiplicative effects for strata.</p></li>
 </ol>
 <div class="section level3">
 <h3 id="preparing-the-data-and-defining-intersectional-strata">1. Preparing the data and defining intersectional strata<a class="anchor" aria-label="anchor" href="#preparing-the-data-and-defining-intersectional-strata"></a>
@@ -280,12 +284,13 @@ fixed effects, but only our different intersectional dimensions:
 <span><span class="co"># m_null &lt;- glmmTMB(qol ~ 1 + (1 | strata), data = efc)</span></span></code></pre></div>
 <p>The purpose of this model is to quantify the “discriminatory
 accuracy”, which is achieved by calculating the ICC (see <a href="https://easystats.github.io/performance/reference/icc.html" class="external-link"><code>performance::icc()</code></a>)
-of this model. The higher the ICC, the greater the degree of similarity
-<em>within the strata</em> (regarding quality of life) and the greater
-the difference in quality of life <em>between the intersectional
-strata</em>. I.e., the higher the ICC, the better the model is at
-discriminating individuals with higher or lower quality of life score,
-as opposed to models with lower ICC.</p>
+of this model (sometimes also calles the <em>VPC</em>, the variance
+partition coefficient). The higher the ICC, the greater the degree of
+similarity <em>within the strata</em> (regarding quality of life) and
+the greater the difference in quality of life <em>between the
+intersectional strata</em>. I.e., the higher the ICC, the better the
+model is at discriminating individuals with higher or lower quality of
+life score, as opposed to models with lower ICC.</p>
 <p>We now look at the model parameters and the ICC of our simple
 intersectional model.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -407,6 +412,14 @@ inequalities.</p>
 regression coefficients. We see the highest proportional change for
 <code>age</code>, meaning that - although gender and education can
 contribute to inequalities - age is the most relevant predictor.</p>
+<div class="custom_note">
+<p>The ICC (or VPC) and the PCV are <em>global</em> measures of
+intersectionality (“are there additive or multiplicative effects and
+which characteristic contributes most to inequalities?”). There is also
+an additional <em>specific</em> measure of intersectionality (“which
+intersections may show multiplicative effects?”), the strata-level
+residuals, which will be introduced in section 6.</p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="predict-between-stratum-variance-and-test-for-significant-differences">4. Predict between-stratum variance and test for significant
@@ -419,7 +432,11 @@ random effects (<em>unit-level</em> predictions).</p>
 <p>The following code shows the predicted average quality of life scores
 for the different groups.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">m_null</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"employed"</span>, <span class="st">"age"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span></span>
+<span>  <span class="va">m_null</span>,</span>
+<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"employed"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
 <p><img src="practical_intersectionality_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="100%"></p>
 <p>According to these results, employed male family carers, who are not
@@ -432,78 +449,153 @@ pairwise comparisons would return 66 rows in total, we just show the
 first ten rows for demonstrating purpose.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># just show first 10 rows of output...</span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">predictions</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"employed"</span>, <span class="st">"age"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt; Model-based Contrasts Analysis</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">m_null</span>,</span>
+<span>  contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"employed"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
+<span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span>
+<span><span class="co">#&gt; Averaged Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1           | Level2           |     Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; -----------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; Male, no, -40    | Female, no, -40  |  0.07 (-2.11, 2.25) | 0.951</span></span>
-<span><span class="co">#&gt; Male, no, -40    | Male, yes, -40   | -0.88 (-3.18, 1.43) | 0.455</span></span>
-<span><span class="co">#&gt; Female, no, -40  | Male, yes, -40   | -0.95 (-2.99, 1.10) | 0.364</span></span>
-<span><span class="co">#&gt; Male, no, -40    | Female, yes, -40 | -0.79 (-2.89, 1.30) | 0.457</span></span>
-<span><span class="co">#&gt; Female, no, -40  | Female, yes, -40 | -0.86 (-2.67, 0.94) | 0.348</span></span>
-<span><span class="co">#&gt; Male, yes, -40   | Female, yes, -40 |  0.08 (-1.86, 2.03) | 0.932</span></span>
-<span><span class="co">#&gt; Male, no, -40    | Male, no, 41-64  |  0.30 (-1.84, 2.45) | 0.781</span></span>
-<span><span class="co">#&gt; Female, no, -40  | Male, no, 41-64  |  0.24 (-1.63, 2.10) | 0.805</span></span>
-<span><span class="co">#&gt; Male, yes, -40   | Male, no, 41-64  |  1.18 (-0.83, 3.19) | 0.248</span></span>
-<span><span class="co">#&gt; Female, yes, -40 | Male, no, 41-64  |  1.10 (-0.66, 2.86) | 0.221</span></span>
+<span><span class="co">#&gt; Level1             | Level2        |      Difference (CI) |      p</span></span>
+<span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Male, no, 41-64    | Male, no, -40 | -0.30 (-0.30, -0.30) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Male, no, 65++     | Male, no, -40 | -0.83 (-0.83, -0.83) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Male, yes, -40     | Male, no, -40 |  0.88 ( 0.88,  0.88) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Male, yes, 41-64   | Male, no, -40 |  0.23 ( 0.23,  0.23) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Male, yes, 65++    | Male, no, -40 |  0.10 ( 0.10,  0.10) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, no, -40    | Male, no, -40 | -0.07 (-0.07, -0.07) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, no, 41-64  | Male, no, -40 | -1.49 (-1.49, -1.49) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, no, 65++   | Male, no, -40 | -1.71 (-1.71, -1.71) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, yes, -40   | Male, no, -40 |  0.79 ( 0.79,  0.79) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, yes, 41-64 | Male, no, -40 | -1.15 (-1.15, -1.15) | &lt;0.001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: qol</span></span>
-<span><span class="co">#&gt; Predictors contrasted: gender, employed, age</span></span></code></pre></div>
+<span><span class="co">#&gt; Predictors contrasted: gender, employed, age</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <p>If we only want to modulate one factor and compare those groups
 within the levels of the other groups, we can use the <code>by</code>
 argument. This reduces the output and only compares the focal term(s)
 within the levels of the remaining predictors.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compare levels of gender and employment status for age groups</span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">predictions</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"employed"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"age"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Model-based Contrasts Analysis</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">m_null</span>,</span>
+<span>  contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"employed"</span><span class="op">)</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"age"</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Averaged Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1     | Level2      | age   |      Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; ---------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; Male, no   | Female, no  | -40   |  0.07 (-2.11,  2.25) | 0.951</span></span>
-<span><span class="co">#&gt; Male, no   | Male, yes   | -40   | -0.88 (-3.18,  1.43) | 0.455</span></span>
-<span><span class="co">#&gt; Female, no | Male, yes   | -40   | -0.95 (-2.99,  1.10) | 0.364</span></span>
-<span><span class="co">#&gt; Male, no   | Female, yes | -40   | -0.79 (-2.89,  1.30) | 0.457</span></span>
-<span><span class="co">#&gt; Female, no | Female, yes | -40   | -0.86 (-2.67,  0.94) | 0.348</span></span>
-<span><span class="co">#&gt; Male, yes  | Female, yes | -40   |  0.08 (-1.86,  2.03) | 0.932</span></span>
-<span><span class="co">#&gt; Male, no   | Female, no  | 41-64 |  1.18 (-0.26,  2.63) | 0.109</span></span>
-<span><span class="co">#&gt; Male, no   | Male, yes   | 41-64 | -0.53 (-2.22,  1.16) | 0.538</span></span>
-<span><span class="co">#&gt; Female, no | Male, yes   | 41-64 | -1.71 (-2.98, -0.44) | 0.008</span></span>
-<span><span class="co">#&gt; Male, no   | Female, yes | 41-64 |  0.84 (-0.62,  2.30) | 0.258</span></span>
-<span><span class="co">#&gt; Female, no | Female, yes | 41-64 | -0.34 (-1.28,  0.60) | 0.476</span></span>
-<span><span class="co">#&gt; Male, yes  | Female, yes | 41-64 |  1.37 ( 0.09,  2.66) | 0.036</span></span>
-<span><span class="co">#&gt; Male, no   | Female, no  | 65+   |  0.88 (-0.62,  2.38) | 0.250</span></span>
-<span><span class="co">#&gt; Male, no   | Male, yes   | 65+   | -0.93 (-3.39,  1.53) | 0.459</span></span>
-<span><span class="co">#&gt; Female, no | Male, yes   | 65+   | -1.81 (-4.10,  0.48) | 0.122</span></span>
-<span><span class="co">#&gt; Male, no   | Female, yes | 65+   | -0.44 (-2.82,  1.94) | 0.717</span></span>
-<span><span class="co">#&gt; Female, no | Female, yes | 65+   | -1.32 (-3.53,  0.89) | 0.241</span></span>
-<span><span class="co">#&gt; Male, yes  | Female, yes | 65+   |  0.49 (-2.45,  3.43) | 0.745</span></span>
+<span><span class="co">#&gt; Level1      | Level2     | age   |      Difference (CI) |      p</span></span>
+<span><span class="co">#&gt; ----------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Male, yes   | Male, no   | -40   |  0.88 ( 0.88,  0.88) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, no  | Male, no   | -40   | -0.07 (-0.07, -0.07) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, yes | Male, no   | -40   |  0.79 ( 0.79,  0.79) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, no  | Male, yes  | -40   | -0.95 (-0.95, -0.95) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, yes | Male, yes  | -40   | -0.08 (-0.08, -0.08) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, yes | Female, no | -40   |  0.86 ( 0.86,  0.86) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Male, yes   | Male, no   | 41-64 |  0.53 ( 0.53,  0.53) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, no  | Male, no   | 41-64 | -1.18 (-1.18, -1.18) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, yes | Male, no   | 41-64 | -0.84 (-0.84, -0.84) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, no  | Male, yes  | 41-64 | -1.71 (-1.71, -1.71) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, yes | Male, yes  | 41-64 | -1.37 (-1.37, -1.37) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, yes | Female, no | 41-64 |  0.34 ( 0.34,  0.34) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Male, yes   | Male, no   | 65+   |  0.93 ( 0.93,  0.93) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, no  | Male, no   | 65+   | -0.88 (-0.88, -0.88) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, yes | Male, no   | 65+   |  0.44 ( 0.44,  0.44) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, no  | Male, yes  | 65+   | -1.81 (-1.81, -1.81) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, yes | Male, yes  | 65+   | -0.49 (-0.49, -0.49) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Female, yes | Female, no | 65+   |  1.32 ( 1.32,  1.32) | &lt;0.001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: qol</span></span>
-<span><span class="co">#&gt; Predictors contrasted: gender, employed</span></span></code></pre></div>
+<span><span class="co">#&gt; Predictors contrasted: gender, employed</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <p>E.g., if we look at the plot and want to know whether female persons
 aged 65+ differ depending on their employment status, we can use the
 following code:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compare levels employment status by gender and age groups</span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">predictions</span>, contrast <span class="op">=</span> <span class="st">"employed"</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"age"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Model-based Contrasts Analysis</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">m_null</span>,</span>
+<span>  contrast <span class="op">=</span> <span class="st">"employed"</span>,</span>
+<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Averaged Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 | gender | age   |     Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; --------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; no     | yes    | Female | -40   | -0.86 (-2.67, 0.94) | 0.348</span></span>
-<span><span class="co">#&gt; no     | yes    | Male   | -40   | -0.88 (-3.18, 1.43) | 0.455</span></span>
-<span><span class="co">#&gt; no     | yes    | Female | 41-64 | -0.34 (-1.28, 0.60) | 0.476</span></span>
-<span><span class="co">#&gt; no     | yes    | Male   | 41-64 | -0.53 (-2.22, 1.16) | 0.538</span></span>
-<span><span class="co">#&gt; no     | yes    | Female | 65+   | -1.32 (-3.53, 0.89) | 0.241</span></span>
-<span><span class="co">#&gt; no     | yes    | Male   | 65+   | -0.93 (-3.39, 1.53) | 0.459</span></span>
+<span><span class="co">#&gt; Level1 | Level2 | gender | age   |   Difference (CI) |      p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; yes    | no     | Male   | -40   | 0.88 (0.88, 0.88) | &lt;0.001</span></span>
+<span><span class="co">#&gt; yes    | no     | Female | -40   | 0.86 (0.86, 0.86) | &lt;0.001</span></span>
+<span><span class="co">#&gt; yes    | no     | Male   | 41-64 | 0.53 (0.53, 0.53) | &lt;0.001</span></span>
+<span><span class="co">#&gt; yes    | no     | Female | 41-64 | 0.34 (0.34, 0.34) | &lt;0.001</span></span>
+<span><span class="co">#&gt; yes    | no     | Male   | 65+   | 0.93 (0.93, 0.93) | &lt;0.001</span></span>
+<span><span class="co">#&gt; yes    | no     | Female | 65+   | 1.32 (1.32, 1.32) | &lt;0.001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: qol</span></span>
-<span><span class="co">#&gt; Predictors contrasted: employed</span></span></code></pre></div>
+<span><span class="co">#&gt; Predictors contrasted: employed</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="conclusion">5. Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
+<h3 id="additive-vs--multiplicative-effects">5. Additive vs. multiplicative effects<a class="anchor" aria-label="anchor" href="#additive-vs--multiplicative-effects"></a>
+</h3>
+<p>In the MAIHDA framework, a specific measure of intersectionality is
+the <em>strata-level residual</em>, which corresponds to the random
+effects of the intersectional interaction model. Examining these
+residuals allows us to distinguish between additive and multiplicative
+effects: if there are no interactions, the inclusion of main effects
+would fully explain the variance between intersectional strata and all
+random effects would be (close to) zero. A positive strata-level
+residual indicates that a stratum’s mean outcome is higher than expected
+from the additive main effects, whereas a negative strata-level residual
+indicates a lower mean outcome than expected for this stratum.
+Consequently, when the credible or confidence interval of a strata-level
+residual does not include zero, this points to a statistically
+significant interaction effect – or a multiplicative effect – in that
+specific stratum <span class="citation">(Keller et al. 2023)</span>.</p>
+<p>We can easily compute the strata-level residuals using the
+<code><a href="../reference/estimate_grouplevel.html">estimate_grouplevel()</a></code> function.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">strata_residuals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">m_null</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">strata_residuals</span></span>
+<span><span class="co">#&gt; Parameter   | Coefficient (CI)     | Group               |            Level</span></span>
+<span><span class="co">#&gt; ---------------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; (Intercept) | 0.26 (-1.11,  1.63)  | gender:employed:age |    Female:no:-40</span></span>
+<span><span class="co">#&gt; (Intercept) | -1.16 (-2.14, -0.18) | gender:employed:age |  Female:no:41-64</span></span>
+<span><span class="co">#&gt; (Intercept) | -1.38 (-2.50, -0.27) | gender:employed:age |    Female:no:65+</span></span>
+<span><span class="co">#&gt; (Intercept) | 1.12 (-0.12,  2.37)  | gender:employed:age |   Female:yes:-40</span></span>
+<span><span class="co">#&gt; (Intercept) | -0.82 (-1.81,  0.17) | gender:employed:age | Female:yes:41-64</span></span>
+<span><span class="co">#&gt; (Intercept) | -0.06 (-1.98,  1.86) | gender:employed:age |   Female:yes:65+</span></span>
+<span><span class="co">#&gt; (Intercept) | 0.33 (-1.32,  1.97)  | gender:employed:age |      Male:no:-40</span></span>
+<span><span class="co">#&gt; (Intercept) | 0.02 (-1.32,  1.37)  | gender:employed:age |    Male:no:41-64</span></span>
+<span><span class="co">#&gt; (Intercept) | -0.50 (-1.83,  0.83) | gender:employed:age |      Male:no:65+</span></span>
+<span><span class="co">#&gt; (Intercept) | 1.21 (-0.29,  2.70)  | gender:employed:age |     Male:yes:-40</span></span>
+<span><span class="co">#&gt; (Intercept) | 0.55 (-0.63,  1.74)  | gender:employed:age |   Male:yes:41-64</span></span>
+<span><span class="co">#&gt; (Intercept) | 0.43 (-1.54,  2.40)  | gender:employed:age |     Male:yes:65+</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">strata_residuals</span><span class="op">)</span></span></code></pre></div>
+<p><img src="practical_intersectionality_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="maihda-and-logistic-regression-models">6. MAIHDA and logistic regression models<a class="anchor" aria-label="anchor" href="#maihda-and-logistic-regression-models"></a>
+</h3>
+<p>When applying this framework to dichotomous outcomes using logistic
+multilevel models, two important distinctions must be considered. First,
+the within-strata (level 1) variance is not estimated, as the variance
+of the binomial distribution is already known (and fixed, see <a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link"><code>?insight::get_variance</code></a>
+for Bernoulli models). Second, logistic models operate on a
+multiplicative scale rather than an additive one. Accodring to evans et
+al. (2018), it is inappropriate to use logistic models to examine
+strata-level residuals for additive interaction effects, since the
+inclusion of main effects may already account for some of these
+interactions. However, logistic models remain fully appropriate if the
+primary goal is to estimate strata-level effects to explore the overall
+patterning of inequalities across society <span class="citation">(Evans
+et al. 2018)</span>.</p>
+</div>
+<div class="section level3">
+<h3 id="conclusion">7. Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h3>
 <p>Intersectional multilevel analysis of individual heterogeneity, using
 the MAIHDA framework, is a new approach in social epidemiology, which
@@ -521,19 +613,43 @@ statistically significant or not, i.e. whether we find “evidence” for
 social inequalities in our data for certain groups (at risk).</p>
 </div>
 <div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<ol style="list-style-type: decimal">
-<li><p>Axelsson Fisk S, Mulinari S, Wemrell M, Leckie G, Perez Vicente
-R, Merlo J. Chronic Obstructive Pulmonary Disease in Sweden: An
-intersectional multilevel analysis of individual heterogeneity and
-discriminatory accuracy. SSM - Population Health (2018) 4:334-346. doi:
-10.1016/j.ssmph.2018.03.005</p></li>
-<li><p>Evans CR, Leckie G, Subramanian SV, Bell A, Merlo J. A tutorial
-for conducting intersectional multilevel analysis of individual
-heterogeneity and discriminatory accuracy (MAIHDA). SSM - Population
-Health (2024) 26; doi: 10.1016/j.ssmph.2024.101664</p></li>
-</ol>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-axelsson_fisk_chronic_2018" class="csl-entry">
+Axelsson Fisk, Sten, Shai Mulinari, Maria Wemrell, George Leckie, Raquel
+Perez Vicente, and Juan Merlo. 2018. <span>“Chronic
+<span>Obstructive</span> <span>Pulmonary</span> <span>Disease</span> in
+<span>Sweden</span>: <span>An</span> Intersectional Multilevel Analysis
+of Individual Heterogeneity and Discriminatory Accuracy.”</span> <em>SSM
+- Population Health</em> 4 (April): 334–46. <a href="https://doi.org/10.1016/j.ssmph.2018.03.005" class="external-link">https://doi.org/10.1016/j.ssmph.2018.03.005</a>.
+</div>
+<div id="ref-evans_tutorial_2024" class="csl-entry">
+Evans, Clare R., George Leckie, S. V. Subramanian, Andrew Bell, and Juan
+Merlo. 2024. <span>“A Tutorial for Conducting Intersectional Multilevel
+Analysis of Individual Heterogeneity and Discriminatory Accuracy
+(<span>MAIHDA</span>).”</span> <em>SSM - Population Health</em> 26
+(June): 101664. <a href="https://doi.org/10.1016/j.ssmph.2024.101664" class="external-link">https://doi.org/10.1016/j.ssmph.2024.101664</a>.
+</div>
+<div id="ref-evans_multilevel_2018" class="csl-entry">
+Evans, Clare R., David R. Williams, Jukka-Pekka Onnela, and S. V.
+Subramanian. 2018. <span>“A Multilevel Approach to Modeling Health
+Inequalities at the Intersection of Multiple Social Identities.”</span>
+<em>Social Science &amp; Medicine</em> 203 (April): 64–73. <a href="https://doi.org/10.1016/j.socscimed.2017.11.011" class="external-link">https://doi.org/10.1016/j.socscimed.2017.11.011</a>.
+</div>
+<div id="ref-keller_educational_2023" class="csl-entry">
+Keller, Lena, Oliver Lüdtke, Franzis Preckel, and Martin Brunner. 2023.
+<span>“Educational <span>Inequalities</span> at the
+<span>Intersection</span> of <span>Multiple</span> <span>Social</span>
+<span>Categories</span>: <span>A</span> n <span>Introduction</span> and
+<span>Systematic</span> <span>Review</span> of the
+<span>Multilevel</span> <span>Analysis</span> of <span>Individual</span>
+<span>Heterogeneity</span> and <span>Discriminatory</span>
+<span>Accuracy</span> (<span>MAIHDA</span>)
+<span>Approach</span>.”</span> <em>Educational Psychology Review</em> 35
+(1): 31. <a href="https://doi.org/10.1007/s10648-023-09733-5" class="external-link">https://doi.org/10.1007/s10648-023-09733-5</a>.
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
