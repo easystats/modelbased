@@ -20,24 +20,28 @@ The steps we are showing here are:
 
 1.  Defining the intersectional strata.
 
-2.  Fitting a multilevel model to see whether intersectional strata
-    contribute to between-stratum variance (which can be considered as
-    “inequalities”, whether social or health related - also known as
-    *discriminatory accucarcy*).
+2.  Fitting a *simple intersectional* model to see whether
+    intersectional strata contribute to between-stratum variance (which
+    can be considered as “inequalities”, whether social or health
+    related - also known as *discriminatory accucarcy*).
 
-3.  Fitting partially adjusted multilevel models and calculating
+3.  Fitting *partially-adjusted intersectional* models and calculating
     proportional change in the between-stratum variance (PCVs) to
     quantify to what degree the different intersectional dimensions
-    contribute to the between-stratum variance (inequalities), which
-    also indicates *global* additive or multiplicative effects.
+    contribute to the between-stratum variance (inequalities)
 
-4.  Calculate adjusted / ranked predictions (estimated marginal means)
-    of the outcome by intersectional strata, to get a clearer picture of
-    the variation between intersectional dimensions, as well as testing
-    specific strata for significant differences.
+4.  Fitting an *intersectional interaction* model to look for *global*
+    additive or multiplicative effects.
 
-5.  Look at group-level estimates (BLUPs), which represent the
-    group-level residuals (also called *strata-level residuals*, see
+5.  Calculate adjusted / ranked predictions (estimated marginal means)
+    of the outcome (of the *simple intersectional* model) by
+    intersectional strata, to get a clearer picture of the variation
+    between intersectional dimensions, as well as testing specific
+    strata for significant differences.
+
+6.  Look at group-level estimates (BLUPs) of the *intersectional
+    interaction* model, which represent the group-level residuals (also
+    called *strata-level residuals*, see Axelsson Fisk et al. (2018) or
     Keller et al. (2023)), to see whether we find *specific* additive or
     multiplicative effects for strata.
 
@@ -86,8 +90,9 @@ fixed effects, but only our different intersectional dimensions:
 
 `# Quality of Life score ranges from 0 to 25`` ``m_null`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(``qol`` ``~`` ``1`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``, data ``=`` ``efc``)`` `` ``# the above model is identical to:`` ``# m_null <- glmmTMB(qol ~ 1 + (1 | strata), data = efc)`
 
-The purpose of this model is to quantify the “discriminatory accuracy”,
-which is achieved by calculating the ICC (see
+The purpose of this model - which is sometimes also called *null model*
+or *base model* - is to quantify the “discriminatory accuracy”, which is
+achieved by calculating the ICC (see
 [`performance::icc()`](https://easystats.github.io/performance/reference/icc.html))
 of this model (sometimes also calles the *VPC*, the variance partition
 coefficient). The higher the ICC, the greater the degree of similarity
@@ -169,10 +174,11 @@ regression coefficients. We see the highest proportional change for
 `age`, meaning that - although gender and education can contribute to
 inequalities - age is the most relevant predictor.
 
-### 4. PCV in the full model: global additive or multiplicative effects
+### 4. PCV in the intersectional interaction model: global additive or multiplicative effects
 
-Finally, a “full” model is fit, which includes all group level variables
-as level-1 *additive* fixed effects. Then, the PCV is again calculated.
+Finally, a “full” model (aka *intersectional interaction* or *main
+effects* model) is fit, which includes all group level variables as
+level-1 *additive* fixed effects. Then, the PCV is again calculated.
 This allows us to see how much of the variability of the additive
 effects will be absorbed by the intersectional strata characteristics. A
 PCV close to 1 suggests that the differences between intersectional
@@ -253,12 +259,13 @@ effects, whereas a negative strata-level residual indicates a lower mean
 outcome than expected for this stratum. Consequently, when the credible
 or confidence interval of a strata-level residual does not include zero,
 this points to a statistically significant interaction effect – or a
-multiplicative effect – in that specific stratum (Keller et al. 2023).
+multiplicative effect – in that specific stratum (Axelsson Fisk et al.
+2018; Keller et al. 2023).
 
 We can easily compute the strata-level residuals using the
 [`estimate_grouplevel()`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)
 function. **Important**: We need to calculate these residuals for the
-*main effects* (full) model, not for the *null* model.
+*intersectional interaction* (full) model, not for the *null* model.
 
 `strata_residuals`` ``<-`` `[`estimate_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``m_full``)`` `` ``strata_residuals`` ``#> Group | Level | Parameter | Coefficient | SE | 95% CI`` ``#> ---------------------------------------------------------------------------------------------`` ``#> gender:employed:age | Female:no:-40 | (Intercept) | -2.23e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:no:41-64 | (Intercept) | 1.58e-08 | 1.49e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:no:65+ | (Intercept) | 1.80e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:yes:-40 | (Intercept) | 1.95e-08 | 1.50e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:yes:41-64 | (Intercept) | -3.58e-08 | 1.60e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:yes:65+ | (Intercept) | 9.71e-10 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:no:-40 | (Intercept) | -9.86e-09 | 1.47e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:no:41-64 | (Intercept) | 6.36e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:no:65+ | (Intercept) | -1.19e-08 | 1.47e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:yes:-40 | (Intercept) | -7.41e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:yes:41-64 | (Intercept) | 1.37e-08 | 1.48e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:yes:65+ | (Intercept) | 9.11e-09 | 1.47e-04 | [ 0.00, 0.00]`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``strata_residuals``)`
 

@@ -168,23 +168,25 @@ social, economic and demographic dimensions.”
 <p>The steps we are showing here are:</p>
 <ol style="list-style-type: decimal">
 <li><p>Defining the intersectional strata.</p></li>
-<li><p>Fitting a multilevel model to see whether intersectional strata
-contribute to between-stratum variance (which can be considered as
-“inequalities”, whether social or health related - also known as
-<em>discriminatory accucarcy</em>).</p></li>
-<li><p>Fitting partially adjusted multilevel models and calculating
-proportional change in the between-stratum variance (PCVs) to quantify
-to what degree the different intersectional dimensions contribute to the
-between-stratum variance (inequalities), which also indicates
+<li><p>Fitting a <em>simple intersectional</em> model to see whether
+intersectional strata contribute to between-stratum variance (which can
+be considered as “inequalities”, whether social or health related - also
+known as <em>discriminatory accucarcy</em>).</p></li>
+<li><p>Fitting <em>partially-adjusted intersectional</em> models and
+calculating proportional change in the between-stratum variance (PCVs)
+to quantify to what degree the different intersectional dimensions
+contribute to the between-stratum variance (inequalities)</p></li>
+<li><p>Fitting an <em>intersectional interaction</em> model to look for
 <em>global</em> additive or multiplicative effects.</p></li>
 <li><p>Calculate adjusted / ranked predictions (estimated marginal
-means) of the outcome by intersectional strata, to get a clearer picture
-of the variation between intersectional dimensions, as well as testing
-specific strata for significant differences.</p></li>
-<li><p>Look at group-level estimates (BLUPs), which represent the
-group-level residuals (also called <em>strata-level residuals</em>, see
-<span class="citation">Keller et al. (2023)</span>), to see whether we
-find <em>specific</em> additive or multiplicative effects for
+means) of the outcome (of the <em>simple intersectional</em> model) by
+intersectional strata, to get a clearer picture of the variation between
+intersectional dimensions, as well as testing specific strata for
+significant differences.</p></li>
+<li><p>Look at group-level estimates (BLUPs) of the <em>intersectional
+interaction</em> model, which represent the group-level residuals (also
+called <em>strata-level residuals</em>, see <span class="citation">Axelsson Fisk et al. (2018)</span> or <span class="citation">Keller et al. (2023)</span>), to see whether we find
+<em>specific</em> additive or multiplicative effects for
 strata.</p></li>
 </ol>
 <div class="section level3">
@@ -286,7 +288,8 @@ fixed effects, but only our different intersectional dimensions:
 <span></span>
 <span><span class="co"># the above model is identical to:</span></span>
 <span><span class="co"># m_null &lt;- glmmTMB(qol ~ 1 + (1 | strata), data = efc)</span></span></code></pre></div>
-<p>The purpose of this model is to quantify the “discriminatory
+<p>The purpose of this model - which is sometimes also called <em>null
+model</em> or <em>base model</em> - is to quantify the “discriminatory
 accuracy”, which is achieved by calculating the ICC (see <a href="https://easystats.github.io/performance/reference/icc.html" class="external-link"><code>performance::icc()</code></a>)
 of this model (sometimes also calles the <em>VPC</em>, the variance
 partition coefficient). The higher the ICC, the greater the degree of
@@ -418,10 +421,11 @@ regression coefficients. We see the highest proportional change for
 contribute to inequalities - age is the most relevant predictor.</p>
 </div>
 <div class="section level3">
-<h3 id="pcv-in-the-full-model-global-additive-or-multiplicative-effects">4. PCV in the full model: global additive or multiplicative
-effects<a class="anchor" aria-label="anchor" href="#pcv-in-the-full-model-global-additive-or-multiplicative-effects"></a>
+<h3 id="pcv-in-the-intersectional-interaction-model-global-additive-or-multiplicative-effects">4. PCV in the intersectional interaction model: global additive or
+multiplicative effects<a class="anchor" aria-label="anchor" href="#pcv-in-the-intersectional-interaction-model-global-additive-or-multiplicative-effects"></a>
 </h3>
-<p>Finally, a “full” model is fit, which includes all group level
+<p>Finally, a “full” model (aka <em>intersectional interaction</em> or
+<em>main effects</em> model) is fit, which includes all group level
 variables as level-1 <em>additive</em> fixed effects. Then, the PCV is
 again calculated. This allows us to see how much of the variability of
 the additive effects will be absorbed by the intersectional strata
@@ -603,11 +607,12 @@ indicates a lower mean outcome than expected for this stratum.
 Consequently, when the credible or confidence interval of a strata-level
 residual does not include zero, this points to a statistically
 significant interaction effect – or a multiplicative effect – in that
-specific stratum <span class="citation">(Keller et al. 2023)</span>.</p>
+specific stratum <span class="citation">(Axelsson Fisk et al. 2018;
+Keller et al. 2023)</span>.</p>
 <p>We can easily compute the strata-level residuals using the
 <code><a href="../reference/estimate_grouplevel.html">estimate_grouplevel()</a></code> function. <strong>Important</strong>:
-We need to calculate these residuals for the <em>main effects</em>
-(full) model, not for the <em>null</em> model.</p>
+We need to calculate these residuals for the <em>intersectional
+interaction</em> (full) model, not for the <em>null</em> model.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">strata_residuals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">m_full</span><span class="op">)</span></span>
 <span></span>
