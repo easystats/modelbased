@@ -1,5 +1,10 @@
 # Case Study: Intersectionality Analysis Using The MAIHDA Framework
 
+    ## Warning in check_dep_version(dep_pkg = "TMB"): package version mismatch: 
+    ## glmmTMB was built with TMB package version 1.9.23
+    ## Current TMB package version is 1.9.25
+    ## Please re-install glmmTMB from source or restore original 'TMB' package (see '?reinstalling' for more information)
+
 This vignette demonstrate how to use *modelbased* in the context of an
 intersectional multilevel analysis of individual heterogeneity, using
 the MAIHDA framework. The general approach of the MAIHDA framework
@@ -319,6 +324,12 @@ The AUC ranges from 0.5 to 1.0 (or 50% to 100%), where 0.5 indicates
 that the intersectional strata provide no discriminatory accuracy, and
 1.0 denotes perfect discriminatory accuracy (Evans et al. 2024).
 
+Another useful measure is the [median odds ratio
+(MOR)](https://easystats.github.io/performance/reference/performance_mor.html),
+a measure of cluster-level variation in multilevel logistic regression
+(Larsen 2005). A MOR \> 1 indicates the resence of heterogeneity and
+meaningful variation across clusters.
+
 ### 8. Conclusion
 
 Intersectional multilevel analysis of individual heterogeneity, using
@@ -364,3 +375,8 @@ Categories: A n Introduction and Systematic Review of the Multilevel
 Analysis of Individual Heterogeneity and Discriminatory Accuracy
 (MAIHDA) Approach.” *Educational Psychology Review* 35 (1): 31.
 <https://doi.org/10.1007/s10648-023-09733-5>.
+
+Larsen, K. 2005. “Appropriate Assessment of Neighborhood Effects on
+Individual Health: Integrating Random and Fixed Effects in Multilevel
+Logistic Regression.” *American Journal of Epidemiology* 161 (1): 81–88.
+<https://doi.org/10.1093/aje/kwi017>.

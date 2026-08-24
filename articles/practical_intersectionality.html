@@ -139,6 +139,10 @@
 
     
     
+<pre><code><span><span class="co">## Warning in check_dep_version(dep_pkg = "TMB"): package version mismatch: </span></span>
+<span><span class="co">## glmmTMB was built with TMB package version 1.9.23</span></span>
+<span><span class="co">## Current TMB package version is 1.9.25</span></span>
+<span><span class="co">## Please re-install glmmTMB from source or restore original 'TMB' package (see '?reinstalling' for more information)</span></span></code></pre>
 <style type="text/css">
 .custom_note {
   border-left: solid 5px hsl(220, 100%, 30%);
@@ -203,7 +207,7 @@ the intersectionality groups are <em>gender</em> (male/female),
 might be health-related inequalities, i.e. the quality of life differs
 depending on the characteristics that define our intersectional
 strata.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/">modelbased</a></span><span class="op">)</span> <span class="co"># predictions and significance testing</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span> <span class="co"># extracting random effects variances</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a></span><span class="op">)</span> <span class="co"># data wrangling and preparation</span></span>
@@ -235,7 +239,7 @@ define them as interacting random effects (excluding main effects of
 interactions): <code>(1 | gender:employed:age)</code> (see also below).
 The idea is to have truly unique combinations in our model, similar as
 if we would create a factor variable with all combinations manually:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">efc</span><span class="op">$</span><span class="va">strata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">efc</span><span class="op">$</span><span class="va">employed</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">efc</span><span class="op">$</span><span class="va">gender</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">efc</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>,</span>
 <span>  <span class="cn">NA_character_</span>,</span>
@@ -282,7 +286,7 @@ model).</p>
 <p>We start by fitting a linear mixed effects model, which includes no
 fixed effects, but only our different intersectional dimensions:
 <code>gender</code>, <code>employed</code> and <code>age</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Quality of Life score ranges from 0 to 25</span></span>
 <span><span class="va">m_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span><span class="va">qol</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gender</span><span class="op">:</span><span class="va">employed</span><span class="op">:</span><span class="va">age</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span>
 <span></span>
@@ -300,7 +304,7 @@ model is at discriminating individuals with higher or lower quality of
 life score, as opposed to models with lower ICC.</p>
 <p>We now look at the model parameters and the ICC of our simple
 intersectional model.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">m_null</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Fixed Effects</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -349,7 +353,7 @@ look at the ICCs of the partially-adjusted models, as well as at the
 proportional change in the between-stratum variance, the so-called
 <em>PCV</em> coefficients.</p>
 <p>First, we fit three models each with one dimension as predictor.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m_gender</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span><span class="va">qol</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gender</span><span class="op">:</span><span class="va">employed</span><span class="op">:</span><span class="va">age</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span>
 <span><span class="va">m_employment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span><span class="va">qol</span> <span class="op">~</span> <span class="va">employed</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gender</span><span class="op">:</span><span class="va">employed</span><span class="op">:</span><span class="va">age</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span>
 <span><span class="va">m_age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span><span class="va">qol</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gender</span><span class="op">:</span><span class="va">employed</span><span class="op">:</span><span class="va">age</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span></code></pre></div>
@@ -358,7 +362,7 @@ association between each single dimension and the outcome is, taking
 between-stratum variance into account. The larger (in absolute values)
 the coefficients, the higher the degree that dimension contributed to
 the between-stratum variance.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/parameters/reference/compare_parameters.html" class="external-link">compare_parameters</a></span><span class="op">(</span><span class="va">m_gender</span>, <span class="va">m_employment</span>, <span class="va">m_age</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Parameter       |             m_gender |         m_employment |                m_age</span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------------------------------</span></span>
@@ -378,7 +382,7 @@ regarding inequalities.</p>
 <p>Since the fixed effects now take away some of the proportion of the
 variance explained by the grouping factors (random effects), we expect
 the ICC for the above models to be lower.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/performance/reference/icc.html" class="external-link">icc</a></span><span class="op">(</span><span class="va">m_gender</span><span class="op">)</span><span class="op">$</span><span class="va">ICC_adjusted</span></span>
 <span><span class="co">#&gt; [1] 0.02583979</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/performance/reference/icc.html" class="external-link">icc</a></span><span class="op">(</span><span class="va">m_employment</span><span class="op">)</span><span class="op">$</span><span class="va">ICC_adjusted</span></span>
@@ -396,7 +400,7 @@ proportion of explained variance by the strata can be explained by a
 single dimension that define those strata. The PCV ranges from 0 to 1,
 and the closer to 1, the more this particular dimension explains social
 inequalities.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># extract random effect variances from all models</span></span>
 <span><span class="va">v_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance</a></span><span class="op">(</span><span class="va">m_null</span><span class="op">)</span></span>
 <span><span class="va">v_gender</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance</a></span><span class="op">(</span><span class="va">m_gender</span><span class="op">)</span></span>
@@ -434,7 +438,7 @@ intersectional strata are primarily driven by additive main effects.
 Conversely, a PCV substantially below 1 indicates that these main
 effects cannot fully explain the strata-level variance, pointing to the
 presence of multiplicative interaction effects.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">qol</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">employed</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gender</span><span class="op">:</span><span class="va">employed</span><span class="op">:</span><span class="va">age</span><span class="op">)</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">efc</span></span>
@@ -457,7 +461,7 @@ means, no variation is left between the intersectional strata after
 adding those predictors as additive fixed effects. This suggests that
 the PCV will be (close to) 1, indicating we have no multiplicative
 interaction effects.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">v_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">get_variance</a></span><span class="op">(</span><span class="va">m_full</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># PCV (proportional change in between-stratum variance)</span></span>
@@ -485,7 +489,7 @@ maybe lowest risk group. To do so, we calculate predictions of the
 random effects (<em>unit-level</em> predictions).</p>
 <p>The following code shows the predicted average quality of life scores
 for the different groups.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span></span>
 <span>  <span class="va">m_null</span>,</span>
 <span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"employed"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
@@ -501,7 +505,7 @@ quality of life.</p>
 between groups are statistically significant. Since all combinations of
 pairwise comparisons would return 66 rows in total, we just show the
 first ten rows for demonstrating purpose.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># just show first 10 rows of output...</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m_null</span>,</span>
@@ -530,7 +534,7 @@ first ten rows for demonstrating purpose.</p>
 within the levels of the other groups, we can use the <code>by</code>
 argument. This reduces the output and only compares the focal term(s)
 within the levels of the remaining predictors.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compare levels of gender and employment status for age groups</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m_null</span>,</span>
@@ -567,7 +571,7 @@ within the levels of the remaining predictors.</p>
 <p>E.g., if we look at the plot and want to know whether female persons
 aged 65+ differ depending on their employment status, we can use the
 following code:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compare levels employment status by gender and age groups</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m_null</span>,</span>
@@ -613,7 +617,7 @@ Keller et al. 2023)</span>.</p>
 <code><a href="../reference/estimate_grouplevel.html">estimate_grouplevel()</a></code> function. <strong>Important</strong>:
 We need to calculate these residuals for the <em>intersectional
 interaction</em> (full) model, not for the <em>null</em> model.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">strata_residuals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">m_full</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">strata_residuals</span></span>
@@ -681,6 +685,11 @@ predicted probability than a randomly selected individual without it.
 The AUC ranges from 0.5 to 1.0 (or 50% to 100%), where 0.5 indicates
 that the intersectional strata provide no discriminatory accuracy, and
 1.0 denotes perfect discriminatory accuracy <span class="citation">(Evans et al. 2024)</span>.</p>
+<p>Another useful measure is the <a href="https://easystats.github.io/performance/reference/performance_mor.html" class="external-link">median
+odds ratio (MOR)</a>, a measure of cluster-level variation in multilevel
+logistic regression <span class="citation">(Larsen 2005)</span>. A MOR
+&gt; 1 indicates the resence of heterogeneity and meaningful variation
+across clusters.</p>
 </div>
 </div>
 <div class="section level3">
@@ -737,6 +746,15 @@ Keller, Lena, Oliver Lüdtke, Franzis Preckel, and Martin Brunner. 2023.
 <span>Accuracy</span> (<span>MAIHDA</span>)
 <span>Approach</span>.”</span> <em>Educational Psychology Review</em> 35
 (1): 31. <a href="https://doi.org/10.1007/s10648-023-09733-5" class="external-link">https://doi.org/10.1007/s10648-023-09733-5</a>.
+</div>
+<div id="ref-larsen_appropriate_2005" class="csl-entry">
+Larsen, K. 2005. <span>“Appropriate <span>Assessment</span> of
+<span>Neighborhood</span> <span>Effects</span> on
+<span>Individual</span> <span>Health</span>: <span>Integrating</span>
+<span>Random</span> and <span>Fixed</span> <span>Effects</span> in
+<span>Multilevel</span> <span>Logistic</span>
+<span>Regression</span>.”</span> <em>American Journal of
+Epidemiology</em> 161 (1): 81–88. <a href="https://doi.org/10.1093/aje/kwi017" class="external-link">https://doi.org/10.1093/aje/kwi017</a>.
 </div>
 </div>
 </div>
