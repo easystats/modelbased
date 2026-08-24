@@ -325,6 +325,8 @@ In the case of *linear* models, the ICC (VPC) works as measure of discriminatory
 
 In the context of *logistic* regression for dichotomous outcomes, the Area Under the Curve (AUC) serves as a measure of discriminatory accuracy (which can be calculated using [`performance::performance_roc()`](https://easystats.github.io/performance/reference/performance_roc.html) or [`performance::performance_accuracy()`](https://easystats.github.io/performance/reference/performance_accuracy.html)). It evaluates how accurately knowing an individual's intersectional stratum can discriminate between those who experience the outcome and those who do not. Formally, the AUC represents the probability that a randomly selected individual with the outcome will have a higher predicted probability than a randomly selected individual without it. The AUC ranges from 0.5 to 1.0 (or 50% to 100%), where 0.5 indicates that the intersectional strata provide no discriminatory accuracy, and 1.0 denotes perfect discriminatory accuracy [@evans_tutorial_2024].
 
+Another useful measure is the [median odds ratio (MOR)](https://easystats.github.io/performance/reference/performance_mor.html), a measure of cluster-level variation in multilevel logistic regression [@larsen_appropriate_2005]. A MOR > 1 indicates the resence of heterogeneity and meaningful variation across clusters.
+
 ## 8. Conclusion
 
 Intersectional multilevel analysis of individual heterogeneity, using the MAIHDA framework, is a new approach in social epidemiology, which helps to understand the interaction of social indicators with regard to social inequalities.
