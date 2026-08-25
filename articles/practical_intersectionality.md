@@ -327,8 +327,8 @@ that the intersectional strata provide no discriminatory accuracy, and
 Another useful measure is the [median odds ratio
 (MOR)](https://easystats.github.io/performance/reference/performance_mor.html),
 a measure of cluster-level variation in multilevel logistic regression
-(Larsen 2005). A MOR \> 1 indicates the resence of heterogeneity and
-meaningful variation across clusters.
+(Larsen and Merlo 2005). A MOR \> 1 indicates the resence of
+heterogeneity and meaningful variation across clusters.
 
 ### 8. Conclusion
 
@@ -376,7 +376,7 @@ Analysis of Individual Heterogeneity and Discriminatory Accuracy
 (MAIHDA) Approach.” *Educational Psychology Review* 35 (1): 31.
 <https://doi.org/10.1007/s10648-023-09733-5>.
 
-Larsen, K. 2005. “Appropriate Assessment of Neighborhood Effects on
-Individual Health: Integrating Random and Fixed Effects in Multilevel
-Logistic Regression.” *American Journal of Epidemiology* 161 (1): 81–88.
-<https://doi.org/10.1093/aje/kwi017>.
+Larsen, Klaus, and Juan Merlo. 2005. “Appropriate Assessment of
+Neighborhood Effects on Individual Health: Integrating Random and Fixed
+Effects in Multilevel Logistic Regression.” *American Journal of
+Epidemiology* 161 (1): 81–88. <https://doi.org/10.1093/aje/kwi017>.
