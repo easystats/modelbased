@@ -379,3 +379,29 @@ test_that("estimate_slopes, estimate-argument works", {
   expect_equal(out$Slope, out3$Slope, tolerance = 1e-4)
   expect_identical(dim(out), c(1L, 7L))
 })
+
+
+test_that("estimate_slopes, estimate-argument and no datagrid works", {
+  # no error for estimate = "average" when no data grid is available
+  set.seed(123)
+  N <- 10000
+
+  cat1 <- sample(c("A", "B", "C"), size = N, replace = TRUE)
+  cat2 <- sample(c("Kontrolle", "Treatment"), size = N, replace = TRUE)
+
+  cat1 <- factor(cat1, levels = c("A", "B", "C"))
+  cat2 <- factor(cat2, levels = c("Kontrolle", "Treatment"))
+
+  log_odds <- -1.5 +
+    ifelse(cat1 == "B", 1.0, 0) +
+    ifelse(cat1 == "C", 2.0, 0) +
+    ifelse(cat2 == "Treatment", 2.5, 0)
+
+  prob <- plogis(log_odds)
+  y <- rbinom(N, size = 1, prob = prob)
+
+  m <- glm(y ~ cat1 + cat2, family = binomial(link = "logit"))
+  out <- estimate_slopes(mod_conditional, "cat1", estimate = "average")
+
+  expect_equal(out$Slope, c(0.16021, 0.32009), tolerance = 1e-4)
+})
