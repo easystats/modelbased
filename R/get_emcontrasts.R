@@ -225,7 +225,7 @@ get_emcontrasts <- function(
   # If levels contain " - " themselves, emmeans wraps them in parentheses
   # like "(A - Low) - (A - High)", so we need to handle that case
   contrast_strings <- as.character(out$contrast)
-  if (any(grepl("^\\(", contrast_strings))) {
+  if (all(grepl("^\\(", contrast_strings))) {
     # Levels with " - " are wrapped in parentheses by emmeans, e.g.
     # "(A - Low) - (A - High)". Extract the parenthesized groups.
     level_list <- lapply(contrast_strings, function(x) {
