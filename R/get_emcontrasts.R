@@ -222,8 +222,26 @@ get_emcontrasts <- function(
 
   # Format contrasts names
   # Split by either " - " or "/"
-  level_cols <- strsplit(as.character(out$contrast), " - |\\/")
-  level_cols <- data.frame(do.call(rbind, lapply(level_cols, trimws)))
+  # If levels contain " - " themselves, emmeans wraps them in parentheses
+  # like "(A - Low) - (A - High)", so we need to handle that case
+  contrast_strings <- as.character(out$contrast)
+  if (all(grepl("^\\(", contrast_strings))) {
+    # Levels with " - " are wrapped in parentheses by emmeans, e.g.
+    # "(A - Low) - (A - High)". Extract the parenthesized groups.
+    level_list <- lapply(contrast_strings, function(x) {
+      m <- regmatches(x, gregexpr("\\([^)]+\\)", x))[[1]]
+      if (length(m) >= 2) {
+        trimws(gsub("[()]", "", m[seq_len(2)]))
+      } else {
+        trimws(strsplit(x, " - |\\/")[[1]])
+      }
+    })
+  } else {
+    level_list <- lapply(contrast_strings, function(x) {
+      trimws(strsplit(x, " - |\\/")[[1]])
+    })
+  }
+  level_cols <- data.frame(do.call(rbind, level_list))
 
   # other comparison methods than "pairwise" do not return two columns
   if (ncol(level_cols) == 2) {

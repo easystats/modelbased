@@ -1890,3 +1890,32 @@ test_that("estimate_contrast, categorical/multinomial response models split off 
     expect_equal(row$Difference, mean_3 - mean_2, tolerance = 1e-4)
   }
 })
+
+
+test_that("estimate_contrast, correctly preserve minus in factor levels", {
+  df <- data.frame(
+    x = rnorm(1000),
+    y = rep_len(c("A - High", "A - Low", "B - High", "B - Low"), 1000)
+  )
+
+  model <- lm(x ~ y, data = df)
+  out1 <- estimate_contrasts(model, contrast = "y", backend = "marginaleffects")
+  out2 <- estimate_contrasts(model, contrast = "y", backend = "emmeans")
+
+  expect_identical(
+    as.character(out1$Level1),
+    c("A - Low", "B - High", "B - Low", "B - High", "B - Low", "B - Low")
+  )
+  expect_identical(
+    as.character(out2$Level1),
+    c("A - Low", "B - High", "B - High", "B - Low", "B - Low", "B - Low")
+  )
+  expect_identical(
+    as.character(out1$Level2),
+    c("A - High", "A - High", "A - High", "A - Low", "A - Low", "B - High")
+  )
+  expect_identical(
+    as.character(out2$Level2),
+    c("A - High", "A - High", "A - Low", "A - High", "A - Low", "B - High")
+  )
+})
