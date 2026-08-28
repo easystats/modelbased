@@ -92,18 +92,18 @@ print(out)
 as.data.frame(out)
 #>      Species  Mean         SE   CI_low  CI_high        t  df
 #> 1     setosa 1.462 0.06085848 1.341729 1.582271 24.02294 147
-#> 2 versicolor 4.260 0.06085848 4.139729 4.380271 69.99846 147
+#> 2 versicolor 4.260 0.06085849 4.139729 4.380271 69.99846 147
 #> 3  virginica 5.552 0.06085848 5.431729 5.672271 91.22804 147
 
 as.data.frame(out, preserve_names = FALSE)
 #>      Species Coefficient         SE   CI_low  CI_high        t  df
 #> 1     setosa       1.462 0.06085848 1.341729 1.582271 24.02294 147
-#> 2 versicolor       4.260 0.06085848 4.139729 4.380271 69.99846 147
+#> 2 versicolor       4.260 0.06085849 4.139729 4.380271 69.99846 147
 #> 3  virginica       5.552 0.06085848 5.431729 5.672271 91.22804 147
 
 as.data.frame(out, preserve_names = FALSE, use_responsename = TRUE)
 #>      Species Petal.Length         SE   CI_low  CI_high        t  df
 #> 1     setosa        1.462 0.06085848 1.341729 1.582271 24.02294 147
-#> 2 versicolor        4.260 0.06085848 4.139729 4.380271 69.99846 147
+#> 2 versicolor        4.260 0.06085849 4.139729 4.380271 69.99846 147
 #> 3  virginica        5.552 0.06085848 5.431729 5.672271 91.22804 147
 ```
