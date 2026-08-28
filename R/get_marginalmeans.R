@@ -597,6 +597,7 @@ get_marginalmeans <- function(
   # on the `by` variables, for internal use, for example filtering at this point
   if (
     identical(estimate, "average") &&
+      !is.null(datagrid) &&
       all(datagrid_info$at_specs$varname %in% colnames(means))
   ) {
     # sanity check - are all filter values from the data grid in the marginaleffects

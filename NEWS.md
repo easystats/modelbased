@@ -43,6 +43,12 @@
 * Improved documentation for `estimate_means()` and vignettes about technical
   details of marginalization.
 
+## Bug fixes
+
+* Fixed issue with `estimate = "average"` in `estimate_slopes()` when no `by`
+  variable was specified and therefore no data grid created. This caused an
+  issue with filtering the output.
+
 # modelbased 0.16.0
 
 ## Changes
