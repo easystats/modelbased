@@ -400,7 +400,7 @@ test_that("estimate_slopes, estimate-argument and no datagrid works", {
   prob <- plogis(log_odds)
   y <- rbinom(N, size = 1, prob = prob)
 
-  m <- glm(y ~ cat1 + cat2, family = binomial(link = "logit"))
+  mod_conditional <- glm(y ~ cat1 + cat2, family = binomial(link = "logit"))
   out <- estimate_slopes(mod_conditional, "cat1", estimate = "average")
 
   expect_equal(out$Slope, c(0.16021, 0.32009), tolerance = 1e-4)
