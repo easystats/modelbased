@@ -1,5 +1,81 @@
 # Changelog
 
+## modelbased 0.17.0
+
+### Breaking Changes
+
+- The `comparison` argument in
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  for `backend = "emmeans"` now defaults to `"revpairwise"`, to return
+  consistent results regarding the sign of contrasts with the
+  `"marginaleffects"` backend.
+
+### Changes
+
+- For contrasts of models where predictions vary by response category
+  (e.g., categorical, ordinal/cumulative or multinomial models, as well
+  as multivariate response models),
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  now returns separate `Response1` and `Response2` columns instead of
+  merging the response category label into the `Level1` and `Level2`
+  columns ([\#646](https://github.com/easystats/modelbased/issues/646)).
+
+- The `iterations` argument can now also be used for Bayesian model in
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md),
+  and
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md),
+  which is then passed to the `ndraws` argument and controls how many
+  samples are drawn from the posterior when calculating marginal means,
+  effects or contrasts.
+
+- `ci = NULL` now suppresses calculation of standard errors and
+  confidence intervals.
+
+- The `data` argument can be used as an alias for `newdata` in
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md),
+  and
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md),
+  and is passed to the related *marginaleffects* functions.
+
+- Improved default settings for plots using
+  [`tinyplot()`](https://grantmcdermott.com/tinyplot/man/tinyplot.html):
+
+  - `facet`s now automatically remove redundant axes. If you prefer to
+    keep them, you can simply enable them by setting `frame = TRUE`.
+  - The x-axis now automatically adjusts its limits when categorical
+    predictors are used. By setting `xlim` to `c(0.5, n + 0.5)`, the
+    geoms are moved closer together, resulting in a more compact
+    appearance.
+
+- `tinyplot`() for *modelbased* objects now supports standard arguments
+  following easystats conventions, allowing for more fine-grained plot
+  customizations (e.g., text/line sizes, color palettes, and axis title
+  sizes).
+
+- New options for printing (in particular, formatting CIs), see also
+  documentation
+  ([`?modelbased::"modelbased-options"`](https://easystats.github.io/modelbased/reference/modelbased-options.md)).
+
+- Improved documentation for
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+  and vignettes about technical details of marginalization.
+
+### Bug fixes
+
+- [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  with `backend = "emmeans"` now correctly parses factor levels that
+  contain `" - "` in their names (e.g., `"A - High"`, `"B - Low"`).
+  emmeans wraps such levels in parentheses (e.g.,
+  `"(A - Low) - (A - High)"`), which is now handled properly
+  ([\#649](https://github.com/easystats/modelbased/issues/649)).
+
+- Fixed issue with `estimate = "average"` in
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  when no `by` variable was specified and therefore no data grid
+  created. This caused an issue with filtering the output.
+
 ## modelbased 0.16.0
 
 CRAN release: 2026-06-30

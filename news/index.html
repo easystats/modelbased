@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,6 +95,34 @@
       <small>Source: <a href="https://github.com/easystats/modelbased/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.17.0" id="modelbased-0170">modelbased 0.17.0<a class="anchor" aria-label="anchor" href="#modelbased-0170"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-17-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-17-0"></a></h3>
+<ul><li>The <code>comparison</code> argument in <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> for <code>backend = "emmeans"</code> now defaults to <code>"revpairwise"</code>, to return consistent results regarding the sign of contrasts with the <code>"marginaleffects"</code> backend.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-0-17-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-17-0"></a></h3>
+<ul><li><p>For contrasts of models where predictions vary by response category (e.g., categorical, ordinal/cumulative or multinomial models, as well as multivariate response models), <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> now returns separate <code>Response1</code> and <code>Response2</code> columns instead of merging the response category label into the <code>Level1</code> and <code>Level2</code> columns (<a href="https://github.com/easystats/modelbased/issues/646" class="external-link">#646</a>).</p></li>
+<li><p>The <code>iterations</code> argument can now also be used for Bayesian model in <code><a href="../reference/estimate_means.html">estimate_means()</a></code>, <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code>, and <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>, which is then passed to the <code>ndraws</code> argument and controls how many samples are drawn from the posterior when calculating marginal means, effects or contrasts.</p></li>
+<li><p><code>ci = NULL</code> now suppresses calculation of standard errors and confidence intervals.</p></li>
+<li><p>The <code>data</code> argument can be used as an alias for <code>newdata</code> in <code><a href="../reference/estimate_means.html">estimate_means()</a></code>, <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code>, and <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>, and is passed to the related <em>marginaleffects</em> functions.</p></li>
+<li>
+<p>Improved default settings for plots using <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">tinyplot()</a></code>:</p>
+<ul><li>
+<code>facet</code>s now automatically remove redundant axes. If you prefer to keep them, you can simply enable them by setting <code>frame = TRUE</code>.</li>
+<li>The x-axis now automatically adjusts its limits when categorical predictors are used. By setting <code>xlim</code> to <code>c(0.5, n + 0.5)</code>, the geoms are moved closer together, resulting in a more compact appearance.</li>
+</ul></li>
+<li><p><code>tinyplot</code>() for <em>modelbased</em> objects now supports standard arguments following easystats conventions, allowing for more fine-grained plot customizations (e.g., text/line sizes, color palettes, and axis title sizes).</p></li>
+<li><p>New options for printing (in particular, formatting CIs), see also documentation (<code><a href="../reference/modelbased-options.html">?modelbased::"modelbased-options"</a></code>).</p></li>
+<li><p>Improved documentation for <code><a href="../reference/estimate_means.html">estimate_means()</a></code> and vignettes about technical details of marginalization.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-17-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-17-0"></a></h3>
+<ul><li><p><code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> with <code>backend = "emmeans"</code> now correctly parses factor levels that contain <code>" - "</code> in their names (e.g., <code>"A - High"</code>, <code>"B - Low"</code>). emmeans wraps such levels in parentheses (e.g., <code>"(A - Low) - (A - High)"</code>), which is now handled properly (<a href="https://github.com/easystats/modelbased/issues/649" class="external-link">#649</a>).</p></li>
+<li><p>Fixed issue with <code>estimate = "average"</code> in <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code> when no <code>by</code> variable was specified and therefore no data grid created. This caused an issue with filtering the output.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.16.0" id="modelbased-0160">modelbased 0.16.0<a class="anchor" aria-label="anchor" href="#modelbased-0160"></a></h2><p class="text-muted">CRAN release: 2026-06-30</p>
 <div class="section level3">
