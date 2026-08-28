@@ -275,7 +275,7 @@ alternative.
 
 `# Same model as m4, within a Bayesian framework, using the Stan and brms package`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`brms`](https://github.com/paul-buerkner/brms)`)`` ``m5`` ``<-`` `[`brm`](https://paulbuerkner.com/brms/reference/brm.html)`(`` `` ``QoL`` ``|`` `[`weights`](https://rdrr.io/r/stats/weights.html)`(``ipw``)`` ``~`` ``treatment`` ``*`` ``time`` ``+`` ``treatment`` ``*`` ``education`` ``+`` ``hospital`` ``+`` `` ``age`` ``+`` ``phq4`` ``+`` ``(``1`` ``|`` ``ID``)``,`` `` refresh ``=`` ``0``,`` `` seed ``=`` ``123``,`` `` data ``=`` ``d`` ``)`
 
-[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m5``, ``"treatment"``, estimate ``=`` ``"population"``, weights ``=`` ``"ipw"``)`` ``#> Counterfactual Contrasts Analysis (G-computation)`` ``#> `` ``#> Level1 | Level2 | Median (CI) | pd`` ``#> --------------------------------------------`` ``#> 1 | 0 | 5.57 (1.79, 9.73) | 99.80%`` ``#> `` ``#> Variable predicted: QoL, ipw`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m5``, ``"treatment"``, estimate ``=`` ``"population"``, weights ``=`` ``"ipw"``)`` ``#> Counterfactual Contrasts Analysis (G-computation)`` ``#> `` ``#> Level1 | Level2 | Median (CI) | pd`` ``#> --------------------------------------------`` ``#> 1 | 0 | 5.68 (1.74, 9.45) | 99.65%`` ``#> `` ``#> Variable predicted: QoL, ipw`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`
 
 ## Conclusion
 
