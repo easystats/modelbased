@@ -1,12 +1,5 @@
 # modelbased (devel)
 
-## Bug Fixes
-
-* `estimate_contrasts()` with `backend = "emmeans"` now correctly parses factor
-  levels that contain `" - "` in their names (e.g., `"A - High"`, `"B - Low"`).
-  emmeans wraps such levels in parentheses (e.g., `"(A - Low) - (A - High)"`),
-  which is now handled properly (#649).
-
 ## Breaking Changes
 
 * The `comparison` argument in `estimate_contrasts()` for `backend = "emmeans"`
@@ -51,6 +44,11 @@
   details of marginalization.
 
 ## Bug fixes
+
+* `estimate_contrasts()` with `backend = "emmeans"` now correctly parses factor
+  levels that contain `" - "` in their names (e.g., `"A - High"`, `"B - Low"`).
+  emmeans wraps such levels in parentheses (e.g., `"(A - Low) - (A - High)"`),
+  which is now handled properly (#649).
 
 * Fixed issue with `estimate = "average"` in `estimate_slopes()` when no `by`
   variable was specified and therefore no data grid created. This caused an
