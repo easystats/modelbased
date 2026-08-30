@@ -63,7 +63,32 @@ that there might be health-related inequalities, i.e. the quality of
 life differs depending on the characteristics that define our
 intersectional strata.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` ``# predictions and significance testing`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`insight`](https://easystats.github.io/insight/)`)`` ``# extracting random effects variances`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`datawizard`](https://easystats.github.io/datawizard/)`)`` ``# data wrangling and preparation`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`parameters`](https://easystats.github.io/parameters/)`)`` ``# model summaries`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`performance`](https://easystats.github.io/performance/)`)`` ``# model fit indices, ICC`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`glmmTMB`](https://github.com/glmmTMB/glmmTMB)`)`` ``# multilevel modelling`` `` ``# sample data set`` `[`data`](https://rdrr.io/r/utils/data.html)`(``efc``, package ``=`` ``"modelbased"``)`` `` ``efc`` ``<-`` ``efc`` ``|>`` `` ``# numeric to factors, set labels as levels`` `` `[`to_factor`](https://easystats.github.io/datawizard/reference/to_factor.html)`(``select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"c161sex"``, ``"c172code"``, ``"c175empl"``)``)`` ``|>`` `` ``# recode age into three groups`` `` `[`recode_values`](https://easystats.github.io/datawizard/reference/recode_values.html)`(`` `` select ``=`` ``"c160age"``,`` `` recode ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``` `1`  ```=`` ``"min:40"``` , `2`  ```=`` ``41``:``64``` , `3`  ```=`` ``"65:max"``)`` `` ``)`` ``|>`` `` ``# rename variables`` `` `[`data_rename`](https://easystats.github.io/datawizard/reference/data_rename.html)`(`` `` select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"c161sex"``, ``"c160age"``, ``"quol_5"``, ``"c175empl"``)``,`` `` replacement ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"age"``, ``"qol"``, ``"employed"``)`` `` ``)`` ``|>`` `` ``# age into factor, set levels, and change labels for education`` `` `[`data_modify`](https://easystats.github.io/datawizard/reference/data_modify.html)`(``age ``=`` `[`factor`](https://rdrr.io/r/base/factor.html)`(``age``, labels ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"-40"``, ``"41-64"``, ``"65+"``)``)``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` ``# predictions and significance testing`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`insight`](https://easystats.github.io/insight/)`)`` ``# extracting random effects variances`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`datawizard`](https://easystats.github.io/datawizard/)`)`` ``# data wrangling and preparation`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`parameters`](https://easystats.github.io/parameters/)`)`` ``# model summaries`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`performance`](https://easystats.github.io/performance/)`)`` ``# model fit indices, ICC`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`glmmTMB`](https://github.com/glmmTMB/glmmTMB)`)`` ``# multilevel modelling`\
+\
+`# sample data set`\
+[`data`](https://rdrr.io/r/utils/data.html)`(``efc``, package ``=`` ``"modelbased"``)`\
+\
+`efc`` ``<-`` ``efc`` ``|>`\
+`  ``# numeric to factors, set labels as levels`\
+`  `[`to_factor`](https://easystats.github.io/datawizard/reference/to_factor.html)`(``select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"c161sex"``, ``"c172code"``, ``"c175empl"``)``)`` ``|>`\
+`  ``# recode age into three groups`\
+`  `[`recode_values`](https://easystats.github.io/datawizard/reference/recode_values.html)`(`\
+`    select ``=`` ``"c160age"``,`\
+`    recode ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``` `1`  ```=`` ``"min:40"``` , `2`  ```=`` ``41``:``64``` , `3`  ```=`` ``"65:max"``)`\
+`  ``)`` ``|>`\
+`  ``# rename variables`\
+`  `[`data_rename`](https://easystats.github.io/datawizard/reference/data_rename.html)`(`\
+`    select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"c161sex"``, ``"c160age"``, ``"quol_5"``, ``"c175empl"``)``,`\
+`    replacement ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"age"``, ``"qol"``, ``"employed"``)`\
+`  ``)`` ``|>`\
+`  ``# age into factor, set levels, and change labels for education`\
+`  `[`data_modify`](https://easystats.github.io/datawizard/reference/data_modify.html)`(``age ``=`` `[`factor`](https://rdrr.io/r/base/factor.html)`(``age``, labels ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"-40"``, ``"41-64"``, ``"65+"``)``)``)`
 
 To include the intersectional strata variables `gender`, `employed` and
 `age` in our mixed model, we will define them as interacting random
@@ -72,7 +97,32 @@ effects (excluding main effects of interactions):
 unique combinations in our model, similar as if we would create a factor
 variable with all combinations manually:
 
-`efc``$``strata`` ``<-`` `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(`` `` `[`is.na`](https://rdrr.io/r/base/NA.html)`(``efc``$``employed``)`` ``|`` `[`is.na`](https://rdrr.io/r/base/NA.html)`(``efc``$``gender``)`` ``|`` `[`is.na`](https://rdrr.io/r/base/NA.html)`(``efc``$``age``)``,`` `` ``NA_character_``,`` `` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``efc``$``gender``, ``", "``, ``efc``$``employed``, ``", "``, ``efc``$``age``)`` ``)`` ``efc``$``strata`` ``<-`` `[`factor`](https://rdrr.io/r/base/factor.html)`(``efc``$``strata``)`` `[`data_tabulate`](https://easystats.github.io/datawizard/reference/data_tabulate.html)`(``efc``$``strata``)`` ``#> efc$strata <categorical>`` ``#> # total N=908 valid N=900`` ``#> `` ``#> Value | N | Raw % | Valid % | Cumulative %`` ``#> -------------------+-----+-------+---------+-------------`` ``#> Female, no, -40 | 37 | 4.07 | 4.11 | 4.11`` ``#> Female, no, 41-64 | 238 | 26.21 | 26.44 | 30.56`` ``#> Female, no, 65+ | 135 | 14.87 | 15.00 | 45.56`` ``#> Female, yes, -40 | 63 | 6.94 | 7.00 | 52.56`` ``#> Female, yes, 41-64 | 210 | 23.13 | 23.33 | 75.89`` ``#> Female, yes, 65+ | 3 | 0.33 | 0.33 | 76.22`` ``#> Male, no, -40 | 15 | 1.65 | 1.67 | 77.89`` ``#> Male, no, 41-64 | 42 | 4.63 | 4.67 | 82.56`` ``#> Male, no, 65+ | 50 | 5.51 | 5.56 | 88.11`` ``#> Male, yes, -40 | 34 | 3.74 | 3.78 | 91.89`` ``#> Male, yes, 41-64 | 70 | 7.71 | 7.78 | 99.67`` ``#> Male, yes, 65+ | 3 | 0.33 | 0.33 | 100.00`` ``#> <NA> | 8 | 0.88 | <NA> | <NA>`
+\
+`efc``$``strata`` ``<-`` `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(`\
+`  `[`is.na`](https://rdrr.io/r/base/NA.html)`(``efc``$``employed``)`` ``|`` `[`is.na`](https://rdrr.io/r/base/NA.html)`(``efc``$``gender``)`` ``|`` `[`is.na`](https://rdrr.io/r/base/NA.html)`(``efc``$``age``)``,`\
+`  ``NA_character_``,`\
+`  `[`paste0`](https://rdrr.io/r/base/paste.html)`(``efc``$``gender``, ``", "``, ``efc``$``employed``, ``", "``, ``efc``$``age``)`\
+`)`\
+`efc``$``strata`` ``<-`` `[`factor`](https://rdrr.io/r/base/factor.html)`(``efc``$``strata``)`\
+[`data_tabulate`](https://easystats.github.io/datawizard/reference/data_tabulate.html)`(``efc``$``strata``)`\
+`#> efc$strata <categorical>`\
+`#> # total N=908 valid N=900`\
+`#> `\
+`#> Value              |   N | Raw % | Valid % | Cumulative %`\
+`#> -------------------+-----+-------+---------+-------------`\
+`#> Female, no, -40    |  37 |  4.07 |    4.11 |         4.11`\
+`#> Female, no, 41-64  | 238 | 26.21 |   26.44 |        30.56`\
+`#> Female, no, 65+    | 135 | 14.87 |   15.00 |        45.56`\
+`#> Female, yes, -40   |  63 |  6.94 |    7.00 |        52.56`\
+`#> Female, yes, 41-64 | 210 | 23.13 |   23.33 |        75.89`\
+`#> Female, yes, 65+   |   3 |  0.33 |    0.33 |        76.22`\
+`#> Male, no, -40      |  15 |  1.65 |    1.67 |        77.89`\
+`#> Male, no, 41-64    |  42 |  4.63 |    4.67 |        82.56`\
+`#> Male, no, 65+      |  50 |  5.51 |    5.56 |        88.11`\
+`#> Male, yes, -40     |  34 |  3.74 |    3.78 |        91.89`\
+`#> Male, yes, 41-64   |  70 |  7.71 |    7.78 |        99.67`\
+`#> Male, yes, 65+     |   3 |  0.33 |    0.33 |       100.00`\
+`#> <NA>               |   8 |  0.88 |    <NA> |         <NA>`
 
 We now have the choice and could either use the `strata` variable as
 group factor for our random effects, or `gender:employed:age`. For
@@ -93,7 +143,12 @@ We start by fitting a linear mixed effects model, which includes no
 fixed effects, but only our different intersectional dimensions:
 `gender`, `employed` and `age`.
 
-`# Quality of Life score ranges from 0 to 25`` ``m_null`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(``qol`` ``~`` ``1`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``, data ``=`` ``efc``)`` `` ``# the above model is identical to:`` ``# m_null <- glmmTMB(qol ~ 1 + (1 | strata), data = efc)`
+\
+`# Quality of Life score ranges from 0 to 25`\
+`m_null`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(``qol`` ``~`` ``1`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``, data ``=`` ``efc``)`\
+\
+`# the above model is identical to:`\
+`# m_null <- glmmTMB(qol ~ 1 + (1 | strata), data = efc)`
 
 The purpose of this model - which is sometimes also called *null model*
 or *base model* - is to quantify the “discriminatory accuracy”, which is
@@ -110,7 +165,26 @@ models with lower ICC.
 We now look at the model parameters and the ICC of our simple
 intersectional model.
 
-[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``m_null``)`` ``#> # Fixed Effects`` ``#> `` ``#> Parameter | Coefficient | SE | 95% CI | z | p`` ``#> ------------------------------------------------------------------`` ``#> (Intercept) | 14.91 | 0.40 | [14.13, 15.70] | 37.41 | < .001`` ``#> `` ``#> # Random Effects`` ``#> `` ``#> Parameter | Coefficient | 95% CI`` ``#> ----------------------------------------------------------------`` ``#> SD (Intercept: gender:employed:age) | 1.03 | [0.56, 1.89]`` ``#> SD (Residual) | 5.23 | [4.99, 5.48]`` `` `[`icc`](https://easystats.github.io/performance/reference/icc.html)`(``m_null``)`` ``#> # Intraclass Correlation Coefficient`` ``#> `` ``#> Adjusted ICC: 0.038`` ``#> Unadjusted ICC: 0.038`
+\
+[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``m_null``)`\
+`#> # Fixed Effects`\
+`#> `\
+`#> Parameter   | Coefficient |   SE |         95% CI |     z |      p`\
+`#> ------------------------------------------------------------------`\
+`#> (Intercept) |       14.91 | 0.40 | [14.13, 15.70] | 37.41 | < .001`\
+`#> `\
+`#> # Random Effects`\
+`#> `\
+`#> Parameter                           | Coefficient |       95% CI`\
+`#> ----------------------------------------------------------------`\
+`#> SD (Intercept: gender:employed:age) |        1.03 | [0.56, 1.89]`\
+`#> SD (Residual)                       |        5.23 | [4.99, 5.48]`\
+\
+[`icc`](https://easystats.github.io/performance/reference/icc.html)`(``m_null``)`\
+`#> # Intraclass Correlation Coefficient`\
+`#> `\
+`#>     Adjusted ICC: 0.038`\
+`#>   Unadjusted ICC: 0.038`
 
 The ICC with a value of about 4% is rather low. Usually, this indicates
 that our dimensions used to define the intersectional strata do not
@@ -139,7 +213,10 @@ coefficients.
 
 First, we fit three models each with one dimension as predictor.
 
-`m_gender`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(``qol`` ``~`` ``gender`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``, data ``=`` ``efc``)`` ``m_employment`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(``qol`` ``~`` ``employed`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``, data ``=`` ``efc``)`` ``m_age`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(``qol`` ``~`` ``age`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``, data ``=`` ``efc``)`
+\
+`m_gender`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(``qol`` ``~`` ``gender`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``, data ``=`` ``efc``)`\
+`m_employment`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(``qol`` ``~`` ``employed`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``, data ``=`` ``efc``)`\
+`m_age`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(``qol`` ``~`` ``age`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``, data ``=`` ``efc``)`
 
 The regression coefficients already give an impression how strong the
 association between each single dimension and the outcome is, taking
@@ -147,7 +224,17 @@ between-stratum variance into account. The larger (in absolute values)
 the coefficients, the higher the degree that dimension contributed to
 the between-stratum variance.
 
-[`compare_parameters`](https://easystats.github.io/parameters/reference/compare_parameters.html)`(``m_gender``, ``m_employment``, ``m_age``)`` ``#> Parameter | m_gender | m_employment | m_age`` ``#> ------------------------------------------------------------------------------------`` ``#> (Intercept) | 15.55 (14.51, 16.60) | 14.23 (13.35, 15.12) | 16.25 (15.33, 17.17)`` ``#> gender [Female] | -1.18 (-2.54, 0.17) | | `` ``#> employed [yes] | | 1.38 ( 0.07, 2.68) | `` ``#> age [41-64] | | | -1.99 (-3.14, -0.84)`` ``#> age [65+] | | | -2.55 (-3.88, -1.23)`` ``#> ------------------------------------------------------------------------------------`` ``#> Observations | 895 | 895 | 895`
+\
+[`compare_parameters`](https://easystats.github.io/parameters/reference/compare_parameters.html)`(``m_gender``, ``m_employment``, ``m_age``)`\
+`#> Parameter       |             m_gender |         m_employment |                m_age`\
+`#> ------------------------------------------------------------------------------------`\
+`#> (Intercept)     | 15.55 (14.51, 16.60) | 14.23 (13.35, 15.12) | 16.25 (15.33, 17.17)`\
+`#> gender [Female] | -1.18 (-2.54,  0.17) |                      |                     `\
+`#> employed [yes]  |                      |  1.38 ( 0.07,  2.68) |                     `\
+`#> age [41-64]     |                      |                      | -1.99 (-3.14, -0.84)`\
+`#> age [65+]       |                      |                      | -2.55 (-3.88, -1.23)`\
+`#> ------------------------------------------------------------------------------------`\
+`#> Observations    |                  895 |                  895 |                  895`
 
 Looking at the summary tables above, it seems like `gender` is the
 dimension that explains least of the between-stratum variance,
@@ -159,7 +246,13 @@ Since the fixed effects now take away some of the proportion of the
 variance explained by the grouping factors (random effects), we expect
 the ICC for the above models to be lower.
 
-[`icc`](https://easystats.github.io/performance/reference/icc.html)`(``m_gender``)``$``ICC_adjusted`` ``#> [1] 0.02583979`` `[`icc`](https://easystats.github.io/performance/reference/icc.html)`(``m_employment``)``$``ICC_adjusted`` ``#> [1] 0.02341412`` `[`icc`](https://easystats.github.io/performance/reference/icc.html)`(``m_age``)``$``ICC_adjusted`` ``#> [1] 0.00461901`
+\
+[`icc`](https://easystats.github.io/performance/reference/icc.html)`(``m_gender``)``$``ICC_adjusted`\
+`#> [1] 0.02583979`\
+[`icc`](https://easystats.github.io/performance/reference/icc.html)`(``m_employment``)``$``ICC_adjusted`\
+`#> [1] 0.02341412`\
+[`icc`](https://easystats.github.io/performance/reference/icc.html)`(``m_age``)``$``ICC_adjusted`\
+`#> [1] 0.00461901`
 
 Indeed, the ICC correlates with the fixed effects coefficients, i.e. the
 larger the coefficient (in absolute values), the lower the ICC.
@@ -172,7 +265,25 @@ variance by the strata can be explained by a single dimension that
 define those strata. The PCV ranges from 0 to 1, and the closer to 1,
 the more this particular dimension explains social inequalities.
 
-`# extract random effect variances from all models`` ``v_null`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_null``)`` ``v_gender`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_gender``)`` ``v_employment`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_employment``)`` ``v_age`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_age``)`` `` ``# PCV (proportional change in between-stratum variance)`` ``# from null-model to gender-model`` ``(``v_null``$``var.random`` ``-`` ``v_gender``$``var.random``)`` ``/`` ``v_null``$``var.random`` ``#> [1] 0.3202535`` `` ``# PCV from null-model to employment-model`` ``(``v_null``$``var.random`` ``-`` ``v_employment``$``var.random``)`` ``/`` ``v_null``$``var.random`` ``#> [1] 0.3859538`` `` ``# PCV from null-model to age-model`` ``(``v_null``$``var.random`` ``-`` ``v_age``$``var.random``)`` ``/`` ``v_null``$``var.random`` ``#> [1] 0.8809532`
+\
+`# extract random effect variances from all models`\
+`v_null`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_null``)`\
+`v_gender`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_gender``)`\
+`v_employment`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_employment``)`\
+`v_age`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_age``)`\
+\
+`# PCV (proportional change in between-stratum variance)`\
+`# from null-model to gender-model`\
+`(``v_null``$``var.random`` ``-`` ``v_gender``$``var.random``)`` ``/`` ``v_null``$``var.random`\
+`#> [1] 0.3202535`\
+\
+`# PCV from null-model to employment-model`\
+`(``v_null``$``var.random`` ``-`` ``v_employment``$``var.random``)`` ``/`` ``v_null``$``var.random`\
+`#> [1] 0.3859538`\
+\
+`# PCV from null-model to age-model`\
+`(``v_null``$``var.random`` ``-`` ``v_age``$``var.random``)`` ``/`` ``v_null``$``var.random`\
+`#> [1] 0.8809532`
 
 Again, we see that the PCV is in line with the models’ ICC’s and
 regression coefficients. We see the highest proportional change for
@@ -192,7 +303,24 @@ substantially below 1 indicates that these main effects cannot fully
 explain the strata-level variance, pointing to the presence of
 multiplicative interaction effects.
 
-`m_full`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`` `` ``qol`` ``~`` ``gender`` ``+`` ``employed`` ``+`` ``age`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``,`` `` data ``=`` ``efc`` ``)`` `` ``# investigate random effects parameters`` `[`random_parameters`](https://easystats.github.io/parameters/reference/random_parameters.html)`(``m_full``)`` ``#> # Random Effects`` ``#> `` ``#> Within-Group Variance 27.1 (5.21)`` ``#> Between-Group Variance`` ``#> Random Intercept (gender:employed:age) 0 (0)`` ``#> N (groups per factor)`` ``#> gender 2`` ``#> employed 2`` ``#> age 3`` ``#> Observations 895`
+\
+`m_full`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`\
+`  ``qol`` ``~`` ``gender`` ``+`` ``employed`` ``+`` ``age`` ``+`` ``(``1`` ``|`` ``gender``:``employed``:``age``)``,`\
+`  data ``=`` ``efc`\
+`)`\
+\
+`# investigate random effects parameters`\
+[`random_parameters`](https://easystats.github.io/parameters/reference/random_parameters.html)`(``m_full``)`\
+`#> # Random Effects`\
+`#> `\
+`#> Within-Group Variance                     27.1 (5.21)`\
+`#> Between-Group Variance`\
+`#>   Random Intercept (gender:employed:age)     0    (0)`\
+`#> N (groups per factor)`\
+`#>   gender                                     2`\
+`#>   employed                                   2`\
+`#>   age                                        3`\
+`#> Observations                               895`
 
 We see that the between-group variance is literally zero, which means,
 no variation is left between the intersectional strata after adding
@@ -200,7 +328,13 @@ those predictors as additive fixed effects. This suggests that the PCV
 will be (close to) 1, indicating we have no multiplicative interaction
 effects.
 
-`v_full`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_full``)`` `` ``# PCV (proportional change in between-stratum variance)`` ``# from null-model to full-model`` ``(``v_null``$``var.random`` ``-`` ``v_full``$``var.random``)`` ``/`` ``v_null``$``var.random`` ``#> [1] 1`
+\
+`v_full`` ``<-`` `[`get_variance`](https://easystats.github.io/insight/reference/get_variance.html)`(``m_full``)`\
+\
+`# PCV (proportional change in between-stratum variance)`\
+`# from null-model to full-model`\
+`(``v_null``$``var.random`` ``-`` ``v_full``$``var.random``)`` ``/`` ``v_null``$``var.random`\
+`#> [1] 1`
 
 Indeed, the PCV for the full model is 1.
 
@@ -221,7 +355,13 @@ random effects (*unit-level* predictions).
 The following code shows the predicted average quality of life scores
 for the different groups.
 
-`predictions`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(`` `` ``m_null``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``, ``"age"``)``,`` `` estimate ``=`` ``"average"`` ``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``predictions``)`
+\
+`predictions`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(`\
+`  ``m_null``,`\
+`  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``, ``"age"``)``,`\
+`  estimate ``=`` ``"average"`\
+`)`\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``predictions``)`
 
 ![](practical_intersectionality_files/figure-html/unnamed-chunk-12-1.png)
 
@@ -235,20 +375,98 @@ between groups are statistically significant. Since all combinations of
 pairwise comparisons would return 66 rows in total, we just show the
 first ten rows for demonstrating purpose.
 
-`# just show first 10 rows of output...`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m_null``,`` `` contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``, ``"age"``)``,`` `` estimate ``=`` ``"average"`` ``)``[``1``:``10``, ``]`` ``#> Averaged Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> ------------------------------------------------------------------`` ``#> Male, no, 41-64 | Male, no, -40 | -0.30 (-0.30, -0.30) | <0.001`` ``#> Male, no, 65++ | Male, no, -40 | -0.83 (-0.83, -0.83) | <0.001`` ``#> Male, yes, -40 | Male, no, -40 | 0.88 ( 0.88, 0.88) | <0.001`` ``#> Male, yes, 41-64 | Male, no, -40 | 0.23 ( 0.23, 0.23) | <0.001`` ``#> Male, yes, 65++ | Male, no, -40 | 0.10 ( 0.10, 0.10) | <0.001`` ``#> Female, no, -40 | Male, no, -40 | -0.07 (-0.07, -0.07) | <0.001`` ``#> Female, no, 41-64 | Male, no, -40 | -1.49 (-1.49, -1.49) | <0.001`` ``#> Female, no, 65++ | Male, no, -40 | -1.71 (-1.71, -1.71) | <0.001`` ``#> Female, yes, -40 | Male, no, -40 | 0.79 ( 0.79, 0.79) | <0.001`` ``#> Female, yes, 41-64 | Male, no, -40 | -1.15 (-1.15, -1.15) | <0.001`` ``#> `` ``#> Variable predicted: qol`` ``#> Predictors contrasted: gender, employed, age`` ``#> p-values are uncorrected.`
+\
+`# just show first 10 rows of output...`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``m_null``,`\
+`  contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``, ``"age"``)``,`\
+`  estimate ``=`` ``"average"`\
+`)``[``1``:``10``, ``]`\
+`#> Averaged Contrasts Analysis`\
+`#> `\
+`#> Level1             | Level2        |      Difference (CI) |      p`\
+`#> ------------------------------------------------------------------`\
+`#> Male, no, 41-64    | Male, no, -40 | -0.30 (-0.30, -0.30) | <0.001`\
+`#> Male, no, 65++     | Male, no, -40 | -0.83 (-0.83, -0.83) | <0.001`\
+`#> Male, yes, -40     | Male, no, -40 |  0.88 ( 0.88,  0.88) | <0.001`\
+`#> Male, yes, 41-64   | Male, no, -40 |  0.23 ( 0.23,  0.23) | <0.001`\
+`#> Male, yes, 65++    | Male, no, -40 |  0.10 ( 0.10,  0.10) | <0.001`\
+`#> Female, no, -40    | Male, no, -40 | -0.07 (-0.07, -0.07) | <0.001`\
+`#> Female, no, 41-64  | Male, no, -40 | -1.49 (-1.49, -1.49) | <0.001`\
+`#> Female, no, 65++   | Male, no, -40 | -1.71 (-1.71, -1.71) | <0.001`\
+`#> Female, yes, -40   | Male, no, -40 |  0.79 ( 0.79,  0.79) | <0.001`\
+`#> Female, yes, 41-64 | Male, no, -40 | -1.15 (-1.15, -1.15) | <0.001`\
+`#> `\
+`#> Variable predicted: qol`\
+`#> Predictors contrasted: gender, employed, age`\
+`#> p-values are uncorrected.`
 
 If we only want to modulate one factor and compare those groups within
 the levels of the other groups, we can use the `by` argument. This
 reduces the output and only compares the focal term(s) within the levels
 of the remaining predictors.
 
-`# Compare levels of gender and employment status for age groups`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m_null``,`` `` contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``)``,`` `` by ``=`` ``"age"``,`` `` estimate ``=`` ``"average"`` ``)`` ``#> Averaged Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | age | Difference (CI) | p`` ``#> ----------------------------------------------------------------`` ``#> Male, yes | Male, no | -40 | 0.88 ( 0.88, 0.88) | <0.001`` ``#> Female, no | Male, no | -40 | -0.07 (-0.07, -0.07) | <0.001`` ``#> Female, yes | Male, no | -40 | 0.79 ( 0.79, 0.79) | <0.001`` ``#> Female, no | Male, yes | -40 | -0.95 (-0.95, -0.95) | <0.001`` ``#> Female, yes | Male, yes | -40 | -0.08 (-0.08, -0.08) | <0.001`` ``#> Female, yes | Female, no | -40 | 0.86 ( 0.86, 0.86) | <0.001`` ``#> Male, yes | Male, no | 41-64 | 0.53 ( 0.53, 0.53) | <0.001`` ``#> Female, no | Male, no | 41-64 | -1.18 (-1.18, -1.18) | <0.001`` ``#> Female, yes | Male, no | 41-64 | -0.84 (-0.84, -0.84) | <0.001`` ``#> Female, no | Male, yes | 41-64 | -1.71 (-1.71, -1.71) | <0.001`` ``#> Female, yes | Male, yes | 41-64 | -1.37 (-1.37, -1.37) | <0.001`` ``#> Female, yes | Female, no | 41-64 | 0.34 ( 0.34, 0.34) | <0.001`` ``#> Male, yes | Male, no | 65+ | 0.93 ( 0.93, 0.93) | <0.001`` ``#> Female, no | Male, no | 65+ | -0.88 (-0.88, -0.88) | <0.001`` ``#> Female, yes | Male, no | 65+ | 0.44 ( 0.44, 0.44) | <0.001`` ``#> Female, no | Male, yes | 65+ | -1.81 (-1.81, -1.81) | <0.001`` ``#> Female, yes | Male, yes | 65+ | -0.49 (-0.49, -0.49) | <0.001`` ``#> Female, yes | Female, no | 65+ | 1.32 ( 1.32, 1.32) | <0.001`` ``#> `` ``#> Variable predicted: qol`` ``#> Predictors contrasted: gender, employed`` ``#> p-values are uncorrected.`
+\
+`# Compare levels of gender and employment status for age groups`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``m_null``,`\
+`  contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``)``,`\
+`  by ``=`` ``"age"``,`\
+`  estimate ``=`` ``"average"`\
+`)`\
+`#> Averaged Contrasts Analysis`\
+`#> `\
+`#> Level1      | Level2     | age   |      Difference (CI) |      p`\
+`#> ----------------------------------------------------------------`\
+`#> Male, yes   | Male, no   | -40   |  0.88 ( 0.88,  0.88) | <0.001`\
+`#> Female, no  | Male, no   | -40   | -0.07 (-0.07, -0.07) | <0.001`\
+`#> Female, yes | Male, no   | -40   |  0.79 ( 0.79,  0.79) | <0.001`\
+`#> Female, no  | Male, yes  | -40   | -0.95 (-0.95, -0.95) | <0.001`\
+`#> Female, yes | Male, yes  | -40   | -0.08 (-0.08, -0.08) | <0.001`\
+`#> Female, yes | Female, no | -40   |  0.86 ( 0.86,  0.86) | <0.001`\
+`#> Male, yes   | Male, no   | 41-64 |  0.53 ( 0.53,  0.53) | <0.001`\
+`#> Female, no  | Male, no   | 41-64 | -1.18 (-1.18, -1.18) | <0.001`\
+`#> Female, yes | Male, no   | 41-64 | -0.84 (-0.84, -0.84) | <0.001`\
+`#> Female, no  | Male, yes  | 41-64 | -1.71 (-1.71, -1.71) | <0.001`\
+`#> Female, yes | Male, yes  | 41-64 | -1.37 (-1.37, -1.37) | <0.001`\
+`#> Female, yes | Female, no | 41-64 |  0.34 ( 0.34,  0.34) | <0.001`\
+`#> Male, yes   | Male, no   | 65+   |  0.93 ( 0.93,  0.93) | <0.001`\
+`#> Female, no  | Male, no   | 65+   | -0.88 (-0.88, -0.88) | <0.001`\
+`#> Female, yes | Male, no   | 65+   |  0.44 ( 0.44,  0.44) | <0.001`\
+`#> Female, no  | Male, yes  | 65+   | -1.81 (-1.81, -1.81) | <0.001`\
+`#> Female, yes | Male, yes  | 65+   | -0.49 (-0.49, -0.49) | <0.001`\
+`#> Female, yes | Female, no | 65+   |  1.32 ( 1.32,  1.32) | <0.001`\
+`#> `\
+`#> Variable predicted: qol`\
+`#> Predictors contrasted: gender, employed`\
+`#> p-values are uncorrected.`
 
 E.g., if we look at the plot and want to know whether female persons
 aged 65+ differ depending on their employment status, we can use the
 following code:
 
-`# Compare levels employment status by gender and age groups`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m_null``,`` `` contrast ``=`` ``"employed"``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"age"``)``,`` `` estimate ``=`` ``"average"`` ``)`` ``#> Averaged Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | gender | age | Difference (CI) | p`` ``#> -------------------------------------------------------------`` ``#> yes | no | Male | -40 | 0.88 (0.88, 0.88) | <0.001`` ``#> yes | no | Female | -40 | 0.86 (0.86, 0.86) | <0.001`` ``#> yes | no | Male | 41-64 | 0.53 (0.53, 0.53) | <0.001`` ``#> yes | no | Female | 41-64 | 0.34 (0.34, 0.34) | <0.001`` ``#> yes | no | Male | 65+ | 0.93 (0.93, 0.93) | <0.001`` ``#> yes | no | Female | 65+ | 1.32 (1.32, 1.32) | <0.001`` ``#> `` ``#> Variable predicted: qol`` ``#> Predictors contrasted: employed`` ``#> p-values are uncorrected.`
+\
+`# Compare levels employment status by gender and age groups`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``m_null``,`\
+`  contrast ``=`` ``"employed"``,`\
+`  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"age"``)``,`\
+`  estimate ``=`` ``"average"`\
+`)`\
+`#> Averaged Contrasts Analysis`\
+`#> `\
+`#> Level1 | Level2 | gender | age   |   Difference (CI) |      p`\
+`#> -------------------------------------------------------------`\
+`#> yes    | no     | Male   | -40   | 0.88 (0.88, 0.88) | <0.001`\
+`#> yes    | no     | Female | -40   | 0.86 (0.86, 0.86) | <0.001`\
+`#> yes    | no     | Male   | 41-64 | 0.53 (0.53, 0.53) | <0.001`\
+`#> yes    | no     | Female | 41-64 | 0.34 (0.34, 0.34) | <0.001`\
+`#> yes    | no     | Male   | 65+   | 0.93 (0.93, 0.93) | <0.001`\
+`#> yes    | no     | Female | 65+   | 1.32 (1.32, 1.32) | <0.001`\
+`#> `\
+`#> Variable predicted: qol`\
+`#> Predictors contrasted: employed`\
+`#> p-values are uncorrected.`
 
 ### 6. Strata-level residuals: Specific additive vs. multiplicative effects
 
@@ -272,12 +490,31 @@ We can easily compute the strata-level residuals using the
 function. **Important**: We need to calculate these residuals for the
 *intersectional interaction* (full) model, not for the *null* model.
 
-`strata_residuals`` ``<-`` `[`estimate_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``m_full``)`` `` ``strata_residuals`` ``#> Group | Level | Parameter | Coefficient | SE | 95% CI`` ``#> ---------------------------------------------------------------------------------------------`` ``#> gender:employed:age | Female:no:-40 | (Intercept) | -2.23e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:no:41-64 | (Intercept) | 1.58e-08 | 1.49e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:no:65+ | (Intercept) | 1.80e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:yes:-40 | (Intercept) | 1.95e-08 | 1.50e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:yes:41-64 | (Intercept) | -3.58e-08 | 1.60e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Female:yes:65+ | (Intercept) | 9.71e-10 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:no:-40 | (Intercept) | -9.86e-09 | 1.47e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:no:41-64 | (Intercept) | 6.36e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:no:65+ | (Intercept) | -1.19e-08 | 1.47e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:yes:-40 | (Intercept) | -7.41e-09 | 1.46e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:yes:41-64 | (Intercept) | 1.37e-08 | 1.48e-04 | [ 0.00, 0.00]`` ``#> gender:employed:age | Male:yes:65+ | (Intercept) | 9.11e-09 | 1.47e-04 | [ 0.00, 0.00]`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``strata_residuals``)`
+\
+`strata_residuals`` ``<-`` `[`estimate_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``m_full``)`\
+\
+`strata_residuals`\
+`#> Group               | Level            | Parameter   | Coefficient |       SE |        95% CI`\
+`#> ---------------------------------------------------------------------------------------------`\
+`#> gender:employed:age | Female:no:-40    | (Intercept) |   -2.23e-09 | 1.46e-04 | [ 0.00, 0.00]`\
+`#> gender:employed:age | Female:no:41-64  | (Intercept) |    1.58e-08 | 1.49e-04 | [ 0.00, 0.00]`\
+`#> gender:employed:age | Female:no:65+    | (Intercept) |    1.80e-09 | 1.46e-04 | [ 0.00, 0.00]`\
+`#> gender:employed:age | Female:yes:-40   | (Intercept) |    1.95e-08 | 1.50e-04 | [ 0.00, 0.00]`\
+`#> gender:employed:age | Female:yes:41-64 | (Intercept) |   -3.58e-08 | 1.60e-04 | [ 0.00, 0.00]`\
+`#> gender:employed:age | Female:yes:65+   | (Intercept) |    9.71e-10 | 1.46e-04 | [ 0.00, 0.00]`\
+`#> gender:employed:age | Male:no:-40      | (Intercept) |   -9.86e-09 | 1.47e-04 | [ 0.00, 0.00]`\
+`#> gender:employed:age | Male:no:41-64    | (Intercept) |    6.36e-09 | 1.46e-04 | [ 0.00, 0.00]`\
+`#> gender:employed:age | Male:no:65+      | (Intercept) |   -1.19e-08 | 1.47e-04 | [ 0.00, 0.00]`\
+`#> gender:employed:age | Male:yes:-40     | (Intercept) |   -7.41e-09 | 1.46e-04 | [ 0.00, 0.00]`\
+`#> gender:employed:age | Male:yes:41-64   | (Intercept) |    1.37e-08 | 1.48e-04 | [ 0.00, 0.00]`\
+`#> gender:employed:age | Male:yes:65+     | (Intercept) |    9.11e-09 | 1.47e-04 | [ 0.00, 0.00]`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``strata_residuals``)`
 
 ![](practical_intersectionality_files/figure-html/unnamed-chunk-17-1.png)
 
 As expected (because the PCV is 1, indicating we found no multiplicative
-effects), als strata-level residuals are close to zero.
+effects), all strata-level residuals are close to zero.
 
 ### 7. MAIHDA and logistic regression models
 

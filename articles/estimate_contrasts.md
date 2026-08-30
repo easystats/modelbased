@@ -17,14 +17,24 @@ ANOVAs with more specific hypotheses about pairwise differences.
 Let’s carry out contrast analysis on the simple model from the previous
 tutorial:
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` `[`data`](https://rdrr.io/r/utils/data.html)`(``iris``)`` `` ``model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species``, data ``=`` ``iris``)`` ``means`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, by ``=`` ``"Species"``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``means``, point ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``width ``=`` ``0.1``)``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`\
+[`data`](https://rdrr.io/r/utils/data.html)`(``iris``)`\
+\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species``, data ``=`` ``iris``)`\
+`means`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, by ``=`` ``"Species"``)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``means``, point ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``width ``=`` ``0.1``)``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_contrasts_files/figure-html/unnamed-chunk-2-1.png)
 
 **Contrast analysis** can be achieved through the `estimate_contrasts`
 function:
 
-[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, contrast ``=`` ``"Species"``)`
+\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, contrast ``=`` ``"Species"``)`
 
     > Marginal Contrasts Analysis
     > 
@@ -46,7 +56,10 @@ significant.
 Again, as contrast analysis is based on marginal means, it can be
 applied to more complex models:
 
-`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species`` ``*`` ``Petal.Width``, data ``=`` ``iris``)`` ``contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, contrast ``=`` ``"Species"``)`` ``contrasts`
+\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species`` ``*`` ``Petal.Width``, data ``=`` ``iris``)`\
+`contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, contrast ``=`` ``"Species"``)`\
+`contrasts`
 
     > Marginal Contrasts Analysis
     > 
@@ -68,7 +81,9 @@ difference between *versicolor* and *virginica* becomes not significant
 Note that we can plot simple contrast analysis through **lighthouse
 plots**:
 
-[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``contrasts``, `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, by ``=`` ``"Species"``)``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``contrasts``, `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, by ``=`` ``"Species"``)``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](estimate_contrasts_files/figure-html/unnamed-chunk-5-1.png)
 
@@ -85,7 +100,27 @@ another continuous variable. Based on the model above (including the
 interaction with `Petal.Width`), we will compute the contrasts at 100
 equally-spaced points of `Petal.Width`, that we will then visualise.
 
-`contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``model``,`` `` contrast ``=`` ``"Species"``,`` `` by ``=`` ``"Petal.Width"``,`` `` length ``=`` ``100``,`` `` ``# we use a emmeans here because marginaleffects doesn't`` `` ``# generate more than 25 rows for pairwise comparisons`` `` backend ``=`` ``"emmeans"`` ``)`` `` ``# Create a variable with the two levels concatenated`` ``contrasts``$``Contrast`` ``<-`` `[`paste`](https://rdrr.io/r/base/paste.html)`(``contrasts``$``Level1``, ``"-"``, ``contrasts``$``Level2``)`` `` ``# Visualise the changes in the differences`` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``contrasts``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Width``, y ``=`` ``Difference``)``)`` ``+`` `` `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``fill ``=`` ``Contrast``, ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``)``, alpha ``=`` ``0.2``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``colour ``=`` ``Contrast``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`` `` `[`ylab`](https://ggplot2.tidyverse.org/reference/labs.html)`(``"Difference"``)`
+\
+`contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``model``,`\
+`  contrast ``=`` ``"Species"``,`\
+`  by ``=`` ``"Petal.Width"``,`\
+`  length ``=`` ``100``,`\
+`  ``# we use a emmeans here because marginaleffects doesn't`\
+`  ``# generate more than 25 rows for pairwise comparisons`\
+`  backend ``=`` ``"emmeans"`\
+`)`\
+\
+`# Create a variable with the two levels concatenated`\
+`contrasts``$``Contrast`` ``<-`` `[`paste`](https://rdrr.io/r/base/paste.html)`(``contrasts``$``Level1``, ``"-"``, ``contrasts``$``Level2``)`\
+\
+`# Visualise the changes in the differences`\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``contrasts``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Width``, y ``=`` ``Difference``)``)`` ``+`\
+`  `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``fill ``=`` ``Contrast``, ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``)``, alpha ``=`` ``0.2``)`` ``+`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``colour ``=`` ``Contrast``)``, linewidth ``=`` ``1``)`` ``+`\
+`  `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`\
+`  `[`ylab`](https://ggplot2.tidyverse.org/reference/labs.html)`(``"Difference"``)`
 
 ![](estimate_contrasts_files/figure-html/fig-1.png)
 

@@ -64,6 +64,7 @@ development version is available on R-universe (from *rOpenSci*).
 
 Once you have downloaded the package, you can then load it using:
 
+\
 [`library`](https://rdrr.io/r/base/library.html)`(`[`"modelbased"`](https://easystats.github.io/modelbased/)`)`
 
 > **Tip:**
@@ -165,13 +166,50 @@ and [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_means.html)
 for a detailed walkthrough on *marginal means*.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` `` ``# 1. The model`` ``model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species``, data ``=`` ``iris``)`` `` ``# 2. Obtain estimated means`` ``means`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, by ``=`` ``"Species"``)`` ``means`` ``## Estimated Marginal Means`` ``##`` ``## Species | Mean | SE | 95% CI | t(147)`` ``## ------------------------------------------------`` ``## setosa | 3.43 | 0.05 | [3.33, 3.52] | 71.36`` ``## versicolor | 2.77 | 0.05 | [2.68, 2.86] | 57.66`` ``## virginica | 2.97 | 0.05 | [2.88, 3.07] | 61.91`` ``##`` ``## Variable predicted: Sepal.Width`` ``## Predictors modulated: Species`` `` ``# 3. Custom plot`` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Species``, y ``=`` ``Sepal.Width``)``)`` ``+`` `` ``# Add base data`` `` `[`geom_violin`](https://ggplot2.tidyverse.org/reference/geom_violin.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``fill ``=`` ``Species``)``, color ``=`` ``"white"``)`` ``+`` `` `[`geom_jitter`](https://ggplot2.tidyverse.org/reference/geom_jitter.html)`(``width ``=`` ``0.1``, height ``=`` ``0``, alpha ``=`` ``0.5``, size ``=`` ``3``)`` ``+`` `` ``# Add pointrange and line for means`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``means``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Mean``, group ``=`` ``1``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`geom_pointrange`](https://ggplot2.tidyverse.org/reference/geom_linerange.html)`(`` `` data ``=`` ``means``,`` `` `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Mean``, ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``)``,`` `` size ``=`` ``1``,`` `` color ``=`` ``"white"`` `` ``)`` ``+`` `` ``# Improve colors`` `` `[`scale_fill_manual`](https://ggplot2.tidyverse.org/reference/scale_manual.html)`(``values ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"pink"``, ``"lightblue"``, ``"lightgreen"``)``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`\
+\
+`# 1. The model`\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species``, data ``=`` ``iris``)`\
+\
+`# 2. Obtain estimated means`\
+`means`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, by ``=`` ``"Species"``)`\
+`means`\
+`## Estimated Marginal Means`\
+`##`\
+`## Species    | Mean |   SE |       95% CI | t(147)`\
+`## ------------------------------------------------`\
+`## setosa     | 3.43 | 0.05 | [3.33, 3.52] |  71.36`\
+`## versicolor | 2.77 | 0.05 | [2.68, 2.86] |  57.66`\
+`## virginica  | 2.97 | 0.05 | [2.88, 3.07] |  61.91`\
+`##`\
+`## Variable predicted: Sepal.Width`\
+`## Predictors modulated: Species`\
+\
+`# 3. Custom plot`\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Species``, y ``=`` ``Sepal.Width``)``)`` ``+`\
+`  ``# Add base data`\
+`  `[`geom_violin`](https://ggplot2.tidyverse.org/reference/geom_violin.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``fill ``=`` ``Species``)``, color ``=`` ``"white"``)`` ``+`\
+`  `[`geom_jitter`](https://ggplot2.tidyverse.org/reference/geom_jitter.html)`(``width ``=`` ``0.1``, height ``=`` ``0``, alpha ``=`` ``0.5``, size ``=`` ``3``)`` ``+`\
+`  ``# Add pointrange and line for means`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``means``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Mean``, group ``=`` ``1``)``, linewidth ``=`` ``1``)`` ``+`\
+`  `[`geom_pointrange`](https://ggplot2.tidyverse.org/reference/geom_linerange.html)`(`\
+`    data ``=`` ``means``,`\
+`    `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Mean``, ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``)``,`\
+`    size ``=`` ``1``,`\
+`    color ``=`` ``"white"`\
+`  ``)`` ``+`\
+`  ``# Improve colors`\
+`  `[`scale_fill_manual`](https://ggplot2.tidyverse.org/reference/scale_manual.html)`(``values ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"pink"``, ``"lightblue"``, ``"lightgreen"``)``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](reference/figures/unnamed-chunk-3-1.png)
 
 You can also get a “quick” plot using the
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) function:
 
+\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``means``)`
 
 ![](reference/figures/unnamed-chunk-4-1.png)
@@ -189,7 +227,24 @@ Check-out [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html)
 for a detailed walkthrough on *contrast analysis*.
 
-`# 1. The model`` ``model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species``, data ``=`` ``iris``)`` `` ``# 2. Estimate marginal contrasts`` ``contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, contrast ``=`` ``"Species"``)`` ``contrasts`` ``## Marginal Contrasts Analysis`` ``##`` ``## Level1 | Level2 | Difference | SE | 95% CI | t(147) | p`` ``## ------------------------------------------------------------------------------`` ``## versicolor | setosa | -0.66 | 0.07 | [-0.79, -0.52] | -9.69 | < .001`` ``## virginica | setosa | -0.45 | 0.07 | [-0.59, -0.32] | -6.68 | < .001`` ``## virginica | versicolor | 0.20 | 0.07 | [ 0.07, 0.34] | 3.00 | 0.003`` ``##`` ``## Variable predicted: Sepal.Width`` ``## Predictors contrasted: Species`` ``## p-values are uncorrected.`
+\
+`# 1. The model`\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species``, data ``=`` ``iris``)`\
+\
+`# 2. Estimate marginal contrasts`\
+`contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, contrast ``=`` ``"Species"``)`\
+`contrasts`\
+`## Marginal Contrasts Analysis`\
+`##`\
+`## Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p`\
+`## ------------------------------------------------------------------------------`\
+`## versicolor | setosa     |      -0.66 | 0.07 | [-0.79, -0.52] |  -9.69 | < .001`\
+`## virginica  | setosa     |      -0.45 | 0.07 | [-0.59, -0.32] |  -6.68 | < .001`\
+`## virginica  | versicolor |       0.20 | 0.07 | [ 0.07,  0.34] |   3.00 |  0.003`\
+`##`\
+`## Variable predicted: Sepal.Width`\
+`## Predictors contrasted: Species`\
+`## p-values are uncorrected.`
 
 ![](reference/figures/unnamed-chunk-6-1.png)
 
@@ -203,9 +258,58 @@ for a detailed walkthrough on *contrast analysis*.
   values of a continuous variable (the *modulator*), and plot these
   differences (they are significant if their 95% CI doesn’t cover 0).
 
-`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species`` ``*`` ``Petal.Length``, data ``=`` ``iris``)`` ``difference`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``model``,`` `` contrast ``=`` ``"Species"``,`` `` by ``=`` ``"Petal.Length"``,`` `` length ``=`` ``3`` ``)`` ``# no line break for table`` `[`print`](https://rdrr.io/r/base/print.html)`(``difference``, table_width ``=`` ``Inf``)`` ``## Marginal Contrasts Analysis`` ``##`` ``## Level1 | Level2 | Petal.Length | Difference | SE | 95% CI | t(144) | p`` ``## ---------------------------------------------------------------------------------------------`` ``## versicolor | setosa | 1.00 | -1.70 | 0.34 | [-2.37, -1.02] | -4.97 | < .001`` ``## virginica | setosa | 1.00 | -1.34 | 0.40 | [-2.13, -0.56] | -3.38 | < .001`` ``## virginica | versicolor | 1.00 | 0.36 | 0.49 | [-0.61, 1.33] | 0.73 | 0.468`` ``## versicolor | setosa | 3.95 | -1.74 | 0.65 | [-3.03, -0.45] | -2.67 | 0.008`` ``## virginica | setosa | 3.95 | -1.79 | 0.66 | [-3.11, -0.48] | -2.70 | 0.008`` ``## virginica | versicolor | 3.95 | -0.06 | 0.15 | [-0.35, 0.24] | -0.37 | 0.710`` ``## versicolor | setosa | 6.90 | -1.78 | 1.44 | [-4.62, 1.06] | -1.24 | 0.218`` ``## virginica | setosa | 6.90 | -2.25 | 1.42 | [-5.06, 0.56] | -1.58 | 0.116`` ``## virginica | versicolor | 6.90 | -0.47 | 0.28 | [-1.03, 0.09] | -1.65 | 0.101`` ``##`` ``## Variable predicted: Sepal.Width`` ``## Predictors contrasted: Species`` ``## p-values are uncorrected.`
+\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species`` ``*`` ``Petal.Length``, data ``=`` ``iris``)`\
+`difference`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``model``,`\
+`  contrast ``=`` ``"Species"``,`\
+`  by ``=`` ``"Petal.Length"``,`\
+`  length ``=`` ``3`\
+`)`\
+`# no line break for table`\
+[`print`](https://rdrr.io/r/base/print.html)`(``difference``, table_width ``=`` ``Inf``)`\
+`## Marginal Contrasts Analysis`\
+`##`\
+`## Level1     | Level2     | Petal.Length | Difference |   SE |         95% CI | t(144) |      p`\
+`## ---------------------------------------------------------------------------------------------`\
+`## versicolor | setosa     |         1.00 |      -1.70 | 0.34 | [-2.37, -1.02] |  -4.97 | < .001`\
+`## virginica  | setosa     |         1.00 |      -1.34 | 0.40 | [-2.13, -0.56] |  -3.38 | < .001`\
+`## virginica  | versicolor |         1.00 |       0.36 | 0.49 | [-0.61,  1.33] |   0.73 |  0.468`\
+`## versicolor | setosa     |         3.95 |      -1.74 | 0.65 | [-3.03, -0.45] |  -2.67 |  0.008`\
+`## virginica  | setosa     |         3.95 |      -1.79 | 0.66 | [-3.11, -0.48] |  -2.70 |  0.008`\
+`## virginica  | versicolor |         3.95 |      -0.06 | 0.15 | [-0.35,  0.24] |  -0.37 |  0.710`\
+`## versicolor | setosa     |         6.90 |      -1.78 | 1.44 | [-4.62,  1.06] |  -1.24 |  0.218`\
+`## virginica  | setosa     |         6.90 |      -2.25 | 1.42 | [-5.06,  0.56] |  -1.58 |  0.116`\
+`## virginica  | versicolor |         6.90 |      -0.47 | 0.28 | [-1.03,  0.09] |  -1.65 |  0.101`\
+`##`\
+`## Variable predicted: Sepal.Width`\
+`## Predictors contrasted: Species`\
+`## p-values are uncorrected.`
 
-`# Recompute contrasts with a higher precision (for a smoother plot)`` ``contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``model``,`` `` contrast ``=`` ``"Species"``,`` `` by ``=`` ``"Petal.Length"``,`` `` length ``=`` ``20``,`` `` ``# we use a emmeans here because marginaleffects doesn't`` `` ``# generate more than 25 rows for pairwise comparisons`` `` backend ``=`` ``"emmeans"`` ``)`` `` ``# Add Contrast column by concatenating`` ``contrasts``$``Contrast`` ``<-`` `[`paste`](https://rdrr.io/r/base/paste.html)`(``contrasts``$``Level1``, ``"-"``, ``contrasts``$``Level2``)`` `` ``# Plot`` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``contrasts``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Difference``, ``)``)`` ``+`` `` ``# Add line and CI band`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``color ``=`` ``Contrast``)``)`` ``+`` `` `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``, fill ``=`` ``Contrast``)``, alpha ``=`` ``0.2``)`` ``+`` `` ``# Add line at 0, indicating no difference`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`` ``+`` `` ``# Colors`` `` ``theme_modern``(``)`
+\
+`# Recompute contrasts with a higher precision (for a smoother plot)`\
+`contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``model``,`\
+`  contrast ``=`` ``"Species"``,`\
+`  by ``=`` ``"Petal.Length"``,`\
+`  length ``=`` ``20``,`\
+`  ``# we use a emmeans here because marginaleffects doesn't`\
+`  ``# generate more than 25 rows for pairwise comparisons`\
+`  backend ``=`` ``"emmeans"`\
+`)`\
+\
+`# Add Contrast column by concatenating`\
+`contrasts``$``Contrast`` ``<-`` `[`paste`](https://rdrr.io/r/base/paste.html)`(``contrasts``$``Level1``, ``"-"``, ``contrasts``$``Level2``)`\
+\
+`# Plot`\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``contrasts``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Difference``, ``)``)`` ``+`\
+`  ``# Add line and CI band`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``color ``=`` ``Contrast``)``)`` ``+`\
+`  `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``, fill ``=`` ``Contrast``)``, alpha ``=`` ``0.2``)`` ``+`\
+`  ``# Add line at 0, indicating no difference`\
+`  `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`` ``+`\
+`  ``# Colors`\
+`  ``theme_modern``(``)`
 
 ![](reference/figures/unnamed-chunk-8-1.png)
 
@@ -223,7 +327,32 @@ Check-out [**this
 vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
 for a detailed walkthrough on *visualisation matrices*.
 
-`# 1. Fit model and get visualization matrix`` ``model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Length`` ``*`` ``Petal.Width``, data ``=`` ``iris``)`` `` ``# 2. Create a visualisation matrix with expected Z-score values of Petal.Width`` ``vizdata`` ``<-`` ``insight``::`[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Petal.Length"``, ``"Petal.Width = c(-1, 0, 1)"``)``)`` `` ``# 3. Revert from expected SD to actual values`` ``vizdata`` ``<-`` `[`unstandardize`](https://easystats.github.io/datawizard/reference/standardize.html)`(``vizdata``, select ``=`` ``"Petal.Width"``)`` `` ``# 4. Add predicted relationship from the model`` ``vizdata`` ``<-`` ``modelbased``::`[`estimate_expectation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``vizdata``)`` `` ``# 5. Express Petal.Width as z-score ("-1 SD", "+2 SD", etc.)`` ``vizdata``$``Petal.Width`` ``<-`` ``effectsize``::`[`format_standardize`](https://easystats.github.io/effectsize/reference/format_standardize.html)`(``vizdata``$``Petal.Width``, reference ``=`` ``iris``$``Petal.Width``)`` `` ``# 6. Plot`` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Sepal.Length``)``)`` ``+`` `` ``# Add points from original dataset (only shapes 21-25 have a fill aesthetic)`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``fill ``=`` ``Petal.Width``)``, size ``=`` ``5``, shape ``=`` ``21``)`` ``+`` `` ``# Add relationship lines`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, color ``=`` ``Petal.Width``)``, linewidth ``=`` ``1``)`` ``+`` `` ``# Improve colors / themes`` `` `[`scale_color_viridis_d`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``direction ``=`` ``-``1``)`` ``+`` `` `[`scale_fill_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``guide ``=`` ``"none"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+`# 1. Fit model and get visualization matrix`\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Length`` ``*`` ``Petal.Width``, data ``=`` ``iris``)`\
+\
+`# 2. Create a visualisation matrix with expected Z-score values of Petal.Width`\
+`vizdata`` ``<-`` ``insight``::`[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Petal.Length"``, ``"Petal.Width = c(-1, 0, 1)"``)``)`\
+\
+`# 3. Revert from expected SD to actual values`\
+`vizdata`` ``<-`` `[`unstandardize`](https://easystats.github.io/datawizard/reference/standardize.html)`(``vizdata``, select ``=`` ``"Petal.Width"``)`\
+\
+`# 4. Add predicted relationship from the model`\
+`vizdata`` ``<-`` ``modelbased``::`[`estimate_expectation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``vizdata``)`\
+\
+`# 5. Express Petal.Width as z-score ("-1 SD", "+2 SD", etc.)`\
+`vizdata``$``Petal.Width`` ``<-`` ``effectsize``::`[`format_standardize`](https://easystats.github.io/effectsize/reference/format_standardize.html)`(``vizdata``$``Petal.Width``, reference ``=`` ``iris``$``Petal.Width``)`\
+\
+`# 6. Plot`\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Sepal.Length``)``)`` ``+`\
+`  ``# Add points from original dataset (only shapes 21-25 have a fill aesthetic)`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``fill ``=`` ``Petal.Width``)``, size ``=`` ``5``, shape ``=`` ``21``)`` ``+`\
+`  ``# Add relationship lines`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, color ``=`` ``Petal.Width``)``, linewidth ``=`` ``1``)`` ``+`\
+`  ``# Improve colors / themes`\
+`  `[`scale_color_viridis_d`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``direction ``=`` ``-``1``)`` ``+`\
+`  `[`scale_fill_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``guide ``=`` ``"none"``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](reference/figures/unnamed-chunk-9-1.png)
 
@@ -242,7 +371,43 @@ Check-out [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html)
 for a detailed walkthrough on *predictions*.
 
-`# Fit model 1 and predict the response variable`` ``model1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Petal.Length`` ``~`` ``Sepal.Length``, data ``=`` ``iris``)`` ``pred1`` ``<-`` `[`estimate_expectation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model1``)`` ``pred1``$``Petal.Length`` ``<-`` ``iris``$``Petal.Length`` ``# Add true response`` `` ``# Print first 5 lines of output`` `[`head`](https://rdrr.io/r/utils/head.html)`(``pred1``, n ``=`` ``5``)`` ``## Model-based Predictions`` ``##`` ``## Sepal.Length | Predicted | SE | 95% CI | Residuals | Petal.Length`` ``## -------------------------------------------------------------------------`` ``## 5.10 | 2.38 | 0.10 | [2.19, 2.57] | -0.98 | 1.40`` ``## 4.90 | 2.00 | 0.11 | [1.79, 2.22] | -0.60 | 1.40`` ``## 4.70 | 1.63 | 0.12 | [1.39, 1.87] | -0.33 | 1.30`` ``## 4.60 | 1.45 | 0.13 | [1.19, 1.70] | 0.05 | 1.50`` ``## 5.00 | 2.19 | 0.10 | [1.99, 2.39] | -0.79 | 1.40`` ``##`` ``## Variable predicted: Petal.Length`` `` ``# Same for model 2`` ``model2`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Petal.Length`` ``~`` ``Sepal.Length`` ``*`` ``Species``, data ``=`` ``iris``)`` ``pred2`` ``<-`` `[`estimate_expectation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model2``)`` ``pred2``$``Petal.Length`` ``<-`` ``iris``$``Petal.Length`` `` `` ``# Initialize plot for model 1`` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``data ``=`` ``pred1``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Predicted``)``)`` ``+`` `` ``# with identity line (diagonal) representing perfect predictions`` `` `[`geom_abline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``linetype ``=`` ``"dashed"``)`` ``+`` `` ``# Add the actual predicted points of the models`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``color ``=`` ``"Model 1"``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``data ``=`` ``pred2``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``color ``=`` ``"Model 2"``)``)`` ``+`` `` ``# Aesthetics changes`` `` `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(``y ``=`` ``"Petal.Length (predicted)"``, color ``=`` ``NULL``)`` ``+`` `` `[`scale_color_manual`](https://ggplot2.tidyverse.org/reference/scale_manual.html)`(``values ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Model 1"`` ``=`` ``"blue"``, ``"Model 2"`` ``=`` ``"red"``)``)`` ``+`` `` ``theme_modern``(``)`
+\
+`# Fit model 1 and predict the response variable`\
+`model1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Petal.Length`` ``~`` ``Sepal.Length``, data ``=`` ``iris``)`\
+`pred1`` ``<-`` `[`estimate_expectation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model1``)`\
+`pred1``$``Petal.Length`` ``<-`` ``iris``$``Petal.Length`` ``# Add true response`\
+\
+`# Print first 5 lines of output`\
+[`head`](https://rdrr.io/r/utils/head.html)`(``pred1``, n ``=`` ``5``)`\
+`## Model-based Predictions`\
+`##`\
+`## Sepal.Length | Predicted |   SE |       95% CI | Residuals | Petal.Length`\
+`## -------------------------------------------------------------------------`\
+`## 5.10         |      2.38 | 0.10 | [2.19, 2.57] |     -0.98 |         1.40`\
+`## 4.90         |      2.00 | 0.11 | [1.79, 2.22] |     -0.60 |         1.40`\
+`## 4.70         |      1.63 | 0.12 | [1.39, 1.87] |     -0.33 |         1.30`\
+`## 4.60         |      1.45 | 0.13 | [1.19, 1.70] |      0.05 |         1.50`\
+`## 5.00         |      2.19 | 0.10 | [1.99, 2.39] |     -0.79 |         1.40`\
+`##`\
+`## Variable predicted: Petal.Length`\
+\
+`# Same for model 2`\
+`model2`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Petal.Length`` ``~`` ``Sepal.Length`` ``*`` ``Species``, data ``=`` ``iris``)`\
+`pred2`` ``<-`` `[`estimate_expectation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model2``)`\
+`pred2``$``Petal.Length`` ``<-`` ``iris``$``Petal.Length`\
+\
+\
+`# Initialize plot for model 1`\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``data ``=`` ``pred1``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Predicted``)``)`` ``+`\
+`  ``# with identity line (diagonal) representing perfect predictions`\
+`  `[`geom_abline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``linetype ``=`` ``"dashed"``)`` ``+`\
+`  ``# Add the actual predicted points of the models`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``color ``=`` ``"Model 1"``)``)`` ``+`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``data ``=`` ``pred2``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``color ``=`` ``"Model 2"``)``)`` ``+`\
+`  ``# Aesthetics changes`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(``y ``=`` ``"Petal.Length (predicted)"``, color ``=`` ``NULL``)`` ``+`\
+`  `[`scale_color_manual`](https://ggplot2.tidyverse.org/reference/scale_manual.html)`(``values ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Model 1"`` ``=`` ``"blue"``, ``"Model 2"`` ``=`` ``"red"``)``)`` ``+`\
+`  ``theme_modern``(``)`
 
 ![](reference/figures/unnamed-chunk-10-1.png)
 
@@ -257,7 +422,25 @@ See [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
 for more information.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`lme4`](https://github.com/lme4/lme4/)`)`` `` ``model`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``mpg`` ``~`` ``drat`` ``+`` ``(``1`` ``+`` ``drat`` ``|`` ``cyl``)``, data ``=`` ``mtcars``)`` `` ``random`` ``<-`` `[`estimate_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``model``)`` ``random`` ``## Group | Level | Parameter | Coefficient | SE | 95% CI`` ``## -----------------------------------------------------------------`` ``## cyl | 4 | (Intercept) | -3.45 | 0.56 | [-4.55, -2.36]`` ``## cyl | 4 | drat | 2.24 | 0.36 | [ 1.53, 2.95]`` ``## cyl | 6 | (Intercept) | 0.13 | 0.84 | [-1.52, 1.78]`` ``## cyl | 6 | drat | -0.09 | 0.54 | [-1.15, 0.98]`` ``## cyl | 8 | (Intercept) | 3.32 | 0.73 | [ 1.89, 4.74]`` ``## cyl | 8 | drat | -2.15 | 0.47 | [-3.07, -1.23]`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``random``)`` ``+`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`lme4`](https://github.com/lme4/lme4/)`)`\
+\
+`model`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``mpg`` ``~`` ``drat`` ``+`` ``(``1`` ``+`` ``drat`` ``|`` ``cyl``)``, data ``=`` ``mtcars``)`\
+\
+`random`` ``<-`` `[`estimate_grouplevel`](https://easystats.github.io/modelbased/reference/estimate_grouplevel.md)`(``model``)`\
+`random`\
+`## Group | Level | Parameter   | Coefficient |   SE |         95% CI`\
+`## -----------------------------------------------------------------`\
+`## cyl   | 4     | (Intercept) |       -3.45 | 0.56 | [-4.55, -2.36]`\
+`## cyl   | 4     | drat        |        2.24 | 0.36 | [ 1.53,  2.95]`\
+`## cyl   | 6     | (Intercept) |        0.13 | 0.84 | [-1.52,  1.78]`\
+`## cyl   | 6     | drat        |       -0.09 | 0.54 | [-1.15,  0.98]`\
+`## cyl   | 8     | (Intercept) |        3.32 | 0.73 | [ 1.89,  4.74]`\
+`## cyl   | 8     | drat        |       -2.15 | 0.47 | [-3.07, -1.23]`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``random``)`` ``+`\
+`  `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](reference/figures/unnamed-chunk-11-1.png)
 
@@ -281,7 +464,23 @@ Check-out [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
 for a detailed walkthrough on *marginal effects*.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`patchwork`](https://patchwork.data-imaginist.com)`)`` `` ``# Fit a non-linear General Additive Model (GAM)`` ``model`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``Sepal.Width`` ``~`` ``s``(``Petal.Length``)``, data ``=`` ``iris``)`` `` ``# 1. Compute derivatives`` ``deriv`` ``<-`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model``,`` `` trend ``=`` ``"Petal.Length"``,`` `` by ``=`` ``"Petal.Length"``,`` `` length ``=`` ``200`` ``)`` `` ``# 2. Visualize predictions and derivative`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, length ``=`` ``200``)``)`` ``/`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``)`` ``+`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`patchwork`](https://patchwork.data-imaginist.com)`)`\
+\
+`# Fit a non-linear General Additive Model (GAM)`\
+`model`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``Sepal.Width`` ``~`` ``s``(``Petal.Length``)``, data ``=`` ``iris``)`\
+\
+`# 1. Compute derivatives`\
+`deriv`` ``<-`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model``,`\
+`  trend ``=`` ``"Petal.Length"``,`\
+`  by ``=`` ``"Petal.Length"``,`\
+`  length ``=`` ``200`\
+`)`\
+\
+`# 2. Visualize predictions and derivative`\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, length ``=`` ``200``)``)`` ``/`\
+`  `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``)`` ``+`\
+`  `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
 
 ![](reference/figures/unnamed-chunk-12-1.png)
 
@@ -295,11 +494,31 @@ for a detailed walkthrough on *marginal effects*.
   on a predicted relationship that will return the different parts of
   increase and decrease.
 
-`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` `[`poly`](https://rdrr.io/r/stats/poly.html)`(``Petal.Length``, ``2``)``, data ``=`` ``iris``)`` `` ``# 1. Visualize`` ``vizdata`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, length ``=`` ``30``)`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Predicted``)``)`` ``+`` `` `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``)``, alpha ``=`` ``0.3``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``)`` ``+`` `` ``# Add original data points`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``data ``=`` ``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Sepal.Width``)``)`` ``+`` `` ``# Aesthetics`` `` ``theme_modern``(``)`
+\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` `[`poly`](https://rdrr.io/r/stats/poly.html)`(``Petal.Length``, ``2``)``, data ``=`` ``iris``)`\
+\
+`# 1. Visualize`\
+`vizdata`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, length ``=`` ``30``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Predicted``)``)`` ``+`\
+`  `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``)``, alpha ``=`` ``0.3``)`` ``+`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``)`` ``+`\
+`  ``# Add original data points`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``data ``=`` ``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Sepal.Width``)``)`` ``+`\
+`  ``# Aesthetics`\
+`  ``theme_modern``(``)`
 
 ![](reference/figures/unnamed-chunk-13-1.png)
 
-` `` ``# 2. Describe smooth line`` `[`describe_nonlinear`](https://easystats.github.io/modelbased/reference/describe_nonlinear.md)`(``vizdata``, x ``=`` ``"Petal.Length"``)`` ``## Start | End | Length | Change | Slope | R2`` ``## ---------------------------------------------`` ``## 1.00 | 4.05 | 0.50 | -0.84 | -0.28 | 0.05`` ``## 4.05 | 6.90 | 0.47 | 0.66 | 0.23 | 0.05`
+\
+\
+\
+`# 2. Describe smooth line`\
+[`describe_nonlinear`](https://easystats.github.io/modelbased/reference/describe_nonlinear.md)`(``vizdata``, x ``=`` ``"Petal.Length"``)`\
+`## Start |  End | Length | Change | Slope |   R2`\
+`## ---------------------------------------------`\
+`## 1.00  | 4.05 |   0.50 |  -0.84 | -0.28 | 0.05`\
+`## 4.05  | 6.90 |   0.47 |   0.66 |  0.23 | 0.05`
 
 ### Plot all posterior draws for Bayesian models predictions
 
@@ -317,7 +536,12 @@ continuous variables.
 For instance, the plot below shows that the effect of `hp` (the y-axis)
 is significantly negative only when `wt` is low (`< ~4`).
 
-`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``mpg`` ``~`` ``hp`` ``*`` ``wt``, data ``=`` ``mtcars``)`` `` ``slopes`` ``<-`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model``, trend ``=`` ``"hp"``, by ``=`` ``"wt"``, length ``=`` ``200``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``slopes``)`
+\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``mpg`` ``~`` ``hp`` ``*`` ``wt``, data ``=`` ``mtcars``)`\
+\
+`slopes`` ``<-`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model``, trend ``=`` ``"hp"``, by ``=`` ``"wt"``, length ``=`` ``200``)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``slopes``)`
 
 ![](reference/figures/unnamed-chunk-14-1.png)
 
@@ -334,7 +558,14 @@ and setting `include_random` to `TRUE`.
 Let’s model the reaction time with the number of days of sleep
 deprivation as fixed effect and the participants as random intercept.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`lme4`](https://github.com/lme4/lme4/)`)`` `` ``model`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Reaction`` ``~`` ``Days`` ``+`` ``(``1`` ``|`` ``Subject``)``, data ``=`` ``sleepstudy``)`` `` ``preds`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, include_random ``=`` ``TRUE``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``preds``, ribbon ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``alpha ``=`` ``0``)``)`` ``# Make CI ribbon transparent for clarity`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`lme4`](https://github.com/lme4/lme4/)`)`\
+\
+`model`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Reaction`` ``~`` ``Days`` ``+`` ``(``1`` ``|`` ``Subject``)``, data ``=`` ``sleepstudy``)`\
+\
+`preds`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, include_random ``=`` ``TRUE``)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``preds``, ribbon ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``alpha ``=`` ``0``)``)`` ``# Make CI ribbon transparent for clarity`
 
 ![](reference/figures/unnamed-chunk-15-1.png)
 
@@ -344,7 +575,12 @@ the only slope is the “general” one estimated across all participants by
 the fixed effect. Let’s address that and allow the slope to vary for
 each participant too.
 
-`model`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Reaction`` ``~`` ``Days`` ``+`` ``(``1`` ``+`` ``Days`` ``|`` ``Subject``)``, data ``=`` ``sleepstudy``)`` `` ``preds`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, include_random ``=`` ``TRUE``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``preds``, ribbon ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``alpha ``=`` ``0.1``)``)`
+\
+`model`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Reaction`` ``~`` ``Days`` ``+`` ``(``1`` ``+`` ``Days`` ``|`` ``Subject``)``, data ``=`` ``sleepstudy``)`\
+\
+`preds`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``, include_random ``=`` ``TRUE``)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``preds``, ribbon ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``alpha ``=`` ``0.1``)``)`
 
 ![](reference/figures/unnamed-chunk-16-1.png)
 
@@ -352,7 +588,12 @@ As we can see, the effect is now different for all participants. Let’s
 plot, on top of that, the “fixed” effect estimated across all these
 individual effects.
 
-`fixed_pred`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``)`` ``# This time, include_random is FALSE (default)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``preds``, ribbon ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``alpha ``=`` ``0``)``)`` ``+`` ``# Previous plot`` `` `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(``data ``=`` ``fixed_pred``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Days``, ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``)``, alpha ``=`` ``0.4``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``fixed_pred``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Days``, y ``=`` ``Predicted``)``, linewidth ``=`` ``2``)`
+\
+`fixed_pred`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``)`` ``# This time, include_random is FALSE (default)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``preds``, ribbon ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``alpha ``=`` ``0``)``)`` ``+`` ``# Previous plot`\
+`  `[`geom_ribbon`](https://ggplot2.tidyverse.org/reference/geom_ribbon.html)`(``data ``=`` ``fixed_pred``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Days``, ymin ``=`` ``CI_low``, ymax ``=`` ``CI_high``)``, alpha ``=`` ``0.4``)`` ``+`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``fixed_pred``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Days``, y ``=`` ``Predicted``)``, linewidth ``=`` ``2``)`
 
 ![](reference/figures/unnamed-chunk-17-1.png)
 

@@ -82,11 +82,52 @@ The `treatment` variable is simulated and not part of the original data
 set. Since we have repeated measurements, we use the `glmmTMB` package
 to fit a linear mixed model to the data.
 
-`# example`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`datawizard`](https://easystats.github.io/datawizard/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`parameters`](https://easystats.github.io/parameters/)`)`` `[`data`](https://rdrr.io/r/utils/data.html)`(``qol_cancer``, package ``=`` ``"parameters"``)`` `` ``# sort and group data by patient ID, then assign each patient either to`` ``# the treatment or control condition, with higher educated patients having`` ``# a higher chance belonging to the treatment group`` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``12345``)`` `` ``d`` ``<-`` ``qol_cancer`` ``|>`` `` `[`data_arrange`](https://easystats.github.io/datawizard/reference/data_arrange.html)`(``"ID"``)`` ``|>`` `` `[`data_group`](https://easystats.github.io/datawizard/reference/data_group.html)`(``"ID"``)`` ``|>`` `` `[`data_modify`](https://easystats.github.io/datawizard/reference/data_modify.html)`(``treatment ``=`` `[`rbinom`](https://rdrr.io/r/stats/Binomial.html)`(``1``, ``1``, `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(``education`` ``==`` ``"high"``, ``0.72``, ``0.3``)``)``)`` ``|>`` `` `[`data_ungroup`](https://easystats.github.io/datawizard/reference/data_group.html)`(``)`` `` ``# create a treatment effect that increased over time`` ``# with more improvements for higher educated patients`` ``d``$``QoL`` ``<-`` ``d``$``QoL`` ``+`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(`` `` `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``d``)``,`` `` ``(``d``$``treatment`` ``*`` ``d``$``time`` ``*`` ``5``)`` ``+`` `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(``d``$``education`` ``==`` ``"high"``, ``5``, ``0``)``,`` `` sd ``=`` ``2`` ``)`` `` ``# convert to factors`` ``d`` ``<-`` `[`to_factor`](https://easystats.github.io/datawizard/reference/to_factor.html)`(``d``, `[`c`](https://rdrr.io/r/base/c.html)`(``"treatment"``, ``"time"``)``)`
+\
+`# example`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`datawizard`](https://easystats.github.io/datawizard/)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`parameters`](https://easystats.github.io/parameters/)`)`\
+[`data`](https://rdrr.io/r/utils/data.html)`(``qol_cancer``, package ``=`` ``"parameters"``)`\
+\
+`# sort and group data by patient ID, then assign each patient either to`\
+`# the treatment or control condition, with higher educated patients having`\
+`# a higher chance belonging to the treatment group`\
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``12345``)`\
+\
+`d`` ``<-`` ``qol_cancer`` ``|>`\
+`  `[`data_arrange`](https://easystats.github.io/datawizard/reference/data_arrange.html)`(``"ID"``)`` ``|>`\
+`  `[`data_group`](https://easystats.github.io/datawizard/reference/data_group.html)`(``"ID"``)`` ``|>`\
+`  `[`data_modify`](https://easystats.github.io/datawizard/reference/data_modify.html)`(``treatment ``=`` `[`rbinom`](https://rdrr.io/r/stats/Binomial.html)`(``1``, ``1``, `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(``education`` ``==`` ``"high"``, ``0.72``, ``0.3``)``)``)`` ``|>`\
+`  `[`data_ungroup`](https://easystats.github.io/datawizard/reference/data_group.html)`(``)`\
+\
+`# create a treatment effect that increased over time`\
+`# with more improvements for higher educated patients`\
+`d``$``QoL`` ``<-`` ``d``$``QoL`` ``+`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(`\
+`  `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``d``)``,`\
+`  ``(``d``$``treatment`` ``*`` ``d``$``time`` ``*`` ``5``)`` ``+`` `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(``d``$``education`` ``==`` ``"high"``, ``5``, ``0``)``,`\
+`  sd ``=`` ``2`\
+`)`\
+\
+`# convert to factors`\
+`d`` ``<-`` `[`to_factor`](https://easystats.github.io/datawizard/reference/to_factor.html)`(``d``, `[`c`](https://rdrr.io/r/base/c.html)`(``"treatment"``, ``"time"``)``)`
 
 We first look at the simple effect of `treatment`, which is about 5.9.
 
-`# simple pooled effect`` ``m1`` ``<-`` ``glmmTMB``::`[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`` `` ``QoL`` ``~`` ``treatment`` ``+`` ``time`` ``+`` ``education`` ``+`` ``hospital`` ``+`` ``age`` ``+`` ``phq4`` ``+`` ``(``1`` ``|`` ``ID``)``,`` `` data ``=`` ``d`` ``)`` `` ``# we don't need the full summary table,`` ``# only the coefficient for treatment`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``m1``, keep ``=`` ``"^treatment"``)`` ``#> # Fixed Effects`` ``#> `` ``#> Parameter | Coefficient | SE | 95% CI | z | p`` ``#> ----------------------------------------------------------------`` ``#> treatment [1] | 5.90 | 1.95 | [2.08, 9.71] | 3.03 | 0.002`
+\
+`# simple pooled effect`\
+`m1`` ``<-`` ``glmmTMB``::`[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`\
+`  ``QoL`` ``~`` ``treatment`` ``+`` ``time`` ``+`` ``education`` ``+`` ``hospital`` ``+`` ``age`` ``+`` ``phq4`` ``+`` ``(``1`` ``|`` ``ID``)``,`\
+`  data ``=`` ``d`\
+`)`\
+\
+`# we don't need the full summary table,`\
+`# only the coefficient for treatment`\
+[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``m1``, keep ``=`` ``"^treatment"``)`\
+`#> # Fixed Effects`\
+`#> `\
+`#> Parameter     | Coefficient |   SE |       95% CI |    z |     p`\
+`#> ----------------------------------------------------------------`\
+`#> treatment [1] |        5.90 | 1.95 | [2.08, 9.71] | 3.03 | 0.002`
 
 Next, inverse probability weights are calculated. This involves
 employing a regression model with the predictor of interest,
@@ -99,7 +140,24 @@ predicted probabilities for each observation’s membership in either the
 treatment or control group. Based on these probabilities, the IPW is
 calculated.
 
-`# logistic regression model`` ``m_ipw`` ``<-`` `[`glm`](https://rdrr.io/r/stats/glm.html)`(`` `` ``treatment`` ``~`` ``time`` ``+`` ``hospital`` ``+`` ``phq4`` ``+`` ``education`` ``+`` ``age``,`` `` data ``=`` ``d``,`` `` family ``=`` `[`binomial`](https://rdrr.io/r/stats/family.html)`(``)`` ``)`` `` ``# add predictions, i.e. the probability of belonging to treatment`` ``# or control for each patient in the sample (propensity score)`` ``d``$``propensity_score`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m_ipw``, newdata ``=`` ``d``, type ``=`` ``"response"``)`` `` ``# calculating the IPW`` ``d``$``ipw`` ``<-`` `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(`` `` ``d``$``treatment`` ``==`` ``1``,`` `` ``1`` ``/`` ``d``$``propensity_score``, ``# IPW for treatment group`` `` ``1`` ``/`` ``(``1`` ``-`` ``d``$``propensity_score``)`` ``# IPW for control group`` ``)`
+\
+`# logistic regression model`\
+`m_ipw`` ``<-`` `[`glm`](https://rdrr.io/r/stats/glm.html)`(`\
+`  ``treatment`` ``~`` ``time`` ``+`` ``hospital`` ``+`` ``phq4`` ``+`` ``education`` ``+`` ``age``,`\
+`  data ``=`` ``d``,`\
+`  family ``=`` `[`binomial`](https://rdrr.io/r/stats/family.html)`(``)`\
+`)`\
+\
+`# add predictions, i.e. the probability of belonging to treatment`\
+`# or control for each patient in the sample (propensity score)`\
+`d``$``propensity_score`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m_ipw``, newdata ``=`` ``d``, type ``=`` ``"response"``)`\
+\
+`# calculating the IPW`\
+`d``$``ipw`` ``<-`` `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(`\
+`  ``d``$``treatment`` ``==`` ``1``,`\
+`  ``1`` ``/`` ``d``$``propensity_score``, ``# IPW for treatment group`\
+`  ``1`` ``/`` ``(``1`` ``-`` ``d``$``propensity_score``)`` ``# IPW for control group`\
+`)`
 
 ### Calculating matching and overlap weights
 
@@ -115,7 +173,20 @@ calculation of Matching Weights (MW) and Overlap Weights (OW) here, we
 will use Inverse Probability Weighting (IPW) for illustrative purposes
 in the subsequent examples.
 
-`# calculating matching weights`` ``d``$``matching_weights`` ``<-`` `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(`` `` ``d``$``treatment`` ``==`` ``1``,`` `` `[`min`](https://rdrr.io/r/base/Extremes.html)`(``d``$``propensity_score``, ``1`` ``-`` ``d``$``propensity_score``)`` ``/`` ``d``$``propensity_score``,`` `` `[`min`](https://rdrr.io/r/base/Extremes.html)`(``d``$``propensity_score``, ``1`` ``-`` ``d``$``propensity_score``)`` ``/`` ``(``1`` ``-`` ``d``$``propensity_score``)`` ``)`` `` ``# calculating overlap weights`` ``d``$``overlap_weights`` ``<-`` `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(`` `` ``d``$``treatment`` ``==`` ``1``,`` `` ``1`` ``-`` ``d``$``propensity_score``,`` `` ``d``$``propensity_score`` ``)`
+\
+`# calculating matching weights`\
+`d``$``matching_weights`` ``<-`` `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(`\
+`  ``d``$``treatment`` ``==`` ``1``,`\
+`  `[`min`](https://rdrr.io/r/base/Extremes.html)`(``d``$``propensity_score``, ``1`` ``-`` ``d``$``propensity_score``)`` ``/`` ``d``$``propensity_score``,`\
+`  `[`min`](https://rdrr.io/r/base/Extremes.html)`(``d``$``propensity_score``, ``1`` ``-`` ``d``$``propensity_score``)`` ``/`` ``(``1`` ``-`` ``d``$``propensity_score``)`\
+`)`\
+\
+`# calculating overlap weights`\
+`d``$``overlap_weights`` ``<-`` `[`ifelse`](https://rdrr.io/r/base/ifelse.html)`(`\
+`  ``d``$``treatment`` ``==`` ``1``,`\
+`  ``1`` ``-`` ``d``$``propensity_score``,`\
+`  ``d``$``propensity_score`\
+`)`
 
 ### ATE calculated from IPW in simpler models
 
@@ -124,13 +195,40 @@ treatment effect, after weighting, is about 5.58 points, i.e. the
 treatment on average results in a QoL score that is 5.58 points higher
 in comparison to the non-treated group.
 
-`m2`` ``<-`` ``glmmTMB``::`[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`` `` ``QoL`` ``~`` ``treatment`` ``+`` ``time`` ``+`` ``education`` ``+`` ``hospital`` ``+`` ``age`` ``+`` ``phq4`` ``+`` ``(``1`` ``|`` ``ID``)``,`` `` weights ``=`` ``ipw``,`` `` data ``=`` ``d`` ``)`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``m2``, keep ``=`` ``"^treatment"``)`` ``#> # Fixed Effects`` ``#> `` ``#> Parameter | Coefficient | SE | 95% CI | z | p`` ``#> ----------------------------------------------------------------`` ``#> treatment [1] | 5.58 | 1.93 | [1.80, 9.35] | 2.90 | 0.004`
+\
+`m2`` ``<-`` ``glmmTMB``::`[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`\
+`  ``QoL`` ``~`` ``treatment`` ``+`` ``time`` ``+`` ``education`` ``+`` ``hospital`` ``+`` ``age`` ``+`` ``phq4`` ``+`` ``(``1`` ``|`` ``ID``)``,`\
+`  weights ``=`` ``ipw``,`\
+`  data ``=`` ``d`\
+`)`\
+[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``m2``, keep ``=`` ``"^treatment"``)`\
+`#> # Fixed Effects`\
+`#> `\
+`#> Parameter     | Coefficient |   SE |       95% CI |    z |     p`\
+`#> ----------------------------------------------------------------`\
+`#> treatment [1] |        5.58 | 1.93 | [1.80, 9.35] | 2.90 | 0.004`
 
 Given the simplicity of the model, g-computation offers no significant
 advantage in calculating contrasts between `treatment` levels, as the
 results are equivalent to a simpler approach.
 
-[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m2``,`` `` ``"treatment"``,`` `` estimate ``=`` ``"population"``,`` `` weights ``=`` ``"ipw"`` ``)`` ``#> Counterfactual Contrasts Analysis (G-computation)`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> -------------------------------------------`` ``#> 1 | 0 | 5.58 (1.80, 9.35) | 0.004`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`` ``#> p-values are uncorrected.`
+\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``m2``,`\
+`  ``"treatment"``,`\
+`  estimate ``=`` ``"population"``,`\
+`  weights ``=`` ``"ipw"`\
+`)`\
+`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> `\
+`#> Level1 | Level2 |   Difference (CI) |     p`\
+`#> -------------------------------------------`\
+`#> 1      | 0      | 5.58 (1.80, 9.35) | 0.004`\
+`#> `\
+`#> Variable predicted: QoL`\
+`#> Predictors contrasted: treatment`\
+`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> p-values are uncorrected.`
 
 ### ATE calculated from IPW and g-computation in more complex models
 
@@ -142,7 +240,22 @@ over time, we need to include an interaction between `treatment` and
 within the treatment group. In such more complex modeling scenarios,
 g-computation becomes particularly advantageous.
 
-`# interaction terms involved`` ``m3`` ``<-`` ``glmmTMB``::`[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`` `` ``QoL`` ``~`` ``treatment`` ``*`` ``time`` ``+`` ``education`` ``+`` ``hospital`` ``+`` ``age`` ``+`` ``phq4`` ``+`` ``(``1`` ``|`` ``ID``)``,`` `` weights ``=`` ``ipw``,`` `` data ``=`` ``d`` ``)`` `` ``# estimated marginal means, to show how treatment`` ``# develops over time between treatment and control conditions`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(`` `` ``m3``,`` `` `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"treatment"``)``,`` `` estimate ``=`` ``"population"``,`` `` weights ``=`` ``"ipw"`` ``)`` ``|>`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
+\
+`# interaction terms involved`\
+`m3`` ``<-`` ``glmmTMB``::`[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`\
+`  ``QoL`` ``~`` ``treatment`` ``*`` ``time`` ``+`` ``education`` ``+`` ``hospital`` ``+`` ``age`` ``+`` ``phq4`` ``+`` ``(``1`` ``|`` ``ID``)``,`\
+`  weights ``=`` ``ipw``,`\
+`  data ``=`` ``d`\
+`)`\
+\
+`# estimated marginal means, to show how treatment`\
+`# develops over time between treatment and control conditions`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(`\
+`  ``m3``,`\
+`  `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"treatment"``)``,`\
+`  estimate ``=`` ``"population"``,`\
+`  weights ``=`` ``"ipw"`\
+`)`` ``|>`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
 ![](practical_causality_files/figure-html/unnamed-chunk-9-1.png)
 
@@ -151,7 +264,34 @@ treatment effect cannot be isolated. If we want to know the ATE of
 `treatment`, we need to calculate contrasts for the levels of our
 `treatment` predictor.
 
-`# ATE no longer visible from coefficient table`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``m3``, keep ``=`` ``"^treatment"``)`` ``#> # Fixed Effects`` ``#> `` ``#> Parameter | Coefficient | SE | 95% CI | z | p`` ``#> -------------------------------------------------------------------------------`` ``#> treatment [1] | -0.53 | 2.13 | [-4.71, 3.64] | -0.25 | 0.802 `` ``#> treatment [1] × time [2] | 4.59 | 1.60 | [ 1.45, 7.74] | 2.86 | 0.004 `` ``#> treatment [1] × time [3] | 13.91 | 1.61 | [10.76, 17.05] | 8.65 | < .001`` `` ``# contrasts of treatment levels, using g-computation`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m3``,`` `` ``"treatment"``,`` `` estimate ``=`` ``"population"``,`` `` weights ``=`` ``"ipw"`` ``)`` ``#> Counterfactual Contrasts Analysis (G-computation)`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> -------------------------------------------`` ``#> 1 | 0 | 5.60 (1.84, 9.37) | 0.004`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`` ``#> p-values are uncorrected.`
+\
+`# ATE no longer visible from coefficient table`\
+[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``m3``, keep ``=`` ``"^treatment"``)`\
+`#> # Fixed Effects`\
+`#> `\
+`#> Parameter                | Coefficient |   SE |         95% CI |     z |      p`\
+`#> -------------------------------------------------------------------------------`\
+`#> treatment [1]            |       -0.53 | 2.13 | [-4.71,  3.64] | -0.25 | 0.802 `\
+`#> treatment [1] × time [2] |        4.59 | 1.60 | [ 1.45,  7.74] |  2.86 | 0.004 `\
+`#> treatment [1] × time [3] |       13.91 | 1.61 | [10.76, 17.05] |  8.65 | < .001`\
+\
+`# contrasts of treatment levels, using g-computation`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``m3``,`\
+`  ``"treatment"``,`\
+`  estimate ``=`` ``"population"``,`\
+`  weights ``=`` ``"ipw"`\
+`)`\
+`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> `\
+`#> Level1 | Level2 |   Difference (CI) |     p`\
+`#> -------------------------------------------`\
+`#> 1      | 0      | 5.60 (1.84, 9.37) | 0.004`\
+`#> `\
+`#> Variable predicted: QoL`\
+`#> Predictors contrasted: treatment`\
+`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> p-values are uncorrected.`
 
 ### Analysing Difference in ATE
 
@@ -162,7 +302,27 @@ However, we can do the same using
 [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
 and the `by` argument. As we can see, results are fairly similar.
 
-`# contrasts of treatment levels, using g-computation`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m3``,`` `` ``"treatment"``,`` `` by ``=`` ``"time"``,`` `` estimate ``=`` ``"population"``,`` `` weights ``=`` ``"ipw"`` ``)`` ``#> Counterfactual Contrasts Analysis (G-computation)`` ``#> `` ``#> Level1 | Level2 | time | Difference (CI) | p`` ``#> ------------------------------------------------------`` ``#> 1 | 0 | 1 | -0.53 (-4.71, 3.64) | 0.802`` ``#> 1 | 0 | 2 | 4.06 (-0.12, 8.24) | 0.057`` ``#> 1 | 0 | 3 | 13.37 ( 9.19, 17.56) | <0.001`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: education, hospital (0.95), age (0.22), phq4 (-0.076), ID`` ``#> p-values are uncorrected.`
+\
+`# contrasts of treatment levels, using g-computation`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``m3``,`\
+`  ``"treatment"``,`\
+`  by ``=`` ``"time"``,`\
+`  estimate ``=`` ``"population"``,`\
+`  weights ``=`` ``"ipw"`\
+`)`\
+`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> `\
+`#> Level1 | Level2 | time |      Difference (CI) |      p`\
+`#> ------------------------------------------------------`\
+`#> 1      | 0      | 1    | -0.53 (-4.71,  3.64) |  0.802`\
+`#> 1      | 0      | 2    |  4.06 (-0.12,  8.24) |  0.057`\
+`#> 1      | 0      | 3    | 13.37 ( 9.19, 17.56) | <0.001`\
+`#> `\
+`#> Variable predicted: QoL`\
+`#> Predictors contrasted: treatment`\
+`#> Predictors averaged: education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> p-values are uncorrected.`
 
 But is the *change* in the ATE between two time points statistically
 significant? In other words, is the ATE increasing (or decreasing)
@@ -171,7 +331,30 @@ significantly over time? We can calculate *interaction contrasts*
 vignette](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html#does-difference-between-two-levels-of-episode-in-the-control-group-differ-from-difference-of-same-two-levels-in-the-treatment-group))
 to check this!
 
-[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m3``,`` `` ``"treatment"``,`` `` by ``=`` ``"time"``,`` `` estimate ``=`` ``"population"``,`` `` weights ``=`` ``"ipw"``,`` `` comparison ``=`` ``"(b3-b1) = (b4-b2)"`` ``)`` ``#> Counterfactual Contrasts Analysis (G-computation)`` ``#> `` ``#> Parameter | Difference (CI) | p`` ``#> ------------------------------------------`` ``#> b3-b1=b4-b2 | -4.59 (-7.74, -1.45) | 0.004`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: education, hospital (0.95), age (0.22), phq4 (-0.076), ID`` ``#> p-values are uncorrected.`` ``#> Parameters:`` ``#> b3 = treatment [0], time [2]`` ``#> b1 = treatment [0], time [1]`` ``#> b4 = treatment [1], time [2]`` ``#> b2 = treatment [1], time [1]`
+\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``m3``,`\
+`  ``"treatment"``,`\
+`  by ``=`` ``"time"``,`\
+`  estimate ``=`` ``"population"``,`\
+`  weights ``=`` ``"ipw"``,`\
+`  comparison ``=`` ``"(b3-b1) = (b4-b2)"`\
+`)`\
+`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> `\
+`#> Parameter   |      Difference (CI) |     p`\
+`#> ------------------------------------------`\
+`#> b3-b1=b4-b2 | -4.59 (-7.74, -1.45) | 0.004`\
+`#> `\
+`#> Variable predicted: QoL`\
+`#> Predictors contrasted: treatment`\
+`#> Predictors averaged: education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> p-values are uncorrected.`\
+`#> Parameters:`\
+`#> b3 = treatment [0], time [2]`\
+`#> b1 = treatment [0], time [1]`\
+`#> b4 = treatment [1], time [2]`\
+`#> b2 = treatment [1], time [1]`
 
 Yes, the the ATE changed statistically significant between the first and
 the second time point!
@@ -190,7 +373,39 @@ estimated difference of 5.99, the contrasts derived from the same model
 using g-computation are close to the effect we found before, with an
 estimated difference of 5.64.
 
-`# more complex model`` ``m4`` ``<-`` ``glmmTMB``::`[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`` `` ``QoL`` ``~`` ``treatment`` ``*`` ``time`` ``+`` ``treatment`` ``*`` ``education`` ``+`` ``hospital`` ``+`` ``age`` ``+`` ``phq4`` ``+`` ``(``1`` ``|`` ``ID``)``,`` `` weights ``=`` ``ipw``,`` `` data ``=`` ``d`` ``)`` `` ``# complex model, simple contrasts, no g-computation`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m4``, ``"treatment"``)`` ``#> Marginal Contrasts Analysis`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> --------------------------------------------`` ``#> 1 | 0 | 5.99 (1.93, 10.04) | 0.004`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`` ``#> p-values are uncorrected.`` `` ``# complex model, with IPW *and* G-computation (double-robust) is accurate!`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m4``, ``"treatment"``, estimate ``=`` ``"population"``, weights ``=`` ``"ipw"``)`` ``#> Counterfactual Contrasts Analysis (G-computation)`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> -------------------------------------------`` ``#> 1 | 0 | 5.64 (1.86, 9.42) | 0.003`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`` ``#> p-values are uncorrected.`
+\
+`# more complex model`\
+`m4`` ``<-`` ``glmmTMB``::`[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`\
+`  ``QoL`` ``~`` ``treatment`` ``*`` ``time`` ``+`` ``treatment`` ``*`` ``education`` ``+`` ``hospital`` ``+`` ``age`` ``+`` ``phq4`` ``+`` ``(``1`` ``|`` ``ID``)``,`\
+`  weights ``=`` ``ipw``,`\
+`  data ``=`` ``d`\
+`)`\
+\
+`# complex model, simple contrasts, no g-computation`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m4``, ``"treatment"``)`\
+`#> Marginal Contrasts Analysis`\
+`#> `\
+`#> Level1 | Level2 |    Difference (CI) |     p`\
+`#> --------------------------------------------`\
+`#> 1      | 0      | 5.99 (1.93, 10.04) | 0.004`\
+`#> `\
+`#> Variable predicted: QoL`\
+`#> Predictors contrasted: treatment`\
+`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> p-values are uncorrected.`\
+\
+`# complex model, with IPW *and* G-computation (double-robust) is accurate!`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m4``, ``"treatment"``, estimate ``=`` ``"population"``, weights ``=`` ``"ipw"``)`\
+`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> `\
+`#> Level1 | Level2 |   Difference (CI) |     p`\
+`#> -------------------------------------------`\
+`#> 1      | 0      | 5.64 (1.86, 9.42) | 0.003`\
+`#> `\
+`#> Variable predicted: QoL`\
+`#> Predictors contrasted: treatment`\
+`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> p-values are uncorrected.`
 
 ### Average treatment effect on the treated and untreated
 
@@ -203,7 +418,50 @@ who already received it. Likewise, the ATU estimates how much the
 treatment would change the outcome if it were given to those who didn’t
 already receive it.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`insight`](https://easystats.github.io/insight/)`)`` `` ``# we need the data used to fit the model - this may not be`` ``# identical to the original data due to case-wise deletion`` ``model_data`` ``<-`` `[`get_data`](https://easystats.github.io/insight/reference/get_data.html)`(``m4``)`` `` ``# the ATT - apply g-computation only to the subset of the treated`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m4``,`` `` ``"treatment"``,`` `` data ``=`` `[`subset`](https://rdrr.io/r/base/subset.html)`(``model_data``, ``treatment`` ``==`` ``1``)``,`` `` estimate ``=`` ``"population"``,`` `` weights ``=`` ``"ipw"`` ``)`` ``#> Counterfactual Contrasts Analysis (G-computation)`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> -------------------------------------------`` ``#> 1 | 0 | 5.62 (1.84, 9.39) | 0.004`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`` ``#> p-values are uncorrected.`` `` ``# the ATU - apply g-computation only to the subset of the conrol`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m4``,`` `` ``"treatment"``,`` `` data ``=`` `[`subset`](https://rdrr.io/r/base/subset.html)`(``model_data``, ``treatment`` ``==`` ``0``)``,`` `` estimate ``=`` ``"population"``,`` `` weights ``=`` ``"ipw"`` ``)`` ``#> Counterfactual Contrasts Analysis (G-computation)`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> -------------------------------------------`` ``#> 1 | 0 | 5.67 (1.89, 9.45) | 0.003`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`` ``#> p-values are uncorrected.`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`insight`](https://easystats.github.io/insight/)`)`\
+\
+`# we need the data used to fit the model - this may not be`\
+`# identical to the original data due to case-wise deletion`\
+`model_data`` ``<-`` `[`get_data`](https://easystats.github.io/insight/reference/get_data.html)`(``m4``)`\
+\
+`# the ATT - apply g-computation only to the subset of the treated`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``m4``,`\
+`  ``"treatment"``,`\
+`  data ``=`` `[`subset`](https://rdrr.io/r/base/subset.html)`(``model_data``, ``treatment`` ``==`` ``1``)``,`\
+`  estimate ``=`` ``"population"``,`\
+`  weights ``=`` ``"ipw"`\
+`)`\
+`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> `\
+`#> Level1 | Level2 |   Difference (CI) |     p`\
+`#> -------------------------------------------`\
+`#> 1      | 0      | 5.62 (1.84, 9.39) | 0.004`\
+`#> `\
+`#> Variable predicted: QoL`\
+`#> Predictors contrasted: treatment`\
+`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> p-values are uncorrected.`\
+\
+`# the ATU - apply g-computation only to the subset of the conrol`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``m4``,`\
+`  ``"treatment"``,`\
+`  data ``=`` `[`subset`](https://rdrr.io/r/base/subset.html)`(``model_data``, ``treatment`` ``==`` ``0``)``,`\
+`  estimate ``=`` ``"population"``,`\
+`  weights ``=`` ``"ipw"`\
+`)`\
+`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> `\
+`#> Level1 | Level2 |   Difference (CI) |     p`\
+`#> -------------------------------------------`\
+`#> 1      | 0      | 5.67 (1.89, 9.45) | 0.003`\
+`#> `\
+`#> Variable predicted: QoL`\
+`#> Predictors contrasted: treatment`\
+`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> p-values are uncorrected.`
 
 It is helpful to calculate both ATT and ATU, as they can differ
 substantially, indicating a potential bias in the selection mechanism of
@@ -268,14 +526,51 @@ function. Package *glmmTMB* supports robust standard errors via the
 `sandwich` package since version 1.1.12, however, currently only the
 `"HC0"` option (which is equivalent to the Huber-White estimator).
 
-`# complex model, with IPW *and* G-computation (double-robust) is accurate!`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``m4``,`` `` ``"treatment"``,`` `` vcov ``=`` ``"HC0"``,`` `` estimate ``=`` ``"population"``,`` `` weights ``=`` ``"ipw"`` ``)`` ``#> Counterfactual Contrasts Analysis (G-computation)`` ``#> `` ``#> Level1 | Level2 | Difference (CI) | p`` ``#> -------------------------------------------`` ``#> 1 | 0 | 5.64 (1.76, 9.52) | 0.004`` ``#> `` ``#> Variable predicted: QoL`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`` ``#> p-values are uncorrected.`
+\
+`# complex model, with IPW *and* G-computation (double-robust) is accurate!`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``m4``,`\
+`  ``"treatment"``,`\
+`  vcov ``=`` ``"HC0"``,`\
+`  estimate ``=`` ``"population"``,`\
+`  weights ``=`` ``"ipw"`\
+`)`\
+`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> `\
+`#> Level1 | Level2 |   Difference (CI) |     p`\
+`#> -------------------------------------------`\
+`#> 1      | 0      | 5.64 (1.76, 9.52) | 0.004`\
+`#> `\
+`#> Variable predicted: QoL`\
+`#> Predictors contrasted: treatment`\
+`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> p-values are uncorrected.`
 
 A fully Bayesian approach, as demonstrated here, also provides a robust
 alternative.
 
-`# Same model as m4, within a Bayesian framework, using the Stan and brms package`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`brms`](https://github.com/paul-buerkner/brms)`)`` ``m5`` ``<-`` `[`brm`](https://paulbuerkner.com/brms/reference/brm.html)`(`` `` ``QoL`` ``|`` `[`weights`](https://rdrr.io/r/stats/weights.html)`(``ipw``)`` ``~`` ``treatment`` ``*`` ``time`` ``+`` ``treatment`` ``*`` ``education`` ``+`` ``hospital`` ``+`` `` ``age`` ``+`` ``phq4`` ``+`` ``(``1`` ``|`` ``ID``)``,`` `` refresh ``=`` ``0``,`` `` seed ``=`` ``123``,`` `` data ``=`` ``d`` ``)`
+\
+`# Same model as m4, within a Bayesian framework, using the Stan and brms package`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`brms`](https://github.com/paul-buerkner/brms)`)`\
+`m5`` ``<-`` `[`brm`](https://paulbuerkner.com/brms/reference/brm.html)`(`\
+`  ``QoL`` ``|`` `[`weights`](https://rdrr.io/r/stats/weights.html)`(``ipw``)`` ``~`` ``treatment`` ``*`` ``time`` ``+`` ``treatment`` ``*`` ``education`` ``+`` ``hospital`` ``+`\
+`    ``age`` ``+`` ``phq4`` ``+`` ``(``1`` ``|`` ``ID``)``,`\
+`  refresh ``=`` ``0``,`\
+`  seed ``=`` ``123``,`\
+`  data ``=`` ``d`\
+`)`
 
-[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m5``, ``"treatment"``, estimate ``=`` ``"population"``, weights ``=`` ``"ipw"``)`` ``#> Counterfactual Contrasts Analysis (G-computation)`` ``#> `` ``#> Level1 | Level2 | Median (CI) | pd`` ``#> --------------------------------------------`` ``#> 1 | 0 | 5.57 (1.79, 9.73) | 99.80%`` ``#> `` ``#> Variable predicted: QoL, ipw`` ``#> Predictors contrasted: treatment`` ``#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`
+\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m5``, ``"treatment"``, estimate ``=`` ``"population"``, weights ``=`` ``"ipw"``)`\
+`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> `\
+`#> Level1 | Level2 |       Median (CI) |     pd`\
+`#> --------------------------------------------`\
+`#> 1      | 0      | 5.57 (1.79, 9.73) | 99.80%`\
+`#> `\
+`#> Variable predicted: QoL, ipw`\
+`#> Predictors contrasted: treatment`\
+`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`
 
 ## Conclusion
 

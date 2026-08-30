@@ -2,6 +2,8 @@
 
 ## modelbased 0.17.0
 
+CRAN release: 2026-08-28
+
 ### Breaking Changes
 
 - The `comparison` argument in

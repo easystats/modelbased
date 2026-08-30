@@ -14,7 +14,12 @@ of statistical models, to help us represent and understand them.
 For instance, let’s fit a simple linear model that models the
 relationship between `Sepal.Width` and `Sepal.Length`.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` `` ``model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Sepal.Length``, data ``=`` ``iris``)`` `[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`\
+\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Sepal.Length``, data ``=`` ``iris``)`\
+[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``)`
 
     > Parameter    | Coefficient |   SE |        95% CI | t(148) |      p
     > -------------------------------------------------------------------
@@ -25,7 +30,11 @@ The most obvious way of representing this model is to plot the data
 points and add the regression line using the `geom_smooth` function from
 `ggplot2`:
 
-[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``, y ``=`` ``Sepal.Width``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`` `` `[`geom_smooth`](https://ggplot2.tidyverse.org/reference/geom_smooth.html)`(``method ``=`` ``"lm"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``, y ``=`` ``Sepal.Width``)``)`` ``+`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`\
+`  `[`geom_smooth`](https://ggplot2.tidyverse.org/reference/geom_smooth.html)`(``method ``=`` ``"lm"``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](visualisation_matrix_files/figure-html/unnamed-chunk-3-1.png)
 
@@ -40,6 +49,7 @@ Let’s try the
 [`get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html)
 function from the **insight** package.
 
+\
 [`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``[``"Sepal.Length"``]``)`
 
     > Visualisation Grid
@@ -65,7 +75,10 @@ linear relationships (i.e., a straight line), two points are in theory
 sufficient. Let’s generate predictions using this reference grid of the
 predictor.
 
-`vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``[``"Sepal.Length"``]``, length ``=`` ``2``)`` ``vizdata``$``Predicted`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``, ``vizdata``)`` ``vizdata`
+\
+`vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``[``"Sepal.Length"``]``, length ``=`` ``2``)`\
+`vizdata``$``Predicted`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``, ``vizdata``)`\
+`vizdata`
 
     > Visualisation Grid
     > 
@@ -77,7 +90,11 @@ predictor.
 Now that we have our *x* and *y* values, we can plot the line as an
 overlay to the actual data points:
 
-[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``, y ``=`` ``Sepal.Width``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``)``, linewidth ``=`` ``1``, color ``=`` ``"red"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``, y ``=`` ``Sepal.Width``)``)`` ``+`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``)``, linewidth ``=`` ``1``, color ``=`` ``"red"``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](visualisation_matrix_files/figure-html/unnamed-chunk-6-1.png)
 
@@ -94,7 +111,11 @@ to add it as a **random effect** in a **mixed model**. In the model
 below, the “fixed” effects (the parameters of interest) will be adjusted
 (“averaged over”) to the random effects.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`lme4`](https://github.com/lme4/lme4/)`)`` `` ``model`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Sepal.Width`` ``~`` ``Sepal.Length`` ``+`` ``(``1`` ``|`` ``Species``)``, data ``=`` ``iris``)`` `[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`lme4`](https://github.com/lme4/lme4/)`)`\
+\
+`model`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Sepal.Width`` ``~`` ``Sepal.Length`` ``+`` ``(``1`` ``|`` ``Species``)``, data ``=`` ``iris``)`\
+[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``)`
 
     > # Fixed Effects
     > 
@@ -121,7 +142,14 @@ using
 from the **insight** package, which is a more robust and user-friendly
 version of [`predict()`](https://rdrr.io/r/stats/predict.html).
 
-`vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``[``"Sepal.Length"``]``)`` ``vizdata``$``Predicted`` ``<-`` `[`get_predicted`](https://easystats.github.io/insight/reference/get_predicted.html)`(``model``, ``vizdata``)`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``, y ``=`` ``Sepal.Width``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``color ``=`` ``Species``)``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+`vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``[``"Sepal.Length"``]``)`\
+`vizdata``$``Predicted`` ``<-`` `[`get_predicted`](https://easystats.github.io/insight/reference/get_predicted.html)`(``model``, ``vizdata``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``, y ``=`` ``Sepal.Width``)``)`` ``+`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``color ``=`` ``Species``)``)`` ``+`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``)``, linewidth ``=`` ``1``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](visualisation_matrix_files/figure-html/unnamed-chunk-8-1.png)
 
@@ -131,7 +159,9 @@ The above way of constructing the reference grid, i.e., by providing a
 single column of data to the function, is almost equivalent to the
 following:
 
-`vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``, by ``=`` ``"Sepal.Length"``)`` ``vizdata`
+\
+`vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``, by ``=`` ``"Sepal.Length"``)`\
+`vizdata`
 
     > Visualisation Grid
     > 
@@ -159,7 +189,9 @@ By default, **factors** are fixed by their **“reference” level** and
 **numeric variables** are fixed at their **mean**. However, this can be
 easily changed:
 
-`vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``, by ``=`` ``"Sepal.Length"``, numerics ``=`` ``"min"``)`` ``vizdata`
+\
+`vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``, by ``=`` ``"Sepal.Length"``, numerics ``=`` ``"min"``)`\
+`vizdata`
 
     > Visualisation Grid
     > 
@@ -188,7 +220,12 @@ between a numeric variable and a factor.
 
 Let’s visualise the regression line for each of the levels of `Species`:
 
-`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Sepal.Length`` ``*`` ``Species``, data ``=`` ``iris``)`` `` ``vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal.Length"``, ``"Species"``)``, length ``=`` ``5``)`` ``vizdata``$``Predicted`` ``<-`` `[`get_predicted`](https://easystats.github.io/insight/reference/get_predicted.html)`(``model``, ``vizdata``)`` ``vizdata`
+\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Sepal.Length`` ``*`` ``Species``, data ``=`` ``iris``)`\
+\
+`vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal.Length"``, ``"Species"``)``, length ``=`` ``5``)`\
+`vizdata``$``Predicted`` ``<-`` `[`get_predicted`](https://easystats.github.io/insight/reference/get_predicted.html)`(``model``, ``vizdata``)`\
+`vizdata`
 
     > Visualisation Grid
     > 
@@ -212,7 +249,11 @@ Let’s visualise the regression line for each of the levels of `Species`:
     > 
     > Maintained constant: Sepal.Width, Petal.Length, Petal.Width
 
-[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``, y ``=`` ``Sepal.Width``, color ``=`` ``Species``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``, y ``=`` ``Sepal.Width``, color ``=`` ``Species``)``)`` ``+`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``)``, linewidth ``=`` ``1``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](visualisation_matrix_files/figure-html/unnamed-chunk-11-1.png)
 
@@ -224,13 +265,27 @@ the **red line**. The `preserve_range` option allows to remove
 observations that are “outside” the original dataset (however, the
 length should be increased to improve the precision toward the edges):
 
-`vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal.Length"``, ``"Species"``)``,`` `` length ``=`` ``100``,`` `` preserve_range ``=`` ``TRUE`` ``)`` `` ``vizdata``$``Predicted_Sepal.Width`` ``<-`` `[`get_predicted`](https://easystats.github.io/insight/reference/get_predicted.html)`(``model``, ``vizdata``)`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``, y ``=`` ``Sepal.Width``, color ``=`` ``Species``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted_Sepal.Width``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+`vizdata`` ``<-`` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``iris``,`\
+`  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Sepal.Length"``, ``"Species"``)``,`\
+`  length ``=`` ``100``,`\
+`  preserve_range ``=`` ``TRUE`\
+`)`\
+\
+`vizdata``$``Predicted_Sepal.Width`` ``<-`` `[`get_predicted`](https://easystats.github.io/insight/reference/get_predicted.html)`(``model``, ``vizdata``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Sepal.Length``, y ``=`` ``Sepal.Width``, color ``=`` ``Species``)``)`` ``+`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted_Sepal.Width``)``, linewidth ``=`` ``1``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](visualisation_matrix_files/figure-html/unnamed-chunk-12-1.png)
 
 ## Visualising an interaction between two numeric variables (three-way interaction)
 
-`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Length`` ``*`` ``Petal.Width``, data ``=`` ``iris``)`` `[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``)`
+\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Length`` ``*`` ``Petal.Width``, data ``=`` ``iris``)`\
+[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``)`
 
     > Parameter                  | Coefficient |   SE |         95% CI | t(146) |      p
     > ----------------------------------------------------------------------------------
@@ -251,7 +306,10 @@ In this case, we will represent the regression line between
 We can obtain the right reference grid quite easily by chaining two data
 grids together as follows:
 
-`vizdata`` ``<-`` ``iris`` ``|>`` `` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"Petal.Length"``, ``"Petal.Width"``)``, length ``=`` ``10``)`` ``|>`` `` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``"Petal.Width"``, length ``=`` ``5``, numerics ``=`` ``"all"``)`
+\
+`vizdata`` ``<-`` ``iris`` ``|>`\
+`  `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"Petal.Length"``, ``"Petal.Width"``)``, length ``=`` ``10``)`` ``|>`\
+`  `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``"Petal.Width"``, length ``=`` ``5``, numerics ``=`` ``"all"``)`
 
 What did we do here? We started by generating a reference grid
 containing all the combinations between the 10 equally spread values of
@@ -262,14 +320,35 @@ the other variables (*i.e.*, keeping the 10 values created for
 
 We can then visualise it as follows:
 
-`vizdata``$``Predicted`` ``<-`` `[`get_predicted`](https://easystats.github.io/insight/reference/get_predicted.html)`(``model``, ``vizdata``)`` `` ``iris`` ``|>`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Sepal.Length``, color ``=`` ``Petal.Width``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, group ``=`` ``Petal.Width``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`scale_color_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+`vizdata``$``Predicted`` ``<-`` `[`get_predicted`](https://easystats.github.io/insight/reference/get_predicted.html)`(``model``, ``vizdata``)`\
+\
+`iris`` ``|>`\
+`  `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Sepal.Length``, color ``=`` ``Petal.Width``)``)`` ``+`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, group ``=`` ``Petal.Width``)``, linewidth ``=`` ``1``)`` ``+`\
+`  `[`scale_color_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](visualisation_matrix_files/figure-html/unnamed-chunk-15-1.png)
 
 Such plot can be more clear by expressing the interaction variable in
 terms of deviations from the mean (as a standardized variable).
 
-`# Express values in an abstract way`` ``vizdata``$``Petal.Width`` ``<-`` ``effectsize``::`[`format_standardize`](https://easystats.github.io/effectsize/reference/format_standardize.html)`(`` `` ``vizdata``$``Petal.Width``,`` `` reference ``=`` ``iris``$``Petal.Width`` ``)`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Sepal.Length``)``)`` ``+`` `` ``# Only shapes from 21 to 25 have a fill aesthetic`` `` `[`geom_point2`](https://easystats.github.io/see/reference/geom_point2.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``fill ``=`` ``Petal.Width``)``, color ``=`` ``"white"``, shape ``=`` ``21``, size ``=`` ``5``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, color ``=`` ``Petal.Width``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`scale_color_viridis_d`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``direction ``=`` ``-``1``)`` ``+`` `` `[`scale_fill_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``guide ``=`` ``"none"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+`# Express values in an abstract way`\
+`vizdata``$``Petal.Width`` ``<-`` ``effectsize``::`[`format_standardize`](https://easystats.github.io/effectsize/reference/format_standardize.html)`(`\
+`  ``vizdata``$``Petal.Width``,`\
+`  reference ``=`` ``iris``$``Petal.Width`\
+`)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Sepal.Length``)``)`` ``+`\
+`  ``# Only shapes from 21 to 25 have a fill aesthetic`\
+`  `[`geom_point2`](https://easystats.github.io/see/reference/geom_point2.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``fill ``=`` ``Petal.Width``)``, color ``=`` ``"white"``, shape ``=`` ``21``, size ``=`` ``5``)`` ``+`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, color ``=`` ``Petal.Width``)``, linewidth ``=`` ``1``)`` ``+`\
+`  `[`scale_color_viridis_d`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``direction ``=`` ``-``1``)`` ``+`\
+`  `[`scale_fill_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``guide ``=`` ``"none"``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](visualisation_matrix_files/figure-html/unnamed-chunk-16-1.png)
 
@@ -286,12 +365,20 @@ To illustrate this, let’s set up a **general additive mixed model
 relationship; specified by [`s()`](https://rdrr.io/pkg/mgcv/man/s.html)
 function) and some **random effects** structure.
 
-[`library`](https://rdrr.io/r/base/library.html)`(``gamm4``)`` `` ``model`` ``<-`` ``gamm4``::`[`gamm4`](https://rdrr.io/pkg/gamm4/man/gamm4.html)`(`` `` formula ``=`` ``Petal.Length`` ``~`` ``Petal.Width`` ``+`` `[`s`](https://rdrr.io/pkg/mgcv/man/s.html)`(``Sepal.Length``)``,`` `` random ``=`` ``~`` ``(``1`` ``|`` ``Species``)``,`` `` data ``=`` ``iris`` ``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(``gamm4``)`\
+\
+`model`` ``<-`` ``gamm4``::`[`gamm4`](https://rdrr.io/pkg/gamm4/man/gamm4.html)`(`\
+`  formula ``=`` ``Petal.Length`` ``~`` ``Petal.Width`` ``+`` `[`s`](https://rdrr.io/pkg/mgcv/man/s.html)`(``Sepal.Length``)``,`\
+`  random ``=`` ``~`` ``(``1`` ``|`` ``Species``)``,`\
+`  data ``=`` ``iris`\
+`)`
 
 One can directly extract the visualization matrix for this model by
 entering the entire object into the function:
 
-[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, length ``=`` ``3``, include_random ``=`` ``FALSE``)`
+\
+[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, length ``=`` ``3``, include_random ``=`` ``FALSE``)`
 
     > Visualisation Grid
     > 
@@ -310,7 +397,8 @@ entering the entire object into the function:
 We also skip the smooth term if we are interested only in the fixed
 effects:
 
-[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, length ``=`` ``3``, include_random ``=`` ``FALSE``, include_smooth ``=`` ``FALSE``)`
+\
+[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, length ``=`` ``3``, include_random ``=`` ``FALSE``, include_smooth ``=`` ``FALSE``)`
 
     > Visualisation Grid
     > 
@@ -324,7 +412,8 @@ effects:
 
 We can also include random effects:
 
-[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, length ``=`` ``5``, include_random ``=`` ``TRUE``)`
+\
+[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, length ``=`` ``5``, include_random ``=`` ``TRUE``)`
 
     > Visualisation Grid
     > 
@@ -354,6 +443,20 @@ achieved by first requesting the values that we want, and then
 Let’s use the same model as above, and then obtain a data grid with
 specific values for `Petal.Width`.
 
-`vizdata`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Length`` ``*`` ``Petal.Width``, data ``=`` ``iris``)`` ``|>`` `` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Petal.Length"``, ``"Petal.Width = seq(-3, 3)"``)``)`` ``|>`` `` `[`unstandardize`](https://easystats.github.io/datawizard/reference/standardize.html)`(``vizdata``, select ``=`` ``"Petal.Width"``)`` ``|>`` `` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``vizdata``)`` `` ``vizdata``$``Petal.Width`` ``<-`` ``effectsize``::`[`format_standardize`](https://easystats.github.io/effectsize/reference/format_standardize.html)`(``vizdata``$``Petal.Width``, reference ``=`` ``iris``$``Petal.Width``)`` `` ``# 6. Plot`` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Sepal.Length``)``)`` ``+`` `` `[`geom_point2`](https://easystats.github.io/see/reference/geom_point2.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``fill ``=`` ``Petal.Width``)``, shape ``=`` ``21``, size ``=`` ``5``)`` ``+`` `` `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, color ``=`` ``Petal.Width``)``, linewidth ``=`` ``1``)`` ``+`` `` `[`scale_color_viridis_d`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``direction ``=`` ``-``1``)`` ``+`` `` `[`scale_fill_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``guide ``=`` ``"none"``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+`vizdata`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Length`` ``*`` ``Petal.Width``, data ``=`` ``iris``)`` ``|>`\
+`  `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Petal.Length"``, ``"Petal.Width = seq(-3, 3)"``)``)`` ``|>`\
+`  `[`unstandardize`](https://easystats.github.io/datawizard/reference/standardize.html)`(``vizdata``, select ``=`` ``"Petal.Width"``)`` ``|>`\
+`  `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``vizdata``)`\
+\
+`vizdata``$``Petal.Width`` ``<-`` ``effectsize``::`[`format_standardize`](https://easystats.github.io/effectsize/reference/format_standardize.html)`(``vizdata``$``Petal.Width``, reference ``=`` ``iris``$``Petal.Width``)`\
+\
+`# 6. Plot`\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``iris``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Petal.Length``, y ``=`` ``Sepal.Length``)``)`` ``+`\
+`  `[`geom_point2`](https://easystats.github.io/see/reference/geom_point2.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``fill ``=`` ``Petal.Width``)``, shape ``=`` ``21``, size ``=`` ``5``)`` ``+`\
+`  `[`geom_line`](https://ggplot2.tidyverse.org/reference/geom_path.html)`(``data ``=`` ``vizdata``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``y ``=`` ``Predicted``, color ``=`` ``Petal.Width``)``, linewidth ``=`` ``1``)`` ``+`\
+`  `[`scale_color_viridis_d`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``direction ``=`` ``-``1``)`` ``+`\
+`  `[`scale_fill_viridis_c`](https://ggplot2.tidyverse.org/reference/scale_viridis.html)`(``guide ``=`` ``"none"``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](visualisation_matrix_files/figure-html/unnamed-chunk-21-1.png)

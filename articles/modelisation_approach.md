@@ -45,7 +45,10 @@ around statistical modelisation.
 
 ## The Empirical Approach (Classic)
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`emmeans`](https://rvlenth.github.io/emmeans/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`emmeans`](https://rvlenth.github.io/emmeans/)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`
 
 ### Data Simulation
 
@@ -55,7 +58,32 @@ due time.
 
 Click here to see the code to generate the data.
 
-`generate_data`` ``<-`` ``function``(``effect`` ``=`` ``5``, ``noise`` ``=`` ``0.5``)`` ``{`` `` ``data`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``)`` `` ``n`` ``<-`` ``100`` `` ``for`` ``(``i`` ``in`` ``1``:`[`length`](https://rdrr.io/r/base/length.html)`(``effect``)``)`` ``{`` `` ``participant`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``Experimental_Variable ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(`[`seq`](https://rdrr.io/r/base/seq.html)`(``-``3``, ``3``, length ``=`` ``n`` ``/`` ``2``)``, `[`seq`](https://rdrr.io/r/base/seq.html)`(``-``3``, ``3``, length ``=`` ``n`` ``/`` ``2``)``)``)`` `` ``participant``$``RT`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(``participant``$``Experimental_Variable``[``1``:``(``n`` ``/`` ``2``)``]``**``2`` ``-`` ``effect``[``i``]``, ``(``participant``$``Experimental_Variable``[``(``n`` ``/`` ``2`` ``+`` ``1``)``:``n``]`` ``+`` ``effect``[``i``]``)``)`` ``+`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(``n``, ``0``, `[`abs`](https://rdrr.io/r/base/MathFun.html)`(``noise``[``i``]``)``)`` `` ``participant``$``Condition`` ``<-`` `[`rep`](https://rdrr.io/r/base/rep.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"A"``, ``"B"``)``, each ``=`` ``n`` ``/`` ``2``)`` `` ``participant``$``Participant`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"S"``, ``i``)`` `` ``data`` ``<-`` `[`rbind`](https://rdrr.io/r/base/cbind.html)`(``data``, ``participant``)`` `` ``}`` `` ``data``$``RT`` ``<-`` ``(``100`` ``+`` ``data``$``RT``)`` ``*`` ``10`` `` ``data`` ``}`` `` ``data`` ``<-`` ``generate_data``(``effect ``=`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(``30``, ``2``, ``2``)``, noise ``=`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(``30``, ``0``, ``0.4``)``)`` ``#`` ``# library(rtdists)`` ``#`` ``# data <- data.frame(`` ``# Participant = paste0("S", speed_acc$id),`` ``# Item = as.numeric(speed_acc$stim),`` ``# Condition = speed_acc$condition,`` ``# Correct = ifelse(as.character(speed_acc$stim_cat) == as.character(speed_acc$response), 1, 0),`` ``# RT = speed_acc$rt * 1000`` ``# )`
+\
+`generate_data`` ``<-`` ``function``(``effect`` ``=`` ``5``, ``noise`` ``=`` ``0.5``)`` ``{`\
+`  ``data`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``)`\
+`  ``n`` ``<-`` ``100`\
+`  ``for`` ``(``i`` ``in`` ``1``:`[`length`](https://rdrr.io/r/base/length.html)`(``effect``)``)`` ``{`\
+`    ``participant`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``Experimental_Variable ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(`[`seq`](https://rdrr.io/r/base/seq.html)`(``-``3``, ``3``, length ``=`` ``n`` ``/`` ``2``)``, `[`seq`](https://rdrr.io/r/base/seq.html)`(``-``3``, ``3``, length ``=`` ``n`` ``/`` ``2``)``)``)`\
+`    ``participant``$``RT`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(``participant``$``Experimental_Variable``[``1``:``(``n`` ``/`` ``2``)``]``**``2`` ``-`` ``effect``[``i``]``, ``(``participant``$``Experimental_Variable``[``(``n`` ``/`` ``2`` ``+`` ``1``)``:``n``]`` ``+`` ``effect``[``i``]``)``)`` ``+`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(``n``, ``0``, `[`abs`](https://rdrr.io/r/base/MathFun.html)`(``noise``[``i``]``)``)`\
+`    ``participant``$``Condition`` ``<-`` `[`rep`](https://rdrr.io/r/base/rep.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"A"``, ``"B"``)``, each ``=`` ``n`` ``/`` ``2``)`\
+`    ``participant``$``Participant`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"S"``, ``i``)`\
+`    ``data`` ``<-`` `[`rbind`](https://rdrr.io/r/base/cbind.html)`(``data``, ``participant``)`\
+`  ``}`\
+`  ``data``$``RT`` ``<-`` ``(``100`` ``+`` ``data``$``RT``)`` ``*`` ``10`\
+`  ``data`\
+`}`\
+\
+`data`` ``<-`` ``generate_data``(``effect ``=`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(``30``, ``2``, ``2``)``, noise ``=`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(``30``, ``0``, ``0.4``)``)`\
+`#`\
+`# library(rtdists)`\
+`#`\
+`# data <- data.frame(`\
+`#   Participant = paste0("S", speed_acc$id),`\
+`#   Item = as.numeric(speed_acc$stim),`\
+`#   Condition = speed_acc$condition,`\
+`#   Correct = ifelse(as.character(speed_acc$stim_cat) == as.character(speed_acc$response), 1, 0),`\
+`#   RT = speed_acc$rt * 1000`\
+`# )`
 
 ### Preprocessing
 
@@ -68,7 +96,22 @@ compare groups.
 
 So we will take, for each participant, its 20…
 
-`data_anova`` ``<-`` ``data`` ``data_anova``$``Category`` ``<-`` ``recode_into``(`` `` ``Experimental_Variable`` ``<`` ``-``1.5`` ``~`` ``"Low"``,`` `` ``Experimental_Variable`` ``>`` ``1.5`` ``~`` ``"High"``,`` `` default ``=`` ``"Middle"``,`` `` data ``=`` ``data_anova`` ``)`` ``data_anova``$``Category`` ``<-`` `[`factor`](https://rdrr.io/r/base/factor.html)`(``data_anova``$``Category``, levels ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Low"``, ``"Middle"``, ``"High"``)``)`` `` ``data_anova`` ``<<-`` ``data_anova`` ``|>`` `` ``data_group``(`[`c`](https://rdrr.io/r/base/c.html)`(``"Participant"``, ``"Condition"``, ``"Category"``)``)`` ``|>`` `` ``data_summary``(``RT ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``RT``)``)`` `` ``results`` ``<-`` `[`aov`](https://rdrr.io/r/stats/aov.html)`(``RT`` ``~`` ``Condition`` ``*`` ``Category`` ``+`` ``Error``(``Participant``)``, data ``=`` ``data_anova``)`` `[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``results``)`
+\
+`data_anova`` ``<-`` ``data`\
+`data_anova``$``Category`` ``<-`` ``recode_into``(`\
+`  ``Experimental_Variable`` ``<`` ``-``1.5`` ``~`` ``"Low"``,`\
+`  ``Experimental_Variable`` ``>`` ``1.5`` ``~`` ``"High"``,`\
+`  default ``=`` ``"Middle"``,`\
+`  data ``=`` ``data_anova`\
+`)`\
+`data_anova``$``Category`` ``<-`` `[`factor`](https://rdrr.io/r/base/factor.html)`(``data_anova``$``Category``, levels ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Low"``, ``"Middle"``, ``"High"``)``)`\
+\
+`data_anova`` ``<<-`` ``data_anova`` ``|>`\
+`  ``data_group``(`[`c`](https://rdrr.io/r/base/c.html)`(``"Participant"``, ``"Condition"``, ``"Category"``)``)`` ``|>`\
+`  ``data_summary``(``RT ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``RT``)``)`\
+\
+`results`` ``<-`` `[`aov`](https://rdrr.io/r/stats/aov.html)`(``RT`` ``~`` ``Condition`` ``*`` ``Category`` ``+`` ``Error``(``Participant``)``, data ``=`` ``data_anova``)`\
+[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``results``)`
 
     > # Participant
     > 
@@ -94,7 +137,10 @@ from psychological science.
 
 ### Post-hoc comparison tests
 
-`posthoc`` ``<-`` `[`get_emmeans`](https://easystats.github.io/modelbased/reference/get_emmeans.md)`(``results``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Condition"``, ``"Category"``)``)`` ``|>`` `` `[`pairs`](https://rdrr.io/r/graphics/pairs.html)`(``)`` `[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``posthoc``)`
+\
+`posthoc`` ``<-`` `[`get_emmeans`](https://easystats.github.io/modelbased/reference/get_emmeans.md)`(``results``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Condition"``, ``"Category"``)``)`` ``|>`\
+`  `[`pairs`](https://rdrr.io/r/graphics/pairs.html)`(``)`\
+[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``posthoc``)`
 
     > contrast            | Coefficient |   SE |           95% CI | t(145) |      p
     > -----------------------------------------------------------------------------
@@ -116,7 +162,11 @@ from psychological science.
     > 
     > p-value adjustment method: Tukey
 
-`data_anova`` ``|>`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Category``, y ``=`` ``RT``, fill ``=`` ``Condition``)``)`` ``+`` `` `[`geom_boxplot`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)`(``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+`data_anova`` ``|>`\
+`  `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Category``, y ``=`` ``RT``, fill ``=`` ``Condition``)``)`` ``+`\
+`  `[`geom_boxplot`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)`(``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](modelisation_approach_files/figure-html/unnamed-chunk-7-1.png)
 
@@ -134,7 +184,13 @@ We can use
 which can fit non-linear relationships in an empirical way, to give us
 an idea of the shape of the relationships.
 
-`data`` ``|>`` `` ``data_group``(`[`c`](https://rdrr.io/r/base/c.html)`(``"Participant"``, ``"Condition"``)``)`` ``|>`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Experimental_Variable``, y ``=`` ``RT``, color ``=`` ``Condition``)``)`` ``+`` `` `[`geom_jitter`](https://ggplot2.tidyverse.org/reference/geom_jitter.html)`(``alpha ``=`` ``0.4``)`` ``+`` `` `[`geom_smooth`](https://ggplot2.tidyverse.org/reference/geom_smooth.html)`(``method ``=`` ``"loess"``, se ``=`` ``FALSE``)`` ``+`` `` `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
+\
+`data`` ``|>`\
+`  ``data_group``(`[`c`](https://rdrr.io/r/base/c.html)`(``"Participant"``, ``"Condition"``)``)`` ``|>`\
+`  `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``Experimental_Variable``, y ``=`` ``RT``, color ``=`` ``Condition``)``)`` ``+`\
+`  `[`geom_jitter`](https://ggplot2.tidyverse.org/reference/geom_jitter.html)`(``alpha ``=`` ``0.4``)`` ``+`\
+`  `[`geom_smooth`](https://ggplot2.tidyverse.org/reference/geom_smooth.html)`(``method ``=`` ``"loess"``, se ``=`` ``FALSE``)`` ``+`\
+`  `[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ![](modelisation_approach_files/figure-html/unnamed-chunk-8-1.png)
 

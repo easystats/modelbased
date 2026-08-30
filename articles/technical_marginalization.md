@@ -19,20 +19,33 @@ vignette](https://easystats.github.io/modelbased/articles/mixed_models.html).
 
 First, let’s load the necessary packages and dataset.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`` `[`data`](https://rdrr.io/r/utils/data.html)`(``penguins``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`\
+[`data`](https://rdrr.io/r/utils/data.html)`(``penguins``)`
 
 We fit a simple linear model with a continuous outcome (`flipper_len`),
 a categorical focal predictor (`sex`), and a categorical non-focal
 predictor (`species`).
 
-`m`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``flipper_len`` ``~`` ``sex`` ``+`` ``species``, data ``=`` ``penguins``)`
+\
+`m`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``flipper_len`` ``~`` ``sex`` ``+`` ``species``, data ``=`` ``penguins``)`
 
 Next, we extract the data used to fit the model. This does not perfectly
 correspond to the original dataset because a few cases with missing
 values were removed via list-wise deletion. We will need this data
 later. Let’s also print the regression coefficients.
 
-`model_data`` ``<-`` `[`get_data`](https://easystats.github.io/insight/reference/get_data.html)`(``m``)`` `` ``mp`` ``<-`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``m``)`` ``mp`` ``#> Parameter | Coefficient (CI)`` ``#> ---------------------------------------------`` ``#> (Intercept) | 186.68 (185.56, 187.80)`` ``#> sex [male] | 6.85 ( 5.62, 8.08)`` ``#> species [Chinstrap] | 5.72 ( 4.07, 7.37)`` ``#> species [Gentoo] | 27.05 ( 25.65, 28.44)`
+\
+`model_data`` ``<-`` `[`get_data`](https://easystats.github.io/insight/reference/get_data.html)`(``m``)`\
+\
+`mp`` ``<-`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``m``)`\
+`mp`\
+`#> Parameter           |        Coefficient (CI)`\
+`#> ---------------------------------------------`\
+`#> (Intercept)         | 186.68 (185.56, 187.80)`\
+`#> sex [male]          |   6.85 (  5.62,   8.08)`\
+`#> species [Chinstrap] |   5.72 (  4.07,   7.37)`\
+`#> species [Gentoo]    |  27.05 ( 25.65,  28.44)`
 
 ## 1. “Specific” Observation
 
@@ -40,26 +53,86 @@ What happens here? Numeric variables are set to their mean, and factors
 are set to their reference level. Thus, a prediction is made for a very
 “specific” observation in the dataset (here: `species = Adelie`).
 
-[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"specific"``)`` ``#> Model-based Predictions`` ``#> `` ``#> sex | Mean (CI)`` ``#> --------------------------------`` ``#> female | 186.68 (185.56, 187.80)`` ``#> male | 193.53 (192.41, 194.65)`` ``#> `` ``#> Variable predicted: flipper_len`` ``#> Predictors modulated: sex`` ``#> Predictors controlled: species (Adelie)`` `` ``# Alternative code (same result, different wrapper)`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``m``, by ``=`` ``"sex"``)`` ``#> Model-based Predictions`` ``#> `` ``#> sex | Predicted (CI)`` ``#> --------------------------------`` ``#> female | 186.68 (185.56, 187.80)`` ``#> male | 193.53 (192.41, 194.65)`` ``#> `` ``#> Variable predicted: flipper_len`` ``#> Predictors modulated: sex`` ``#> Predictors controlled: species (Adelie)`
+\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"specific"``)`\
+`#> Model-based Predictions`\
+`#> `\
+`#> sex    |               Mean (CI)`\
+`#> --------------------------------`\
+`#> female | 186.68 (185.56, 187.80)`\
+`#> male   | 193.53 (192.41, 194.65)`\
+`#> `\
+`#> Variable predicted: flipper_len`\
+`#> Predictors modulated: sex`\
+`#> Predictors controlled: species (Adelie)`\
+\
+`# Alternative code (same result, different wrapper)`\
+[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``m``, by ``=`` ``"sex"``)`\
+`#> Model-based Predictions`\
+`#> `\
+`#> sex    |          Predicted (CI)`\
+`#> --------------------------------`\
+`#> female | 186.68 (185.56, 187.80)`\
+`#> male   | 193.53 (192.41, 194.65)`\
+`#> `\
+`#> Variable predicted: flipper_len`\
+`#> Predictors modulated: sex`\
+`#> Predictors controlled: species (Adelie)`
 
 To illustrate, we can calculate this manually. “Female” is the reference
 level for `sex` here. Since `species` is kept at its reference level
 (Adelie), the estimated marginal mean corresponds exactly to the
 intercept.
 
-`# female (reference)`` ``mp``$``Coefficient``[``1``]`` ``#> [1] 186.6777`
+\
+`# female (reference)`\
+`mp``$``Coefficient``[``1``]`\
+`#> [1] 186.6777`
 
 For “male”, we add the main effect for `sexmale` to the intercept.
 `species` still remains at the reference level (Adelie).
 
-`# male`` ``mp``$``Coefficient``[``1``]`` ``+`` ``mp``$``Coefficient``[``2``]`` ``#> [1] 193.5278`
+\
+`# male`\
+`mp``$``Coefficient``[``1``]`` ``+`` ``mp``$``Coefficient``[``2``]`\
+`#> [1] 193.5278`
 
 ### Excursus: How does `predict()` work in comparison?
 
 Let’s compare this logic to the standard
 [`predict()`](https://rdrr.io/r/stats/predict.html) function.
 
-`pred`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m``)`` `` ``# Let's look at the real data of the 1st observation in the dataset:`` ``penguins``[``1``, `[`c`](https://rdrr.io/r/base/c.html)`(``"species"``, ``"sex"``)``]`` ``# Adelie, male`` ``#> species sex`` ``#> 1 Adelie male`` `` ``# Predicted value (predicted mean) for this 1st observation:`` ``pred``[``1``]`` ``#> 1 `` ``#> 193.5278`` `` ``# Manual calculation: Intercept + effect for "male" (since Adelie is the reference)`` ``mp``$``Coefficient``[``1``]`` ``+`` ``mp``$``Coefficient``[``2``]`` ``#> [1] 193.5278`` `` ``# Let's look at the real data of the 221st observation in the dataset:`` ``penguins``[``221``, `[`c`](https://rdrr.io/r/base/c.html)`(``"species"``, ``"sex"``)``]`` ``# Gentoo, female`` ``#> species sex`` ``#> 221 Gentoo female`` `` ``# Predicted value (predicted mean) for this 221st observation:`` ``pred``[``221``]`` ``#> 229 `` ``#> 213.7239`` `` ``# Manual calculation:`` ``# Intercept (female is reference) + effect for species "Gentoo" (4th coefficient)`` ``mp``$``Coefficient``[``1``]`` ``+`` ``mp``$``Coefficient``[``4``]`` ``#> [1] 213.7239`
+\
+`pred`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m``)`\
+\
+`# Let's look at the real data of the 1st observation in the dataset:`\
+`penguins``[``1``, `[`c`](https://rdrr.io/r/base/c.html)`(``"species"``, ``"sex"``)``]`` ``# Adelie, male`\
+`#>   species  sex`\
+`#> 1  Adelie male`\
+\
+`# Predicted value (predicted mean) for this 1st observation:`\
+`pred``[``1``]`\
+`#>        1 `\
+`#> 193.5278`\
+\
+`# Manual calculation: Intercept + effect for "male" (since Adelie is the reference)`\
+`mp``$``Coefficient``[``1``]`` ``+`` ``mp``$``Coefficient``[``2``]`\
+`#> [1] 193.5278`\
+\
+`# Let's look at the real data of the 221st observation in the dataset:`\
+`penguins``[``221``, `[`c`](https://rdrr.io/r/base/c.html)`(``"species"``, ``"sex"``)``]`` ``# Gentoo, female`\
+`#>     species    sex`\
+`#> 221  Gentoo female`\
+\
+`# Predicted value (predicted mean) for this 221st observation:`\
+`pred``[``221``]`\
+`#>      229 `\
+`#> 213.7239`\
+\
+`# Manual calculation:`\
+`# Intercept (female is reference) + effect for species "Gentoo" (4th coefficient)`\
+`mp``$``Coefficient``[``1``]`` ``+`` ``mp``$``Coefficient``[``4``]`\
+`#> [1] 213.7239`
 
 ## 2. “Typical” Observation
 
@@ -69,7 +142,44 @@ non-focal terms (here: `species`). Each level of `species` is weighted
 *equally* in the calculation, regardless of how often it occurs in the
 actual empirical data.
 
-`# We manually create a reference grid with evenly distributed levels`` ``# of our non-focal ("controlled for") term "species".`` ``d`` ``<-`` `[`rbind`](https://rdrr.io/r/base/cbind.html)`(`` `` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``m``, `[`c`](https://rdrr.io/r/base/c.html)`(``"sex"``, ``"species = 'Adelie'"``)``)``,`` `` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``m``, `[`c`](https://rdrr.io/r/base/c.html)`(``"sex"``, ``"species = 'Chinstrap'"``)``)``,`` `` `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``m``, `[`c`](https://rdrr.io/r/base/c.html)`(``"sex"``, ``"species = 'Gentoo'"``)``)`` ``)`` `` ``# Now we calculate the predicted values for this balanced grid.`` ``# The non-focal terms are weighted exactly equally here`` ``# (1/3 Adelie, 1/3 Chinstrap, 1/3 Gentoo).`` ``d``$``predicted`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m``, newdata ``=`` ``d``)`` `` ``# Manual calculation of the means grouped by "sex":`` `[`means_by_group`](https://easystats.github.io/datawizard/reference/means_by_group.html)`(``d``, ``"predicted"``, ``"sex"``)`` ``#> # Mean of predicted by sex`` ``#> `` ``#> Category | Mean | N | SD | 95% CI | p`` ``#> --------------------------------------------------------`` ``#> female | 197.60 | 3 | 14.25 | [174.75, 220.45] | 0.588`` ``#> male | 204.45 | 3 | 14.25 | [181.60, 227.30] | 0.588`` ``#> Total | 201.03 | 6 | 13.29 | | `` ``#> `` ``#> Anova: R2=0.080; adj.R2=-0.150; F=0.346; p=0.588`` `` ``# This corresponds to the easystats default (estimate = "typical").`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> sex | Mean (CI)`` ``#> --------------------------------`` ``#> female | 197.60 (196.70, 198.50)`` ``#> male | 204.45 (203.56, 205.34)`` ``#> `` ``#> Variable predicted: flipper_len`` ``#> Predictors modulated: sex`` ``#> Predictors averaged: species`
+\
+`# We manually create a reference grid with evenly distributed levels`\
+`# of our non-focal ("controlled for") term "species".`\
+`d`` ``<-`` `[`rbind`](https://rdrr.io/r/base/cbind.html)`(`\
+`  `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``m``, `[`c`](https://rdrr.io/r/base/c.html)`(``"sex"``, ``"species = 'Adelie'"``)``)``,`\
+`  `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``m``, `[`c`](https://rdrr.io/r/base/c.html)`(``"sex"``, ``"species = 'Chinstrap'"``)``)``,`\
+`  `[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``m``, `[`c`](https://rdrr.io/r/base/c.html)`(``"sex"``, ``"species = 'Gentoo'"``)``)`\
+`)`\
+\
+`# Now we calculate the predicted values for this balanced grid.`\
+`# The non-focal terms are weighted exactly equally here`\
+`# (1/3 Adelie, 1/3 Chinstrap, 1/3 Gentoo).`\
+`d``$``predicted`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m``, newdata ``=`` ``d``)`\
+\
+`# Manual calculation of the means grouped by "sex":`\
+[`means_by_group`](https://easystats.github.io/datawizard/reference/means_by_group.html)`(``d``, ``"predicted"``, ``"sex"``)`\
+`#> # Mean of predicted by sex`\
+`#> `\
+`#> Category |   Mean | N |    SD |           95% CI |     p`\
+`#> --------------------------------------------------------`\
+`#> female   | 197.60 | 3 | 14.25 | [174.75, 220.45] | 0.588`\
+`#> male     | 204.45 | 3 | 14.25 | [181.60, 227.30] | 0.588`\
+`#> Total    | 201.03 | 6 | 13.29 |                  |      `\
+`#> `\
+`#> Anova: R2=0.080; adj.R2=-0.150; F=0.346; p=0.588`\
+\
+`# This corresponds to the easystats default (estimate = "typical").`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``)`\
+`#> Estimated Marginal Means`\
+`#> `\
+`#> sex    |               Mean (CI)`\
+`#> --------------------------------`\
+`#> female | 197.60 (196.70, 198.50)`\
+`#> male   | 204.45 (203.56, 205.34)`\
+`#> `\
+`#> Variable predicted: flipper_len`\
+`#> Predictors modulated: sex`\
+`#> Predictors averaged: species`
 
 ## 3. “Average” Observation
 
@@ -78,7 +188,35 @@ in the real dataset. Afterwards, the average of these predictions is
 calculated per focal group. By doing this, the non-focal terms retain
 their exact empirical distribution.
 
-`d`` ``<-`` ``model_data`` `` ``# We use the predict() function for the entire original dataset`` ``d``$``predicted`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m``)`` `` ``# Afterwards, we calculate the mean of the predictions, grouped by "sex"`` `[`means_by_group`](https://easystats.github.io/datawizard/reference/means_by_group.html)`(``d``, ``"predicted"``, ``"sex"``)`` ``#> # Mean of predicted by sex`` ``#> `` ``#> Category | Mean | N | SD | 95% CI | p`` ``#> -----------------------------------------------------------`` ``#> female | 197.36 | 165 | 12.27 | [195.48, 199.25] | < .001`` ``#> male | 204.51 | 168 | 12.35 | [202.64, 206.37] | < .001`` ``#> Total | 200.97 | 333 | 12.80 | | `` ``#> `` ``#> Anova: R2=0.078; adj.R2=0.075; F=28.008; p<.001`` `` ``# The corresponding easystats call:`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"average"``)`` ``#> Average Predictions`` ``#> `` ``#> sex | Mean (CI)`` ``#> --------------------------------`` ``#> female | 197.36 (196.49, 198.24)`` ``#> male | 204.51 (203.64, 205.38)`` ``#> `` ``#> Variable predicted: flipper_len`` ``#> Predictors modulated: sex`
+\
+`d`` ``<-`` ``model_data`\
+\
+`# We use the predict() function for the entire original dataset`\
+`d``$``predicted`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m``)`\
+\
+`# Afterwards, we calculate the mean of the predictions, grouped by "sex"`\
+[`means_by_group`](https://easystats.github.io/datawizard/reference/means_by_group.html)`(``d``, ``"predicted"``, ``"sex"``)`\
+`#> # Mean of predicted by sex`\
+`#> `\
+`#> Category |   Mean |   N |    SD |           95% CI |      p`\
+`#> -----------------------------------------------------------`\
+`#> female   | 197.36 | 165 | 12.27 | [195.48, 199.25] | < .001`\
+`#> male     | 204.51 | 168 | 12.35 | [202.64, 206.37] | < .001`\
+`#> Total    | 200.97 | 333 | 12.80 |                  |       `\
+`#> `\
+`#> Anova: R2=0.078; adj.R2=0.075; F=28.008; p<.001`\
+\
+`# The corresponding easystats call:`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"average"``)`\
+`#> Average Predictions`\
+`#> `\
+`#> sex    |               Mean (CI)`\
+`#> --------------------------------`\
+`#> female | 197.36 (196.49, 198.24)`\
+`#> male   | 204.51 (203.64, 205.38)`\
+`#> `\
+`#> Variable predicted: flipper_len`\
+`#> Predictors modulated: sex`
 
 ## 4. “Counterfactual” Observation (also “Population”)
 
@@ -91,7 +229,44 @@ we retain its original `species` (and de facto all other unobserved
 characteristics/confounding that we want to equalize through
 randomization).
 
-`# We duplicate ("clone") our dataset to imitate randomization.`` ``d`` ``<-`` `[`do.call`](https://rdrr.io/r/base/do.call.html)`(``rbind``, `[`replicate`](https://rdrr.io/r/base/lapply.html)`(``2``, ``model_data``, simplify ``=`` ``FALSE``)``)`` `` ``# For each cloned dataset, we set our focal term to one of the two levels.`` ``# The first half of the dataset becomes entirely "female", the second half entirely "male".`` ``d``$``sex`` ``<-`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(`[`rep`](https://rdrr.io/r/base/rep.html)`(`[`levels`](https://rdrr.io/r/base/levels.html)`(``model_data``$``sex``)``, each ``=`` `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``model_data``)``)``)`` `` ``# We calculate the predicted values for this new "what-if" scenario,`` ``# i.e., for our pseudo-randomized sample.`` ``d``$``predicted`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m``, newdata ``=`` ``d``)`` `` ``# Now we calculate the average predicted value for the levels of "sex".`` ``# The non-focal terms are weighted exactly proportional to their actual`` ``# occurrence in the real data here.`` `[`means_by_group`](https://easystats.github.io/datawizard/reference/means_by_group.html)`(``d``, ``"predicted"``, ``"sex"``)`` ``#> # Mean of predicted by sex`` ``#> `` ``#> Category | Mean | N | SD | 95% CI | p`` ``#> -----------------------------------------------------------`` ``#> female | 197.51 | 333 | 12.30 | [196.19, 198.83] | < .001`` ``#> male | 204.36 | 333 | 12.30 | [203.04, 205.68] | < .001`` ``#> Total | 200.94 | 666 | 12.76 | | `` ``#> `` ``#> Anova: R2=0.072; adj.R2=0.071; F=51.680; p<.001`` `` ``# The corresponding easystats call:`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"counterfactual"``)`` ``#> Average Counterfactual Predictions`` ``#> `` ``#> sex | Mean (CI)`` ``#> --------------------------------`` ``#> female | 197.51 (196.63, 198.39)`` ``#> male | 204.36 (203.49, 205.23)`` ``#> `` ``#> Variable predicted: flipper_len`` ``#> Predictors modulated: sex`` ``#> Predictors averaged: species`
+\
+`# We duplicate ("clone") our dataset to imitate randomization.`\
+`d`` ``<-`` `[`do.call`](https://rdrr.io/r/base/do.call.html)`(``rbind``, `[`replicate`](https://rdrr.io/r/base/lapply.html)`(``2``, ``model_data``, simplify ``=`` ``FALSE``)``)`\
+\
+`# For each cloned dataset, we set our focal term to one of the two levels.`\
+`# The first half of the dataset becomes entirely "female", the second half entirely "male".`\
+`d``$``sex`` ``<-`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(`[`rep`](https://rdrr.io/r/base/rep.html)`(`[`levels`](https://rdrr.io/r/base/levels.html)`(``model_data``$``sex``)``, each ``=`` `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``model_data``)``)``)`\
+\
+`# We calculate the predicted values for this new "what-if" scenario,`\
+`# i.e., for our pseudo-randomized sample.`\
+`d``$``predicted`` ``<-`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m``, newdata ``=`` ``d``)`\
+\
+`# Now we calculate the average predicted value for the levels of "sex".`\
+`# The non-focal terms are weighted exactly proportional to their actual`\
+`# occurrence in the real data here.`\
+[`means_by_group`](https://easystats.github.io/datawizard/reference/means_by_group.html)`(``d``, ``"predicted"``, ``"sex"``)`\
+`#> # Mean of predicted by sex`\
+`#> `\
+`#> Category |   Mean |   N |    SD |           95% CI |      p`\
+`#> -----------------------------------------------------------`\
+`#> female   | 197.51 | 333 | 12.30 | [196.19, 198.83] | < .001`\
+`#> male     | 204.36 | 333 | 12.30 | [203.04, 205.68] | < .001`\
+`#> Total    | 200.94 | 666 | 12.76 |                  |       `\
+`#> `\
+`#> Anova: R2=0.072; adj.R2=0.071; F=51.680; p<.001`\
+\
+`# The corresponding easystats call:`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"counterfactual"``)`\
+`#> Average Counterfactual Predictions`\
+`#> `\
+`#> sex    |               Mean (CI)`\
+`#> --------------------------------`\
+`#> female | 197.51 (196.63, 198.39)`\
+`#> male   | 204.36 (203.49, 205.23)`\
+`#> `\
+`#> Variable predicted: flipper_len`\
+`#> Predictors modulated: sex`\
+`#> Predictors averaged: species`
 
 ------------------------------------------------------------------------
 
@@ -198,16 +373,123 @@ precise comparison.
 
 ### Specific Observation
 
-`# easystats: Sets numeric variables to their mean and factors`` ``# to their reference level.`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"specific"``)`` ``#> Model-based Predictions`` ``#> `` ``#> sex | Mean (CI)`` ``#> --------------------------------`` ``#> female | 186.68 (185.56, 187.80)`` ``#> male | 193.53 (192.41, 194.65)`` ``#> `` ``#> Variable predicted: flipper_len`` ``#> Predictors modulated: sex`` ``#> Predictors controlled: species (Adelie)`` `` ``# marginaleffects: The 'newdata = "mean"' argument replicates this`` ``# "theoretical" observation behavior.`` ``marginaleffects``::`[`avg_predictions`](https://rdrr.io/pkg/marginaleffects/man/predictions.html)`(``m``, by ``=`` ``"sex"``, newdata ``=`` ``"mean"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`` ``#> Predicted (CI) | sex`` ``#> --------------------------------`` ``#> 186.68 (185.56, 187.79) | female`` ``#> 193.53 (192.41, 194.64) | male`
+\
+`# easystats: Sets numeric variables to their mean and factors`\
+`# to their reference level.`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"specific"``)`\
+`#> Model-based Predictions`\
+`#> `\
+`#> sex    |               Mean (CI)`\
+`#> --------------------------------`\
+`#> female | 186.68 (185.56, 187.80)`\
+`#> male   | 193.53 (192.41, 194.65)`\
+`#> `\
+`#> Variable predicted: flipper_len`\
+`#> Predictors modulated: sex`\
+`#> Predictors controlled: species (Adelie)`\
+\
+`# marginaleffects: The 'newdata = "mean"' argument replicates this`\
+`# "theoretical" observation behavior.`\
+`marginaleffects``::`[`avg_predictions`](https://rdrr.io/pkg/marginaleffects/man/predictions.html)`(``m``, by ``=`` ``"sex"``, newdata ``=`` ``"mean"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`\
+`#> Predicted (CI)          |    sex`\
+`#> --------------------------------`\
+`#> 186.68 (185.56, 187.79) | female`\
+`#> 193.53 (192.41, 194.64) |   male`
 
 ### Typical Observation
 
-`# easystats: Builds a balanced reference grid and weights each group`` ``# equally (the default).`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"typical"``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> sex | Mean (CI)`` ``#> --------------------------------`` ``#> female | 197.60 (196.70, 198.50)`` ``#> male | 204.45 (203.56, 205.34)`` ``#> `` ``#> Variable predicted: flipper_len`` ``#> Predictors modulated: sex`` ``#> Predictors averaged: species`` `` ``# marginaleffects: 'newdata = "grid"' creates a similar balanced`` ``# data grid.`` ``marginaleffects``::`[`avg_predictions`](https://rdrr.io/pkg/marginaleffects/man/predictions.html)`(``m``, by ``=`` ``"sex"``, newdata ``=`` ``"grid"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`` ``#> Predicted (CI) | sex`` ``#> --------------------------------`` ``#> 197.60 (196.70, 198.50) | female`` ``#> 204.45 (203.56, 205.34) | male`` `` ``# emmeans: Equal weighting across a reference grid is the default`` ``# behavior in emmeans.`` ``emmeans``::`[`emmeans`](https://rvlenth.github.io/emmeans/reference/emmeans.html)`(``m``, ``"sex"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`` ``#> Marginal Means (CI) | sex`` ``#> --------------------------------`` ``#> 197.60 (196.70, 198.50) | female`` ``#> 204.45 (203.56, 205.34) | male`
+\
+`# easystats: Builds a balanced reference grid and weights each group`\
+`# equally (the default).`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"typical"``)`\
+`#> Estimated Marginal Means`\
+`#> `\
+`#> sex    |               Mean (CI)`\
+`#> --------------------------------`\
+`#> female | 197.60 (196.70, 198.50)`\
+`#> male   | 204.45 (203.56, 205.34)`\
+`#> `\
+`#> Variable predicted: flipper_len`\
+`#> Predictors modulated: sex`\
+`#> Predictors averaged: species`\
+\
+`# marginaleffects: 'newdata = "grid"' creates a similar balanced`\
+`# data grid.`\
+`marginaleffects``::`[`avg_predictions`](https://rdrr.io/pkg/marginaleffects/man/predictions.html)`(``m``, by ``=`` ``"sex"``, newdata ``=`` ``"grid"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`\
+`#> Predicted (CI)          |    sex`\
+`#> --------------------------------`\
+`#> 197.60 (196.70, 198.50) | female`\
+`#> 204.45 (203.56, 205.34) |   male`\
+\
+`# emmeans: Equal weighting across a reference grid is the default`\
+`# behavior in emmeans.`\
+`emmeans``::`[`emmeans`](https://rvlenth.github.io/emmeans/reference/emmeans.html)`(``m``, ``"sex"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`\
+`#> Marginal Means (CI)     |    sex`\
+`#> --------------------------------`\
+`#> 197.60 (196.70, 198.50) | female`\
+`#> 204.45 (203.56, 205.34) |   male`
 
 ### Average Observation
 
-`# easystats: Calculates predictions for every observation in the`` ``# empirical data and averages them.`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"average"``)`` ``#> Average Predictions`` ``#> `` ``#> sex | Mean (CI)`` ``#> --------------------------------`` ``#> female | 197.36 (196.49, 198.24)`` ``#> male | 204.51 (203.64, 205.38)`` ``#> `` ``#> Variable predicted: flipper_len`` ``#> Predictors modulated: sex`` `` ``# marginaleffects: Using 'by' without modifying 'newdata' averages`` ``# predictions over the original empirical dataset.`` ``marginaleffects``::`[`avg_predictions`](https://rdrr.io/pkg/marginaleffects/man/predictions.html)`(``m``, by ``=`` ``"sex"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`` ``#> Predicted (CI) | sex`` ``#> --------------------------------`` ``#> 197.36 (196.49, 198.24) | female`` ``#> 204.51 (203.64, 205.37) | male`` `` ``# emmeans: 'weights = "cell"' weights the reference grid based on`` ``# actual cell frequencies in the data.`` ``emmeans``::`[`emmeans`](https://rvlenth.github.io/emmeans/reference/emmeans.html)`(``m``, ``"sex"``, weights ``=`` ``"cell"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`` ``#> Marginal Means (CI) | sex`` ``#> --------------------------------`` ``#> 197.36 (196.49, 198.24) | female`` ``#> 204.51 (203.64, 205.38) | male`
+\
+`# easystats: Calculates predictions for every observation in the`\
+`# empirical data and averages them.`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"average"``)`\
+`#> Average Predictions`\
+`#> `\
+`#> sex    |               Mean (CI)`\
+`#> --------------------------------`\
+`#> female | 197.36 (196.49, 198.24)`\
+`#> male   | 204.51 (203.64, 205.38)`\
+`#> `\
+`#> Variable predicted: flipper_len`\
+`#> Predictors modulated: sex`\
+\
+`# marginaleffects: Using 'by' without modifying 'newdata' averages`\
+`# predictions over the original empirical dataset.`\
+`marginaleffects``::`[`avg_predictions`](https://rdrr.io/pkg/marginaleffects/man/predictions.html)`(``m``, by ``=`` ``"sex"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`\
+`#> Predicted (CI)          |    sex`\
+`#> --------------------------------`\
+`#> 197.36 (196.49, 198.24) | female`\
+`#> 204.51 (203.64, 205.37) |   male`\
+\
+`# emmeans: 'weights = "cell"' weights the reference grid based on`\
+`# actual cell frequencies in the data.`\
+`emmeans``::`[`emmeans`](https://rvlenth.github.io/emmeans/reference/emmeans.html)`(``m``, ``"sex"``, weights ``=`` ``"cell"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`\
+`#> Marginal Means (CI)     |    sex`\
+`#> --------------------------------`\
+`#> 197.36 (196.49, 198.24) | female`\
+`#> 204.51 (203.64, 205.38) |   male`
 
 ### Counterfactual / Population Observation
 
-`# easystats: Uses G-computation (cloning the dataset to`` ``# simulate pseudo-randomization).`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"population"``)`` ``#> Average Counterfactual Predictions`` ``#> `` ``#> sex | Mean (CI)`` ``#> --------------------------------`` ``#> female | 197.51 (196.63, 198.39)`` ``#> male | 204.36 (203.49, 205.23)`` ``#> `` ``#> Variable predicted: flipper_len`` ``#> Predictors modulated: sex`` ``#> Predictors averaged: species`` `` ``# marginaleffects: Using the 'variables' argument automatically`` ``# triggers this counterfactual approach.`` ``marginaleffects``::`[`avg_predictions`](https://rdrr.io/pkg/marginaleffects/man/predictions.html)`(``m``, variables ``=`` ``"sex"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`` ``#> Predicted (CI) | sex`` ``#> --------------------------------`` ``#> 197.51 (196.64, 198.38) | female`` ``#> 204.36 (203.50, 205.23) | male`` `` ``# emmeans: 'weights = "proportional"' weights the means`` ``# proportionally to the marginal frequencies of the sample.`` ``emmeans``::`[`emmeans`](https://rvlenth.github.io/emmeans/reference/emmeans.html)`(``m``, ``"sex"``, weights ``=`` ``"proportional"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`` ``#> Marginal Means (CI) | sex`` ``#> --------------------------------`` ``#> 197.51 (196.63, 198.39) | female`` ``#> 204.36 (203.49, 205.23) | male`
+\
+`# easystats: Uses G-computation (cloning the dataset to`\
+`# simulate pseudo-randomization).`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"population"``)`\
+`#> Average Counterfactual Predictions`\
+`#> `\
+`#> sex    |               Mean (CI)`\
+`#> --------------------------------`\
+`#> female | 197.51 (196.63, 198.39)`\
+`#> male   | 204.36 (203.49, 205.23)`\
+`#> `\
+`#> Variable predicted: flipper_len`\
+`#> Predictors modulated: sex`\
+`#> Predictors averaged: species`\
+\
+`# marginaleffects: Using the 'variables' argument automatically`\
+`# triggers this counterfactual approach.`\
+`marginaleffects``::`[`avg_predictions`](https://rdrr.io/pkg/marginaleffects/man/predictions.html)`(``m``, variables ``=`` ``"sex"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`\
+`#> Predicted (CI)          |    sex`\
+`#> --------------------------------`\
+`#> 197.51 (196.64, 198.38) | female`\
+`#> 204.36 (203.50, 205.23) |   male`\
+\
+`# emmeans: 'weights = "proportional"' weights the means`\
+`# proportionally to the marginal frequencies of the sample.`\
+`emmeans``::`[`emmeans`](https://rvlenth.github.io/emmeans/reference/emmeans.html)`(``m``, ``"sex"``, weights ``=`` ``"proportional"``)`` ``|>`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``)`\
+`#> Marginal Means (CI)     |    sex`\
+`#> --------------------------------`\
+`#> 197.51 (196.63, 198.39) | female`\
+`#> 204.36 (203.49, 205.23) |   male`

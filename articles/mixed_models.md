@@ -72,7 +72,74 @@ on `Days`, with random intercepts and slopes for `Subject`. Because the
 data is balanced and we have a linear model, results are identical for
 all marginalization methods.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` `[`data`](https://rdrr.io/r/utils/data.html)`(``sleepstudy``, package ``=`` ``"lme4"``)`` ``model`` ``<-`` ``lme4``::`[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Reaction`` ``~`` ``Days`` ``+`` ``(``1`` ``+`` ``Days`` ``|`` ``Subject``)``, data ``=`` ``sleepstudy``)`` `` ``` # `estimate = "typical"`, `re.form = NULL`: a "typical" observation ``` ``# across clusters on average`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"Days"``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> Days | Mean (CI)`` ``#> ------------------------------`` ``#> 0 | 251.41 (237.94, 264.87)`` ``#> 1 | 261.87 (248.48, 275.27)`` ``#> 2 | 272.34 (258.34, 286.34)`` ``#> 3 | 282.81 (267.60, 298.02)`` ``#> 4 | 293.27 (276.39, 310.16)`` ``#> 5 | 303.74 (284.83, 322.65)`` ``#> 6 | 314.21 (293.03, 335.39)`` ``#> 7 | 324.68 (301.05, 348.31)`` ``#> 8 | 335.14 (308.94, 361.35)`` ``#> 9 | 345.61 (316.74, 374.48)`` ``#> `` ``#> Variable predicted: Reaction`` ``#> Predictors modulated: Days`` ``#> Predictors averaged: Subject`` `` ``` # `estimate = "typical"`, `re.form = NA`: a "typical" observation ``` ``` # for a "typical" (average) cluster - `re.form = NA` has no effect here ``` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"Days"``, re.form ``=`` ``NA``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> Days | Mean (CI)`` ``#> ------------------------------`` ``#> 0 | 251.41 (237.94, 264.87)`` ``#> 1 | 261.87 (248.48, 275.27)`` ``#> 2 | 272.34 (258.34, 286.34)`` ``#> 3 | 282.81 (267.60, 298.02)`` ``#> 4 | 293.27 (276.39, 310.16)`` ``#> 5 | 303.74 (284.83, 322.65)`` ``#> 6 | 314.21 (293.03, 335.39)`` ``#> 7 | 324.68 (301.05, 348.31)`` ``#> 8 | 335.14 (308.94, 361.35)`` ``#> 9 | 345.61 (316.74, 374.48)`` ``#> `` ``#> Variable predicted: Reaction`` ``#> Predictors modulated: Days`` ``#> Predictors averaged: Subject`` `` ``# fully marginalized predictions, still same result as above`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"Days"``, estimate ``=`` ``"average"``)`` ``#> Average Predictions`` ``#> `` ``#> Days | Mean (CI)`` ``#> ------------------------------`` ``#> 0 | 251.41 (237.94, 264.87)`` ``#> 1 | 261.87 (248.48, 275.27)`` ``#> 2 | 272.34 (258.34, 286.34)`` ``#> 3 | 282.81 (267.60, 298.02)`` ``#> 4 | 293.27 (276.39, 310.16)`` ``#> 5 | 303.74 (284.83, 322.65)`` ``#> 6 | 314.21 (293.03, 335.39)`` ``#> 7 | 324.68 (301.05, 348.31)`` ``#> 8 | 335.14 (308.94, 361.35)`` ``#> 9 | 345.61 (316.74, 374.48)`` ``#> `` ``#> Variable predicted: Reaction`` ``#> Predictors modulated: Days`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`\
+[`data`](https://rdrr.io/r/utils/data.html)`(``sleepstudy``, package ``=`` ``"lme4"``)`\
+`model`` ``<-`` ``lme4``::`[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Reaction`` ``~`` ``Days`` ``+`` ``(``1`` ``+`` ``Days`` ``|`` ``Subject``)``, data ``=`` ``sleepstudy``)`\
+\
+`` # `estimate = "typical"`, `re.form = NULL`: a "typical" observation ``\
+`# across clusters on average`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"Days"``)`\
+`#> Estimated Marginal Means`\
+`#> `\
+`#> Days |               Mean (CI)`\
+`#> ------------------------------`\
+`#> 0    | 251.41 (237.94, 264.87)`\
+`#> 1    | 261.87 (248.48, 275.27)`\
+`#> 2    | 272.34 (258.34, 286.34)`\
+`#> 3    | 282.81 (267.60, 298.02)`\
+`#> 4    | 293.27 (276.39, 310.16)`\
+`#> 5    | 303.74 (284.83, 322.65)`\
+`#> 6    | 314.21 (293.03, 335.39)`\
+`#> 7    | 324.68 (301.05, 348.31)`\
+`#> 8    | 335.14 (308.94, 361.35)`\
+`#> 9    | 345.61 (316.74, 374.48)`\
+`#> `\
+`#> Variable predicted: Reaction`\
+`#> Predictors modulated: Days`\
+`#> Predictors averaged: Subject`\
+\
+`` # `estimate = "typical"`, `re.form = NA`: a "typical" observation ``\
+`` # for a "typical" (average) cluster - `re.form = NA` has no effect here ``\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"Days"``, re.form ``=`` ``NA``)`\
+`#> Estimated Marginal Means`\
+`#> `\
+`#> Days |               Mean (CI)`\
+`#> ------------------------------`\
+`#> 0    | 251.41 (237.94, 264.87)`\
+`#> 1    | 261.87 (248.48, 275.27)`\
+`#> 2    | 272.34 (258.34, 286.34)`\
+`#> 3    | 282.81 (267.60, 298.02)`\
+`#> 4    | 293.27 (276.39, 310.16)`\
+`#> 5    | 303.74 (284.83, 322.65)`\
+`#> 6    | 314.21 (293.03, 335.39)`\
+`#> 7    | 324.68 (301.05, 348.31)`\
+`#> 8    | 335.14 (308.94, 361.35)`\
+`#> 9    | 345.61 (316.74, 374.48)`\
+`#> `\
+`#> Variable predicted: Reaction`\
+`#> Predictors modulated: Days`\
+`#> Predictors averaged: Subject`\
+\
+`# fully marginalized predictions, still same result as above`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"Days"``, estimate ``=`` ``"average"``)`\
+`#> Average Predictions`\
+`#> `\
+`#> Days |               Mean (CI)`\
+`#> ------------------------------`\
+`#> 0    | 251.41 (237.94, 264.87)`\
+`#> 1    | 261.87 (248.48, 275.27)`\
+`#> 2    | 272.34 (258.34, 286.34)`\
+`#> 3    | 282.81 (267.60, 298.02)`\
+`#> 4    | 293.27 (276.39, 310.16)`\
+`#> 5    | 303.74 (284.83, 322.65)`\
+`#> 6    | 314.21 (293.03, 335.39)`\
+`#> 7    | 324.68 (301.05, 348.31)`\
+`#> 8    | 335.14 (308.94, 361.35)`\
+`#> 9    | 345.61 (316.74, 374.48)`\
+`#> `\
+`#> Variable predicted: Reaction`\
+`#> Predictors modulated: Days`
 
 #### Imbalanced Data
 
@@ -87,7 +154,50 @@ marginalized over a *balanced* grid of random effects levels. In this
 case, setting `re.form = NA` has no effect when we have *linear* mixed
 models.
 
-[`data`](https://rdrr.io/r/utils/data.html)`(``penguins``)`` ``# Add a non-focal categorical covariate to illustrate differences`` ``# in marginalization`` ``penguins``$``body_mass`` ``<-`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(``datawizard``::`[`categorize`](https://easystats.github.io/datawizard/reference/categorize.html)`(``penguins``$``body_mass``)``)`` ``model`` ``<-`` ``lme4``::`[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``bill_len`` ``~`` ``sex`` ``+`` ``body_mass`` ``+`` ``(``1`` ``|`` ``species``)``, data ``=`` ``penguins``)`` `` ``# conditional predictions marginalized over`` ``# a "balanced" grid of random effects`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> sex | Mean (CI)`` ``#> -----------------------------`` ``#> female | 43.34 (37.28, 49.39)`` ``#> male | 46.81 (40.75, 52.86)`` ``#> `` ``#> Variable predicted: bill_len`` ``#> Predictors modulated: sex`` ``#> Predictors averaged: body_mass, species`` `` ``# (fully) marginal predictions`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``, estimate ``=`` ``"average"``)`` ``#> Average Predictions`` ``#> `` ``#> sex | Mean (CI)`` ``#> -----------------------------`` ``#> female | 42.10 (36.04, 48.15)`` ``#> male | 45.85 (39.80, 51.91)`` ``#> `` ``#> Variable predicted: bill_len`` ``#> Predictors modulated: sex`` `` ``# marginal predictions conditioning on a "typical" cluster`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``, estimate ``=`` ``"average"``, re.form ``=`` ``NA``)`` ``#> Average Predictions`` ``#> `` ``#> sex | Mean (CI)`` ``#> -----------------------------`` ``#> female | 43.22 (37.17, 49.28)`` ``#> male | 46.92 (40.87, 52.98)`` ``#> `` ``#> Variable predicted: bill_len`` ``#> Predictors modulated: sex`
+\
+[`data`](https://rdrr.io/r/utils/data.html)`(``penguins``)`\
+`# Add a non-focal categorical covariate to illustrate differences`\
+`# in marginalization`\
+`penguins``$``body_mass`` ``<-`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(``datawizard``::`[`categorize`](https://easystats.github.io/datawizard/reference/categorize.html)`(``penguins``$``body_mass``)``)`\
+`model`` ``<-`` ``lme4``::`[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``bill_len`` ``~`` ``sex`` ``+`` ``body_mass`` ``+`` ``(``1`` ``|`` ``species``)``, data ``=`` ``penguins``)`\
+\
+`# conditional predictions marginalized over`\
+`# a "balanced" grid of random effects`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``)`\
+`#> Estimated Marginal Means`\
+`#> `\
+`#> sex    |            Mean (CI)`\
+`#> -----------------------------`\
+`#> female | 43.34 (37.28, 49.39)`\
+`#> male   | 46.81 (40.75, 52.86)`\
+`#> `\
+`#> Variable predicted: bill_len`\
+`#> Predictors modulated: sex`\
+`#> Predictors averaged: body_mass, species`\
+\
+`# (fully) marginal predictions`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``, estimate ``=`` ``"average"``)`\
+`#> Average Predictions`\
+`#> `\
+`#> sex    |            Mean (CI)`\
+`#> -----------------------------`\
+`#> female | 42.10 (36.04, 48.15)`\
+`#> male   | 45.85 (39.80, 51.91)`\
+`#> `\
+`#> Variable predicted: bill_len`\
+`#> Predictors modulated: sex`\
+\
+`# marginal predictions conditioning on a "typical" cluster`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``, estimate ``=`` ``"average"``, re.form ``=`` ``NA``)`\
+`#> Average Predictions`\
+`#> `\
+`#> sex    |            Mean (CI)`\
+`#> -----------------------------`\
+`#> female | 43.22 (37.17, 49.28)`\
+`#> male   | 46.92 (40.87, 52.98)`\
+`#> `\
+`#> Variable predicted: bill_len`\
+`#> Predictors modulated: sex`
 
 #### Excourse: Technical Details
 
@@ -105,7 +215,13 @@ Technically, `estimate_means(model, "sex")` is equivalent to
 3.  followed by averaging the predictions by the levels of the focal
     predictors.
 
-`dg`` ``<-`` ``insight``::`[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, ``"sex"``, factors ``=`` ``"all"``, include_random ``=`` ``TRUE``)`` ``out`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``predicted ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``, newdata ``=`` ``dg``)``, ``dg``)`` `[`aggregate`](https://rdrr.io/r/stats/aggregate.html)`(``out``$``predicted``, `[`list`](https://rdrr.io/r/base/list.html)`(``sex ``=`` ``out``$``sex``)``, ``mean``)`` ``#> sex x`` ``#> 1 female 43`` ``#> 2 male 47`
+\
+`dg`` ``<-`` ``insight``::`[`get_datagrid`](https://easystats.github.io/insight/reference/get_datagrid.html)`(``model``, ``"sex"``, factors ``=`` ``"all"``, include_random ``=`` ``TRUE``)`\
+`out`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``predicted ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``, newdata ``=`` ``dg``)``, ``dg``)`\
+[`aggregate`](https://rdrr.io/r/stats/aggregate.html)`(``out``$``predicted``, `[`list`](https://rdrr.io/r/base/list.html)`(``sex ``=`` ``out``$``sex``)``, ``mean``)`\
+`#>      sex  x`\
+`#> 1 female 43`\
+`#> 2   male 47`
 
 `estimate_means(model, "sex", estimate = "average")` is equivalent to
 
@@ -113,7 +229,12 @@ Technically, `estimate_means(model, "sex")` is equivalent to
 2.  followed by averaging the predictions by the levels of the focal
     predictors.
 
-`out`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``predicted ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``)``, ``insight``::`[`get_data`](https://easystats.github.io/insight/reference/get_data.html)`(``model``)``)`` `[`aggregate`](https://rdrr.io/r/stats/aggregate.html)`(``out``$``predicted``, `[`list`](https://rdrr.io/r/base/list.html)`(``sex ``=`` ``out``$``sex``)``, ``mean``)`` ``#> sex x`` ``#> 1 female 42`` ``#> 2 male 46`
+\
+`out`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``predicted ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``model``)``, ``insight``::`[`get_data`](https://easystats.github.io/insight/reference/get_data.html)`(``model``)``)`\
+[`aggregate`](https://rdrr.io/r/stats/aggregate.html)`(``out``$``predicted``, `[`list`](https://rdrr.io/r/base/list.html)`(``sex ``=`` ``out``$``sex``)``, ``mean``)`\
+`#>      sex  x`\
+`#> 1 female 42`\
+`#> 2   male 46`
 
 ### Generalized linear mixed models
 
@@ -126,7 +247,42 @@ for `camper = 1`) compared to conditional predictions (using
 `re.form = NA`), which are lower (0.66 for `camper = 0` and 1.68 for
 `camper = 1`).
 
-[`data`](https://rdrr.io/r/utils/data.html)`(``"fish"``, package ``=`` ``"insight"``)`` ``model`` ``<-`` ``lme4``::`[`glmer`](https://rdrr.io/pkg/lme4/man/glmer.html)`(`` `` ``count`` ``~`` ``child`` ``+`` ``camper`` ``+`` ``(``1`` ``|`` ``persons``)``,`` `` data ``=`` ``fish``,`` `` family ``=`` `[`poisson`](https://rdrr.io/r/stats/family.html)`(``)`` ``)`` `` ``# conditional predictions marginalized over`` ``# a "balanced" grid of random effects`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> camper | Mean (CI)`` ``#> ---------------------------`` ``#> 0 | 1.26 (-0.28, 2.79)`` ``#> 1 | 3.21 (-0.68, 7.10)`` ``#> `` ``#> Variable predicted: count`` ``#> Predictors modulated: camper`` ``#> Predictors averaged: child (0.68), persons (1)`` ``#> Predictions are on the response-scale.`` `` ``# conditional predictions for a "typical" cluster`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, re.form ``=`` ``NA``)`` ``#> Estimated Marginal Means`` ``#> `` ``#> camper | Mean (CI)`` ``#> ---------------------------`` ``#> 0 | 0.66 (-0.14, 1.46)`` ``#> 1 | 1.68 (-0.36, 3.71)`` ``#> `` ``#> Variable predicted: count`` ``#> Predictors modulated: camper`` ``#> Predictors averaged: child (0.68), persons (1)`` ``#> Predictions are on the response-scale.`
+\
+[`data`](https://rdrr.io/r/utils/data.html)`(``"fish"``, package ``=`` ``"insight"``)`\
+`model`` ``<-`` ``lme4``::`[`glmer`](https://rdrr.io/pkg/lme4/man/glmer.html)`(`\
+`  ``count`` ``~`` ``child`` ``+`` ``camper`` ``+`` ``(``1`` ``|`` ``persons``)``,`\
+`  data ``=`` ``fish``,`\
+`  family ``=`` `[`poisson`](https://rdrr.io/r/stats/family.html)`(``)`\
+`)`\
+\
+`# conditional predictions marginalized over`\
+`# a "balanced" grid of random effects`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``)`\
+`#> Estimated Marginal Means`\
+`#> `\
+`#> camper |          Mean (CI)`\
+`#> ---------------------------`\
+`#> 0      | 1.26 (-0.28, 2.79)`\
+`#> 1      | 3.21 (-0.68, 7.10)`\
+`#> `\
+`#> Variable predicted: count`\
+`#> Predictors modulated: camper`\
+`#> Predictors averaged: child (0.68), persons (1)`\
+`#> Predictions are on the response-scale.`\
+\
+`# conditional predictions for a "typical" cluster`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, re.form ``=`` ``NA``)`\
+`#> Estimated Marginal Means`\
+`#> `\
+`#> camper |          Mean (CI)`\
+`#> ---------------------------`\
+`#> 0      | 0.66 (-0.14, 1.46)`\
+`#> 1      | 1.68 (-0.36, 3.71)`\
+`#> `\
+`#> Variable predicted: count`\
+`#> Predictors modulated: camper`\
+`#> Predictors averaged: child (0.68), persons (1)`\
+`#> Predictions are on the response-scale.`
 
 When using `estimate = "average"` to average across all observations and
 clusters, the differences between marginal and conditional predictions
@@ -136,7 +292,32 @@ higher means (1.52 and 4.54) than conditional predictions (1.20 and
 observations based on the default `estimate` option, as shown in the
 previous output.
 
-`# (fully) marginal predictions`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, estimate ``=`` ``"average"``)`` ``#> Average Predictions`` ``#> `` ``#> camper | Mean (CI)`` ``#> ----------------------------`` ``#> 0 | 1.52 (-0.33, 3.38)`` ``#> 1 | 4.54 (-0.95, 10.03)`` ``#> `` ``#> Variable predicted: count`` ``#> Predictors modulated: camper`` ``#> Predictions are on the response-scale.`` `` ``# marginal predictions, conditioning on a "typical" cluster`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, estimate ``=`` ``"average"``, re.form ``=`` ``NA``)`` ``#> Average Predictions`` ``#> `` ``#> camper | Mean (CI)`` ``#> ---------------------------`` ``#> 0 | 1.20 (-0.26, 2.66)`` ``#> 1 | 3.19 (-0.67, 7.04)`` ``#> `` ``#> Variable predicted: count`` ``#> Predictors modulated: camper`` ``#> Predictions are on the response-scale.`
+\
+`# (fully) marginal predictions`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, estimate ``=`` ``"average"``)`\
+`#> Average Predictions`\
+`#> `\
+`#> camper |           Mean (CI)`\
+`#> ----------------------------`\
+`#> 0      | 1.52 (-0.33,  3.38)`\
+`#> 1      | 4.54 (-0.95, 10.03)`\
+`#> `\
+`#> Variable predicted: count`\
+`#> Predictors modulated: camper`\
+`#> Predictions are on the response-scale.`\
+\
+`# marginal predictions, conditioning on a "typical" cluster`\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, estimate ``=`` ``"average"``, re.form ``=`` ``NA``)`\
+`#> Average Predictions`\
+`#> `\
+`#> camper |          Mean (CI)`\
+`#> ---------------------------`\
+`#> 0      | 1.20 (-0.26, 2.66)`\
+`#> 1      | 3.19 (-0.67, 7.04)`\
+`#> `\
+`#> Variable predicted: count`\
+`#> Predictors modulated: camper`\
+`#> Predictions are on the response-scale.`
 
 This highlights that in GLMMs, the choice between marginal and
 conditional predictions significantly impacts the estimated means and,

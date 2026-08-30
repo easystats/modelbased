@@ -33,7 +33,9 @@ this example simple, we have only included `time` as a random slope.
 
 ## Sample data used in this vignette
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`parameters`](https://easystats.github.io/parameters/)`)`` `[`data`](https://rdrr.io/r/utils/data.html)`(``"qol_cancer"``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`parameters`](https://easystats.github.io/parameters/)`)`\
+[`data`](https://rdrr.io/r/utils/data.html)`(``"qol_cancer"``)`
 
 - Variables:
   - `QoL` : Response (quality of life of patient)
@@ -50,7 +52,9 @@ of centering variables called
 [*demeaning*](https://easystats.github.io/datawizard/reference/demean.html).
 This “separates” the within-effect from a between-effect of a predictor.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`datawizard`](https://easystats.github.io/datawizard/)`)`` ``qol_cancer`` ``<-`` `[`demean`](https://easystats.github.io/datawizard/reference/demean.html)`(``qol_cancer``, select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4"``, ``"QoL"``)``, by ``=`` ``"ID"``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`datawizard`](https://easystats.github.io/datawizard/)`)`\
+`qol_cancer`` ``<-`` `[`demean`](https://easystats.github.io/datawizard/reference/demean.html)`(``qol_cancer``, select ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4"``, ``"QoL"``)``, by ``=`` ``"ID"``)`
 
 Now we have:
 
@@ -64,7 +68,15 @@ Now we have:
 First, we start with calculating the within- and between-effects from
 `phq4`, before we move on to investigate the context effects.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`lme4`](https://github.com/lme4/lme4/)`)`` ``mixed`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(`` `` ``QoL`` ``~`` ``time`` ``+`` ``phq4_within`` ``+`` ``phq4_between`` ``+`` ``education`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`` `` data ``=`` ``qol_cancer`` ``)`` ``# effects = "fixed" will not display random effects, but split the`` ``# fixed effects into its between- and within-effects components.`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``mixed``, effects ``=`` ``"fixed"``)`` ``|>`` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`lme4`](https://github.com/lme4/lme4/)`)`\
+`mixed`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(`\
+`  ``QoL`` ``~`` ``time`` ``+`` ``phq4_within`` ``+`` ``phq4_between`` ``+`` ``education`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`\
+`  data ``=`` ``qol_cancer`\
+`)`\
+`# effects = "fixed" will not display random effects, but split the`\
+`# fixed effects into its between- and within-effects components.`\
+[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``mixed``, effects ``=`` ``"fixed"``)`` ``|>`` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
 
 | Parameter        | Coefficient | SE   | 95% CI         | t(554) | p       |
 |------------------|-------------|------|----------------|--------|---------|
@@ -75,7 +87,7 @@ First, we start with calculating the within- and between-effects from
 | education (mid)  | 5.01        | 2.35 | (0.40, 9.62)   | 2.14   | 0.033   |
 | education (high) | 5.52        | 2.75 | (0.11, 10.93)  | 2.00   | 0.046   |
 
-Model Summary {#tinytable_ymim7ioztqhwxl7p1fxj .table .tinytable
+Model Summary {#tinytable_l9lg5udojf9uewuwn47g .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -130,11 +142,14 @@ environment in which they live.
 To test whether the within- and between-effects are significantly
 different from each other, we can estimate their contrast:
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``mixed``, `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``)``)`` ``|>`` `` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`modelbased`](https://easystats.github.io/modelbased/)`)`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``mixed``, `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``)``)`` ``|>`\
+`  `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_sjftq54b7zevwykdzsfd .table
+Marginal Contrasts Analysis {#tinytable_mu8ddr11xsa2o01jvgqq .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -162,7 +177,12 @@ extend our model by adding interaction terms between the time of
 measurement (`time`) and our two centered variables (`phq4_within` and
 `phq4_between`).
 
-`mixed`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(`` `` ``QoL`` ``~`` ``time`` ``*`` ``(``phq4_within`` ``+`` ``phq4_between``)`` ``+`` ``education`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`` `` data ``=`` ``qol_cancer`` ``)`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``mixed``, effects ``=`` ``"fixed"``)`` ``|>`` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
+\
+`mixed`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(`\
+`  ``QoL`` ``~`` ``time`` ``*`` ``(``phq4_within`` ``+`` ``phq4_between``)`` ``+`` ``education`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`\
+`  data ``=`` ``qol_cancer`\
+`)`\
+[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``mixed``, effects ``=`` ``"fixed"``)`` ``|>`` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
 
 | Parameter           | Coefficient | SE   | 95% CI         | t(552) | p       |
 |---------------------|-------------|------|----------------|--------|---------|
@@ -175,7 +195,7 @@ measurement (`time`) and our two centered variables (`phq4_within` and
 | time × phq4 within  | 0.33        | 0.61 | (-0.87, 1.52)  | 0.54   | 0.592   |
 | time × phq4 between | -0.66       | 0.37 | (-1.39, 0.07)  | -1.77  | 0.077   |
 
-Model Summary {#tinytable_01jdmgsn93cmr9bte12v .table .tinytable
+Model Summary {#tinytable_6yxvgcqp8ne8a3yr4yvy .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -201,7 +221,8 @@ These temporal dynamics can be best understood visually using Estimated
 Marginal Means. The generated plots confirm the statistical results from
 the table very clearly.
 
-[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``mixed``, `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"phq4_within=[sd]"``)``)`` ``|>`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
+\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``mixed``, `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"phq4_within=[sd]"``)``)`` ``|>`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
 ![](practical_context_effect_files/figure-html/unnamed-chunk-8-1.png)
 
@@ -212,7 +233,8 @@ visualizes the lack of interaction: An acute increase in psychological
 symptoms (shifting to the blue line) depresses the quality of life
 uniformly across all time points.
 
-[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``mixed``, `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"phq4_between=[sd]"``)``)`` ``|>`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
+\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``mixed``, `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"phq4_between=[sd]"``)``)`` ``|>`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
 ![](practical_context_effect_files/figure-html/unnamed-chunk-9-1.png)
 
@@ -233,19 +255,23 @@ look at the marginal effects (slopes) of both the within- and
 between-components separately at each time point. This helps us
 understand the underlying dynamics.
 
-`# average marginal effect of within-effect at each time point`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``mixed``, ``"phq4_within"``, by ``=`` ``"time"``)`` ``|>`` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
+\
+`# average marginal effect of within-effect at each time point`\
+[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``mixed``, ``"phq4_within"``, by ``=`` ``"time"``)`` ``|>`` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
 
 [TABLE]
 
-Estimated Marginal Effects {#tinytable_jnqlobkueq636vikjbv9 .table
+Estimated Marginal Effects {#tinytable_yubt2h8kwc886hd1iyo8 .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
-`# average marginal effect of between-effect at each time point`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``mixed``, ``"phq4_between"``, by ``=`` ``"time"``)`` ``|>`` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
+\
+`# average marginal effect of between-effect at each time point`\
+[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``mixed``, ``"phq4_between"``, by ``=`` ``"time"``)`` ``|>`` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
 
 [TABLE]
 
-Estimated Marginal Effects {#tinytable_rjn9191h2kbhsurxk99o .table
+Estimated Marginal Effects {#tinytable_h6rt5m5840nabbgf8xpj .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -260,11 +286,17 @@ Because these two effects drift further apart over time, we can now
 formally test their difference — the context effect — by calculating the
 marginal contrasts at each specific time point.
 
-[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``mixed``,`` `` `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``)``,`` `` by ``=`` ``"time"`` ``)`` ``|>`` `` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
+\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``mixed``,`\
+`  `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``)``,`\
+`  by ``=`` ``"time"`\
+`)`` ``|>`\
+`  `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_rap9v1fkg81m2e1pjm8h .table
+Marginal Contrasts Analysis {#tinytable_5prtrta8u2at6yvys3pd .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -301,11 +333,16 @@ over time is statistically significant. We can do this by computing
 pairwise comparisons of the context effect across the different time
 points.
 
-[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``mixed``,`` `` `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``, ``"time"``)`` ``)`` ``|>`` `` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
+\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``mixed``,`\
+`  `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``, ``"time"``)`\
+`)`` ``|>`\
+`  `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_bokbaxg43eulcbpnh6b3 .table
+Marginal Contrasts Analysis {#tinytable_1r2ypqfqy865jurtzfl7 .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -334,11 +371,13 @@ more appropriate to evaluate the average contrast of the slopes across
 the entire study period. To do this, we calculate the contrast between
 the within- and between-effects without stratifying by time.
 
-[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``mixed``, `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``)``)`` ``|>`` `` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
+\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``mixed``, `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``)``)`` ``|>`\
+`  `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_cuii49eml5rnbb9md79t .table
+Marginal Contrasts Analysis {#tinytable_c6yslpicos1aiwbus2r4 .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -368,11 +407,21 @@ To formally test this, we extend our model to include a three-way
 interaction between `time`, `education`, and our centered `phq4`
 variables.
 
-`mixed`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(`` `` ``QoL`` ``~`` ``time`` ``*`` ``education`` ``*`` ``(``phq4_within`` ``+`` ``phq4_between``)`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`` `` data ``=`` ``qol_cancer`` ``)`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``mixed``,`` `` `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``)``,`` `` by ``=`` ``"education"`` ``)`` ``|>`` `` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
+\
+`mixed`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(`\
+`  ``QoL`` ``~`` ``time`` ``*`` ``education`` ``*`` ``(``phq4_within`` ``+`` ``phq4_between``)`` ``+`` ``(``1`` ``+`` ``time`` ``|`` ``ID``)``,`\
+`  data ``=`` ``qol_cancer`\
+`)`\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``mixed``,`\
+`  `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``)``,`\
+`  by ``=`` ``"education"`\
+`)`` ``|>`\
+`  `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_hxgtpbjlqhzivt0es17b .table
+Marginal Contrasts Analysis {#tinytable_lwspzwrledrzbsz3c8xz .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -424,11 +473,16 @@ the educational levels.
 We can do this by adding the grouping variable (`education`) as a third
 term to our contrast statement.
 
-[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`` `` ``mixed``,`` `` `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``, ``"education"``)`` ``)`` ``|>`` `` `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
+\
+[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
+`  ``mixed``,`\
+`  `[`c`](https://rdrr.io/r/base/c.html)`(``"phq4_within"``, ``"phq4_between"``, ``"education"``)`\
+`)`` ``|>`\
+`  `[`display`](https://easystats.github.io/insight/reference/display.html)`(``format ``=`` ``"tt"``)`
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_624z6ikb9qx02kfil58y .table
+Marginal Contrasts Analysis {#tinytable_w7u4p3wkm6s9zrg739l5 .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 

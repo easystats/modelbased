@@ -20,7 +20,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/easystats/modelbased/blob/v0.17.0/inst/CITATION)
+[`inst/CITATION`](https://github.com/easystats/modelbased/blob/main/inst/CITATION)
 
 Makowski, D., Ben-Shachar, M. S., Wiernik, B. M., Patil, I., Thériault,
 R., & Lüdecke, D. (2025). modelbased: An R package to make the most out
@@ -28,11 +28,14 @@ of your statistical models through marginal means, marginal effects, and
 model predictions. Journal of Open Source Software, 10(109), 7969.
 https://doi.org/10.21105/joss.07969
 
-@Article{modelbasedPackage, title = {{modelbased}: An {R} package to
-make the most out of your statistical models through marginal means,
-marginal effects, and model predictions.}, volume = {10}, doi =
-{10.21105/joss.07969}, number = {109}, journal = {Journal of Open Source
-Software}, author = {Dominique Makowski and Mattan S. Ben-Shachar and
-Brenton M. Wiernik and Indrajeet Patil and Rémi Thériault and Daniel
-Lüdecke}, year = {2025}, pages = {7969}, url =
-{https://joss.theoj.org/papers/10.21105/joss.07969}, }
+@Article{modelbasedPackage,\
+  title = {{modelbased}: An {R} package to make the most out of your statistical models through marginal means, marginal effects, and model predictions.},\
+  volume = {10},\
+  doi = {10.21105/joss.07969},\
+  number = {109},\
+  journal = {Journal of Open Source Software},\
+  author = {Dominique Makowski and Mattan S. Ben-Shachar and Brenton M. Wiernik and Indrajeet Patil and Rémi Thériault and Daniel Lüdecke},\
+  year = {2025},\
+  pages = {7969},\
+  url = {https://joss.theoj.org/papers/10.21105/joss.07969},\
+}

@@ -14,7 +14,21 @@ analysis easier**.
 Let’s say we are interested in the relationship between *y* and *x* in
 the following dataset:
 
-`# Package to fit GAMs`` `[`library`](https://rdrr.io/r/base/library.html)`(``mgcv``)`` `` ``# Tidyverse`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`` `` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``333``)`` `` ``# Generate data`` ``data`` ``<-`` ``bayestestR``::`[`simulate_correlation`](https://easystats.github.io/bayestestR/reference/simulate_correlation.html)`(``r ``=`` ``0.85``, n ``=`` ``1000``, names ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"y"``, ``"x"``)``, mean ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``100``, ``0``)``, sd ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``15``, ``1``)``)`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``data``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x``, ``y``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`
+\
+`# Package to fit GAMs`\
+[`library`](https://rdrr.io/r/base/library.html)`(``mgcv``)`\
+\
+`# Tidyverse`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`easystats`](https://easystats.github.io/easystats/)`)`\
+\
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``333``)`\
+\
+`# Generate data`\
+`data`` ``<-`` ``bayestestR``::`[`simulate_correlation`](https://easystats.github.io/bayestestR/reference/simulate_correlation.html)`(``r ``=`` ``0.85``, n ``=`` ``1000``, names ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"y"``, ``"x"``)``, mean ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``100``, ``0``)``, sd ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``15``, ``1``)``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``data``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x``, ``y``)``)`` ``+`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-2-1.png)
 
@@ -23,7 +37,9 @@ straightforward thing to do is to run a **correlation analysis**” (they
 might not be wrong, but for the sake of the demonstration, we will push
 things further here). Let’s start with that:
 
-`rez`` ``<-`` `[`cor.test`](https://rdrr.io/r/stats/cor.test.html)`(``data``$``y``, ``data``$``x``)`` ``report``::`[`report`](https://easystats.github.io/report/reference/report.html)`(``rez``)`
+\
+`rez`` ``<-`` `[`cor.test`](https://rdrr.io/r/stats/cor.test.html)`(``data``$``y``, ``data``$``x``)`\
+`report``::`[`report`](https://easystats.github.io/report/reference/report.html)`(``rez``)`
 
     > Effect sizes were labelled following Funder's (2019) recommendations.
     > 
@@ -46,10 +62,15 @@ estimated by the regression correspond to.
 Let’s fit a linear regression model, visualize it, and describe its
 parameters.
 
-`model_lm`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``y`` ``~`` ``x``, data ``=`` ``data``)`` `` ``modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model_lm``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
+\
+`model_lm`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``y`` ``~`` ``x``, data ``=`` ``data``)`\
+\
+`modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model_lm``)`` ``|>`\
+`  `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-5-1.png)
 
+\
 `parameters``::`[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model_lm``)`
 
     > Parameter   | Coefficient |   SE |          95% CI | t(998) |      p
@@ -80,10 +101,15 @@ we need to specify a **smooth** term
 ([`s()`](https://rdrr.io/pkg/mgcv/man/s.html)) for the variable for
 which we want to estimate the (non-necessarily linear) relationship.
 
-`model_gam`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``y`` ``~`` `[`s`](https://rdrr.io/pkg/mgcv/man/s.html)`(``x``)``, data ``=`` ``data``)`` `` ``modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model_gam``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`
+\
+`model_gam`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``y`` ``~`` `[`s`](https://rdrr.io/pkg/mgcv/man/s.html)`(``x``)``, data ``=`` ``data``)`\
+\
+`modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model_gam``)`` ``|>`\
+`  `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-6-1.png)
 
+\
 `parameters``::`[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model_gam``)`
 
     > # Fixed Effects
@@ -150,10 +176,15 @@ To compute the derivative, we can use the
 function, and specify that we want to know: the trend of *x* **over the
 course of** (“at”) itself.
 
-`deriv`` ``<-`` ``modelbased``::`[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model_lm``, trend ``=`` ``"x"``, by ``=`` ``"x"``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``)`` ``+`` ``# add a dashed line at 0 to show absence of effect`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
+\
+`deriv`` ``<-`` ``modelbased``::`[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model_lm``, trend ``=`` ``"x"``, by ``=`` ``"x"``)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``)`` ``+`` ``# add a dashed line at 0 to show absence of effect`\
+`  `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-8-1.png)
 
+\
 [`summary`](https://rdrr.io/r/base/summary.html)`(``deriv``)`
 
     > Johnson-Neymann Intervals
@@ -181,10 +212,15 @@ derivative. And guess what… it can be applied to **any model**!
 
 Such as GAMs. Lets’ to the same for our GAM model:
 
-`deriv`` ``<-`` ``modelbased``::`[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model_gam``, trend ``=`` ``"x"``, by ``=`` ``"x"``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``, line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`` ``+`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
+\
+`deriv`` ``<-`` ``modelbased``::`[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model_gam``, trend ``=`` ``"x"``, by ``=`` ``"x"``)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``, line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`` ``+`\
+`  `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-9-1.png)
 
+\
 [`summary`](https://rdrr.io/r/base/summary.html)`(``deriv``)`
 
     > Johnson-Neymann Intervals
@@ -213,16 +249,26 @@ However, it is **very common to have difficult-to-interpret parameters
 in normal regression models too!** Let’s take the case of a **polynomial
 regression**, that we could use to model the following data:
 
-`data``$``y2`` ``<-`` ``data``$``x``^``2`` ``+`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(`[`nrow`](https://rdrr.io/r/base/nrow.html)`(``data``)``, sd ``=`` ``0.5``)`` `` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``data``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x``, ``y2``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`
+\
+`data``$``y2`` ``<-`` ``data``$``x``^``2`` ``+`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(`[`nrow`](https://rdrr.io/r/base/nrow.html)`(``data``)``, sd ``=`` ``0.5``)`\
+\
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``data``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x``, ``y2``)``)`` ``+`\
+`  `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-10-1.png)
 
 Let us fit a polynomial regression:
 
-`model_poly`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``y2`` ``~`` `[`poly`](https://rdrr.io/r/stats/poly.html)`(``x``, ``2``)``, data ``=`` ``data``)`` `` ``# Length is increased to have a smoother line`` ``modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model_poly``, length ``=`` ``30``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
+\
+`model_poly`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``y2`` ``~`` `[`poly`](https://rdrr.io/r/stats/poly.html)`(``x``, ``2``)``, data ``=`` ``data``)`\
+\
+`# Length is increased to have a smoother line`\
+`modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model_poly``, length ``=`` ``30``)`` ``|>`\
+`  `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-11-1.png)
 
+\
 `parameters``::`[`parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model_poly``)`
 
     > Parameter      | Coefficient |   SE |         95% CI | t(997) |      p
@@ -239,10 +285,15 @@ about how polynomials work. **Ain’t nobody got time for dat’!**
 Instead, we can rely on our *good ol’* derivatives to obtain the “linear
 slope” at every point of the curve.
 
-`deriv`` ``<-`` ``modelbased``::`[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model_poly``, trend ``=`` ``"x"``, by ``=`` ``"x"``, length ``=`` ``100``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``)`` ``+`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
+\
+`deriv`` ``<-`` ``modelbased``::`[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model_poly``, trend ``=`` ``"x"``, by ``=`` ``"x"``, length ``=`` ``100``)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``)`` ``+`\
+`  `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-12-1.png)
 
+\
 [`summary`](https://rdrr.io/r/base/summary.html)`(``deriv``)`
 
     > Johnson-Neymann Intervals
@@ -270,14 +321,23 @@ not straightforward to interpret.**
 But, if you’ve been attentive up to this point, you might wonder: **why
 bother with polynomials at all when GAMs can do the trick?**
 
-`model_gam2`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``y2`` ``~`` `[`s`](https://rdrr.io/pkg/mgcv/man/s.html)`(``x``)``, data ``=`` ``data``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model_gam2``, length ``=`` ``100``)``, line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`
+\
+`model_gam2`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``y2`` ``~`` `[`s`](https://rdrr.io/pkg/mgcv/man/s.html)`(``x``)``, data ``=`` ``data``)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model_gam2``, length ``=`` ``100``)``, line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-13-1.png)
 
-`# Increase precision`` ``deriv`` ``<-`` ``modelbased``::`[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model_gam2``, trend ``=`` ``"x"``, by ``=`` ``"x"``, length ``=`` ``100``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``, line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`` ``+`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
+\
+`# Increase precision`\
+`deriv`` ``<-`` ``modelbased``::`[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model_gam2``, trend ``=`` ``"x"``, by ``=`` ``"x"``, length ``=`` ``100``)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``, line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`` ``+`\
+`  `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-13-2.png)
 
+\
 [`summary`](https://rdrr.io/r/base/summary.html)`(``deriv``)`
 
     > Johnson-Neymann Intervals
@@ -298,11 +358,20 @@ around 0.
 
 What about *3rd-degree-type* relationships? It works the same way:
 
-`data``$``y3`` ``<-`` ``data``$``x``^``3`` ``+`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(`[`nrow`](https://rdrr.io/r/base/nrow.html)`(``data``)``, sd ``=`` ``1``)`` `` ``model_gam3`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``y3`` ``~`` `[`s`](https://rdrr.io/pkg/mgcv/man/s.html)`(``x``)``, data ``=`` ``data``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model_gam3``, length ``=`` ``100``)``, line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`
+\
+`data``$``y3`` ``<-`` ``data``$``x``^``3`` ``+`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(`[`nrow`](https://rdrr.io/r/base/nrow.html)`(``data``)``, sd ``=`` ``1``)`\
+\
+`model_gam3`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``y3`` ``~`` `[`s`](https://rdrr.io/pkg/mgcv/man/s.html)`(``x``)``, data ``=`` ``data``)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``modelbased``::`[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model_gam3``, length ``=`` ``100``)``, line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-14-1.png)
 
-`deriv`` ``<-`` ``modelbased``::`[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model_gam3``, trend ``=`` ``"x"``, by ``=`` ``"x"``, length ``=`` ``100``)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``, line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`` ``+`` `` `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
+\
+`deriv`` ``<-`` ``modelbased``::`[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``model_gam3``, trend ``=`` ``"x"``, by ``=`` ``"x"``, length ``=`` ``100``)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``deriv``, line ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``color ``=`` ``"blue"``)``)`` ``+`\
+`  `[`geom_hline`](https://ggplot2.tidyverse.org/reference/geom_abline.html)`(``yintercept ``=`` ``0``, linetype ``=`` ``"dashed"``)`
 
 ![](derivatives_files/figure-html/unnamed-chunk-14-2.png)
 
