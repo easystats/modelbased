@@ -309,7 +309,7 @@ strata_residuals
 plot(strata_residuals)
 ```
 
-As expected (because the PCV is 1, indicating we found no multiplicative effects), als strata-level residuals are close to zero.
+As expected (because the PCV is 1, indicating we found no multiplicative effects), all strata-level residuals are close to zero.
 
 ## 7. MAIHDA and logistic regression models
 
