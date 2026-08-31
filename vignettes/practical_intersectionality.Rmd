@@ -8,7 +8,7 @@ vignette: >
 bibliography: bibliography.bib
 ---
 
-```{r set-options, echo = FALSE}
+```{r set-options, echo = FALSE, warning=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
