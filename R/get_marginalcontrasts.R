@@ -626,11 +626,11 @@ get_marginalcontrasts <- function(
   new_b_letters <- paste0("b", letters[new_b_numbers])
   # first, numbers to letters
   for (i in seq_along(b)) {
-    comparison <- gsub(b[i], new_b_letters[i], comparison, fixed = TRUE)
+    comparison <- gsub(paste0("\\<", b[i], "\\>"), new_b_letters[i], comparison)
   }
   # next, letters to new numbers
   for (i in seq_along(b)) {
-    comparison <- gsub(new_b_letters[i], new_b[i], comparison, fixed = TRUE)
+    comparison <- gsub(paste0("\\<", new_b_letters[i], "\\>"), new_b[i], comparison)
   }
   comparison
 }
