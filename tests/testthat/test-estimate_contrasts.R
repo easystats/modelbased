@@ -901,6 +901,8 @@ test_that("estimate_contrasts - custom comparisons, validate against marginaleff
 
   m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
 
+  # this produces more than 9 rows - make sure that reordering works, and "b1"
+  # and "b10" are not incorrectly re-assigned, because both start with "b1"
   out1 <- estimate_contrasts(
     m,
     c("c172code", "e42dep"),
