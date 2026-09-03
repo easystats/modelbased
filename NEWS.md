@@ -1,3 +1,12 @@
+# modelbased (devel)
+
+## Bug fixes
+
+* Fixed issue in `estimate_contrasts()` with wrong assignment of estimates in
+  custom comparisons (e.g., when `comparison = "(b1 - b12) = (b4 - b18)"`),
+  when some of the indexed coefficients contained the same digit (in this case,
+  `1` in `b1` and `b12`).
+
 # modelbased 0.17.0
 
 ## Breaking Changes

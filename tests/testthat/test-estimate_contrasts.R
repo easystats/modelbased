@@ -894,6 +894,27 @@ test_that("estimate_contrasts - marginaleffects, comparisons, validate against p
 })
 
 
+test_that("estimate_contrasts - custom comparisons, validate against marginaleffects for larger b-index", {
+  data(efc, package = "modelbased")
+  efc$c172code <- as.factor(efc$c172code)
+  efc$e42dep <- as.factor(efc$e42dep)
+
+  m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
+
+  out1 <- estimate_contrasts(
+    m,
+    c("c172code", "e42dep"),
+    comparison = "(b1 - b10) = (b2 - b12)"
+  )
+  out2 <- suppressWarnings(marginaleffects::avg_predictions(
+    m,
+    by = c("c172code", "e42dep"),
+    hypothesis = "(b1 - b4) = (b5 - b12)"
+  ))
+  expect_equal(out1$Difference, out2$estimate, tolerance = 1e-4)
+})
+
+
 test_that("estimate_contrasts - marginaleffects vs emmeans", {
   data(iris)
   dat <- iris
