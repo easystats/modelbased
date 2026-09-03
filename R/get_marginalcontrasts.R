@@ -619,11 +619,21 @@ get_marginalcontrasts <- function(
   # these are the new numbers of the b-values
   new_b_numbers <- match(old_b_numbers, datagrid$.rowid)
   new_b <- paste0("b", new_b_numbers)
+
   # we need to replace all occurences of "b" in comparison with "new_b".
   # however, to avoid overwriting already replaced values with "gsub()", we
   # first replace with a non-existing pattern "new_b_letters", which we will
   # replace with "new_b" in a second step
-  new_b_letters <- paste0("b", letters[new_b_numbers])
+
+  # first, generate enough combinations of unique letters, in case we have
+  # more than 26 rows of estimates
+  many_letters <- datawizard::data_unite(
+    expand.grid(list(letters, LETTERS)),
+    new_column = "alphabet",
+    separator = ""
+  )[[1]]
+
+  new_b_letters <- paste0("b", many_letters[new_b_numbers])
   # first, numbers to letters
   for (i in seq_along(b)) {
     comparison <- gsub(paste0("\\<", b[i], "\\>"), new_b_letters[i], comparison)
