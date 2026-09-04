@@ -379,18 +379,18 @@ first ten rows for demonstrating purpose.
 `)``[``1``:``10``, ``]`\
 `#> Averaged Contrasts Analysis`\
 `#> `\
-`#> Level1             | Level2        |      Difference (CI) |      p`\
-`#> ------------------------------------------------------------------`\
-`#> Male, no, 41-64    | Male, no, -40 | -0.30 (-0.30, -0.30) | <0.001`\
-`#> Male, no, 65++     | Male, no, -40 | -0.83 (-0.83, -0.83) | <0.001`\
-`#> Male, yes, -40     | Male, no, -40 |  0.88 ( 0.88,  0.88) | <0.001`\
-`#> Male, yes, 41-64   | Male, no, -40 |  0.23 ( 0.23,  0.23) | <0.001`\
-`#> Male, yes, 65++    | Male, no, -40 |  0.10 ( 0.10,  0.10) | <0.001`\
-`#> Female, no, -40    | Male, no, -40 | -0.07 (-0.07, -0.07) | <0.001`\
-`#> Female, no, 41-64  | Male, no, -40 | -1.49 (-1.49, -1.49) | <0.001`\
-`#> Female, no, 65++   | Male, no, -40 | -1.71 (-1.71, -1.71) | <0.001`\
-`#> Female, yes, -40   | Male, no, -40 |  0.79 ( 0.79,  0.79) | <0.001`\
-`#> Female, yes, 41-64 | Male, no, -40 | -1.15 (-1.15, -1.15) | <0.001`\
+`#> Level1             | Level2        | Difference (CI)`\
+`#> ----------------------------------------------------`\
+`#> Male, no, 41-64    | Male, no, -40 |           -0.30`\
+`#> Male, no, 65++     | Male, no, -40 |           -0.83`\
+`#> Male, yes, -40     | Male, no, -40 |            0.88`\
+`#> Male, yes, 41-64   | Male, no, -40 |            0.23`\
+`#> Male, yes, 65++    | Male, no, -40 |            0.10`\
+`#> Female, no, -40    | Male, no, -40 |           -0.07`\
+`#> Female, no, 41-64  | Male, no, -40 |           -1.49`\
+`#> Female, no, 65++   | Male, no, -40 |           -1.71`\
+`#> Female, yes, -40   | Male, no, -40 |            0.79`\
+`#> Female, yes, 41-64 | Male, no, -40 |           -1.15`\
 `#> `\
 `#> Variable predicted: qol`\
 `#> Predictors contrasted: gender, employed, age`\
@@ -411,26 +411,26 @@ of the remaining predictors.
 `)`\
 `#> Averaged Contrasts Analysis`\
 `#> `\
-`#> Level1      | Level2     | age   |      Difference (CI) |      p`\
-`#> ----------------------------------------------------------------`\
-`#> Male, yes   | Male, no   | -40   |  0.88 ( 0.88,  0.88) | <0.001`\
-`#> Female, no  | Male, no   | -40   | -0.07 (-0.07, -0.07) | <0.001`\
-`#> Female, yes | Male, no   | -40   |  0.79 ( 0.79,  0.79) | <0.001`\
-`#> Female, no  | Male, yes  | -40   | -0.95 (-0.95, -0.95) | <0.001`\
-`#> Female, yes | Male, yes  | -40   | -0.08 (-0.08, -0.08) | <0.001`\
-`#> Female, yes | Female, no | -40   |  0.86 ( 0.86,  0.86) | <0.001`\
-`#> Male, yes   | Male, no   | 41-64 |  0.53 ( 0.53,  0.53) | <0.001`\
-`#> Female, no  | Male, no   | 41-64 | -1.18 (-1.18, -1.18) | <0.001`\
-`#> Female, yes | Male, no   | 41-64 | -0.84 (-0.84, -0.84) | <0.001`\
-`#> Female, no  | Male, yes  | 41-64 | -1.71 (-1.71, -1.71) | <0.001`\
-`#> Female, yes | Male, yes  | 41-64 | -1.37 (-1.37, -1.37) | <0.001`\
-`#> Female, yes | Female, no | 41-64 |  0.34 ( 0.34,  0.34) | <0.001`\
-`#> Male, yes   | Male, no   | 65+   |  0.93 ( 0.93,  0.93) | <0.001`\
-`#> Female, no  | Male, no   | 65+   | -0.88 (-0.88, -0.88) | <0.001`\
-`#> Female, yes | Male, no   | 65+   |  0.44 ( 0.44,  0.44) | <0.001`\
-`#> Female, no  | Male, yes  | 65+   | -1.81 (-1.81, -1.81) | <0.001`\
-`#> Female, yes | Male, yes  | 65+   | -0.49 (-0.49, -0.49) | <0.001`\
-`#> Female, yes | Female, no | 65+   |  1.32 ( 1.32,  1.32) | <0.001`\
+`#> Level1      | Level2     | Difference (CI) |   age`\
+`#> --------------------------------------------------`\
+`#> Male, yes   | Male, no   | 0.88            |   -40`\
+`#> Female, no  | Male, no   | -0.07           |   -40`\
+`#> Female, yes | Male, no   | 0.79            |   -40`\
+`#> Female, no  | Male, yes  | -0.95           |   -40`\
+`#> Female, yes | Male, yes  | -0.08           |   -40`\
+`#> Female, yes | Female, no | 0.86            |   -40`\
+`#> Male, yes   | Male, no   | 0.53            | 41-64`\
+`#> Female, no  | Male, no   | -1.18           | 41-64`\
+`#> Female, yes | Male, no   | -0.84           | 41-64`\
+`#> Female, no  | Male, yes  | -1.71           | 41-64`\
+`#> Female, yes | Male, yes  | -1.37           | 41-64`\
+`#> Female, yes | Female, no | 0.34            | 41-64`\
+`#> Male, yes   | Male, no   | 0.93            |   65+`\
+`#> Female, no  | Male, no   | -0.88           |   65+`\
+`#> Female, yes | Male, no   | 0.44            |   65+`\
+`#> Female, no  | Male, yes  | -1.81           |   65+`\
+`#> Female, yes | Male, yes  | -0.49           |   65+`\
+`#> Female, yes | Female, no | 1.32            |   65+`\
 `#> `\
 `#> Variable predicted: qol`\
 `#> Predictors contrasted: gender, employed`\
@@ -450,14 +450,14 @@ following code:
 `)`\
 `#> Averaged Contrasts Analysis`\
 `#> `\
-`#> Level1 | Level2 | gender | age   |   Difference (CI) |      p`\
-`#> -------------------------------------------------------------`\
-`#> yes    | no     | Male   | -40   | 0.88 (0.88, 0.88) | <0.001`\
-`#> yes    | no     | Female | -40   | 0.86 (0.86, 0.86) | <0.001`\
-`#> yes    | no     | Male   | 41-64 | 0.53 (0.53, 0.53) | <0.001`\
-`#> yes    | no     | Female | 41-64 | 0.34 (0.34, 0.34) | <0.001`\
-`#> yes    | no     | Male   | 65+   | 0.93 (0.93, 0.93) | <0.001`\
-`#> yes    | no     | Female | 65+   | 1.32 (1.32, 1.32) | <0.001`\
+`#> Level1 | Level2 | Difference (CI) | gender |   age`\
+`#> --------------------------------------------------`\
+`#> yes    | no     | 0.88            | Male   |   -40`\
+`#> yes    | no     | 0.86            | Female |   -40`\
+`#> yes    | no     | 0.53            | Male   | 41-64`\
+`#> yes    | no     | 0.34            | Female | 41-64`\
+`#> yes    | no     | 0.93            | Male   |   65+`\
+`#> yes    | no     | 1.32            | Female |   65+`\
 `#> `\
 `#> Variable predicted: qol`\
 `#> Predictors contrasted: employed`\

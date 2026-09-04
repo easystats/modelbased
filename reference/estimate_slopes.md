@@ -499,7 +499,7 @@ standardize(slopes)
 #> Species    | Slope |   SE |        95% CI | t(144) |      p
 #> -----------------------------------------------------------
 #> setosa     |  0.39 | 0.60 | [-0.29, 2.07] |   1.49 |  0.138
-#> versicolor |  0.37 | 0.22 | [ 0.42, 1.30] |   3.89 | < .001
+#> versicolor |  0.37 | 0.22 | [ 0.42, 1.29] |   3.89 | < .001
 #> virginica  |  0.23 | 0.19 | [ 0.17, 0.91] |   2.86 |  0.005
 #> 
 #> Marginal effects estimated for Petal.Length
@@ -654,7 +654,7 @@ estimate_slopes(m, "bill_dep", by = "island")
 #> --------------------------------------------------------------
 #> Biscoe    | 6.07e-03 | 4.45e-03 | [ 0.00, 0.01] | 1.36 | 0.173
 #> Dream     |     0.04 |     0.03 | [-0.01, 0.10] | 1.47 | 0.141
-#> Torgersen | 5.29e-03 |     0.01 | [-0.02, 0.03] | 0.41 | 0.679
+#> Torgersen | 5.29e-03 |     0.01 | [-0.02, 0.03] | 0.42 | 0.678
 #> 
 #> Marginal effects estimated for bill_dep
 #> Type of slope was dY/dX
@@ -682,9 +682,9 @@ estimate_slopes(m, "bill_dep", by = "island", estimate = "average")
 marginaleffects::avg_slopes(m, variables = "bill_dep", by = "island")
 #> 
 #>     island Estimate Std. Error    z Pr(>|z|)   S     2.5 % 97.5 %
-#>  Biscoe      0.0640     0.0365 1.75   0.0794 3.7 -0.007509 0.1356
-#>  Dream       0.0473     0.0245 1.93   0.0534 4.2 -0.000698 0.0952
-#>  Torgersen   0.0297     0.0274 1.08   0.2786 1.8 -0.024004 0.0833
+#>  Biscoe      0.0640     0.0365 1.75   0.0794 3.7 -0.007511 0.1356
+#>  Dream       0.0473     0.0245 1.93   0.0534 4.2 -0.000699 0.0952
+#>  Torgersen   0.0297     0.0274 1.08   0.2786 1.8 -0.024002 0.0833
 #> 
 #> Term: bill_dep
 #> Type: response

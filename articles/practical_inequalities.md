@@ -491,9 +491,9 @@ shown in the two plots above.
 `#> `\
 `#> education |          Slope (CI) |     p`\
 `#> ---------------------------------------`\
-`#> low       | 3.24 (-2.93,  9.41) | 0.302`\
+`#> low       | 3.24 (-2.93,  9.42) | 0.302`\
 `#> mid       | 1.72 (-1.95,  5.38) | 0.358`\
-`#> high      | 6.04 ( 0.19, 11.90) | 0.043`\
+`#> high      | 6.04 ( 0.18, 11.90) | 0.043`\
 `#> `\
 `#> Marginal effects estimated for time`\
 `#> Type of slope was dY/dX`\
@@ -504,12 +504,12 @@ shown in the two plots above.
 `#> `\
 `#> education | grp     |               Slope (CI) |      p`\
 `#> -------------------------------------------------------`\
-`#> low       | Group 1 |    -6.71 (-12.92, -0.50) |  0.034`\
-`#> mid       | Group 1 |     0.40 ( -3.25,  4.06) |  0.830`\
-`#> high      | Group 1 | 1.42e-10 ( -4.92,  4.92) | > .999`\
-`#> low       | Group 2 |     3.24 ( -2.98,  9.46) |  0.306`\
+`#> low       | Group 1 |    -6.71 (-12.93, -0.50) |  0.034`\
+`#> mid       | Group 1 |     0.40 ( -3.26,  4.06) |  0.830`\
+`#> high      | Group 1 | 1.42e-10 ( -4.90,  4.90) | > .999`\
+`#> low       | Group 2 |     3.24 ( -2.97,  9.46) |  0.306`\
 `#> mid       | Group 2 |     1.72 ( -1.98,  5.41) |  0.362`\
-`#> high      | Group 2 |     6.04 (  0.14, 11.94) |  0.045`\
+`#> high      | Group 2 |     6.04 (  0.15, 11.94) |  0.045`\
 `#> `\
 `#> Marginal effects estimated for time`\
 `#> Type of slope was dY/dX`
@@ -533,8 +533,8 @@ in inequality directly.
 `#> `\
 `#> Parameter          | Mean Difference (CI) |     p`\
 `#> -------------------------------------------------`\
-`#> education: Group 1 |   4.74 (-0.05, 9.53) | 0.052`\
-`#> education: Group 2 |   2.88 (-1.75, 7.51) | 0.222`\
+`#> education: Group 1 |   4.74 (-0.05, 9.54) | 0.053`\
+`#> education: Group 2 |   2.88 (-1.74, 7.51) | 0.222`\
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: time`\
@@ -572,7 +572,7 @@ perform a pairwise comparison of the slopes across groups:
 `#> `\
 `#> Parameter         | Mean Difference (CI) |     p`\
 `#> ------------------------------------------------`\
-`#> Group 1 - Group 2 |   1.86 (-4.82, 8.53) | 0.585`\
+`#> Group 1 - Group 2 |   1.86 (-4.81, 8.52) | 0.585`\
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: time`\
