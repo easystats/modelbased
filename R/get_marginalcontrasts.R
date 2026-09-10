@@ -162,6 +162,7 @@ get_marginalcontrasts <- function(
       verbose = verbose,
       .joint_test = my_args$joint_test,
       .omnibus_test = my_args$omnibus_test,
+      .original_contrast = my_args$contrast,
       ...
     )
   }
@@ -473,7 +474,7 @@ get_marginalcontrasts <- function(
       comparison <- stats::as.formula(f)
       # if user specified group in "by" *and* in formula, we keep the group
       # for contrasts of slopes - thus,we need to update comparison_slopes
-      by_formula <- trimws(unlist(
+      by_formula <- insight::trim_ws(unlist(
         strsplit(deparse(original_comparison), "|", fixed = TRUE),
         use.names = FALSE
       ))[2]
@@ -540,10 +541,11 @@ get_marginalcontrasts <- function(
 # small helper to extract the pure variable names from the "by" argument
 
 .grep_cleaned_by_vars <- function(string) {
-  matches <- gregexpr('(?<=")[a-zA-Z_]\\w*(?=\\s*=|")', string, perl = TRUE)
-  start_pos <- matches[[1]]
-  match_lengths <- attr(start_pos, "match.length")
-  substring(string, start_pos, start_pos + match_lengths - 1)
+  insight::trim_ws(sub("=.*", "", string))
+  # Searches beginning of string (^) and then alphanumeric chars and underscore
+  # matches <- regexpr("^[a-zA-Z_]\\w*", string, perl = TRUE)
+  # regmatches extract found matches
+  # regmatches(string, matches)
 }
 
 

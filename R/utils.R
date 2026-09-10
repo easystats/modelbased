@@ -71,6 +71,75 @@
 
 #' @keywords internal
 #' @noRd
+.check_custom_contrasts_and_filter <- function(
+  estimate,
+  by,
+  original_contrast,
+  comparison
+) {
+  # setup message to tell user that results must be cross-checked
+  if (estimate == "average" && !all(.grep_cleaned_by_vars(by) == by)) {
+    # first, extract contrast with filtering, which doesn't work
+    wrong_contrast <- setdiff(original_contrast, .grep_cleaned_by_vars(original_contrast))
+    # clean contrast and by, used to show correct example
+    original_contrast <- .grep_cleaned_by_vars(original_contrast)
+    original_by <- setdiff(.grep_cleaned_by_vars(by), original_contrast)
+    msg1 <- paste0(
+      "Selecting specific levels or values in the `contrast` or `by` arguments ",
+      if (length(wrong_contrast)) {
+        paste0(
+          "(e.g., ",
+          paste0(
+            "`contrast = c(",
+            paste0("\"", wrong_contrast, "\"", collapse = ", "),
+            ")`) "
+          )
+        )
+      },
+      "is error-prone for custom contrasts like ",
+      paste0("`comparison = \"", comparison, "\"`"),
+      " in combination with `estimate = \"average\"`. This can yield incorrect results,",
+      " even if the output suggests the correct comparisons. It is strongly recommended",
+      " to use only bare variable names in `contrast` and `by`, e.g.\n\n"
+    )
+    msg2 <- insight::color_text(
+      paste0(
+        "  estimate_contrasts(\n",
+        "    contrast = c(",
+        paste0("\"", original_contrast, "\"", collapse = ", "),
+        "),\n",
+        if (length(original_by)) {
+          paste0("    by = c(", paste0("\"", original_by, "\"", collapse = ", "), "),\n")
+        },
+        "    estimate = \"average\",\n    comparison = ...\n  )"
+      ),
+      color = "green"
+    )
+    msg3 <- "\n\n  and update your `comparison` argument accordingly.\n  Run\n\n"
+    msg4 <- insight::color_text(
+      paste0(
+        "  estimate_means(\n",
+        "    c(",
+        paste0("\"", c(original_contrast, original_by), "\"", collapse = ", "),
+        "),\n    estimate = \"average\"\n  )"
+      ),
+      color = "green"
+    )
+    msg5 <- "\n\n  first to find out the correct rows to specify the `b`-coefficients for the `comparison` argument.\n"
+    warning(
+      insight::format_message(msg1),
+      msg2,
+      msg3,
+      msg4,
+      insight::format_message(msg5),
+      call. = FALSE
+    )
+  }
+}
+
+
+#' @keywords internal
+#' @noRd
 .check_standard_errors <- function(
   out,
   by = NULL,
