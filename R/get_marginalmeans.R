@@ -43,6 +43,7 @@ get_marginalmeans <- function(
   comparison <- dots$hypothesis
   post_process <- dots$post_process
   original_contrast <- dots$.original_contrast
+  dots$.original_contrast <- NULL
   joint_test <- isTRUE(dots$.joint_test)
   omnibus_test <- isTRUE(dots$.omnibus_test)
 
