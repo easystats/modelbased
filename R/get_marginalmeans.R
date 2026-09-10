@@ -43,7 +43,6 @@ get_marginalmeans <- function(
   comparison <- dots$hypothesis
   post_process <- dots$post_process
   original_contrast <- dots$.original_contrast
-  dots$.original_contrast <- NULL
   joint_test <- isTRUE(dots$.joint_test)
   omnibus_test <- isTRUE(dots$.omnibus_test)
 
@@ -96,7 +95,7 @@ get_marginalmeans <- function(
   # fmt: skip
   dots[c(
     "by", "conf_level", "type", "digits", "bias_correction", "sigma",
-    "offset", ".joint_test", ".omnibus_test", "post_process"
+    "offset", ".joint_test", ".omnibus_test", ".original_contrast", "post_process"
   )] <- NULL
 
   # model df - can be passed via `...`
