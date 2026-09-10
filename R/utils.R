@@ -108,16 +108,33 @@
         "  estimate_contrast(\n",
         "    contrast = c(",
         paste0("\"", original_contrast, "\"", collapse = ", "),
-        ")\n",
+        "),\n",
         if (length(original_by)) {
-          paste0("    by = c(", paste0("\"", original_by, "\"", collapse = ", "), ")\n")
+          paste0("    by = c(", paste0("\"", original_by, "\"", collapse = ", "), "),\n")
         },
-        "    comparison = ...\n  )"
+        "    estimate = \"average\",\n    comparison = ...\n  )"
       ),
       color = "green"
     )
-    msg3 <- "\n\n  and update your `comparison` argument accordingly."
-    stop(insight::format_message(msg1), msg2, msg3, call. = FALSE)
+    msg3 <- "\n\n  and update your `comparison` argument accordingly.\n  Run\n\n"
+    msg4 <- insight::color_text(
+      paste0(
+        "  estimate_means(\n",
+        "    c(",
+        paste0("\"", c(original_contrast, original_by), "\"", collapse = ", "),
+        "),\n    estimate = \"average\"\n  )"
+      ),
+      color = "green"
+    )
+    msg5 <- "\n\n  first to find out the correct rows to specify the `b`-coefficients for the `comparison` argument."
+    stop(
+      insight::format_message(msg1),
+      msg2,
+      msg3,
+      msg4,
+      insight::format_message(msg5),
+      call. = FALSE
+    )
   }
 }
 
