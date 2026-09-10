@@ -231,14 +231,14 @@ get_emcontrasts <- function(
     level_list <- lapply(contrast_strings, function(x) {
       m <- regmatches(x, gregexpr("\\([^)]+\\)", x))[[1]]
       if (length(m) >= 2) {
-        trimws(gsub("[()]", "", m[seq_len(2)]))
+        insight::trim_ws(gsub("[()]", "", m[seq_len(2)]))
       } else {
-        trimws(strsplit(x, " - |\\/")[[1]])
+        insight::trim_ws(strsplit(x, " - |\\/")[[1]])
       }
     })
   } else {
     level_list <- lapply(contrast_strings, function(x) {
-      trimws(strsplit(x, " - |\\/")[[1]])
+      insight::trim_ws(strsplit(x, " - |\\/")[[1]])
     })
   }
   level_cols <- data.frame(do.call(rbind, level_list))

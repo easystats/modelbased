@@ -248,7 +248,7 @@ get_emmeans <- function(
   } else if (is.character(x)) {
     # strip "= <values/function>" suffix, e.g. "Subject = c(308, 309)" or
     # "Subject = [fivenum]", to get the plain variable name
-    trimws(sub("=.*", "", x))
+    .grep_cleaned_by_vars(x)
   } else if (inherits(x, "formula")) {
     all.vars(x)
   } else if (is.list(x) || is.data.frame(x)) {
