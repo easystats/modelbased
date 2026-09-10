@@ -42,6 +42,7 @@ get_marginalmeans <- function(
   dots <- list(...)
   comparison <- dots$hypothesis
   post_process <- dots$post_process
+  original_contrast <- dots$.original_contrast
   joint_test <- isTRUE(dots$.joint_test)
   omnibus_test <- isTRUE(dots$.omnibus_test)
 
@@ -197,6 +198,13 @@ get_marginalmeans <- function(
   # compared to what "avg_predictions()" returns... so let's check if we have to
   # take care of this
   if (.is_custom_comparison(comparison)) {
+    # first check if we have filtering in by-variables when estimate is set to
+    # 'average' - this won't work, because the internal re-ordering relies on
+    # predictions based on a "filtered" data grid, while `estimate = "average"`
+    # does the filtering later in the code, *after* calling marginaleffects
+    .check_custom_contrasts_and_filter(estimate, by, original_contrast, comparison)
+
+    # reorder custom row-indices
     dots$hypothesis <- .reorder_custom_hypothesis(
       comparison,
       datagrid,

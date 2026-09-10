@@ -71,6 +71,59 @@
 
 #' @keywords internal
 #' @noRd
+.check_custom_contrasts_and_filter <- function(
+  estimate,
+  by,
+  original_contrast,
+  comparison
+) {
+  # setup message to tell user that results must be cross-checked
+  if (estimate == "average" && !all(.grep_cleaned_by_vars(by) == by)) {
+    # first, extract contrast with filtering, which doesn't work
+    wrong_contrast <- setdiff(original_contrast, .grep_cleaned_by_vars(original_contrast))
+    # clean contrast and by, used to show correct example
+    original_contrast <- .grep_cleaned_by_vars(original_contrast)
+    original_by <- setdiff(.grep_cleaned_by_vars(by), original_contrast)
+    msg1 <- paste0(
+      "Selecting specific levels or values in `contrast` or `by` ",
+      if (length(wrong_contrast)) {
+        paste0(
+          "(e.g., ",
+          insight::color_text(
+            paste0(
+              "`contrast = c(",
+              paste0("\"", wrong_contrast, "\"", collapse = ", "),
+              ")` "
+            ),
+            "green"
+          )
+        )
+      },
+      "does not work for custom contrasts like ",
+      insight::color_text(paste0("`comparison = \"", comparison, "\"`"), "green"),
+      " in combination with `estimate = \"average\"`. Please use only bare variable names in `contrast` and `by`, e.g.\n\n"
+    )
+    msg2 <- insight::color_text(
+      paste0(
+        "  estimate_contrast(\n",
+        "    contrast = c(",
+        paste0("\"", original_contrast, "\"", collapse = ", "),
+        ")\n",
+        if (length(original_by)) {
+          paste0("    by = c(", paste0("\"", original_by, "\"", collapse = ", "), ")\n")
+        },
+        "    comparison = ...\n  )"
+      ),
+      color = "green"
+    )
+    msg3 <- "\n\n  and update your `comparison` argument accordingly."
+    stop(insight::format_message(msg1), msg2, msg3, call. = FALSE)
+  }
+}
+
+
+#' @keywords internal
+#' @noRd
 .check_standard_errors <- function(
   out,
   by = NULL,
