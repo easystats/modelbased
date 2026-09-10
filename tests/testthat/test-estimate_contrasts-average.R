@@ -100,6 +100,13 @@ test_that("estimate_contrast, filterin in `by` and `contrast`", {
   )
   expect_equal(out$Difference, 1.507576, tolerance = 1e-4)
 
+  emm <- estimate_means(
+    m,
+    c("e42dep=c('independent','slightly dependent','moderately dependent')", "c172code"),
+    estimate = "average"
+  )
+  expect_equal(emm$Mean[1] - emm$Mean[2], out$Difference, tolerance = 1e-5)
+
   out <- estimate_contrasts(
     m,
     "e42dep",
