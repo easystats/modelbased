@@ -1,5 +1,13 @@
 # modelbased (devel)
 
+## Changes
+
+* `estimate_contrasts()` with custom comparisons (e.g., when
+  `comparison = "(b1 - b12) = (b4 - b18)"`) can yield incorrect results when
+  `estimate = "average"` and predictions are filtered (e.g. when
+  `contrast = c("x=c(2,4)")`). This does not happen in general, but may happen.
+  Therefore, now an informative warning is printed in such edge-cases.
+
 ## Bug fixes
 
 * Fixed issue in `estimate_contrasts()` with wrong assignment of estimates in
