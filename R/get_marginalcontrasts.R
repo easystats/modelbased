@@ -541,7 +541,7 @@ get_marginalcontrasts <- function(
 # small helper to extract the pure variable names from the "by" argument
 
 .grep_cleaned_by_vars <- function(string) {
-  sub("=.*", "", string)
+  trimws(sub("=.*", "", string))
   # Seraches beginning of string (^) and then alphanumeric chars and underscore
   # matches <- regexpr("^[a-zA-Z_]\\w*", string, perl = TRUE)
   # regmatches extract found matches
