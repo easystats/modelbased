@@ -85,14 +85,14 @@
     original_contrast <- .grep_cleaned_by_vars(original_contrast)
     original_by <- setdiff(.grep_cleaned_by_vars(by), original_contrast)
     msg1 <- paste0(
-      "Selecting specific levels or values in `contrast` or `by` ",
+      "Selecting specific levels or values in the `contrast` or `by` arguments ",
       if (length(wrong_contrast)) {
         paste0(
           "(e.g., ",
           paste0(
             "`contrast = c(",
             paste0("\"", wrong_contrast, "\"", collapse = ", "),
-            ")` "
+            ")`) "
           )
         )
       },
