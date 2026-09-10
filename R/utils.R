@@ -104,7 +104,7 @@
     )
     msg2 <- insight::color_text(
       paste0(
-        "  estimate_contrast(\n",
+        "  estimate_contrasts(\n",
         "    contrast = c(",
         paste0("\"", original_contrast, "\"", collapse = ", "),
         "),\n",
