@@ -89,19 +89,18 @@
       if (length(wrong_contrast)) {
         paste0(
           "(e.g., ",
-          insight::color_text(
-            paste0(
-              "`contrast = c(",
-              paste0("\"", wrong_contrast, "\"", collapse = ", "),
-              ")` "
-            ),
-            "green"
+          paste0(
+            "`contrast = c(",
+            paste0("\"", wrong_contrast, "\"", collapse = ", "),
+            ")` "
           )
         )
       },
-      "does not work for custom contrasts like ",
-      insight::color_text(paste0("`comparison = \"", comparison, "\"`"), "green"),
-      " in combination with `estimate = \"average\"`. Please use only bare variable names in `contrast` and `by`, e.g.\n\n"
+      "is error-prone for custom contrasts like ",
+      paste0("`comparison = \"", comparison, "\"`"),
+      " in combination with `estimate = \"average\"`. This can yield incorrect results,",
+      " even if the output suggests the correct comparisons. It is strongly recommended",
+      " to use only bare variable names in `contrast` and `by`, e.g.\n\n"
     )
     msg2 <- insight::color_text(
       paste0(
@@ -126,8 +125,8 @@
       ),
       color = "green"
     )
-    msg5 <- "\n\n  first to find out the correct rows to specify the `b`-coefficients for the `comparison` argument."
-    stop(
+    msg5 <- "\n\n  first to find out the correct rows to specify the `b`-coefficients for the `comparison` argument.\n"
+    warning(
       insight::format_message(msg1),
       msg2,
       msg3,
