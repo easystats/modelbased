@@ -53,18 +53,8 @@
     }
   }
 
-  if (isTRUE(is.na(predict))) {
-    # add modelbased-options to valid types
-    valid_types <- unique(c("response", "link", valid_types))
-    insight::format_error(paste0(
-      "The option provided in the `",
-      error_arg,
-      "` argument is not recognized.",
-      " Valid options are: ",
-      datawizard::text_concatenate(valid_types, enclose = "`"),
-      "."
-    ))
-  }
+  # validate predict-options
+  .check_predict_arg(predict, valid_types, error_arg)
 
   # if we have bias-correction, and we are able to get predictions on the
   # link-scale, we set `predict` to "response" - only in this case,

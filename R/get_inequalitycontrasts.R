@@ -245,36 +245,6 @@
 # handle inequality hypothesis  --------------------------------------
 # --------------------------------------------------------------------
 
-# check whether we have a formula definition of inequality comparisons,
-# and convert it to a string
-.check_for_inequality_comparison <- function(comparison) {
-  # the default formulas are converted to a string:
-  # ~inequality -> "inequality"
-  # inequality ~ pairwise -> "inequality_pairwise"
-  # ratio ~ inequality -> "inequality_ratio"
-  # ratio ~ inequality + pairwise` -> "inequality_ratio_pairwise"
-  #
-  # we may have other formulas that control grouping and averaging, like
-  # `~ inequality | grp1 + grp2`. In this case, the formula is returned as is
-  # and processed later in ".process_inequality_formula()"
-  if (inherits(comparison, "formula")) {
-    # parse variables into a string
-    out <- paste(all.vars(comparison), collapse = "_")
-    # handle special cases
-    out <- switch(
-      out,
-      ratio_inequality = "inequality_ratio",
-      ratio_inequality_pairwise = "inequality_ratio_pairwise",
-      out
-    )
-    if (.is_inequality_comparison(out)) {
-      return(out)
-    }
-  }
-  comparison
-}
-
-
 # check whether we have a valid inequality comparison
 .is_inequality_comparison <- function(comparison) {
   # "comparison" can be a string or a formula. If a string, we expect

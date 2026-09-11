@@ -258,23 +258,7 @@ get_marginaltrends <- function(
   }
 
   # check that we have only one predictor
-  if (length(trend) > 1) {
-    if (verbose) {
-      insight::format_alert(paste0(
-        "More than one numeric variable was selected for slope estimation. Keeping only `",
-        trend[1],
-        "`. ",
-        "If you want to estimate the slope of `",
-        trend[1],
-        "` at different values of `",
-        trend[2],
-        "`, use `by=\"",
-        trend[2],
-        "\"` instead."
-      ))
-    }
-    trend <- trend[1]
-  }
+  trend <- .check_trend_arg(trend, verbose)
 
   # check if user provided values in `trend`, e.g. `trend=1:10`. We then pass
   # this argument to also create a data grid, but we also need to "clean" trend

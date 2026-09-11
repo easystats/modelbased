@@ -341,13 +341,11 @@ get_marginalmeans <- function(
 
   # display informative error
   if (inherits(out, "simpleError")) {
-    insight::format_error(.marginaleffects_errors(out, fun_args))
+    insight::format_error(.check_marginaleffects_errors(out, fun_args))
   }
 
   # check number of rows - for estimate = "average", no rows might be returned
-  if (nrow(out) == 0) {
-    .filter_error("No rows returned from marginal means.")
-  }
+  .check_filter_args(out, "No rows returned from marginal means.")
 
   out
 }
@@ -496,90 +494,6 @@ get_marginalmeans <- function(
 }
 
 
-# handle dots argument -----------------------------------------
-#
-.check_dots_data <- function(dots, verbose) {
-  if (!is.null(dots$data)) {
-    if (!is.null(dots$newdata) && verbose) {
-      insight::format_alert(
-        "Both 'data' and 'newdata' were provided. Please specify only one. Ignoring 'newdata' and using 'data' instead."
-      )
-    }
-    dots$newdata <- dots$data
-    dots$data <- NULL
-  }
-  dots
-}
-
-
-# handle errors from marginaleffects -----------------------------------------
-#
-# This helper function processes errors that occur during calls to the
-# {marginaleffects} package. It creates more informative and user-friendly
-# error messages by inspecting the original error and suggesting potential
-# solutions for common problems, such as using a different `estimate` option
-# or switching to the `emmeans` backend.
-#
-# Arguments:
-# - out: The error object returned from the `tryCatch` block.
-# - fun_args: A list of arguments that were passed to the failing
-#   {marginaleffects} function.
-#
-# returns: A character vector containing the formatted, user-friendly error
-#   message, which is then passed to `insight::format_error()`.
-.marginaleffects_errors <- function(out, fun_args) {
-  # what was requested?
-  if (is.null(fun_args$hypothesis)) {
-    fun <- "marginal means"
-  } else {
-    fun <- "marginal contrasts"
-  }
-  # clean original error message
-  out$message <- gsub("\\s+", " ", gsub("\n", "", out$message, fixed = TRUE))
-  # setup clear error message
-  msg <- c(
-    paste0("Sorry, calculating ", fun, " failed with following error:"),
-    insight::color_text(gsub("\n", "", out$message, fixed = TRUE), "red")
-  )
-  # handle exceptions ------------------------------------------------------
-  # we get this error when we should use counterfactuals
-  if (grepl("not found in column names", out$message, fixed = TRUE)) {
-    msg <- c(
-      msg,
-      "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\"."
-    )
-  }
-  # we get this error for models with complex random effects structures in glmmTMB,
-  # or when the data grid is too large
-  if (
-    grepl("map factor length must equal", out$message, fixed = TRUE) ||
-      grepl("cannot allocate", out$message, fixed = TRUE)
-  ) {
-    msg <- c(
-      msg,
-      paste0(
-        "\nYou may try using the `emmeans` backend, e.g. `estimate_means(model, by = c(",
-        toString(paste0("\"", fun_args$by, "\"")),
-        "), backend = \"emmeans\")`, or use `estimate_relation(model, by = c(",
-        toString(paste0("\"", fun_args$by, "\"")),
-        "))` instead. For contrasts or pairwise comparisons, save the output of `estimate_relation()` and pass it to `estimate_contrasts()`, e.g.\n"
-      ),
-      paste0(
-        "out <- estimate_relation(model, by = c(",
-        toString(paste0("\"", fun_args$by, "\"")),
-        "))"
-      ),
-      paste0(
-        "estimate_contrasts(out, contrast = c(",
-        toString(paste0("\"", fun_args$by, "\"")),
-        "))"
-      )
-    )
-  }
-  msg
-}
-
-
 # filter datagrid for `estimate = "average"`---------------------------------
 #
 # This helper function filters the results of marginal means/predictions when
@@ -642,22 +556,9 @@ get_marginalmeans <- function(
     # else, filter values
     means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
     # sanity check - do we have any rows left?
-    if (nrow(means) == 0) {
-      .filter_error("No rows left after filtering.")
-    }
+    .check_filter_args(means, "No rows left after filtering.")
   }
   means
-}
-
-
-# small helper, because we have the same error message in several places
-.filter_error <- function(prefix = "") {
-  insight::format_error(
-    prefix,
-    "Please check your `by` and `contrast` arguments, or try one of the following options:",
-    "1. Use a different option for the `estimate` argument, e.g. `estimate = \"typical\"`.",
-    "2. Use the `newdata` argument to provide a data grid of predictor values at which to evaluate predictions."
-  )
 }
 
 
@@ -775,60 +676,6 @@ get_marginalmeans <- function(
   contrast <- validate_arg(contrast, "contrast")
 
   list(by = by, contrast = contrast)
-}
-
-
-.check_offset <- function(
-  model,
-  estimate,
-  offset = NULL,
-  my_args = NULL,
-  verbose = TRUE
-) {
-  model_offset <- insight::find_offset(model)
-  # check if model has an offset at all
-  if (!is.null(model_offset) && !any(startsWith(my_args$by, model_offset)) && verbose) {
-    msg <- NULL
-    if (is.null(offset)) {
-      # if no offset argument was specified, tell user what this means
-      msg <- switch(
-        estimate,
-        specific = ,
-        typical = paste(
-          "Model contains an offset-term, which is set to its mean value.",
-          "If you want to average predictions over the distribution of the offset",
-          "(if appropriate), use `estimate = \"average\"` or `estimate = \"population\"`.",
-          "If you want to fix the offset to a specific value, for instance `1`,",
-          "use `offset = 1`."
-        ),
-        average = ,
-        population = paste(
-          "Model contains an offset-term and you average predictions over the",
-          "distribution of that offset. If you want to fix the offset to a",
-          "specific value, for instance `1`, use `offset = 1`."
-        )
-      )
-      # if offset term is log-transformed, tell user. offset should be fixed then
-      log_offset <- insight::find_transformation(insight::find_offset(
-        model,
-        as_term = TRUE
-      ))
-      if (!is.null(log_offset) && startsWith(log_offset, "log")) {
-        msg <- c(
-          msg,
-          paste(
-            "We also found that the model has a log-transformed offset term.",
-            "If you use the `offset` argument, the log-transformation will",
-            "automatically be applied to the provided offset-value. I.e., consider",
-            "using, for instance, `offset = 10` and not `offset = log(10)`."
-          )
-        )
-      }
-    }
-    if (!is.null(msg)) {
-      insight::format_alert(msg)
-    }
-  }
 }
 
 

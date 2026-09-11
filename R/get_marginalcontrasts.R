@@ -241,9 +241,7 @@ get_marginalcontrasts <- function(
       out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
     }
     # sanity check - do we have any rows left?
-    if (nrow(out) == 0) {
-      .filter_error("No rows left after filtering.")
-    }
+    .check_filter_args(out, "No rows left after filtering.")
   }
   out
 }
