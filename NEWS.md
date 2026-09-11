@@ -2,6 +2,11 @@
 
 ## Changes
 
+* Post-processing in `estimate_contrasts()` including group-variable (e.g.,
+  `post_process = ~ pairwise | group_var`) now no longer prints levels from
+  `group_var`in both the group and comparison columns (i.e. redundant labels
+  have been removed from the output).
+
 * `estimate_contrasts()` with custom comparisons (e.g., when
   `comparison = "(b1 - b12) = (b4 - b18)"`) can yield incorrect results when
   `estimate = "average"` and predictions are filtered (e.g. when

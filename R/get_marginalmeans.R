@@ -375,7 +375,12 @@ get_marginalmeans <- function(
         out,
         hypothesis = post_process[[i]]
       ))
-      temp_params <- .update_post_process_params(out, temp_params, group_params)
+      temp_params <- .update_post_process_params(
+        out,
+        temp_params,
+        group_params,
+        post_process[[i]]
+      )
     }
     # check if extractinb parameters worked
     if (length(temp_params) == nrow(out)) {
@@ -385,10 +390,42 @@ get_marginalmeans <- function(
   out
 }
 
-.update_post_process_params <- function(out, temp_params, group_params) {
+.update_post_process_params <- function(
+  out,
+  temp_params,
+  group_params,
+  post_process = NULL
+) {
   if (is.null(temp_params)) {
     return(NULL)
   }
+
+  # we may have groups in post-processing contrasts, and these groups should not
+  # be included in the levels of the hypothesis
+  if (!is.null(post_process)) {
+    # extract all group variables from post-processing hypothesis, i.e.
+    # extract "groups" from "difference ~ pairwise | groups"
+    comparison_groups <- vapply(
+      unlist(
+        strsplit(insight::safe_deparse(post_process), "|", fixed = TRUE),
+        use.names = FALSE
+      ),
+      insight::trim_ws,
+      character(1)
+    )
+    # if we have any groups, check if these names also appear in the group-name
+    # data frame, and if yes, remove them. these groups have their own column
+    # in the output and don't need to appear twice (in the comparison labels)
+    # again
+    if (length(comparison_groups) > 1) {
+      comparison_groups <- all.vars(stats::formula(paste("~", comparison_groups[2])))
+      remove <- intersect(colnames(group_params), comparison_groups)
+      if (length(remove)) {
+        group_params[remove] <- NULL
+      }
+    }
+  }
+
   .safe(
     {
       # clean current parameter names
