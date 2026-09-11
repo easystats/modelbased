@@ -1942,3 +1942,35 @@ test_that("estimate_contrast, correctly preserve minus in factor levels", {
     c("A - High", "A - High", "A - Low", "A - High", "A - Low", "B - High")
   )
 })
+
+
+test_that("estimate_contrast, don't let group labels appear in comparison labels", {
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  m <- lm(neg_c_7 ~ barthtot + c172code * e42dep * c161sex, data = efc)
+
+  out <- estimate_contrasts(
+    m,
+    "c161sex",
+    by = c("c172code", "e42dep"),
+    estimate = "average",
+    post_process = ~ pairwise | e42dep
+  )
+  expect_identical(dim(out), c(10L, 8L))
+  expect_identical(
+    out$Parameter,
+    c(
+      "Female - Male, mid - low",
+      "Female - Male, mid - low",
+      "Female - Male, high - low",
+      "Female - Male, high - mid",
+      "Female - Male, mid - low",
+      "Female - Male, high - low",
+      "Female - Male, high - mid",
+      "Female - Male, mid - low",
+      "Female - Male, high - low",
+      "Female - Male, high - mid"
+    )
+  )
+})
