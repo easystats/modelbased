@@ -402,14 +402,18 @@ get_marginalmeans <- function(
 
   # we may have groups in post-processing contrasts, and these groups should not
   # be included in the levels of the hypothesis
-  if (!is.null(post_process)) {
+  if (
+    !is.null(post_process) &&
+      (inherits(post_process, "formula") || is.character(post_process))
+  ) {
     # extract all group variables from post-processing hypothesis, i.e.
     # extract "groups" from "difference ~ pairwise | groups"
     comparison_groups <- vapply(
-      unlist(
-        strsplit(insight::safe_deparse(post_process), "|", fixed = TRUE),
-        use.names = FALSE
-      ),
+      strsplit(
+        paste(insight::safe_deparse(post_process), collapse = ""),
+        "|",
+        fixed = TRUE
+      )[[1L]],
       insight::trim_ws,
       character(1)
     )
