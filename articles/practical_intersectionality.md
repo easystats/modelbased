@@ -525,13 +525,13 @@ the within-strata (level 1) variance is not estimated, as the variance
 of the binomial distribution is already known (and fixed, see
 [`?insight::get_variance`](https://easystats.github.io/insight/reference/get_variance.html)
 for Bernoulli models). Second, logistic models operate on a
-multiplicative scale rather than an additive one. Accodring to evans et
+multiplicative scale rather than an additive one. According to Evans et
 al. (2018), it is inappropriate to use logistic models to examine
 strata-level residuals for additive interaction effects, since the
 inclusion of main effects may already account for some of these
 interactions. However, logistic models remain fully appropriate if the
 primary goal is to estimate strata-level effects to explore the overall
-patterning of inequalities across society (Evans et al. 2018).
+patterning of inequalities across strata-groups (Evans et al. 2018).
 
 #### 7.2 Discriminatory Accuracy
 
