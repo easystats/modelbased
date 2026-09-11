@@ -559,7 +559,7 @@ that the intersectional strata provide no discriminatory accuracy, and
 Another useful measure is the [median odds ratio
 (MOR)](https://easystats.github.io/performance/reference/performance_mor.html),
 a measure of cluster-level variation in multilevel logistic regression
-(Larsen and Merlo 2005). A MOR \> 1 indicates the resence of
+(Larsen and Merlo 2005). A MOR \> 1 indicates the presence of
 heterogeneity and meaningful variation across clusters.
 
 ### 8. Conclusion
