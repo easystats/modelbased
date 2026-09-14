@@ -91,7 +91,7 @@ NULL
 #'   `"disagree"`, `"neutral"`, `"agree"`, and `"strongly agree"`.
 #'   `"I have no complaints"` was the residual category for patients without
 #'   specific somatic symptoms.
-#' - `time3`: Measurement point (baseline, and two followu-ups)
+#' - `time3`: Measurement point (baseline, and two follow-ups)
 #' - `education_casmin`: Educational level, measured according to the CASMIN
 #'   classification.
 #' - `sex`: The participant's sex
