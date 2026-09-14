@@ -7,9 +7,9 @@
 \description{
 A sample data set from the SOMACROSS project (Development and
 Persistence of Somatic Symptoms). This is a random, anonymized subset of the
-project data set.
+original project data set.
 
-The data consists of nine variables from 1200 observations (400 patients at
+The data consists of nine variables from 1140 observations (380 patients at
 three time points):
 \itemize{
 \item \code{patid}: A unique identifier for each participant
