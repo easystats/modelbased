@@ -3,19 +3,18 @@
 \docType{data}
 \name{stigma}
 \alias{stigma}
-\title{Sample dataset from the SOMACROSS project}
+\title{Sample dataset from patients with somatic symptons}
 \description{
-A sample data set from the SOMACROSS project (Development and
-Persistence of Somatic Symptoms). This is a random, anonymized subset of the
-original project data set.
+An artificial, anonymized data set based on a project related to
+the development and persistence of somatic symptoms.
 
 The data consists of nine variables from 1140 observations (380 patients at
 three time points):
 \itemize{
 \item \code{patid}: A unique identifier for each participant
-\item \code{disease_group}: Classification of main disease from patient, e.g.
-primary Sclerosing Cholangitis, chronic kidney disease (CKD), Ulcerative
-colitis, Irritable Bowel Syndrome (IBS)	and others.
+\item \code{disease_group}: Classification of main disease from patient, e.g. chronic
+kidney disease (CKD), Ulcerative colitis, Irritable Bowel Syndrome (IBS)
+and others.
 \item \code{phq15}: Total score of the PHQ-15 questionnaire (Patient Health
 Questionnaire-15), measuring the somatic symptoms severity
 \item \code{stigma_unreal}: Question regarding perceived stigma related to somatic
