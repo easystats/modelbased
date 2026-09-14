@@ -87,7 +87,7 @@ First, we start with calculating the within- and between-effects from
 | education (mid)  | 5.01        | 2.35 | (0.40, 9.62)   | 2.14   | 0.033   |
 | education (high) | 5.52        | 2.75 | (0.11, 10.93)  | 2.00   | 0.046   |
 
-Model Summary {#tinytable_05zn58pr4o8mlzgx6g5e .table .tinytable
+Model Summary {#tinytable_vv14xsqyyagbpxisypq9 .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -149,7 +149,7 @@ different from each other, we can estimate their contrast:
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_247cid8w53op37mrchfc .table
+Marginal Contrasts Analysis {#tinytable_mdw0dnc1hye1vsdhmloo .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -195,7 +195,7 @@ measurement (`time`) and our two centered variables (`phq4_within` and
 | time × phq4 within  | 0.33        | 0.61 | (-0.87, 1.52)  | 0.54   | 0.592   |
 | time × phq4 between | -0.66       | 0.37 | (-1.39, 0.07)  | -1.77  | 0.077   |
 
-Model Summary {#tinytable_bk5mzg76v80rmr0ew6rr .table .tinytable
+Model Summary {#tinytable_0ksrdpcqhc55objjsz20 .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -261,7 +261,7 @@ understand the underlying dynamics.
 
 [TABLE]
 
-Estimated Marginal Effects {#tinytable_zc9xmte0uxjezm2m9p66 .table
+Estimated Marginal Effects {#tinytable_s60op7dcyo18ifiyfi2d .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -271,7 +271,7 @@ quarto-disable-processing="true"}
 
 [TABLE]
 
-Estimated Marginal Effects {#tinytable_42vn8sm1kizsd5a3ebff .table
+Estimated Marginal Effects {#tinytable_5hmnsdcdq5m3x7ouqnp1 .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -296,7 +296,7 @@ marginal contrasts at each specific time point.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_kos7jsvtg92b0hkbyu2q .table
+Marginal Contrasts Analysis {#tinytable_9vsuk3flk8yq8q2cjfpx .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -342,7 +342,7 @@ points.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_hdj6rufkdh2uv7g6sx82 .table
+Marginal Contrasts Analysis {#tinytable_2k0pltj07tfyv3x787f5 .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -377,7 +377,7 @@ the within- and between-effects without stratifying by time.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_o5wy6qsqugm91jsimkv5 .table
+Marginal Contrasts Analysis {#tinytable_hjskqx60mi8cw40frt8l .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -421,7 +421,7 @@ variables.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_stdhp1hqqy6rshfr2z3j .table
+Marginal Contrasts Analysis {#tinytable_1zzss4usfdeozyavnjhw .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -482,7 +482,7 @@ term to our contrast statement.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_xaio2dfcf07nhe3p1gpb .table
+Marginal Contrasts Analysis {#tinytable_ewl48o7v37kyarxjbsfh .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
