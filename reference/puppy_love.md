@@ -8,7 +8,7 @@ for a person’s love of puppies, taken from the `{discovr}` package
 
 Following variables are included in the dataset:
 
-- \`id“: Participant id
+- `id`: Participant id
 
 - `dose`: Treatment group to which the participant was randomly assigned
   (No puppies (control), 15 minutes of puppy therapy, 30 minutes of

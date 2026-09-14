@@ -85,3 +85,5 @@
   Sample dataset from the EFC Survey
 - [`fish`](https://easystats.github.io/modelbased/reference/fish.md) :
   Sample data set
+- [`stigma`](https://easystats.github.io/modelbased/reference/stigma.md)
+  : Sample dataset from the SOMACROSS project
