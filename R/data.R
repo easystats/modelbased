@@ -30,7 +30,7 @@ NULL
 #' (Field 2025)
 #'
 #' @details Following variables are included in the dataset:
-#' - `id``: Participant id
+#' - `id`: Participant id
 #' - `dose`: Treatment group to which the participant was randomly assigned (No
 #'   puppies (control), 15 minutes of puppy therapy, 30 minutes of puppy
 #'   therapy)

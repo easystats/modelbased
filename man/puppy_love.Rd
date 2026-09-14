@@ -12,7 +12,7 @@ adjust for a person’s love of puppies, taken from the \code{{discovr}} package
 \details{
 Following variables are included in the dataset:
 \itemize{
-\item `id``: Participant id
+\item \code{id}: Participant id
 \item \code{dose}: Treatment group to which the participant was randomly assigned (No
 puppies (control), 15 minutes of puppy therapy, 30 minutes of puppy
 therapy)
