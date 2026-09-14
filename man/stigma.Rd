@@ -24,7 +24,7 @@ illness". Answer categories ranged from \code{"strongly disagree"},
 \code{"disagree"}, \code{"neutral"}, \code{"agree"}, and \code{"strongly agree"}.
 \code{"I have no complaints"} was the residual category for patients without
 specific somatic symptoms.
-\item \code{time3}: Measurement point (baseline, and two followu-ups)
+\item \code{time3}: Measurement point (baseline, and two follow-ups)
 \item \code{education_casmin}: Educational level, measured according to the CASMIN
 classification.
 \item \code{sex}: The participant's sex
