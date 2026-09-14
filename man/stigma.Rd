@@ -28,7 +28,7 @@ specific somatic symptoms.
 \item \code{education_casmin}: Educational level, measured according to the CASMIN
 classification.
 \item \code{sex}: The participant's sex
-\item \code{migration_history}: History of migrations from patients
+\item \code{migration_history}: History of migration from patients
 \item \code{age_z}: Age of patient, standardized
 }
 }

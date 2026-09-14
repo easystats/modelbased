@@ -95,6 +95,6 @@ NULL
 #' - `education_casmin`: Educational level, measured according to the CASMIN
 #'   classification.
 #' - `sex`: The participant's sex
-#' - `migration_history`: History of migrations from patients
+#' - `migration_history`: History of migration from patients
 #' - `age_z`: Age of patient, standardized
 NULL
