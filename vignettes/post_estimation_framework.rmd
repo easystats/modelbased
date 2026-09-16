@@ -38,7 +38,8 @@ pkgs <- c(
   "grid",
   "marginaleffects",
   "ggplot2",
-  "gt"
+  "ggdag",
+  "dagitty"
 )
 
 if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
@@ -531,7 +532,7 @@ result <- plot(emm) +
 </details>
 
 ```{r, fig.width = 10, fig.height = 8, fig.cap="Figure 6: Interaction Contrasts - Evaluating the Change in Group Differences Over Time Across Groups"}
-plot(result)
+plot(result) + theme_gray()
 ```
 
 ## Summary and Conclusion
