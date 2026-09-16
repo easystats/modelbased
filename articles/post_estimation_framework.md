@@ -223,7 +223,16 @@ constant* \[Gelman et al. (2020); Chapter 6.3\].
 Regression Coefficients from Linear Mixed Model (only fixed effects
 shown) {.table}
 
-![](../reference/figures/estimates_as_comparisons.jpg)
+------------------------------------------------------------------------
+
+#### The Interpretation Trap
+
+![The Cognitive Overload of Conditional
+Effects](../reference/figures/estimates_as_comparisons.jpg)
+
+The Cognitive Overload of Conditional Effects
+
+------------------------------------------------------------------------
 
 - **Categorical Predictors:** Estimates are interpreted relative to a
   baseline reference category. For instance, the coefficient for
