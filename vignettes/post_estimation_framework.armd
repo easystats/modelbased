@@ -34,6 +34,7 @@ options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
 
 pkgs <- c(
+  "easystats",
   "glmmTMB",
   "grid",
   "marginaleffects",
