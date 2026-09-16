@@ -13,6 +13,11 @@
   `contrast = c("x=c(2,4)")`). This does not happen in general, but may happen.
   Therefore, now an informative warning is printed in such edge-cases.
 
+* Added a new vignette, "The Modelisation Approach", which demonstrates a
+  complete analytical workflow from setting up models using DAGs to extracting
+  meaningful predictions, slopes, and interaction contrasts using modelbased
+  post-estimation functions.
+
 ## Bug fixes
 
 * Fixed issue in `estimate_contrasts()` with wrong assignment of estimates in
