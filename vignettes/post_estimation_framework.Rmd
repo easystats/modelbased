@@ -190,7 +190,7 @@ display(
 
 ### The Interpretation Trap
 
-```{r, echo=FALSE, out.width = "650px", fig.align="center"}
+```{r, echo=FALSE, out.width = "650px", fig.align="center", fig.cap = "The Cognitive Overload of Conditional Effects"}
 knitr::include_graphics("../man/figures/estimates_as_comparisons.jpg")
 ```
 
