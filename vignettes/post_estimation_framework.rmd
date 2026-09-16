@@ -177,9 +177,12 @@ model <- glmmTMB(
 
 When looking at the standard regression table, it is crucial to interpret these coefficients as *descriptive comparisons*. Specifically, coefficients generally represent *conditional effects*, meaning they describe an association while *strictly holding all other covariates constant* [@gelman_regression_2020, chapter 6.3].
 
-```{r}
+```{r, }
 result <- model_parameters(model, effects = "fixed")
-display(result)
+display(
+  result,
+  caption = "Regression Coefficients from Linear Mixed Model (only fixed effects shown)"
+)
 ```
 
 - **Categorical Predictors:** Estimates are interpreted relative to a baseline reference category. For instance, the coefficient for `stigma_unreal ((strongly) disagree)` is `-1.34`. This indicates that, holding `time`, `sex`, `age`, and all other covariates constant, patients who disagree that their symptoms are "unreal" score 1.34 points lower on the PHQ-15 than those in the implicit reference category (who agree).
@@ -533,7 +536,7 @@ plot(result)
 
 ## Summary and Conclusion
 
-The actual empirical insight of a study rarely emerges from simply reading off raw regression coefficients. Particularly in complex models involving interactions, hierarchical structures, or nonlinearities, interpreting these coefficients directly can be highly error-prone. It can even lead to fundamental misinterpretations, such as the "Table 2 fallacy", where the coefficients of control variables are wrongly interpreted as causal effects [@westreich_table_2013, @rohrer_models_2026].
+The actual empirical insight of a study rarely emerges from simply reading off raw regression coefficients. Particularly in complex models involving interactions, hierarchical structures, or nonlinearities, interpreting these coefficients directly can be highly error-prone. It can even lead to fundamental misinterpretations, such as the "Table 2 fallacy", where the coefficients of control variables are wrongly interpreted as causal effects [@westreich_table_2013; @rohrer_models_2026].
 
 By shifting our perspective and treating statistical models as "counterfactual prediction machines", we unburden ourselves from the cognitive load of reverse-engineering complex model mechanics. This model-agnostic framework forces us to put substantive theory first by explicitly defining a theoretical estimand - the exact target quantity that answers our specific research question.
 
