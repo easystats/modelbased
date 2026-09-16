@@ -223,6 +223,8 @@ constant* (Gelman et al. 2020, 6.3).
 Regression Coefficients from Linear Mixed Model (only fixed effects
 shown) {.table}
 
+![](../reference/figures/estimates_as_comparisons.jpg)
+
 - **Categorical Predictors:** Estimates are interpreted relative to a
   baseline reference category. For instance, the coefficient for
   `stigma_unreal ((strongly) disagree)` is `-1.34`. This indicates that,
@@ -297,7 +299,7 @@ Click to show code for plot generation
 `  ``)`
 
 ![Figure 3: Estimated Marginal Means of PHQ-15 by Stigma
-Groups](post_estimation_framework_files/figure-html/unnamed-chunk-10-1.png)
+Groups](post_estimation_framework_files/figure-html/unnamed-chunk-11-1.png)
 
 Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups
 
@@ -330,7 +332,7 @@ Click to show code for plot generation
 `  ``)`
 
 ![Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across
-Time](post_estimation_framework_files/figure-html/unnamed-chunk-13-1.png)
+Time](post_estimation_framework_files/figure-html/unnamed-chunk-14-1.png)
 
 Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across
 Time
@@ -426,7 +428,7 @@ Click to show code for plot generation
 `  ``)`
 
 ![Figure 5: Comparison of Trends in PHQ-15 by Stigma
-Groups](post_estimation_framework_files/figure-html/unnamed-chunk-16-1.png)
+Groups](post_estimation_framework_files/figure-html/unnamed-chunk-17-1.png)
 
 Figure 5: Comparison of Trends in PHQ-15 by Stigma Groups
 
@@ -518,7 +520,7 @@ Click to show code for plot generation
 
 ![Figure 6: Interaction Contrasts - Evaluating the Change in Group
 Differences Over
-Time](post_estimation_framework_files/figure-html/unnamed-chunk-19-1.png)
+Time](post_estimation_framework_files/figure-html/unnamed-chunk-20-1.png)
 
 Figure 6: Interaction Contrasts - Evaluating the Change in Group
 Differences Over Time
@@ -639,7 +641,7 @@ Click to show code for plot generation
 
 ![Figure 7: Interaction Contrasts - Evaluating the Change in Group
 Differences Over Time Across
-Groups](post_estimation_framework_files/figure-html/unnamed-chunk-22-1.png)
+Groups](post_estimation_framework_files/figure-html/unnamed-chunk-23-1.png)
 
 Figure 7: Interaction Contrasts - Evaluating the Change in Group
 Differences Over Time Across Groups
