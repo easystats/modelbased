@@ -36,6 +36,9 @@
   tinyplot](https://easystats.github.io/modelbased/articles/plotting_tinyplot.md):
 - [Plotting estimated marginal
   means](https://easystats.github.io/modelbased/articles/plotting.md):
+- [The Modelisation Approach: An Analytical Workflow with Integrated
+  Post-Estimation
+  Framework](https://easystats.github.io/modelbased/articles/post_estimation_framework.md):
 - [Case Study: Causal inference for observational data using
   modelbased](https://easystats.github.io/modelbased/articles/practical_causality.md):
 - [Context Effects: How the Environment Shapes the
