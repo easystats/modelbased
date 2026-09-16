@@ -197,7 +197,7 @@ This is exactly why we need to move beyond the regression table. To draw valid c
 
 ## Step 2: Post-Estimation with `modelbased`
 
-Now we query our model using the core functions of the `modelbased` toolkit: `estimate_means()`, `estimate_slopes()`, and `estimate_contrasts()`. We evaluate specific target populations using the `estimate = "average"` argument, which calculates predictions using the actual empirical distribution of covariates in our sample before averaging the results (see also the [vignette on marginalization methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html) for technical details and the meaning of other optins for the `estimate` argument).
+Now we query our model using the core functions of the `modelbased` toolkit: `estimate_means()`, `estimate_slopes()`, and `estimate_contrasts()`. We evaluate specific target populations using the `estimate = "average"` argument, which calculates predictions using the actual empirical distribution of covariates in our sample before averaging the results (see also the [vignette on marginalization methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html) for technical details and the meaning of other options for the `estimate` argument).
 
 ### Predicted overall PHQ-15 scores: Comparing stigma groups
 
