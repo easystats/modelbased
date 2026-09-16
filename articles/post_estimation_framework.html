@@ -200,7 +200,8 @@ spell out their theoretical estimands in precise terms. An estimand is
 the specific target quantity that directly answers the research
 question. Instead of passively interpreting whatever coefficients the
 software returns, we must actively decide whether our question requires
-us to estimate predictions, slopes, or comparisons <span class="citation">Rohrer and Murayama (2023)</span>.</p>
+us to estimate predictions, slopes, or comparisons <span class="citation">(Rohrer and Arel-Bundock 2026; Rohrer and Murayama
+2023)</span>.</p>
 <p>In this vignette, we will use a single model to target five distinct
 estimands:</p>
 <ol style="list-style-type: decimal">
@@ -251,7 +252,7 @@ guide to determine which variables must be included (confounders) or may
 be included (risk factors) to prevent bias and increase precision. It
 also tells us which variables must strictly be excluded (mediators,
 colliders, and instrumental variables) to avoid overadjustment bias or
-bias amplification (see figure 1, <span class="citation">Chatton and
+bias amplification (see Figure 1, <span class="citation">Chatton and
 Rohrer (2024)</span>).</p>
 <div class="figure" style="text-align: center">
 <img src="../reference/figures/DAG_summary.png" class="r-plt" alt="Figure 1: Variable Roles in a Directed Acyclic Graph (DAG)" width="500px"><p class="caption">
@@ -349,7 +350,7 @@ Click to show code for data generation
 interpret these coefficients as <em>descriptive comparisons</em>.
 Specifically, coefficients generally represent <em>conditional
 effects</em>, meaning they describe an association while <em>strictly
-holding all other covariates constant</em> <span class="citation">(Gelman et al. 2020, 6.3)</span>.</p>
+holding all other covariates constant</em> [<span class="citation">Gelman et al. (2020)</span>; Chapter 6.3].</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span></span>
@@ -503,12 +504,11 @@ other options for the <code>estimate</code> argument).</p>
 <h4 id="predicted-overall-phq-15-scores-comparing-stigma-groups">Predicted overall PHQ-15 scores: Comparing stigma groups<a class="anchor" aria-label="anchor" href="#predicted-overall-phq-15-scores-comparing-stigma-groups"></a>
 </h4>
 <p>First, we ask: How does symptom severity differ between stigma
-groups? We use <code><a href="../reference/estimate_means.html">estimate_means()</a></code> to calculate the estimated
-marginal means for each stigma group, comparing their overall average
-score. By doing so, we target our first estimand—marginal
-predictions—which allows us to see the expected outcome for these groups
-while standardizing the distribution of all other covariates in our
-sample.</p>
+groups? We use <code><a href="../reference/estimate_means.html">estimate_means()</a></code> to calculate the marginal
+means for each stigma group, comparing their overall average score. By
+doing so, we target our first estimand—marginal predictions—which allows
+us to see the expected outcome for these groups while standardizing the
+distribution of all other covariates in our sample.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate overall marginal means for each stigma group. Using</span></span>
 <span><span class="co"># estimate = "average" computes predictions based on the actual sample</span></span>
@@ -668,7 +668,7 @@ a comparison of comparisons - allowing us to formally test if the
 initial gap between the stigma groups significantly widens or narrows by
 the end of the study.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calculate contrasts between stigma groups at specific time points</span></span>
+<code class="sourceCode R"><span><span class="co"># Calculate simple contrasts between stigma groups at specific time points</span></span>
 <span><span class="va">contrast2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  <span class="st">"stigma_unreal"</span>,</span>
@@ -861,9 +861,9 @@ Click to show code for plot generation
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </details><div class="figure">
-<img src="post_estimation_framework_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="Figure 7: Interaction Contrasts - Evaluating the Change in Group Differences Over Time Across Groups" width="100%"><p class="caption">
-Figure 7: Interaction Contrasts - Evaluating the Change in Group
-Differences Over Time Across Groups
+<img src="post_estimation_framework_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease Groups" width="100%"><p class="caption">
+Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease
+Groups
 </p>
 </div>
 </div>

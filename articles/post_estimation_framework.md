@@ -50,8 +50,8 @@ spell out their theoretical estimands in precise terms. An estimand is
 the specific target quantity that directly answers the research
 question. Instead of passively interpreting whatever coefficients the
 software returns, we must actively decide whether our question requires
-us to estimate predictions, slopes, or comparisons Rohrer and Murayama
-(2023).
+us to estimate predictions, slopes, or comparisons (Rohrer and
+Arel-Bundock 2026; Rohrer and Murayama 2023).
 
 In this vignette, we will use a single model to target five distinct
 estimands:
@@ -98,7 +98,7 @@ practical guide to determine which variables must be included
 (confounders) or may be included (risk factors) to prevent bias and
 increase precision. It also tells us which variables must strictly be
 excluded (mediators, colliders, and instrumental variables) to avoid
-overadjustment bias or bias amplification (see figure 1, Chatton and
+overadjustment bias or bias amplification (see Figure 1, Chatton and
 Rohrer (2024)).
 
 ![Figure 1: Variable Roles in a Directed Acyclic Graph
@@ -198,7 +198,7 @@ When looking at the standard regression table, it is crucial to
 interpret these coefficients as *descriptive comparisons*. Specifically,
 coefficients generally represent *conditional effects*, meaning they
 describe an association while *strictly holding all other covariates
-constant* (Gelman et al. 2020, 6.3).
+constant* \[Gelman et al. (2020); Chapter 6.3\].
 
 \
 `result`` ``<-`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``, effects ``=`` ``"fixed"``)`\
@@ -271,8 +271,8 @@ for technical details and the meaning of other options for the
 First, we ask: How does symptom severity differ between stigma groups?
 We use
 [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
-to calculate the estimated marginal means for each stigma group,
-comparing their overall average score. By doing so, we target our first
+to calculate the marginal means for each stigma group, comparing their
+overall average score. By doing so, we target our first
 estimand—marginal predictions—which allows us to see the expected
 outcome for these groups while standardizing the distribution of all
 other covariates in our sample.
@@ -443,7 +443,7 @@ initial gap between the stigma groups significantly widens or narrows by
 the end of the study.
 
 \
-`# Calculate contrasts between stigma groups at specific time points`\
+`# Calculate simple contrasts between stigma groups at specific time points`\
 `contrast2`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
 `  ``"stigma_unreal"``,`\
@@ -639,12 +639,12 @@ Click to show code for plot generation
 `    `[`theme`](https://ggplot2.tidyverse.org/reference/theme.html)`(``legend.position ``=`` ``"bottom"``)`\
 `)`
 
-![Figure 7: Interaction Contrasts - Evaluating the Change in Group
-Differences Over Time Across
+![Figure 7: Interaction Contrasts - Exploring Heterogeneity Across
+Disease
 Groups](post_estimation_framework_files/figure-html/unnamed-chunk-23-1.png)
 
-Figure 7: Interaction Contrasts - Evaluating the Change in Group
-Differences Over Time Across Groups
+Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease
+Groups
 
 ### Summary and Conclusion
 
