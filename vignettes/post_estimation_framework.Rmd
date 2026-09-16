@@ -351,7 +351,7 @@ result <- plot(emm, numeric_as_discrete = FALSE) +
 
 </details>
 
-```{r, echo=FALSE, fig.cap="Figure 4: Comparison of Trends in PHQ-15 by Stigma Groups"}
+```{r, echo=FALSE, fig.cap="Figure 5: Comparison of Trends in PHQ-15 by Stigma Groups"}
 plot(result)
 ```
 
@@ -440,7 +440,7 @@ result <- plot(emm) +
 
 </details>
 
-```{r, echo=FALSE, fig.cap="Figure 5: Interaction Contrasts - Evaluating the Change in Group Differences Over Time"}
+```{r, echo=FALSE, fig.cap="Figure 6: Interaction Contrasts - Evaluating the Change in Group Differences Over Time"}
 plot(result)
 ```
 
@@ -556,7 +556,7 @@ result <- plot(emm) +
 
 </details>
 
-```{r, echo=FALSE, fig.width = 10, fig.height = 8, fig.cap="Figure 6: Interaction Contrasts - Evaluating the Change in Group Differences Over Time Across Groups"}
+```{r, echo=FALSE, fig.width = 10, fig.height = 8, fig.cap="Figure 7: Interaction Contrasts - Evaluating the Change in Group Differences Over Time Across Groups"}
 plot(result)
 ```
 
