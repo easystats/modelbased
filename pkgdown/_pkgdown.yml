@@ -77,6 +77,8 @@ navbar:
           href: articles/estimate_relation.html
         - text: "The modelisation approach"
           href: articles/modelisation_approach.html
+        - text: "The modelisation approach-2"
+          href: articles/post_estimation_framework.html
     - text: "Case Studies"
       menu:
         - text: "Workflows"
