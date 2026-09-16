@@ -202,7 +202,7 @@ Now we query our model using the core functions of the `modelbased` toolkit: `es
 
 First, we ask: How does symptom severity differ between stigma groups? We use `estimate_means()` to calculate the estimated marginal means for each stigma group, comparing their overall average score. By doing so, we target our first estimand—marginal predictions—which allows us to see the expected outcome for these groups while standardizing the distribution of all other covariates in our sample.
 
-```{r, fig.cap="Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups"}
+```{r}
 # Calculate overall marginal means for each stigma group. Using
 # estimate = "average" computes predictions based on the actual sample
 # distribution
@@ -211,9 +211,15 @@ emm <- estimate_means(
   by = "stigma_unreal",
   estimate = "average"
 )
+```
 
+
+<details>
+<summary>Click to show code for plot generation</summary>
+
+```{r}
 # Plot the estimated marginal means
-plot(emm) +
+result <- plot(emm) +
   labs(
     title = NULL,
     x = "Stigma Group",
@@ -221,25 +227,42 @@ plot(emm) +
   )
 ```
 
+</details>
+
+```{r, fig.cap="Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups"}
+plot(result)
+```
+
 ### Predicted PHQ-15 trajectories: Overlaying modeled trend
 
 Next, we ask: How does symptom severity evolve over time across different stigma groups? We evaluate the interaction between time and stigma group by estimating predictions across specific values. This maps out the expected trajectories, transforming the model's complex interaction coefficients into an intuitive visual format that directly answers our second question.
 
-```{r, fig.cap="Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across Time"}
+```{r}
 # Calculate marginal means for the interaction between time and stigma group
 emm <- estimate_means(
   model,
   by = c("time", "stigma_unreal"),
   estimate = "average"
 )
+```
 
+<details>
+<summary>Click to show code for plot generation</summary>
+
+```{r}
 # Plot the estimated trajectories over time
-plot(emm) +
+result <- plot(emm) +
   labs(
     title = NULL,
     x = "time",
     y = "Estimated PHQ-15 score"
   )
+```
+
+</details>
+
+```{r, fig.cap="Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across Time"}
+plot(result)
 ```
 
 ### Quantifying the change (trend) in PHQ-15 scores
