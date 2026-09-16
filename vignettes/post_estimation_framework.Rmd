@@ -71,7 +71,7 @@ knitr::include_graphics("../man/figures/from-model-to-meaning-final.png")
 
 ### Defining the Estimands: Five Questions, One Model
 
-Before setting up any statistical model, researchers must explicitly spell out their theoretical estimands in precise terms. An estimand is the specific target quantity that directly answers the research question. Instead of passively interpreting whatever coefficients the software returns, we must actively decide whether our question requires us to estimate predictions, slopes, or comparisons [@rohrer_models_2026, @rohrer_these_2023].
+Before setting up any statistical model, researchers must explicitly spell out their theoretical estimands in precise terms. An estimand is the specific target quantity that directly answers the research question. Instead of passively interpreting whatever coefficients the software returns, we must actively decide whether our question requires us to estimate predictions, slopes, or comparisons [@rohrer_models_2026; @rohrer_these_2023].
 
 In this vignette, we will use a single model to target five distinct estimands:
 
@@ -95,7 +95,7 @@ library(grid)
 
 ### Which predictors to include?
 
-To answer our overarching research question - Does perceived stigmatization predict an increase in somatic symptom severity (PHQ-15)? - we must first determine the appropriate variables to include in our analysis. We use Directed Acyclic Graphs (DAGs) to visually map out the theoretical causal assumptions behind our data. This acts as a practical guide to determine which variables must be included (confounders) or may be included (risk factors) to prevent bias and increase precision. It also tells us which variables must strictly be excluded (mediators, colliders, and instrumental variables) to avoid overadjustment bias or bias amplification (see figure 1, @chatton_causal_2024).
+To answer our overarching research question - Does perceived stigmatization predict an increase in somatic symptom severity (PHQ-15)? - we must first determine the appropriate variables to include in our analysis. We use Directed Acyclic Graphs (DAGs) to visually map out the theoretical causal assumptions behind our data. This acts as a practical guide to determine which variables must be included (confounders) or may be included (risk factors) to prevent bias and increase precision. It also tells us which variables must strictly be excluded (mediators, colliders, and instrumental variables) to avoid overadjustment bias or bias amplification (see Figure 1, @chatton_causal_2024).
 
 ```{r fig1-dag, echo=FALSE, out.width = "500px", fig.align="center", fig.cap="Figure 1: Variable Roles in a Directed Acyclic Graph (DAG)"}
 knitr::include_graphics("../man/figures/DAG_summary.png")
@@ -177,7 +177,7 @@ model <- glmmTMB(
 
 ### Interpreting the output
 
-When looking at the standard regression table, it is crucial to interpret these coefficients as *descriptive comparisons*. Specifically, coefficients generally represent *conditional effects*, meaning they describe an association while *strictly holding all other covariates constant* [@gelman_regression_2020, chapter 6.3].
+When looking at the standard regression table, it is crucial to interpret these coefficients as *descriptive comparisons*. Specifically, coefficients generally represent *conditional effects*, meaning they describe an association while *strictly holding all other covariates constant* [@gelman_regression_2020; Chapter 6.3].
 
 ```{r, }
 result <- model_parameters(model, effects = "fixed")
@@ -205,7 +205,7 @@ Now we query our model using the core functions of the `modelbased` toolkit: `es
 
 ### Predicted overall PHQ-15 scores: Comparing stigma groups
 
-First, we ask: How does symptom severity differ between stigma groups? We use `estimate_means()` to calculate the estimated marginal means for each stigma group, comparing their overall average score. By doing so, we target our first estimand—marginal predictions—which allows us to see the expected outcome for these groups while standardizing the distribution of all other covariates in our sample.
+First, we ask: How does symptom severity differ between stigma groups? We use `estimate_means()` to calculate the marginal means for each stigma group, comparing their overall average score. By doing so, we target our first estimand—marginal predictions—which allows us to see the expected outcome for these groups while standardizing the distribution of all other covariates in our sample.
 
 ```{r}
 # Calculate overall marginal means for each stigma group. Using
@@ -364,7 +364,7 @@ plot(result)
 Is there a significant gap between the groups at specific measurement points, and does this gap change? We can run an interaction contrast to test whether the group difference at time point 0 differs significantly from the difference at time point 2. This targets our fourth estimand - a comparison of comparisons - allowing us to formally test if the initial gap between the stigma groups significantly widens or narrows by the end of the study.
 
 ```{r}
-# Calculate contrasts between stigma groups at specific time points
+# Calculate simple contrasts between stigma groups at specific time points
 contrast2 <- estimate_contrasts(
   model,
   "stigma_unreal",
@@ -562,7 +562,7 @@ result <- suppressWarnings(
 
 </details>
 
-```{r, warning=FALSE, echo=FALSE, fig.width = 9, fig.height = 7.5, fig.cap="Figure 7: Interaction Contrasts - Evaluating the Change in Group Differences Over Time Across Groups"}
+```{r, warning=FALSE, echo=FALSE, fig.width = 9, fig.height = 7.5, fig.cap="Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease Groups"}
 suppressWarnings(plot(result))
 ```
 
