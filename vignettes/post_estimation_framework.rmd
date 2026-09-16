@@ -229,7 +229,7 @@ result <- plot(emm) +
 
 </details>
 
-```{r, fig.cap="Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups"}
+```{r, echo=FALSE, fig.cap="Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups"}
 plot(result)
 ```
 
@@ -261,7 +261,7 @@ result <- plot(emm) +
 
 </details>
 
-```{r, fig.cap="Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across Time"}
+```{r, echo=FALSE, fig.cap="Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across Time"}
 plot(result)
 ```
 
@@ -350,7 +350,7 @@ result <- plot(emm, numeric_as_discrete = FALSE) +
 
 </details>
 
-```{r, fig.cap="Figure 4: Comparison of Trends in PHQ-15 by Stigma Groups"}
+```{r, echo=FALSE, fig.cap="Figure 4: Comparison of Trends in PHQ-15 by Stigma Groups"}
 plot(result)
 ```
 
@@ -439,7 +439,7 @@ result <- plot(emm) +
 
 </details>
 
-```{r, fig.cap="Figure 5: Interaction Contrasts - Evaluating the Change in Group Differences Over Time"}
+```{r, echo=FALSE, fig.cap="Figure 5: Interaction Contrasts - Evaluating the Change in Group Differences Over Time"}
 plot(result)
 ```
 
@@ -468,7 +468,7 @@ int_contrasts <- estimate_contrasts(
 <details>
 <summary>Click to show code for plot generation</summary>
 
-```{r, fig.width = 10, fig.height = 8}
+```{r}
 # Filter out comparisons that we are not interested in
 # (e.g., comparing time 0 to time 1)
 remove <- endsWith(int_contrasts$Parameter, "0 - 1") |
@@ -554,7 +554,7 @@ result <- plot(emm) +
 
 </details>
 
-```{r, fig.width = 10, fig.height = 8, fig.cap="Figure 6: Interaction Contrasts - Evaluating the Change in Group Differences Over Time Across Groups"}
+```{r, echo=FALSE, fig.width = 10, fig.height = 8, fig.cap="Figure 6: Interaction Contrasts - Evaluating the Change in Group Differences Over Time Across Groups"}
 plot(result) + theme_gray()
 ```
 

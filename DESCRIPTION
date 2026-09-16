@@ -63,7 +63,7 @@ Suggests:
     correlation,
     coxme,
     curl,
-    daggity,
+    dagitty,
     discovr,
     easystats,
     effectsize (>= 1.0.0),
