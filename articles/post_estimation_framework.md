@@ -88,7 +88,8 @@ vignette, we default to `estimate = "average"` to accurately reflect the
 empirical distribution of our observed sample. However, if your estimand
 requires formal causal inference and transferring results to other
 contexts, switching to `estimate = "population"` allows you to evaluate
-true counterfactual scenarios.
+true counterfactual scenarios (see also the [vignette on marginalization
+methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html)).
 
 Before we start, let’s load the necessary R packages.
 
@@ -115,12 +116,13 @@ Rohrer (2024)).
 
 ------------------------------------------------------------------------
 
-!["Just hold all covariates constant," they said. The cognitive overload
-of interpreting raw interaction
-coefficients](../reference/figures/know_your_estimand.jpg)
+!["Just control for everything in the DAG", they said. The cognitive
+overload of searching for an estimand without a clear post-estimation
+strategy](../reference/figures/know_your_estimand.jpg)
 
-“Just hold all covariates constant,” they said. The cognitive overload
-of interpreting raw interaction coefficients
+“Just control for everything in the DAG”, they said. The cognitive
+overload of searching for an estimand without a clear post-estimation
+strategy
 
 ------------------------------------------------------------------------
 

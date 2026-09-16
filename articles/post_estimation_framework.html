@@ -244,7 +244,8 @@ Throughout this vignette, we default to
 distribution of our observed sample. However, if your estimand requires
 formal causal inference and transferring results to other contexts,
 switching to <code>estimate = "population"</code> allows you to evaluate
-true counterfactual scenarios.</p>
+true counterfactual scenarios (see also the <a href="https://easystats.github.io/modelbased/articles/technical_marginalization.html">vignette
+on marginalization methods</a>).</p>
 </div>
 <p>Before we start, let’s load the necessary R packages.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -270,9 +271,10 @@ bias amplification (see Figure 1, <span class="citation">Chatton and
 Rohrer (2024)</span>).</p>
 <hr>
 <div class="figure" style="text-align: center">
-<img src="../reference/figures/know_your_estimand.jpg" class="r-plt" alt='"Just hold all covariates constant," they said. The cognitive overload of interpreting raw interaction coefficients' width="650px"><p class="caption">
-“Just hold all covariates constant,” they said. The cognitive overload
-of interpreting raw interaction coefficients
+<img src="../reference/figures/know_your_estimand.jpg" class="r-plt" alt='"Just control for everything in the DAG", they said. The cognitive overload of searching for an estimand without a clear post-estimation strategy' width="650px"><p class="caption">
+“Just control for everything in the DAG”, they said. The cognitive
+overload of searching for an estimand without a clear post-estimation
+strategy
 </p>
 </div>
 <hr>
