@@ -549,13 +549,14 @@ result <- plot(emm) +
     color = "#333333",
     fill = "white"
   ) +
+  theme_gray() +
   theme(legend.position = "bottom")
 ```
 
 </details>
 
 ```{r, echo=FALSE, fig.width = 10, fig.height = 8, fig.cap="Figure 6: Interaction Contrasts - Evaluating the Change in Group Differences Over Time Across Groups"}
-plot(result) + theme_gray()
+plot(result)
 ```
 
 ## Summary and Conclusion
