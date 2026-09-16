@@ -104,7 +104,7 @@ To answer our overarching research question - Does perceived stigmatization pred
 
 ---
 
-```{r, echo=FALSE, out.width = "650px", fig.align="center", fig.cap = '"Just hold all covariates constant," they said. The cognitive overload of interpreting raw interaction coefficients'}
+```{r, echo=FALSE, out.width = "650px", fig.align="center", fig.cap = '"Just control for everything in the DAG," they said. The cognitive overload of searching for an estimand without a clear post-estimation strategy'}
 knitr::include_graphics("../man/figures/know_your_estimand.jpg")
 ```
 
