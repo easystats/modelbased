@@ -17,6 +17,7 @@
 ^vignettes/w.
 ^man/figures/DAG_summary.png
 ^man/figures/from-model-to-meaning-final.png
+^man/figures/estimates_as_comparisons.jpg
 ^logo.png
 ^README.Rmd
 ^air.toml
