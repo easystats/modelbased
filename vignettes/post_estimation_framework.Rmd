@@ -186,10 +186,15 @@ display(
   caption = "Regression Coefficients from Linear Mixed Model (only fixed effects shown)"
 )
 ```
+---
+
+### The Interpretation Trap
 
 ```{r, echo=FALSE, out.width = "650px", fig.align="center"}
 knitr::include_graphics("../man/figures/estimates_as_comparisons.jpg")
 ```
+
+---
 
 - **Categorical Predictors:** Estimates are interpreted relative to a baseline reference category. For instance, the coefficient for `stigma_unreal ((strongly) disagree)` is `-1.34`. This indicates that, holding `time`, `sex`, `age`, and all other covariates constant, patients who disagree that their symptoms are "unreal" score 1.34 points lower on the PHQ-15 than those in the implicit reference category (who agree).
 
