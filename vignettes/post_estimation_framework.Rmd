@@ -469,7 +469,7 @@ int_contrasts <- estimate_contrasts(
 <details>
 <summary>Click to show code for plot generation</summary>
 
-```{r}
+```{r, warning=FALSE}
 # Filter out comparisons that we are not interested in
 # (e.g., comparing time 0 to time 1)
 remove <- endsWith(int_contrasts$Parameter, "0 - 1") |
@@ -519,45 +519,47 @@ for (i in unique(emm$disease_group)) {
 }
 
 # Render the faceted base plot and overlay the calculated annotations
-result <- plot(emm) +
-  labs(
-    title = "Did the gap of stigma-groups change over time?",
-    x = "Time point",
-    y = "Estimated PHQ-15 score"
-  ) +
-  geom_segment(
-    aes(x = x_start, xend = x_end, y = y_min_arrows, yend = y_max_arrows),
-    arrow = arrow(ends = "both", length = unit(0.15, "cm")),
-    color = "#FFC107",
-    linewidth = 0.5
-  ) +
-  geom_curve(
-    aes(
-      x = 1.02,
-      xend = 1.98,
-      y = arrow_start,
-      yend = arrow_end
-    ),
-    curvature = -0.15,
-    arrow = arrow(ends = "both", length = unit(0.15, "cm")),
-    color = "#FFC107",
-    linewidth = 0.3,
-    linetype = "dashed"
-  ) +
-  geom_label(
-    aes(x = 1.5, y = Mean, label = p_label),
-    size = 3,
-    color = "#333333",
-    fill = "white"
-  ) +
-  theme_gray() +
-  theme(legend.position = "bottom")
+result <- suppressWarnings(
+  plot(emm) +
+    labs(
+      title = "Did the gap of stigma-groups change over time?",
+      x = "Time point",
+      y = "Estimated PHQ-15 score"
+    ) +
+    geom_segment(
+      aes(x = x_start, xend = x_end, y = y_min_arrows, yend = y_max_arrows),
+      arrow = arrow(ends = "both", length = unit(0.15, "cm")),
+      color = "#FFC107",
+      linewidth = 0.5
+    ) +
+    geom_curve(
+      aes(
+        x = 1.02,
+        xend = 1.98,
+        y = arrow_start,
+        yend = arrow_end
+      ),
+      curvature = -0.15,
+      arrow = arrow(ends = "both", length = unit(0.15, "cm")),
+      color = "#FFC107",
+      linewidth = 0.3,
+      linetype = "dashed"
+    ) +
+    geom_label(
+      aes(x = 1.5, y = Mean, label = p_label),
+      size = 3,
+      color = "#333333",
+      fill = "white"
+    ) +
+    theme_gray() +
+    theme(legend.position = "bottom")
+)
 ```
 
 </details>
 
-```{r, echo=FALSE, fig.width = 10, fig.height = 8, fig.cap="Figure 7: Interaction Contrasts - Evaluating the Change in Group Differences Over Time Across Groups"}
-plot(result)
+```{r, warning=FALSE, echo=FALSE, fig.width = 10, fig.height = 8, fig.cap="Figure 7: Interaction Contrasts - Evaluating the Change in Group Differences Over Time Across Groups"}
+suppressWarnings(plot(result))
 ```
 
 ## Summary and Conclusion
