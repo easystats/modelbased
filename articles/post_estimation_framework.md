@@ -78,6 +78,18 @@ estimands:
 Once these target quantities are clearly defined, we can proceed to
 construct the mathematical model that will allow us to estimate them.
 
+When calculating your estimand, specifying the unit of interest -
+whether that is a specific individual, an average across individuals, or
+a broader target population - is just as crucial as choosing between
+predictions or slopes. In the `modelbased` package, this target
+population is controlled via the `estimate` argument, which determines
+how to marginalize over the non-focal predictors. Throughout this
+vignette, we default to `estimate = "average"` to accurately reflect the
+empirical distribution of our observed sample. However, if your estimand
+requires formal causal inference and transferring results to other
+contexts, switching to `estimate = "population"` allows you to evaluate
+true counterfactual scenarios.
+
 Before we start, let’s load the necessary R packages.
 
 \
@@ -101,13 +113,22 @@ excluded (mediators, colliders, and instrumental variables) to avoid
 overadjustment bias or bias amplification (see Figure 1, Chatton and
 Rohrer (2024)).
 
+This is an often-neglected, yet crucial step in data analysis. Depending
+on your research question, it may be necessary to “control for a
+confounder” to reduce bias. However, in other situations, that exact
+same variable might act not as a confounder, but as a mediator - which
+dictates that it should be omitted from the model (Rohrer and
+Arel-Bundock 2026).
+
 ![Figure 1: Variable Roles in a Directed Acyclic Graph
 (DAG)](../reference/figures/DAG_summary.png)
 
 Figure 1: Variable Roles in a Directed Acyclic Graph (DAG)
 
 Here is the DAG checking the theoretical structure of our variables
-before proceeding to the actual modeling step:
+before proceeding to the actual modeling step. If we omitted a necessary
+confounder, or accidentally included a collider, this diagnostic check
+will alert us.
 
 \
 `# Define and check the theoretical causal structure using a Directed Acyclic`\
