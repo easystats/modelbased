@@ -606,7 +606,7 @@ Click to show code for plot generation
 `result`` ``<-`` `[`suppressWarnings`](https://rdrr.io/r/base/warning.html)`(`\
 `  `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``emm``)`` ``+`\
 `    `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
-`      title ``=`` ``"Did the gap of stigma-groups change over time?"``,`\
+`      title ``=`` ``NULL``,`\
 `      x ``=`` ``"Time point"``,`\
 `      y ``=`` ``"Estimated PHQ-15 score"`\
 `    ``)`` ``+`\
