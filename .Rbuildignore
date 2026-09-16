@@ -16,7 +16,7 @@
 ^vignettes/v.
 ^vignettes/w.
 ^man/figures/DAG_summary.png
-^man/figures/from_model_to_meaning_final.png
+^man/figures/from-model-to-meaning-final.png
 ^logo.png
 ^README.Rmd
 ^air.toml
