@@ -268,6 +268,14 @@ also tells us which variables must strictly be excluded (mediators,
 colliders, and instrumental variables) to avoid overadjustment bias or
 bias amplification (see Figure 1, <span class="citation">Chatton and
 Rohrer (2024)</span>).</p>
+<hr>
+<div class="figure" style="text-align: center">
+<img src="../reference/figures/know_your_estimand.jpg" class="r-plt" alt='"Just hold all covariates constant," they said. The cognitive overload of interpreting raw interaction coefficients' width="650px"><p class="caption">
+“Just hold all covariates constant,” they said. The cognitive overload
+of interpreting raw interaction coefficients
+</p>
+</div>
+<hr>
 <p>This is an often-neglected, yet crucial step in data analysis.
 Depending on your research question, it may be necessary to “control for
 a confounder” to reduce bias. However, in other situations, that exact
@@ -298,7 +306,7 @@ will alert us.</p>
 <span><span class="co"># Visualize the DAG to confirm our adjustment strategy</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dag</span>, which <span class="op">=</span> <span class="st">"current"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="post_estimation_framework_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="Figure 2: DAG of our theoretical causal assumptions" width="100%"><p class="caption">
+<img src="post_estimation_framework_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="Figure 2: DAG of our theoretical causal assumptions" width="100%"><p class="caption">
 Figure 2: DAG of our theoretical causal assumptions
 </p>
 </div>
@@ -490,7 +498,6 @@ effects shown)</caption>
 The Cognitive Overload of Conditional Effects
 </p>
 </div>
-<hr>
 <ul>
 <li><p><strong>Categorical Predictors:</strong> Estimates are
 interpreted relative to a baseline reference category. For instance, the
@@ -560,7 +567,7 @@ Click to show code for plot generation
 <span>    y <span class="op">=</span> <span class="st">"Estimated PHQ-15 score"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </details><div class="figure">
-<img src="post_estimation_framework_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups" width="100%"><p class="caption">
+<img src="post_estimation_framework_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups" width="100%"><p class="caption">
 Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups
 </p>
 </div>
@@ -592,7 +599,7 @@ Click to show code for plot generation
 <span>    y <span class="op">=</span> <span class="st">"Estimated PHQ-15 score"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </details><div class="figure">
-<img src="post_estimation_framework_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across Time" width="100%"><p class="caption">
+<img src="post_estimation_framework_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across Time" width="100%"><p class="caption">
 Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across
 Time
 </p>
@@ -683,7 +690,7 @@ Click to show code for plot generation
 <span>    show.legend <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </details><div class="figure">
-<img src="post_estimation_framework_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="Figure 5: Comparison of Trends in PHQ-15 by Stigma Groups" width="100%"><p class="caption">
+<img src="post_estimation_framework_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="Figure 5: Comparison of Trends in PHQ-15 by Stigma Groups" width="100%"><p class="caption">
 Figure 5: Comparison of Trends in PHQ-15 by Stigma Groups
 </p>
 </div>
@@ -773,7 +780,7 @@ Click to show code for plot generation
 <span>    hjust <span class="op">=</span> <span class="fl">0.5</span>, size <span class="op">=</span> <span class="fl">3.5</span>, fontface <span class="op">=</span> <span class="st">"bold"</span>, color <span class="op">=</span> <span class="st">"#333333"</span>, fill <span class="op">=</span> <span class="st">"white"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </details><div class="figure">
-<img src="post_estimation_framework_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="Figure 6: Interaction Contrasts - Evaluating the Change in Group Differences Over Time" width="100%"><p class="caption">
+<img src="post_estimation_framework_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" alt="Figure 6: Interaction Contrasts - Evaluating the Change in Group Differences Over Time" width="100%"><p class="caption">
 Figure 6: Interaction Contrasts - Evaluating the Change in Group
 Differences Over Time
 </p>
@@ -892,7 +899,7 @@ Click to show code for plot generation
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </details><div class="figure">
-<img src="post_estimation_framework_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease Groups" width="100%"><p class="caption">
+<img src="post_estimation_framework_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" alt="Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease Groups" width="100%"><p class="caption">
 Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease
 Groups
 </p>
