@@ -214,7 +214,7 @@ Click to show code for data generation
 `)`\
 \
 `# Set a global clean theme for all subsequent plots`\
-[`set_theme`](https://ggplot2.tidyverse.org/reference/get_theme.html)`(`[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)``)`
+[`set_theme`](https://ggplot2.tidyverse.org/reference/get_theme.html)`(`[`theme_modern`](https://easystats.github.io/see/reference/theme_modern.html)`(``show.ticks ``=`` ``TRUE``)``)`
 
 \
 `# Fit a linear mixed-effects model using glmmTMB: We predict 'phq15' based on`\
@@ -394,11 +394,9 @@ Click to show code for plot generation
 \
 `# Plot the estimated trajectories over time`\
 `result`` ``<-`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``emm``)`` ``+`\
-`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
-`    title ``=`` ``NULL``,`\
-`    x ``=`` ``"time"``,`\
-`    y ``=`` ``"Estimated PHQ-15 score"`\
-`  ``)`
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(``title ``=`` ``NULL``, x ``=`` ``"time"``, y ``=`` ``"Estimated PHQ-15 score"``)`` ``+`\
+`  `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`` ``+`\
+`  `[`scale_fill_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`
 
 ![Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across
 Time](post_estimation_framework_files/figure-html/unnamed-chunk-15-1.png)
@@ -494,7 +492,9 @@ Click to show code for plot generation
 `    vjust ``=`` ``-``0.5``,`\
 `    size ``=`` ``3.5``,`\
 `    show.legend ``=`` ``FALSE`\
-`  ``)`
+`  ``)`` ``+`\
+`  `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`` ``+`\
+`  `[`scale_fill_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`
 
 ![Figure 5: Comparison of Trends in PHQ-15 by Stigma
 Groups](post_estimation_framework_files/figure-html/unnamed-chunk-18-1.png)
@@ -586,7 +586,9 @@ Click to show code for plot generation
 `      ``if`` ``(``contrast3``$``p`` ``>=`` ``0.05``)`` ``" (n.s.)"`\
 `    ``)``,`\
 `    hjust ``=`` ``0.5``, size ``=`` ``3.5``, fontface ``=`` ``"bold"``, color ``=`` ``"#333333"``, fill ``=`` ``"white"`\
-`  ``)`
+`  ``)`` ``+`\
+`  `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`` ``+`\
+`  `[`scale_fill_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`
 
 ![Figure 6: Interaction Contrasts - Evaluating the Change in Group
 Differences Over
@@ -706,11 +708,17 @@ Click to show code for plot generation
 `    `[`geom_label`](https://ggplot2.tidyverse.org/reference/geom_text.html)`(`\
 `      `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``1.5``, y ``=`` ``Mean``, label ``=`` ``p_label``)``,`\
 `      size ``=`` ``3``,`\
-`      color ``=`` ``"#333333"``,`\
-`      fill ``=`` ``"white"`\
+`      text.color ``=`` ``"#333333"``,`\
+`      fill ``=`` ``"#fcefcb"``,`\
+`      border.color ``=`` ``"#555555"`\
 `    ``)`` ``+`\
-`    `[`theme_gray`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`` ``+`\
-`    `[`theme`](https://ggplot2.tidyverse.org/reference/theme.html)`(``legend.position ``=`` ``"bottom"``)`\
+`    `[`theme`](https://ggplot2.tidyverse.org/reference/theme.html)`(`\
+`      legend.position ``=`` ``"bottom"``,`\
+`      strip.background ``=`` `[`element_rect`](https://ggplot2.tidyverse.org/reference/element.html)`(``fill ``=`` ``"#efefef"``, colour ``=`` ``"white"``)``,`\
+`      strip.text ``=`` `[`element_text`](https://ggplot2.tidyverse.org/reference/element.html)`(``size ``=`` ``13``)`\
+`    ``)`` ``+`\
+`    `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`` ``+`\
+`    `[`scale_fill_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`\
 `)`
 
 ![Figure 7: Interaction Contrasts - Exploring Heterogeneity Across
