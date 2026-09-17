@@ -494,7 +494,7 @@ Click to show code for plot generation
 `      ``insight``::`[`format_ci`](https://easystats.github.io/insight/reference/format_ci.html)`(``contrast1``)``,`\
 `      ``", "``,`\
 `      ``insight``::`[`format_p`](https://easystats.github.io/insight/reference/format_p.html)`(``contrast1``$``p``)``,`\
-`      ``"\n(no significant difference in trends)"`\
+`      ``if`` ``(``contrast1``$``p`` ``>=`` ``0.05``)`` ``"\n(no significant difference in trends)"`\
 `    ``)``,`\
 `    size ``=`` ``3.5``,`\
 `    fill ``=`` ``"white"``,`\
@@ -574,7 +574,12 @@ Click to show code for plot generation
 `  ``)`` ``+`\
 `  `[`annotate`](https://ggplot2.tidyverse.org/reference/annotate.html)`(`\
 `    ``"text"``, x ``=`` ``0.9``, y ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``emm``$``Mean``[``emm``$``time`` ``==`` ``0``]``)``,`\
-`    label ``=`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"Diff: "``, `[`round`](https://rdrr.io/r/base/Round.html)`(``contrast2``$``Difference``[``1``]``, ``2``)``, ``"\np < .001"``)``,`\
+`    label ``=`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`\
+`      ``"Diff: "``,`\
+`      `[`round`](https://rdrr.io/r/base/Round.html)`(``contrast2``$``Difference``[``1``]``, ``2``)``,`\
+`      ``"\n"``,`\
+`      ``if`` ``(``contrast2``$``p``[``1``]`` ``>=`` ``0.05`` ``)`` ``"(n.s.)"`` ``else`` ``format_p``(``contrast2``$``p``[``1``]``)`\
+`    ``)``,`\
 `    hjust ``=`` ``1``, size ``=`` ``3.5``, fontface ``=`` ``"italic"``, color ``=`` ``"#333333"`\
 `  ``)`` ``+`\
 `  ``# Annotate the gap at time = 2`\
@@ -587,7 +592,12 @@ Click to show code for plot generation
 `  ``)`` ``+`\
 `  `[`annotate`](https://ggplot2.tidyverse.org/reference/annotate.html)`(`\
 `    ``"text"``, x ``=`` ``3.1``, y ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``emm``$``Mean``[``emm``$``time`` ``==`` ``2``]``)``,`\
-`    label ``=`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"Diff: "``, `[`round`](https://rdrr.io/r/base/Round.html)`(``contrast2``$``Difference``[``2``]``, ``2``)``, ``"\np < .001"``)``,`\
+`    label ``=`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`\
+`      ``"Diff: "``,`\
+`      `[`round`](https://rdrr.io/r/base/Round.html)`(``contrast2``$``Difference``[``2``]``, ``2``)``,`\
+`      ``"\n"``,`\
+`      ``if`` ``(``contrast2``$``p``[``2``]`` ``>=`` ``0.05`` ``)`` ``"(n.s.)"`` ``else`` ``format_p``(``contrast2``$``p``[``2``]``)`\
+`    ``)``,`\
 `    hjust ``=`` ``0``, size ``=`` ``3.5``, fontface ``=`` ``"italic"``, color ``=`` ``"#333333"`\
 `  ``)`` ``+`\
 `  ``# Annotate the "Difference of Differences" (interaction contrast)`\
