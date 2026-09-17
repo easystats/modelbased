@@ -14,7 +14,7 @@ Completing the analytic workflow means understanding that fitting the model is j
 
 By adopting this perspective, the `modelbased` package helps you extract multiple insights from one comprehensive model. Because there is rarely just a single "effect" of interest in any given study, a single, well-built model can be repeatedly queried to estimate various target quantities - such as predictions, comparisons, or slopes. In this vignette, we will demonstrate this efficiency by using just one model to answer five distinct, progressively complex research questions, moving seamlessly from exploratory analysis to formal hypothesis testing.
 
-This vignette illustrates a two-step framework for statistical modeling, which we call the *modelisation approach*.
+This vignette illustrates a two-step framework for statistical modeling, which we call the *modelisation approach* (derived from the French *modélisation*).
 
 1. **Setup the Model**: The first step is to explicitly define the theoretical estimand, which is the specific target quantity that actually answers your research question. Once the goal is clear, we must carefully select predictors. This process is greatly aided by Directed Acyclic Graphs (DAGs), which allow us to map out the theoretical causal web and decide which variables must be included (like confounders) and which must be avoided (like colliders and mediators). Finally, we must recognize that standard regression coefficients usually just represent descriptive, conditional comparisons rather than direct causal effects.
 
