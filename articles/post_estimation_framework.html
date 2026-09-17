@@ -496,6 +496,10 @@ effects shown)</caption>
 <div class="section level4">
 <h4 id="the-interpretation-trap">The Interpretation Trap<a class="anchor" aria-label="anchor" href="#the-interpretation-trap"></a>
 </h4>
+<p>The “interpretation trap” occurs when researchers forget that
+regression coefficients must be interpreted conditionally - meaning they
+only compare individuals who share the exact same characteristics across
+all other variables.</p>
 <ul>
 <li><p><strong>Categorical Predictors:</strong> Estimates are
 interpreted relative to a baseline reference category. For instance, the
@@ -549,9 +553,10 @@ other options for the <code>estimate</code> argument).</p>
 <p>First, we ask: How does symptom severity differ between stigma
 groups? We use <code><a href="../reference/estimate_means.html">estimate_means()</a></code> to calculate the marginal
 means for each stigma group, comparing their overall average score. By
-doing so, we target our first estimand—marginal predictions—which allows
-us to see the expected outcome for these groups while standardizing the
-distribution of all other covariates in our sample.</p>
+doing so, we target our first estimand - marginal predictions - which
+allows us to see the expected outcome for these groups while
+standardizing the distribution of all other covariates in our
+sample.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate overall marginal means for each stigma group. Using</span></span>
 <span><span class="co"># estimate = "average" computes predictions based on the actual sample</span></span>
@@ -578,7 +583,7 @@ Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups
 </div>
 </div>
 <div class="section level4">
-<h4 id="predicted-phq-15-trajectories-overlaying-modeled-trend">Predicted PHQ-15 trajectories: Overlaying modeled trend<a class="anchor" aria-label="anchor" href="#predicted-phq-15-trajectories-overlaying-modeled-trend"></a>
+<h4 id="predicted-phq-15-trajectories">Predicted PHQ-15 trajectories<a class="anchor" aria-label="anchor" href="#predicted-phq-15-trajectories"></a>
 </h4>
 <p>Next, we ask: How does symptom severity evolve over time across
 different stigma groups? We evaluate the interaction between time and
@@ -587,7 +592,8 @@ out the expected trajectories, transforming the model’s complex
 interaction coefficients into an intuitive visual format that directly
 answers our second question.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calculate marginal means for the interaction between time and stigma group</span></span>
+<code class="sourceCode R"><span><span class="co"># Calculate marginal means for the interaction</span></span>
+<span><span class="co"># between time and stigma group</span></span>
 <span><span class="va">emm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"stigma_unreal"</span><span class="op">)</span>,</span>
@@ -623,8 +629,8 @@ between the two slopes is significantly different from zero. We set
 <code>integer_as_continuous = TRUE</code> so that numeric predictors
 with few unique values are correctly treated for slope contrasts.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Estimate the linear trend (slope) of PHQ-15 scores over time</span></span>
-<span><span class="co"># for each stigma group</span></span>
+<code class="sourceCode R"><span><span class="co"># Estimate the linear trend (slope) of PHQ-15 scores</span></span>
+<span><span class="co"># over time for each stigma group</span></span>
 <span><span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  <span class="st">"time"</span>,</span>
@@ -632,9 +638,9 @@ with few unique values are correctly treated for slope contrasts.</p>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Test if the difference between the two slopes is statistically significant</span></span>
-<span><span class="co"># 'integer_as_continuous = TRUE' ensures the 3 time points are treated as</span></span>
-<span><span class="co"># a continuous trend</span></span>
+<span><span class="co"># Test if the difference between the two slopes is</span></span>
+<span><span class="co"># statistically significant. 'integer_as_continuous = TRUE'</span></span>
+<span><span class="co"># ensures the 3 time points are treated as a continuous trend</span></span>
 <span><span class="va">contrast1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  <span class="st">"time"</span>,</span>
@@ -711,7 +717,8 @@ a comparison of comparisons - allowing us to formally test if the
 initial gap between the stigma groups significantly widens or narrows by
 the end of the study.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calculate simple contrasts between stigma groups at specific time points</span></span>
+<code class="sourceCode R"><span><span class="co"># Calculate simple contrasts between stigma groups</span></span>
+<span><span class="co"># at specific time points</span></span>
 <span><span class="va">contrast2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  <span class="st">"stigma_unreal"</span>,</span>
@@ -719,9 +726,9 @@ the end of the study.</p>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Calculate interaction contrasts: Does the group gap at time 0 differ from</span></span>
-<span><span class="co"># the gap at time 2?</span></span>
-<span><span class="co"># We specify a custom comparison: (Group 1 at T0 - Group 2 at T0) vs</span></span>
+<span><span class="co"># Calculate interaction contrasts: Does the group gap at</span></span>
+<span><span class="co"># time 0 differ from the gap at time 2? We specify a custom</span></span>
+<span><span class="co"># comparison: (Group 1 at T0 - Group 2 at T0) vs</span></span>
 <span><span class="co"># (Group 1 at T2 - Group 2 at T2)</span></span>
 <span><span class="va">contrast3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
@@ -801,14 +808,18 @@ disease groups). This shifts our focus from average marginal effects to
 conditional comparisons, revealing whether the overall patterns hold
 true or vary across different clinical contexts.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calculate marginal means conditional on higher-level groupings (disease_group)</span></span>
+<code class="sourceCode R"><span><span class="co"># Calculate marginal means conditional on</span></span>
+<span><span class="co"># higher-level groupings (disease_group)</span></span>
 <span><span class="va">emm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>,</span>
 <span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time=c(0,2)"</span>, <span class="st">"stigma_unreal"</span>, <span class="st">"disease_group"</span><span class="op">)</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Estimate pairwise contrasts between stigma groups at</span></span>
-<span><span class="co"># specific time points and disease groups</span></span>
+<span><span class="co"># specific time points and disease groups, and then</span></span>
+<span><span class="co"># do a pairwise comparison of these differences (again:</span></span>
+<span><span class="co"># interaction contrasts, this time aggregated by disease</span></span>
+<span><span class="co"># groups).</span></span>
 <span><span class="va">int_contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  <span class="st">"stigma_unreal"</span>,</span>

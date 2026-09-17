@@ -260,6 +260,11 @@ shown) {.table}
 
 #### The Interpretation Trap
 
+The “interpretation trap” occurs when researchers forget that regression
+coefficients must be interpreted conditionally - meaning they only
+compare individuals who share the exact same characteristics across all
+other variables.
+
 - **Categorical Predictors:** Estimates are interpreted relative to a
   baseline reference category. For instance, the coefficient for
   `stigma_unreal ((strongly) disagree)` is `-1.34`. This indicates that,
@@ -316,10 +321,10 @@ First, we ask: How does symptom severity differ between stigma groups?
 We use
 [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
 to calculate the marginal means for each stigma group, comparing their
-overall average score. By doing so, we target our first
-estimand—marginal predictions—which allows us to see the expected
-outcome for these groups while standardizing the distribution of all
-other covariates in our sample.
+overall average score. By doing so, we target our first estimand -
+marginal predictions - which allows us to see the expected outcome for
+these groups while standardizing the distribution of all other
+covariates in our sample.
 
 \
 `# Calculate overall marginal means for each stigma group. Using`\
@@ -347,7 +352,7 @@ Groups](post_estimation_framework_files/figure-html/unnamed-chunk-12-1.png)
 
 Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups
 
-#### Predicted PHQ-15 trajectories: Overlaying modeled trend
+#### Predicted PHQ-15 trajectories
 
 Next, we ask: How does symptom severity evolve over time across
 different stigma groups? We evaluate the interaction between time and
@@ -357,7 +362,8 @@ interaction coefficients into an intuitive visual format that directly
 answers our second question.
 
 \
-`# Calculate marginal means for the interaction between time and stigma group`\
+`# Calculate marginal means for the interaction`\
+`# between time and stigma group`\
 `emm`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(`\
 `  ``model``,`\
 `  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"stigma_unreal"``)``,`\
@@ -398,8 +404,8 @@ numeric predictors with few unique values are correctly treated for
 slope contrasts.
 
 \
-`# Estimate the linear trend (slope) of PHQ-15 scores over time`\
-`# for each stigma group`\
+`# Estimate the linear trend (slope) of PHQ-15 scores`\
+`# over time for each stigma group`\
 `slopes`` ``<-`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(`\
 `  ``model``,`\
 `  ``"time"``,`\
@@ -407,9 +413,9 @@ slope contrasts.
 `  estimate ``=`` ``"average"`\
 `)`\
 \
-`# Test if the difference between the two slopes is statistically significant`\
-`# 'integer_as_continuous = TRUE' ensures the 3 time points are treated as`\
-`# a continuous trend`\
+`# Test if the difference between the two slopes is`\
+`# statistically significant. 'integer_as_continuous = TRUE'`\
+`# ensures the 3 time points are treated as a continuous trend`\
 `contrast1`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
 `  ``"time"``,`\
@@ -487,7 +493,8 @@ initial gap between the stigma groups significantly widens or narrows by
 the end of the study.
 
 \
-`# Calculate simple contrasts between stigma groups at specific time points`\
+`# Calculate simple contrasts between stigma groups`\
+`# at specific time points`\
 `contrast2`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
 `  ``"stigma_unreal"``,`\
@@ -495,9 +502,9 @@ the end of the study.
 `  estimate ``=`` ``"average"`\
 `)`\
 \
-`# Calculate interaction contrasts: Does the group gap at time 0 differ from`\
-`# the gap at time 2?`\
-`# We specify a custom comparison: (Group 1 at T0 - Group 2 at T0) vs`\
+`# Calculate interaction contrasts: Does the group gap at`\
+`# time 0 differ from the gap at time 2? We specify a custom`\
+`# comparison: (Group 1 at T0 - Group 2 at T0) vs`\
 `# (Group 1 at T2 - Group 2 at T2)`\
 `contrast3`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
@@ -579,14 +586,18 @@ comparisons, revealing whether the overall patterns hold true or vary
 across different clinical contexts.
 
 \
-`# Calculate marginal means conditional on higher-level groupings (disease_group)`\
+`# Calculate marginal means conditional on`\
+`# higher-level groupings (disease_group)`\
 `emm`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``,`\
 `  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time=c(0,2)"``, ``"stigma_unreal"``, ``"disease_group"``)``,`\
 `  estimate ``=`` ``"average"`\
 `)`\
 \
 `# Estimate pairwise contrasts between stigma groups at`\
-`# specific time points and disease groups`\
+`# specific time points and disease groups, and then`\
+`# do a pairwise comparison of these differences (again:`\
+`# interaction contrasts, this time aggregated by disease`\
+`# groups).`\
 `int_contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
 `  ``"stigma_unreal"``,`\
