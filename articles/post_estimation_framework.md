@@ -299,6 +299,18 @@ This is exactly why we need to move beyond the regression table. To draw
 valid conclusions, we must transition to Step 2 and extract meaningful
 answers through post-estimation.
 
+Up to this point, we have focused on the relatively straightforward case
+of linear models. Moving to generalized linear models, such as logistic
+regression, makes interpreting raw coefficients even more complex.
+
+This is where the modelisation approach truly shines: by utilizing the
+`modelbased` package, we bypass these difficulties and generate
+intuitive, real-world quantities instead. In the case of logistic
+regression, for example, we can directly estimate the predicted
+probability of an outcome event. Probabilities are vastly easier to
+communicate and understand than confusing - and often misinterpreted -
+odds ratios.
+
 ### Step 2: Post-Estimation with `modelbased`
 
 Now we query our model using the core functions of the `modelbased`
