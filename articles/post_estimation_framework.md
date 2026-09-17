@@ -182,7 +182,7 @@ will alert us.
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``dag``, which ``=`` ``"current"``)`` ``+`` `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(``title ``=`` ``NULL``)`
 
 ![Figure 2: DAG of our theoretical causal
-assumptions](post_estimation_framework_files/figure-html/unnamed-chunk-5-1.png)
+assumptions](post_estimation_framework_files/figure-html/fig2-own-dag-1.png)
 
 Figure 2: DAG of our theoretical causal assumptions
 
@@ -381,7 +381,7 @@ Click to show code for plot generation
 `  ``)`
 
 ![Figure 3: Estimated Marginal Means of PHQ-15 by Stigma
-Groups](post_estimation_framework_files/figure-html/unnamed-chunk-12-1.png)
+Groups](post_estimation_framework_files/figure-html/unnamed-chunk-11-1.png)
 
 Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups
 
@@ -417,7 +417,7 @@ Click to show code for plot generation
 `  `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`
 
 ![Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across
-Time](post_estimation_framework_files/figure-html/unnamed-chunk-15-1.png)
+Time](post_estimation_framework_files/figure-html/unnamed-chunk-14-1.png)
 
 Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across
 Time
@@ -517,7 +517,7 @@ Click to show code for plot generation
 `  `[`scale_fill_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`
 
 ![Figure 5: Comparison of Trends in PHQ-15 by Stigma
-Groups](post_estimation_framework_files/figure-html/unnamed-chunk-18-1.png)
+Groups](post_estimation_framework_files/figure-html/unnamed-chunk-17-1.png)
 
 Figure 5: Comparison of Trends in PHQ-15 by Stigma Groups
 
@@ -612,7 +612,7 @@ Click to show code for plot generation
 
 ![Figure 6: Interaction Contrasts - Evaluating the Change in Group
 Differences Over
-Time](post_estimation_framework_files/figure-html/unnamed-chunk-21-1.png)
+Time](post_estimation_framework_files/figure-html/unnamed-chunk-20-1.png)
 
 Figure 6: Interaction Contrasts - Evaluating the Change in Group
 Differences Over Time
@@ -743,7 +743,7 @@ Click to show code for plot generation
 
 ![Figure 7: Interaction Contrasts - Exploring Heterogeneity Across
 Disease
-Groups](post_estimation_framework_files/figure-html/unnamed-chunk-24-1.png)
+Groups](post_estimation_framework_files/figure-html/unnamed-chunk-23-1.png)
 
 Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease
 Groups
