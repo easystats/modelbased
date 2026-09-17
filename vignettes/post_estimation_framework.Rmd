@@ -130,11 +130,11 @@ Here is the DAG checking the theoretical structure of our variables before proce
 # to adjust for.
 dag <- check_dag(
   phq15 ~ symptoms_unreal + sex + age + education,
-  symptoms_unreal ~ sex + age + education + ID,
+  symptoms_unreal ~ sex + age + education,
   education ~ age,
   outcome = "phq15",
   exposure = "symptoms_unreal",
-  adjusted = ~ sex + age + education + ID
+  adjusted = ~ sex + age + education
 )
 
 # Visualize the DAG to confirm our adjustment strategy
