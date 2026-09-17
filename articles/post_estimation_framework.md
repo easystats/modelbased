@@ -743,7 +743,7 @@ Click to show code for plot generation
 
 ![Figure 7: Interaction Contrasts - Exploring Heterogeneity Across
 Disease
-Groups](post_estimation_framework_files/figure-html/unnamed-chunk-23-1.png)
+Groups](post_estimation_framework_files/figure-html/fig-7-clusters-1.png)
 
 Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease
 Groups
@@ -766,7 +766,7 @@ Arel-Bundock 2026).
 ------------------------------------------------------------------------
 
 By shifting our perspective and treating statistical models as
-“counterfactual prediction machines”, we unburden ourselves from the
+“(counterfactual) prediction machines”, we unburden ourselves from the
 cognitive load of reverse-engineering complex model mechanics. This
 model-agnostic framework forces us to put substantive theory first by
 explicitly defining a theoretical estimand - the exact target quantity
