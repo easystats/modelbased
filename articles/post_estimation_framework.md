@@ -760,6 +760,12 @@ fallacy”, where the coefficients of control variables are wrongly
 interpreted as causal effects (Westreich and Greenland 2013; Rohrer and
 Arel-Bundock 2026).
 
+------------------------------------------------------------------------
+
+![](../reference/figures/vive_modelisation.jpg)
+
+------------------------------------------------------------------------
+
 By shifting our perspective and treating statistical models as
 “counterfactual prediction machines”, we unburden ourselves from the
 cognitive load of reverse-engineering complex model mechanics. This
