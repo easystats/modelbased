@@ -53,6 +53,18 @@ software returns, we must actively decide whether our question requires
 us to estimate predictions, slopes, or comparisons (Rohrer and
 Arel-Bundock 2026; Rohrer and Murayama 2023).
 
+------------------------------------------------------------------------
+
+!["Just control for everything in the DAG", they said. The cognitive
+overload of searching for an estimand without a clear post-estimation
+strategy](../reference/figures/know_your_estimand.jpg)
+
+“Just control for everything in the DAG”, they said. The cognitive
+overload of searching for an estimand without a clear post-estimation
+strategy
+
+------------------------------------------------------------------------
+
 In this vignette, we will use a single model to target five distinct
 estimands:
 
@@ -113,18 +125,6 @@ increase precision. It also tells us which variables must strictly be
 excluded (mediators, colliders, and instrumental variables) to avoid
 overadjustment bias or bias amplification (see Figure 1, Chatton and
 Rohrer (2024)).
-
-------------------------------------------------------------------------
-
-!["Just control for everything in the DAG", they said. The cognitive
-overload of searching for an estimand without a clear post-estimation
-strategy](../reference/figures/know_your_estimand.jpg)
-
-“Just control for everything in the DAG”, they said. The cognitive
-overload of searching for an estimand without a clear post-estimation
-strategy
-
-------------------------------------------------------------------------
 
 This is an often-neglected, yet crucial step in data analysis. Depending
 on your research question, it may be necessary to “control for a
@@ -257,14 +257,7 @@ constant* \[Gelman et al. (2020); Chapter 6.3\].
 Regression Coefficients from Linear Mixed Model (only fixed effects
 shown) {.table}
 
-------------------------------------------------------------------------
-
 #### The Interpretation Trap
-
-![The Cognitive Overload of Conditional
-Effects](../reference/figures/estimates_as_comparisons.jpg)
-
-The Cognitive Overload of Conditional Effects
 
 - **Categorical Predictors:** Estimates are interpreted relative to a
   baseline reference category. For instance, the coefficient for
@@ -279,6 +272,15 @@ The Cognitive Overload of Conditional Effects
   coefficient of `-0.69` suggests a 0.69-point decrease in PHQ-15 scores
   for every single unit of time passed, again, assuming *all other
   variables are held constant*.
+
+------------------------------------------------------------------------
+
+![The Cognitive Overload of Conditional
+Effects](../reference/figures/these_are_not_the_effects.jpg)
+
+The Cognitive Overload of Conditional Effects
+
+------------------------------------------------------------------------
 
 Because our model includes an interaction (`stigma_unreal * time`),
 interpreting these individual coefficients becomes highly confusing. The

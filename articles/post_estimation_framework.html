@@ -202,6 +202,15 @@ question. Instead of passively interpreting whatever coefficients the
 software returns, we must actively decide whether our question requires
 us to estimate predictions, slopes, or comparisons <span class="citation">(Rohrer and Arel-Bundock 2026; Rohrer and Murayama
 2023)</span>.</p>
+<hr>
+<div class="figure" style="text-align: center">
+<img src="../reference/figures/know_your_estimand.jpg" class="r-plt" alt='"Just control for everything in the DAG", they said. The cognitive overload of searching for an estimand without a clear post-estimation strategy' width="650px"><p class="caption">
+“Just control for everything in the DAG”, they said. The cognitive
+overload of searching for an estimand without a clear post-estimation
+strategy
+</p>
+</div>
+<hr>
 <p>In this vignette, we will use a single model to target five distinct
 estimands:</p>
 <ol style="list-style-type: decimal">
@@ -269,15 +278,6 @@ also tells us which variables must strictly be excluded (mediators,
 colliders, and instrumental variables) to avoid overadjustment bias or
 bias amplification (see Figure 1, <span class="citation">Chatton and
 Rohrer (2024)</span>).</p>
-<hr>
-<div class="figure" style="text-align: center">
-<img src="../reference/figures/know_your_estimand.jpg" class="r-plt" alt='"Just control for everything in the DAG", they said. The cognitive overload of searching for an estimand without a clear post-estimation strategy' width="650px"><p class="caption">
-“Just control for everything in the DAG”, they said. The cognitive
-overload of searching for an estimand without a clear post-estimation
-strategy
-</p>
-</div>
-<hr>
 <p>This is an often-neglected, yet crucial step in data analysis.
 Depending on your research question, it may be necessary to “control for
 a confounder” to reduce bias. However, in other situations, that exact
@@ -490,16 +490,10 @@ effects shown)</caption>
 </tr>
 </tbody>
 </table>
-<hr>
 </div>
 <div class="section level4">
 <h4 id="the-interpretation-trap">The Interpretation Trap<a class="anchor" aria-label="anchor" href="#the-interpretation-trap"></a>
 </h4>
-<div class="figure" style="text-align: center">
-<img src="../reference/figures/estimates_as_comparisons.jpg" class="r-plt" alt="The Cognitive Overload of Conditional Effects" width="650px"><p class="caption">
-The Cognitive Overload of Conditional Effects
-</p>
-</div>
 <ul>
 <li><p><strong>Categorical Predictors:</strong> Estimates are
 interpreted relative to a baseline reference category. For instance, the
@@ -516,6 +510,13 @@ The <code>time</code> coefficient of <code>-0.69</code> suggests a
 passed, again, assuming <em>all other variables are held
 constant</em>.</p></li>
 </ul>
+<hr>
+<div class="figure" style="text-align: center">
+<img src="../reference/figures/these_are_not_the_effects.jpg" class="r-plt" alt="The Cognitive Overload of Conditional Effects" width="650px"><p class="caption">
+The Cognitive Overload of Conditional Effects
+</p>
+</div>
+<hr>
 <p>Because our model includes an interaction
 (<code>stigma_unreal * time</code>), interpreting these individual
 coefficients becomes highly confusing. The “main effect” coefficients in
