@@ -290,8 +290,7 @@ emm <- estimate_means(
 # Plot the estimated trajectories over time
 result <- plot(emm) +
   labs(title = NULL, x = "time", y = "Estimated PHQ-15 score") +
-  scale_color_see() +
-  scale_fill_see()
+  scale_color_see()
 ```
 
 </details>
@@ -348,8 +347,10 @@ anno_slopes <- data.frame(
 result <- plot(emm, numeric_as_discrete = FALSE) +
   labs(
     title = NULL,
-    x = "time",
-    y = "Estimated PHQ-15 score"
+    x = "Time Point",
+    y = "Estimated PHQ-15 score",
+    colour = "People believe my\nsymptoms are unreal",
+    fill = "People believe my\nsymptoms are unreal"
   ) +
   annotate(
     "label",
@@ -426,8 +427,9 @@ contrast3 <- estimate_contrasts(
 result <- plot(emm) +
   labs(
     title = NULL,
-    x = "time",
-    y = "Estimated PHQ-15 score"
+    x = "Time Point",
+    y = "Estimated PHQ-15 score",
+    colour = "People believe my symptoms are unreal"
   ) +
   # Annotate the gap at time = 0
   annotate(
@@ -473,8 +475,7 @@ result <- plot(emm) +
     ),
     hjust = 0.5, size = 3.5, fontface = "bold", color = "#333333", fill = "white"
   ) +
-  scale_color_see() +
-  scale_fill_see()
+  scale_color_see()
 ```
 
 </details>
@@ -566,8 +567,9 @@ result <- suppressWarnings(
   plot(emm) +
     labs(
       title = NULL,
-      x = "Time point",
-      y = "Estimated PHQ-15 score"
+      x = "Time Point",
+      y = "Estimated PHQ-15 score",
+      colour = "People believe my symptoms are unreal"
     ) +
     geom_segment(
       aes(x = x_start, xend = x_end, y = y_min_arrows, yend = y_max_arrows),
@@ -600,8 +602,7 @@ result <- suppressWarnings(
       strip.background = element_rect(fill = "#efefef", colour = "white"),
       strip.text = element_text(size = 13)
     ) +
-    scale_color_see() +
-    scale_fill_see()
+    scale_color_see()
 )
 ```
 
