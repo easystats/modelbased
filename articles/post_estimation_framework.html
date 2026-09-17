@@ -381,7 +381,9 @@ Click to show code for data generation
 interpret these coefficients as <em>descriptive comparisons</em>.
 Specifically, coefficients generally represent <em>conditional
 effects</em>, meaning they describe an association while <em>strictly
-holding all other covariates constant</em> [<span class="citation">Gelman et al. (2020)</span>; Chapter 6.3].</p>
+holding all other covariates constant</em> (<span class="citation">Gelman et al. (2020)</span>; Chapter 6.3), i.e.,
+comparing individuals who are identical regarding these
+characteristics.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span></span>

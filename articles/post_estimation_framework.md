@@ -232,7 +232,8 @@ When looking at the standard regression table, it is crucial to
 interpret these coefficients as *descriptive comparisons*. Specifically,
 coefficients generally represent *conditional effects*, meaning they
 describe an association while *strictly holding all other covariates
-constant* \[Gelman et al. (2020); Chapter 6.3\].
+constant* (Gelman et al. (2020); Chapter 6.3), i.e., comparing
+individuals who are identical regarding these characteristics.
 
 \
 `result`` ``<-`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``, effects ``=`` ``"fixed"``)`\
