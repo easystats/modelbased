@@ -9,7 +9,7 @@ interactions or nonlinearities. Instead, we should treat our statistical
 models as *(counterfactual) prediction machines* (Rohrer and
 Arel-Bundock 2026).
 
-### The Modelisation Approach: One Model, Many Answers
+### L’Approche de Modélisation: Un Modèle, Plusieurs Réponses (One Model, Many Answers)
 
 By adopting this perspective, the `modelbased` package helps you extract
 multiple insights from one comprehensive model. Because there is rarely
