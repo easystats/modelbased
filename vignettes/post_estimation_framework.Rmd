@@ -623,6 +623,14 @@ suppressWarnings(plot(result))
 
 # Vive la modélisation !
 
+---
+
+```{r, echo=FALSE, out.width = "650px", fig.align="center"}
+knitr::include_graphics("../man/figures/vive_modelisation.png")
+```
+
+---
+
 The actual empirical insight of a study rarely emerges from simply reading off raw regression coefficients. Particularly in complex models involving interactions, hierarchical structures, or nonlinearities, interpreting these coefficients directly can be highly error-prone. It can even lead to fundamental misinterpretations, such as the "Table 2 fallacy", where the coefficients of control variables are wrongly interpreted as causal effects [@westreich_table_2013; @rohrer_models_2026].
 
 By shifting our perspective and treating statistical models as "counterfactual prediction machines", we unburden ourselves from the cognitive load of reverse-engineering complex model mechanics. This model-agnostic framework forces us to put substantive theory first by explicitly defining a theoretical estimand - the exact target quantity that answers our specific research question.
