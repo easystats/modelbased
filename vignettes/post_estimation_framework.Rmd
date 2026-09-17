@@ -63,6 +63,12 @@ This vignette illustrates a two-step framework for statistical modeling, which w
 
 2. **Post-Estimation**: With the model fitted, we step away from the mechanics of estimation and query our "prediction machine". Utilizing `modelbased` functions, we interrogate the model using specific predictors of interest, define exact evaluation points, and specify target populations. This post-estimation process allows us to translate confusing coefficients into clear, substantive quantities that directly address our initial research questions.
 
+::: custom_note
+Some might take issue with the term *prediction*, assuming it strictly implies forecasting future or unseen events. However, that is exactly the point: the mechanical estimation of parameters is already complete once the model is fitted. What follows are statements like, "based on our data and our model, we can predict this value as our expected outcome."
+
+In this model-agnostic framework, the word "prediction" is used generically to refer to the expected value of the outcome for a given set of predictor variables. It does not require a literal forecast of the future, as the everyday usage of the term might imply. Rather, this model-based expectation - or prediction - is simply the most basic statistical quantity that analysts can target in a regression context to answer substantive questions [@rohrer_models_2026].
+:::
+
 ```{r, echo=FALSE, out.width = "700px", fig.align="center"}
 knitr::include_graphics("../man/figures/from-model-to-meaning-final.png")
 ```
@@ -167,7 +173,7 @@ prior <- data.frame(
 )
 
 # Set a global clean theme for all subsequent plots
-set_theme(theme_modern(show.ticks = TRUE))
+set_theme(theme_modern(show.ticks = TRUE, base_size = 10))
 ```
 
 </details>
@@ -598,7 +604,7 @@ result <- suppressWarnings(
     theme(
       legend.position = "bottom",
       strip.background = element_rect(fill = "#efefef", colour = "white"),
-      strip.text = element_text(size = 13)
+      strip.text = element_text(size = 12)
     ) +
     scale_color_see()
 )
