@@ -77,7 +77,7 @@ knitr::include_graphics("../man/figures/from-model-to-meaning-final.png")
 
 ## Defining the Estimands: Five Questions, One Model
 
-Before setting up any statistical model, researchers must explicitly spell out their theoretical estimands in precise terms. An estimand is the specific target quantity that directly answers the research question. Instead of passively interpreting whatever coefficients the software returns, we must actively decide whether our question requires us to estimate predictions, slopes, or comparisons [@rohrer_models_2026; @rohrer_these_2023].
+Before setting up any statistical model, researchers must explicitly spell out their theoretical estimands in precise terms. An estimand is the specific target quantity that directly answers the research question [@lundberg_what_2021]. Instead of passively interpreting whatever coefficients the software returns, we must actively decide whether our question requires us to estimate predictions, slopes, or comparisons [@rohrer_models_2026; @rohrer_these_2023].
 
 ---
 
