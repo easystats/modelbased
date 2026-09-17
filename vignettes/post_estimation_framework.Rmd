@@ -53,7 +53,7 @@ if (getRversion() < "4.1.0") {
 
 Completing the analytic workflow means understanding that fitting the model is just the beginning. Traditionally, researchers often stop at the regression table, trying to make sense of individual coefficients. However, interpreting coefficients directly can be highly confusing and error-prone, especially when dealing with complex models that include interactions or nonlinearities. Instead, we should treat our statistical models as *(counterfactual) prediction machines* [@rohrer_models_2026].
 
-# L'Approche de Modélisation: Un Modèle, Plusieurs Réponses (One Model, Many Answers)
+# L'Approche de Modélisation: One Model, Many Answers
 
 By adopting this perspective, the `modelbased` package helps you extract multiple insights from one comprehensive model. Because there is rarely just a single "effect" of interest in any given study, a single, well-built model can be repeatedly queried to estimate various target quantities - such as predictions, comparisons, or slopes. In this vignette, we will demonstrate this efficiency by using just one model to answer five distinct, progressively complex research questions, moving seamlessly from exploratory analysis to formal hypothesis testing.
 
