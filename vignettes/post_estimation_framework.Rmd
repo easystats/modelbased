@@ -262,7 +262,7 @@ emm <- estimate_means(
 result <- plot(emm) +
   labs(
     title = NULL,
-    x = "Stigma Group",
+    x = "People believe my symptoms are unreal",
     y = "Estimated PHQ-15 score"
   )
 ```
