@@ -737,11 +737,12 @@ Click to show code for plot generation
 `      linetype ``=`` ``"dashed"`\
 `    ``)`` ``+`\
 `    `[`geom_label`](https://ggplot2.tidyverse.org/reference/geom_text.html)`(`\
-`      `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``1.5``, y ``=`` ``Mean``, label ``=`` ``p_label``)``,`\
+`      `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``1.5``, y ``=`` ``arrow_start`` ``+`` ``1.5``, label ``=`` ``p_label``)``,`\
 `      size ``=`` ``3``,`\
 `      text.color ``=`` ``"#333333"``,`\
 `      fill ``=`` ``"#fff0c8"``,`\
-`      border.color ``=`` ``"#444444"`\
+`      border.color ``=`` ``"#444444"``,`\
+`      alpha ``=`` ``0.3`\
 `    ``)`` ``+`\
 `    `[`theme`](https://ggplot2.tidyverse.org/reference/theme.html)`(`\
 `      legend.position ``=`` ``"bottom"``,`\
