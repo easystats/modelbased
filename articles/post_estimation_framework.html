@@ -157,8 +157,7 @@ error-prone, especially when dealing with complex models that include
 interactions or nonlinearities. Instead, we should treat our statistical
 models as <em>(counterfactual) prediction machines</em> <span class="citation">(Rohrer and Arel-Bundock 2026)</span>.</p>
 <div class="section level2">
-<h2 id="lapproche-de-modélisation-un-modèle-plusieurs-réponses-one-model-many-answers">L’Approche de Modélisation: Un Modèle, Plusieurs Réponses (One
-Model, Many Answers)<a class="anchor" aria-label="anchor" href="#lapproche-de-mod%C3%A9lisation-un-mod%C3%A8le-plusieurs-r%C3%A9ponses-one-model-many-answers"></a>
+<h2 id="lapproche-de-modélisation-one-model-many-answers">L’Approche de Modélisation: One Model, Many Answers<a class="anchor" aria-label="anchor" href="#lapproche-de-mod%C3%A9lisation-one-model-many-answers"></a>
 </h2>
 <p>By adopting this perspective, the <code>modelbased</code> package
 helps you extract multiple insights from one comprehensive model.
@@ -169,6 +168,22 @@ In this vignette, we will demonstrate this efficiency by using just one
 model to answer five distinct, progressively complex research questions,
 moving seamlessly from exploratory analysis to formal hypothesis
 testing.</p>
+<div class="custom_note">
+<p>Some might take issue with the term <em>prediction</em> (or
+<em>prediction machine</em>), assuming it strictly implies forecasting
+future or unseen events. However, that is exactly the point: the
+mechanical estimation of parameters is already complete once the model
+is fitted. What follows are statements like, “based on our data and our
+model, we can predict this value as our expected outcome.”</p>
+<p>In this model-agnostic framework, the word “prediction” is used
+generically to refer to the expected value of the outcome for a given
+set of predictor variables. It does not require a literal forecast of
+the future, as the everyday usage of the term might imply. Rather, this
+model-based expectation - or prediction - is simply the most basic
+statistical quantity that analysts can target in a regression context to
+answer substantive questions <span class="citation">(Rohrer and
+Arel-Bundock 2026)</span>.</p>
+</div>
 <p>This vignette illustrates a two-step framework for statistical
 modeling, which we call the <em>modelisation approach</em> (derived from
 the French <em>modélisation</em>).</p>
@@ -192,22 +207,6 @@ allows us to translate confusing coefficients into clear, substantive
 quantities that directly address our initial research
 questions.</p></li>
 </ol>
-<div class="custom_note">
-<p>Some might take issue with the term <em>prediction</em>, assuming it
-strictly implies forecasting future or unseen events. However, that is
-exactly the point: the mechanical estimation of parameters is already
-complete once the model is fitted. What follows are statements like,
-“based on our data and our model, we can predict this value as our
-expected outcome.”</p>
-<p>In this model-agnostic framework, the word “prediction” is used
-generically to refer to the expected value of the outcome for a given
-set of predictor variables. It does not require a literal forecast of
-the future, as the everyday usage of the term might imply. Rather, this
-model-based expectation - or prediction - is simply the most basic
-statistical quantity that analysts can target in a regression context to
-answer substantive questions <span class="citation">(Rohrer and
-Arel-Bundock 2026)</span>.</p>
-</div>
 <p><img src="../reference/figures/from-model-to-meaning-final.png" class="r-plt" alt="" width="700px" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -289,8 +288,8 @@ on marginalization methods</a>).</p>
 <h3 id="which-predictors-to-include">Which predictors to include?<a class="anchor" aria-label="anchor" href="#which-predictors-to-include"></a>
 </h3>
 <p>To answer our overarching research question - Does perceived
-stigmatization predict an increase in somatic symptom severity (PHQ-15)?
-- we must first determine the appropriate variables to include in our
+stigmatization predict an increase in somatic symptom burden (PHQ-15)? -
+we must first determine the appropriate variables to include in our
 analysis. We use Directed Acyclic Graphs (DAGs) to visually map out the
 theoretical causal assumptions behind our data. This acts as a practical
 guide to determine which variables must be included (confounders) or may
@@ -322,11 +321,12 @@ will alert us.</p>
 <span><span class="co"># to adjust for.</span></span>
 <span><span class="va">dag</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/performance/reference/check_dag.html" class="external-link">check_dag</a></span><span class="op">(</span></span>
 <span>  <span class="va">phq15</span> <span class="op">~</span> <span class="va">symptoms_unreal</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">education</span>,</span>
-<span>  <span class="va">symptoms_unreal</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">ID</span>,</span>
+<span>  <span class="va">symptoms_unreal</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">education</span>,</span>
 <span>  <span class="va">education</span> <span class="op">~</span> <span class="va">age</span>,</span>
 <span>  outcome <span class="op">=</span> <span class="st">"phq15"</span>,</span>
 <span>  exposure <span class="op">=</span> <span class="st">"symptoms_unreal"</span>,</span>
-<span>  adjusted <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">ID</span></span>
+<span>  adjusted <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">education</span>,</span>
+<span>  coords <span class="op">=</span> <span class="fu">ggdag</span><span class="fu">::</span><span class="fu"><a href="https://r-causal.github.io/ggdag/reference/time_ordered_coords.html" class="external-link">time_ordered_coords</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Visualize the DAG to confirm our adjustment strategy</span></span>

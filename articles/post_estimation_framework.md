@@ -9,7 +9,7 @@ interactions or nonlinearities. Instead, we should treat our statistical
 models as *(counterfactual) prediction machines* (Rohrer and
 Arel-Bundock 2026).
 
-## L’Approche de Modélisation: Un Modèle, Plusieurs Réponses (One Model, Many Answers)
+## L’Approche de Modélisation: One Model, Many Answers
 
 By adopting this perspective, the `modelbased` package helps you extract
 multiple insights from one comprehensive model. Because there is rarely
@@ -19,6 +19,21 @@ quantities - such as predictions, comparisons, or slopes. In this
 vignette, we will demonstrate this efficiency by using just one model to
 answer five distinct, progressively complex research questions, moving
 seamlessly from exploratory analysis to formal hypothesis testing.
+
+Some might take issue with the term *prediction* (or *prediction
+machine*), assuming it strictly implies forecasting future or unseen
+events. However, that is exactly the point: the mechanical estimation of
+parameters is already complete once the model is fitted. What follows
+are statements like, “based on our data and our model, we can predict
+this value as our expected outcome.”
+
+In this model-agnostic framework, the word “prediction” is used
+generically to refer to the expected value of the outcome for a given
+set of predictor variables. It does not require a literal forecast of
+the future, as the everyday usage of the term might imply. Rather, this
+model-based expectation - or prediction - is simply the most basic
+statistical quantity that analysts can target in a regression context to
+answer substantive questions (Rohrer and Arel-Bundock 2026).
 
 This vignette illustrates a two-step framework for statistical modeling,
 which we call the *modelisation approach* (derived from the French
@@ -42,21 +57,6 @@ which we call the *modelisation approach* (derived from the French
     specify target populations. This post-estimation process allows us
     to translate confusing coefficients into clear, substantive
     quantities that directly address our initial research questions.
-
-Some might take issue with the term *prediction*, assuming it strictly
-implies forecasting future or unseen events. However, that is exactly
-the point: the mechanical estimation of parameters is already complete
-once the model is fitted. What follows are statements like, “based on
-our data and our model, we can predict this value as our expected
-outcome.”
-
-In this model-agnostic framework, the word “prediction” is used
-generically to refer to the expected value of the outcome for a given
-set of predictor variables. It does not require a literal forecast of
-the future, as the everyday usage of the term might imply. Rather, this
-model-based expectation - or prediction - is simply the most basic
-statistical quantity that analysts can target in a regression context to
-answer substantive questions (Rohrer and Arel-Bundock 2026).
 
 ![](../reference/figures/from-model-to-meaning-final.png)
 
@@ -134,16 +134,15 @@ Before we start, let’s load the necessary R packages.
 ### Which predictors to include?
 
 To answer our overarching research question - Does perceived
-stigmatization predict an increase in somatic symptom severity
-(PHQ-15)? - we must first determine the appropriate variables to include
-in our analysis. We use Directed Acyclic Graphs (DAGs) to visually map
-out the theoretical causal assumptions behind our data. This acts as a
-practical guide to determine which variables must be included
-(confounders) or may be included (risk factors) to prevent bias and
-increase precision. It also tells us which variables must strictly be
-excluded (mediators, colliders, and instrumental variables) to avoid
-overadjustment bias or bias amplification (see Figure 1, Chatton and
-Rohrer (2024)).
+stigmatization predict an increase in somatic symptom burden (PHQ-15)? -
+we must first determine the appropriate variables to include in our
+analysis. We use Directed Acyclic Graphs (DAGs) to visually map out the
+theoretical causal assumptions behind our data. This acts as a practical
+guide to determine which variables must be included (confounders) or may
+be included (risk factors) to prevent bias and increase precision. It
+also tells us which variables must strictly be excluded (mediators,
+colliders, and instrumental variables) to avoid overadjustment bias or
+bias amplification (see Figure 1, Chatton and Rohrer (2024)).
 
 This is an often-neglected, yet crucial step in data analysis. Depending
 on your research question, it may be necessary to “control for a
@@ -171,11 +170,12 @@ will alert us.
 `# to adjust for.`\
 `dag`` ``<-`` `[`check_dag`](https://easystats.github.io/performance/reference/check_dag.html)`(`\
 `  ``phq15`` ``~`` ``symptoms_unreal`` ``+`` ``sex`` ``+`` ``age`` ``+`` ``education``,`\
-`  ``symptoms_unreal`` ``~`` ``sex`` ``+`` ``age`` ``+`` ``education`` ``+`` ``ID``,`\
+`  ``symptoms_unreal`` ``~`` ``sex`` ``+`` ``age`` ``+`` ``education``,`\
 `  ``education`` ``~`` ``age``,`\
 `  outcome ``=`` ``"phq15"``,`\
 `  exposure ``=`` ``"symptoms_unreal"``,`\
-`  adjusted ``=`` ``~`` ``sex`` ``+`` ``age`` ``+`` ``education`` ``+`` ``ID`\
+`  adjusted ``=`` ``~`` ``sex`` ``+`` ``age`` ``+`` ``education``,`\
+`  coords ``=`` ``ggdag``::`[`time_ordered_coords`](https://r-causal.github.io/ggdag/reference/time_ordered_coords.html)`(``)`\
 `)`\
 \
 `# Visualize the DAG to confirm our adjustment strategy`\
