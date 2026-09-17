@@ -443,7 +443,7 @@ slope contrasts.
 `# over time for each stigma group`\
 `slopes`` ``<-`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(`\
 `  ``model``,`\
-`  ``"time"``,`\
+`  slope ``=`` ``"time"``,`\
 `  by ``=`` ``"symptoms_unreal"``,`\
 `  estimate ``=`` ``"average"`\
 `)`\
@@ -453,7 +453,7 @@ slope contrasts.
 `# ensures the 3 time points are treated as a continuous trend`\
 `contrast1`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
-`  ``"time"``,`\
+`  contrast ``=`` ``"time"``,`\
 `  by ``=`` ``"symptoms_unreal"``,`\
 `  integer_as_continuous ``=`` ``TRUE``,`\
 `  estimate ``=`` ``"average"`\
@@ -536,7 +536,7 @@ the end of the study.
 `# at specific time points`\
 `contrast2`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
-`  ``"symptoms_unreal"``,`\
+`  contrast ``=`` ``"symptoms_unreal"``,`\
 `  by ``=`` ``"time=c(0,2)"``,`\
 `  estimate ``=`` ``"average"`\
 `)`\
@@ -547,7 +547,7 @@ the end of the study.
 `# (Group 1 at T2 - Group 2 at T2)`\
 `contrast3`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
-`  `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"symptoms_unreal"``)``,`\
+`  contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"symptoms_unreal"``)``,`\
 `  comparison ``=`` ``"(b1 - b4) = (b3 - b6)"``,`\
 `  estimate ``=`` ``"average"`\
 `)`
@@ -651,7 +651,7 @@ across different clinical contexts.
 `# time aggregated by disease groups).`\
 `int_contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
-`  ``"symptoms_unreal"``,`\
+`  contrast ``=`` ``"symptoms_unreal"``,`\
 `  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"disease_group"``)``,`\
 `  estimate ``=`` ``"average"``,`\
 `  post_process ``=`` ``~`` ``revpairwise`` ``|`` ``disease_group`\
