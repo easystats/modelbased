@@ -621,7 +621,7 @@ result <- suppressWarnings(
 suppressWarnings(plot(result))
 ```
 
-## Summary and Conclusion
+## Vive la modélisation !
 
 The actual empirical insight of a study rarely emerges from simply reading off raw regression coefficients. Particularly in complex models involving interactions, hierarchical structures, or nonlinearities, interpreting these coefficients directly can be highly error-prone. It can even lead to fundamental misinterpretations, such as the "Table 2 fallacy", where the coefficients of control variables are wrongly interpreted as causal effects [@westreich_table_2013; @rohrer_models_2026].
 
