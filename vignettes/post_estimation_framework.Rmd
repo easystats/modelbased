@@ -611,11 +611,12 @@ result <- suppressWarnings(
       linetype = "dashed"
     ) +
     geom_label(
-      aes(x = 1.5, y = Mean, label = p_label),
+      aes(x = 1.5, y = arrow_start + 1.5, label = p_label),
       size = 3,
       text.color = "#333333",
       fill = "#fff0c8",
-      border.color = "#444444"
+      border.color = "#444444",
+      alpha = 0.3
     ) +
     theme(
       legend.position = "bottom",
