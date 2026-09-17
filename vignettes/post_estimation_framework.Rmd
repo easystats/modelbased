@@ -293,7 +293,7 @@ emm <- estimate_means(
 ```{r}
 # Plot the estimated trajectories over time
 result <- plot(emm) +
-  labs(title = NULL, x = "time", y = "Estimated PHQ-15 score") +
+  labs(title = NULL, x = "Time Point", y = "Estimated PHQ-15 score") +
   scale_color_see()
 ```
 
