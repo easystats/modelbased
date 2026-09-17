@@ -73,6 +73,14 @@ knitr::include_graphics("../man/figures/from-model-to-meaning-final.png")
 
 Before setting up any statistical model, researchers must explicitly spell out their theoretical estimands in precise terms. An estimand is the specific target quantity that directly answers the research question. Instead of passively interpreting whatever coefficients the software returns, we must actively decide whether our question requires us to estimate predictions, slopes, or comparisons [@rohrer_models_2026; @rohrer_these_2023].
 
+---
+
+```{r, echo=FALSE, out.width = "650px", fig.align="center", fig.cap = '"Just control for everything in the DAG", they said. The cognitive overload of searching for an estimand without a clear post-estimation strategy'}
+knitr::include_graphics("../man/figures/know_your_estimand.jpg")
+```
+
+---
+
 In this vignette, we will use a single model to target five distinct estimands:
 
 1. **Predicted overall PHQ-15 scores:** To answer how symptom severity differs between stigma groups, our target quantity relies on marginal predictions.
@@ -101,14 +109,6 @@ library(grid)
 ### Which predictors to include?
 
 To answer our overarching research question - Does perceived stigmatization predict an increase in somatic symptom severity (PHQ-15)? - we must first determine the appropriate variables to include in our analysis. We use Directed Acyclic Graphs (DAGs) to visually map out the theoretical causal assumptions behind our data. This acts as a practical guide to determine which variables must be included (confounders) or may be included (risk factors) to prevent bias and increase precision. It also tells us which variables must strictly be excluded (mediators, colliders, and instrumental variables) to avoid overadjustment bias or bias amplification (see Figure 1, @chatton_causal_2024).
-
----
-
-```{r, echo=FALSE, out.width = "650px", fig.align="center", fig.cap = '"Just control for everything in the DAG", they said. The cognitive overload of searching for an estimand without a clear post-estimation strategy'}
-knitr::include_graphics("../man/figures/know_your_estimand.jpg")
-```
-
----
 
 This is an often-neglected, yet crucial step in data analysis. Depending on your research question, it may be necessary to "control for a confounder" to reduce bias. However, in other situations, that exact same variable might act not as a confounder, but as a mediator - which dictates that it should be omitted from the model [@rohrer_models_2026].
 
@@ -201,17 +201,20 @@ display(
   caption = "Regression Coefficients from Linear Mixed Model (only fixed effects shown)"
 )
 ```
----
 
 ### The Interpretation Trap
-
-```{r, echo=FALSE, out.width = "650px", fig.align="center", fig.cap = "The Cognitive Overload of Conditional Effects"}
-knitr::include_graphics("../man/figures/estimates_as_comparisons.jpg")
-```
 
 - **Categorical Predictors:** Estimates are interpreted relative to a baseline reference category. For instance, the coefficient for `stigma_unreal ((strongly) disagree)` is `-1.34`. This indicates that, holding `time`, `sex`, `age`, and all other covariates constant, patients who disagree that their symptoms are "unreal" score 1.34 points lower on the PHQ-15 than those in the implicit reference category (who agree).
 
 - **Continuous Predictors:** Estimates reflect the expected change associated with a one-unit increase in the predictor. The `time` coefficient of `-0.69` suggests a 0.69-point decrease in PHQ-15 scores for every single unit of time passed, again, assuming *all other variables are held constant*.
+
+---
+
+```{r, echo=FALSE, out.width = "650px", fig.align="center", fig.cap = "The Cognitive Overload of Conditional Effects"}
+knitr::include_graphics("../man/figures/these_are_not_the_effects.jpg")
+```
+
+---
 
 Because our model includes an interaction (`stigma_unreal * time`), interpreting these individual coefficients becomes highly confusing. The "main effect" coefficients in the table only apply when the interacting variable is at its reference level (e.g., at `time = 0`). Focusing solely on these isolated numbers can quickly lead to incomplete or erroneous conclusions.
 
