@@ -147,6 +147,9 @@ However, interpreting coefficients directly can be highly confusing and
 error-prone, especially when dealing with complex models that include
 interactions or nonlinearities. Instead, we should treat our statistical
 models as <em>(counterfactual) prediction machines</em> <span class="citation">(Rohrer and Arel-Bundock 2026)</span>.</p>
+<div class="section level3">
+<h3 id="the-modelisation-approach-one-model-many-answers">The Modelisation Approach: One Model, Many Answers<a class="anchor" aria-label="anchor" href="#the-modelisation-approach-one-model-many-answers"></a>
+</h3>
 <p>By adopting this perspective, the <code>modelbased</code> package
 helps you extract multiple insights from one comprehensive model.
 Because there is rarely just a single “effect” of interest in any given
@@ -157,7 +160,8 @@ model to answer five distinct, progressively complex research questions,
 moving seamlessly from exploratory analysis to formal hypothesis
 testing.</p>
 <p>This vignette illustrates a two-step framework for statistical
-modeling:</p>
+modeling, which we call the <em>modelisation approach</em> (derived from
+the French <em>modélisation</em>).</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>Setup the Model</strong>: The first step is to explicitly
 define the theoretical estimand, which is the specific target quantity
@@ -189,6 +193,7 @@ questions.</p></li>
 
 </style>
 <p><img src="../reference/figures/from-model-to-meaning-final.png" class="r-plt" alt="" width="700px" style="display: block; margin: auto;"></p>
+</div>
 <div class="section level3">
 <h3 id="step-1-setup-the-model">Step 1: Setup the Model<a class="anchor" aria-label="anchor" href="#step-1-setup-the-model"></a>
 </h3>
@@ -952,8 +957,8 @@ cognitive load of reverse-engineering complex model mechanics. This
 model-agnostic framework forces us to put substantive theory first by
 explicitly defining a theoretical estimand - the exact target quantity
 that answers our specific research question.</p>
-<p>The complete analytical workflow thus requires two critical
-steps:</p>
+<p>The complete analytical workflow, the <em>modelisation approach</em>,
+thus requires two critical steps:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>Careful Model Setup:</strong> Using tools like Directed
 Acyclic Graphs (DAGs) to transparently map causal assumptions and

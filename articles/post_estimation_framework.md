@@ -9,6 +9,8 @@ interactions or nonlinearities. Instead, we should treat our statistical
 models as *(counterfactual) prediction machines* (Rohrer and
 Arel-Bundock 2026).
 
+### The Modelisation Approach: One Model, Many Answers
+
 By adopting this perspective, the `modelbased` package helps you extract
 multiple insights from one comprehensive model. Because there is rarely
 just a single “effect” of interest in any given study, a single,
@@ -18,7 +20,9 @@ vignette, we will demonstrate this efficiency by using just one model to
 answer five distinct, progressively complex research questions, moving
 seamlessly from exploratory analysis to formal hypothesis testing.
 
-This vignette illustrates a two-step framework for statistical modeling:
+This vignette illustrates a two-step framework for statistical modeling,
+which we call the *modelisation approach* (derived from the French
+*modélisation*).
 
 1.  **Setup the Model**: The first step is to explicitly define the
     theoretical estimand, which is the specific target quantity that
@@ -731,7 +735,8 @@ model-agnostic framework forces us to put substantive theory first by
 explicitly defining a theoretical estimand - the exact target quantity
 that answers our specific research question.
 
-The complete analytical workflow thus requires two critical steps:
+The complete analytical workflow, the *modelisation approach*, thus
+requires two critical steps:
 
 1.  **Careful Model Setup:** Using tools like Directed Acyclic Graphs
     (DAGs) to transparently map causal assumptions and distinguish
