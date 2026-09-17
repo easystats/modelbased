@@ -617,9 +617,9 @@ across different clinical contexts.
 \
 `# Estimate pairwise contrasts between stigma groups at`\
 `# specific time points and disease groups, and then`\
-`# do a pairwise comparison of these differences (again:`\
-`# interaction contrasts, this time aggregated by disease`\
-`# groups).`\
+`# do a subsequent pairwise comparison of these differences`\
+`` # using `post_process` (again: interaction contrasts, this ``\
+`# time aggregated by disease groups).`\
 `int_contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
 `  ``"stigma_unreal"``,`\

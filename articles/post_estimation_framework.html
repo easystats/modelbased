@@ -842,9 +842,9 @@ true or vary across different clinical contexts.</p>
 <span></span>
 <span><span class="co"># Estimate pairwise contrasts between stigma groups at</span></span>
 <span><span class="co"># specific time points and disease groups, and then</span></span>
-<span><span class="co"># do a pairwise comparison of these differences (again:</span></span>
-<span><span class="co"># interaction contrasts, this time aggregated by disease</span></span>
-<span><span class="co"># groups).</span></span>
+<span><span class="co"># do a subsequent pairwise comparison of these differences</span></span>
+<span><span class="co"># using `post_process` (again: interaction contrasts, this</span></span>
+<span><span class="co"># time aggregated by disease groups).</span></span>
 <span><span class="va">int_contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  <span class="st">"stigma_unreal"</span>,</span>
