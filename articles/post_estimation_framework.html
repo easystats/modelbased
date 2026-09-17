@@ -321,12 +321,12 @@ will alert us.</p>
 <span><span class="co"># Graph (DAG). We specify our outcome, exposure, and the covariates we plan</span></span>
 <span><span class="co"># to adjust for.</span></span>
 <span><span class="va">dag</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/performance/reference/check_dag.html" class="external-link">check_dag</a></span><span class="op">(</span></span>
-<span>  <span class="va">phq15</span> <span class="op">~</span> <span class="va">stigma_unreal</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">migration_history</span>,</span>
-<span>  <span class="va">stigma_unreal</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">migration_history</span>,</span>
+<span>  <span class="va">phq15</span> <span class="op">~</span> <span class="va">symptoms_unreal</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">education</span>,</span>
+<span>  <span class="va">symptoms_unreal</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">ID</span>,</span>
 <span>  <span class="va">education</span> <span class="op">~</span> <span class="va">age</span>,</span>
 <span>  outcome <span class="op">=</span> <span class="st">"phq15"</span>,</span>
-<span>  exposure <span class="op">=</span> <span class="st">"stigma_unreal"</span>,</span>
-<span>  adjusted <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">migration_history</span></span>
+<span>  exposure <span class="op">=</span> <span class="st">"symptoms_unreal"</span>,</span>
+<span>  adjusted <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">ID</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Visualize the DAG to confirm our adjustment strategy</span></span>
@@ -341,22 +341,25 @@ Figure 2: DAG of our theoretical causal assumptions
 <h3 id="building-the-model">Building the Model<a class="anchor" aria-label="anchor" href="#building-the-model"></a>
 </h3>
 <p>Guided by this causal structure, we can now build a statistical model
-complex enough to capture our core theoretical assumptions. We fit a
-linear mixed model for hierarchical, longitudinal data predicting
-<code>phq15</code> (somatic symptom burden) using an interaction between
-<code>stigma_unreal</code> and <code>time</code>. The focal predictor,
-<code>stigma_unreal</code>, measures perceived stigma related to somatic
-symptoms by asking participants how much they agree with the statement,
-<em>“Most people believe that my symptoms are not a real illness”</em>
-(with responses ranging from <em>strongly disagree</em> to <em>strongly
-agree</em>, excluding a residual category of patients without
-complaints). Following the DAG, we adjust for the necessary covariates,
-and we include random intercepts for baseline differences and random
-slopes to allow the time trend to vary by patient and disease group.</p>
+complex enough to capture our core theoretical assumptions. The global
+research question is whether perceived stigma predicts the trajectory of
+somatic symptom burden (PHQ-15) over time. We fit a linear mixed model
+for hierarchical, longitudinal data predicting <code>phq15</code> using
+an interaction between <code>symptoms_unreal</code> and
+<code>time</code>. The focal predictor, <code>symptoms_unreal</code>,
+measures perceived stigma related to somatic symptoms by asking
+participants how much they agree with the statement, <em>“People believe
+that my symptoms are not a real illness”</em> (with responses ranging
+from <em>strongly disagree</em> to <em>strongly agree</em>, excluding a
+residual category of patients without complaints). Following the DAG, we
+adjust for the necessary covariates, and we include random intercepts
+for baseline differences and random slopes to allow the time trend to
+vary by patient and disease group.</p>
 <details><summary>
 Click to show code for data generation
 </summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load the example dataset 'stigma' from the modelbased package</span></span>
+<span><span class="co"># This is a toy-dataset with simulated data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">stigma</span>, package <span class="op">=</span> <span class="st">"modelbased"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Shift the 'time' variable so that the baseline starts at 0 instead of 1</span></span>
@@ -364,10 +367,10 @@ Click to show code for data generation
 <span></span>
 <span><span class="co"># Recode the stigma variable to combine levels into a binary-like</span></span>
 <span><span class="co"># structure for simplicity</span></span>
-<span><span class="va">stigma</span><span class="op">$</span><span class="va">stigma_unreal</span> <span class="op">&lt;-</span> <span class="fu">recode_into</span><span class="op">(</span></span>
-<span>  <span class="va">stigma_unreal</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span></span>
+<span><span class="va">stigma</span><span class="op">$</span><span class="va">symptoms_unreal</span> <span class="op">&lt;-</span> <span class="fu">recode_into</span><span class="op">(</span></span>
+<span>  <span class="va">symptoms_unreal</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strongly disagree"</span>, <span class="st">"disagree"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"(strongly) disagree"</span>,</span>
-<span>  <span class="va">stigma_unreal</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span></span>
+<span>  <span class="va">symptoms_unreal</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strongly agree"</span>, <span class="st">"agree"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"(strongly) agree"</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">stigma</span></span>
 <span><span class="op">)</span></span>
@@ -387,13 +390,12 @@ Click to show code for data generation
 <span><span class="co"># include random intercepts and slopes for time across disease groups and</span></span>
 <span><span class="co"># patients.</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
-<span>  <span class="va">phq15</span> <span class="op">~</span> <span class="va">stigma_unreal</span> <span class="op">*</span></span>
+<span>  <span class="va">phq15</span> <span class="op">~</span> <span class="va">symptoms_unreal</span> <span class="op">*</span></span>
 <span>    <span class="va">time</span> <span class="op">+</span></span>
 <span>    <span class="va">sex</span> <span class="op">+</span></span>
 <span>    <span class="va">age_z</span> <span class="op">+</span></span>
-<span>    <span class="va">education_casmin</span> <span class="op">+</span></span>
-<span>    <span class="va">migration_history</span> <span class="op">+</span></span>
-<span>    <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">disease_group</span> <span class="op">/</span> <span class="va">patid</span><span class="op">)</span>,</span>
+<span>    <span class="va">education</span> <span class="op">+</span></span>
+<span>    <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">disease_group</span> <span class="op">/</span> <span class="va">ID</span><span class="op">)</span>,</span>
 <span>  priors <span class="op">=</span> <span class="va">prior</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">stigma</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -418,10 +420,10 @@ characteristics.</p>
 <caption>Regression Coefficients from Linear Mixed Model (only fixed
 effects shown)</caption>
 <colgroup>
-<col width="46%">
+<col width="47%">
 <col width="13%">
 <col width="6%">
-<col width="17%">
+<col width="16%">
 <col width="7%">
 <col width="8%">
 </colgroup>
@@ -436,83 +438,67 @@ effects shown)</caption>
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="center">8.72</td>
+<td align="center">8.61</td>
 <td align="center">1.10</td>
-<td align="center">(6.57, 10.88)</td>
-<td align="center">7.93</td>
+<td align="center">(6.46, 10.76)</td>
+<td align="center">7.85</td>
 <td align="center">&lt; .001</td>
 </tr>
 <tr class="even">
-<td align="left">stigma unreal ((strongly) disagree)</td>
-<td align="center">-1.34</td>
+<td align="left">symptoms unreal ((strongly) disagree)</td>
+<td align="center">-1.36</td>
 <td align="center">0.77</td>
-<td align="center">(-2.85, 0.16)</td>
-<td align="center">-1.75</td>
-<td align="center">0.080</td>
+<td align="center">(-2.87, 0.15)</td>
+<td align="center">-1.76</td>
+<td align="center">0.079</td>
 </tr>
 <tr class="odd">
 <td align="left">time</td>
 <td align="center">-0.69</td>
 <td align="center">0.30</td>
-<td align="center">(-1.29, -0.10)</td>
+<td align="center">(-1.28, -0.10)</td>
 <td align="center">-2.27</td>
 <td align="center">0.023</td>
 </tr>
 <tr class="even">
 <td align="left">sex (female)</td>
-<td align="center">2.77</td>
+<td align="center">2.70</td>
 <td align="center">0.68</td>
-<td align="center">(1.44, 4.09)</td>
-<td align="center">4.10</td>
+<td align="center">(1.37, 4.03)</td>
+<td align="center">3.98</td>
 <td align="center">&lt; .001</td>
 </tr>
 <tr class="odd">
 <td align="left">age z</td>
-<td align="center">-0.12</td>
+<td align="center">-0.07</td>
 <td align="center">0.33</td>
-<td align="center">(-0.77, 0.54)</td>
-<td align="center">-0.35</td>
-<td align="center">0.725</td>
+<td align="center">(-0.73, 0.58)</td>
+<td align="center">-0.21</td>
+<td align="center">0.832</td>
 </tr>
 <tr class="even">
-<td align="left">education casmin (linear)</td>
-<td align="center">-0.92</td>
+<td align="left">education (linear)</td>
+<td align="center">-0.99</td>
 <td align="center">0.67</td>
-<td align="center">(-2.23, 0.39)</td>
-<td align="center">-1.37</td>
-<td align="center">0.170</td>
+<td align="center">(-2.31, 0.32)</td>
+<td align="center">-1.48</td>
+<td align="center">0.139</td>
 </tr>
 <tr class="odd">
-<td align="left">education casmin (quadratic)</td>
-<td align="center">-0.23</td>
-<td align="center">0.49</td>
-<td align="center">(-1.20, 0.73)</td>
-<td align="center">-0.47</td>
-<td align="center">0.637</td>
+<td align="left">education (quadratic)</td>
+<td align="center">-0.20</td>
+<td align="center">0.50</td>
+<td align="center">(-1.17, 0.77)</td>
+<td align="center">-0.40</td>
+<td align="center">0.690</td>
 </tr>
 <tr class="even">
-<td align="left">migration history (2nd generation)</td>
-<td align="center">-1.73</td>
-<td align="center">1.02</td>
-<td align="center">(-3.73, 0.27)</td>
-<td align="center">-1.70</td>
-<td align="center">0.090</td>
-</tr>
-<tr class="odd">
-<td align="left">migration history (1st generation)</td>
-<td align="center">-0.57</td>
-<td align="center">0.93</td>
-<td align="center">(-2.39, 1.24)</td>
-<td align="center">-0.62</td>
-<td align="center">0.537</td>
-</tr>
-<tr class="even">
-<td align="left">stigma unreal ((strongly) disagree) × time</td>
+<td align="left">symptoms unreal ((strongly) disagree) × time</td>
 <td align="center">0.34</td>
 <td align="center">0.31</td>
-<td align="center">(-0.28, 0.96)</td>
+<td align="center">(-0.28, 0.95)</td>
 <td align="center">1.08</td>
-<td align="center">0.279</td>
+<td align="center">0.281</td>
 </tr>
 </tbody>
 </table>
@@ -526,7 +512,7 @@ all other variables.</p>
 <ul>
 <li><p><strong>Categorical Predictors:</strong> Estimates are
 interpreted relative to a baseline reference category. For instance, the
-coefficient for <code>stigma_unreal ((strongly) disagree)</code> is
+coefficient for <code>symptoms_unreal ((strongly) disagree)</code> is
 <code>-1.34</code>. This indicates that, holding <code>time</code>,
 <code>sex</code>, <code>age</code>, and all other covariates constant,
 patients who disagree that their symptoms are “unreal” score 1.34 points
@@ -547,7 +533,7 @@ The Cognitive Overload of Conditional Effects
 </div>
 <hr>
 <p>Because our model includes an interaction
-(<code>stigma_unreal * time</code>), interpreting these individual
+(<code>symptoms_unreal * time</code>), interpreting these individual
 coefficients becomes highly confusing. The “main effect” coefficients in
 the table only apply when the interacting variable is at its reference
 level (e.g., at <code>time = 0</code>). Focusing solely on these
@@ -600,7 +586,7 @@ sample.</p>
 <span><span class="co"># distribution</span></span>
 <span><span class="va">emm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
-<span>  by <span class="op">=</span> <span class="st">"stigma_unreal"</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"symptoms_unreal"</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <details><summary>
@@ -633,7 +619,7 @@ answers our second question.</p>
 <span><span class="co"># between time and stigma group</span></span>
 <span><span class="va">emm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
-<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"stigma_unreal"</span><span class="op">)</span>,</span>
+<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"symptoms_unreal"</span><span class="op">)</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <details><summary>
@@ -673,7 +659,7 @@ with few unique values are correctly treated for slope contrasts.</p>
 <span><span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  <span class="st">"time"</span>,</span>
-<span>  by <span class="op">=</span> <span class="st">"stigma_unreal"</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"symptoms_unreal"</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -683,7 +669,7 @@ with few unique values are correctly treated for slope contrasts.</p>
 <span><span class="va">contrast1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  <span class="st">"time"</span>,</span>
-<span>  by <span class="op">=</span> <span class="st">"stigma_unreal"</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"symptoms_unreal"</span>,</span>
 <span>  integer_as_continuous <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -692,7 +678,7 @@ Click to show code for plot generation
 </summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a dataframe to hold custom annotations for the slopes in the plot</span></span>
 <span><span class="va">anno_slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  stigma_unreal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"(strongly) agree"</span>, <span class="st">"(strongly) disagree"</span><span class="op">)</span>,</span>
+<span>  symptoms_unreal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"(strongly) agree"</span>, <span class="st">"(strongly) disagree"</span><span class="op">)</span>,</span>
 <span>  x_pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  y_pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">emm</span><span class="op">$</span><span class="va">Mean</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">+</span> <span class="fl">0.2</span>, <span class="va">emm</span><span class="op">$</span><span class="va">Mean</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span> <span class="op">+</span> <span class="fl">0.2</span><span class="op">)</span>,</span>
 <span>  angle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">$</span><span class="va">Slope</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="fl">19</span>, <span class="va">slopes</span><span class="op">$</span><span class="va">Slope</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">19</span><span class="op">)</span>,</span>
@@ -735,7 +721,7 @@ Click to show code for plot generation
 <span>      y <span class="op">=</span> <span class="va">y_pos</span>,</span>
 <span>      label <span class="op">=</span> <span class="va">label</span>,</span>
 <span>      angle <span class="op">=</span> <span class="va">angle</span>,</span>
-<span>      color <span class="op">=</span> <span class="va">stigma_unreal</span></span>
+<span>      color <span class="op">=</span> <span class="va">symptoms_unreal</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>,</span>
 <span>    size <span class="op">=</span> <span class="fl">3.5</span>,</span>
@@ -764,7 +750,7 @@ the end of the study.</p>
 <span><span class="co"># at specific time points</span></span>
 <span><span class="va">contrast2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
-<span>  <span class="st">"stigma_unreal"</span>,</span>
+<span>  <span class="st">"symptoms_unreal"</span>,</span>
 <span>  by <span class="op">=</span> <span class="st">"time=c(0,2)"</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
 <span><span class="op">)</span></span>
@@ -775,7 +761,7 @@ the end of the study.</p>
 <span><span class="co"># (Group 1 at T2 - Group 2 at T2)</span></span>
 <span><span class="va">contrast3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"stigma_unreal"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"symptoms_unreal"</span><span class="op">)</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"(b1 - b4) = (b3 - b6)"</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -856,7 +842,7 @@ true or vary across different clinical contexts.</p>
 <code class="sourceCode R"><span><span class="co"># Calculate marginal means conditional on</span></span>
 <span><span class="co"># higher-level groupings (disease_group)</span></span>
 <span><span class="va">emm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>,</span>
-<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time=c(0,2)"</span>, <span class="st">"stigma_unreal"</span>, <span class="st">"disease_group"</span><span class="op">)</span>,</span>
+<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time=c(0,2)"</span>, <span class="st">"symptoms_unreal"</span>, <span class="st">"disease_group"</span><span class="op">)</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -867,7 +853,7 @@ true or vary across different clinical contexts.</p>
 <span><span class="co"># time aggregated by disease groups).</span></span>
 <span><span class="va">int_contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
-<span>  <span class="st">"stigma_unreal"</span>,</span>
+<span>  <span class="st">"symptoms_unreal"</span>,</span>
 <span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"disease_group"</span><span class="op">)</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>  post_process <span class="op">=</span> <span class="op">~</span> <span class="va">revpairwise</span> <span class="op">|</span> <span class="va">disease_group</span></span>
@@ -912,7 +898,7 @@ Click to show code for plot generation
 <span>  <span class="co"># Format the statistical significance labels</span></span>
 <span>  <span class="va">rows</span> <span class="op">&lt;-</span> <span class="va">emm</span><span class="op">$</span><span class="va">time</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span></span>
 <span>    <span class="va">emm</span><span class="op">$</span><span class="va">disease_group</span> <span class="op">==</span> <span class="va">i</span> <span class="op">&amp;</span></span>
-<span>    <span class="va">emm</span><span class="op">$</span><span class="va">stigma_unreal</span> <span class="op">==</span> <span class="st">"(strongly) agree"</span></span>
+<span>    <span class="va">emm</span><span class="op">$</span><span class="va">symptoms_unreal</span> <span class="op">==</span> <span class="st">"(strongly) agree"</span></span>
 <span></span>
 <span>  <span class="va">emm</span><span class="op">$</span><span class="va">p_label</span><span class="op">[</span><span class="va">rows</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Δ = "</span>,</span>
@@ -955,8 +941,8 @@ Click to show code for plot generation
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1.5</span>, y <span class="op">=</span> <span class="va">Mean</span>, label <span class="op">=</span> <span class="va">p_label</span><span class="op">)</span>,</span>
 <span>      size <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>      text.color <span class="op">=</span> <span class="st">"#333333"</span>,</span>
-<span>      fill <span class="op">=</span> <span class="st">"#fcefcb"</span>,</span>
-<span>      border.color <span class="op">=</span> <span class="st">"#555555"</span></span>
+<span>      fill <span class="op">=</span> <span class="st">"#fff0c8"</span>,</span>
+<span>      border.color <span class="op">=</span> <span class="st">"#444444"</span></span>
 <span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
 <span>      legend.position <span class="op">=</span> <span class="st">"bottom"</span>,</span>

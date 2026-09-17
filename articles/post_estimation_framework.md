@@ -170,12 +170,12 @@ will alert us.
 `# Graph (DAG). We specify our outcome, exposure, and the covariates we plan`\
 `# to adjust for.`\
 `dag`` ``<-`` `[`check_dag`](https://easystats.github.io/performance/reference/check_dag.html)`(`\
-`  ``phq15`` ``~`` ``stigma_unreal`` ``+`` ``sex`` ``+`` ``age`` ``+`` ``education`` ``+`` ``migration_history``,`\
-`  ``stigma_unreal`` ``~`` ``sex`` ``+`` ``age`` ``+`` ``education`` ``+`` ``migration_history``,`\
+`  ``phq15`` ``~`` ``symptoms_unreal`` ``+`` ``sex`` ``+`` ``age`` ``+`` ``education``,`\
+`  ``symptoms_unreal`` ``~`` ``sex`` ``+`` ``age`` ``+`` ``education`` ``+`` ``ID``,`\
 `  ``education`` ``~`` ``age``,`\
 `  outcome ``=`` ``"phq15"``,`\
-`  exposure ``=`` ``"stigma_unreal"``,`\
-`  adjusted ``=`` ``~`` ``sex`` ``+`` ``age`` ``+`` ``education`` ``+`` ``migration_history`\
+`  exposure ``=`` ``"symptoms_unreal"``,`\
+`  adjusted ``=`` ``~`` ``sex`` ``+`` ``age`` ``+`` ``education`` ``+`` ``ID`\
 `)`\
 \
 `# Visualize the DAG to confirm our adjustment strategy`\
@@ -189,12 +189,13 @@ Figure 2: DAG of our theoretical causal assumptions
 ### Building the Model
 
 Guided by this causal structure, we can now build a statistical model
-complex enough to capture our core theoretical assumptions. We fit a
-linear mixed model for hierarchical, longitudinal data predicting
-`phq15` (somatic symptom burden) using an interaction between
-`stigma_unreal` and `time`. The focal predictor, `stigma_unreal`,
-measures perceived stigma related to somatic symptoms by asking
-participants how much they agree with the statement, *“Most people
+complex enough to capture our core theoretical assumptions. The global
+research question is whether perceived stigma predicts the trajectory of
+somatic symptom burden (PHQ-15) over time. We fit a linear mixed model
+for hierarchical, longitudinal data predicting `phq15` using an
+interaction between `symptoms_unreal` and `time`. The focal predictor,
+`symptoms_unreal`, measures perceived stigma related to somatic symptoms
+by asking participants how much they agree with the statement, *“People
 believe that my symptoms are not a real illness”* (with responses
 ranging from *strongly disagree* to *strongly agree*, excluding a
 residual category of patients without complaints). Following the DAG, we
@@ -206,6 +207,7 @@ Click to show code for data generation
 
 \
 `# Load the example dataset 'stigma' from the modelbased package`\
+`# This is a toy-dataset with simulated data`\
 [`data`](https://rdrr.io/r/utils/data.html)`(``stigma``, package ``=`` ``"modelbased"``)`\
 \
 `# Shift the 'time' variable so that the baseline starts at 0 instead of 1`\
@@ -213,10 +215,10 @@ Click to show code for data generation
 \
 `# Recode the stigma variable to combine levels into a binary-like`\
 `# structure for simplicity`\
-`stigma``$``stigma_unreal`` ``<-`` ``recode_into``(`\
-`  ``stigma_unreal`` `[`%in%`](https://rdrr.io/r/base/match.html)\
+`stigma``$``symptoms_unreal`` ``<-`` ``recode_into``(`\
+`  ``symptoms_unreal`` `[`%in%`](https://rdrr.io/r/base/match.html)\
 `    `[`c`](https://rdrr.io/r/base/c.html)`(``"strongly disagree"``, ``"disagree"``)`` ``~`` ``"(strongly) disagree"``,`\
-`  ``stigma_unreal`` `[`%in%`](https://rdrr.io/r/base/match.html)\
+`  ``symptoms_unreal`` `[`%in%`](https://rdrr.io/r/base/match.html)\
 `    `[`c`](https://rdrr.io/r/base/c.html)`(``"strongly agree"``, ``"agree"``)`` ``~`` ``"(strongly) agree"``,`\
 `  data ``=`` ``stigma`\
 `)`\
@@ -237,13 +239,12 @@ Click to show code for data generation
 `# include random intercepts and slopes for time across disease groups and`\
 `# patients.`\
 `model`` ``<-`` `[`glmmTMB`](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html)`(`\
-`  ``phq15`` ``~`` ``stigma_unreal`` ``*`\
+`  ``phq15`` ``~`` ``symptoms_unreal`` ``*`\
 `    ``time`` ``+`\
 `    ``sex`` ``+`\
 `    ``age_z`` ``+`\
-`    ``education_casmin`` ``+`\
-`    ``migration_history`` ``+`\
-`    ``(``1`` ``+`` ``time`` ``|`` ``disease_group`` ``/`` ``patid``)``,`\
+`    ``education`` ``+`\
+`    ``(``1`` ``+`` ``time`` ``|`` ``disease_group`` ``/`` ``ID``)``,`\
 `  priors ``=`` ``prior``,`\
 `  data ``=`` ``stigma`\
 `)`
@@ -266,16 +267,14 @@ individuals who are identical regarding these characteristics.
 
 | Parameter | Coefficient | SE | 95% CI | z | p |
 |:---|:--:|:--:|:--:|:--:|:--:|
-| (Intercept) | 8.72 | 1.10 | (6.57, 10.88) | 7.93 | \< .001 |
-| stigma unreal ((strongly) disagree) | -1.34 | 0.77 | (-2.85, 0.16) | -1.75 | 0.080 |
-| time | -0.69 | 0.30 | (-1.29, -0.10) | -2.27 | 0.023 |
-| sex (female) | 2.77 | 0.68 | (1.44, 4.09) | 4.10 | \< .001 |
-| age z | -0.12 | 0.33 | (-0.77, 0.54) | -0.35 | 0.725 |
-| education casmin (linear) | -0.92 | 0.67 | (-2.23, 0.39) | -1.37 | 0.170 |
-| education casmin (quadratic) | -0.23 | 0.49 | (-1.20, 0.73) | -0.47 | 0.637 |
-| migration history (2nd generation) | -1.73 | 1.02 | (-3.73, 0.27) | -1.70 | 0.090 |
-| migration history (1st generation) | -0.57 | 0.93 | (-2.39, 1.24) | -0.62 | 0.537 |
-| stigma unreal ((strongly) disagree) × time | 0.34 | 0.31 | (-0.28, 0.96) | 1.08 | 0.279 |
+| (Intercept) | 8.61 | 1.10 | (6.46, 10.76) | 7.85 | \< .001 |
+| symptoms unreal ((strongly) disagree) | -1.36 | 0.77 | (-2.87, 0.15) | -1.76 | 0.079 |
+| time | -0.69 | 0.30 | (-1.28, -0.10) | -2.27 | 0.023 |
+| sex (female) | 2.70 | 0.68 | (1.37, 4.03) | 3.98 | \< .001 |
+| age z | -0.07 | 0.33 | (-0.73, 0.58) | -0.21 | 0.832 |
+| education (linear) | -0.99 | 0.67 | (-2.31, 0.32) | -1.48 | 0.139 |
+| education (quadratic) | -0.20 | 0.50 | (-1.17, 0.77) | -0.40 | 0.690 |
+| symptoms unreal ((strongly) disagree) × time | 0.34 | 0.31 | (-0.28, 0.95) | 1.08 | 0.281 |
 
 Regression Coefficients from Linear Mixed Model (only fixed effects
 shown) {.table}
@@ -289,8 +288,8 @@ other variables.
 
 - **Categorical Predictors:** Estimates are interpreted relative to a
   baseline reference category. For instance, the coefficient for
-  `stigma_unreal ((strongly) disagree)` is `-1.34`. This indicates that,
-  holding `time`, `sex`, `age`, and all other covariates constant,
+  `symptoms_unreal ((strongly) disagree)` is `-1.34`. This indicates
+  that, holding `time`, `sex`, `age`, and all other covariates constant,
   patients who disagree that their symptoms are “unreal” score 1.34
   points lower on the PHQ-15 than those in the implicit reference
   category (who agree).
@@ -310,7 +309,7 @@ The Cognitive Overload of Conditional Effects
 
 ------------------------------------------------------------------------
 
-Because our model includes an interaction (`stigma_unreal * time`),
+Because our model includes an interaction (`symptoms_unreal * time`),
 interpreting these individual coefficients becomes highly confusing. The
 “main effect” coefficients in the table only apply when the interacting
 variable is at its reference level (e.g., at `time = 0`). Focusing
@@ -366,7 +365,7 @@ covariates in our sample.
 `# distribution`\
 `emm`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(`\
 `  ``model``,`\
-`  by ``=`` ``"stigma_unreal"``,`\
+`  by ``=`` ``"symptoms_unreal"``,`\
 `  estimate ``=`` ``"average"`\
 `)`
 
@@ -400,7 +399,7 @@ answers our second question.
 `# between time and stigma group`\
 `emm`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(`\
 `  ``model``,`\
-`  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"stigma_unreal"``)``,`\
+`  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"symptoms_unreal"``)``,`\
 `  estimate ``=`` ``"average"`\
 `)`
 
@@ -445,7 +444,7 @@ slope contrasts.
 `slopes`` ``<-`` `[`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(`\
 `  ``model``,`\
 `  ``"time"``,`\
-`  by ``=`` ``"stigma_unreal"``,`\
+`  by ``=`` ``"symptoms_unreal"``,`\
 `  estimate ``=`` ``"average"`\
 `)`\
 \
@@ -455,7 +454,7 @@ slope contrasts.
 `contrast1`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
 `  ``"time"``,`\
-`  by ``=`` ``"stigma_unreal"``,`\
+`  by ``=`` ``"symptoms_unreal"``,`\
 `  integer_as_continuous ``=`` ``TRUE``,`\
 `  estimate ``=`` ``"average"`\
 `)`
@@ -465,7 +464,7 @@ Click to show code for plot generation
 \
 `# Create a dataframe to hold custom annotations for the slopes in the plot`\
 `anno_slopes`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`\
-`  stigma_unreal ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"(strongly) agree"``, ``"(strongly) disagree"``)``,`\
+`  symptoms_unreal ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"(strongly) agree"``, ``"(strongly) disagree"``)``,`\
 `  x_pos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``1``)``,`\
 `  y_pos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``emm``$``Mean``[``3``]`` ``+`` ``0.2``, ``emm``$``Mean``[``4``]`` ``+`` ``0.2``)``,`\
 `  angle ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``slopes``$``Slope``[``1``]`` ``*`` ``19``, ``slopes``$``Slope``[``2``]`` ``*`` ``19``)``,`\
@@ -508,7 +507,7 @@ Click to show code for plot generation
 `      y ``=`` ``y_pos``,`\
 `      label ``=`` ``label``,`\
 `      angle ``=`` ``angle``,`\
-`      color ``=`` ``stigma_unreal`\
+`      color ``=`` ``symptoms_unreal`\
 `    ``)``,`\
 `    vjust ``=`` ``-``0.5``,`\
 `    size ``=`` ``3.5``,`\
@@ -537,7 +536,7 @@ the end of the study.
 `# at specific time points`\
 `contrast2`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
-`  ``"stigma_unreal"``,`\
+`  ``"symptoms_unreal"``,`\
 `  by ``=`` ``"time=c(0,2)"``,`\
 `  estimate ``=`` ``"average"`\
 `)`\
@@ -548,7 +547,7 @@ the end of the study.
 `# (Group 1 at T2 - Group 2 at T2)`\
 `contrast3`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
-`  `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"stigma_unreal"``)``,`\
+`  `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"symptoms_unreal"``)``,`\
 `  comparison ``=`` ``"(b1 - b4) = (b3 - b6)"``,`\
 `  estimate ``=`` ``"average"`\
 `)`
@@ -631,7 +630,7 @@ across different clinical contexts.
 `# Calculate marginal means conditional on`\
 `# higher-level groupings (disease_group)`\
 `emm`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``,`\
-`  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time=c(0,2)"``, ``"stigma_unreal"``, ``"disease_group"``)``,`\
+`  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time=c(0,2)"``, ``"symptoms_unreal"``, ``"disease_group"``)``,`\
 `  estimate ``=`` ``"average"`\
 `)`\
 \
@@ -642,7 +641,7 @@ across different clinical contexts.
 `# time aggregated by disease groups).`\
 `int_contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(`\
 `  ``model``,`\
-`  ``"stigma_unreal"``,`\
+`  ``"symptoms_unreal"``,`\
 `  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"disease_group"``)``,`\
 `  estimate ``=`` ``"average"``,`\
 `  post_process ``=`` ``~`` ``revpairwise`` ``|`` ``disease_group`\
@@ -688,7 +687,7 @@ Click to show code for plot generation
 `  ``# Format the statistical significance labels`\
 `  ``rows`` ``<-`` ``emm``$``time`` ``==`` ``0`` ``&`\
 `    ``emm``$``disease_group`` ``==`` ``i`` ``&`\
-`    ``emm``$``stigma_unreal`` ``==`` ``"(strongly) agree"`\
+`    ``emm``$``symptoms_unreal`` ``==`` ``"(strongly) agree"`\
 \
 `  ``emm``$``p_label``[``rows``]`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`\
 `    ``"Δ = "``,`\
@@ -731,8 +730,8 @@ Click to show code for plot generation
 `      `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``1.5``, y ``=`` ``Mean``, label ``=`` ``p_label``)``,`\
 `      size ``=`` ``3``,`\
 `      text.color ``=`` ``"#333333"``,`\
-`      fill ``=`` ``"#fcefcb"``,`\
-`      border.color ``=`` ``"#555555"`\
+`      fill ``=`` ``"#fff0c8"``,`\
+`      border.color ``=`` ``"#444444"`\
 `    ``)`` ``+`\
 `    `[`theme`](https://ggplot2.tidyverse.org/reference/theme.html)`(`\
 `      legend.position ``=`` ``"bottom"``,`\
