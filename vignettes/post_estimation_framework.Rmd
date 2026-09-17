@@ -124,7 +124,7 @@ knitr::include_graphics("../man/figures/DAG_summary.png")
 
 Here is the DAG checking the theoretical structure of our variables before proceeding to the actual modeling step. If we omitted a necessary confounder, or accidentally included a collider, this diagnostic check will alert us.
 
-```{r, fig.cap="Figure 2: DAG of our theoretical causal assumptions"}
+```{r fig2-own-dag, fig.cap="Figure 2: DAG of our theoretical causal assumptions"}
 # Define and check the theoretical causal structure using a Directed Acyclic
 # Graph (DAG). We specify our outcome, exposure, and the covariates we plan
 # to adjust for.
