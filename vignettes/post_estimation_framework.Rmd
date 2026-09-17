@@ -204,6 +204,8 @@ display(
 
 ### The Interpretation Trap
 
+The "interpretation trap" occurs when researchers forget that regression coefficients must be interpreted conditionally - meaning they only compare individuals who share the exact same characteristics across all other variables.
+
 - **Categorical Predictors:** Estimates are interpreted relative to a baseline reference category. For instance, the coefficient for `stigma_unreal ((strongly) disagree)` is `-1.34`. This indicates that, holding `time`, `sex`, `age`, and all other covariates constant, patients who disagree that their symptoms are "unreal" score 1.34 points lower on the PHQ-15 than those in the implicit reference category (who agree).
 
 - **Continuous Predictors:** Estimates reflect the expected change associated with a one-unit increase in the predictor. The `time` coefficient of `-0.69` suggests a 0.69-point decrease in PHQ-15 scores for every single unit of time passed, again, assuming *all other variables are held constant*.
@@ -226,7 +228,7 @@ Now we query our model using the core functions of the `modelbased` toolkit: `es
 
 ### Predicted overall PHQ-15 scores: Comparing stigma groups
 
-First, we ask: How does symptom severity differ between stigma groups? We use `estimate_means()` to calculate the marginal means for each stigma group, comparing their overall average score. By doing so, we target our first estimand—marginal predictions—which allows us to see the expected outcome for these groups while standardizing the distribution of all other covariates in our sample.
+First, we ask: How does symptom severity differ between stigma groups? We use `estimate_means()` to calculate the marginal means for each stigma group, comparing their overall average score. By doing so, we target our first estimand - marginal predictions - which allows us to see the expected outcome for these groups while standardizing the distribution of all other covariates in our sample.
 
 ```{r}
 # Calculate overall marginal means for each stigma group. Using
@@ -259,12 +261,13 @@ result <- plot(emm) +
 plot(result)
 ```
 
-### Predicted PHQ-15 trajectories: Overlaying modeled trend
+### Predicted PHQ-15 trajectories
 
 Next, we ask: How does symptom severity evolve over time across different stigma groups? We evaluate the interaction between time and stigma group by estimating predictions across specific values. This maps out the expected trajectories, transforming the model's complex interaction coefficients into an intuitive visual format that directly answers our second question.
 
 ```{r}
-# Calculate marginal means for the interaction between time and stigma group
+# Calculate marginal means for the interaction
+# between time and stigma group
 emm <- estimate_means(
   model,
   by = c("time", "stigma_unreal"),
@@ -298,8 +301,8 @@ How strong is the time trend in symptom severity within each stigma group? We us
 We can then formally test if this rate of change depends on stigma by running `estimate_contrasts()` to see whether the difference between the two slopes is significantly different from zero. We set `integer_as_continuous = TRUE` so that numeric predictors with few unique values are correctly treated for slope contrasts.
 
 ```{r}
-# Estimate the linear trend (slope) of PHQ-15 scores over time
-# for each stigma group
+# Estimate the linear trend (slope) of PHQ-15 scores
+# over time for each stigma group
 slopes <- estimate_slopes(
   model,
   "time",
@@ -307,9 +310,9 @@ slopes <- estimate_slopes(
   estimate = "average"
 )
 
-# Test if the difference between the two slopes is statistically significant
-# 'integer_as_continuous = TRUE' ensures the 3 time points are treated as
-# a continuous trend
+# Test if the difference between the two slopes is
+# statistically significant. 'integer_as_continuous = TRUE'
+# ensures the 3 time points are treated as a continuous trend
 contrast1 <- estimate_contrasts(
   model,
   "time",
@@ -385,7 +388,8 @@ plot(result)
 Is there a significant gap between the groups at specific measurement points, and does this gap change? We can run an interaction contrast to test whether the group difference at time point 0 differs significantly from the difference at time point 2. This targets our fourth estimand - a comparison of comparisons - allowing us to formally test if the initial gap between the stigma groups significantly widens or narrows by the end of the study.
 
 ```{r}
-# Calculate simple contrasts between stigma groups at specific time points
+# Calculate simple contrasts between stigma groups
+# at specific time points
 contrast2 <- estimate_contrasts(
   model,
   "stigma_unreal",
@@ -393,9 +397,9 @@ contrast2 <- estimate_contrasts(
   estimate = "average"
 )
 
-# Calculate interaction contrasts: Does the group gap at time 0 differ from
-# the gap at time 2?
-# We specify a custom comparison: (Group 1 at T0 - Group 2 at T0) vs
+# Calculate interaction contrasts: Does the group gap at
+# time 0 differ from the gap at time 2? We specify a custom
+# comparison: (Group 1 at T0 - Group 2 at T0) vs
 # (Group 1 at T2 - Group 2 at T2)
 contrast3 <- estimate_contrasts(
   model,
@@ -474,14 +478,18 @@ plot(result)
 Because our model contains complex hierarchical structures, we can utilize `modelbased` to further unpack these interactions conditionally across the random effects hierarchy (e.g., specific disease groups). This shifts our focus from average marginal effects to conditional comparisons, revealing whether the overall patterns hold true or vary across different clinical contexts.
 
 ```{r}
-# Calculate marginal means conditional on higher-level groupings (disease_group)
+# Calculate marginal means conditional on
+# higher-level groupings (disease_group)
 emm <- estimate_means(model,
   by = c("time=c(0,2)", "stigma_unreal", "disease_group"),
   estimate = "average"
 )
 
 # Estimate pairwise contrasts between stigma groups at
-# specific time points and disease groups
+# specific time points and disease groups, and then
+# do a pairwise comparison of these differences (again:
+# interaction contrasts, this time aggregated by disease
+# groups).
 int_contrasts <- estimate_contrasts(
   model,
   "stigma_unreal",
