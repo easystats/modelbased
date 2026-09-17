@@ -53,7 +53,7 @@ if (getRversion() < "4.1.0") {
 
 Completing the analytic workflow means understanding that fitting the model is just the beginning. Traditionally, researchers often stop at the regression table, trying to make sense of individual coefficients. However, interpreting coefficients directly can be highly confusing and error-prone, especially when dealing with complex models that include interactions or nonlinearities. Instead, we should treat our statistical models as *(counterfactual) prediction machines* [@rohrer_models_2026].
 
-## L'Approche de Modélisation: Un Modèle, Plusieurs Réponses (One Model, Many Answers)
+# L'Approche de Modélisation: Un Modèle, Plusieurs Réponses (One Model, Many Answers)
 
 By adopting this perspective, the `modelbased` package helps you extract multiple insights from one comprehensive model. Because there is rarely just a single "effect" of interest in any given study, a single, well-built model can be repeatedly queried to estimate various target quantities - such as predictions, comparisons, or slopes. In this vignette, we will demonstrate this efficiency by using just one model to answer five distinct, progressively complex research questions, moving seamlessly from exploratory analysis to formal hypothesis testing.
 
@@ -73,9 +73,9 @@ In this model-agnostic framework, the word "prediction" is used generically to r
 knitr::include_graphics("../man/figures/from-model-to-meaning-final.png")
 ```
 
-## Step 1: Setup the Model
+# Step 1: Setup the Model
 
-### Defining the Estimands: Five Questions, One Model
+## Defining the Estimands: Five Questions, One Model
 
 Before setting up any statistical model, researchers must explicitly spell out their theoretical estimands in precise terms. An estimand is the specific target quantity that directly answers the research question. Instead of passively interpreting whatever coefficients the software returns, we must actively decide whether our question requires us to estimate predictions, slopes, or comparisons [@rohrer_models_2026; @rohrer_these_2023].
 
@@ -112,7 +112,7 @@ library(ggplot2)
 library(grid)
 ```
 
-### Which predictors to include?
+## Which predictors to include?
 
 To answer our overarching research question - Does perceived stigmatization predict an increase in somatic symptom severity (PHQ-15)? - we must first determine the appropriate variables to include in our analysis. We use Directed Acyclic Graphs (DAGs) to visually map out the theoretical causal assumptions behind our data. This acts as a practical guide to determine which variables must be included (confounders) or may be included (risk factors) to prevent bias and increase precision. It also tells us which variables must strictly be excluded (mediators, colliders, and instrumental variables) to avoid overadjustment bias or bias amplification (see Figure 1, @chatton_causal_2024).
 
@@ -141,7 +141,7 @@ dag <- check_dag(
 plot(dag, which = "current") + labs(title = NULL)
 ```
 
-### Building the Model
+## Building the Model
 
 Guided by this causal structure, we can now build a statistical model complex enough to capture our core theoretical assumptions. We fit a linear mixed model for hierarchical, longitudinal data predicting `phq15` (somatic symptom burden) using an interaction between `stigma_unreal` and `time`. The focal predictor, `stigma_unreal`, measures perceived stigma related to somatic symptoms by asking participants how much they agree with the statement, *"Most people believe that my symptoms are not a real illness"* (with responses ranging from *strongly disagree* to *strongly agree*, excluding a residual category of patients without complaints). Following the DAG, we adjust for the necessary covariates, and we include random intercepts for baseline differences and random slopes to allow the time trend to vary by patient and disease group.
 
@@ -196,7 +196,7 @@ model <- glmmTMB(
 )
 ```
 
-### Interpreting the output
+## Interpreting the output
 
 When looking at the standard regression table, it is crucial to interpret these coefficients as *descriptive comparisons*. Specifically, coefficients generally represent *conditional effects*, meaning they describe an association while *strictly holding all other covariates constant* (@gelman_regression_2020; Chapter 6.3), i.e., comparing individuals who are identical regarding these characteristics.
 
@@ -234,11 +234,11 @@ Up to this point, we have focused on the relatively straightforward case of line
 This is where the modelisation approach truly shines: by utilizing the `modelbased` package, we bypass these difficulties and generate intuitive, real-world quantities instead. In the case of logistic regression, for example, we can directly estimate the predicted probability of an outcome event. Probabilities are vastly easier to communicate and understand than confusing - and often misinterpreted - odds ratios.
 :::
 
-## Step 2: Post-Estimation with `modelbased`
+# Step 2: Post-Estimation with `modelbased`
 
 Now we query our model using the core functions of the `modelbased` toolkit: `estimate_means()`, `estimate_slopes()`, and `estimate_contrasts()`. We evaluate specific target populations using the `estimate = "average"` argument, which calculates predictions using the actual empirical distribution of covariates in our sample before averaging the results (see also the [vignette on marginalization methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html) for technical details and the meaning of other options for the `estimate` argument).
 
-### Predicted overall PHQ-15 scores: Comparing stigma groups
+## Predicted overall PHQ-15 scores: Comparing stigma groups
 
 First, we ask: How does symptom severity differ between stigma groups? We use `estimate_means()` to calculate the marginal means for each stigma group, comparing their overall average score. By doing so, we target our first estimand - marginal predictions - which allows us to see the expected outcome for these groups while standardizing the distribution of all other covariates in our sample.
 
@@ -273,7 +273,7 @@ result <- plot(emm) +
 plot(result)
 ```
 
-### Predicted PHQ-15 trajectories
+## Predicted PHQ-15 trajectories
 
 Next, we ask: How does symptom severity evolve over time across different stigma groups? We evaluate the interaction between time and stigma group by estimating predictions across specific values. This maps out the expected trajectories, transforming the model's complex interaction coefficients into an intuitive visual format that directly answers our second question.
 
@@ -308,7 +308,7 @@ result <- plot(emm) +
 plot(result)
 ```
 
-### Quantifying the change (trend) in PHQ-15 scores
+## Quantifying the change (trend) in PHQ-15 scores
 
 How strong is the time trend in symptom severity within each stigma group? We use `estimate_slopes()` to calculate the average linear slope of the PHQ-15 score per time unit, shifting our targeted estimand to the rate of change.
 
@@ -401,7 +401,7 @@ result <- plot(emm, numeric_as_discrete = FALSE) +
 plot(result)
 ```
 
-### Testing the interaction: Does the group gap change over time?
+## Testing the interaction: Does the group gap change over time?
 
 Is there a significant gap between the groups at specific measurement points, and does this gap change? We can run an interaction contrast to test whether the group difference at time point 0 differs significantly from the difference at time point 2. This targets our fourth estimand - a comparison of comparisons - allowing us to formally test if the initial gap between the stigma groups significantly widens or narrows by the end of the study.
 
@@ -493,7 +493,7 @@ result <- plot(emm) +
 plot(result)
 ```
 
-### Exploring Heterogeneity Across Clusters
+## Exploring Heterogeneity Across Clusters
 
 Because our model contains complex hierarchical structures, we can utilize `modelbased` to further unpack these interactions conditionally across the random effects hierarchy (e.g., specific disease groups). This shifts our focus from average marginal effects to conditional comparisons, revealing whether the overall patterns hold true or vary across different clinical contexts.
 
@@ -621,7 +621,7 @@ result <- suppressWarnings(
 suppressWarnings(plot(result))
 ```
 
-## Vive la modélisation !
+# Vive la modélisation !
 
 The actual empirical insight of a study rarely emerges from simply reading off raw regression coefficients. Particularly in complex models involving interactions, hierarchical structures, or nonlinearities, interpreting these coefficients directly can be highly error-prone. It can even lead to fundamental misinterpretations, such as the "Table 2 fallacy", where the coefficients of control variables are wrongly interpreted as causal effects [@westreich_table_2013; @rohrer_models_2026].
 
