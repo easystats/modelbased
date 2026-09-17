@@ -134,7 +134,8 @@ dag <- check_dag(
   education ~ age,
   outcome = "phq15",
   exposure = "symptoms_unreal",
-  adjusted = ~ sex + age + education
+  adjusted = ~ sex + age + education,
+  coords = ggdag::time_ordered_coords()
 )
 
 # Visualize the DAG to confirm our adjustment strategy
