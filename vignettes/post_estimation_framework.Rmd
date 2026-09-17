@@ -169,7 +169,7 @@ prior <- data.frame(
 )
 
 # Set a global clean theme for all subsequent plots
-set_theme(theme_minimal())
+set_theme(theme_modern(show.ticks = TRUE))
 ```
 
 </details>
@@ -289,11 +289,9 @@ emm <- estimate_means(
 ```{r}
 # Plot the estimated trajectories over time
 result <- plot(emm) +
-  labs(
-    title = NULL,
-    x = "time",
-    y = "Estimated PHQ-15 score"
-  )
+  labs(title = NULL, x = "time", y = "Estimated PHQ-15 score") +
+  scale_color_see() +
+  scale_fill_see()
 ```
 
 </details>
@@ -382,7 +380,9 @@ result <- plot(emm, numeric_as_discrete = FALSE) +
     vjust = -0.5,
     size = 3.5,
     show.legend = FALSE
-  )
+  ) +
+  scale_color_see() +
+  scale_fill_see()
 ```
 
 </details>
@@ -472,7 +472,9 @@ result <- plot(emm) +
       if (contrast3$p >= 0.05) " (n.s.)"
     ),
     hjust = 0.5, size = 3.5, fontface = "bold", color = "#333333", fill = "white"
-  )
+  ) +
+  scale_color_see() +
+  scale_fill_see()
 ```
 
 </details>
@@ -589,11 +591,17 @@ result <- suppressWarnings(
     geom_label(
       aes(x = 1.5, y = Mean, label = p_label),
       size = 3,
-      color = "#333333",
-      fill = "white"
+      text.color = "#333333",
+      fill = "#fcefcb",
+      border.color = "#555555"
     ) +
-    theme_gray() +
-    theme(legend.position = "bottom")
+    theme(
+      legend.position = "bottom",
+      strip.background = element_rect(fill = "#efefef", colour = "white"),
+      strip.text = element_text(size = 13)
+    ) +
+    scale_color_see() +
+    scale_fill_see()
 )
 ```
 
