@@ -288,15 +288,15 @@ other variables.
 
 - **Categorical Predictors:** Estimates are interpreted relative to a
   baseline reference category. For instance, the coefficient for
-  `symptoms_unreal ((strongly) disagree)` is `-1.34`. This indicates
-  that, holding `time`, `sex`, `age`, and all other covariates constant,
-  patients who disagree that their symptoms are “unreal” score 1.34
+  `symptoms_unreal ((strongly) disagree)` is -1.36. This indicates that,
+  holding `time`, `sex`, `age`, and all other covariates constant,
+  patients who disagree that their symptoms are “unreal” score 1.36
   points lower on the PHQ-15 than those in the implicit reference
   category (who agree).
 
 - **Continuous Predictors:** Estimates reflect the expected change
   associated with a one-unit increase in the predictor. The `time`
-  coefficient of `-0.69` suggests a 0.69-point decrease in PHQ-15 scores
+  coefficient of -0.69 suggests a 0.69-point decrease in PHQ-15 scores
   for every single unit of time passed, again, assuming *all other
   variables are held constant*.
 
