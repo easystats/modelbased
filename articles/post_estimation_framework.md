@@ -135,7 +135,10 @@ on your research question, it may be necessary to “control for a
 confounder” to reduce bias. However, in other situations, that exact
 same variable might act not as a confounder, but as a mediator - which
 dictates that it should be omitted from the model (Rohrer and
-Arel-Bundock 2026).
+Arel-Bundock 2026) (again, depending on your research question: if you
+are interested in *direct* or *indirect* effects, including a mediator
+can be meaningful, and a DAG will also help here to find the correct
+model).
 
 ![Figure 1: Variable Roles in a Directed Acyclic Graph
 (DAG)](../reference/figures/DAG_summary.png)
