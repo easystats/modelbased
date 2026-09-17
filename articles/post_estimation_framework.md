@@ -395,8 +395,7 @@ Click to show code for plot generation
 `# Plot the estimated trajectories over time`\
 `result`` ``<-`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``emm``)`` ``+`\
 `  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(``title ``=`` ``NULL``, x ``=`` ``"time"``, y ``=`` ``"Estimated PHQ-15 score"``)`` ``+`\
-`  `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`` ``+`\
-`  `[`scale_fill_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`
+`  `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`
 
 ![Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across
 Time](post_estimation_framework_files/figure-html/unnamed-chunk-15-1.png)
@@ -460,8 +459,10 @@ Click to show code for plot generation
 `result`` ``<-`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``emm``, numeric_as_discrete ``=`` ``FALSE``)`` ``+`\
 `  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
 `    title ``=`` ``NULL``,`\
-`    x ``=`` ``"time"``,`\
-`    y ``=`` ``"Estimated PHQ-15 score"`\
+`    x ``=`` ``"Time Point"``,`\
+`    y ``=`` ``"Estimated PHQ-15 score"``,`\
+`    colour ``=`` ``"People believe my\nsymptoms are unreal"``,`\
+`    fill ``=`` ``"People believe my\nsymptoms are unreal"`\
 `  ``)`` ``+`\
 `  `[`annotate`](https://ggplot2.tidyverse.org/reference/annotate.html)`(`\
 `    ``"label"``,`\
@@ -540,8 +541,9 @@ Click to show code for plot generation
 `result`` ``<-`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``emm``)`` ``+`\
 `  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
 `    title ``=`` ``NULL``,`\
-`    x ``=`` ``"time"``,`\
-`    y ``=`` ``"Estimated PHQ-15 score"`\
+`    x ``=`` ``"Time Point"``,`\
+`    y ``=`` ``"Estimated PHQ-15 score"``,`\
+`    colour ``=`` ``"People believe my symptoms are unreal"`\
 `  ``)`` ``+`\
 `  ``# Annotate the gap at time = 0`\
 `  `[`annotate`](https://ggplot2.tidyverse.org/reference/annotate.html)`(`\
@@ -587,8 +589,7 @@ Click to show code for plot generation
 `    ``)``,`\
 `    hjust ``=`` ``0.5``, size ``=`` ``3.5``, fontface ``=`` ``"bold"``, color ``=`` ``"#333333"``, fill ``=`` ``"white"`\
 `  ``)`` ``+`\
-`  `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`` ``+`\
-`  `[`scale_fill_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`
+`  `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`
 
 ![Figure 6: Interaction Contrasts - Evaluating the Change in Group
 Differences Over
@@ -683,8 +684,9 @@ Click to show code for plot generation
 `  `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``emm``)`` ``+`\
 `    `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
 `      title ``=`` ``NULL``,`\
-`      x ``=`` ``"Time point"``,`\
-`      y ``=`` ``"Estimated PHQ-15 score"`\
+`      x ``=`` ``"Time Point"``,`\
+`      y ``=`` ``"Estimated PHQ-15 score"``,`\
+`      colour ``=`` ``"People believe my symptoms are unreal"`\
 `    ``)`` ``+`\
 `    `[`geom_segment`](https://ggplot2.tidyverse.org/reference/geom_segment.html)`(`\
 `      `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``x_start``, xend ``=`` ``x_end``, y ``=`` ``y_min_arrows``, yend ``=`` ``y_max_arrows``)``,`\
@@ -717,8 +719,7 @@ Click to show code for plot generation
 `      strip.background ``=`` `[`element_rect`](https://ggplot2.tidyverse.org/reference/element.html)`(``fill ``=`` ``"#efefef"``, colour ``=`` ``"white"``)``,`\
 `      strip.text ``=`` `[`element_text`](https://ggplot2.tidyverse.org/reference/element.html)`(``size ``=`` ``13``)`\
 `    ``)`` ``+`\
-`    `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`` ``+`\
-`    `[`scale_fill_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`\
+`    `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`\
 `)`
 
 ![Figure 7: Interaction Contrasts - Exploring Heterogeneity Across
