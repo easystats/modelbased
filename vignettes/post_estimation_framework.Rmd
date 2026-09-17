@@ -618,7 +618,7 @@ result <- suppressWarnings(
 
 </details>
 
-```{r, warning=FALSE, echo=FALSE, fig.width = 9, fig.height = 7.5, fig.cap="Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease Groups"}
+```{r fig-7-clusters, warning=FALSE, echo=FALSE, fig.width = 9, fig.height = 7.5, fig.cap="Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease Groups"}
 suppressWarnings(plot(result))
 ```
 
@@ -634,7 +634,7 @@ knitr::include_graphics("../man/figures/vive_modelisation.jpg")
 
 ---
 
-By shifting our perspective and treating statistical models as "counterfactual prediction machines", we unburden ourselves from the cognitive load of reverse-engineering complex model mechanics. This model-agnostic framework forces us to put substantive theory first by explicitly defining a theoretical estimand - the exact target quantity that answers our specific research question.
+By shifting our perspective and treating statistical models as "(counterfactual) prediction machines", we unburden ourselves from the cognitive load of reverse-engineering complex model mechanics. This model-agnostic framework forces us to put substantive theory first by explicitly defining a theoretical estimand - the exact target quantity that answers our specific research question.
 
 The complete analytical workflow, the *modelisation approach*, thus requires two critical steps:
 
