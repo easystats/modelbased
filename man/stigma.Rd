@@ -11,23 +11,22 @@ the development and persistence of somatic symptoms.
 The data consists of nine variables from 1140 observations (380 patients at
 three time points):
 \itemize{
-\item \code{patid}: A unique identifier for each participant
+\item \code{ID}: A unique identifier for each participant
 \item \code{disease_group}: Classification of main disease from patient, e.g. chronic
 kidney disease (CKD), Ulcerative colitis, Irritable Bowel Syndrome (IBS)
 and others.
 \item \code{phq15}: Total score of the PHQ-15 questionnaire (Patient Health
 Questionnaire-15), measuring the somatic symptoms severity
-\item \code{stigma_unreal}: Question regarding perceived stigma related to somatic
-symptoms, asking "Most people believe that my symptoms are not a real
+\item \code{symptoms_unreal}: Question regarding perceived stigma related to somatic
+symptoms, asking "People believe that my symptoms are not a real
 illness". Answer categories ranged from \code{"strongly disagree"},
 \code{"disagree"}, \code{"neutral"}, \code{"agree"}, and \code{"strongly agree"}.
 \code{"I have no complaints"} was the residual category for patients without
 specific somatic symptoms.
 \item \code{time3}: Measurement point (baseline, and two follow-ups)
-\item \code{education_casmin}: Educational level, measured according to the CASMIN
+\item \code{education}: Educational level, measured according to the CASMIN
 classification.
 \item \code{sex}: The participant's sex
-\item \code{migration_history}: History of migration from patients
 \item \code{age_z}: Age of patient, standardized
 }
 }
