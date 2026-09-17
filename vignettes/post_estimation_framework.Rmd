@@ -320,7 +320,7 @@ We can then formally test if this rate of change depends on stigma by running `e
 # over time for each stigma group
 slopes <- estimate_slopes(
   model,
-  "time",
+  slope = "time",
   by = "symptoms_unreal",
   estimate = "average"
 )
@@ -330,7 +330,7 @@ slopes <- estimate_slopes(
 # ensures the 3 time points are treated as a continuous trend
 contrast1 <- estimate_contrasts(
   model,
-  "time",
+  contrast = "time",
   by = "symptoms_unreal",
   integer_as_continuous = TRUE,
   estimate = "average"
@@ -411,7 +411,7 @@ Is there a significant gap between the groups at specific measurement points, an
 # at specific time points
 contrast2 <- estimate_contrasts(
   model,
-  "symptoms_unreal",
+  contrast = "symptoms_unreal",
   by = "time=c(0,2)",
   estimate = "average"
 )
@@ -422,7 +422,7 @@ contrast2 <- estimate_contrasts(
 # (Group 1 at T2 - Group 2 at T2)
 contrast3 <- estimate_contrasts(
   model,
-  c("time", "symptoms_unreal"),
+  contrast = c("time", "symptoms_unreal"),
   comparison = "(b1 - b4) = (b3 - b6)",
   estimate = "average"
 )
@@ -523,7 +523,7 @@ emm <- estimate_means(model,
 # time aggregated by disease groups).
 int_contrasts <- estimate_contrasts(
   model,
-  "symptoms_unreal",
+  contrast = "symptoms_unreal",
   by = c("time", "disease_group"),
   estimate = "average",
   post_process = ~ revpairwise | disease_group
