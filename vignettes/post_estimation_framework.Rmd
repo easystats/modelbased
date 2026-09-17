@@ -626,7 +626,7 @@ suppressWarnings(plot(result))
 ---
 
 ```{r, echo=FALSE, out.width = "650px", fig.align="center"}
-knitr::include_graphics("../man/figures/vive_modelisation.png")
+knitr::include_graphics("../man/figures/vive_modelisation.jpg")
 ```
 
 ---
