@@ -438,7 +438,7 @@ result <- plot(emm) +
     title = NULL,
     x = "Time Point",
     y = "Estimated PHQ-15 score",
-    colour = "People believe my symptoms are unreal"
+    colour = "People believe my\nsymptoms are unreal"
   ) +
   # Annotate the gap at time = 0
   annotate(
