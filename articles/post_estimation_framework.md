@@ -9,7 +9,7 @@ interactions or nonlinearities. Instead, we should treat our statistical
 models as *(counterfactual) prediction machines* (Rohrer and
 Arel-Bundock 2026).
 
-### L’Approche de Modélisation: Un Modèle, Plusieurs Réponses (One Model, Many Answers)
+## L’Approche de Modélisation: Un Modèle, Plusieurs Réponses (One Model, Many Answers)
 
 By adopting this perspective, the `modelbased` package helps you extract
 multiple insights from one comprehensive model. Because there is rarely
@@ -43,11 +43,26 @@ which we call the *modelisation approach* (derived from the French
     to translate confusing coefficients into clear, substantive
     quantities that directly address our initial research questions.
 
+Some might take issue with the term *prediction*, assuming it strictly
+implies forecasting future or unseen events. However, that is exactly
+the point: the mechanical estimation of parameters is already complete
+once the model is fitted. What follows are statements like, “based on
+our data and our model, we can predict this value as our expected
+outcome.”
+
+In this model-agnostic framework, the word “prediction” is used
+generically to refer to the expected value of the outcome for a given
+set of predictor variables. It does not require a literal forecast of
+the future, as the everyday usage of the term might imply. Rather, this
+model-based expectation - or prediction - is simply the most basic
+statistical quantity that analysts can target in a regression context to
+answer substantive questions (Rohrer and Arel-Bundock 2026).
+
 ![](../reference/figures/from-model-to-meaning-final.png)
 
-### Step 1: Setup the Model
+## Step 1: Setup the Model
 
-#### Defining the Estimands: Five Questions, One Model
+### Defining the Estimands: Five Questions, One Model
 
 Before setting up any statistical model, researchers must explicitly
 spell out their theoretical estimands in precise terms. An estimand is
@@ -116,7 +131,7 @@ Before we start, let’s load the necessary R packages.
 [`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`\
 [`library`](https://rdrr.io/r/base/library.html)`(``grid``)`
 
-#### Which predictors to include?
+### Which predictors to include?
 
 To answer our overarching research question - Does perceived
 stigmatization predict an increase in somatic symptom severity
@@ -171,7 +186,7 @@ assumptions](post_estimation_framework_files/figure-html/unnamed-chunk-5-1.png)
 
 Figure 2: DAG of our theoretical causal assumptions
 
-#### Building the Model
+### Building the Model
 
 Guided by this causal structure, we can now build a statistical model
 complex enough to capture our core theoretical assumptions. We fit a
@@ -214,7 +229,7 @@ Click to show code for data generation
 `)`\
 \
 `# Set a global clean theme for all subsequent plots`\
-[`set_theme`](https://ggplot2.tidyverse.org/reference/get_theme.html)`(`[`theme_modern`](https://easystats.github.io/see/reference/theme_modern.html)`(``show.ticks ``=`` ``TRUE``)``)`
+[`set_theme`](https://ggplot2.tidyverse.org/reference/get_theme.html)`(`[`theme_modern`](https://easystats.github.io/see/reference/theme_modern.html)`(``show.ticks ``=`` ``TRUE``, base_size ``=`` ``10``)``)`
 
 \
 `# Fit a linear mixed-effects model using glmmTMB: We predict 'phq15' based on`\
@@ -233,7 +248,7 @@ Click to show code for data generation
 `  data ``=`` ``stigma`\
 `)`
 
-#### Interpreting the output
+### Interpreting the output
 
 When looking at the standard regression table, it is crucial to
 interpret these coefficients as *descriptive comparisons*. Specifically,
@@ -318,7 +333,7 @@ probability of an outcome event. Probabilities are vastly easier to
 communicate and understand than confusing - and often misinterpreted -
 odds ratios.
 
-### Step 2: Post-Estimation with `modelbased`
+## Step 2: Post-Estimation with `modelbased`
 
 Now we query our model using the core functions of the `modelbased`
 toolkit:
@@ -334,7 +349,7 @@ methods](https://easystats.github.io/modelbased/articles/technical_marginalizati
 for technical details and the meaning of other options for the
 `estimate` argument).
 
-#### Predicted overall PHQ-15 scores: Comparing stigma groups
+### Predicted overall PHQ-15 scores: Comparing stigma groups
 
 First, we ask: How does symptom severity differ between stigma groups?
 We use
@@ -362,7 +377,7 @@ Click to show code for plot generation
 `result`` ``<-`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``emm``)`` ``+`\
 `  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
 `    title ``=`` ``NULL``,`\
-`    x ``=`` ``"Stigma Group"``,`\
+`    x ``=`` ``"People believe my symptoms are unreal"``,`\
 `    y ``=`` ``"Estimated PHQ-15 score"`\
 `  ``)`
 
@@ -371,7 +386,7 @@ Groups](post_estimation_framework_files/figure-html/unnamed-chunk-12-1.png)
 
 Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups
 
-#### Predicted PHQ-15 trajectories
+### Predicted PHQ-15 trajectories
 
 Next, we ask: How does symptom severity evolve over time across
 different stigma groups? We evaluate the interaction between time and
@@ -394,7 +409,12 @@ Click to show code for plot generation
 \
 `# Plot the estimated trajectories over time`\
 `result`` ``<-`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``emm``)`` ``+`\
-`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(``title ``=`` ``NULL``, x ``=`` ``"time"``, y ``=`` ``"Estimated PHQ-15 score"``)`` ``+`\
+`  `[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`\
+`    title ``=`` ``NULL``,`\
+`    x ``=`` ``"Time Point"``,`\
+`    y ``=`` ``"Estimated PHQ-15 score"``,`\
+`    colour ``=`` ``"People believe my\nsymptoms are unreal"`\
+`  ``)`` ``+`\
 `  `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`
 
 ![Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across
@@ -403,7 +423,7 @@ Time](post_estimation_framework_files/figure-html/unnamed-chunk-15-1.png)
 Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across
 Time
 
-#### Quantifying the change (trend) in PHQ-15 scores
+### Quantifying the change (trend) in PHQ-15 scores
 
 How strong is the time trend in symptom severity within each stigma
 group? We use
@@ -502,7 +522,7 @@ Groups](post_estimation_framework_files/figure-html/unnamed-chunk-18-1.png)
 
 Figure 5: Comparison of Trends in PHQ-15 by Stigma Groups
 
-#### Testing the interaction: Does the group gap change over time?
+### Testing the interaction: Does the group gap change over time?
 
 Is there a significant gap between the groups at specific measurement
 points, and does this gap change? We can run an interaction contrast to
@@ -543,7 +563,7 @@ Click to show code for plot generation
 `    title ``=`` ``NULL``,`\
 `    x ``=`` ``"Time Point"``,`\
 `    y ``=`` ``"Estimated PHQ-15 score"``,`\
-`    colour ``=`` ``"People believe my symptoms are unreal"`\
+`    colour ``=`` ``"People believe my\nsymptoms are unreal"`\
 `  ``)`` ``+`\
 `  ``# Annotate the gap at time = 0`\
 `  `[`annotate`](https://ggplot2.tidyverse.org/reference/annotate.html)`(`\
@@ -598,7 +618,7 @@ Time](post_estimation_framework_files/figure-html/unnamed-chunk-21-1.png)
 Figure 6: Interaction Contrasts - Evaluating the Change in Group
 Differences Over Time
 
-#### Exploring Heterogeneity Across Clusters
+### Exploring Heterogeneity Across Clusters
 
 Because our model contains complex hierarchical structures, we can
 utilize `modelbased` to further unpack these interactions conditionally
@@ -717,7 +737,7 @@ Click to show code for plot generation
 `    `[`theme`](https://ggplot2.tidyverse.org/reference/theme.html)`(`\
 `      legend.position ``=`` ``"bottom"``,`\
 `      strip.background ``=`` `[`element_rect`](https://ggplot2.tidyverse.org/reference/element.html)`(``fill ``=`` ``"#efefef"``, colour ``=`` ``"white"``)``,`\
-`      strip.text ``=`` `[`element_text`](https://ggplot2.tidyverse.org/reference/element.html)`(``size ``=`` ``13``)`\
+`      strip.text ``=`` `[`element_text`](https://ggplot2.tidyverse.org/reference/element.html)`(``size ``=`` ``12``)`\
 `    ``)`` ``+`\
 `    `[`scale_color_see`](https://easystats.github.io/see/reference/scale_color_see.html)`(``)`\
 `)`
@@ -729,7 +749,7 @@ Groups](post_estimation_framework_files/figure-html/unnamed-chunk-24-1.png)
 Figure 7: Interaction Contrasts - Exploring Heterogeneity Across Disease
 Groups
 
-### Summary and Conclusion
+## Vive la modélisation !
 
 The actual empirical insight of a study rarely emerges from simply
 reading off raw regression coefficients. Particularly in complex models

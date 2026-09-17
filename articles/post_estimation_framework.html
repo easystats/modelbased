@@ -140,6 +140,15 @@
 
     
     
+<style type="text/css">
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+</style>
 <p>Completing the analytic workflow means understanding that fitting the
 model is just the beginning. Traditionally, researchers often stop at
 the regression table, trying to make sense of individual coefficients.
@@ -147,10 +156,10 @@ However, interpreting coefficients directly can be highly confusing and
 error-prone, especially when dealing with complex models that include
 interactions or nonlinearities. Instead, we should treat our statistical
 models as <em>(counterfactual) prediction machines</em> <span class="citation">(Rohrer and Arel-Bundock 2026)</span>.</p>
-<div class="section level3">
-<h3 id="lapproche-de-modélisation-un-modèle-plusieurs-réponses-one-model-many-answers">L’Approche de Modélisation: Un Modèle, Plusieurs Réponses (One
+<div class="section level2">
+<h2 id="lapproche-de-modélisation-un-modèle-plusieurs-réponses-one-model-many-answers">L’Approche de Modélisation: Un Modèle, Plusieurs Réponses (One
 Model, Many Answers)<a class="anchor" aria-label="anchor" href="#lapproche-de-mod%C3%A9lisation-un-mod%C3%A8le-plusieurs-r%C3%A9ponses-one-model-many-answers"></a>
-</h3>
+</h2>
 <p>By adopting this perspective, the <code>modelbased</code> package
 helps you extract multiple insights from one comprehensive model.
 Because there is rarely just a single “effect” of interest in any given
@@ -183,24 +192,30 @@ allows us to translate confusing coefficients into clear, substantive
 quantities that directly address our initial research
 questions.</p></li>
 </ol>
-<style type="text/css">
-.custom_note {
-  border-left: solid 5px hsl(220, 100%, 30%);
-  background-color: hsl(220, 100%, 95%);
-  padding: 10px;
-  margin-bottom: 10px;
-  font-size: 0.9em;
-}
-
-</style>
+<div class="custom_note">
+<p>Some might take issue with the term <em>prediction</em>, assuming it
+strictly implies forecasting future or unseen events. However, that is
+exactly the point: the mechanical estimation of parameters is already
+complete once the model is fitted. What follows are statements like,
+“based on our data and our model, we can predict this value as our
+expected outcome.”</p>
+<p>In this model-agnostic framework, the word “prediction” is used
+generically to refer to the expected value of the outcome for a given
+set of predictor variables. It does not require a literal forecast of
+the future, as the everyday usage of the term might imply. Rather, this
+model-based expectation - or prediction - is simply the most basic
+statistical quantity that analysts can target in a regression context to
+answer substantive questions <span class="citation">(Rohrer and
+Arel-Bundock 2026)</span>.</p>
+</div>
 <p><img src="../reference/figures/from-model-to-meaning-final.png" class="r-plt" alt="" width="700px" style="display: block; margin: auto;"></p>
 </div>
+<div class="section level2">
+<h2 id="step-1-setup-the-model">Step 1: Setup the Model<a class="anchor" aria-label="anchor" href="#step-1-setup-the-model"></a>
+</h2>
 <div class="section level3">
-<h3 id="step-1-setup-the-model">Step 1: Setup the Model<a class="anchor" aria-label="anchor" href="#step-1-setup-the-model"></a>
+<h3 id="defining-the-estimands-five-questions-one-model">Defining the Estimands: Five Questions, One Model<a class="anchor" aria-label="anchor" href="#defining-the-estimands-five-questions-one-model"></a>
 </h3>
-<div class="section level4">
-<h4 id="defining-the-estimands-five-questions-one-model">Defining the Estimands: Five Questions, One Model<a class="anchor" aria-label="anchor" href="#defining-the-estimands-five-questions-one-model"></a>
-</h4>
 <p>Before setting up any statistical model, researchers must explicitly
 spell out their theoretical estimands in precise terms. An estimand is
 the specific target quantity that directly answers the research
@@ -270,9 +285,9 @@ on marginalization methods</a>).</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="which-predictors-to-include">Which predictors to include?<a class="anchor" aria-label="anchor" href="#which-predictors-to-include"></a>
-</h4>
+<div class="section level3">
+<h3 id="which-predictors-to-include">Which predictors to include?<a class="anchor" aria-label="anchor" href="#which-predictors-to-include"></a>
+</h3>
 <p>To answer our overarching research question - Does perceived
 stigmatization predict an increase in somatic symptom severity (PHQ-15)?
 - we must first determine the appropriate variables to include in our
@@ -322,9 +337,9 @@ Figure 2: DAG of our theoretical causal assumptions
 </p>
 </div>
 </div>
-<div class="section level4">
-<h4 id="building-the-model">Building the Model<a class="anchor" aria-label="anchor" href="#building-the-model"></a>
-</h4>
+<div class="section level3">
+<h3 id="building-the-model">Building the Model<a class="anchor" aria-label="anchor" href="#building-the-model"></a>
+</h3>
 <p>Guided by this causal structure, we can now build a statistical model
 complex enough to capture our core theoretical assumptions. We fit a
 linear mixed model for hierarchical, longitudinal data predicting
@@ -365,7 +380,7 @@ Click to show code for data generation
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Set a global clean theme for all subsequent plots</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">set_theme</a></span><span class="op">(</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span>show.ticks <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">set_theme</a></span><span class="op">(</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span>show.ticks <span class="op">=</span> <span class="cn">TRUE</span>, base_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </details><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit a linear mixed-effects model using glmmTMB: We predict 'phq15' based on</span></span>
 <span><span class="co"># the interaction of stigma and time, plus several covariates. Random effects</span></span>
@@ -383,9 +398,9 @@ Click to show code for data generation
 <span>  data <span class="op">=</span> <span class="va">stigma</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="interpreting-the-output">Interpreting the output<a class="anchor" aria-label="anchor" href="#interpreting-the-output"></a>
-</h4>
+<div class="section level3">
+<h3 id="interpreting-the-output">Interpreting the output<a class="anchor" aria-label="anchor" href="#interpreting-the-output"></a>
+</h3>
 <p>When looking at the standard regression table, it is crucial to
 interpret these coefficients as <em>descriptive comparisons</em>.
 Specifically, coefficients generally represent <em>conditional
@@ -501,7 +516,6 @@ effects shown)</caption>
 </tr>
 </tbody>
 </table>
-</div>
 <div class="section level4">
 <h4 id="the-interpretation-trap">The Interpretation Trap<a class="anchor" aria-label="anchor" href="#the-interpretation-trap"></a>
 </h4>
@@ -557,9 +571,10 @@ odds ratios.</p>
 </div>
 </div>
 </div>
-<div class="section level3">
-<h3 id="step-2-post-estimation-with-modelbased">Step 2: Post-Estimation with <code>modelbased</code><a class="anchor" aria-label="anchor" href="#step-2-post-estimation-with-modelbased"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="step-2-post-estimation-with-modelbased">Step 2: Post-Estimation with <code>modelbased</code><a class="anchor" aria-label="anchor" href="#step-2-post-estimation-with-modelbased"></a>
+</h2>
 <p>Now we query our model using the core functions of the
 <code>modelbased</code> toolkit: <code><a href="../reference/estimate_means.html">estimate_means()</a></code>,
 <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code>, and <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>.
@@ -569,9 +584,9 @@ using the actual empirical distribution of covariates in our sample
 before averaging the results (see also the <a href="https://easystats.github.io/modelbased/articles/technical_marginalization.html">vignette
 on marginalization methods</a> for technical details and the meaning of
 other options for the <code>estimate</code> argument).</p>
-<div class="section level4">
-<h4 id="predicted-overall-phq-15-scores-comparing-stigma-groups">Predicted overall PHQ-15 scores: Comparing stigma groups<a class="anchor" aria-label="anchor" href="#predicted-overall-phq-15-scores-comparing-stigma-groups"></a>
-</h4>
+<div class="section level3">
+<h3 id="predicted-overall-phq-15-scores-comparing-stigma-groups">Predicted overall PHQ-15 scores: Comparing stigma groups<a class="anchor" aria-label="anchor" href="#predicted-overall-phq-15-scores-comparing-stigma-groups"></a>
+</h3>
 <p>First, we ask: How does symptom severity differ between stigma
 groups? We use <code><a href="../reference/estimate_means.html">estimate_means()</a></code> to calculate the marginal
 means for each stigma group, comparing their overall average score. By
@@ -595,7 +610,7 @@ Click to show code for plot generation
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">emm</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"Stigma Group"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"People believe my symptoms are unreal"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Estimated PHQ-15 score"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </details><div class="figure">
@@ -604,9 +619,9 @@ Figure 3: Estimated Marginal Means of PHQ-15 by Stigma Groups
 </p>
 </div>
 </div>
-<div class="section level4">
-<h4 id="predicted-phq-15-trajectories">Predicted PHQ-15 trajectories<a class="anchor" aria-label="anchor" href="#predicted-phq-15-trajectories"></a>
-</h4>
+<div class="section level3">
+<h3 id="predicted-phq-15-trajectories">Predicted PHQ-15 trajectories<a class="anchor" aria-label="anchor" href="#predicted-phq-15-trajectories"></a>
+</h3>
 <p>Next, we ask: How does symptom severity evolve over time across
 different stigma groups? We evaluate the interaction between time and
 stigma group by estimating predictions across specific values. This maps
@@ -626,7 +641,12 @@ Click to show code for plot generation
 </summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the estimated trajectories over time</span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">emm</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="cn">NULL</span>, x <span class="op">=</span> <span class="st">"time"</span>, y <span class="op">=</span> <span class="st">"Estimated PHQ-15 score"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Time Point"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Estimated PHQ-15 score"</span>,</span>
+<span>    colour <span class="op">=</span> <span class="st">"People believe my\nsymptoms are unreal"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/see/reference/scale_color_see.html" class="external-link">scale_color_see</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </details><div class="figure">
 <img src="post_estimation_framework_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="Figure 4: Estimated Marginal Means of PHQ-15 by Stigma Groups Across Time" width="100%"><p class="caption">
@@ -635,9 +655,9 @@ Time
 </p>
 </div>
 </div>
-<div class="section level4">
-<h4 id="quantifying-the-change-trend-in-phq-15-scores">Quantifying the change (trend) in PHQ-15 scores<a class="anchor" aria-label="anchor" href="#quantifying-the-change-trend-in-phq-15-scores"></a>
-</h4>
+<div class="section level3">
+<h3 id="quantifying-the-change-trend-in-phq-15-scores">Quantifying the change (trend) in PHQ-15 scores<a class="anchor" aria-label="anchor" href="#quantifying-the-change-trend-in-phq-15-scores"></a>
+</h3>
 <p>How strong is the time trend in symptom severity within each stigma
 group? We use <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code> to calculate the average
 linear slope of the PHQ-15 score per time unit, shifting our targeted
@@ -729,9 +749,9 @@ Figure 5: Comparison of Trends in PHQ-15 by Stigma Groups
 </p>
 </div>
 </div>
-<div class="section level4">
-<h4 id="testing-the-interaction-does-the-group-gap-change-over-time">Testing the interaction: Does the group gap change over time?<a class="anchor" aria-label="anchor" href="#testing-the-interaction-does-the-group-gap-change-over-time"></a>
-</h4>
+<div class="section level3">
+<h3 id="testing-the-interaction-does-the-group-gap-change-over-time">Testing the interaction: Does the group gap change over time?<a class="anchor" aria-label="anchor" href="#testing-the-interaction-does-the-group-gap-change-over-time"></a>
+</h3>
 <p>Is there a significant gap between the groups at specific measurement
 points, and does this gap change? We can run an interaction contrast to
 test whether the group difference at time point 0 differs significantly
@@ -769,7 +789,7 @@ Click to show code for plot generation
 <span>    title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"Time Point"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Estimated PHQ-15 score"</span>,</span>
-<span>    colour <span class="op">=</span> <span class="st">"People believe my symptoms are unreal"</span></span>
+<span>    colour <span class="op">=</span> <span class="st">"People believe my\nsymptoms are unreal"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Annotate the gap at time = 0</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span></span>
@@ -823,9 +843,9 @@ Differences Over Time
 </p>
 </div>
 </div>
-<div class="section level4">
-<h4 id="exploring-heterogeneity-across-clusters">Exploring Heterogeneity Across Clusters<a class="anchor" aria-label="anchor" href="#exploring-heterogeneity-across-clusters"></a>
-</h4>
+<div class="section level3">
+<h3 id="exploring-heterogeneity-across-clusters">Exploring Heterogeneity Across Clusters<a class="anchor" aria-label="anchor" href="#exploring-heterogeneity-across-clusters"></a>
+</h3>
 <p>Because our model contains complex hierarchical structures, we can
 utilize <code>modelbased</code> to further unpack these interactions
 conditionally across the random effects hierarchy (e.g., specific
@@ -941,7 +961,7 @@ Click to show code for plot generation
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
 <span>      legend.position <span class="op">=</span> <span class="st">"bottom"</span>,</span>
 <span>      strip.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#efefef"</span>, colour <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span>,</span>
-<span>      strip.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">13</span><span class="op">)</span></span>
+<span>      strip.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span>
 <span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://easystats.github.io/see/reference/scale_color_see.html" class="external-link">scale_color_see</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -953,9 +973,9 @@ Groups
 </div>
 </div>
 </div>
-<div class="section level3">
-<h3 id="summary-and-conclusion">Summary and Conclusion<a class="anchor" aria-label="anchor" href="#summary-and-conclusion"></a>
-</h3>
+<div class="section level2">
+<h2 id="vive-la-modélisation">Vive la modélisation !<a class="anchor" aria-label="anchor" href="#vive-la-mod%C3%A9lisation"></a>
+</h2>
 <p>The actual empirical insight of a study rarely emerges from simply
 reading off raw regression coefficients. Particularly in complex models
 involving interactions, hierarchical structures, or nonlinearities,
