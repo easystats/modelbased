@@ -66,11 +66,11 @@ which we call the *modelisation approach* (derived from the French
 
 Before setting up any statistical model, researchers must explicitly
 spell out their theoretical estimands in precise terms. An estimand is
-the specific target quantity that directly answers the research
-question. Instead of passively interpreting whatever coefficients the
-software returns, we must actively decide whether our question requires
-us to estimate predictions, slopes, or comparisons (Rohrer and
-Arel-Bundock 2026; Rohrer and Murayama 2023).
+the specific target quantity that directly answers the research question
+(Lundberg et al. 2021). Instead of passively interpreting whatever
+coefficients the software returns, we must actively decide whether our
+question requires us to estimate predictions, slopes, or comparisons
+(Rohrer and Arel-Bundock 2026; Rohrer and Murayama 2023).
 
 ------------------------------------------------------------------------
 
@@ -812,6 +812,11 @@ Science* 7 (1): 25152459241236149.
 
 Gelman, Andrew, Jennifer Hill, and Aki Vehtari. 2020. *Regression and
 Other Stories.* Cambridge University Press.
+
+Lundberg, Ian, Rebecca Johnson, and Brandon M. Stewart. 2021. “What Is
+Your Estimand? Defining the Target Quantity Connects Statistical
+Evidence to Theory.” *American Sociological Review* 86 (3): 532–65.
+<https://doi.org/10.1177/00031224211004187>.
 
 Rohrer, Julia M., and Vincent Arel-Bundock. 2026. “Models as Prediction
 Machines: How to Convert Confusing Coefficients Into Clear Quantities.”
