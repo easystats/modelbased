@@ -89,16 +89,22 @@ knitr::include_graphics("../man/figures/know_your_estimand.jpg")
 
 In this vignette, we will use a single model to target five distinct estimands:
 
-1. **Predicted overall PHQ-15 scores:** To answer how symptom severity differs between stigma groups, our target quantity relies on marginal predictions.
-2. **Predicted PHQ-15 trajectories:** To see how symptom severity evolves over time across groups, our estimand is again based on predictions, but this time evaluated across a specific grid of time and stigma levels to map out expected trajectories.
-3. **Quantifying the change (trend) in PHQ-15 scores:** To understand how strong the time trend is within each stigma group, our target quantity shifts to slopes. The estimand is the rate of change in symptoms over time for each specific group.
-4. **Testing the interaction:** Does the group gap change over time? To test if the gap between groups widens or narrows, our target quantity is an interaction contrast.
-5. **Exploring Heterogeneity Across Clusters:** Instead of averaging across the whole population, we calculate specific contrasts conditionally within higher-level clusters (the disease groups) to explore heterogeneity.
+1. **Predicted overall PHQ-15 scores:** To answer how symptom severity differs between stigma groups, our target quantity relies on marginal *predictions*.
+2. **Predicted PHQ-15 trajectories:** To see how symptom severity evolves over time across groups, our estimand is again based on *predictions*, but this time evaluated across a specific grid of time and stigma levels to map out expected trajectories.
+3. **Quantifying the change (trend) in PHQ-15 scores:** To understand how strong the time trend is within each stigma group, our target quantity shifts to *slopes*. The estimand is the rate of change in symptoms over time for each specific group.
+4. **Testing the interaction:** Does the group gap change over time? To test if the gap between groups widens or narrows, our target quantity is an interaction *contrast*.
+5. **Exploring Heterogeneity Across Clusters:** Instead of averaging across the whole population, we calculate specific *contrasts* conditionally within higher-level clusters (the disease groups) to explore heterogeneity.
 
 Once these target quantities are clearly defined, we can proceed to construct the mathematical model that will allow us to estimate them.
 
 ::: custom_note
-When calculating your estimand, specifying the unit of interest - whether that is a specific individual, an average across individuals, or a broader target population - is just as crucial as choosing between predictions or slopes. In the `modelbased` package, this target population is controlled via the `estimate` argument, which determines how to marginalize over the non-focal predictors. Throughout this vignette, we default to `estimate = "average"` to accurately reflect the empirical distribution of our observed sample. Crucially, this assumes that our sample adequately represents the underlying target population. However, if your estimand requires formal causal inference and transferring results to other contexts, switching to `estimate = "population"` allows you to evaluate true counterfactual scenarios (see also the [vignette on marginalization methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html)).
+**The estimand - quantity and unit of interests**
+
+Defining your *estimand* requires specifying both the *quantity* and the *unit* of interest. Thus, determining your target population (*unit*) - whether that is a specific individual, an average across individuals, or a broader population - is just as crucial as choosing between predictions, contrasts or slopes (*quantity*) [@lundberg_what_2021; @rohrer_models_2026].
+
+In the `modelbased` package, this target population is controlled via the `estimate` argument, which determines how to marginalize over the non-focal predictors. Throughout this vignette, we default to `estimate = "average"` to accurately reflect the empirical distribution of our observed sample. Crucially, this assumes that our sample adequately represents the underlying target population.
+
+However, if your estimand requires formal causal inference and transferring results to other contexts, switching to `estimate = "population"` allows you to evaluate true counterfactual scenarios (see also the [vignette on marginalization methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html)).
 :::
 
 
