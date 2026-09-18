@@ -243,43 +243,48 @@ estimands:</p>
 <li>
 <strong>Predicted overall PHQ-15 scores:</strong> To answer how
 symptom severity differs between stigma groups, our target quantity
-relies on marginal predictions.</li>
+relies on marginal <em>predictions</em>.</li>
 <li>
 <strong>Predicted PHQ-15 trajectories:</strong> To see how symptom
 severity evolves over time across groups, our estimand is again based on
-predictions, but this time evaluated across a specific grid of time and
-stigma levels to map out expected trajectories.</li>
+<em>predictions</em>, but this time evaluated across a specific grid of
+time and stigma levels to map out expected trajectories.</li>
 <li>
 <strong>Quantifying the change (trend) in PHQ-15 scores:</strong> To
 understand how strong the time trend is within each stigma group, our
-target quantity shifts to slopes. The estimand is the rate of change in
-symptoms over time for each specific group.</li>
+target quantity shifts to <em>slopes</em>. The estimand is the rate of
+change in symptoms over time for each specific group.</li>
 <li>
 <strong>Testing the interaction:</strong> Does the group gap change
 over time? To test if the gap between groups widens or narrows, our
-target quantity is an interaction contrast.</li>
+target quantity is an interaction <em>contrast</em>.</li>
 <li>
 <strong>Exploring Heterogeneity Across Clusters:</strong> Instead of
-averaging across the whole population, we calculate specific contrasts
-conditionally within higher-level clusters (the disease groups) to
-explore heterogeneity.</li>
+averaging across the whole population, we calculate specific
+<em>contrasts</em> conditionally within higher-level clusters (the
+disease groups) to explore heterogeneity.</li>
 </ol>
 <p>Once these target quantities are clearly defined, we can proceed to
 construct the mathematical model that will allow us to estimate
 them.</p>
 <div class="custom_note">
-<p>When calculating your estimand, specifying the unit of interest -
-whether that is a specific individual, an average across individuals, or
-a broader target population - is just as crucial as choosing between
-predictions or slopes. In the <code>modelbased</code> package, this
-target population is controlled via the <code>estimate</code> argument,
-which determines how to marginalize over the non-focal predictors.
-Throughout this vignette, we default to
-<code>estimate = "average"</code> to accurately reflect the empirical
-distribution of our observed sample. Crucially, this assumes that our
-sample adequately represents the underlying target population. However,
-if your estimand requires formal causal inference and transferring
-results to other contexts, switching to
+<p><strong>The estimand - quantity and unit of interests</strong></p>
+<p>Defining your <em>estimand</em> requires specifying both the
+<em>quantity</em> and the <em>unit</em> of interest. Thus, determining
+your target population (<em>unit</em>) - whether that is a specific
+individual, an average across individuals, or a broader population - is
+just as crucial as choosing between predictions, contrasts or slopes
+(<em>quantity</em>) <span class="citation">(Lundberg et al. 2021; Rohrer
+and Arel-Bundock 2026)</span>.</p>
+<p>In the <code>modelbased</code> package, this target population is
+controlled via the <code>estimate</code> argument, which determines how
+to marginalize over the non-focal predictors. Throughout this vignette,
+we default to <code>estimate = "average"</code> to accurately reflect
+the empirical distribution of our observed sample. Crucially, this
+assumes that our sample adequately represents the underlying target
+population.</p>
+<p>However, if your estimand requires formal causal inference and
+transferring results to other contexts, switching to
 <code>estimate = "population"</code> allows you to evaluate true
 counterfactual scenarios (see also the <a href="https://easystats.github.io/modelbased/articles/technical_marginalization.html">vignette
 on marginalization methods</a>).</p>
