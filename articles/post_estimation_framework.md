@@ -116,10 +116,12 @@ predictions or slopes. In the `modelbased` package, this target
 population is controlled via the `estimate` argument, which determines
 how to marginalize over the non-focal predictors. Throughout this
 vignette, we default to `estimate = "average"` to accurately reflect the
-empirical distribution of our observed sample. However, if your estimand
-requires formal causal inference and transferring results to other
-contexts, switching to `estimate = "population"` allows you to evaluate
-true counterfactual scenarios (see also the [vignette on marginalization
+empirical distribution of our observed sample. Crucially, this assumes
+that our sample adequately represents the underlying target population.
+However, if your estimand requires formal causal inference and
+transferring results to other contexts, switching to
+`estimate = "population"` allows you to evaluate true counterfactual
+scenarios (see also the [vignette on marginalization
 methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html)).
 
 Before we start, let’s load the necessary R packages.
