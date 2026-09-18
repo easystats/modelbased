@@ -65,7 +65,7 @@ In this model-agnostic framework, the word "prediction" is used generically to r
 
 This vignette illustrates a two-step framework for statistical modeling, which we call the *modelisation approach* (derived from the French *modélisation*).
 
-1. **Setup the Model**: The first step is to explicitly define the theoretical estimand, which is the specific target quantity that actually answers your research question. Once the goal is clear, we must carefully select predictors. This process is greatly aided by Directed Acyclic Graphs (DAGs), which allow us to map out the theoretical causal web and decide which variables must be included (like confounders) and which must be avoided (like colliders and mediators). Finally, we must recognize that standard regression coefficients usually just represent descriptive, conditional comparisons rather than direct causal effects.
+1. **Setup the Model**: The first step is to explicitly define the theoretical estimand, which is the specific target quantity that actually answers your research question. Once the goal is clear, we must carefully select predictors. This process is greatly aided by Directed Acyclic Graphs (DAGs), which allow us to map out the theoretical causal web and decide which variables must be included (like confounders) and which must be avoided (like colliders and mediators). Finally, we must recognize that standard regression coefficients usually just represent descriptive, conditional comparisons rather than direct causal effects or other quantities of interest.
 
 2. **Post-Estimation**: With the model fitted, we step away from the mechanics of estimation and query our "prediction machine". Utilizing `modelbased` functions, we interrogate the model using specific predictors of interest, define exact evaluation points, and specify target populations. This post-estimation process allows us to translate confusing coefficients into clear, substantive quantities that directly address our initial research questions.
 
@@ -77,7 +77,7 @@ knitr::include_graphics("../man/figures/from-model-to-meaning-final.png")
 
 ## Defining the Estimands: Five Questions, One Model
 
-Before setting up any statistical model, researchers must explicitly spell out their theoretical estimands in precise terms. An estimand is the specific target quantity that directly answers the research question [@lundberg_what_2021]. Instead of passively interpreting whatever coefficients the software returns, we must actively decide whether our question requires us to estimate predictions, slopes, or comparisons [@rohrer_models_2026; @rohrer_these_2023].
+Before setting up any statistical model, researchers must explicitly spell out their theoretical estimands in precise terms. An estimand is the specific target quantity (and unit) that directly answers the research question [@lundberg_what_2021]. Instead of passively interpreting whatever coefficients the software returns, we must actively decide whether our question requires us to estimate *predictions*, *slopes*, or *comparisons* (*quantity*),and determine to which target population we want to generalize our results (*unit*) [@rohrer_models_2026; @rohrer_these_2023].
 
 ---
 
