@@ -48,6 +48,7 @@ navbar:
         - text: "Overview of Vignettes"
           href: articles/overview_of_vignettes.html
         - text: -------
+        - text: "Complete Analytical Workflow"
         - text: "The modelisation approach"
           href: articles/post_estimation_framework.html
         - text: -------
@@ -63,15 +64,7 @@ navbar:
         - text: "Mixed effects models"
           href: articles/mixed_models.html
         - text: -------
-        - text: "Interpretation"
-        - text: "Use a model to make predictions"
-          href: articles/estimate_response.html
-        - text: "Interpret models using Effect Derivatives"
-          href: articles/derivatives.html
-        - text: "Estimate and re-use Random Effects"
-          href: articles/estimate_grouplevel.html
-    - text: "Visualization"
-      menu:
+        - text: "Visualization"
         - text: "Plotting estimated marginal means"
           href: articles/plotting.html
         - text: "Plotting estimated marginal means with tinyplot"
@@ -80,6 +73,14 @@ navbar:
           href: articles/estimate_relation.html
         - text: "The modelisation approach (WIP)"
           href: articles/modelisation_approach.html
+        - text: -------
+        - text: "Interpretation"
+        - text: "Use a model to make predictions"
+          href: articles/estimate_response.html
+        - text: "Interpret models using Effect Derivatives"
+          href: articles/derivatives.html
+        - text: "Estimate and re-use Random Effects"
+          href: articles/estimate_grouplevel.html
     - text: "Hypothesis testing"
       menu:
         - text: "Contrasts and comparisons"
