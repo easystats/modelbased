@@ -44,6 +44,8 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-introductions">
 <li><a class="dropdown-item" href="../articles/overview_of_vignettes.html">Overview of Vignettes</a></li>
     <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/post_estimation_framework.html">The modelisation approach</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Basics</h6></li>
     <li><a class="dropdown-item" href="../articles/visualisation_matrix.html">Data grids</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_means.html">Marginal means</a></li>
@@ -55,13 +57,25 @@
     <li><a class="dropdown-item" href="../articles/estimate_response.html">Use a model to make predictions</a></li>
     <li><a class="dropdown-item" href="../articles/derivatives.html">Interpret models using Effect Derivatives</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_grouplevel.html">Estimate and re-use Random Effects</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Visualization</h6></li>
-    <li><a class="dropdown-item" href="../articles/plotting.html">Plotting estimated marginal means</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-visualization" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Visualization</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-visualization">
+<li><a class="dropdown-item" href="../articles/plotting.html">Plotting estimated marginal means</a></li>
     <li><a class="dropdown-item" href="../articles/plotting_tinyplot.html">Plotting estimated marginal means with tinyplot</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_relation.html">Visualize effects and interactions</a></li>
-    <li><a class="dropdown-item" href="../articles/modelisation_approach.html">The modelisation approach</a></li>
-    <li><a class="dropdown-item" href="../articles/post_estimation_framework.html">The modelisation approach-2</a></li>
+    <li><a class="dropdown-item" href="../articles/modelisation_approach.html">The modelisation approach (WIP)</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-hypothesis-testing" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Hypothesis testing</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-hypothesis-testing">
+<li><a class="dropdown-item" href="../articles/introduction_comparisons_1.html">Contrasts and comparisons</a></li>
+    <li><a class="dropdown-item" href="../articles/introduction_comparisons_2.html">User Defined Contrasts and Joint Tests</a></li>
+    <li><a class="dropdown-item" href="../articles/introduction_comparisons_3.html">Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)</a></li>
+    <li><a class="dropdown-item" href="../articles/introduction_comparisons_4.html">Contrasts and comparisons for generalized linear models</a></li>
+    <li><a class="dropdown-item" href="../articles/introduction_comparisons_5.html">Contrasts and comparisons for zero-inflation models</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -75,13 +89,6 @@
     <li><a class="dropdown-item" href="../articles/practical_context_effect.html">Context Effects: How the Environment Shapes the Individual</a></li>
     <li><a class="dropdown-item" href="../articles/practical_its.html">Interrupted Time Series Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/practical_growthmixture.html">An Introduction to Growth Mixture Models</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Contrasts</h6></li>
-    <li><a class="dropdown-item" href="../articles/introduction_comparisons_1.html">Contrasts and comparisons</a></li>
-    <li><a class="dropdown-item" href="../articles/introduction_comparisons_2.html">User Defined Contrasts and Joint Tests</a></li>
-    <li><a class="dropdown-item" href="../articles/introduction_comparisons_3.html">Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)</a></li>
-    <li><a class="dropdown-item" href="../articles/introduction_comparisons_4.html">Contrasts and comparisons for generalized linear models</a></li>
-    <li><a class="dropdown-item" href="../articles/introduction_comparisons_5.html">Contrasts and comparisons for zero-inflation models</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Technical Details</h6></li>
     <li><a class="dropdown-item" href="../articles/technical_marginalization.html">Understanding marginalization methods</a></li>
@@ -150,11 +157,16 @@ Documentation</a></li>
 </ul>
 </div>
 <div class="section level2">
+<h2 id="the-analytical-workflow-with-modelbased">The analytical workflow with <code>{modelbased}</code><a class="anchor" aria-label="anchor" href="#the-analytical-workflow-with-modelbased"></a>
+</h2>
+<ul>
+<li><a href="https://easystats.github.io/modelbased/articles/post_estimation_framework.html">The
+Modelisation Approach to Statistics</a></li>
+</ul>
+</div>
+<div class="section level2">
 <h2 id="introductions">Introductions<a class="anchor" aria-label="anchor" href="#introductions"></a>
 </h2>
-<div class="section level3">
-<h3 id="basics">Basics<a class="anchor" aria-label="anchor" href="#basics"></a>
-</h3>
 <ul>
 <li><a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html">Data
 grids</a></li>
@@ -168,9 +180,9 @@ effects and derivatives</a></li>
 effects models</a></li>
 </ul>
 </div>
-<div class="section level3">
-<h3 id="interpretation">Interpretation<a class="anchor" aria-label="anchor" href="#interpretation"></a>
-</h3>
+<div class="section level2">
+<h2 id="interpretation">Interpretation<a class="anchor" aria-label="anchor" href="#interpretation"></a>
+</h2>
 <ul>
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_response.html">Use
 a model to make predictions</a></li>
@@ -180,9 +192,9 @@ simple and complex models using the power of Effect Derivatives</a></li>
 to use Mixed models to Estimate Individuals’ Scores</a></li>
 </ul>
 </div>
-<div class="section level3">
-<h3 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
-</h3>
+<div class="section level2">
+<h2 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
+</h2>
 <ul>
 <li><a href="https://easystats.github.io/modelbased/articles/plotting.html">Plotting
 estimated marginal means</a></li>
@@ -190,17 +202,27 @@ estimated marginal means</a></li>
 estimated marginal means with tinyplot</a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_relation.html">Visualize
 effects and interactions</a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/modelisation_approach.html">The
-Modelisation Approach to Statistics</a></li>
 </ul>
 </div>
+<div class="section level2">
+<h2 id="hypothesis-testing">Hypothesis Testing<a class="anchor" aria-label="anchor" href="#hypothesis-testing"></a>
+</h2>
+<ul>
+<li><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html">Contrasts
+and pairwise comparisons</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html">User
+Defined Contrasts and Joint Tests</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html">Slopes,
+floodlight and spotlight analysis (Johnson-Neyman intervals)</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html">Contrasts
+and comparisons for generalized linear models</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html">Contrasts
+and comparisons for zero-inflation models</a></li>
+</ul>
 </div>
 <div class="section level2">
-<h2 id="case-studies">Case Studies<a class="anchor" aria-label="anchor" href="#case-studies"></a>
+<h2 id="case-studies-and-workflows">Case Studies and Workflows<a class="anchor" aria-label="anchor" href="#case-studies-and-workflows"></a>
 </h2>
-<div class="section level3">
-<h3 id="workflows">Workflows<a class="anchor" aria-label="anchor" href="#workflows"></a>
-</h3>
 <ul>
 <li><a href="https://easystats.github.io/modelbased/articles/workflow_modelbased.html">Understanding
 your models</a></li>
@@ -218,30 +240,13 @@ Time Series Analysis with <code>modelbased</code></a></li>
 Introduction to Growth Mixture Models</a></li>
 </ul>
 </div>
-<div class="section level3">
-<h3 id="contrasts">Contrasts<a class="anchor" aria-label="anchor" href="#contrasts"></a>
-</h3>
-<ul>
-<li><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html">Contrasts
-and pairwise comparisons</a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html">User
-Defined Contrasts and Joint Tests</a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html">Slopes,
-floodlight and spotlight analysis (Johnson-Neyman intervals)</a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html">Contrasts
-and comparisons for generalized linear models</a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html">Contrasts
-and comparisons for zero-inflation models</a></li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="technical-details">Technical Details<a class="anchor" aria-label="anchor" href="#technical-details"></a>
-</h3>
+<div class="section level2">
+<h2 id="technical-details">Technical Details<a class="anchor" aria-label="anchor" href="#technical-details"></a>
+</h2>
 <ul>
 <li><a href="https://easystats.github.io/modelbased/articles/technical_marginalization.html">Understanding
 marginalization methods</a></li>
 </ul>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

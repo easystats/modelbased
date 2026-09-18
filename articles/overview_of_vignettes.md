@@ -8,9 +8,12 @@ All package vignettes are available at
 - [Function
   Documentation](https://easystats.github.io/modelbased/reference/index.html)
 
-## Introductions
+## The analytical workflow with `{modelbased}`
 
-### Basics
+- [The Modelisation Approach to
+  Statistics](https://easystats.github.io/modelbased/articles/post_estimation_framework.html)
+
+## Introductions
 
 - [Data
   grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
@@ -23,7 +26,7 @@ All package vignettes are available at
 - [Mixed effects
   models](https://easystats.github.io/modelbased/articles/mixed_models.html)
 
-### Interpretation
+## Interpretation
 
 - [Use a model to make
   predictions](https://easystats.github.io/modelbased/articles/estimate_response.html)
@@ -32,7 +35,7 @@ All package vignettes are available at
 - [How to use Mixed models to Estimate Individuals’
   Scores](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
 
-### Visualization
+## Visualization
 
 - [Plotting estimated marginal
   means](https://easystats.github.io/modelbased/articles/plotting.html)
@@ -40,12 +43,21 @@ All package vignettes are available at
   tinyplot](https://easystats.github.io/modelbased/articles/plotting_tinyplot.html)
 - [Visualize effects and
   interactions](https://easystats.github.io/modelbased/articles/estimate_relation.html)
-- [The Modelisation Approach to
-  Statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 
-## Case Studies
+## Hypothesis Testing
 
-### Workflows
+- [Contrasts and pairwise
+  comparisons](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
+- [User Defined Contrasts and Joint
+  Tests](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
+- [Slopes, floodlight and spotlight analysis (Johnson-Neyman
+  intervals)](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
+- [Contrasts and comparisons for generalized linear
+  models](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+- [Contrasts and comparisons for zero-inflation
+  models](https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html)
+
+## Case Studies and Workflows
 
 - [Understanding your
   models](https://easystats.github.io/modelbased/articles/workflow_modelbased.html)
@@ -62,20 +74,7 @@ All package vignettes are available at
 - [An Introduction to Growth Mixture
   Models](https://easystats.github.io/modelbased/articles/practical_growthmixture.html)
 
-### Contrasts
-
-- [Contrasts and pairwise
-  comparisons](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
-- [User Defined Contrasts and Joint
-  Tests](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
-- [Slopes, floodlight and spotlight analysis (Johnson-Neyman
-  intervals)](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
-- [Contrasts and comparisons for generalized linear
-  models](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
-- [Contrasts and comparisons for zero-inflation
-  models](https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html)
-
-### Technical Details
+## Technical Details
 
 - [Understanding marginalization
   methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html)
