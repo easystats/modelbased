@@ -2,8 +2,122 @@
 
 ## Changes
 
+* Post-processing in `estimate_contrasts()` including group-variable (e.g.,
+  `post_process = ~ pairwise | group_var`) now no longer prints levels from
+  `group_var` in both the group and comparison columns (i.e. redundant labels
+  have been removed from the output).
+
+* `estimate_contrasts()` with custom comparisons (e.g., when
+  `comparison = "(b1 - b12) = (b4 - b18)"`) can yield incorrect results when
+  `estimate = "average"` and predictions are filtered (e.g. when
+  `contrast = c("x=c(2,4)")`). This does not happen in general, but may happen.
+  Therefore, now an informative warning is printed in such edge-cases.
+
+* Added a new vignette, "The Modelisation Approach", which demonstrates a
+  complete analytical workflow from setting up models using DAGs to extracting
+  meaningful predictions, slopes, and interaction contrasts using modelbased
+  post-estimation functions.
+
+## Bug fixes
+
+* Fixed issue in `estimate_contrasts()` with wrong assignment of estimates in
+  custom comparisons (e.g., when `comparison = "(b1 - b12) = (b4 - b18)"`),
+  when some of the indexed coefficients contained the same digit (in this case,
+  `1` in `b1` and `b12`).
+
+# modelbased 0.17.0
+
+## Breaking Changes
+
+* The `comparison` argument in `estimate_contrasts()` for `backend = "emmeans"`
+  now defaults to `"revpairwise"`, to return consistent results regarding the
+  sign of contrasts with the `"marginaleffects"` backend.
+
+## Changes
+
+* For contrasts of models where predictions vary by response category
+  (e.g., categorical, ordinal/cumulative or multinomial models, as well as
+  multivariate response models), `estimate_contrasts()` now returns separate
+  `Response1` and `Response2` columns instead of merging the response
+  category label into the `Level1` and `Level2` columns (#646).
+
+* The `iterations` argument can now also be used for Bayesian model in
+  `estimate_means()`, `estimate_slopes()`, and `estimate_contrasts()`, which
+  is then passed to the `ndraws` argument and controls how many samples are
+  drawn from the posterior when calculating marginal means, effects or contrasts.
+
+* `ci = NULL` now suppresses calculation of standard errors and confidence
+  intervals.
+
+* The `data` argument can be used as an alias for `newdata` in `estimate_means()`,
+  `estimate_slopes()`, and `estimate_contrasts()`, and is passed to the related
+  *marginaleffects*  functions.
+
+* Improved default settings for plots using `tinyplot()`:
+  - `facet`s now automatically remove redundant axes. If you prefer to keep them,
+    you can simply enable them by setting `frame = TRUE`.
+  - The x-axis now automatically adjusts its limits when categorical predictors
+    are used. By setting `xlim` to `c(0.5, n + 0.5)`, the geoms are moved closer
+    together, resulting in a more compact appearance.
+
+* `tinyplot`() for *modelbased* objects now supports standard arguments following
+  easystats conventions, allowing for more fine-grained plot customizations
+  (e.g., text/line sizes, color palettes, and axis title sizes).
+
+* New options for printing (in particular, formatting CIs), see also documentation
+  (`?modelbased::"modelbased-options"`).
+
+* Improved documentation for `estimate_means()` and vignettes about technical
+  details of marginalization.
+
+## Bug fixes
+
+* `estimate_contrasts()` with `backend = "emmeans"` now correctly parses factor
+  levels that contain `" - "` in their names (e.g., `"A - High"`, `"B - Low"`).
+  emmeans wraps such levels in parentheses (e.g., `"(A - Low) - (A - High)"`),
+  which is now handled properly (#649).
+
+* Fixed issue with `estimate = "average"` in `estimate_slopes()` when no `by`
+  variable was specified and therefore no data grid created. This caused an
+  issue with filtering the output.
+
+# modelbased 0.16.0
+
+## Changes
+
 * Informative error message when the `trend` variable in `estimate_slopes()` is
   not numeric and `backend = "emmeans"`.
+
+* `estimate_contrasts()` gets a `post_process` argument, to process subsequent
+  comparisons. It allows for complex, multi-step comparisons.
+
+* The `comparison` argument in `estimate_contrasts()` can now also be `"omnibus"`,
+  to calculate a global omnibus test for differences between levels of a
+  predictor.
+
+* Offsets (using the `offset` argument) now also work when `estimate` is set to
+  `"population"` or `"average"`.
+
+* Argument `slope`, when specific values are defined, can now also be a list
+  instead of only a string. E.g., `slope="<variable> = seq(1, 3, 0.1)"` can now
+  also be written as `slope=list(<variable> = seq(1, 3, 0.1))`.
+
+* Clarified usage of `marginal` group-level estimates in `estimate_grouplevel()`.
+  The `type` argument can now be used in combination with the `estimate` argument,
+  which is now also more explained in detail in the documentation.
+
+* `by = NULL` now also works for `backend = "emmeans"`, to predict the grand mean.
+
+## Bug fixes
+
+* Minor bug fix when evaluating `slope` and `by` arguments in `estimate_slopes()`.
+
+* `get_emcontrasts()`, `get_emmeans()` and `get_emtrends()` (i.e., functions
+  using `backend = "emmeans"`) now give an informative error message when
+  `by`, `contrast`, or `trend` refer to a variable that is only used as random
+  effects grouping factor (e.g., `Subject` in `(1 | Subject)`), instead of failing
+  with a cryptic error. Such variables can only be used with
+  `backend = "marginaleffects"`.
 
 # modelbased 0.15.0
 

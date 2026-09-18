@@ -28,6 +28,7 @@ get_marginalmeans <- function(
   ci = 0.95,
   estimate = NULL,
   transform = NULL,
+  iterations = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -40,7 +41,10 @@ get_marginalmeans <- function(
 
   dots <- list(...)
   comparison <- dots$hypothesis
+  post_process <- dots$post_process
+  original_contrast <- dots$.original_contrast
   joint_test <- isTRUE(dots$.joint_test)
+  omnibus_test <- isTRUE(dots$.omnibus_test)
 
   # validate input
   estimate <- .validate_estimate_arg(estimate)
@@ -52,7 +56,8 @@ get_marginalmeans <- function(
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # inform user about appropriate use of offset-terms
-  .check_offset(model, estimate, offset = dots$offset, verbose = verbose)
+  model_offset <- dots$offset
+  .check_offset(model, estimate, offset = model_offset, my_args, verbose = verbose)
 
   # find default response-type, and get information about back transformation
   predict_args <- .get_marginaleffects_type_argument(
@@ -60,9 +65,13 @@ get_marginalmeans <- function(
     predict,
     comparison,
     model_info,
+    omnibus_test,
     verbose,
     ...
   )
+
+  # was "data" argument used? if so, it replaces "newdata" in dots
+  dots <- .check_dots_data(dots, verbose)
 
   # Second step: create a data grid -------------------------------------------
   # ---------------------------------------------------------------------------
@@ -86,7 +95,7 @@ get_marginalmeans <- function(
   # fmt: skip
   dots[c(
     "by", "conf_level", "type", "digits", "bias_correction", "sigma",
-    "offset", ".joint_test"
+    "offset", ".joint_test", ".omnibus_test", ".original_contrast", "post_process"
   )] <- NULL
 
   # model df - can be passed via `...`
@@ -125,6 +134,15 @@ get_marginalmeans <- function(
       # # overwrite if explicitly set
       fun_args$newdata <- datagrid
     }
+    if (!is.null(model_offset) && estimate == "average") {
+      # handling offsets for estimate = "average" is different,
+      # we need to add the specific offset-value to the "variables"
+      # argument
+      fun_args$variables <- as.list(stats::setNames(
+        model_offset,
+        insight::find_offset(model)
+      ))
+    }
     fun_args$by <- datagrid_info$at_specs$varname
   }
 
@@ -137,6 +155,31 @@ get_marginalmeans <- function(
   } else {
     fun_args$type <- predict_args$predict
   }
+
+  ## TODO: document "fast" argument?
+
+  # fast mode?
+  # ---------------------------
+
+  # we have several options for "fast"
+  # fast = NULL:    nothing happens
+  # fast = TRUE:    creates a weighted (reduced) data frame, binning numerics
+  #                 into 5 groups
+  # fast = NA:      creates a weighted (reduced) data frame, setting numerics
+  #                 to their mean value
+  # fast = <value>: creates a weighted (reduced) data frame, binning
+  #                 numerics into <value> groups
+
+  # create weighted (reduced) data grid
+  tmp <- .create_weighted_datagrid(
+    model = model,
+    estimate = estimate,
+    fun_args = fun_args,
+    dots = dots
+  )
+  # if we made any changes, update arguments
+  fun_args <- tmp$fun_args
+  dots <- tmp$dots
 
   # weights?
   # ---------------------------
@@ -155,6 +198,13 @@ get_marginalmeans <- function(
   # compared to what "avg_predictions()" returns... so let's check if we have to
   # take care of this
   if (.is_custom_comparison(comparison)) {
+    # first check if we have filtering in by-variables when estimate is set to
+    # 'average' - this won't work, because the internal re-ordering relies on
+    # predictions based on a "filtered" data grid, while `estimate = "average"`
+    # does the filtering later in the code, *after* calling marginaleffects
+    .check_custom_contrasts_and_filter(estimate, by, original_contrast, comparison)
+
+    # reorder custom row-indices
     dots$hypothesis <- .reorder_custom_hypothesis(
       comparison,
       datagrid,
@@ -165,10 +215,19 @@ get_marginalmeans <- function(
   # cleanup
   fun_args <- insight::compact_list(c(fun_args, dots))
 
+  # handle remaining arguments ---------------------------------------
+  # ------------------------------------------------------------------
+
   ## TODO: need to check against different mixed models results from other packages
   # set to NULL
   if (!"re.form" %in% names(dots)) {
     fun_args$re.form <- NULL
+  }
+
+  # missing or NA for conf_level? If so, we want to suppress SE and CI
+  if (is.null(fun_args$conf_level) || is.na(fun_args$conf_level)) {
+    fun_args$conf_level <- NULL # for NA
+    fun_args$vcov <- FALSE
   }
 
   # transform reponse?
@@ -179,19 +238,32 @@ get_marginalmeans <- function(
     fun_args$transform <- transform
   }
 
+  # bayesian models: number of posterior draws to use, passed to `ndraws`
+  if (!is.null(iterations)) {
+    fun_args$ndraws <- iterations
+  }
+
   # Fourth step: compute marginal means ---------------------------------------
   # ---------------------------------------------------------------------------
 
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
-  means <- .call_marginaleffects(fun_args)
+  means <- .call_marginaleffects(fun_args, post_process, verbose)
   vcov_means <- .safe(stats::vcov(means))
 
   # intermediate step: joint tests --------------------------------------------
   # ---------------------------------------------------------------------------
 
-  if (joint_test) {
-    means <- .get_jointtest(means, my_args, test = c(dots$joint_test, dots$test))
+  if (joint_test || omnibus_test) {
+    means <- .get_jointtest(
+      means,
+      my_args,
+      test = c(dots$joint_test, dots$test),
+      null = dots$null,
+      is_omnibus = omnibus_test
+    )
+    # update null
+    dots$null <- attr(means, "null", exact = TRUE)
   }
 
   # Fifth step: post-processing marginal means----------------------------------
@@ -238,8 +310,11 @@ get_marginalmeans <- function(
         estimate = estimate,
         datagrid = datagrid,
         transform = !is.null(transform),
+        iterations = iterations,
         keep_iterations = keep_iterations,
         joint_test = joint_test,
+        omnibus_test = omnibus_test,
+        null = dots$null,
         vcov = vcov_means,
         equivalence = dots$equivalence
       )
@@ -253,23 +328,136 @@ get_marginalmeans <- function(
 
 # call marginaleffects and process potential errors ---------------------------
 
-.call_marginaleffects <- function(fun_args, type = "means") {
+.call_marginaleffects <- function(fun_args, post_process = NULL, verbose = TRUE) {
   out <- tryCatch(
-    suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
+    {
+      # call marginaleffects
+      result <- suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args))
+      # process subsequential comparisons, if any
+      .post_process_comparisons(result, post_process = post_process, verbose = verbose)
+    },
     error = function(e) e
   )
 
   # display informative error
   if (inherits(out, "simpleError")) {
-    insight::format_error(.marginaleffects_errors(out, fun_args))
+    insight::format_error(.check_marginaleffects_errors(out, fun_args))
   }
 
   # check number of rows - for estimate = "average", no rows might be returned
-  if (nrow(out) == 0) {
-    .filter_error("No rows returned from marginal means.")
-  }
+  .check_filter_args(out, "No rows returned from marginal means.")
 
   out
+}
+
+# process subsequential comparisons ---------------------------
+
+.post_process_comparisons <- function(out, post_process = NULL, verbose = TRUE) {
+  if (!is.null(post_process)) {
+    # coerce to list
+    if (!is.list(post_process)) {
+      post_process <- list(post_process)
+    }
+    # save temporary parameter names
+    temp_params <- .safe(out$hypothesis)
+    # parameter names from groups
+    group_params <- .safe(out[seq_len(which(colnames(out) == "estimate") - 1)[-1]])
+    # check
+    for (i in seq_along(post_process)) {
+      if (verbose) {
+        insight::format_alert(paste0(
+          "Post-processing ",
+          deparse(post_process[[i]]),
+          "..."
+        ))
+      }
+      out <- suppressWarnings(marginaleffects::hypotheses(
+        out,
+        hypothesis = post_process[[i]]
+      ))
+      temp_params <- .update_post_process_params(
+        out,
+        temp_params,
+        group_params,
+        post_process[[i]]
+      )
+    }
+    # check if extractinb parameters worked
+    if (length(temp_params) == nrow(out)) {
+      out$hypothesis <- temp_params
+    }
+  }
+  out
+}
+
+.update_post_process_params <- function(
+  out,
+  temp_params,
+  group_params,
+  post_process = NULL
+) {
+  if (is.null(temp_params)) {
+    return(NULL)
+  }
+
+  # we may have groups in post-processing contrasts, and these groups should not
+  # be included in the levels of the hypothesis
+  if (
+    !is.null(post_process) &&
+      (inherits(post_process, "formula") || is.character(post_process))
+  ) {
+    # extract all group variables from post-processing hypothesis, i.e.
+    # extract "groups" from "difference ~ pairwise | groups"
+    comparison_groups <- vapply(
+      strsplit(
+        paste(insight::safe_deparse(post_process), collapse = ""),
+        "|",
+        fixed = TRUE
+      )[[1L]],
+      insight::trim_ws,
+      character(1)
+    )
+    # if we have any groups, check if these names also appear in the group-name
+    # data frame, and if yes, remove them. these groups have their own column
+    # in the output and don't need to appear twice (in the comparison labels)
+    # again
+    if (length(comparison_groups) > 1) {
+      comparison_groups <- all.vars(stats::formula(paste("~", comparison_groups[2])))
+      remove <- intersect(colnames(group_params), comparison_groups)
+      if (length(remove)) {
+        group_params[remove] <- NULL
+      }
+    }
+  }
+
+  .safe(
+    {
+      # clean current parameter names
+      temp_params <- gsub("(", "", gsub(")", "", temp_params, fixed = TRUE), fixed = TRUE)
+      # extract rownumbers (from b-cofficients) from current output
+      lhs <- as.numeric(gsub("\\(b(\\d+)\\) - \\(b(\\d+)\\)", "\\1", out$hypothesis))
+      rhs <- as.numeric(gsub("\\(b(\\d+)\\) - \\(b(\\d+)\\)", "\\2", out$hypothesis))
+      # update current parameter names
+      if (all(temp_params[lhs] == temp_params[rhs])) {
+        temp_params <- temp_params[lhs]
+      } else {
+        temp_params <- paste(temp_params[lhs], "-", temp_params[rhs])
+      }
+      if (!is.null(group_params)) {
+        for (i in colnames(group_params)) {
+          temp_params <- paste0(
+            temp_params,
+            ", ",
+            group_params[lhs, i],
+            " - ",
+            group_params[rhs, i]
+          )
+        }
+      }
+      temp_params
+    },
+    quietly = TRUE
+  )
 }
 
 
@@ -315,16 +503,24 @@ get_marginalmeans <- function(
   dots[c("by", "factors", "include_random", "verbose")] <- NULL
   dg_args <- insight::compact_list(c(dg_args, dots))
 
+  # for estimate = "population", we need the offset in `by`, thus, we have to
+  # add it before we call data grid
+  model_offset <- insight::find_offset(model)
+  needs_offset <- !is.null(dots$offset) && !is.null(model_offset)
+
+  if (
+    needs_offset && estimate == "population" && !any(startsWith(dg_args$by, model_offset))
+  ) {
+    dg_args$by <- c(dg_args$by, paste(model_offset, "=", dots$offset))
+  }
+
   # Get corresponding datagrid (and deal with particular ats)
   datagrid <- do.call(insight::get_datagrid, dg_args)
   datagrid_info <- attributes(datagrid)
 
-  # handle offsets
-  if (!is.null(dots$offset)) {
-    model_offset <- insight::find_offset(model)
-    if (!is.null(model_offset)) {
-      datagrid[[model_offset]] <- dots$offset
-    }
+  # handle offsets for other estimate-options
+  if (needs_offset && estimate != "population") {
+    datagrid[[model_offset]] <- dots$offset
   }
 
   # restore data types -  if we have defined numbers in `by`, like
@@ -336,74 +532,6 @@ get_marginalmeans <- function(
   )
 
   list(datagrid = datagrid, datagrid_info = datagrid_info, dots = dots)
-}
-
-
-# handle errors from marginaleffects -----------------------------------------
-#
-# This helper function processes errors that occur during calls to the
-# {marginaleffects} package. It creates more informative and user-friendly
-# error messages by inspecting the original error and suggesting potential
-# solutions for common problems, such as using a different `estimate` option
-# or switching to the `emmeans` backend.
-#
-# Arguments:
-# - out: The error object returned from the `tryCatch` block.
-# - fun_args: A list of arguments that were passed to the failing
-#   {marginaleffects} function.
-#
-# returns: A character vector containing the formatted, user-friendly error
-#   message, which is then passed to `insight::format_error()`.
-.marginaleffects_errors <- function(out, fun_args) {
-  # what was requested?
-  if (is.null(fun_args$hypothesis)) {
-    fun <- "marginal means"
-  } else {
-    fun <- "marginal contrasts"
-  }
-  # clean original error message
-  out$message <- gsub("\\s+", " ", gsub("\n", "", out$message, fixed = TRUE))
-  # setup clear error message
-  msg <- c(
-    paste0("Sorry, calculating ", fun, " failed with following error:"),
-    insight::color_text(gsub("\n", "", out$message, fixed = TRUE), "red")
-  )
-  # handle exceptions ------------------------------------------------------
-  # we get this error when we should use counterfactuals
-  if (grepl("not found in column names", out$message, fixed = TRUE)) {
-    msg <- c(
-      msg,
-      "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\"."
-    )
-  }
-  # we get this error for models with complex random effects structures in glmmTMB,
-  # or when the data grid is too large
-  if (
-    grepl("map factor length must equal", out$message, fixed = TRUE) ||
-      grepl("cannot allocate", out$message, fixed = TRUE)
-  ) {
-    msg <- c(
-      msg,
-      paste0(
-        "\nYou may try using the `emmeans` backend, e.g. `estimate_means(model, by = c(",
-        toString(paste0("\"", fun_args$by, "\"")),
-        "), backend = \"emmeans\")`, or use `estimate_relation(model, by = c(",
-        toString(paste0("\"", fun_args$by, "\"")),
-        "))` instead. For contrasts or pairwise comparisons, save the output of `estimate_relation()` and pass it to `estimate_contrasts()`, e.g.\n" # nolint
-      ),
-      paste0(
-        "out <- estimate_relation(model, by = c(",
-        toString(paste0("\"", fun_args$by, "\"")),
-        "))"
-      ),
-      paste0(
-        "estimate_contrasts(out, contrast = c(",
-        toString(paste0("\"", fun_args$by, "\"")),
-        "))"
-      )
-    )
-  }
-  msg
 }
 
 
@@ -432,6 +560,7 @@ get_marginalmeans <- function(
   # on the `by` variables, for internal use, for example filtering at this point
   if (
     identical(estimate, "average") &&
+      !is.null(datagrid) &&
       all(datagrid_info$at_specs$varname %in% colnames(means))
   ) {
     # sanity check - are all filter values from the data grid in the marginaleffects
@@ -459,7 +588,7 @@ get_marginalmeans <- function(
         "None of the values specified for the predictors ",
         datawizard::text_concatenate(invalid_filters, enclose = "`"),
         " are available in the data. This is required for `estimate=\"average\"`.",
-        " Either use a different option for the `estimate` argument, or use values that",
+        " To resolve this, either select a different option for the `estimate` argument, supply a defined data grid via the `data` argument, or use values that",
         " are present in the data, such as ",
         datawizard::text_concatenate(example_values, last = " or ", enclose = "`"),
         "."
@@ -468,22 +597,9 @@ get_marginalmeans <- function(
     # else, filter values
     means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
     # sanity check - do we have any rows left?
-    if (nrow(means) == 0) {
-      .filter_error("No rows left after filtering.")
-    }
+    .check_filter_args(means, "No rows left after filtering.")
   }
   means
-}
-
-
-# small helper, because we have the same error message in several places
-.filter_error <- function(prefix = "") {
-  insight::format_error(
-    prefix,
-    "Please check your `by` and `contrast` arguments, or try one of the following options:",
-    "1. Use a different option for the `estimate` argument, e.g. `estimate = \"typical\"`.",
-    "2. Use the `newdata` argument to provide a data grid of predictor values at which to evaluate predictions."
-  )
 }
 
 
@@ -530,8 +646,9 @@ get_marginalmeans <- function(
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info", "contrast_filter",
-    "keep_iterations", "joint_test", "vcov", "equivalence", "context_effects"
+    "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
+    "iterations", "keep_iterations", "joint_test", "omnibus_test", "vcov",
+    "equivalence", "context_effects"
   )
 }
 
@@ -567,11 +684,17 @@ get_marginalmeans <- function(
         factors <- attributes(model_frame)$factors
         # if still no factors found, throw error
         if (is.null(factors)) {
-          insight::format_error(paste0(
+          # tell user to specify argument
+          msg <- paste0(
             "Model contains no categorical predictor. Please specify `",
             spec_name,
             "`."
-          ))
+          )
+          # for `by`, we also allow NULL - tell user
+          if (identical(spec_name, "by")) {
+            msg <- paste(msg, "Or use `by = NULL` to predict the grand mean.")
+          }
+          insight::format_error(msg)
         }
         spec_value <- factors
       }
@@ -597,43 +720,54 @@ get_marginalmeans <- function(
 }
 
 
-.check_offset <- function(model, estimate, offset = NULL, verbose = TRUE) {
-  # check if model has an offset at all
-  if (!is.null(insight::find_offset(model)) && verbose) {
-    msg <- NULL
-    if (is.null(offset)) {
-      # if no offset argument was specified, tell user what this means
-      msg <- switch(
-        estimate,
-        specific = ,
-        typical = "Model contains an offset-term, which is set to its mean value. If you want to average predictions over the distribution of the offset (if appropriate), use `estimate = \"average\"`. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1`.",
-        "Model contains an offset-term and you average predictions over the distribution of that offset. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and set `estimate = \"typical\"`."
+# create weighted data grid, for faster computation of predictions. Works best
+# if reduced data grid is considerably smaller than the original model data,
+# and is more efficient if model contains fewer categorical predictors.
+
+.create_weighted_datagrid <- function(model, estimate, fun_args, dots) {
+  if (
+    !is.null(dots$fast) &&
+      (isTRUE(dots$fast) || is.numeric(dots$fast) || is.na(dots$fast))
+  ) {
+    # this overrides the existing data grid, if any. this means, "fast = TRUE"
+    # only works with marginal predictions (when `estimate` is "average" or
+    # "population"), not conditional, datagrid-based predictions (when
+    # `estimate` is "specific" or "typical")
+    if (estimate %in% c("specific", "typical")) {
+      insight::format_error(
+        "`fast` only works for marginal predictions, i.e. when `estimate` is set to \"average\" or \"population\"."
       )
-      # if offset term is log-transformed, tell user. offset should be fixed then
-      log_offset <- insight::find_transformation(insight::find_offset(
-        model,
-        as_term = TRUE
-      ))
-      if (!is.null(log_offset) && startsWith(log_offset, "log")) {
-        msg <- c(
-          msg,
-          "We also found that the model has a log-transformed offset term. If you use the `offset` argument, the log-transformation will automatically be applied to the provided offset-value. I.e., consider using, for instance, `offset = 10` and not `offset = log(10)`."
-        )
+    }
+    # do we have bins?
+    n_bins <- dots$n_bins
+    # if not specified, we default to 5 bins, or to the value provided in "fast"
+    if (is.null(n_bins)) {
+      if (is.numeric(dots$fast)) {
+        # use given number for bins
+        n_bins <- dots$fast
+      } else if (is.na(dots$fast)) {
+        # if "NA", set n_bins to NULL, meaning we just take the mean for
+        # numerics and only bin categorical predictors
+        n_bins <- NULL
+      } else {
+        # if fast = TRUE, use the default (5 bins for numerics)
+        n_bins <- 5
       }
-    } else {
-      # if offset was specified, and estimate averages over predictions, tell this
-      msg <- switch(
-        estimate,
-        average = ,
-        population = paste0(
-          "For `estimate = \"",
-          estimate,
-          "\"`, predictions are averaged over the distribution of the offset and the `offset` argument is ignored. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and set `estimate = \"typical\"`."
-        )
-      )
     }
-    if (!is.null(msg)) {
-      insight::format_alert(msg)
+    # does model have weights?
+    model_weights <- insight::find_weights(model)
+    # if not, we default to TRUE to trigger weighted data grid. Else, we
+    # pass the name of the weights variable
+    if (is.null(model_weights)) {
+      model_weights <- TRUE
     }
+    # create weighted (reduced) data grid
+    fast_grid <- insight::get_datagrid(model, n_bins = n_bins, weighted = model_weights)
+    # update newdata with reduced data grid for faster computation
+    fun_args$newdata <- fast_grid
+    dots$weights <- fast_grid$Weight
+    # clean-up dots
+    dots$fast <- dots$n_bins <- NULL
   }
+  list(fun_args = fun_args, dots = dots)
 }

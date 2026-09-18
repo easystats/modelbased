@@ -17,14 +17,16 @@
 #' get_emcontrasts(model, by = "Petal.Width", length = 4)
 #' }
 #' @export
-get_emcontrasts <- function(model,
-                            contrast = NULL,
-                            by = NULL,
-                            predict = NULL,
-                            comparison = "pairwise",
-                            keep_iterations = FALSE,
-                            verbose = TRUE,
-                            ...) {
+get_emcontrasts <- function(
+  model,
+  contrast = NULL,
+  by = NULL,
+  predict = NULL,
+  comparison = "revpairwise",
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # check if available
   insight::check_if_installed("emmeans")
 
@@ -45,9 +47,18 @@ get_emcontrasts <- function(model,
   fun_args <- list(model)
 
   # handle distributional parameters
-  if (predict %in% .brms_aux_elements(model) && inherits(model, "brmsfit")) {
-    dpars <- TRUE
-    fun_args$dpar <- predict
+  if (inherits(model, "brmsfit")) {
+    if (identical(predict, "response")) {
+      dpars <- FALSE
+      fun_args$epred <- TRUE
+      fun_args$type <- "response"
+    } else if (predict %in% .brms_aux_elements(model)) {
+      dpars <- TRUE
+      fun_args$dpar <- predict
+    } else {
+      dpars <- FALSE
+      fun_args$type <- predict
+    }
   } else {
     dpars <- FALSE
     fun_args$type <- predict
@@ -58,13 +69,17 @@ get_emcontrasts <- function(model,
   fun_args <- insight::compact_list(c(fun_args, dots))
 
   # if first focal term is numeric, we contrast slopes
-  if (is.numeric(model_data[[first_focal]]) &&
-    !first_focal %in% on_the_fly_factors &&
-    # if these are identical, only slopes are contrasted - we need emmeans then
-    !identical(my_args$by, my_args$contrast)) {
+  if (
+    is.numeric(model_data[[first_focal]]) &&
+      !first_focal %in% on_the_fly_factors &&
+      # if these are identical, only slopes are contrasted - we need emmeans then
+      !identical(my_args$by, my_args$contrast)
+  ) {
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
-      insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
+      insight::format_error(
+        "Please specify the `by` argument to calculate contrasts of slopes."
+      )
     }
     # Run emmeans
     fun_args <- c(fun_args, list(specs = my_args$by, var = my_args$contrast))
@@ -128,11 +143,13 @@ get_emcontrasts <- function(model,
 # =========================================================================
 
 #' @keywords internal
-.guess_emcontrasts_arguments <- function(model,
-                                         contrast = NULL,
-                                         by = NULL,
-                                         verbose = TRUE,
-                                         ...) {
+.guess_emcontrasts_arguments <- function(
+  model,
+  contrast = NULL,
+  by = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Gather info
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
   predictors <- intersect(
@@ -147,7 +164,11 @@ get_emcontrasts <- function(model,
       contrast <- predictors[1]
     }
     if (verbose) {
-      insight::format_alert(paste0("No variable was specified for contrast estimation. Selecting `contrast = \"", contrast, "\"`.")) # nolint
+      insight::format_alert(paste0(
+        "No variable was specified for contrast estimation. Selecting `contrast = \"",
+        contrast,
+        "\"`."
+      ))
     }
   } else if (all(contrast == "all")) {
     contrast <- predictors
@@ -160,7 +181,6 @@ get_emcontrasts <- function(model,
 
 # Table formatting emmeans ----------------------------------------------------
 
-
 .format_emmeans_contrasts <- function(model, estimated, ci, p_adjust, ...) {
   predict <- attributes(estimated)$predict
   m_info <- insight::model_info(model, response = 1)
@@ -169,7 +189,13 @@ get_emcontrasts <- function(model,
   if (m_info$is_bayesian) {
     out <- cbind(
       estimated@grid,
-      bayestestR::describe_posterior(estimated, ci = ci, diagnostic = NULL, verbose = FALSE, ...)
+      bayestestR::describe_posterior(
+        estimated,
+        ci = ci,
+        diagnostic = NULL,
+        verbose = FALSE,
+        ...
+      )
     )
     out <- .clean_names_bayesian(out, model, predict, type = "contrast")
   } else {
@@ -194,11 +220,28 @@ get_emcontrasts <- function(model,
     )
   }
 
-
   # Format contrasts names
   # Split by either " - " or "/"
-  level_cols <- strsplit(as.character(out$contrast), " - |\\/")
-  level_cols <- data.frame(do.call(rbind, lapply(level_cols, trimws)))
+  # If levels contain " - " themselves, emmeans wraps them in parentheses
+  # like "(A - Low) - (A - High)", so we need to handle that case
+  contrast_strings <- as.character(out$contrast)
+  if (all(grepl("^\\(", contrast_strings))) {
+    # Levels with " - " are wrapped in parentheses by emmeans, e.g.
+    # "(A - Low) - (A - High)". Extract the parenthesized groups.
+    level_list <- lapply(contrast_strings, function(x) {
+      m <- regmatches(x, gregexpr("\\([^)]+\\)", x))[[1]]
+      if (length(m) >= 2) {
+        insight::trim_ws(gsub("[()]", "", m[seq_len(2)]))
+      } else {
+        insight::trim_ws(strsplit(x, " - |\\/")[[1]])
+      }
+    })
+  } else {
+    level_list <- lapply(contrast_strings, function(x) {
+      insight::trim_ws(strsplit(x, " - |\\/")[[1]])
+    })
+  }
+  level_cols <- data.frame(do.call(rbind, level_list))
 
   # other comparison methods than "pairwise" do not return two columns
   if (ncol(level_cols) == 2) {

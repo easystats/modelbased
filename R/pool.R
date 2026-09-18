@@ -122,7 +122,7 @@ pool_predictions <- function(x, transform = NULL, ...) {
     ))
   ) {
     insight::format_error(
-      "`x` must be a list of `estimate_means` objects, as returned by `estimate_means()`, or a list of `estimate_predicted` objects, as returned by functions like `estimate_expectation()`." # nolint
+      "`x` must be a list of `estimate_means` objects, as returned by `estimate_means()`, or a list of `estimate_predicted` objects, as returned by functions like `estimate_expectation()`."
     )
   }
 
@@ -197,7 +197,7 @@ pool_slopes <- pool_predictions
   # check if we have standard errors?
   if (all(is.na(pooled_predictions$SE))) {
     insight::format_warning(
-      "Could not extract standard errors of predictions. Try adding `type=\"response\"` to your call to `estimate_means()`." # nolint
+      "Could not extract standard errors of predictions. Try adding `type=\"response\"` to your call to `estimate_means()`."
     )
   }
 

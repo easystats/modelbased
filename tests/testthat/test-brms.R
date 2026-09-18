@@ -11,14 +11,28 @@ test_that("estimate_means - brms", {
     Sepal.Length ~ Species * Sepal.Width,
     data = iris,
     refresh = 0,
-    iter = 1000
+    iter = 1000,
+    seed = 123
   )
   estim <- estimate_means(model, backend = "emmeans")
   expect_identical(dim(estim), c(3L, 5L))
+
+  estim1 <- estimate_means(model, backend = "marginaleffects")
+  expect_null(attributes(estim1)$iterations)
+
+  estim2 <- estimate_means(model, iterations = 200, backend = "marginaleffects")
+  expect_identical(attributes(estim2)$iterations, 200)
+
+  expect_true(all(abs(estim1$Median - estim2$Median) > 0.001))
 })
 
 test_that("estimate_relation - brms", {
-  model <- brms::brm(Sepal.Length ~ Species * Sepal.Width, data = iris, refresh = 0, iter = 1000)
+  model <- brms::brm(
+    Sepal.Length ~ Species * Sepal.Width,
+    data = iris,
+    refresh = 0,
+    iter = 1000
+  )
   estim <- estimate_relation(model, preserve_range = FALSE)
   expect_identical(dim(estim), c(30L, 6L))
 
@@ -27,7 +41,12 @@ test_that("estimate_relation - brms", {
 })
 
 test_that("estimate_slopes - brms", {
-  model <- brms::brm(Sepal.Length ~ Species * Sepal.Width, data = iris, refresh = 0, iter = 1000)
+  model <- brms::brm(
+    Sepal.Length ~ Species * Sepal.Width,
+    data = iris,
+    refresh = 0,
+    iter = 1000
+  )
   estim <- estimate_slopes(model, by = "Species", backend = "emmeans")
   expect_identical(dim(estim), c(3L, 5L))
 })
@@ -44,8 +63,16 @@ test_that("estimate_means - brms, multivariate", {
   expect_named(
     estim,
     c(
-      "wt", "ROPE_CI", "Response", "Median", "CI_low", "CI_high",
-      "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage"
+      "wt",
+      "ROPE_CI",
+      "Response",
+      "Median",
+      "CI_low",
+      "CI_high",
+      "pd",
+      "ROPE_low",
+      "ROPE_high",
+      "ROPE_Percentage"
     )
   )
 })

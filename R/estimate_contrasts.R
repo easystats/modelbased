@@ -27,12 +27,14 @@
 #' `?stats::p.adjust`. Note that certain options provided by the **emmeans**
 #' package are only available if you set `backend = "emmeans"`.
 #' @param comparison Specify the type of contrasts or tests that should be
-#' carried out.
-#' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"poly"`,
-#'   `"consec"`, `"eff"`, `"del.eff"`, `"mean_chg"`, `"trt.vs.ctrl"`,
-#'   `"dunnett"`, `"wtcon"` and some more. To test multiple hypotheses jointly
-#'   (usually used for factorial designs), `comparison` can also be `"joint"`.
-#'   See also `method` argument in [emmeans::contrast] and the
+#' carried out. See also section *Comparison options* below for details.
+#' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"revpairwise"`,
+#'   `"poly"`, `"consec"`, `"eff"`, `"del.eff"`, `"mean_chg"`, `"trt.vs.ctrl"`,
+#'   `"dunnett"`, `"wtcon"` and some more. Defaults to `"revpairwise"`, to
+#'   return consistent results (regarding the sign) with the default
+#'   `backend = "marginaleffects"`. To test multiple hypotheses jointly (usually
+#'   used for factorial designs), `comparison` can also be `"joint"`. See also
+#'   `method` argument in [emmeans::contrast] and the
 #'   `?emmeans::emmc-functions`.
 #' * For `backend = "marginaleffects"`, can be a numeric value, vector, or
 #'   matrix, a string equation specifying the hypothesis to test, a string
@@ -40,11 +42,14 @@
 #'   described below, see documentation of [marginaleffects::comparisons],
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html) and
 #'   section _Comparison options_ below.
-#'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
-#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test
-#'     multiple hypotheses jointly (usually used for factorial designs),
-#'     `comparison` can also be `"joint"`. In this case, use the `test` argument
-#'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
+#'   * String: One of `"pairwise"`, `"revpairwise"`, `"reference"`,
+#'     `"sequential"`, `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, or
+#'     `"trt_vs_ctrl"`. To test multiple hypotheses jointly (usually used for
+#'     factorial designs), `comparison` can also be `"joint"` or `"omnibus"`. In
+#'     this case, use the `test` argument to specify which test should be
+#'     conducted: `"F"` (default) or `"Chi2"`, and use argument `null` to
+#'     specify the null-hypothesis to test against. For `"omnibus"`, `null` is
+#'     set to the overall mean or prevalence/proportion.
 #'   * String: Special string options are `"inequality"`, `"inequality_ratio"`,
 #'     and `"inequality_pairwise"`. `comparison = "inequality"` computes the
 #'     marginal effect inequality summary of categorical predictors' overall
@@ -64,19 +69,25 @@
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
-#'   * Formula: A formula like `<comparison> ~ pairs | group`, where the left-hand
-#'     side indicates the type of `<comparison>` (`difference` or `ratio`), the
-#'     right-hand side determines the pairs of estimates to compare (`reference`,
-#'     `sequential`, `meandev`, etc., see string-options). Optionally, comparisons
-#'     can be carried out within subsets by indicating the grouping variable
-#'     after a vertical bar ( `|`). If the left-hand side is missing, it defaults
-#'     to `difference` (i.e. `comparison = ~pairs | group` is identical to
+#'   * Formula: A formula like `<comparison> ~ pairs | group`, where the
+#'     left-hand side indicates the type of `<comparison>` (`difference` or
+#'     `ratio`), the right-hand side determines the pairs of estimates to
+#'     compare (`reference`, `pairwise`, `sequential`, `meandev`, etc., see
+#'     string-options). Optionally, comparisons can be carried out within
+#'     subsets by indicating the grouping variable after a vertical bar ( `|`).
+#'     If the left-hand side is missing, it defaults to `difference` (i.e.
+#'     `comparison = ~pairs | group` is identical to
 #'     `comparison = difference ~ pairs | group`).
-#'   * A custom function, e.g. `comparison = myfun`, or
+#'   * A custom function, e.g. `comparison = I(my_fun(x))`, or
 #'     `<comparison> ~ I(my_fun(x)) | groups` (where `<comparison>` can be
 #'     `difference` or `ratio`, or skipped).
 #'   * If contrasts should be calculated (or grouped by) factors, `comparison`
 #'     can also be a matrix that specifies factor contrasts (see 'Examples').
+#' @param post_process Optional formula, character string or function (see
+#' `comparison`), or a list of formulas, strings or functions, to process
+#' subsequent, multi-step comparisons. After the initial comparison in
+#' `comparison` is completed, the results are then post-processed using the
+#' specified post-process tests. See 'Examples'.
 #' @param effectsize Desired measure of standardized effect size, one of
 #' `"emmeans"`, `"marginal"`, or `"boot"`. Default is `NULL`, i.e. no effect
 #' size will be computed.
@@ -85,7 +96,16 @@
 #' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See `effect.type`
 #' argument of [`bootES::bootES()`] for details. If not specified, defaults to
 #' `"cohens.d"`.
-#' @param iterations The number of bootstrap resamples to perform.
+#' @param iterations This argument has two distinct effects, depending on the
+#' context. When `effectsize = "boot"`, it defines the number of bootstrap
+#' resamples used to calculate the effect size (via [`bootES::bootES()`]), and
+#' defaults to `200` in this case. For Bayesian models used in `estimate_means()`,
+#' `estimate_slopes()`, or `estimate_contrasts()` (and when
+#' `backend = "marginaleffects"`), it is passed to the `ndraws` argument of the
+#' related `marginaleffects` functions, and defines the number of posterior
+#' draws to sample from. If `NULL` (the default), all draws are used. Note
+#' that `ndraws` currently only has an effect for Bayesian models fit with
+#' **brms** or **MCMCglmm**.
 #' @inheritParams estimate_means
 #'
 #' @inherit estimate_means details
@@ -99,6 +119,8 @@
 #' - `comparison = "pairwise"`: This method computes all possible unique
 #'   differences between pairs of levels of the focal predictor. For example, if
 #'   a factor has levels A, B, and C, it would compute A-B, A-C, and B-C.
+#' - `comparison = "revpairwise"`: Like `"pairwise"`, but reverses the order
+#'   of levels when comparing, e.g. B-A, C-A, and C-B.
 #' - `comparison = "reference"`: This compares each level of the focal predictor
 #'   to a specified reference level (by default, the first level). For example,
 #'   if levels are A, B, C, and A is the reference, it computes B-A and C-A.
@@ -121,8 +143,13 @@
 #'   first, which is typically the control) against the first level. It's often
 #'   used when comparing multiple treatment groups to a single control group.
 #' - To test multiple hypotheses jointly (usually used for factorial designs),
-#'   `comparison` can also be `"joint"`. In this case, use the `test` argument
-#'   to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
+#'   `comparison` can also be `"joint"`. This option runs sequential joint tests
+#'   on the results of an initial pairwise comparison. To test for differences
+#'   between groups from an global average, use `comparison = "omnibus"`, which
+#'   conducts a global omnibus test. Use the `test` argument to specify which
+#'   test should be conducted: `"F"` (default) or `"Chi2"`. Use the `null`
+#'   argument to define a specific null-hypothesis to test against. For
+#'   `"omnibus"`, `null` is set to the overall mean or prevalence/proportion.
 #' - `comparison = "inequality"` computes the *absolute inequality* of groups,
 #'   or in other words, the marginal effect inequality summary of categorical
 #'   predictors' overall effects, respectively, the comprehensive effect of an
@@ -151,6 +178,8 @@
 #'
 #' Examples for analysing inequalities are shown in the related
 #' [vignette](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
+#' An introduction into pairwise comparisons and contrasts starts with this
+#' [vignette](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html).
 #'
 #' @section Context Effects - contrasting average slopes:
 #' Calculating contrasts between average slopes can tell us about the
@@ -331,6 +360,18 @@
 #' )
 #' estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 #'
+#' # Omnibus and Joint Tests ------------------------------------
+#' #
+#' # ------------------------------------------------------------
+#' data(coffee_data, package = "modelbased")
+#' m <- lm(alertness ~ time * coffee, data = coffee_data)
+#' # joint test for simple effects of "time" for levels of "coffee".
+#' estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
+#' # global omnibus test to test for differences between "time" levels
+#' estimate_contrasts(m, contrast = "time", comparison = "omnibus")
+#' # test against a different null-hypothesis
+#' estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
+#'
 #' # Context effects --------------------------------------------
 #' # This is the difference of within- and between-effects, which
 #' # typically are two average slopes that are compared. It is
@@ -368,6 +409,36 @@
 #' # are differences in time trends of context effects statistically significant
 #' # between education levels?
 #' estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
+#'
+#' # Post-processing of multiple comparisons ---------------------
+#' # Caution! Don't expect this example to be meaningful! # It is
+#' # just to demonstrate the usage of the `post_process` argument.
+#' # -------------------------------------------------------------
+#' data("qol_cancer", package = "parameters")
+#' model <- lme4::lmer(QoL ~ time * education + (1 + time | ID), data = qol_cancer)
+#'
+#' # contrasts (pairwise comparisons - the default) by timepoints
+#' estimate_contrasts(model, "education=c('low', 'mid')", by = "time")
+#'
+#' # contrasts (pairwise comparisons, the default for `comparison`) by timepoints
+#' # additionally, we compare the differences of these contrasts across timepoints
+#' # against the reference time point (contrasts at times 2 and 3 against
+#' # contrasts at time 1)
+#' estimate_contrasts(model,
+#'   contrast = "education=c('low', 'mid')",
+#'   by = "time",
+#'   post_process = ~reference
+#' )
+#'
+#' # multiple post-processing steps - same as before, but calculates
+#' # additional poly-contrasts applied to the reference contrasts (that
+#' # were applied to the default pairwise comparisons of educational levels,
+#' # grouped `by time`)
+#' estimate_contrasts(model,
+#'   contrast = "education=c('low', 'mid')",
+#'   by = "time",
+#'   post_process = list(~reference, ~poly)
+#' )
 #' }
 #'
 #' @return A data frame of estimated contrasts.
@@ -389,9 +460,10 @@ estimate_contrasts.default <- function(
   estimate = NULL,
   p_adjust = "none",
   transform = NULL,
+  post_process = NULL,
   keep_iterations = FALSE,
   effectsize = NULL,
-  iterations = 200,
+  iterations = NULL,
   es_type = NULL,
   backend = NULL,
   verbose = TRUE,
@@ -407,7 +479,15 @@ estimate_contrasts.default <- function(
 
   # validate input
   estimate <- .validate_estimate_arg(estimate)
+  backend <- insight::validate_argument(backend, c("marginaleffects", "emmeans"))
+
+  # for emmeans, we default to revpairwise, to get consistent signs of contrasts
+  # for both backends, see #645
+  if (missing(comparison) && backend == "emmeans") {
+    comparison <- "revpairwise"
+  }
   comparison <- .check_for_inequality_comparison(comparison)
+
   # Validate es_type usage
   if (is.null(effectsize) && !is.null(es_type)) {
     insight::format_error(
@@ -441,6 +521,8 @@ estimate_contrasts.default <- function(
       ci = ci,
       estimate = estimate,
       transform = transform,
+      post_process = post_process,
+      iterations = iterations,
       keep_iterations = keep_iterations,
       verbose = verbose,
       ...
@@ -450,12 +532,14 @@ estimate_contrasts.default <- function(
 
   # add effect size ----------------------------------------------------------
   if (!is.null(effectsize)) {
+    # default number of bootstrap resamples, if not specified
+    bootstraps <- if (is.null(iterations)) 200 else iterations
     out <- .estimate_contrasts_effectsize(
       model = model,
       estimated = estimated,
       contrasts_results = out,
       effectsize = effectsize,
-      bootstraps = iterations,
+      bootstraps = bootstraps,
       bootES_type = es_type,
       backend = backend
     )
@@ -476,7 +560,9 @@ estimate_contrasts.default <- function(
   type <- "contrasts"
 
   # Table formatting
-  if (isTRUE(info$joint_test)) {
+  if (isTRUE(info$omnibus_test)) {
+    suffix <- "Omnibus Test"
+  } else if (isTRUE(info$joint_test)) {
     suffix <- "Joint Test"
   } else if (.is_inequality_comparison(comparison)) {
     suffix <- "Inequality Analysis"

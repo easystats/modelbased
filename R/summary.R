@@ -6,7 +6,7 @@ summary.estimate_slopes <- function(object, verbose = TRUE, ...) {
   if (verbose && nrow(out) < 50) {
     insight::format_alert(
       "There might be too few data to accurately determine intervals. Consider setting `length = 100` (or larger) in your call to `estimate_slopes()`."
-    ) # nolint
+    )
   }
 
   # Add "Confidence" col based on the sig index present in the data

@@ -17,9 +17,10 @@ estimate_contrasts(model, ...)
   estimate = NULL,
   p_adjust = "none",
   transform = NULL,
+  post_process = NULL,
   keep_iterations = FALSE,
   effectsize = NULL,
-  iterations = 200,
+  iterations = NULL,
   es_type = NULL,
   backend = NULL,
   verbose = TRUE,
@@ -40,13 +41,14 @@ treated as numerics, i.e. values can have fractions or not.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
 means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
 instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope}, \code{hypothesis} or even
-\code{newdata} can be passed to those functions. A \code{weights} argument is passed
-to the \code{wts} argument in \code{avg_predictions()} or \code{avg_slopes()}, however,
-weights can only be applied when \code{estimate} is \code{"average"} or
-\code{"population"} (i.e. for those marginalization options that do not use data
-grids). Other arguments, such as \code{re.form} or \code{allow.new.levels}, may be
-passed to \code{predict()} (which is internally used by \emph{marginaleffects}) if
-supported by that model class.
+\code{newdata} can be passed to those functions (note that \code{data} is supported
+as an alias for \code{newdata} for consistency across the \emph{easystats}
+ecosystem). A \code{weights} argument is passed to the \code{wts} argument in
+\code{avg_predictions()} or \code{avg_slopes()}, however, weights can only be applied
+when \code{estimate} is \code{"average"} or \code{"population"} (i.e. for those
+marginalization options that do not use data grids). Other arguments, such
+as \code{re.form} or \code{allow.new.levels}, may be passed to \code{predict()} (which is
+internally used by \emph{marginaleffects}) if supported by that model class.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
@@ -61,8 +63,9 @@ contrasts of slopes are calculated. If the integer has more than
 \code{integer_as_continuous} unique values, it is treated as numeric. Defaults
 to \code{5}. Set to \code{TRUE} to always treat integer predictors as continuous.
 \item For count regression models that use an offset term, use \verb{offset = <value>}
-to fix the offset at a specific value. Or use \code{estimate = "average"}, to
-average predictions over the distribution of the offset (if appropriate).
+to fix the offset at a specific value. Or use \code{estimate = "average"} or
+\code{estimate = "population"} without specifying the \code{offset}, to average
+predictions over the distribution of the offset (if appropriate).
 }}
 
 \item{contrast}{A character vector indicating the name of the variable(s) for
@@ -87,7 +90,9 @@ is \emph{not} \code{"average"}, the \code{by} argument is used to create a "refe
 or "data grid" with representative values for the focal predictors. In this
 case, \code{by} can also be list of named elements. See details in
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
-predictors of interest.}
+predictors of interest. For \code{estimate_means()}, \code{by} defaults to \code{"auto"},
+which automatically selects the first focal predictor found in the model. If
+\code{by = NULL}, the grand mean of the response is predicted.}
 
 \item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
@@ -111,16 +116,20 @@ transformation is selected (which usually is \code{"response"}). See also
 
 See also section \emph{Predictions on different scales}.}
 
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+\item{ci}{Confidence Interval (CI) level. Must be numeric between 0 and 1.
+Defaults to \code{0.95}. Use \code{NULL} to suppress calculation of standard errors and
+confidence intervals.}
 
 \item{comparison}{Specify the type of contrasts or tests that should be
-carried out.
+carried out. See also section \emph{Comparison options} below for details.
 \itemize{
-\item When \code{backend = "emmeans"}, can be one of \code{"pairwise"}, \code{"poly"},
-\code{"consec"}, \code{"eff"}, \code{"del.eff"}, \code{"mean_chg"}, \code{"trt.vs.ctrl"},
-\code{"dunnett"}, \code{"wtcon"} and some more. To test multiple hypotheses jointly
-(usually used for factorial designs), \code{comparison} can also be \code{"joint"}.
-See also \code{method} argument in \link[emmeans:contrast]{emmeans::contrast} and the
+\item When \code{backend = "emmeans"}, can be one of \code{"pairwise"}, \code{"revpairwise"},
+\code{"poly"}, \code{"consec"}, \code{"eff"}, \code{"del.eff"}, \code{"mean_chg"}, \code{"trt.vs.ctrl"},
+\code{"dunnett"}, \code{"wtcon"} and some more. Defaults to \code{"revpairwise"}, to
+return consistent results (regarding the sign) with the default
+\code{backend = "marginaleffects"}. To test multiple hypotheses jointly (usually
+used for factorial designs), \code{comparison} can also be \code{"joint"}. See also
+\code{method} argument in \link[emmeans:contrast]{emmeans::contrast} and the
 \code{?emmeans::emmc-functions}.
 \item For \code{backend = "marginaleffects"}, can be a numeric value, vector, or
 matrix, a string equation specifying the hypothesis to test, a string
@@ -129,11 +138,14 @@ described below, see documentation of \link[marginaleffects:comparisons]{margina
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website} and
 section \emph{Comparison options} below.
 \itemize{
-\item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
-multiple hypotheses jointly (usually used for factorial designs),
-\code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
-to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
+\item String: One of \code{"pairwise"}, \code{"revpairwise"}, \code{"reference"},
+\code{"sequential"}, \code{"meandev"} \code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or
+\code{"trt_vs_ctrl"}. To test multiple hypotheses jointly (usually used for
+factorial designs), \code{comparison} can also be \code{"joint"} or \code{"omnibus"}. In
+this case, use the \code{test} argument to specify which test should be
+conducted: \code{"F"} (default) or \code{"Chi2"}, and use argument \code{null} to
+specify the null-hypothesis to test against. For \code{"omnibus"}, \code{null} is
+set to the overall mean or prevalence/proportion.
 \item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},
 and \code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
 marginal effect inequality summary of categorical predictors' overall
@@ -153,15 +165,16 @@ See an overview of applications in the related case study in the
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
-\item Formula: A formula like \verb{<comparison> ~ pairs | group}, where the left-hand
-side indicates the type of \verb{<comparison>} (\code{difference} or \code{ratio}), the
-right-hand side determines the pairs of estimates to compare (\code{reference},
-\code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
-can be carried out within subsets by indicating the grouping variable
-after a vertical bar ( \code{|}). If the left-hand side is missing, it defaults
-to \code{difference} (i.e. \code{comparison = ~pairs | group} is identical to
+\item Formula: A formula like \verb{<comparison> ~ pairs | group}, where the
+left-hand side indicates the type of \verb{<comparison>} (\code{difference} or
+\code{ratio}), the right-hand side determines the pairs of estimates to
+compare (\code{reference}, \code{pairwise}, \code{sequential}, \code{meandev}, etc., see
+string-options). Optionally, comparisons can be carried out within
+subsets by indicating the grouping variable after a vertical bar ( \code{|}).
+If the left-hand side is missing, it defaults to \code{difference} (i.e.
+\code{comparison = ~pairs | group} is identical to
 \code{comparison = difference ~ pairs | group}).
-\item A custom function, e.g. \code{comparison = myfun}, or
+\item A custom function, e.g. \code{comparison = I(my_fun(x))}, or
 \verb{<comparison> ~ I(my_fun(x)) | groups} (where \verb{<comparison>} can be
 \code{difference} or \code{ratio}, or skipped).
 \item If contrasts should be calculated (or grouped by) factors, \code{comparison}
@@ -171,10 +184,19 @@ can also be a matrix that specifies factor contrasts (see 'Examples').
 
 \item{estimate}{The \code{estimate} argument determines how predictions are
 averaged ("marginalized") over variables not specified in \code{by} or \code{contrast}
-(non-focal predictors). It controls whether predictions represent a "typical"
-individual, an "average" individual from the sample, or an "average"
-individual from a broader population.
+(non-focal predictors). It controls whether predictions represent a
+"specific" or "typical" individual (\emph{conditional}, \emph{individual-level}
+predictions), or an "average" individual from the sample, or an
+"counterfactual" individual from a broader population (\emph{marginal},
+\emph{population-level} predictions).
+
+\strong{Conditional Predictions based on artificially constructed reference grids}
 \itemize{
+\item \code{"specific"}: The estimated means represent a rather "theoretical" view of
+the data. A prediction is made for a specific individual from the sample
+(i.e., a very specific combination of predictor values). This answers the
+question about the expected average value of the target variable for a
+\emph{specific} observation.
 \item \code{"typical"} (Default): Calculates predictions for a balanced data grid
 representing all combinations of focal predictor levels (specified in \code{by}).
 For non-focal numeric predictors, it uses the mean; for non-focal
@@ -183,6 +205,10 @@ represents a "typical" observation based on the data grid and is useful for
 comparing groups. It answers: "What would the average outcome be for a
 'typical' observation?". This is the default approach when estimating
 marginal means using the \emph{emmeans} package.
+}
+
+\strong{Marginal predictions based on actual empirical observations}
+\itemize{
 \item \code{"average"}: Calculates predictions for each observation in the sample and
 then averages these predictions within each group defined by the focal
 predictors. This reflects the sample's actual distribution of non-focal
@@ -194,28 +220,35 @@ predictions across these "counterfactual" observations (non-observed
 permutations) within each group. This extrapolates to a hypothetical
 broader population, considering "what if" scenarios. It answers: "What is
 the predicted response for the 'average' observation in a broader possible
-target population?" This approach entails more assumptions about the
-likelihood of different combinations, but can be more apt to generalize.
-This is also the option that should be used for \strong{G-computation}
-(causal inference, see \emph{Chatton and Rohrer 2024}). \code{"counterfactual"} is
-an alias for \code{"population"}.
+target population?" This approach mimics a "pseudo-randomization" and hence
+can be more apt to generalize, which should be used for \strong{G-computation}
+(causal inference, see \emph{Chatton and Rohrer 2024}). \code{"counterfactual"} is an
+alias for \code{"population"}.
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
 e.g. \code{options(modelbased_estimate = "average")}.
 
-Note following limitations:
+\strong{Note following limitations:}
 \itemize{
-\item When you set \code{estimate} to \code{"average"}, it calculates the average based
-only on the data points that actually exist. This is in particular
-important for two or more focal predictors, because it doesn't generate a
-\emph{complete} grid of all theoretical combinations of predictor values.
-Consequently, the output may not include all the values.
+\item Especially for continuous predictors, \code{estimate = "average"} may produce
+erratic-looking outputs, because it calculates the average based only on
+the data points that actually exist. This is in particular important for
+two or more focal predictors, because it doesn't generate a \emph{complete} grid
+of all theoretical combinations of predictor values. Consequently, the
+output may not include all the values. To resolve this, you may provide a
+defined data grid via the \code{data} argument containing the values of
+interest.
+\item For the same reason, \emph{conditional} predictions or \code{estimate = "population"}
+typically yield smoother curves in \strong{visualizations} for continuous focal
+predictors, whereas \emph{marginal} predictions with \code{estimate = "average"} may
+introduce noisy visual artifacts.
 \item Filtering the output at values of continuous predictors, e.g.
 \code{by = "x=1:5"}, in combination with \code{estimate = "average"} may result in
-returning an empty data frame because of what was described above. In such
-case, you can use \code{estimate = "typical"} or use the \code{newdata} argument to
-provide a data grid of predictor values at which to evaluate predictions.
+returning an empty data frame because the requested values may not overlap
+with existing data. In such cases, you can use \code{estimate = "typical"} or
+use the \code{newdata} argument to provide a data grid of predictor values at
+which to evaluate predictions.
 \item \code{estimate = "population"} is not available for \code{estimate_slopes()}.
 }}
 
@@ -240,6 +273,12 @@ which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
 
+\item{post_process}{Optional formula, character string or function (see
+\code{comparison}), or a list of formulas, strings or functions, to process
+subsequent, multi-step comparisons. After the initial comparison in
+\code{comparison} is completed, the results are then post-processed using the
+specified post-process tests. See 'Examples'.}
+
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns
 named \code{iter_1}, \code{iter_2}, and so on. If \code{keep_iterations} is a positive
@@ -251,7 +290,16 @@ to the output. You can reshape them to a long format by running
 \code{"emmeans"}, \code{"marginal"}, or \code{"boot"}. Default is \code{NULL}, i.e. no effect
 size will be computed.}
 
-\item{iterations}{The number of bootstrap resamples to perform.}
+\item{iterations}{This argument has two distinct effects, depending on the
+context. When \code{effectsize = "boot"}, it defines the number of bootstrap
+resamples used to calculate the effect size (via \code{\link[bootES:bootES]{bootES::bootES()}}), and
+defaults to \code{200} in this case. For Bayesian models used in \code{estimate_means()},
+\code{estimate_slopes()}, or \code{estimate_contrasts()} (and when
+\code{backend = "marginaleffects"}), it is passed to the \code{ndraws} argument of the
+related \code{marginaleffects} functions, and defines the number of posterior
+draws to sample from. If \code{NULL} (the default), all draws are used. Note
+that \code{ndraws} currently only has an effect for Bayesian models fit with
+\strong{brms} or \strong{MCMCglmm}.}
 
 \item{es_type}{Specifies the type of effect-size measure to estimate when
 using \code{effectsize = "boot"}. One of \code{"unstandardized"}, \code{"cohens.d"},
@@ -346,6 +394,8 @@ condition (using \code{\link[=estimate_slopes]{estimate_slopes()}}).
 \item \code{comparison = "pairwise"}: This method computes all possible unique
 differences between pairs of levels of the focal predictor. For example, if
 a factor has levels A, B, and C, it would compute A-B, A-C, and B-C.
+\item \code{comparison = "revpairwise"}: Like \code{"pairwise"}, but reverses the order
+of levels when comparing, e.g. B-A, C-A, and C-B.
 \item \code{comparison = "reference"}: This compares each level of the focal predictor
 to a specified reference level (by default, the first level). For example,
 if levels are A, B, C, and A is the reference, it computes B-A and C-A.
@@ -368,8 +418,13 @@ compute B-A and C-(A+B)/2.
 first, which is typically the control) against the first level. It's often
 used when comparing multiple treatment groups to a single control group.
 \item To test multiple hypotheses jointly (usually used for factorial designs),
-\code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
-to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
+\code{comparison} can also be \code{"joint"}. This option runs sequential joint tests
+on the results of an initial pairwise comparison. To test for differences
+between groups from an global average, use \code{comparison = "omnibus"}, which
+conducts a global omnibus test. Use the \code{test} argument to specify which
+test should be conducted: \code{"F"} (default) or \code{"Chi2"}. Use the \code{null}
+argument to define a specific null-hypothesis to test against. For
+\code{"omnibus"}, \code{null} is set to the overall mean or prevalence/proportion.
 \item \code{comparison = "inequality"} computes the \emph{absolute inequality} of groups,
 or in other words, the marginal effect inequality summary of categorical
 predictors' overall effects, respectively, the comprehensive effect of an
@@ -399,6 +454,8 @@ impact on the dependent variable in terms of inequalities.
 
 Examples for analysing inequalities are shown in the related
 \href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignette}.
+An introduction into pairwise comparisons and contrasts starts with this
+\href{https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html}{vignette}.
 }
 
 \section{Context Effects - contrasting average slopes}{
@@ -474,7 +531,7 @@ documentation for more details.
 and \code{slope}.
 \itemize{
 \item For numeric focal predictors, use examples like \code{by = "gear = c(4, 8)"},
-\code{by = list(gear = c(4, 8))} or \code{by = "gear = 5:10"}
+\code{by = list(gear = c(4, 8))}, \code{by = "gear = 5:10"} or \code{by = list(gear = 5:10)}
 \item For factor or character predictors, use \code{by = "Species = c('setosa', 'virginica')"}
 or \code{by = list(Species = c('setosa', 'virginica'))}
 }
@@ -649,6 +706,18 @@ model <- rstanarm::stan_glm(
 )
 estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 
+# Omnibus and Joint Tests ------------------------------------
+#
+# ------------------------------------------------------------
+data(coffee_data, package = "modelbased")
+m <- lm(alertness ~ time * coffee, data = coffee_data)
+# joint test for simple effects of "time" for levels of "coffee".
+estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
+# global omnibus test to test for differences between "time" levels
+estimate_contrasts(m, contrast = "time", comparison = "omnibus")
+# test against a different null-hypothesis
+estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
+
 # Context effects --------------------------------------------
 # This is the difference of within- and between-effects, which
 # typically are two average slopes that are compared. It is
@@ -686,6 +755,36 @@ estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "education")
 # are differences in time trends of context effects statistically significant
 # between education levels?
 estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
+
+# Post-processing of multiple comparisons ---------------------
+# Caution! Don't expect this example to be meaningful! # It is
+# just to demonstrate the usage of the `post_process` argument.
+# -------------------------------------------------------------
+data("qol_cancer", package = "parameters")
+model <- lme4::lmer(QoL ~ time * education + (1 + time | ID), data = qol_cancer)
+
+# contrasts (pairwise comparisons - the default) by timepoints
+estimate_contrasts(model, "education=c('low', 'mid')", by = "time")
+
+# contrasts (pairwise comparisons, the default for `comparison`) by timepoints
+# additionally, we compare the differences of these contrasts across timepoints
+# against the reference time point (contrasts at times 2 and 3 against
+# contrasts at time 1)
+estimate_contrasts(model,
+  contrast = "education=c('low', 'mid')",
+  by = "time",
+  post_process = ~reference
+)
+
+# multiple post-processing steps - same as before, but calculates
+# additional poly-contrasts applied to the reference contrasts (that
+# were applied to the default pairwise comparisons of educational levels,
+# grouped `by time`)
+estimate_contrasts(model,
+  contrast = "education=c('low', 'mid')",
+  by = "time",
+  post_process = list(~reference, ~poly)
+)
 }
 \dontshow{\}) # examplesIf}
 }

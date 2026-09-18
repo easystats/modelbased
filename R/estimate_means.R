@@ -17,7 +17,9 @@
 #' or "data grid" with representative values for the focal predictors. In this
 #' case, `by` can also be list of named elements. See details in
 #' [`insight::get_datagrid()`] to learn more about how to create data grids for
-#' predictors of interest.
+#' predictors of interest. For `estimate_means()`, `by` defaults to `"auto"`,
+#' which automatically selects the first focal predictor found in the model. If
+#' `by = NULL`, the grand mean of the response is predicted.
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). Valid options for `predict` are:
@@ -41,9 +43,19 @@
 #'
 #' @param estimate The `estimate` argument determines how predictions are
 #' averaged ("marginalized") over variables not specified in `by` or `contrast`
-#' (non-focal predictors). It controls whether predictions represent a "typical"
-#' individual, an "average" individual from the sample, or an "average"
-#' individual from a broader population.
+#' (non-focal predictors). It controls whether predictions represent a
+#' "specific" or "typical" individual (*conditional*, *individual-level*
+#' predictions), or an "average" individual from the sample, or an
+#' "counterfactual" individual from a broader population (*marginal*,
+#' *population-level* predictions).
+#'
+#' **Conditional Predictions based on artificially constructed reference grids**
+#'
+#' - `"specific"`: The estimated means represent a rather "theoretical" view of
+#'   the data. A prediction is made for a specific individual from the sample
+#'   (i.e., a very specific combination of predictor values). This answers the
+#'   question about the expected average value of the target variable for a
+#'   *specific* observation.
 #' - `"typical"` (Default): Calculates predictions for a balanced data grid
 #'   representing all combinations of focal predictor levels (specified in `by`).
 #'   For non-focal numeric predictors, it uses the mean; for non-focal
@@ -52,6 +64,9 @@
 #'   comparing groups. It answers: "What would the average outcome be for a
 #'   'typical' observation?". This is the default approach when estimating
 #'   marginal means using the *emmeans* package.
+#'
+#' **Marginal predictions based on actual empirical observations**
+#'
 #' - `"average"`: Calculates predictions for each observation in the sample and
 #'   then averages these predictions within each group defined by the focal
 #'   predictors. This reflects the sample's actual distribution of non-focal
@@ -63,26 +78,33 @@
 #'   permutations) within each group. This extrapolates to a hypothetical
 #'   broader population, considering "what if" scenarios. It answers: "What is
 #'   the predicted response for the 'average' observation in a broader possible
-#'   target population?" This approach entails more assumptions about the
-#'   likelihood of different combinations, but can be more apt to generalize.
-#'   This is also the option that should be used for **G-computation**
-#'   (causal inference, see _Chatton and Rohrer 2024_). `"counterfactual"` is
-#'   an alias for `"population"`.
+#'   target population?" This approach mimics a "pseudo-randomization" and hence
+#'   can be more apt to generalize, which should be used for **G-computation**
+#'   (causal inference, see _Chatton and Rohrer 2024_). `"counterfactual"` is an
+#'   alias for `"population"`.
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
 #' e.g. `options(modelbased_estimate = "average")`.
 #'
-#' Note following limitations:
-#' - When you set `estimate` to `"average"`, it calculates the average based
-#'   only on the data points that actually exist. This is in particular
-#'   important for two or more focal predictors, because it doesn't generate a
-#'   *complete* grid of all theoretical combinations of predictor values.
-#'   Consequently, the output may not include all the values.
+#' **Note following limitations:**
+#' - Especially for continuous predictors, `estimate = "average"` may produce
+#'   erratic-looking outputs, because it calculates the average based only on
+#'   the data points that actually exist. This is in particular important for
+#'   two or more focal predictors, because it doesn't generate a *complete* grid
+#'   of all theoretical combinations of predictor values. Consequently, the
+#'   output may not include all the values. To resolve this, you may provide a
+#'   defined data grid via the `data` argument containing the values of
+#'   interest.
+#' - For the same reason, *conditional* predictions or `estimate = "population"`
+#'   typically yield smoother curves in **visualizations** for continuous focal
+#'   predictors, whereas *marginal* predictions with `estimate = "average"` may
+#'   introduce noisy visual artifacts.
 #' - Filtering the output at values of continuous predictors, e.g.
 #'   `by = "x=1:5"`, in combination with `estimate = "average"` may result in
-#'   returning an empty data frame because of what was described above. In such
-#'   case, you can use `estimate = "typical"` or use the `newdata` argument to
-#'   provide a data grid of predictor values at which to evaluate predictions.
+#'   returning an empty data frame because the requested values may not overlap
+#'   with existing data. In such cases, you can use `estimate = "typical"` or
+#'   use the `newdata` argument to provide a data grid of predictor values at
+#'   which to evaluate predictions.
 #' - `estimate = "population"` is not available for `estimate_slopes()`.
 #' @param backend Whether to use `"marginaleffects"` (default) or `"emmeans"` as
 #' a backend. Results are usually very similar. The major difference will be
@@ -113,6 +135,9 @@
 #' number, only as many columns as indicated in `keep_iterations` will be added
 #' to the output. You can reshape them to a long format by running
 #' [`bayestestR::reshape_iterations()`].
+#' @param ci Confidence Interval (CI) level. Must be numeric between 0 and 1.
+#' Defaults to `0.95`. Use `NULL` to suppress calculation of standard errors and
+#' confidence intervals.
 #' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
@@ -124,13 +149,14 @@
 #' - **marginaleffects**: Internally used functions are `avg_predictions()` for
 #'   means and contrasts, and `avg_slope()` for slopes. Therefore, arguments for
 #'   instance like `vcov`, `equivalence`, `df`, `slope`, `hypothesis` or even
-#'   `newdata` can be passed to those functions. A `weights` argument is passed
-#'   to the `wts` argument in `avg_predictions()` or `avg_slopes()`, however,
-#'   weights can only be applied when `estimate` is `"average"` or
-#'   `"population"` (i.e. for those marginalization options that do not use data
-#'   grids). Other arguments, such as `re.form` or `allow.new.levels`, may be
-#'   passed to `predict()` (which is internally used by *marginaleffects*) if
-#'   supported by that model class.
+#'   `newdata` can be passed to those functions (note that `data` is supported
+#'   as an alias for `newdata` for consistency across the *easystats*
+#'   ecosystem). A `weights` argument is passed to the `wts` argument in
+#'   `avg_predictions()` or `avg_slopes()`, however, weights can only be applied
+#'   when `estimate` is `"average"` or `"population"` (i.e. for those
+#'   marginalization options that do not use data grids). Other arguments, such
+#'   as `re.form` or `allow.new.levels`, may be passed to `predict()` (which is
+#'   internally used by *marginaleffects*) if supported by that model class.
 #' - **emmeans**: Internally used functions are `emmeans()` and `emtrends()`.
 #'   Additional arguments can be passed to these functions.
 #' - Bayesian models: For Bayesian models, parameters are cleaned using
@@ -145,11 +171,9 @@
 #'   `integer_as_continuous` unique values, it is treated as numeric. Defaults
 #'   to `5`. Set to `TRUE` to always treat integer predictors as continuous.
 #' - For count regression models that use an offset term, use `offset = <value>`
-#'   to fix the offset at a specific value. Or use `estimate = "average"`, to
-#'   average predictions over the distribution of the offset (if appropriate).
-#'
-#' @inheritParams parameters::model_parameters.default
-#' @inheritParams estimate_expectation
+#'   to fix the offset at a specific value. Or use `estimate = "average"` or
+#'   `estimate = "population"` without specifying the `offset`, to average
+#'   predictions over the distribution of the offset (if appropriate).
 #'
 #' @details
 #' The [estimate_slopes()], [estimate_means()] and [estimate_contrasts()]
@@ -218,7 +242,7 @@
 #' * You can directly specify values as strings or lists for `by`, `contrast`,
 #'   and `slope`.
 #'   * For numeric focal predictors, use examples like `by = "gear = c(4, 8)"`,
-#'     `by = list(gear = c(4, 8))` or `by = "gear = 5:10"`
+#'     `by = list(gear = c(4, 8))`, `by = "gear = 5:10"` or `by = list(gear = 5:10)`
 #'   * For factor or character predictors, use `by = "Species = c('setosa', 'virginica')"`
 #'     or `by = list(Species = c('setosa', 'virginica'))`
 #' * You can use "shortcuts" within square brackets, such as `by = "Sepal.Width = [sd]"`
@@ -437,6 +461,7 @@ estimate_means <- function(
 
   # validate input
   estimate <- .validate_estimate_arg(estimate)
+  backend <- insight::validate_argument(backend, c("marginaleffects", "emmeans"))
 
   if (backend == "emmeans") {
     # Emmeans ----------------------------------------------------------------

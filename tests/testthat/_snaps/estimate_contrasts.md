@@ -158,9 +158,9 @@
       
       Level1     | Level2     | Difference |         95% CI |   SE |     z |      p
       -----------------------------------------------------------------------------
-      setosa     | versicolor |      -0.68 | [-0.82, -0.54] | 0.07 | -9.27 | < .001
-      setosa     | virginica  |      -0.50 | [-0.67, -0.33] | 0.08 | -5.90 | < .001
-      versicolor | virginica  |       0.18 | [ 0.01,  0.35] | 0.08 |  2.12 |  0.034
+      versicolor | setosa     |       0.68 | [ 0.54,  0.82] | 0.07 |  9.27 | < .001
+      virginica  | setosa     |       0.50 | [ 0.33,  0.67] | 0.08 |  5.90 | < .001
+      virginica  | versicolor |      -0.18 | [-0.35, -0.01] | 0.08 | -2.12 |  0.034
       
       Variable predicted: y
       Predictors contrasted: Species
@@ -197,11 +197,11 @@
     Output
       Marginal Contrasts Analysis
       
-      Level1     | Level2     | Difference |         95% CI |   SE |     z |      p
-      -----------------------------------------------------------------------------
-      setosa     | versicolor |      -0.68 | [-0.86, -0.50] | 0.07 | -9.27 | < .001
-      setosa     | virginica  |      -0.50 | [-0.70, -0.30] | 0.08 | -5.90 | < .001
-      versicolor | virginica  |       0.18 | [-0.02,  0.38] | 0.08 |  2.12 |  0.034
+      Level1     | Level2     | Difference |        95% CI |   SE |     z |      p
+      ----------------------------------------------------------------------------
+      versicolor | setosa     |       0.68 | [ 0.50, 0.86] | 0.07 |  9.27 | < .001
+      virginica  | setosa     |       0.50 | [ 0.30, 0.70] | 0.08 |  5.90 | < .001
+      virginica  | versicolor |      -0.18 | [-0.38, 0.02] | 0.08 | -2.12 |  0.034
       
       Variable predicted: y
       Predictors contrasted: Species
@@ -324,7 +324,7 @@
       ----------------------------------------------------------
       low      | -0.06 | 0.01 | [-0.08, -0.05] |  -7.08 | < .001
       mid      | -0.05 | 0.01 | [-0.06, -0.04] |  -9.82 | < .001
-      high     | -0.05 | 0.01 | [-0.07, -0.03] |  -4.51 | < .001
+      high     | -0.05 | 0.01 | [-0.07, -0.03] |  -4.53 | < .001
       
       Marginal effects estimated for barthtot
       Type of slope was dY/dX
@@ -340,7 +340,7 @@
       Level1 | Level2 | Difference |   SE |        95% CI | t(808) |     p
       --------------------------------------------------------------------
       mid    | low    |       0.01 | 0.01 | [-0.01, 0.03] |   1.17 | 0.243
-      high   | low    |       0.02 | 0.01 | [-0.01, 0.04] |   1.10 | 0.271
+      high   | low    |       0.02 | 0.01 | [-0.01, 0.04] |   1.10 | 0.270
       high   | mid    |       0.00 | 0.01 | [-0.02, 0.03] |   0.27 | 0.786
       
       Variable predicted: neg_c_7
@@ -367,7 +367,7 @@
       mid, female  | low, female |       0.02 | 0.01 | [ 0.00, 0.05] |   1.76 | 0.079
       high, male   | low, female |       0.00 | 0.02 | [-0.04, 0.05] |   0.12 | 0.908
       high, female | low, female |       0.03 | 0.02 | [-0.01, 0.06] |   1.58 | 0.115
-      mid, female  | mid, male   |       0.03 | 0.01 | [ 0.00, 0.05] |   2.24 | 0.026
+      mid, female  | mid, male   |       0.03 | 0.01 | [ 0.00, 0.05] |   2.23 | 0.026
       high, male   | mid, male   |       0.00 | 0.02 | [-0.04, 0.05] |   0.18 | 0.859
       high, female | mid, male   |       0.03 | 0.02 | [ 0.00, 0.06] |   1.83 | 0.068
       high, male   | mid, female |      -0.02 | 0.02 | [-0.06, 0.02] |  -1.08 | 0.280
@@ -886,7 +886,7 @@
       Predictors contrasted: grp, time=2
       p-values are uncorrected.
 
-# estimate_contrast, slopes with emmeans
+# estimate_contrast, slopes with emmeans-2
 
     Code
       print(out, table_width = Inf)

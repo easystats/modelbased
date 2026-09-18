@@ -4,6 +4,7 @@
   predict = NULL,
   comparison = NULL,
   model_info = NULL,
+  omnibus_test = FALSE,
   verbose = TRUE,
   ...
 ) {
@@ -21,7 +22,7 @@
 
   # extract all valid types and the default type for model class
   valid_types <- .valid_marginaleffects_types(model)
-  default_type <- .default_marginaleffects_types(model)
+  default_type <- .default_marginaleffects_types(model, omnibus_test)
 
   # find link-types - we need link-type when user wants bias-correction
   link_types <- c("link", "linear.predictor", "lp")
@@ -52,18 +53,8 @@
     }
   }
 
-  if (isTRUE(is.na(predict))) {
-    # add modelbased-options to valid types
-    valid_types <- unique(c("response", "link", valid_types))
-    insight::format_error(paste0(
-      "The option provided in the `",
-      error_arg,
-      "` argument is not recognized.",
-      " Valid options are: ",
-      datawizard::text_concatenate(valid_types, enclose = "`"),
-      "."
-    ))
-  }
+  # validate predict-options
+  .check_predict_arg(predict, valid_types, error_arg)
 
   # if we have bias-correction, and we are able to get predictions on the
   # link-scale, we set `predict` to "response" - only in this case,
@@ -130,14 +121,20 @@
 # return default type argument for model class, as defined in marginaleffecs
 # we can overwrite the default, e.g. using "inverse_link" as an option when
 # not provided by marginaleffects, in the ".default_type" data frame
-.default_marginaleffects_types <- function(model) {
+.default_marginaleffects_types <- function(model, omnibus_test = FALSE) {
   model_class <- class(model)[1]
   # for unrecognized model classes, return "response"
   if (!model_class %in% .default_type$class) {
     return("response")
   }
   # extract all valid types for model class
-  .default_type$type[.default_type$class == model_class]
+  out <- .default_type$type[.default_type$class == model_class]
+  # sanity check - for omnibus test, we change the default from
+  # "invlink(link)" to "response"
+  if (isTRUE(omnibus_test) && out == "invlink(link)") {
+    out <- "response"
+  }
+  out
 }
 
 
@@ -147,26 +144,26 @@
 # fmt: skip
 .typedic <- data.frame(
   class = c(
-    "bam", "bam", "bart", "bart", "betareg",
-    "betareg", "betareg", "betareg", "betareg", "bife", "bife", "bracl",
-    "brglmFit", "brglmFit", "brmsfit", "brmsfit", "brmsfit", "brmsfit",
-    "brmultinom", "brmultinom", "clm", "clm", "clm", "clogit", "clogit",
-    "clogit", "clogit", "coxph", "coxph", "coxph", "coxph", "coxph_weightit",
-    "coxph_weightit", "coxph_weightit", "coxph_weightit", "crch",
-    "crch", "crch", "crch", "hetprob", "hetprob", "hxlr", "hxlr",
-    "hxlr", "hxlr", "ivpml", "ivpml", "flexsurvreg", "flexsurvreg",
+    "bam", "bam", "bart", "bart", "betareg", "betareg", "betareg",
+    "betareg", "betareg", "bife", "bife", "bracl", "brglmFit", "brglmFit",
+    "brmsfit", "brmsfit", "brmsfit", "brmsfit", "brmultinom", "brmultinom",
+    "clm", "clm", "clm", "clogit", "clogit", "clogit", "clogit",
+    "coxph", "coxph", "coxph", "coxph", "coxph_weightit", "coxph_weightit",
+    "coxph_weightit", "coxph_weightit", "crch", "crch", "crch", "crch",
+    "DirichletRegModel", "hetprob", "hetprob", "hxlr", "hxlr", "hxlr",
+    "hxlr", "ivpml", "ivpml", "flexsurvreg", "flexsurvreg", "flexsurvreg",
     "flexsurvreg", "flexsurvreg", "flexsurvreg", "flexsurvreg", "flexsurvreg",
-    "flexsurvreg", "flexsurvreg", "fixest", "fixest", "fixest", "hurdle",
-    "hurdle", "hurdle", "hurdle", "iv_robust", "lm", "gam", "gam",
-    "Gam", "Gam", "Gam", "geeglm", "geeglm", "Gls", "glimML", "glimML",
-    "glm", "glm", "glm", "glmerMod", "glmerMod", "glmgee", "glmrob",
-    "glmrob", "glmmTMB", "glmmTMB", "glmmTMB", "glmmTMB", "glmmTMB",
-    "glmmTMB", "glmmPQL", "glmmPQL", "glmx", "glm_weightit", "glm_weightit",
-    "glm_weightit", "glm_weightit", "glm_weightit", "ivreg", "lmerMod",
-    "lmerModLmerTest", "lmrob", "lm_robust", "lrm", "lrm", "lrm",
-    "mblogit", "mblogit", "mblogit", "mclogit", "mclogit", "mclogit",
-    "MCMCglmm", "model_fit", "model_fit", "model_fit", "workflow",
-    "workflow", "workflow", "multinom", "multinom", "multinom_weightit",
+    "flexsurvreg", "fixest", "fixest", "fixest", "hurdle", "hurdle",
+    "hurdle", "hurdle", "iv_robust", "gam", "gam", "Gam", "Gam",
+    "Gam", "geeglm", "geeglm", "Gls", "glimML", "glimML", "glm",
+    "glm", "glm", "glmerMod", "glmerMod", "glmgee", "glmrob", "glmrob",
+    "glmmTMB", "glmmTMB", "glmmTMB", "glmmTMB", "glmmTMB", "glmmTMB",
+    "glmmPQL", "glmmPQL", "glmx", "glm_weightit", "glm_weightit",
+    "glm_weightit", "glm_weightit", "glm_weightit", "ivreg", "lda",
+    "lda", "lm", "lmerMod", "lmerModLmerTest", "lmrob", "lm_robust",
+    "lrm", "lrm", "lrm", "mblogit", "mblogit", "mblogit", "mclogit",
+    "mclogit", "mclogit", "MCMCglmm", "model_fit", "model_fit", "model_fit",
+    "workflow", "workflow", "workflow", "multinom", "multinom", "multinom_weightit",
     "multinom_weightit", "multinom_weightit", "mhurdle", "mhurdle",
     "mhurdle", "mvgam", "mvgam", "mvgam", "mvgam", "mvgam", "negbin",
     "negbin", "negbin", "ols", "oohbchoice", "oohbchoice", "orm",
@@ -179,24 +176,24 @@
     "zeroinfl", "zeroinfl"
   ),
   type = c(
-    "response", "link", "ev", "ppd",
-    "response", "link", "precision", "quantile", "variance", "response",
-    "link", "probs", "response", "link", "response", "link", "prediction",
-    "average", "probs", "class", "prob", "cum.prob", "linear.predictor",
-    "expected", "lp", "risk", "survival", "survival", "expected",
-    "lp", "risk", "survival", "expected", "lp", "risk", "response",
-    "location", "scale", "density", "pr", "xb", "location", "cumprob",
+    "response", "link", "ev", "ppd", "response", "link", "precision",
+    "quantile", "variance", "response", "link", "probs", "response",
+    "link", "response", "link", "prediction", "average", "probs",
+    "class", "prob", "cum.prob", "linear.predictor", "expected",
+    "lp", "risk", "survival", "survival", "expected", "lp", "risk",
+    "survival", "expected", "lp", "risk", "response", "location",
+    "scale", "density", "response", "pr", "xb", "location", "cumprob",
     "scale", "density", "pr", "xb", "survival", "response", "mean",
     "link", "lp", "linear", "rmst", "hazard", "cumhaz", "invlink(link)",
     "response", "link", "response", "prob", "count", "zero", "response",
-    "response", "response", "link", "invlink(link)", "response",
-    "link", "response", "link", "lp", "response", "link", "invlink(link)",
-    "response", "link", "response", "link", "response", "response",
-    "link", "response", "link", "conditional", "zprob", "zlink",
-    "disp", "response", "link", "response", "invlink(link)", "probs",
-    "response", "lp", "link", "response", "response", "response",
-    "response", "response", "fitted", "lp", "mean", "response", "latent",
-    "link", "response", "latent", "link", "response", "numeric",
+    "response", "link", "invlink(link)", "response", "link", "response",
+    "link", "lp", "response", "link", "invlink(link)", "response",
+    "link", "response", "link", "response", "response", "link", "response",
+    "link", "conditional", "zprob", "zlink", "disp", "response",
+    "link", "response", "invlink(link)", "probs", "response", "lp",
+    "link", "response", "class", "posterior", "response", "response",
+    "response", "response", "response", "fitted", "lp", "mean", "response",
+    "latent", "link", "response", "latent", "link", "response", "numeric",
     "prob", "class", "numeric", "prob", "class", "probs", "latent",
     "probs", "response", "mean", "E", "Ep", "p", "response", "link",
     "expected", "detection", "latent_N", "invlink(link)", "response",
@@ -223,12 +220,12 @@
 .default_type <- data.frame(
   class = c(
     "other",
-    "bam", "bart", "betareg", "bife", "bracl",
-    "brglmFit", "brmsfit", "brmultinom", "clm", "clogit", "coxph",
-    "coxph_weightit", "crch", "hetprob", "hxlr", "ivpml", "flexsurvreg",
-    "fixest", "hurdle", "iv_robust", "lm", "gam", "Gam", "geeglm",
-    "Gls", "glimML", "glm", "glmerMod", "glmgee", "glmrob", "glmmTMB",
-    "glmmPQL", "glmx", "glm_weightit", "ivreg", "lmerMod", "lmerModLmerTest",
+    "bam", "bart", "betareg", "bife", "bracl", "brglmFit", "brmsfit",
+    "brmultinom", "clm", "clogit", "coxph", "coxph_weightit", "crch",
+    "DirichletRegModel", "hetprob", "hxlr", "ivpml", "flexsurvreg",
+    "fixest", "hurdle", "iv_robust", "gam", "Gam", "geeglm", "Gls",
+    "glimML", "glm", "glmerMod", "glmgee", "glmrob", "glmmTMB", "glmmPQL",
+    "glmx", "glm_weightit", "ivreg", "lda", "lm", "lmerMod", "lmerModLmerTest",
     "lmrob", "lm_robust", "lrm", "mblogit", "mclogit", "MCMCglmm",
     "model_fit", "workflow", "multinom", "multinom_weightit", "mhurdle",
     "mvgam", "negbin", "ols", "oohbchoice", "orm", "ordinal_weightit",
@@ -238,18 +235,18 @@
   ),
   type = c(
     "response",
-    "response", "ev", "response", "response",
-    "probs", "response", "response", "probs", "prob", "expected",
-    "survival", "survival", "response", "pr", "location", "pr", "survival",
-    "invlink(link)", "response", "response", "response", "response",
-    "invlink(link)", "response", "lp", "response", "invlink(link)",
-    "response", "response", "response", "response", "response", "response",
-    "invlink(link)", "response", "response", "response", "response",
-    "response", "fitted", "response", "response", "response", "numeric",
-    "numeric", "probs", "probs", "E", "response", "invlink(link)",
-    "lp", "probability", "fitted", "probs", "probs", "response",
-    "response", "response", "response", "response", "response", "response",
-    "response", "probs", "response", "expvalue", "response"
+    "response", "ev", "response", "response", "probs", "response",
+    "response", "probs", "prob", "expected", "survival", "survival",
+    "response", "response", "pr", "location", "pr", "survival", "invlink(link)",
+    "response", "response", "response", "invlink(link)", "response",
+    "lp", "response", "invlink(link)", "response", "response", "response",
+    "response", "response", "response", "invlink(link)", "response",
+    "class", "response", "response", "response", "response", "response",
+    "fitted", "response", "response", "response", "numeric", "numeric",
+    "probs", "probs", "E", "response", "invlink(link)", "lp", "probability",
+    "fitted", "probs", "probs", "response", "response", "response",
+    "response", "response", "response", "response", "response", "probs",
+    "response", "expvalue", "response"
   ),
   stringsAsFactors = FALSE
 )

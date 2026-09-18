@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.15.0.1
+Version: 0.17.0.6
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -39,10 +39,10 @@ BugReports: https://github.com/easystats/modelbased/issues
 Depends:
     R (>= 4.0)
 Imports:
-    bayestestR (>= 0.17.0),
+    bayestestR (>= 0.18.1),
     datawizard (>= 1.3.1),
-    insight (>= 1.5.0),
-    parameters (>= 0.28.3),
+    insight (>= 1.5.3),
+    parameters (>= 0.29.2),
     graphics,
     stats,
     tools,
@@ -63,6 +63,7 @@ Suggests:
     correlation,
     coxme,
     curl,
+    dagitty,
     discovr,
     easystats,
     effectsize (>= 1.0.0),
@@ -70,8 +71,10 @@ Suggests:
     Formula,
     gamm4,
     gganimate,
+    ggdag,
     ggplot2,
     glmmTMB (>= 1.1.12),
+    grid,
     httr2,
     knitr,
     lme4,
@@ -88,7 +91,6 @@ Suggests:
     nestedLogit,
     nnet,
     ordinal,
-    palmerpenguins,
     performance (>= 0.14.0),
     patchwork,
     pbkrtest,
@@ -114,10 +116,10 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.3.3
 Config/testthat/edition: 3
-Config/testthat/parallel: true
+Config/testthat/parallel: false
 Roxygen: list(markdown = TRUE)
 Config/Needs/check: stan-dev/cmdstanr
 Config/Needs/website: easystats/easystatstemplate
 LazyData: true
+Config/roxygen2/version: 8.1.0

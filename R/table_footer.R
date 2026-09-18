@@ -30,7 +30,7 @@
 
   # modulated predictors (focal terms) ---------------------------------------
 
-  if (!is.null(by) && !isTRUE(info$joint_test)) {
+  if (!is.null(by) && !isTRUE(info$joint_test) && !inherits(by, "formula")) {
     modulate_string <- switch(type, inequality = , contrasts = "contrasted", "modulated")
     table_footer <- paste0(
       table_footer,
@@ -96,6 +96,19 @@
         parameters::format_p_adjust(p_adjust)
       )
     }
+  }
+
+  # leave early for joint tests ----------------------------------------------
+
+  if (isTRUE(info$joint_test)) {
+    if (!is.null(info$null) && info$omnibus_test) {
+      table_footer <- paste0(
+        table_footer,
+        "\nNull-hypothesis: Group means equal ",
+        insight::format_value(info$null)
+      )
+    }
+    return(c(paste0(table_footer, "\n"), "yellow"))
   }
 
   # tell user about scale of predictions / contrasts -------------------------

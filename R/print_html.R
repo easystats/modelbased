@@ -1,9 +1,11 @@
 #' @export
-print_html.estimate_contrasts <- function(x,
-                                          select = getOption("modelbased_select", NULL),
-                                          include_grid = getOption("modelbased_include_grid", FALSE),
-                                          full_labels = TRUE,
-                                          ...) {
+print_html.estimate_contrasts <- function(
+  x,
+  select = getOption("modelbased_select", NULL),
+  include_grid = getOption("modelbased_include_grid", FALSE),
+  full_labels = TRUE,
+  ...
+) {
   # copy original
   out <- x
   # get attributes, but remove some of them - else, matching attribute fails
@@ -11,7 +13,13 @@ print_html.estimate_contrasts <- function(x,
   attr <- attr[setdiff(names(attr), c("names", "row.names"))]
 
   # format table
-  formatted_table <- format(out, select = select, format = "html", include_grid = include_grid, ...)
+  formatted_table <- format(
+    out,
+    select = select,
+    format = "html",
+    include_grid = include_grid,
+    ...
+  )
   attributes(formatted_table) <- utils::modifyList(attributes(formatted_table), attr)
 
   # remove redundant labels, for "by" variables
@@ -53,14 +61,3 @@ print_html.visualisation_matrix <- print_html.estimate_contrasts
 
 #' @export
 print_html.estimate_grouplevel <- print_html.estimate_contrasts
-
-
-# we allow exporting HTML format based on "gt" or "tinytable"
-.check_format_backend <- function(...) {
-  dots <- list(...)
-  if (identical(dots$backend, "tt")) {
-    "tt"
-  } else {
-    "html"
-  }
-}

@@ -48,6 +48,24 @@ test_that("estimate_contrast, context effects, linear", {
     ignore_attr = TRUE
   )
 
+  # post processing for context effects
+  out <- estimate_contrasts(
+    m,
+    c("bill_len_between", "bill_len_within", "year"),
+    post_process = ~sequential
+  )
+  expect_named(
+    out,
+    c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+  )
+  expect_equal(
+    out$Difference,
+    c(0.04317388, -0.04317388),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_identical(out$Level1, c("2009 - 2007", "2009 - 2008"))
+
   skip_on_os(c("mac", "linux"))
   m <- lm(bill_dep ~ sex * year * (bill_len_between + bill_len_within), data = d)
   out <- estimate_contrasts(
@@ -64,7 +82,7 @@ test_that("estimate_contrast, context effects, linear", {
       "-------------------------------------------------------------------",
       "female | 2007 |      -0.28 | 0.08 | [-0.45, -0.12] | -3.41 | < .001",
       "female | 2008 |      -0.26 | 0.06 | [-0.37, -0.15] | -4.47 | < .001",
-      "female | 2009 |      -0.24 | 0.10 | [-0.42, -0.05] | -2.48 |  0.013",
+      "female | 2009 |      -0.24 | 0.10 | [-0.42, -0.05] | -2.47 |  0.013",
       "male   | 2007 |      -0.46 | 0.10 | [-0.65, -0.26] | -4.60 | < .001",
       "male   | 2008 |      -0.28 | 0.06 | [-0.40, -0.15] | -4.41 | < .001",
       "male   | 2009 |      -0.10 | 0.10 | [-0.30,  0.11] | -0.93 |  0.355",
@@ -87,7 +105,7 @@ test_that("estimate_contrast, context effects, linear", {
       "Level1 | Level2 | year | Difference |   SE |        95% CI |     z |     p",
       "--------------------------------------------------------------------------",
       "male   | female | 2007 |      -0.17 | 0.13 | [-0.43, 0.08] | -1.33 | 0.183",
-      "male   | female | 2008 |      -0.02 | 0.09 | [-0.18, 0.15] | -0.18 | 0.853",
+      "male   | female | 2008 |      -0.02 | 0.09 | [-0.18, 0.15] | -0.18 | 0.854",
       "male   | female | 2009 |       0.14 | 0.14 | [-0.14, 0.42] |  0.99 | 0.320",
       "",
       "Variable predicted: bill_dep",

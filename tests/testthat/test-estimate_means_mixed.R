@@ -19,7 +19,11 @@ test_that("estimate_means() - mixed models", {
   expect_identical(dim(estim2), c(3L, 7L))
   expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
 
-  model <- lme4::glmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = dat, family = "Gamma")
+  model <- lme4::glmer(
+    Sepal.Width ~ Species + (1 | Petal.Length_factor),
+    data = dat,
+    family = "Gamma"
+  )
   estim1 <- estimate_means(model, backend = "emmeans", verbose = FALSE)
   expect_identical(dim(estim1), c(3L, 5L))
   estim2 <- estimate_means(model, backend = "marginaleffects", verbose = FALSE)
@@ -33,13 +37,28 @@ test_that("estimate_means() - mixed models", {
     family = poisson(),
     data = Salamanders
   )
-  expect_snapshot(estimate_means(m, c("mined", "spp"), backend = "marginaleffects", predict = "inverse_link"))
+  expect_snapshot(estimate_means(
+    m,
+    c("mined", "spp"),
+    backend = "marginaleffects",
+    predict = "inverse_link"
+  ))
   expect_snapshot(estimate_means(m, c("mined", "spp"), backend = "marginaleffects"))
-  out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects", predict = "inverse_link")
+  out <- estimate_means(
+    m,
+    c("mined", "spp"),
+    backend = "marginaleffects",
+    predict = "inverse_link"
+  )
   expect_true(all(out$CI_low >= 0))
   expect_true(all(out$CI_high >= 0))
 
-  out1 <- estimate_means(m, c("mined", "spp"), type = "conditional", backend = "marginaleffects")
+  out1 <- estimate_means(
+    m,
+    c("mined", "spp"),
+    type = "conditional",
+    backend = "marginaleffects"
+  )
   out2 <- estimate_means(m, c("mined", "spp"), backend = "emmeans")
   expect_equal(out1$Mean[order(out1$spp)], out2$Rate, tolerance = 1e-1)
 
@@ -66,10 +85,19 @@ test_that("estimate_means() - mixed models", {
     family = "binomial"
   )
   estim1 <- estimate_means(gm1, backend = "emmeans", verbose = FALSE)
-  estim2 <- estimate_means(gm1, backend = "marginaleffects", verbose = FALSE, predict = "inverse_link")
+  estim2 <- estimate_means(
+    gm1,
+    backend = "marginaleffects",
+    verbose = FALSE,
+    predict = "inverse_link"
+  )
   expect_identical(dim(estim1), c(4L, 5L))
   expect_identical(dim(estim2), c(4L, 6L))
-  expect_equal(estim2$Probability, c(0.20293, 0.08627, 0.07612, 0.04984), tolerance = 1e-3)
+  expect_equal(
+    estim2$Probability,
+    c(0.20293, 0.08627, 0.07612, 0.04984),
+    tolerance = 1e-3
+  )
   expect_equal(estim2$CI_low, c(0.13928, 0.04915, 0.04159, 0.02229), tolerance = 1e-3)
   expect_true(all(estim2$CI_low >= 0 & estim2$CI_low <= 1))
   expect_true(all(estim2$CI_high >= 0 & estim2$CI_high <= 1))
@@ -108,12 +136,27 @@ test_that("estimate_contrasts - Random Effects Levels, pairwise", {
 
   # Quality of Life score ranges from 0 to 25
   m_null <- glmmTMB::glmmTMB(qol ~ 1 + (1 | gender:employed:age), data = dat)
-  expect_silent(
-    estimate_means(m_null, by = c("gender", "employed", "age"))
-  )
-  expect_silent(
-    estimate_means(m_null, by = c("gender", "employed", "age"), verbose = FALSE)
-  )
+  expect_silent(estimate_means(m_null, by = c("gender", "employed", "age")))
+  expect_silent(estimate_means(
+    m_null,
+    by = c("gender", "employed", "age"),
+    verbose = FALSE
+  ))
   out <- estimate_relation(m_null, by = c("gender", "employed", "age"))
   expect_true(any(out$SE != out$SE[1]))
+})
+
+
+test_that("estimate_means, validate against marginaleffects", {
+  skip_if_not_installed("lme4")
+  data(penguins)
+  model <- lme4::lmer(bill_len ~ sex + island + (1 | species), data = penguins)
+
+  est1 <- estimate_means(model, "sex", estimate = "population")
+  est2 <- suppressWarnings(marginaleffects::avg_predictions(model, variables = "sex"))
+  expect_equal(est1$Mean, est2$estimate, tolerance = 1e-5)
+
+  est1 <- estimate_means(model, "sex", estimate = "average")
+  est2 <- suppressWarnings(marginaleffects::avg_predictions(model, by = "sex"))
+  expect_equal(est1$Mean, est2$estimate, tolerance = 1e-5)
 })

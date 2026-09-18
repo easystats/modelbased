@@ -68,7 +68,8 @@
   }
 
   if (p_adjust %in% tolower(stats::p.adjust.methods)) {
-    # base R adjustments
+    # base R adjustments - need to convert BH and BY back to uppercase before
+    p_adjust <- switch(p_adjust, bh = "BH", by = "BY", p_adjust)
     params[["p"]] <- stats::p.adjust(params[["p"]], method = p_adjust)
   } else if (p_adjust == "tukey") {
     # find first occurence of one of the following columns: "t", "z", or "statistic"
@@ -203,7 +204,7 @@
   if (!inherits(x, c("estimate_slopes", "marginaleffects_slopes"))) {
     insight::format_error(
       "The `esarey` p-value adjustment is only available for Johnson-Neyman intervals, i.e. when calling `estimate_slopes()` with an interaction term of two numeric predictors."
-    ) # nolint
+    )
   }
   # get names of interaction terms
   pred <- attributes(x)$trend
@@ -213,7 +214,7 @@
   if (!all(vapply(attributes(x)$datagrid[c(pred, mod)], is.numeric, logical(1)))) {
     insight::format_error(
       "The `esarey` p-value adjustment is only available for Johnson-Neyman intervals, i.e. when calling `estimate_slopes()` with an interaction term of two numeric predictors."
-    ) # nolint
+    )
   }
 
   int <- paste0(pred, ":", mod)

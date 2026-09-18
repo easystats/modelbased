@@ -55,7 +55,18 @@ test_that("estimate_contrast, counterfactual", {
     vcov = "HC3"
   )
 
+  # check that alias `data` works
+  out3 <- estimate_contrasts(
+    mod,
+    contrast = "treat",
+    data = subset(lalonde, treat == 1),
+    estimate = "population",
+    weights = "wts",
+    vcov = "HC3"
+  )
+
   expect_equal(out1$estimate[2], out2$Difference, tolerance = 1e-2)
+  expect_equal(out3$Difference, out2$Difference, tolerance = 1e-2)
   expect_named(
     out2,
     c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")

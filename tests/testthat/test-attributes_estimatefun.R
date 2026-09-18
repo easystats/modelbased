@@ -1,7 +1,7 @@
 skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
-test_that("attributes_means", {
+test_that("attributes_means, means", {
   data(iris)
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 
@@ -22,8 +22,9 @@ test_that("attributes_means", {
     c(
       "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
       "predict", "estimate", "transform", "datagrid", "preserve_range",
-      "model_info", "keep_iterations", "joint_test", "vcov", "table_title",
-      "table_footer", "model", "response", "ci", "backend", "coef_name", "call"
+      "model_info", "keep_iterations", "joint_test", "omnibus_test", "vcov",
+      "table_title", "table_footer", "model", "response", "ci", "backend",
+      "coef_name", "call"
     )
   )
 })
@@ -56,7 +57,7 @@ test_that("attributes_means, contrasts", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations", "joint_test", "vcov", "context_effects"
+      "keep_iterations", "joint_test", "omnibus_test", "vcov", "context_effects"
     )
   )
   estim <- suppressMessages(estimate_contrasts(
@@ -72,7 +73,7 @@ test_that("attributes_means, contrasts", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations", "joint_test", "vcov", "context_effects"
+      "keep_iterations", "joint_test", "omnibus_test", "vcov", "context_effects"
     )
   )
   estim <- suppressMessages(estimate_contrasts(
@@ -89,7 +90,8 @@ test_that("attributes_means, contrasts", {
       "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "contrast_filter", "keep_iterations", "joint_test","vcov", "context_effects"
+      "contrast_filter", "keep_iterations", "joint_test", "omnibus_test", "vcov",
+      "context_effects"
     )
   )
 })
@@ -126,7 +128,7 @@ test_that("attributes_means, slopes", {
 })
 
 
-test_that("attributes_means", {
+test_that("attributes_means, expectation", {
   data(iris)
   model <- lm(Sepal.Width ~ Petal.Length + Species * Petal.Width, data = iris)
   estim <- estimate_expectation(

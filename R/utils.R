@@ -71,76 +71,11 @@
 
 #' @keywords internal
 #' @noRd
-.check_standard_errors <- function(
-  out,
-  by = NULL,
-  contrast = NULL,
-  model = NULL,
-  model_name = "model",
-  verbose = TRUE,
-  ...
-) {
-  if (!verbose || is.null(out$SE)) {
-    return(NULL)
-  }
-
-  if (all(is.na(out$SE))) {
-    # we show an example code how to resolve the problem. this example
-    # code only works when we have at least `by` or `contrast`. If both
-    # are NULL, we ignore the example code (see below)
-    code_snippet <- paste0("\n\nestim <- estimate_relation(\n  ", model_name)
-    by_vars <- c(by, contrast)
-    if (!is.null(by_vars)) {
-      code_snippet <- paste0(
-        code_snippet,
-        ",\n  by = ",
-        ifelse(length(by_vars) > 1, "c(", ""),
-        paste0("\"", by_vars, "\"", collapse = ", "),
-        ifelse(length(by_vars) > 1, ")", "")
-      )
-    }
-    code_snippet <- paste0(code_snippet, "\n)\nestimate_contrasts(\n  estim")
-    if (!is.null(contrast)) {
-      code_snippet <- paste0(
-        code_snippet,
-        ",\n  contrast = ",
-        ifelse(length(contrast) > 1, "c(", ""),
-        paste0("\"", contrast, "\"", collapse = ", "),
-        ifelse(length(contrast) > 1, ")", "")
-      )
-    }
-    code_snippet <- paste0(code_snippet, "\n)")
-    # setup message
-    msg <- insight::format_message(
-      "Could not calculate standard errors for contrasts. This can happen when random effects are involved."
-    )
-    # add example code, if valid
-    if (!is.null(by_vars)) {
-      msg <- c(
-        paste(msg, "You may try following:"),
-        insight::color_text(code_snippet, "green"),
-        "\n"
-      )
-    }
-    message(msg)
-
-    # disable message for now, see
-    # https://github.com/easystats/modelbased/issues/526
-    # } else if (length(out$SE) > 1 && isTRUE(all(out$SE == out$SE[1])) && insight::is_mixed_model(model)) {
-    #   msg <- "Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead." # nolint
-    #   if (!inherits(model, "glmmTMB")) {
-    #     msg <- paste(msg, "You may also try package {.pkg glmmTMB} to produce valid standard errors.")
-    #   }
-    #   insight::format_alert(msg)
-  }
-}
-
-
-#' @keywords internal
-#' @noRd
-.safe <- function(code, on_error = NULL) {
+.safe <- function(code, on_error = NULL, quietly = FALSE) {
   if (isTRUE(getOption("easystats_errors", FALSE)) && is.null(on_error)) {
     code
+  } else if (quietly) {
+    suppressWarnings(tryCatch(code, error = function(e) on_error))
   } else {
     tryCatch(code, error = function(e) on_error)
   }

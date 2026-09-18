@@ -88,6 +88,12 @@ test_that("estimate_slopes", {
   )
   expect_named(estim2, c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "z", "p"))
 
+  # suppress CI
+  out <- suppressMessages(estimate_slopes(model, ci = NULL))
+  expect_named(out, "Slope")
+  out <- suppressMessages(estimate_slopes(model, ci = NA))
+  expect_named(out, "Slope")
+
   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 
   estim1 <- suppressMessages(estimate_slopes(
@@ -126,8 +132,15 @@ test_that("estimate_slopes", {
     by = "Sepal.Width = c(1, 2, 3)",
     backend = "marginaleffects"
   ))
+  # test alternative list-notation
+  estim3 <- suppressMessages(estimate_slopes(
+    model,
+    by = list(Sepal.Width = c(1, 2, 3)),
+    backend = "emmeans"
+  ))
   expect_identical(dim(estim1), c(3L, 9L))
   expect_equal(estim1$Slope, estim2$Slope, tolerance = 0.2)
+  expect_equal(estim3$Slope, estim2$Slope, tolerance = 0.2)
 })
 
 
@@ -325,9 +338,11 @@ test_that("estimate_slopes, works with glmmTMB and splines", {
   # average marginal effects of Petal.Length,
   # just for the trend within a certain range
   out <- estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
+  out2 <- estimate_slopes(model, trend = list(Petal.Length = seq(2, 4, 0.01)))
   expect_identical(dim(out), c(1L, 7L))
   expect_named(out, c("Slope", "SE", "CI_low", "CI_high", "t", "df", "p"))
   expect_equal(out$Slope, 0.06614, tolerance = 1e-3)
+  expect_equal(out$Slope, out2$Slope, tolerance = 1e-3)
 })
 
 
@@ -353,6 +368,40 @@ test_that("estimate_slopes, estimate-argument works", {
   expect_equal(out1$Slope, out2$estimate, tolerance = 1e-4)
 
   out <- estimate_slopes(m, "bill_dep", by = "island = 'Dream'", estimate = "average")
+  # test alternative list notation
+  out3 <- estimate_slopes(
+    m,
+    "bill_dep",
+    by = list(island = 'Dream'),
+    estimate = "average"
+  )
   expect_equal(out$Slope, out2$estimate[2], tolerance = 1e-4)
+  expect_equal(out$Slope, out3$Slope, tolerance = 1e-4)
   expect_identical(dim(out), c(1L, 7L))
+})
+
+
+test_that("estimate_slopes, estimate-argument and no datagrid works", {
+  # no error for estimate = "average" when no data grid is available
+  set.seed(123)
+  N <- 10000
+
+  cat1 <- sample(c("A", "B", "C"), size = N, replace = TRUE)
+  cat2 <- sample(c("Kontrolle", "Treatment"), size = N, replace = TRUE)
+
+  cat1 <- factor(cat1, levels = c("A", "B", "C"))
+  cat2 <- factor(cat2, levels = c("Kontrolle", "Treatment"))
+
+  log_odds <- -1.5 +
+    ifelse(cat1 == "B", 1.0, 0) +
+    ifelse(cat1 == "C", 2.0, 0) +
+    ifelse(cat2 == "Treatment", 2.5, 0)
+
+  prob <- plogis(log_odds)
+  y <- rbinom(N, size = 1, prob = prob)
+
+  mod_conditional <- glm(y ~ cat1 + cat2, family = binomial(link = "logit"))
+  out <- estimate_slopes(mod_conditional, "cat1", estimate = "average")
+
+  expect_equal(out$Slope, c(0.16021, 0.32009), tolerance = 1e-4)
 })

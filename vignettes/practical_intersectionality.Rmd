@@ -5,9 +5,10 @@ vignette: >
   %\VignetteIndexEntry{Case Study: Intersectionality Analysis Using The MAIHDA Framework}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
 ---
 
-```{r set-options, echo = FALSE}
+```{r set-options, echo = FALSE, warning=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -41,21 +42,37 @@ if (getRversion() < "4.1.0") {
 }
 ```
 
-This vignette demonstrate how to use *modelbased* in the context of an intersectional multilevel analysis of individual heterogeneity, using the MAIHDA framework. The general approach of the MAIHDA framework (sometimes also _I-MAIHDA_) is described in _Axelsson Fisk et al. 2018_ and _Evans et al. 2024_.
+```{css, echo=FALSE, eval = TRUE}
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+```
+
+This vignette demonstrate how to use *modelbased* in the context of an intersectional multilevel analysis of individual heterogeneity, using the MAIHDA framework. The general approach of the MAIHDA framework (sometimes also _I-MAIHDA_) is described in @axelsson_fisk_chronic_2018 and @evans_tutorial_2024.
 
 Intersectionality analysis is a new approach in social epidemiology, which attempts to move away from looking at relevant social indicators in isolation.
 
-> "The advantage of incorporating an intersectional framework in social epidemiology is that it goes beyond the unidimensional study of socioeconomic and demographic categorizations by considering the effect of belonging to specific strata simultaneously defined by multiple social, economic and demographic dimensions."
+::: custom_note
+<p>"The advantage of incorporating an intersectional framework in social epidemiology is that it goes beyond the unidimensional study of socioeconomic and demographic categorizations by considering the effect of belonging to specific strata simultaneously defined by multiple social, economic and demographic dimensions."</p>
+:::
 
 The steps we are showing here are:
 
 1. Defining the intersectional strata.
 
-2. Fitting a multilevel model to see whether intersectional strata contribute to between-stratum variance (which can be considered as "inequalities", whether social or health related).
+2. Fitting a *simple intersectional* model to see whether intersectional strata contribute to between-stratum variance (which can be considered as "inequalities", whether social or health related - also known as _discriminatory accucarcy_).
 
-3. Fitting partially adjusted multilevel models and calculating proportional change in the between-stratum variance (PCVs) to quantify to what degree the different intersectional dimensions contribute to the between-stratum variance (inequalities).
+3. Fitting *partially-adjusted intersectional* models and calculating proportional change in the between-stratum variance (PCVs) to quantify to what degree the different intersectional dimensions contribute to the between-stratum variance (inequalities)
 
-4. Calculate adjusted predictions (estimated marginal means) of the outcome by intersectional strata, to get a clearer picture of the variation between intersectional dimensions, as well as testing specific strata for significant differences.
+4. Fitting an *intersectional interaction* model to look for *global* additive or multiplicative effects.
+
+5. Calculate adjusted / ranked predictions (estimated marginal means) of the outcome (of the *simple intersectional* model) by intersectional strata, to get a clearer picture of the variation between intersectional dimensions, as well as testing specific strata for significant differences.
+
+6. Look at group-level estimates (BLUPs) of the *intersectional interaction* model, which represent the group-level residuals (also called _strata-level residuals_, see @axelsson_fisk_chronic_2018 or @keller_educational_2023), to see whether we find *specific* additive or multiplicative effects for strata.
 
 ## 1. Preparing the data and defining intersectional strata
 
@@ -103,7 +120,7 @@ data_tabulate(efc$strata)
 
 We now have the choice and could either use the `strata` variable as group factor for our random effects, or `gender:employed:age`. For plotting predictions (see section 4), we get clearer plots when we include the three factors `gender`, `employed` and `age` instead of the integrated `strata` factor.
 
-## 2. Fitting the simple intersectional model
+## 2. Fitting the simple intersectional model: discriminatory accuracy
 
 Intersectionality analysis aims at recognizing effects of belonging to specific strata simultaneously. In the context of the MAIHDA framework, the interest lies in analysing the variation between strata regarding the outcome of interest. Thus, the indicators that define the intersectional dimensions are used as interacting _random effects_ (group factors) in a multilevel model (random-intercept model).
 
@@ -117,7 +134,7 @@ m_null <- glmmTMB(qol ~ 1 + (1 | gender:employed:age), data = efc)
 # m_null <- glmmTMB(qol ~ 1 + (1 | strata), data = efc)
 ```
 
-The purpose of this model is to quantify the "discriminatory accuracy", which is achieved by calculating the ICC (see [`performance::icc()`](https://easystats.github.io/performance/reference/icc.html)) of this model. The higher the ICC, the greater the degree of similarity _within the strata_ (regarding quality of life) and the greater the difference in quality of life _between the intersectional strata_. I.e., the higher the ICC, the better the model is at discriminating individuals with higher or lower quality of life score, as opposed to models with lower ICC.
+The purpose of this model - which is sometimes also called *null model* or *base model* - is to quantify the "discriminatory accuracy", which is achieved by calculating the ICC (see [`performance::icc()`](https://easystats.github.io/performance/reference/icc.html)) of this model (sometimes also calles the _VPC_, the variance partition coefficient). The higher the ICC, the greater the degree of similarity _within the strata_ (regarding quality of life) and the greater the difference in quality of life _between the intersectional strata_. I.e., the higher the ICC, the better the model is at discriminating individuals with higher or lower quality of life score, as opposed to models with lower ICC.
 
 We now look at the model parameters and the ICC of our simple intersectional model.
 
@@ -133,7 +150,9 @@ The ICC with a value of about 4% is rather low. Usually, this indicates that our
 
 In the next step we want to find out, which intersectional dimension contributes most to possible inequalities, i.e. which of our group factors `gender`, `employed` and `age` explains most of the between-stratum variance of the random effects. This is achieved by fitting partially-adjusted intersectional models.
 
-> "The purpose of the partially adjusted model was to quantify to what degree the different dimensions used to construct the intersectional strata contributed to the between stratum variance seen in the previous model."
+::: custom_note
+<p>"The purpose of the partially adjusted model was to quantify to what degree the different dimensions used to construct the intersectional strata contributed to the between stratum variance seen in the previous model."</p>
+:::
 
 For each of the intersectional dimensions, a multilevel model including this dimension as fixed effect is fitted. We can then both look at the ICCs of the partially-adjusted models, as well as at the proportional change in the between-stratum variance, the so-called _PCV_ coefficients.
 
@@ -185,14 +204,48 @@ v_age <- get_variance(m_age)
 
 Again, we see that the PCV is in line with the models' ICC's and regression coefficients. We see the highest proportional change for `age`, meaning that - although gender and education can contribute to inequalities - age is the most relevant predictor.
 
-## 4. Predict between-stratum variance and test for significant differences
+## 4. PCV in the intersectional interaction model: global additive or multiplicative effects
+
+Finally, a "full" model (aka *intersectional interaction* or *main effects* model) is fit, which includes all group level variables as level-1 *additive* fixed effects. Then, the PCV is again calculated. This allows us to see how much of the variability of the additive effects will be absorbed by the intersectional strata characteristics. A PCV close to 1 suggests that the differences between intersectional strata are primarily driven by additive main effects. Conversely, a PCV substantially below 1 indicates that these main effects cannot fully explain the strata-level variance, pointing to the presence of multiplicative interaction effects.
+
+```{r}
+m_full <- glmmTMB(
+  qol ~ gender + employed + age + (1 | gender:employed:age),
+  data = efc
+)
+
+# investigate random effects parameters
+random_parameters(m_full)
+```
+
+We see that the between-group variance is literally zero, which means, no variation is left between the intersectional strata after adding those predictors as additive fixed effects. This suggests that the PCV will be (close to) 1, indicating we have no multiplicative interaction effects.
+
+```{r}
+v_full <- get_variance(m_full)
+
+# PCV (proportional change in between-stratum variance)
+# from null-model to full-model
+(v_null$var.random - v_full$var.random) / v_null$var.random
+```
+
+Indeed, the PCV for the full model is 1.
+
+::: custom_note
+ The ICC (or VPC) and the PCV are *global* measures of intersectionality ("are there differences between intersectional strata" and "are there additive or multiplicative effects and which characteristic contributes most to inequalities?"). There is also an additional *specific* measure of intersectionality ("which intersections may show multiplicative effects?"), the strata-level residuals, which will be introduced below.
+:::
+
+## 5. Predict between-stratum variance and test for significant differences
 
 Finally, we may want to have a clearer picture of how the different strata vary, which combination of characteristics defines the highest or maybe lowest risk group. To do so, we calculate predictions of the random effects (*unit-level* predictions).
 
 The following code shows the predicted average quality of life scores for the different groups.
 
 ```{r}
-predictions <- estimate_relation(m_null, by = c("gender", "employed", "age"))
+predictions <- estimate_means(
+  m_null,
+  by = c("gender", "employed", "age"),
+  estimate = "average"
+)
 plot(predictions)
 ```
 
@@ -202,36 +255,38 @@ We can now calculate pairwise comparisons that show which differences between gr
 
 ```{r}
 # just show first 10 rows of output...
-estimate_contrasts(predictions, contrast = c("gender", "employed", "age"))[1:10, ]
+estimate_contrasts(
+  m_null,
+  contrast = c("gender", "employed", "age"),
+  estimate = "average"
+)[1:10, ]
 ```
 
 If we only want to modulate one factor and compare those groups within the levels of the other groups, we can use the `by` argument. This reduces the output and only compares the focal term(s) within the levels of the remaining predictors.
 
 ```{r}
 # Compare levels of gender and employment status for age groups
-estimate_contrasts(predictions, contrast = c("gender", "employed"), by = "age")
+estimate_contrasts(
+  m_null,
+  contrast = c("gender", "employed"),
+  by = "age",
+  estimate = "average"
+)
 ```
 
 E.g., if we look at the plot and want to know whether female persons aged 65+ differ depending on their employment status, we can use the following code:
 
 ```{r}
 # Compare levels employment status by gender and age groups
-estimate_contrasts(predictions, contrast = "employed", by = c("gender", "age"))
+estimate_contrasts(
+  m_null,
+  contrast = "employed",
+  by = c("gender", "age"),
+  estimate = "average"
+)
 ```
 
-## 5. Conclusion
-
-Intersectional multilevel analysis of individual heterogeneity, using the MAIHDA framework, is a new approach in social epidemiology, which helps to understand the interaction of social indicators with regard to social inequalities.
-
-This approach requires the application of multilevel models, where ICC and PCV are relevant coefficients. The *modelbased* package allows to go beyond quantifying to what degree different intersectional dimensions contribute to inequalities by predicting the average outcome by group, thereby explicitly showing the differences between those groups (strata).
-
-Furthermore, with *modelbased* it is possible to compare differences between groups and test whether these differences are statistically significant or not, i.e. whether we find "evidence" for social inequalities in our data for certain groups (at risk).
-
-# References
-
-1. Axelsson Fisk S, Mulinari S, Wemrell M, Leckie G, Perez Vicente R, Merlo J. Chronic Obstructive Pulmonary Disease in Sweden: An intersectional multilevel analysis of individual heterogeneity and discriminatory accuracy. SSM - Population Health (2018) 4:334-346. doi: 10.1016/j.ssmph.2018.03.005
-
-2. Evans CR, Leckie G, Subramanian SV, Bell A, Merlo J. A tutorial for conducting intersectional multilevel analysis of individual heterogeneity and discriminatory accuracy (MAIHDA). SSM - Population Health (2024) 26; doi: 10.1016/j.ssmph.2024.101664
+## 6. Strata-level residuals: Specific additive vs. multiplicative effects
 
 ```{r echo=FALSE}
 # reset options
@@ -241,3 +296,43 @@ options(
   modelbased_select = NULL
 )
 ```
+
+In the MAIHDA framework, a specific measure of intersectionality is the _strata-level residual_, which corresponds to the random effects of the intersectional interaction model. Examining these residuals allows us to distinguish between additive and multiplicative effects: if there are no interactions, the inclusion of main effects would fully explain the variance between intersectional strata and all random effects would be (close to) zero. A positive strata-level residual indicates that a stratum's mean outcome is higher than expected from the additive main effects, whereas a negative strata-level residual indicates a lower mean outcome than expected for this stratum. Consequently, when the credible or confidence interval of a strata-level residual does not include zero, this points to a statistically significant interaction effect – or a multiplicative effect – in that specific stratum [@axelsson_fisk_chronic_2018; @keller_educational_2023].
+
+We can easily compute the strata-level residuals using the `estimate_grouplevel()` function. **Important**: We need to calculate these residuals for the *intersectional interaction* (full) model, not for the *null* model.
+
+```{r}
+strata_residuals <- estimate_grouplevel(m_full)
+
+strata_residuals
+
+plot(strata_residuals)
+```
+
+As expected (because the PCV is 1, indicating we found no multiplicative effects), all strata-level residuals are close to zero.
+
+## 7. MAIHDA and logistic regression models
+
+Compared to a MAIHDA analysis using *linear* regression models, there are two important aspects to consider when using *binary logistic* regression models.
+
+### 7.1 Additive and multiplicatice effects
+
+When applying this framework to dichotomous outcomes using logistic multilevel models, two important distinctions must be considered. First, the within-strata (level 1) variance is not estimated, as the variance of the binomial distribution is already known (and fixed, see [`?insight::get_variance`](https://easystats.github.io/insight/reference/get_variance.html) for Bernoulli models). Second, logistic models operate on a multiplicative scale rather than an additive one. According to Evans et al. (2018), it is inappropriate to use logistic models to examine strata-level residuals for additive interaction effects, since the inclusion of main effects may already account for some of these interactions. However, logistic models remain fully appropriate if the primary goal is to estimate strata-level effects to explore the overall patterning of inequalities across strata-groups [@evans_multilevel_2018].
+
+### 7.2 Discriminatory Accuracy
+
+In the case of *linear* models, the ICC (VPC) works as measure of discriminatory accuracy. However, since the ICC relies on the *estimated* variances on level-1 and the higher levels and the level-1 variance is not estimable in logistic regression models, we need a different measure for the discriminatory accuracy.
+
+In the context of *logistic* regression for dichotomous outcomes, the Area Under the Curve (AUC) serves as a measure of discriminatory accuracy (which can be calculated using [`performance::performance_roc()`](https://easystats.github.io/performance/reference/performance_roc.html) or [`performance::performance_accuracy()`](https://easystats.github.io/performance/reference/performance_accuracy.html)). It evaluates how accurately knowing an individual's intersectional stratum can discriminate between those who experience the outcome and those who do not. Formally, the AUC represents the probability that a randomly selected individual with the outcome will have a higher predicted probability than a randomly selected individual without it. The AUC ranges from 0.5 to 1.0 (or 50% to 100%), where 0.5 indicates that the intersectional strata provide no discriminatory accuracy, and 1.0 denotes perfect discriminatory accuracy [@evans_tutorial_2024].
+
+Another useful measure is the [median odds ratio (MOR)](https://easystats.github.io/performance/reference/performance_mor.html), a measure of cluster-level variation in multilevel logistic regression [@larsen_appropriate_2005]. A MOR > 1 indicates the presence of heterogeneity and meaningful variation across clusters.
+
+## 8. Conclusion
+
+Intersectional multilevel analysis of individual heterogeneity, using the MAIHDA framework, is a new approach in social epidemiology, which helps to understand the interaction of social indicators with regard to social inequalities.
+
+This approach requires the application of multilevel models, where ICC and PCV are relevant coefficients. The *modelbased* package allows to go beyond quantifying to what degree different intersectional dimensions contribute to inequalities by predicting the average outcome by group, thereby explicitly showing the differences between those groups (strata).
+
+Furthermore, with *modelbased* it is possible to compare differences between groups and test whether these differences are statistically significant or not, i.e. whether we find "evidence" for social inequalities in our data for certain groups (at risk).
+
+# References

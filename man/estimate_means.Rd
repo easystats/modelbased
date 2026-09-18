@@ -30,7 +30,9 @@ is \emph{not} \code{"average"}, the \code{by} argument is used to create a "refe
 or "data grid" with representative values for the focal predictors. In this
 case, \code{by} can also be list of named elements. See details in
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
-predictors of interest.}
+predictors of interest. For \code{estimate_means()}, \code{by} defaults to \code{"auto"},
+which automatically selects the first focal predictor found in the model. If
+\code{by = NULL}, the grand mean of the response is predicted.}
 
 \item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
@@ -54,14 +56,25 @@ transformation is selected (which usually is \code{"response"}). See also
 
 See also section \emph{Predictions on different scales}.}
 
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+\item{ci}{Confidence Interval (CI) level. Must be numeric between 0 and 1.
+Defaults to \code{0.95}. Use \code{NULL} to suppress calculation of standard errors and
+confidence intervals.}
 
 \item{estimate}{The \code{estimate} argument determines how predictions are
 averaged ("marginalized") over variables not specified in \code{by} or \code{contrast}
-(non-focal predictors). It controls whether predictions represent a "typical"
-individual, an "average" individual from the sample, or an "average"
-individual from a broader population.
+(non-focal predictors). It controls whether predictions represent a
+"specific" or "typical" individual (\emph{conditional}, \emph{individual-level}
+predictions), or an "average" individual from the sample, or an
+"counterfactual" individual from a broader population (\emph{marginal},
+\emph{population-level} predictions).
+
+\strong{Conditional Predictions based on artificially constructed reference grids}
 \itemize{
+\item \code{"specific"}: The estimated means represent a rather "theoretical" view of
+the data. A prediction is made for a specific individual from the sample
+(i.e., a very specific combination of predictor values). This answers the
+question about the expected average value of the target variable for a
+\emph{specific} observation.
 \item \code{"typical"} (Default): Calculates predictions for a balanced data grid
 representing all combinations of focal predictor levels (specified in \code{by}).
 For non-focal numeric predictors, it uses the mean; for non-focal
@@ -70,6 +83,10 @@ represents a "typical" observation based on the data grid and is useful for
 comparing groups. It answers: "What would the average outcome be for a
 'typical' observation?". This is the default approach when estimating
 marginal means using the \emph{emmeans} package.
+}
+
+\strong{Marginal predictions based on actual empirical observations}
+\itemize{
 \item \code{"average"}: Calculates predictions for each observation in the sample and
 then averages these predictions within each group defined by the focal
 predictors. This reflects the sample's actual distribution of non-focal
@@ -81,28 +98,35 @@ predictions across these "counterfactual" observations (non-observed
 permutations) within each group. This extrapolates to a hypothetical
 broader population, considering "what if" scenarios. It answers: "What is
 the predicted response for the 'average' observation in a broader possible
-target population?" This approach entails more assumptions about the
-likelihood of different combinations, but can be more apt to generalize.
-This is also the option that should be used for \strong{G-computation}
-(causal inference, see \emph{Chatton and Rohrer 2024}). \code{"counterfactual"} is
-an alias for \code{"population"}.
+target population?" This approach mimics a "pseudo-randomization" and hence
+can be more apt to generalize, which should be used for \strong{G-computation}
+(causal inference, see \emph{Chatton and Rohrer 2024}). \code{"counterfactual"} is an
+alias for \code{"population"}.
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
 e.g. \code{options(modelbased_estimate = "average")}.
 
-Note following limitations:
+\strong{Note following limitations:}
 \itemize{
-\item When you set \code{estimate} to \code{"average"}, it calculates the average based
-only on the data points that actually exist. This is in particular
-important for two or more focal predictors, because it doesn't generate a
-\emph{complete} grid of all theoretical combinations of predictor values.
-Consequently, the output may not include all the values.
+\item Especially for continuous predictors, \code{estimate = "average"} may produce
+erratic-looking outputs, because it calculates the average based only on
+the data points that actually exist. This is in particular important for
+two or more focal predictors, because it doesn't generate a \emph{complete} grid
+of all theoretical combinations of predictor values. Consequently, the
+output may not include all the values. To resolve this, you may provide a
+defined data grid via the \code{data} argument containing the values of
+interest.
+\item For the same reason, \emph{conditional} predictions or \code{estimate = "population"}
+typically yield smoother curves in \strong{visualizations} for continuous focal
+predictors, whereas \emph{marginal} predictions with \code{estimate = "average"} may
+introduce noisy visual artifacts.
 \item Filtering the output at values of continuous predictors, e.g.
 \code{by = "x=1:5"}, in combination with \code{estimate = "average"} may result in
-returning an empty data frame because of what was described above. In such
-case, you can use \code{estimate = "typical"} or use the \code{newdata} argument to
-provide a data grid of predictor values at which to evaluate predictions.
+returning an empty data frame because the requested values may not overlap
+with existing data. In such cases, you can use \code{estimate = "typical"} or
+use the \code{newdata} argument to provide a data grid of predictor values at
+which to evaluate predictions.
 \item \code{estimate = "population"} is not available for \code{estimate_slopes()}.
 }}
 
@@ -151,13 +175,14 @@ treated as numerics, i.e. values can have fractions or not.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
 means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
 instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope}, \code{hypothesis} or even
-\code{newdata} can be passed to those functions. A \code{weights} argument is passed
-to the \code{wts} argument in \code{avg_predictions()} or \code{avg_slopes()}, however,
-weights can only be applied when \code{estimate} is \code{"average"} or
-\code{"population"} (i.e. for those marginalization options that do not use data
-grids). Other arguments, such as \code{re.form} or \code{allow.new.levels}, may be
-passed to \code{predict()} (which is internally used by \emph{marginaleffects}) if
-supported by that model class.
+\code{newdata} can be passed to those functions (note that \code{data} is supported
+as an alias for \code{newdata} for consistency across the \emph{easystats}
+ecosystem). A \code{weights} argument is passed to the \code{wts} argument in
+\code{avg_predictions()} or \code{avg_slopes()}, however, weights can only be applied
+when \code{estimate} is \code{"average"} or \code{"population"} (i.e. for those
+marginalization options that do not use data grids). Other arguments, such
+as \code{re.form} or \code{allow.new.levels}, may be passed to \code{predict()} (which is
+internally used by \emph{marginaleffects}) if supported by that model class.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
@@ -172,8 +197,9 @@ contrasts of slopes are calculated. If the integer has more than
 \code{integer_as_continuous} unique values, it is treated as numeric. Defaults
 to \code{5}. Set to \code{TRUE} to always treat integer predictors as continuous.
 \item For count regression models that use an offset term, use \verb{offset = <value>}
-to fix the offset at a specific value. Or use \code{estimate = "average"}, to
-average predictions over the distribution of the offset (if appropriate).
+to fix the offset at a specific value. Or use \code{estimate = "average"} or
+\code{estimate = "population"} without specifying the \code{offset}, to average
+predictions over the distribution of the offset (if appropriate).
 }}
 }
 \value{
@@ -253,7 +279,7 @@ documentation for more details.
 and \code{slope}.
 \itemize{
 \item For numeric focal predictors, use examples like \code{by = "gear = c(4, 8)"},
-\code{by = list(gear = c(4, 8))} or \code{by = "gear = 5:10"}
+\code{by = list(gear = c(4, 8))}, \code{by = "gear = 5:10"} or \code{by = list(gear = 5:10)}
 \item For factor or character predictors, use \code{by = "Species = c('setosa', 'virginica')"}
 or \code{by = list(Species = c('setosa', 'virginica'))}
 }

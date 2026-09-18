@@ -114,9 +114,13 @@ export(standardize)
 export(unstandardize)
 export(visualisation_recipe)
 export(zero_crossings)
-importFrom(datawizard,standardize)
-importFrom(datawizard,unstandardize)
-importFrom(datawizard,visualisation_recipe)
-importFrom(insight,display)
-importFrom(insight,print_html)
-importFrom(insight,print_md)
+importFrom(datawizard,
+  standardize,
+  unstandardize,
+  visualisation_recipe
+)
+importFrom(insight,
+  display,
+  print_html,
+  print_md
+)

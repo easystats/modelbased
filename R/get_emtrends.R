@@ -40,12 +40,18 @@ get_emtrends <- function(
   ))
 
   # handle distributional parameters
-  if (
-    !is.null(predict) &&
-      inherits(model, "brmsfit") &&
-      predict %in% .brms_aux_elements(model)
-  ) {
-    fun_args$dpar <- predict
+  if (inherits(model, "brmsfit")) {
+    if (identical(predict, "response") || is.null(predict)) {
+      # slope of the expected response
+      fun_args$epred <- TRUE
+      fun_args$type <- "response"
+    } else if (predict %in% .brms_aux_elements(model)) {
+      # slope of a specific distributional parameter
+      fun_args$dpar <- predict
+    } else {
+      # link, none, unlink, etc.
+      fun_args$type <- predict
+    }
   } else {
     fun_args$type <- predict
   }

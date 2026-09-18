@@ -35,6 +35,7 @@ reference:
       - puppy_love
       - efc
       - fish
+      - stigma
 
 # Keep articles organized
 navbar:
@@ -46,6 +47,9 @@ navbar:
       menu:
         - text: "Overview of Vignettes"
           href: articles/overview_of_vignettes.html
+        - text: -------
+        - text: "The modelisation approach"
+          href: articles/post_estimation_framework.html
         - text: -------
         - text: "Basics"
         - text: "Data grids"
@@ -66,16 +70,28 @@ navbar:
           href: articles/derivatives.html
         - text: "Estimate and re-use Random Effects"
           href: articles/estimate_grouplevel.html
-        - text: -------
-        - text: "Visualization"
+    - text: "Visualization"
+      menu:
         - text: "Plotting estimated marginal means"
           href: articles/plotting.html
         - text: "Plotting estimated marginal means with tinyplot"
           href: articles/plotting_tinyplot.html
         - text: "Visualize effects and interactions"
           href: articles/estimate_relation.html
-        - text: "The modelisation approach"
+        - text: "The modelisation approach (WIP)"
           href: articles/modelisation_approach.html
+    - text: "Hypothesis testing"
+      menu:
+        - text: "Contrasts and comparisons"
+          href: articles/introduction_comparisons_1.html
+        - text: "User Defined Contrasts and Joint Tests"
+          href: articles/introduction_comparisons_2.html
+        - text: "Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)"
+          href: articles/introduction_comparisons_3.html
+        - text: "Contrasts and comparisons for generalized linear models"
+          href: articles/introduction_comparisons_4.html
+        - text: "Contrasts and comparisons for zero-inflation models"
+          href: articles/introduction_comparisons_5.html
     - text: "Case Studies"
       menu:
         - text: "Workflows"
@@ -94,21 +110,9 @@ navbar:
         - text: "An Introduction to Growth Mixture Models"
           href: articles/practical_growthmixture.html
         - text: -------
-        - text: "Contrasts"
-        - text: "Contrasts and comparisons"
-          href: articles/introduction_comparisons_1.html
-        - text: "User Defined Contrasts and Joint Tests"
-          href: articles/introduction_comparisons_2.html
-        - text: "Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)"
-          href: articles/introduction_comparisons_3.html
-        - text: "Contrasts and comparisons for generalized linear models"
-          href: articles/introduction_comparisons_4.html
-        - text: "Contrasts and comparisons for zero-inflation models"
-          href: articles/introduction_comparisons_5.html
-        - text: -------
-        - text: "Comparison to other R packages"
-        - text: "Packages related to predictions, marginal means and effects"
-          href: articles/practical_comparison.html
+        - text: "Technical Details"
+        - text: "Understanding marginalization methods"
+          href: articles/technical_marginalization.html
     - icon: fa fa-newspaper
       text: News
       href: news/index.html

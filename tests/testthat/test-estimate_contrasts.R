@@ -3,6 +3,14 @@ skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 skip_on_os("mac")
 
+test_that("estimate_contrasts - same sign of contrasts for both backends", {
+  data(iris)
+  m <- lm(Sepal.Length ~ Species, data = iris)
+  out1 <- estimate_contrasts(m, contrast = "Species", backend = "emmeans")
+  out2 <- estimate_contrasts(m, contrast = "Species", backend = "marginaleffects")
+  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
+})
+
 test_that("estimate_contrasts - Frequentist, one factor", {
   data(iris)
   # One factor
@@ -11,7 +19,7 @@ test_that("estimate_contrasts - Frequentist, one factor", {
 
   estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
-  expect_equal(estim$Difference, c(0.658, 0.454, -0.204), tolerance = 1e-4)
+  expect_equal(estim$Difference, c(-0.658, -0.454, 0.204), tolerance = 1e-4)
 
   estim <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
   expect_identical(dim(estim), c(3L, 9L))
@@ -430,13 +438,13 @@ test_that("estimate_contrasts - Frequentist, GLM", {
     model,
     backend = "marginaleffects"
   )))
-  expect_identical(estim3$Difference, estim1$Difference * -1)
+  expect_identical(estim3$Difference, estim1$Difference)
   estim4 <- suppressWarnings(suppressMessages(estimate_contrasts(
     model,
     predict = "link",
     backend = "marginaleffects"
   )))
-  expect_identical(estim4$Difference, estim2$Difference * -1)
+  expect_identical(estim4$Difference, estim2$Difference)
 
   # GLM - poisson
   dat <- data.frame(counts = c(18, 17, 15, 20, 10, 20, 25, 13, 12), treatment = gl(3, 3))
@@ -618,6 +626,14 @@ test_that("estimate_contrasts - p.adjust", {
   ))
   expect_true(any(p_none$p != p_tuk$p))
 
+  # make sure upper case works
+  expect_no_error(estimate_contrasts(
+    model,
+    contrast = "Species",
+    p_adjust = "BH",
+    backend = "marginaleffects"
+  ))
+
   model <- lm(Petal.Width ~ Species, data = iris)
   expect_error(
     estimate_contrasts(model, p_adjust = "scheffe"),
@@ -766,8 +782,8 @@ test_that("estimate_contrasts - dfs", {
   ))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
-  expect_equal(estim1$CI_low, c(-2.43, -2.25692, -2.89384), tolerance = 1e-4)
-  expect_equal(estim2$CI_low, c(-2.62766, -2.53389, -2.98196), tolerance = 1e-4)
+  expect_equal(estim1$CI_high, c(2.43, 2.25692, 2.89384), tolerance = 1e-4)
+  expect_equal(estim2$CI_high, c(2.62766, 2.53389, 2.98196), tolerance = 1e-4)
 
   estim1 <- suppressMessages(estimate_contrasts(
     model,
@@ -781,8 +797,8 @@ test_that("estimate_contrasts - dfs", {
   ))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
-  expect_equal(estim1$CI_low, c(-0.22624, -0.33383, -1.0109), tolerance = 1e-4)
-  expect_equal(estim2$CI_low, c(-0.29193, -0.4364, -1.04019), tolerance = 1e-4)
+  expect_equal(estim1$CI_high, c(0.22624, 0.33383, 1.0109), tolerance = 1e-4)
+  expect_equal(estim2$CI_high, c(0.29193, 0.4364, 1.04019), tolerance = 1e-4)
 })
 
 
@@ -878,6 +894,29 @@ test_that("estimate_contrasts - marginaleffects, comparisons, validate against p
 })
 
 
+test_that("estimate_contrasts - custom comparisons, validate against marginaleffects for larger b-index", {
+  data(efc, package = "modelbased")
+  efc$c172code <- as.factor(efc$c172code)
+  efc$e42dep <- as.factor(efc$e42dep)
+
+  m <- lm(neg_c_7 ~ c172code * e42dep, data = efc)
+
+  # this produces more than 9 rows - make sure that reordering works, and "b1"
+  # and "b10" are not incorrectly re-assigned, because both start with "b1"
+  out1 <- estimate_contrasts(
+    m,
+    c("c172code", "e42dep"),
+    comparison = "(b1 - b10) = (b2 - b12)"
+  )
+  out2 <- suppressWarnings(marginaleffects::avg_predictions(
+    m,
+    by = c("c172code", "e42dep"),
+    hypothesis = "(b1 - b4) = (b5 - b12)"
+  ))
+  expect_equal(out1$Difference, out2$estimate, tolerance = 1e-4)
+})
+
+
 test_that("estimate_contrasts - marginaleffects vs emmeans", {
   data(iris)
   dat <- iris
@@ -897,7 +936,7 @@ test_that("estimate_contrasts - marginaleffects vs emmeans", {
     backend = "emmeans"
   ))
   expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
-  expect_equal(out1$Difference, c(-0.68, -0.5, 0.18), tolerance = 1e-4)
+  expect_equal(out1$Difference, c(0.68, 0.5, -0.18), tolerance = 1e-4)
 
   ## marginaleffects backend works and has proper default
   out4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
@@ -912,7 +951,7 @@ test_that("estimate_contrasts - marginaleffects vs emmeans", {
   out_emm <- emmeans::emmeans(model, "Species", type = "response")
   out_emm <- emmeans::regrid(out_emm)
   out6 <- as.data.frame(emmeans::contrast(out_emm, method = "pairwise"))
-  expect_equal(out6$estimate, out1$Difference, tolerance = 1e-3)
+  expect_equal(out6$estimate, out1$Difference * -1, tolerance = 1e-3)
 
   # validate against marginaleffects
   out7 <- marginaleffects::avg_predictions(model, by = "Species", hypothesis = ~pairwise)
@@ -938,7 +977,7 @@ test_that("estimate_contrasts - on-the-fly factors", {
 
   expect_identical(nrow(out1), 3L)
   expect_identical(nrow(out2), 3L)
-  expect_equal(out1$Difference, out2$Difference * -1, tolerance = 1e-4) # swicthed sign
+  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4) # swicthed sign
 
   mtcars2 <- mtcars
   mtcars2$cyl <- as.factor(mtcars2$cyl)
@@ -948,7 +987,7 @@ test_that("estimate_contrasts - on-the-fly factors", {
 
   expect_identical(nrow(out3), 3L)
   expect_identical(nrow(out4), 3L)
-  expect_equal(out3$Difference, out4$Difference * -1, tolerance = 1e-4) # switched sign
+  expect_equal(out3$Difference, out4$Difference, tolerance = 1e-4) # switched sign
 })
 
 
@@ -1458,12 +1497,12 @@ test_that("estimate_contrast, slopes with emmeans", {
     backend = "emmeans"
   )
   expect_identical(dim(out), c(3L, 9L))
-  expect_equal(out$Difference, c(-0.12981, 0.04095, 0.17076), tolerance = 1e-4)
-  expect_identical(as.character(out$Level1), c("setosa", "setosa", "versicolor"))
+  expect_equal(out$Difference, c(0.12981, -0.04095, -0.17076), tolerance = 1e-4)
+  expect_identical(as.character(out$Level2), c("setosa", "setosa", "versicolor"))
 })
 
 
-test_that("estimate_contrast, slopes with emmeans", {
+test_that("estimate_contrast, slopes with emmeans-2", {
   set.seed(123)
   dat <- data.frame(
     outcome = rbinom(n = 100, size = 1, prob = 0.35),
@@ -1568,7 +1607,17 @@ test_that("estimate_contrast, filter by numeric values", {
   )
   expect_equal(
     out2$Difference,
-    c(0.23635, -0.25985, -0.75604, -0.2129, 0.06644, 0.34579, -0.44924, 0.32629, 1.10183),
+    c(
+      -0.23635,
+      0.25985,
+      0.75604,
+      0.2129,
+      -0.06644,
+      -0.34579,
+      0.44924,
+      -0.32629,
+      -1.10183
+    ),
     tolerance = 1e-4
   )
 
@@ -1586,7 +1635,7 @@ test_that("estimate_contrast, filter by numeric values", {
   )
   expect_identical(dim(out1), c(3L, 10L))
   expect_identical(dim(out2), c(3L, 10L))
-  expect_equal(out1$Difference, -1 * out2$Difference, tolerance = 1e-4)
+  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
 
   data(CO2)
   mod <- suppressWarnings(lme4::lmer(uptake ~ conc * Plant + (1 | Type), data = CO2))
@@ -1619,7 +1668,7 @@ test_that("estimate_contrast, filter by numeric values", {
   )
   expect_identical(dim(out1), c(6L, 10L))
   expect_identical(dim(out2), c(6L, 10L))
-  expect_equal(out1$Difference[c(1, 6)], -1 * out2$Difference[c(1, 6)], tolerance = 1e-4)
+  expect_equal(out1$Difference[c(1, 6)], out2$Difference[c(1, 6)], tolerance = 1e-4)
 
   out1 <- estimate_contrasts(
     mod,
@@ -1788,4 +1837,140 @@ test_that("estimate_contrast, p-adjust tukey works for contrasting slopes", {
   # methods, especially with Tukey p-adjustment. A tolerance of 1e-2 is used
   # here to avoid fragile tests while still ensuring close agreement.
   expect_equal(out1$p.value, out2$p, tolerance = 1e-2)
+})
+
+
+test_that("estimate_contrast, categorical/multinomial response models split off Response levels", {
+  skip_if_not_installed("nnet")
+
+  data(iris)
+  m <- nnet::multinom(Species ~ Sepal.Width, data = iris, trace = FALSE)
+  out <- estimate_contrasts(
+    m,
+    contrast = "Sepal.Width = c(2, 3)",
+    backend = "marginaleffects"
+  )
+
+  # Level1/Response1/Level2/Response2 columns, in that order
+  expect_named(
+    out,
+    c(
+      "Level1",
+      "Response1",
+      "Level2",
+      "Response2",
+      "Difference",
+      "SE",
+      "CI_low",
+      "CI_high",
+      "t",
+      "df",
+      "p"
+    )
+  )
+  # contrasted levels no longer contain the response category label
+  expect_true(all(as.character(out$Level1) %in% c("2", "3")))
+  expect_true(all(as.character(out$Level2) %in% c("2", "3")))
+  expect_true(all(as.character(out$Response1) %in% levels(iris$Species)))
+  expect_true(all(as.character(out$Response2) %in% levels(iris$Species)))
+
+  out2 <- marginaleffects::avg_predictions(
+    m,
+    by = "Sepal.Width",
+    newdata = data.frame(Sepal.Width = c(2, 3)),
+    hypothesis = ~pairwise
+  )
+
+  expect_identical(
+    paste0(
+      "(",
+      out$Response1,
+      " ",
+      out$Level1,
+      ") - (",
+      out$Response2,
+      " ",
+      out$Level2,
+      ")"
+    ),
+    out2$hypothesis
+  )
+  expect_equal(out$Difference, out2$estimate, tolerance = 1e-4)
+
+  # contrasts within the same response category should match the difference
+  # between the corresponding marginal means for that category
+  means <- estimate_means(m, by = "Sepal.Width = c(2, 3)", backend = "marginaleffects")
+  for (resp in levels(iris$Species)) {
+    row <- out[
+      as.character(out$Level1) == "3" &
+        as.character(out$Level2) == "2" &
+        as.character(out$Response1) == resp &
+        as.character(out$Response2) == resp,
+    ]
+    expect_identical(nrow(row), 1L)
+    mean_3 <- means$Probability[means$Sepal.Width == "3" & means$Response == resp]
+    mean_2 <- means$Probability[means$Sepal.Width == "2" & means$Response == resp]
+    expect_equal(row$Difference, mean_3 - mean_2, tolerance = 1e-4)
+  }
+})
+
+
+test_that("estimate_contrast, correctly preserve minus in factor levels", {
+  df <- data.frame(
+    x = rnorm(1000),
+    y = rep_len(c("A - High", "A - Low", "B - High", "B - Low"), 1000)
+  )
+
+  model <- lm(x ~ y, data = df)
+  out1 <- estimate_contrasts(model, contrast = "y", backend = "marginaleffects")
+  out2 <- estimate_contrasts(model, contrast = "y", backend = "emmeans")
+
+  expect_identical(
+    as.character(out1$Level1),
+    c("A - Low", "B - High", "B - Low", "B - High", "B - Low", "B - Low")
+  )
+  expect_identical(
+    as.character(out2$Level1),
+    c("A - Low", "B - High", "B - High", "B - Low", "B - Low", "B - Low")
+  )
+  expect_identical(
+    as.character(out1$Level2),
+    c("A - High", "A - High", "A - High", "A - Low", "A - Low", "B - High")
+  )
+  expect_identical(
+    as.character(out2$Level2),
+    c("A - High", "A - High", "A - Low", "A - High", "A - Low", "B - High")
+  )
+})
+
+
+test_that("estimate_contrast, don't let group labels appear in comparison labels", {
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  m <- lm(neg_c_7 ~ barthtot + c172code * e42dep * c161sex, data = efc)
+
+  out <- estimate_contrasts(
+    m,
+    "c161sex",
+    by = c("c172code", "e42dep"),
+    estimate = "average",
+    post_process = ~ pairwise | e42dep
+  )
+  expect_identical(dim(out), c(10L, 8L))
+  expect_identical(
+    out$Parameter,
+    c(
+      "Female - Male, mid - low",
+      "Female - Male, mid - low",
+      "Female - Male, high - low",
+      "Female - Male, high - mid",
+      "Female - Male, mid - low",
+      "Female - Male, high - low",
+      "Female - Male, high - mid",
+      "Female - Male, mid - low",
+      "Female - Male, high - low",
+      "Female - Male, high - mid"
+    )
+  )
 })

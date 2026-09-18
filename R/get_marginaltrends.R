@@ -16,13 +16,16 @@ get_marginaltrends <- function(
   estimate = NULL,
   transform = NULL,
   p_adjust = "none",
+  iterations = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
 ) {
   # check if available
   insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
-  dots <- list(...)
+
+  # was "data" argument used? if so, it replaces "newdata" in dots
+  dots <- .check_dots_data(list(...), verbose)
 
   # set defaults
   estimate <- .validate_estimate_arg(estimate)
@@ -84,7 +87,7 @@ get_marginaltrends <- function(
   }
 
   # remove user-arguments from "..." that will be used when calling marginaleffects
-  dots[c("by", "conf_level", "digits")] <- NULL
+  dots[c("by", "conf_level", "digits", "post_process")] <- NULL
 
   # handle weights - argument is named "wts" in marginal effects
   if (!is.null(dots$weights)) {
@@ -129,12 +132,31 @@ get_marginaltrends <- function(
     fun_args$type <- predict
   }
 
+  # missing or NA for conf_level? If so, we want to suppress SE and CI
+  if (is.null(fun_args$conf_level) || is.na(fun_args$conf_level)) {
+    fun_args$conf_level <- NULL # for NA
+    fun_args$vcov <- FALSE
+  }
+
+  # bayesian models: number of posterior draws to use, passed to `ndraws`
+  if (!is.null(iterations)) {
+    fun_args$ndraws <- iterations
+  }
+
   # Third step: compute marginal slopes ---------------------------------------
   # ---------------------------------------------------------------------------
 
   # Compute stuff
   estimated <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
   vcov_slopes <- .safe(stats::vcov(estimated))
+
+  # any subsequent comparisons? -----------------------------------------------
+  # ---------------------------------------------------------------------------
+  estimated <- .post_process_comparisons(
+    estimated,
+    post_process = myargs$post_process,
+    verbose = verbose
+  )
 
   # Fourth step: back-transform response --------------------------------------
   # ---------------------------------------------------------------------------
@@ -177,6 +199,7 @@ get_marginaltrends <- function(
         p_adjust = p_adjust,
         ci = ci,
         transform = !is.null(transform),
+        iterations = iterations,
         keep_iterations = keep_iterations,
         vcov = vcov_slopes,
         equivalence = dots$equivalence
@@ -199,12 +222,15 @@ get_marginaltrends <- function(
 # =========================================================================
 
 #' @keywords internal
-.guess_marginaltrends_arguments <- function(model,
-                                            trend = NULL,
-                                            by = NULL,
-                                            verbose = TRUE,
-                                            ...) {
+.guess_marginaltrends_arguments <- function(
+  model,
+  trend = NULL,
+  by = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Gather info
+  dots <- list(...)
   model_data <- insight::get_data(model, verbose = FALSE)
   predictors <- intersect(
     colnames(model_data),
@@ -215,23 +241,24 @@ get_marginaltrends <- function(
   if (is.null(trend)) {
     trend <- predictors[sapply(model_data[predictors], is.numeric)][1]
     if (!length(trend) || is.na(trend)) {
-      insight::format_error("Model contains no numeric predictor. Please specify `trend`.")
+      insight::format_error(
+        "Model contains no numeric predictor. Please specify `trend`."
+      )
     }
     if (verbose) {
-      insight::format_alert(paste0("No numeric variable was specified for slope estimation. Selecting `trend = \"", trend, "\"`.")) # nolint
+      insight::format_alert(paste0(
+        "No numeric variable was specified for slope estimation. Selecting `trend = \"",
+        trend,
+        "\"`."
+      ))
     }
+  } else if (is.list(trend)) {
+    # convert list into a string, to simplify handling below
+    trend <- paste0(names(trend), "=", trend)
   }
 
   # check that we have only one predictor
-  if (length(trend) > 1) {
-    if (verbose) {
-      insight::format_alert(paste0(
-        "More than one numeric variable was selected for slope estimation. Keeping only `", trend[1], "`. ", # nolint
-        "If you want to estimate the slope of `", trend[1], "` at different values of `", trend[2], "`, use `by=\"", trend[2], "\"` instead." # nolint
-      ))
-    }
-    trend <- trend[1]
-  }
+  trend <- .check_trend_arg(trend, verbose)
 
   # check if user provided values in `trend`, e.g. `trend=1:10`. We then pass
   # this argument to also create a data grid, but we also need to "clean" trend
@@ -243,21 +270,31 @@ get_marginaltrends <- function(
   }
 
   # make sure range in `trend` is not also in `by`
-  if (!is.null(by) && !is.null(range) && startsWith(by, trend)) {
+  if (!is.null(by) && !is.null(range) && any(startsWith(by, trend))) {
     insight::format_error(
       paste0(
-        "To calculate average marginal effects over a range of `", trend, "` ",
-        "values, use `trend=\"", trend, "=seq(1, 3, 0.1)\"` (or similar) and omit `",
-        trend, "` from the `by` argument."
+        "To calculate average marginal effects over a range of `",
+        trend,
+        "` ",
+        "values, use `trend=\"",
+        trend,
+        "=seq(1, 3, 0.1)\"` (or similar) and omit `",
+        trend,
+        "` from the `by` argument."
       ),
       paste0(
-        "To get marginal effects at specific `", trend, "` values, use `trend=\"",
-        trend, "\"` along with `by=\"", trend, "=c(1, 3, 5)\"`."
+        "To get marginal effects at specific `",
+        trend,
+        "` values, use `trend=\"",
+        trend,
+        "\"` along with `by=\"",
+        trend,
+        "=c(1, 3, 5)\"`."
       )
     )
   }
 
-  list(trend = trend, range = range, by = NULL)
+  list(trend = trend, range = range, by = NULL, post_process = dots$post_process)
 }
 
 

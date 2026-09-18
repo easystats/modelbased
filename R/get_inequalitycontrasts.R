@@ -8,9 +8,13 @@
   comparison,
   ci,
   estimate = NULL,
+  post_process = NULL,
+  iterations = NULL,
+  verbose = TRUE,
   ...
 ) {
-  dots <- list(...)
+  dots <- .check_dots_data(list(...), verbose)
+
   # extract datagrid?
   if (!is.null(dots$newdata)) {
     datagrid <- dots$newdata
@@ -73,13 +77,15 @@
     # named list, which we need to specify the pairwise-contrasts. However, we
     # can use the hypothesis argument to specify the pairwise contrasts first, and
     # then calculate the marginal effects inequalities in the second step.
-    out <- marginaleffects::avg_slopes(
+    slopes_args <- insight::compact_list(list(
       model = model,
       variables = my_args$contrast,
       by = my_args$by,
       newdata = datagrid,
-      hypothesis = formulas$f1
-    )
+      hypothesis = formulas$f1,
+      ndraws = iterations
+    ))
+    out <- do.call(marginaleffects::avg_slopes, slopes_args)
     out <- marginaleffects::hypotheses(out, hypothesis = formulas$f2)
     # save some labels for printing
     attr(out, "by") <- my_args$by
@@ -109,12 +115,14 @@
 
       formulas <- .inequality_formula(comparison, group)
 
-      out <- marginaleffects::avg_predictions(
+      predictions_args <- insight::compact_list(list(
         model = model,
         variables = c(my_args$contrast, my_args$by),
         newdata = datagrid,
-        hypothesis = formulas$f1
-      )
+        hypothesis = formulas$f1,
+        ndraws = iterations
+      ))
+      out <- do.call(marginaleffects::avg_predictions, predictions_args)
       out <- marginaleffects::hypotheses(out, hypothesis = formulas$f2)
     } else {
       # ----------------------------------------------
@@ -134,7 +142,7 @@
       }
       # for this special case, we need "avg_comparisons()", else we cannot specify
       # the "variables" argument as named list
-      out <- marginaleffects::avg_comparisons(
+      comparisons_args <- insight::compact_list(list(
         model = model,
         variables = as.list(stats::setNames(
           rep_len("pairwise", length(my_args$contrast)),
@@ -143,8 +151,9 @@
         by = my_args$by,
         newdata = datagrid,
         hypothesis = formulas$f2,
-        ...
-      )
+        ndraws = iterations
+      ))
+      out <- do.call(marginaleffects::avg_comparisons, c(comparisons_args, list(...)))
     }
   }
 
@@ -159,6 +168,9 @@
     }
     out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
   }
+
+  # process subsequential comparisons, if any
+  out <- .post_process_comparisons(out, post_process = post_process, verbose = verbose)
 
   attr(out, "hypothesis_by") <- group
   class(out) <- unique(c("marginaleffects_means", class(out)))
@@ -232,36 +244,6 @@
 
 # handle inequality hypothesis  --------------------------------------
 # --------------------------------------------------------------------
-
-# check whether we have a formula definition of inequality comparisons,
-# and convert it to a string
-.check_for_inequality_comparison <- function(comparison) {
-  # the default formulas are converted to a string:
-  # ~inequality -> "inequality"
-  # inequality ~ pairwise -> "inequality_pairwise"
-  # ratio ~ inequality -> "inequality_ratio"
-  # ratio ~ inequality + pairwise` -> "inequality_ratio_pairwise"
-  #
-  # we may have other formulas that control grouping and averaging, like
-  # `~ inequality | grp1 + grp2`. In this case, the formula is returned as is
-  # and processed later in ".process_inequality_formula()"
-  if (inherits(comparison, "formula")) {
-    # parse variables into a string
-    out <- paste(all.vars(comparison), collapse = "_")
-    # handle special cases
-    out <- switch(
-      out,
-      ratio_inequality = "inequality_ratio",
-      ratio_inequality_pairwise = "inequality_ratio_pairwise",
-      out
-    )
-    if (.is_inequality_comparison(out)) {
-      return(out)
-    }
-  }
-  comparison
-}
-
 
 # check whether we have a valid inequality comparison
 .is_inequality_comparison <- function(comparison) {

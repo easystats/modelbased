@@ -9,12 +9,7 @@ test_that("estimate_contrasts - joint test, 2-way", {
   # 2 way interaction
   m <- lm(alertness ~ time * coffee, data = coffee_data)
 
-  out1 <- estimate_contrasts(
-    m,
-    contrast = "time",
-    by = "coffee",
-    comparison = "joint"
-  )
+  out1 <- estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
   out2 <- emmeans::joint_tests(m, "coffee")
   out3 <- estimate_contrasts(
     m,
@@ -32,17 +27,59 @@ test_that("estimate_contrasts - joint test, 2-way", {
   expect_named(out1, c("Contrast", "coffee", "df1", "df2", "Difference", "F", "p"))
   expect_named(out3, c("Contrast", "coffee", "df1", "df2", "F", "p"))
 
-  out1 <- estimate_contrasts(
-    m,
-    contrast = "coffee",
-    by = "time",
-    comparison = "joint"
-  )
+  out1 <- estimate_contrasts(m, contrast = "coffee", by = "time", comparison = "joint")
   out2 <- emmeans::joint_tests(m, "time")
 
   expect_identical(out1$time, out2$time)
   expect_equal(out1$`F`, out2$`F.ratio`, tolerance = 1e-3)
   expect_equal(out1$p, out2$p.value, tolerance = 1e-3)
+
+  # omnibus test
+  out <- estimate_contrasts(m, contrast = "time", comparison = "omnibus")
+  expect_equal(out$`F`, 2.352941, tolerance = 1e-3)
+  expect_equal(out$p, 0.07586666, tolerance = 1e-3)
+  expect_equal(attributes(out)$null, mean(predict(m)), tolerance = 1e-3)
+  expect_identical(
+    capture.output(out),
+    c(
+      "Marginal Omnibus Test",
+      "",
+      "df1 | df2 |    F |     p",
+      "------------------------",
+      "3   | 114 | 2.35 | 0.076",
+      "",
+      "Predictors averaged: coffee",
+      "p-values are uncorrected.",
+      "Null-hypothesis: Group means equal 16.20"
+    )
+  )
+
+  out <- estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
+  expect_equal(out$`F`, 3.71661, tolerance = 1e-3)
+  expect_equal(out$p, 0.01356, tolerance = 1e-3)
+
+  set.seed(5)
+  data <- data.frame(
+    outcome = rbinom(100, 1, 0.5),
+    var1 = rbinom(100, 1, 0.1),
+    var2 = rnorm(100, 10, 7)
+  )
+  m <- glm(outcome ~ var1 + var2, data = data, family = binomial(link = "logit"))
+  out1 <- estimate_contrasts(m, contrast = "var1", comparison = "omnibus")
+  out2 <- estimate_contrasts(
+    m,
+    contrast = "var1",
+    comparison = "omnibus",
+    predict = "response"
+  )
+  expect_equal(out1$p, out2$p, tolerance = 1e-4)
+  out3 <- estimate_contrasts(
+    m,
+    contrast = "var1",
+    comparison = "omnibus",
+    predict = "invlink(link)"
+  )
+  expect_equal(out3$p, 0.9956601, tolerance = 1e-4)
 })
 
 
@@ -50,12 +87,7 @@ test_that("estimate_contrasts - joint test, p-adjust", {
   data(coffee_data, package = "modelbased")
   m <- lm(alertness ~ time * coffee, data = coffee_data)
 
-  out1 <- estimate_contrasts(
-    m,
-    contrast = "time",
-    by = "coffee",
-    comparison = "joint"
-  )
+  out1 <- estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
   out2 <- estimate_contrasts(
     m,
     contrast = "time",
@@ -78,12 +110,7 @@ test_that("estimate_contrasts - joint test, Chi2 test", {
     comparison = "joint",
     test = "Chi2"
   )
-  out2 <- estimate_contrasts(
-    m,
-    contrast = "time",
-    by = "coffee",
-    comparison = "joint"
-  )
+  out2 <- estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
   expect_named(out1, c("Contrast", "coffee", "Difference", "Chi2", "df", "p"))
   expect_named(out2, c("Contrast", "coffee", "df1", "df2", "Difference", "F", "p"))
   expect_identical(dim(out1), c(2L, 6L))
@@ -152,9 +179,10 @@ test_that("estimate_contrasts - joint test, correct df for anova", {
   skip_if_not_installed("discovr")
 
   date_tib <- discovr::speed_date
-  date_afx1 <- suppressWarnings(
-    afex::aov_4(date ~ strategy * looks + (looks | id), data = date_tib)
-  )
+  date_afx1 <- suppressWarnings(afex::aov_4(
+    date ~ strategy * looks + (looks | id),
+    data = date_tib
+  ))
   out <- estimate_contrasts(
     date_afx1,
     contrast = "looks",
@@ -171,6 +199,11 @@ withr::with_options(
   test_that("estimate_contrasts - joint test, works with select printing", {
     data(coffee_data, package = "modelbased")
     m <- lm(alertness ~ time * coffee, data = coffee_data)
-    expect_snapshot(estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint"))
+    expect_snapshot(estimate_contrasts(
+      m,
+      contrast = "time",
+      by = "coffee",
+      comparison = "joint"
+    ))
   })
 )

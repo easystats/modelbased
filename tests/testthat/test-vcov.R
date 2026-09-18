@@ -51,5 +51,5 @@ test_that("estimate_means - glmmTMB, vcov", {
   out <- estimate_means(m1, "child")
   expect_equal(out$SE, c(3.151255, 0.575173, 0.059253, 0.008286), tolerance = 1e-4)
   out <- estimate_means(m1, "child", vcov = "HC0")
-  expect_equal(out$SE, c(3.445424, 0.553019, 0.05949, 0.0094), tolerance = 1e-4)
+  expect_equal(out$SE, c(3.34154, 0.56503, 0.06019, 0.00943), tolerance = 1e-4)
 })

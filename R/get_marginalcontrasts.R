@@ -9,7 +9,9 @@ get_marginalcontrasts <- function(
   comparison = "pairwise",
   estimate = NULL,
   transform = NULL,
+  post_process = NULL,
   p_adjust = "none",
+  iterations = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -65,7 +67,7 @@ get_marginalcontrasts <- function(
         all(my_args$cleaned_contrast %in% my_args$cleaned_by))
   ) {
     insight::format_error(
-      "You cannot specifiy the same variables in `contrast` and `by`. Either omit `by`, or choose a different variable for `contrast` or `by`." # nolint
+      "You cannot specifiy the same variables in `contrast` and `by`. Either omit `by`, or choose a different variable for `contrast` or `by`."
     )
   }
 
@@ -86,6 +88,9 @@ get_marginalcontrasts <- function(
       comparison,
       ci,
       estimate,
+      post_process = post_process,
+      iterations = iterations,
+      verbose = verbose,
       ...
     )
     predict <- "response"
@@ -94,7 +99,17 @@ get_marginalcontrasts <- function(
     # and don't use the usual machinery of `estimate_means()` here, which we
     # can use for other contrasts.
     # -------------------------------------------------------------------------
-    out <- .get_contexteffects(model, my_args, predict, transform, model_info, ...)
+    out <- .get_contexteffects(
+      model,
+      my_args = my_args,
+      predict = predict,
+      transform = transform,
+      post_process = post_process,
+      model_info = model_info,
+      iterations = iterations,
+      verbose = verbose,
+      ...
+    )
     # set defaults, for proper printing
     if (is.null(predict)) {
       predict <- "link"
@@ -123,6 +138,8 @@ get_marginalcontrasts <- function(
       hypothesis = my_args$comparison_slopes,
       backend = "marginaleffects",
       transform = transform,
+      post_process = post_process,
+      iterations = iterations,
       keep_iterations = keep_iterations,
       verbose = verbose,
       ...
@@ -139,9 +156,13 @@ get_marginalcontrasts <- function(
       backend = "marginaleffects",
       estimate = estimate,
       transform = transform,
+      post_process = post_process,
+      iterations = iterations,
       keep_iterations = keep_iterations,
       verbose = verbose,
       .joint_test = my_args$joint_test,
+      .omnibus_test = my_args$omnibus_test,
+      .original_contrast = my_args$contrast,
       ...
     )
   }
@@ -168,6 +189,7 @@ get_marginalcontrasts <- function(
       p_adjust = p_adjust,
       contrast_filter = my_args$contrast_filter,
       context_effects = my_args$context_effects,
+      iterations = iterations,
       keep_iterations = keep_iterations
     )
   )
@@ -210,7 +232,7 @@ get_marginalcontrasts <- function(
           "None of the values specified for the predictor `",
           i,
           "` are available in the data. This is required for `estimate=\"average\"`.",
-          " Either use a different option for the `estimate` argument, or use values that",
+          " To resolve this, either select a different option for the `estimate` argument, supply a defined data grid via the `data` argument, or use values that",
           " are present in the data, such as ",
           datawizard::text_concatenate(example_values, last = " or ", enclose = "`"),
           "."
@@ -219,9 +241,7 @@ get_marginalcontrasts <- function(
       out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
     }
     # sanity check - do we have any rows left?
-    if (nrow(out) == 0) {
-      .filter_error("No rows left after filtering.")
-    }
+    .check_filter_args(out, "No rows left after filtering.")
   }
   out
 }
@@ -245,7 +265,7 @@ get_marginalcontrasts <- function(
 ) {
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
-  joint_test <- FALSE
+  joint_test <- omnibus_test <- FALSE
   context_effects <- FALSE
 
   # save original `by`
@@ -424,36 +444,44 @@ get_marginalcontrasts <- function(
         comparison <- "reference"
         joint_test <- TRUE
       }
+      if (comparison == "omnibus") {
+        joint_test <- TRUE
+        omnibus_test <- TRUE
+      }
       # for some comparisons, we need an empty left-hand side. else, we default
       # to "difference".
       formula_lhs <- switch(comparison, poly = , helmert = "", "difference")
       formula_rhs <- comparison
     }
-    # we put "by" into the formula. user either provided "by", or we put the
-    # group variable from the formula into "by" (see code above), hence,
-    # "my_args$by" definitely contains the requested groups
-    formula_group <- my_args$by
-    # compose formula
-    f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
-    # for contrasts of slopes, we don *not* want the group-variable in the formula
-    comparison_slopes <- stats::as.formula(f)
-    # for contrasts of categorical, we add the group variable and update `by`
-    if (!is.null(formula_group)) {
-      f <- paste(f, "|", paste(formula_group, collapse = "+"))
-      my_args$by <- formula_group
-    }
-    comparison <- stats::as.formula(f)
-    # if user specified group in "by" *and* in formula, we keep the group
-    # for contrasts of slopes - thus,we need to update comparison_slopes
-    by_formula <- trimws(unlist(
-      strsplit(deparse(original_comparison), "|", fixed = TRUE),
-      use.names = FALSE
-    ))[2]
-    if (!is.na(by_formula) && identical(by_formula, formula_group)) {
-      # we have a group variable in the formula, which is the same as in `by`
-      # so we keep it for the slopes comparison - this is required to add
-      # grouping in (pairwise) slopes
-      comparison_slopes <- comparison
+    if (omnibus_test) {
+      comparison <- NULL
+    } else {
+      # we put "by" into the formula. user either provided "by", or we put the
+      # group variable from the formula into "by" (see code above), hence,
+      # "my_args$by" definitely contains the requested groups
+      formula_group <- my_args$by
+      # compose formula
+      f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
+      # for contrasts of slopes, we don *not* want the group-variable in the formula
+      comparison_slopes <- stats::as.formula(f)
+      # for contrasts of categorical, we add the group variable and update `by`
+      if (!is.null(formula_group)) {
+        f <- paste(f, "|", paste(formula_group, collapse = "+"))
+        my_args$by <- formula_group
+      }
+      comparison <- stats::as.formula(f)
+      # if user specified group in "by" *and* in formula, we keep the group
+      # for contrasts of slopes - thus,we need to update comparison_slopes
+      by_formula <- insight::trim_ws(unlist(
+        strsplit(deparse(original_comparison), "|", fixed = TRUE),
+        use.names = FALSE
+      ))[2]
+      if (!is.na(by_formula) && identical(by_formula, formula_group)) {
+        # we have a group variable in the formula, which is the same as in `by`
+        # so we keep it for the slopes comparison - this is required to add
+        # grouping in (pairwise) slopes
+        comparison_slopes <- comparison
+      }
     }
   }
   # remove "by" from "contrast"
@@ -485,6 +513,7 @@ get_marginalcontrasts <- function(
       contrast_filter = insight::compact_list(contrast_filter),
       # in case we have a joint/omnibus test
       joint_test = joint_test,
+      omnibus_test = omnibus_test,
       # remember if we want to calculate context effects
       context_effects = context_effects,
       # cleaned `by` and `contrast`, without filtering information
@@ -507,6 +536,17 @@ get_marginalcontrasts <- function(
 }
 
 
+# small helper to extract the pure variable names from the "by" argument
+
+.grep_cleaned_by_vars <- function(string) {
+  insight::trim_ws(sub("=.*", "", string))
+  # Searches beginning of string (^) and then alphanumeric chars and underscore
+  # matches <- regexpr("^[a-zA-Z_]\\w*", string, perl = TRUE)
+  # regmatches extract found matches
+  # regmatches(string, matches)
+}
+
+
 # supported comparison strings  --------------------------------------
 # --------------------------------------------------------------------
 
@@ -524,6 +564,7 @@ get_marginalcontrasts <- function(
     "helmert",
     "trt_vs_ctrl",
     "joint",
+    "omnibus",
     "inequality",
     "inequality_pairwise",
     "inequality_ratio",
@@ -578,18 +619,28 @@ get_marginalcontrasts <- function(
   # these are the new numbers of the b-values
   new_b_numbers <- match(old_b_numbers, datagrid$.rowid)
   new_b <- paste0("b", new_b_numbers)
+
   # we need to replace all occurences of "b" in comparison with "new_b".
   # however, to avoid overwriting already replaced values with "gsub()", we
   # first replace with a non-existing pattern "new_b_letters", which we will
   # replace with "new_b" in a second step
-  new_b_letters <- paste0("b", letters[new_b_numbers])
+
+  # first, generate enough combinations of unique letters, in case we have
+  # more than 26 rows of estimates
+  many_letters <- datawizard::data_unite(
+    expand.grid(list(letters, LETTERS)),
+    new_column = "alphabet",
+    separator = ""
+  )[[1]]
+
+  new_b_letters <- paste0("b", many_letters[new_b_numbers])
   # first, numbers to letters
   for (i in seq_along(b)) {
-    comparison <- gsub(b[i], new_b_letters[i], comparison, fixed = TRUE)
+    comparison <- gsub(paste0("\\<", b[i], "\\>"), new_b_letters[i], comparison)
   }
   # next, letters to new numbers
   for (i in seq_along(b)) {
-    comparison <- gsub(new_b_letters[i], new_b[i], comparison, fixed = TRUE)
+    comparison <- gsub(paste0("\\<", new_b_letters[i], "\\>"), new_b[i], comparison)
   }
   comparison
 }
