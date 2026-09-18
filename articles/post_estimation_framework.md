@@ -40,16 +40,16 @@ which we call the *modelisation approach* (derived from the French
 *modélisation*).
 
 1.  **Setup the Model**: The first step is to explicitly define the
-    theoretical estimand, which is the specific target quantity that
-    actually answers your research question. Once the goal is clear, we
-    must carefully select predictors. This process is greatly aided by
-    Directed Acyclic Graphs (DAGs), which allow us to map out the
-    theoretical causal web and decide which variables must be included
-    (like confounders) and which must be avoided (like colliders and
-    mediators). Finally, we must recognize that standard regression
-    coefficients usually just represent descriptive, conditional
-    comparisons rather than direct causal effects or other quantities of
-    interest.
+    theoretical estimand, which is the specific target quantity and unit
+    that actually answers your research question. Once the goal is
+    clear, we must carefully select predictors. This process is greatly
+    aided by Directed Acyclic Graphs (DAGs), which allow us to map out
+    the theoretical causal web and decide which variables must be
+    included (like confounders) and which must be avoided (like
+    colliders and mediators). Finally, we must recognize that standard
+    regression coefficients usually just represent descriptive,
+    conditional comparisons rather than direct causal effects or other
+    quantities of interest.
 
 2.  **Post-Estimation**: With the model fitted, we step away from the
     mechanics of estimation and query our “prediction machine”.
