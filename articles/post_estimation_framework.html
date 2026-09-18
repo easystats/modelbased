@@ -202,7 +202,7 @@ theoretical causal web and decide which variables must be included (like
 confounders) and which must be avoided (like colliders and mediators).
 Finally, we must recognize that standard regression coefficients usually
 just represent descriptive, conditional comparisons rather than direct
-causal effects.</p></li>
+causal effects or other quantities of interest.</p></li>
 <li><p><strong>Post-Estimation</strong>: With the model fitted, we step
 away from the mechanics of estimation and query our “prediction
 machine”. Utilizing <code>modelbased</code> functions, we interrogate
@@ -222,12 +222,14 @@ questions.</p></li>
 </h3>
 <p>Before setting up any statistical model, researchers must explicitly
 spell out their theoretical estimands in precise terms. An estimand is
-the specific target quantity that directly answers the research question
-<span class="citation">(Lundberg et al. 2021)</span>. Instead of
-passively interpreting whatever coefficients the software returns, we
-must actively decide whether our question requires us to estimate
-predictions, slopes, or comparisons <span class="citation">(Rohrer and
-Arel-Bundock 2026; Rohrer and Murayama 2023)</span>.</p>
+the specific target quantity (and unit) that directly answers the
+research question <span class="citation">(Lundberg et al. 2021)</span>.
+Instead of passively interpreting whatever coefficients the software
+returns, we must actively decide whether our question requires us to
+estimate <em>predictions</em>, <em>slopes</em>, or <em>comparisons</em>
+(<em>quantity</em>),and determine to which target population we want to
+generalize our results (<em>unit</em>) <span class="citation">(Rohrer
+and Arel-Bundock 2026; Rohrer and Murayama 2023)</span>.</p>
 <hr>
 <div class="figure" style="text-align: center">
 <img src="../reference/figures/know_your_estimand.jpg" class="r-plt" alt='"Just control for everything in the DAG", they said. The cognitive overload of searching for an estimand without a clear post-estimation strategy' width="650px"><p class="caption">

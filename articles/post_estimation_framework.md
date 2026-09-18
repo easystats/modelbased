@@ -48,7 +48,8 @@ which we call the *modelisation approach* (derived from the French
     (like confounders) and which must be avoided (like colliders and
     mediators). Finally, we must recognize that standard regression
     coefficients usually just represent descriptive, conditional
-    comparisons rather than direct causal effects.
+    comparisons rather than direct causal effects or other quantities of
+    interest.
 
 2.  **Post-Estimation**: With the model fitted, we step away from the
     mechanics of estimation and query our “prediction machine”.
@@ -66,10 +67,12 @@ which we call the *modelisation approach* (derived from the French
 
 Before setting up any statistical model, researchers must explicitly
 spell out their theoretical estimands in precise terms. An estimand is
-the specific target quantity that directly answers the research question
-(Lundberg et al. 2021). Instead of passively interpreting whatever
-coefficients the software returns, we must actively decide whether our
-question requires us to estimate predictions, slopes, or comparisons
+the specific target quantity (and unit) that directly answers the
+research question (Lundberg et al. 2021). Instead of passively
+interpreting whatever coefficients the software returns, we must
+actively decide whether our question requires us to estimate
+*predictions*, *slopes*, or *comparisons* (*quantity*),and determine to
+which target population we want to generalize our results (*unit*)
 (Rohrer and Arel-Bundock 2026; Rohrer and Murayama 2023).
 
 ------------------------------------------------------------------------
