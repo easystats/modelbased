@@ -25,8 +25,7 @@
   when some of the indexed coefficients contained the same digit (in this case,
   `1` in `b1` and `b12`).
 
-* Fixed issues in offset-handling when offset was specified via the `offset`
-  arguments in the model-call, instead inside the formula.
+* Fixed issues in offset handling when the offset was specified via the `offset` argument in the model call instead of inside the formula.
 
 # modelbased 0.17.0
 
