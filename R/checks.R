@@ -144,50 +144,51 @@
   dots = NULL,
   verbose = TRUE
 ) {
+  # check if model has an offset at all
   model_offset <- insight::find_offset(model)
-  # check if model has an offset at all, and if it was specified in "newdata"
-  offset_missing1 <- !is.null(dots$newdata) &&
-    (!is.null(model_offset) && !model_offset %in% colnames(dots$newdata))
-  offset_missing2 <- (!is.null(model_offset) &&
-    (!is.null(my_args$by) && !any(startsWith(my_args$by, model_offset))))
+  if (is.null(model_offset)) {
+    return(NULL)
+  }
 
-  if (offset_missing1 && offset_missing2 && verbose) {
+  # check if offset was specified in "newdata"
+  offset1 <- !is.null(dots$newdata) && !model_offset %in% colnames(dots$newdata)
+  offset2 <- !is.null(my_args$by) && !any(startsWith(my_args$by, model_offset))
+
+  if (verbose && is.null(offset) && (offset1 || offset2)) {
     msg <- NULL
-    if (is.null(offset)) {
-      # if no offset argument was specified, tell user what this means
-      msg <- switch(
-        estimate,
-        specific = ,
-        typical = paste(
-          "Model contains an offset-term, which is set to its mean value.",
-          "If you want to average predictions over the distribution of the offset",
-          "(if appropriate), use `estimate = \"average\"` or `estimate = \"population\"`.",
-          "If you want to fix the offset to a specific value, for instance `1`,",
-          "use `offset = 1`."
-        ),
-        average = ,
-        population = paste(
-          "Model contains an offset-term and you average predictions over the",
-          "distribution of that offset. If you want to fix the offset to a",
-          "specific value, for instance `1`, use `offset = 1`."
+    # if no offset argument was specified, tell user what this means
+    msg <- switch(
+      estimate,
+      specific = ,
+      typical = paste(
+        "Model contains an offset-term, which is set to its mean value.",
+        "If you want to average predictions over the distribution of the offset",
+        "(if appropriate), use `estimate = \"average\"` or `estimate = \"population\"`.",
+        "If you want to fix the offset to a specific value, for instance `1`,",
+        "use `offset = 1`."
+      ),
+      average = ,
+      population = paste(
+        "Model contains an offset-term and you average predictions over the",
+        "distribution of that offset. If you want to fix the offset to a",
+        "specific value, for instance `1`, use `offset = 1`."
+      )
+    )
+    # if offset term is log-transformed, tell user. offset should be fixed then
+    log_offset <- insight::find_transformation(insight::find_offset(
+      model,
+      as_term = TRUE
+    ))
+    if (!is.null(log_offset) && startsWith(log_offset, "log")) {
+      msg <- c(
+        msg,
+        paste(
+          "\nWe also found that the model has a log-transformed offset term.",
+          "If you use the `offset` argument, the log-transformation will",
+          "automatically be applied to the provided offset-value. I.e., consider",
+          "using, for instance, `offset = 10` and not `offset = log(10)`."
         )
       )
-      # if offset term is log-transformed, tell user. offset should be fixed then
-      log_offset <- insight::find_transformation(insight::find_offset(
-        model,
-        as_term = TRUE
-      ))
-      if (!is.null(log_offset) && startsWith(log_offset, "log")) {
-        msg <- c(
-          msg,
-          paste(
-            "\nWe also found that the model has a log-transformed offset term.",
-            "If you use the `offset` argument, the log-transformation will",
-            "automatically be applied to the provided offset-value. I.e., consider",
-            "using, for instance, `offset = 10` and not `offset = log(10)`."
-          )
-        )
-      }
     }
     if (!is.null(msg)) {
       insight::format_alert(msg)
