@@ -506,7 +506,11 @@ get_marginalmeans <- function(
   # for estimate = "population", we need the offset in `by`, thus, we have to
   # add it before we call data grid
   model_offset <- insight::find_offset(model)
-  needs_offset <- !is.null(dots$offset) && !is.null(model_offset)
+  needs_offset <- (!is.null(dots$offset) && !is.null(model_offset))
+  # check if offset was specified via `offset` argument, and not inside
+  # formula. This may lead to errors, because the offset term would not included
+  # in the data grid
+  call_offset <- !is.null(insight::get_call(model)$offset)
 
   if (
     needs_offset && estimate == "population" && !any(startsWith(dg_args$by, model_offset))
@@ -521,6 +525,9 @@ get_marginalmeans <- function(
   # handle offsets for other estimate-options
   if (needs_offset && estimate != "population") {
     datagrid[[model_offset]] <- dots$offset
+  } else if (call_offset && estimate != "population") {
+    model_data <- insight::get_data(model)
+    datagrid[[model_offset]] <- mean(model_data[[model_offset]], na.rmn = TRUE)
   }
 
   # restore data types -  if we have defined numbers in `by`, like

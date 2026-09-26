@@ -175,7 +175,7 @@
         msg <- c(
           msg,
           paste(
-            "We also found that the model has a log-transformed offset term.",
+            "\nWe also found that the model has a log-transformed offset term.",
             "If you use the `offset` argument, the log-transformation will",
             "automatically be applied to the provided offset-value. I.e., consider",
             "using, for instance, `offset = 10` and not `offset = log(10)`."
