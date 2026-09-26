@@ -55,10 +55,6 @@ get_marginalmeans <- function(
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
-  # inform user about appropriate use of offset-terms
-  model_offset <- dots$offset
-  .check_offset(model, estimate, offset = model_offset, my_args, verbose = verbose)
-
   # find default response-type, and get information about back transformation
   predict_args <- .get_marginaleffects_type_argument(
     model,
@@ -72,6 +68,10 @@ get_marginalmeans <- function(
 
   # was "data" argument used? if so, it replaces "newdata" in dots
   dots <- .check_dots_data(dots, verbose)
+
+  # inform user about appropriate use of offset-terms
+  model_offset <- dots$offset
+  .check_offset(model, estimate, offset = model_offset, my_args, dots, verbose = verbose)
 
   # Second step: create a data grid -------------------------------------------
   # ---------------------------------------------------------------------------
@@ -503,14 +503,28 @@ get_marginalmeans <- function(
   dots[c("by", "factors", "include_random", "verbose")] <- NULL
   dg_args <- insight::compact_list(c(dg_args, dots))
 
+  # we first need to determine whether we have an offset term at all
+  # ==========================================================================
+
   # for estimate = "population", we need the offset in `by`, thus, we have to
   # add it before we call data grid
   model_offset <- insight::find_offset(model)
-  needs_offset <- !is.null(dots$offset) && !is.null(model_offset)
 
-  if (
-    needs_offset && estimate == "population" && !any(startsWith(dg_args$by, model_offset))
-  ) {
+  # offset_arg is a flag for the "offset" argument, which is used by users
+  # to define a specific offset-value
+  offset_arg <- (!is.null(dots$offset) && !is.null(model_offset))
+
+  # check if offset was specified via `offset` argument in the model call, and
+  # not inside formula. We need to handle this differently.
+  call_offset <- !is.null(insight::get_call(model)$offset)
+
+  # by_miss_offset is a flag that checks whether the offset-term was
+  # specified in the "by" argument or not
+  by_miss_offset <- (!is.null(dg_args$by) &&
+    !is.null(model_offset) &&
+    !any(startsWith(dg_args$by, model_offset)))
+
+  if (offset_arg && estimate == "population" && by_miss_offset) {
     dg_args$by <- c(dg_args$by, paste(model_offset, "=", dots$offset))
   }
 
@@ -519,8 +533,35 @@ get_marginalmeans <- function(
   datagrid_info <- attributes(datagrid)
 
   # handle offsets for other estimate-options
-  if (needs_offset && estimate != "population") {
+  if (offset_arg && estimate != "population") {
+    # if user provided an offset-argument, we use this value in the datagrid
     datagrid[[model_offset]] <- dots$offset
+  } else if (call_offset && estimate != "population") {
+    # else, we take the mean-value of the offset from the data
+    model_data <- insight::get_data(model)
+    datagrid[[model_offset]] <- mean(model_data[[model_offset]], na.rmn = TRUE)
+  }
+
+  # check if we have a "newdata" argument, where offset is already specified
+  # if so, we use that data and don't need to do anything else. However, if
+  # a) model has an offset, b) newdata is provided, and c) model-offset is
+  # not yet included in the newdata, or explicitly specied in the offset-argument,
+  # we add/overwrite that value. "datagrid" is already handled above
+  if (
+    !is.null(model_offset) &&
+      !is.null(dots$newdata) &&
+      (!model_offset %in% colnames(dots$newdata) || offset_arg)
+  ) {
+    if (offset_arg) {
+      # use user-specified offset-value
+      offset_val <- dots$offset
+    } else {
+      # take mean from model data
+      model_data <- insight::get_data(model)
+      offset_val <- mean(model_data[[model_offset]], na.rmn = TRUE)
+    }
+    # add offset-term to newdata
+    dots$newdata[[model_offset]] <- offset_val
   }
 
   # restore data types -  if we have defined numbers in `by`, like

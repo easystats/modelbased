@@ -25,6 +25,12 @@
   when some of the indexed coefficients contained the same digit (in this case,
   `1` in `b1` and `b12`).
 
+* Fixed issues in offset handling when the offset was specified via the `offset`
+  argument in the model call instead of inside the formula.
+
+* Fixed issues with using offsets and predicting grand mean (i.e. when model
+  contains offset and `by = NULL`).
+
 # modelbased 0.17.0
 
 ## Breaking Changes

@@ -1,7 +1,7 @@
 skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
-skip_if_not_installed("MASS")
 
-test_that("verbose", {
+test_that("offset works", {
+  skip_if_not_installed("MASS")
   set.seed(1)
   newdata <- data.frame(
     y = c(602, 38, 616, 256, 21, 723, 245, 176, 89, 1614, 31, 27, 313, 251, 345),
@@ -80,7 +80,71 @@ test_that("verbose", {
 })
 
 
+test_that("offset works when not in formula", {
+  set.seed(1)
+  newdata <- data.frame(
+    y = c(602, 38, 616, 256, 21, 723, 245, 176, 89, 1614, 31, 27, 313, 251, 345),
+    x = as.factor(sample(letters[1:3], 15, replace = TRUE)),
+    offset_1 = c(72, 50, 31, 30, 16, 25, 75, 16, 78, 40, 68, 25, 71, 52, 17)
+  )
+  moff <- glm(y ~ x, offset = log(offset_1), data = newdata, family = poisson())
+  expect_message(
+    {
+      out <- estimate_means(moff, "x")
+    },
+    regex = "Model contains"
+  )
+  expect_identical(dim(out), c(3L, 4L))
+  expect_equal(out$Mean, c(304.31461, 272.69787, 456.2186), tolerance = 1e-3)
+
+  expect_message(
+    {
+      out <- estimate_means(moff, "x", estimate = "average")
+    },
+    regex = "and you average"
+  )
+  expect_equal(out$Mean, c(264.40874, 173.47822, 493.28517), tolerance = 1e-3)
+
+  expect_silent({
+    out <- estimate_means(moff, "x", offset = 5)
+  })
+  expect_equal(out$Mean, c(34.26966, 30.70922, 51.37597), tolerance = 1e-3)
+})
+
+
+test_that("offset checks work", {
+  set.seed(1)
+  newdata <- data.frame(
+    y = c(602, 38, 616, 256, 21, 723, 245, 176, 89, 1614, 31, 27, 313, 251, 345),
+    x = as.factor(sample(letters[1:3], 15, replace = TRUE)),
+    offset_1 = c(72, 50, 31, 30, 16, 25, 75, 16, 78, 40, 68, 25, 71, 52, 17)
+  )
+  moff <- glm(y ~ x, offset = log(offset_1), data = newdata, family = poisson())
+
+  # offset term is in newdata, no message
+  expect_silent(estimate_means(moff, "x", data = newdata))
+
+  # offset term is explicitly specified, no message
+  expect_silent(estimate_means(moff, "x", data = newdata, offset = 1))
+
+  # offset term is neither in newdata, nor as offset-argument, so tell user
+  # that average is taken
+  expect_message(
+    {
+      out <- estimate_means(moff, "x", data = newdata[1:2])
+    },
+    regex = "Model contains"
+  )
+  # grand mean works
+  expect_silent({
+    out <- estimate_means(moff, by = NULL)
+  })
+  expect_identical(dim(out), c(1L, 3L))
+})
+
+
 test_that("offset, estimate_relation", {
+  skip_if_not_installed("MASS")
   set.seed(1)
   newdata <- data.frame(
     y = c(602, 38, 616, 256, 21, 723, 245, 176, 89, 1614, 31, 27, 313, 251, 345),
