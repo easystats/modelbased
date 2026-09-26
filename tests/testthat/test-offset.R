@@ -121,8 +121,14 @@ test_that("offset checks work", {
   )
   moff <- glm(y ~ x, offset = log(offset_1), data = newdata, family = poisson())
 
+  # offset term is in newdata, no message
   expect_silent(estimate_means(moff, "x", data = newdata))
+
+  # offset term is explicitly specified, no message
   expect_silent(estimate_means(moff, "x", data = newdata, offset = 1))
+
+  # offset term is neither in newdata, nor as offset-argument, so tell user
+  # that average is taken
   expect_message(
     {
       out <- estimate_means(moff, "x", data = newdata[1:2])

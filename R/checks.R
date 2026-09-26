@@ -146,15 +146,25 @@
 ) {
   # check if model has an offset at all
   model_offset <- insight::find_offset(model)
-  if (is.null(model_offset)) {
+
+  # if we have no offset at all, or offset is explicitly specified, we don't
+  # need a warning here...
+  if (is.null(model_offset) || !is.null(dots$offset)) {
     return(NULL)
   }
 
-  # check if offset was specified in "newdata"
-  offset1 <- !is.null(dots$newdata) && !model_offset %in% colnames(dots$newdata)
-  offset2 <- !is.null(my_args$by) && !any(startsWith(my_args$by, model_offset))
+  # check if a) we have "newdata" and b) offset was specified in "newdata".
+  # if not, "offset_miss_1" flags that offset is not specified or provided,
+  # we need a warning
+  offset_miss_1 <- !is.null(dots$newdata) && !model_offset %in% colnames(dots$newdata)
 
-  if (verbose && is.null(offset) && (offset1 || offset2)) {
+  # if no newdata provided, offset_miss_1 is FALSE, indicating no problems yet.
+  # We only need to start the 2nd check if we have no newdata
+  offset_miss_2 <- is.null(dots$newdata) &&
+    !is.null(my_args$by) &&
+    !any(startsWith(my_args$by, model_offset))
+
+  if (verbose && is.null(offset) && (offset_miss_1 || offset_miss_2)) {
     msg <- NULL
     # if no offset argument was specified, tell user what this means
     msg <- switch(

@@ -520,7 +520,9 @@ get_marginalmeans <- function(
 
   # by_miss_offset is a flag that checks whether the offset-term was
   # specified in the "by" argument or not
-  by_miss_offset <- (!is.null(dg_args$by) && !any(startsWith(dg_args$by, model_offset)))
+  by_miss_offset <- (!is.null(dg_args$by) &&
+    !is.null(model_offset) &&
+    !any(startsWith(dg_args$by, model_offset)))
 
   if (offset_arg && estimate == "population" && by_miss_offset) {
     dg_args$by <- c(dg_args$by, paste(model_offset, "=", dots$offset))
