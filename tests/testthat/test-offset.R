@@ -129,6 +129,11 @@ test_that("offset checks work", {
     },
     regex = "Model contains"
   )
+  # grand mean works
+  expect_silent({
+    out <- estimate_means(moff, by = NULL)
+  })
+  expect_identical(dim(out), c(1L, 3L))
 })
 
 
