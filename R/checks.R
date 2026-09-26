@@ -141,11 +141,17 @@
   estimate,
   offset = NULL,
   my_args = NULL,
+  dots = NULL,
   verbose = TRUE
 ) {
   model_offset <- insight::find_offset(model)
-  # check if model has an offset at all
-  if (!is.null(model_offset) && !any(startsWith(my_args$by, model_offset)) && verbose) {
+  # check if model has an offset at all, and if it was specified in "newdata"
+  offset_missing1 <- !is.null(dots$newdata) &&
+    (!is.null(model_offset) && !model_offset %in% colnames(dots$newdata))
+  offset_missing2 <- (!is.null(model_offset) &&
+    (!is.null(my_args$by) && !any(startsWith(my_args$by, model_offset))))
+
+  if (offset_missing1 && offset_missing2 && verbose) {
     msg <- NULL
     if (is.null(offset)) {
       # if no offset argument was specified, tell user what this means
