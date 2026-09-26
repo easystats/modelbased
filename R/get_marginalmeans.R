@@ -55,10 +55,6 @@ get_marginalmeans <- function(
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
-  # inform user about appropriate use of offset-terms
-  model_offset <- dots$offset
-  .check_offset(model, estimate, offset = model_offset, my_args, verbose = verbose)
-
   # find default response-type, and get information about back transformation
   predict_args <- .get_marginaleffects_type_argument(
     model,
@@ -72,6 +68,10 @@ get_marginalmeans <- function(
 
   # was "data" argument used? if so, it replaces "newdata" in dots
   dots <- .check_dots_data(dots, verbose)
+
+  # inform user about appropriate use of offset-terms
+  model_offset <- dots$offset
+  .check_offset(model, estimate, offset = model_offset, my_args, dots, verbose = verbose)
 
   # Second step: create a data grid -------------------------------------------
   # ---------------------------------------------------------------------------
@@ -503,13 +503,16 @@ get_marginalmeans <- function(
   dots[c("by", "factors", "include_random", "verbose")] <- NULL
   dg_args <- insight::compact_list(c(dg_args, dots))
 
+  # we first need to determine whether we have an offset term at all
+  # ==========================================================================
+
   # for estimate = "population", we need the offset in `by`, thus, we have to
   # add it before we call data grid
   model_offset <- insight::find_offset(model)
   needs_offset <- (!is.null(dots$offset) && !is.null(model_offset))
   # check if offset was specified via `offset` argument, and not inside
-  # formula. This may lead to errors, because the offset term would not included
-  # in the data grid
+  # formula. This may lead to errors, because the offset term would not be
+  # included in the data grid
   call_offset <- !is.null(insight::get_call(model)$offset)
 
   if (
@@ -528,6 +531,20 @@ get_marginalmeans <- function(
   } else if (call_offset && estimate != "population") {
     model_data <- insight::get_data(model)
     datagrid[[model_offset]] <- mean(model_data[[model_offset]], na.rmn = TRUE)
+  }
+
+  # check if we have a "newdata" argument, where offset is already specified
+  # if so, we use this data, else, we add the offset mean to the newdata argument
+  if (
+    !is.null(dots$newdata) && (!model_offset %in% colnames(dots$newdata)) || needs_offset
+  ) {
+    if (needs_offset) {
+      offset_val <- dots$offset
+    } else {
+      model_data <- insight::get_data(model)
+      offset_val <- mean(model_data[[model_offset]], na.rmn = TRUE)
+    }
+    dots$newdata[[model_offset]] <- offset_val
   }
 
   # restore data types -  if we have defined numbers in `by`, like

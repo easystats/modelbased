@@ -112,6 +112,26 @@ test_that("offset works when not in formula", {
 })
 
 
+test_that("offset checks work", {
+  set.seed(1)
+  newdata <- data.frame(
+    y = c(602, 38, 616, 256, 21, 723, 245, 176, 89, 1614, 31, 27, 313, 251, 345),
+    x = as.factor(sample(letters[1:3], 15, replace = TRUE)),
+    offset_1 = c(72, 50, 31, 30, 16, 25, 75, 16, 78, 40, 68, 25, 71, 52, 17)
+  )
+  moff <- glm(y ~ x, offset = log(offset_1), data = newdata, family = poisson())
+
+  expect_silent(estimate_means(moff, "x", data = newdata))
+  expect_silent(estimate_means(moff, "x", data = newdata, offset = 1))
+  expect_message(
+    {
+      out <- estimate_means(moff, "x", data = newdata[1:2])
+    },
+    regex = "Model contains"
+  )
+})
+
+
 test_that("offset, estimate_relation", {
   skip_if_not_installed("MASS")
   set.seed(1)
