@@ -18,8 +18,15 @@
   meaningful predictions, slopes, and interaction contrasts using modelbased
   post-estimation functions.
 
-* Backend `"emmeans"` now supports ordinal models by passing the `predict`
-  argument to `mode` in the `emmeans()` call.
+* `estimate_means()` with `backend = "emmeans"` now supports ordinal models,
+  e.g. from `MASS::polr()` or `ordinal::clm()`. `predict` accepts the ordinal
+  modes of *emmeans* (`"prob"`, `"cum.prob"`, `"exc.prob"`,
+  `"linear.predictor"`, `"latent"` and `"mean.class"`). For `"prob"`, the
+  output has one row per response category, in a `Response` column. For
+  `"cum.prob"`, `"exc.prob"` and `"linear.predictor"`, the output has one row
+  per threshold, in a `Threshold` column. For ordinal models, the default is
+  now `predict = "prob"`, which returns the same probabilities as the
+  `"marginaleffects"` backend.
 
 ## Bug fixes
 

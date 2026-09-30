@@ -39,7 +39,10 @@
     "Median",
     "MAP",
     "Coefficient",
-    "Odds_ratio"
+    "Odds_ratio",
+    "Latent",
+    "Linear_predictor",
+    "Mean_class"
   )
   dpars <- insight::find_auxiliary(model, verbose = FALSE)
   if (!is.null(dpars)) {
