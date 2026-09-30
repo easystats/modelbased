@@ -114,6 +114,7 @@ test_that("estimate_means, backend emmeans, ordinal, mean.class and latent", {
     out <- estimate_means(m, "Type", predict = mode, backend = "emmeans")
     expect_identical(nrow(out), 4L)
     expect_true(modes[[mode]] %in% colnames(out))
+    expect_identical(attributes(out)$coef_name, modes[[mode]])
     expected <- as.data.frame(suppressMessages(
       emmeans::emmeans(m, "Type", mode = mode)
     ))
@@ -155,6 +156,7 @@ test_that("estimate_means, backend emmeans, ordinal, threshold modes", {
     expect_identical(nrow(out), 8L)
     expect_setequal(as.character(out$Threshold), c("Low|Medium", "Medium|High"))
     expect_true(modes[[mode]] %in% colnames(out))
+    expect_identical(attributes(out)$coef_name, modes[[mode]])
     expected <- as.data.frame(suppressMessages(
       emmeans::emmeans(m, c("Type", "cut"), mode = mode)
     ))
@@ -203,6 +205,28 @@ test_that("estimate_means, backend emmeans, ordinal, clm and glmmTMB", {
   out <- estimate_means(m, "Type", predict = "prob", backend = "emmeans")
   expect_identical(nrow(out), 12L)
   compared <- .compare_ordinal_backends(out, estimate_means(m, "Type"), "Type")
+  expect_identical(nrow(compared), 12L)
+  expect_equal(compared$Probability.x, compared$Probability.y, tolerance = 1e-6)
+})
+
+
+test_that("estimate_means, backend emmeans, ordinal, transformed response", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  housing$SatNum <- as.integer(housing$Sat)
+  # `Hess = TRUE`, else `vcov()` re-fits the model in an environment where
+  # `SatNum` does not exist
+  m <- MASS::polr(
+    factor(SatNum) ~ Infl + Type + Cont,
+    weights = Freq,
+    data = housing,
+    Hess = TRUE
+  )
+  out <- estimate_means(m, "Type", backend = "emmeans")
+  expect_identical(nrow(out), 12L)
+  expect_setequal(as.character(out$Response), c("1", "2", "3"))
+  compared <- .compare_ordinal_backends(out, estimate_means(m, "Type"), "Type")
+  expect_identical(nrow(compared), 12L)
   expect_equal(compared$Probability.x, compared$Probability.y, tolerance = 1e-6)
 })
 

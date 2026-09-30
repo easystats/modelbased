@@ -133,6 +133,12 @@ response scale.
 \code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
 transformation is selected (which usually is \code{"response"}). See also
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
+For ordinal models (e.g. from \code{MASS::polr()} or \code{ordinal::clm()}),
+\code{estimate_means()} also accepts the ordinal modes of \emph{emmeans}:
+\code{"prob"}, \code{"cum.prob"}, \code{"exc.prob"}, \code{"linear.predictor"}, \code{"latent"}
+and \code{"mean.class"} (see \code{vignette("models", package = "emmeans")}). For
+these models, the default is \code{"prob"}, which returns one probability per
+response category.
 }
 
 See also section \emph{Predictions on different scales}.}

@@ -38,6 +38,12 @@
 #'   `"unlink"`, or `"log"`. If `predict = NULL` (default), the most appropriate
 #'   transformation is selected (which usually is `"response"`). See also
 #'   [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
+#'   For ordinal models (e.g. from `MASS::polr()` or `ordinal::clm()`),
+#'   `estimate_means()` also accepts the ordinal modes of *emmeans*:
+#'   `"prob"`, `"cum.prob"`, `"exc.prob"`, `"linear.predictor"`, `"latent"`
+#'   and `"mean.class"` (see `vignette("models", package = "emmeans")`). For
+#'   these models, the default is `"prob"`, which returns one probability per
+#'   response category.
 #'
 #' See also section _Predictions on different scales_.
 #'

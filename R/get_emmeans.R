@@ -183,10 +183,12 @@ get_emmeans <- function(
 
 # name of the pseudo-factor that emmeans adds to the reference grid for
 # ordinal models: the response categories for `mode = "prob"`, and the
-# thresholds for `mode = "cum.prob"`, `"exc.prob"` and `"linear.predictor"`
+# thresholds for `mode = "cum.prob"`, `"exc.prob"` and `"linear.predictor"`.
+# emmeans names the response pseudo-factor after the left-hand side of the
+# formula, e.g. `factor(y)`, so we need the response term, not the variable
 .emmeans_ordinal_pseudo_factor <- function(model, mode) {
   switch(mode,
-    prob = insight::find_response(model),
+    prob = insight::find_terms(model, verbose = FALSE)$response,
     cum.prob = ,
     exc.prob = ,
     linear.predictor = "cut",
