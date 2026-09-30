@@ -32,11 +32,157 @@ test_that("estimate_relation prints ordinal models correctly", {
 })
 
 
-test_that("estimate_means with backend emmeans work for ordinal", {
+# compares probabilities from the emmeans and the marginaleffects backend,
+# matching rows by focal terms and response category
+.compare_ordinal_backends <- function(out_emmeans, out_marginaleffects, by) {
+  merge_by <- c(by, "Response")
+  out_emmeans <- as.data.frame(out_emmeans)[c(merge_by, "Probability")]
+  out_marginaleffects <- as.data.frame(out_marginaleffects)[c(merge_by, "Probability")]
+  for (i in merge_by) {
+    out_emmeans[[i]] <- as.character(out_emmeans[[i]])
+    out_marginaleffects[[i]] <- as.character(out_marginaleffects[[i]])
+  }
+  merge(out_emmeans, out_marginaleffects, by = merge_by)
+}
+
+
+test_that("estimate_means, backend emmeans, ordinal, predict = 'prob'", {
+  skip_if_not_installed("emmeans")
   data(housing, package = "MASS")
   m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+
+  # one row per focal level and response category
   out <- estimate_means(m, "Type", predict = "prob", backend = "emmeans")
-  expect_equal(out$Probability, c(0.33333, 0.33333, 0.33333, 0.33333))
+  expect_identical(nrow(out), 12L)
+  expect_setequal(as.character(out$Response), levels(housing$Sat))
+  compared <- .compare_ordinal_backends(out, estimate_means(m, "Type"), "Type")
+  expect_identical(nrow(compared), 12L)
+  expect_equal(compared$Probability.x, compared$Probability.y, tolerance = 1e-6)
+
+  # two focal terms
+  out <- estimate_means(m, c("Type", "Infl"), predict = "prob", backend = "emmeans")
+  expect_identical(nrow(out), 36L)
+  compared <- .compare_ordinal_backends(
+    out,
+    estimate_means(m, c("Type", "Infl")),
+    c("Type", "Infl")
+  )
+  expect_identical(nrow(compared), 36L)
+  expect_equal(compared$Probability.x, compared$Probability.y, tolerance = 1e-6)
+})
+
+
+test_that("estimate_means, backend emmeans, ordinal, default predict", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+
+  # default returns probabilities, same as predict = "prob"
+  out_prob <- estimate_means(m, "Type", predict = "prob", backend = "emmeans")
+  out_default <- estimate_means(m, "Type", backend = "emmeans")
+  expect_identical(nrow(out_default), 12L)
+  expect_identical(
+    paste(out_default$Type, out_default$Response),
+    paste(out_prob$Type, out_prob$Response)
+  )
+  expect_equal(out_default$Probability, out_prob$Probability, tolerance = 1e-6)
+
+  # contrasts are not affected by the new default for means
+  out <- estimate_contrasts(m, "Type", backend = "emmeans")
+  expect_identical(
+    paste(out$Level1, out$Level2),
+    c(
+      "Apartment Tower", "Atrium Apartment", "Atrium Tower",
+      "Terrace Apartment", "Terrace Atrium", "Terrace Tower"
+    )
+  )
+  expect_equal(
+    out$Difference,
+    c(-0.5723501, 0.2061636, -0.3661866, -0.5186648, -0.7248283, -1.0910149),
+    tolerance = 1e-6
+  )
+})
+
+
+test_that("estimate_means, backend emmeans, ordinal, mean.class and latent", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+
+  modes <- c(mean.class = "Mean_class", latent = "Latent")
+  for (mode in names(modes)) {
+    out <- estimate_means(m, "Type", predict = mode, backend = "emmeans")
+    expect_identical(nrow(out), 4L)
+    expect_true(modes[[mode]] %in% colnames(out))
+    expected <- as.data.frame(suppressMessages(
+      emmeans::emmeans(m, "Type", mode = mode)
+    ))
+    estimate_column <- setdiff(
+      colnames(expected),
+      c("Type", "SE", "df", "asymp.LCL", "asymp.UCL")
+    )
+    compared <- merge(
+      data.frame(Type = as.character(out$Type), x = out[[modes[[mode]]]]),
+      data.frame(Type = as.character(expected$Type), y = expected[[estimate_column]]),
+      by = "Type"
+    )
+    expect_identical(nrow(compared), 4L)
+    expect_equal(compared$x, compared$y, tolerance = 1e-6)
+  }
+})
+
+
+test_that("estimate_means, backend emmeans, ordinal, threshold modes", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+
+  modes <- c(
+    cum.prob = "Probability",
+    exc.prob = "Probability",
+    linear.predictor = "Linear_predictor"
+  )
+  for (mode in names(modes)) {
+    out <- estimate_means(m, "Type", predict = mode, backend = "emmeans")
+    expect_identical(nrow(out), 8L)
+    expect_setequal(as.character(out$Threshold), c("Low|Medium", "Medium|High"))
+    expect_true(modes[[mode]] %in% colnames(out))
+    expected <- as.data.frame(suppressMessages(
+      emmeans::emmeans(m, c("Type", "cut"), mode = mode)
+    ))
+    estimate_column <- setdiff(
+      colnames(expected),
+      c("Type", "cut", "SE", "df", "asymp.LCL", "asymp.UCL")
+    )
+    compared <- merge(
+      data.frame(
+        Type = as.character(out$Type),
+        Threshold = as.character(out$Threshold),
+        x = out[[modes[[mode]]]]
+      ),
+      data.frame(
+        Type = as.character(expected$Type),
+        Threshold = as.character(expected$cut),
+        y = expected[[estimate_column]]
+      ),
+      by = c("Type", "Threshold")
+    )
+    expect_identical(nrow(compared), 8L)
+    expect_equal(compared$x, compared$y, tolerance = 1e-6)
+  }
+})
+
+
+test_that("estimate_means, backend emmeans, ordinal, clm and glmmTMB", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+  m <- ordinal::clm(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+  out <- estimate_means(m, "Type", predict = "prob", backend = "emmeans")
+  expect_identical(nrow(out), 12L)
+  compared <- .compare_ordinal_backends(out, estimate_means(m, "Type"), "Type")
+  expect_identical(nrow(compared), 12L)
+  expect_equal(compared$Probability.x, compared$Probability.y, tolerance = 1e-6)
 
   skip_if_not_installed("glmmTMB", minimum_version = "1.1.15.2")
   m <- glmmTMB::glmmTMB(
@@ -45,7 +191,9 @@ test_that("estimate_means with backend emmeans work for ordinal", {
     family = glmmTMB::ordinal()
   )
   out <- estimate_means(m, "Type", predict = "prob", backend = "emmeans")
-  expect_equal(out$Probability, c(0.33333, 0.33333, 0.33333, 0.33333))
+  expect_identical(nrow(out), 12L)
+  compared <- .compare_ordinal_backends(out, estimate_means(m, "Type"), "Type")
+  expect_equal(compared$Probability.x, compared$Probability.y, tolerance = 1e-6)
 })
 
 
