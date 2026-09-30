@@ -122,8 +122,16 @@ test_that("estimate_means, backend emmeans, ordinal, mean.class and latent", {
       c("Type", "SE", "df", "asymp.LCL", "asymp.UCL")
     )
     compared <- merge(
-      data.frame(Type = as.character(out$Type), x = out[[modes[[mode]]]]),
-      data.frame(Type = as.character(expected$Type), y = expected[[estimate_column]]),
+      data.frame(
+        Type = as.character(out$Type),
+        x = out[[modes[[mode]]]],
+        stringsAsFactors = FALSE
+      ),
+      data.frame(
+        Type = as.character(expected$Type),
+        y = expected[[estimate_column]],
+        stringsAsFactors = FALSE
+      ),
       by = "Type"
     )
     expect_identical(nrow(compared), 4L)
@@ -158,12 +166,14 @@ test_that("estimate_means, backend emmeans, ordinal, threshold modes", {
       data.frame(
         Type = as.character(out$Type),
         Threshold = as.character(out$Threshold),
-        x = out[[modes[[mode]]]]
+        x = out[[modes[[mode]]]],
+        stringsAsFactors = FALSE
       ),
       data.frame(
         Type = as.character(expected$Type),
         Threshold = as.character(expected$cut),
-        y = expected[[estimate_column]]
+        y = expected[[estimate_column]],
+        stringsAsFactors = FALSE
       ),
       by = c("Type", "Threshold")
     )
