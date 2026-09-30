@@ -187,7 +187,8 @@ get_emmeans <- function(
 # emmeans names the response pseudo-factor after the left-hand side of the
 # formula, e.g. `factor(y)`, so we need the response term, not the variable
 .emmeans_ordinal_pseudo_factor <- function(model, mode) {
-  switch(mode,
+  switch(
+    mode,
     prob = insight::find_terms(model, verbose = FALSE)$response,
     cum.prob = ,
     exc.prob = ,
