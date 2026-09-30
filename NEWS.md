@@ -18,6 +18,9 @@
   meaningful predictions, slopes, and interaction contrasts using modelbased
   post-estimation functions.
 
+* Backend `"emmeans"` now supports ordinal models by passing the `predict`
+  argument to `mode` in the `emmeans()` call.
+
 ## Bug fixes
 
 * Fixed issue in `estimate_contrasts()` with wrong assignment of estimates in

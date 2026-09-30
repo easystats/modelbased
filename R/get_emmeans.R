@@ -77,7 +77,11 @@ get_emmeans <- function(
     }
   } else {
     dpars <- FALSE
-    fun_args$type <- predict
+    if (predict %in% .emmeans_ordinal_types) {
+      fun_args$mode <- predict
+    } else {
+      fun_args$type <- predict
+    }
   }
 
   # add dots
@@ -121,6 +125,16 @@ get_emmeans <- function(
 # =========================================================================
 # HELPERS (guess arguments) -----------------------------------------------
 # =========================================================================
+
+.emmeans_ordinal_types <- c(
+  "latent",
+  "linear.predictor",
+  "cum.prob",
+  "exc.prob",
+  "prob",
+  "mean.class"
+)
+
 
 #' @keywords internal
 .guess_emmeans_arguments <- function(model, by = NULL, verbose = TRUE, ...) {

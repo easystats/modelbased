@@ -32,6 +32,23 @@ test_that("estimate_relation prints ordinal models correctly", {
 })
 
 
+test_that("estimate_means with backend emmeans work for ordinal", {
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+  out <- estimate_means(m, "Type", predict = "prob", backend = "emmeans")
+  expect_equal(out$Probability, c(0.33333, 0.33333, 0.33333, 0.33333))
+
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.15.2")
+  m <- glmmTMB::glmmTMB(
+    Sat ~ Infl + Type + Cont,
+    data = housing,
+    family = glmmTMB::ordinal()
+  )
+  out <- estimate_means(m, "Type", predict = "prob", backend = "emmeans")
+  expect_equal(out$Probability, c(0.33333, 0.33333, 0.33333, 0.33333))
+})
+
+
 test_that("estimate_means, print bracl", {
   skip_if_not_installed("brglm2")
   # required for the penguins dataset, which was added in R 4.5.0
