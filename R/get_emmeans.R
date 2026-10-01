@@ -62,6 +62,9 @@ get_emmeans <- function(
   # setup arguments
   fun_args <- list(model, specs = my_args$emmeans_specs, at = my_args$emmeans_at)
 
+  # ordinal models: prediction mode, used for column names when formatting
+  ordinal_mode <- NULL
+
   # handle distributional parameters
   if (inherits(model, "brmsfit")) {
     if (identical(predict, "response")) {
@@ -77,7 +80,31 @@ get_emmeans <- function(
     }
   } else {
     dpars <- FALSE
-    fun_args$type <- predict
+    # for ordinal models, emmeans ignores `type = "response"`, and we need the
+    # `mode` argument instead. Probabilities are the default.
+    ordinal_model <- .is_emmeans_ordinal(model)
+    if (ordinal_model && identical(predict, "response")) {
+      predict <- "prob"
+    }
+    if (predict %in% .emmeans_ordinal_types) {
+      fun_args$mode <- predict
+      # some modes add a pseudo-factor to the reference grid (the response
+      # categories, or the thresholds). We add it to `specs`, else emmeans
+      # averages over it
+      if (ordinal_model) {
+        ordinal_mode <- predict
+        pseudo_factor <- .emmeans_ordinal_pseudo_factor(model, predict)
+        if (!is.null(pseudo_factor)) {
+          if (inherits(fun_args$specs, "formula")) {
+            fun_args$specs <- pseudo_factor
+          } else {
+            fun_args$specs <- c(fun_args$specs, pseudo_factor)
+          }
+        }
+      }
+    } else {
+      fun_args$type <- predict
+    }
   }
 
   # add dots
@@ -113,6 +140,7 @@ get_emmeans <- function(
   attr(estimated, "focal_terms") <- my_args$emmeans_specs
   attr(estimated, "transform") <- TRUE
   attr(estimated, "keep_iterations") <- keep_iterations
+  attr(estimated, "ordinal_mode") <- ordinal_mode
 
   estimated
 }
@@ -121,6 +149,54 @@ get_emmeans <- function(
 # =========================================================================
 # HELPERS (guess arguments) -----------------------------------------------
 # =========================================================================
+
+.emmeans_ordinal_types <- c(
+  "latent",
+  "linear.predictor",
+  "cum.prob",
+  "exc.prob",
+  "prob",
+  "mean.class"
+)
+
+
+# column names for the estimates of each ordinal mode
+.emmeans_ordinal_estimate_names <- c(
+  latent = "Latent",
+  linear.predictor = "Linear_predictor",
+  cum.prob = "Probability",
+  exc.prob = "Probability",
+  prob = "Probability",
+  mean.class = "Mean_class"
+)
+
+
+# frequentist ordinal models, which support the `mode` argument in emmeans
+.is_emmeans_ordinal <- function(model) {
+  if (inherits(model, "brmsfit")) {
+    return(FALSE)
+  }
+  m_info <- insight::model_info(model, response = 1, verbose = FALSE)
+  isTRUE(m_info$is_ordinal) && !isTRUE(m_info$is_bayesian)
+}
+
+
+# name of the pseudo-factor that emmeans adds to the reference grid for
+# ordinal models: the response categories for `mode = "prob"`, and the
+# thresholds for `mode = "cum.prob"`, `"exc.prob"` and `"linear.predictor"`.
+# emmeans names the response pseudo-factor after the left-hand side of the
+# formula, e.g. `factor(y)`, so we need the response term, not the variable
+.emmeans_ordinal_pseudo_factor <- function(model, mode) {
+  switch(
+    mode,
+    prob = insight::find_terms(model, verbose = FALSE)$response,
+    cum.prob = ,
+    exc.prob = ,
+    linear.predictor = "cut",
+    NULL
+  )
+}
+
 
 #' @keywords internal
 .guess_emmeans_arguments <- function(model, by = NULL, verbose = TRUE, ...) {
@@ -194,6 +270,7 @@ get_emmeans <- function(
   } else {
     means <- as.data.frame(stats::confint(x, level = ci))
     means$df <- NULL
+    means <- .clean_names_emmeans_ordinal(means, x, model)
     means <- .clean_names_frequentist(means, predict, m_info)
   }
 
@@ -209,6 +286,26 @@ get_emmeans <- function(
   attr(means, "by") <- info$by
 
   .add_posterior_draws_emmeans(info, means)
+}
+
+
+# for ordinal models, renames the estimate column and the pseudo-factor
+# columns (response categories or thresholds)
+.clean_names_emmeans_ordinal <- function(means, x, model) {
+  ordinal_mode <- attributes(x)$ordinal_mode
+  if (is.null(ordinal_mode)) {
+    return(means)
+  }
+  estimate_name <- x@misc$estName
+  if (!is.null(estimate_name) && estimate_name %in% colnames(means)) {
+    colnames(means)[colnames(means) == estimate_name] <- .emmeans_ordinal_estimate_names[[ordinal_mode]]
+  }
+  pseudo_factor <- .emmeans_ordinal_pseudo_factor(model, ordinal_mode)
+  if (!is.null(pseudo_factor) && pseudo_factor %in% colnames(means)) {
+    new_name <- if (ordinal_mode == "prob") "Response" else "Threshold"
+    colnames(means)[colnames(means) == pseudo_factor] <- new_name
+  }
+  means
 }
 
 
