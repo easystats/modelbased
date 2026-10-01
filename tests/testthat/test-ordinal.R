@@ -92,8 +92,12 @@ test_that("estimate_means, backend emmeans, ordinal, default predict", {
   expect_identical(
     paste(out$Level1, out$Level2),
     c(
-      "Apartment Tower", "Atrium Apartment", "Atrium Tower",
-      "Terrace Apartment", "Terrace Atrium", "Terrace Tower"
+      "Apartment Tower",
+      "Atrium Apartment",
+      "Atrium Tower",
+      "Terrace Apartment",
+      "Terrace Atrium",
+      "Terrace Tower"
     )
   )
   expect_equal(
@@ -115,9 +119,7 @@ test_that("estimate_means, backend emmeans, ordinal, mean.class and latent", {
     expect_identical(nrow(out), 4L)
     expect_true(modes[[mode]] %in% colnames(out))
     expect_identical(attributes(out)$coef_name, modes[[mode]])
-    expected <- as.data.frame(suppressMessages(
-      emmeans::emmeans(m, "Type", mode = mode)
-    ))
+    expected <- as.data.frame(suppressMessages(emmeans::emmeans(m, "Type", mode = mode)))
     estimate_column <- setdiff(
       colnames(expected),
       c("Type", "SE", "df", "asymp.LCL", "asymp.UCL")
@@ -157,9 +159,11 @@ test_that("estimate_means, backend emmeans, ordinal, threshold modes", {
     expect_setequal(as.character(out$Threshold), c("Low|Medium", "Medium|High"))
     expect_true(modes[[mode]] %in% colnames(out))
     expect_identical(attributes(out)$coef_name, modes[[mode]])
-    expected <- as.data.frame(suppressMessages(
-      emmeans::emmeans(m, c("Type", "cut"), mode = mode)
-    ))
+    expected <- as.data.frame(suppressMessages(emmeans::emmeans(
+      m,
+      c("Type", "cut"),
+      mode = mode
+    )))
     estimate_column <- setdiff(
       colnames(expected),
       c("Type", "cut", "SE", "df", "asymp.LCL", "asymp.UCL")
@@ -196,7 +200,10 @@ test_that("estimate_means, backend emmeans, ordinal, clm and glmmTMB", {
   expect_identical(nrow(compared), 12L)
   expect_equal(compared$Probability.x, compared$Probability.y, tolerance = 1e-6)
 
+  # ordinal glmmTMB not supported in marginaleffects <= 1.0.0
   skip_if_not_installed("glmmTMB", minimum_version = "1.1.15.2")
+  skip_if_not_installed("marginaleffects", minimum_version = "1.0.1")
+
   m <- glmmTMB::glmmTMB(
     Sat ~ Infl + Type + Cont,
     data = housing,
