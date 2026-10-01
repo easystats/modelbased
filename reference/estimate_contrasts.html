@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -228,7 +228,13 @@ response scale.</p></li>
 <li><p><code>backend = "emmeans"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>, <code>"mu"</code>,
 <code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
 transformation is selected (which usually is <code>"response"</code>). See also
-<a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.</p></li>
+<a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.
+For ordinal models (e.g. from <code><a href="https://rdrr.io/pkg/MASS/man/polr.html" class="external-link">MASS::polr()</a></code> or <code><a href="https://rdrr.io/pkg/ordinal/man/clm.html" class="external-link">ordinal::clm()</a></code>),
+<code><a href="estimate_means.html">estimate_means()</a></code> also accepts the ordinal modes of <em>emmeans</em>:
+<code>"prob"</code>, <code>"cum.prob"</code>, <code>"exc.prob"</code>, <code>"linear.predictor"</code>, <code>"latent"</code>
+and <code>"mean.class"</code> (see <code><a href="https://rvlenth.github.io/emmeans/articles/models.html" class="external-link">vignette("models", package = "emmeans")</a></code>). For
+these models, the default is <code>"prob"</code>, which returns one probability per
+response category.</p></li>
 </ul><p>See also section <em>Predictions on different scales</em>.</p></dd>
 
 

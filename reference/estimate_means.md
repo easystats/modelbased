@@ -77,6 +77,15 @@ estimate_means(
     most appropriate transformation is selected (which usually is
     `"response"`). See also [this
     vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
+    For ordinal models (e.g. from
+    [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html) or
+    [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html)),
+    `estimate_means()` also accepts the ordinal modes of *emmeans*:
+    `"prob"`, `"cum.prob"`, `"exc.prob"`, `"linear.predictor"`,
+    `"latent"` and `"mean.class"` (see
+    [`vignette("models", package = "emmeans")`](https://rvlenth.github.io/emmeans/articles/models.html)).
+    For these models, the default is `"prob"`, which returns one
+    probability per response category.
 
   See also section *Predictions on different scales*.
 
