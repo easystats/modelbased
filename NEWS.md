@@ -28,7 +28,7 @@
   now `predict = "prob"`, which returns the same probabilities as the
   `"marginaleffects"` backend.
 
-* `comparison = "ratio"` is a new short-cut to compute pairwise comparisons
+* `comparison = "ratio"` is a new shortcut to compute pairwise comparisons
   as ratios.
 
 ## Bug fixes
