@@ -400,7 +400,7 @@ condition (using \code{\link[=estimate_slopes]{estimate_slopes()}}).
 \item \code{comparison = "pairwise"} (default): This method computes all possible
 unique differences between pairs of levels of the focal predictor. For
 example, if a factor has levels A, B, and C, it would compute A-B, A-C, and
-B-C. The formula notation would be \code{comparison = difference ~ pairwise}
+B-C. The formula notation would be \code{comparison = difference ~ pairwise}.
 \item \code{comparison = "revpairwise"}: Like \code{"pairwise"}, but reverses the order
 of levels when comparing, e.g. B-A, C-A, and C-B.
 \item \code{comparison = "ratio"}: This method computes all possible unique ratios
