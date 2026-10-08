@@ -116,14 +116,15 @@
 #'
 #' @section Comparison options:
 #'
-#' - `comparison = "pairwise"`: This method computes all possible unique
-#'   differences between pairs of levels of the focal predictor. For example, if
-#'   a factor has levels A, B, and C, it would compute A-B, A-C, and B-C.
+#' - `comparison = "pairwise"` (default): This method computes all possible
+#'   unique differences between pairs of levels of the focal predictor. For
+#'   example, if a factor has levels A, B, and C, it would compute A-B, A-C, and
+#'   B-C. The formula notation would be `comparison = difference ~ pairwise`
 #' - `comparison = "revpairwise"`: Like `"pairwise"`, but reverses the order
 #'   of levels when comparing, e.g. B-A, C-A, and C-B.
-#' - `comparison = "ratio"`: This method computes all possible unique
-#'   ratios between pairs of levels of the focal predictor (not differences, like
-#'   the default).
+#' - `comparison = "ratio"`: This method computes all possible unique ratios
+#'   between pairs of levels of the focal predictor (not differences, like the
+#'   default). It is basically a shortcut for `comparison = ratio ~ pairwise`.
 #' - `comparison = "reference"`: This compares each level of the focal predictor
 #'   to a specified reference level (by default, the first level). For example,
 #'   if levels are A, B, C, and A is the reference, it computes B-A and C-A.
