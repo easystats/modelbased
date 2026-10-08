@@ -42,7 +42,7 @@
 #'   described below, see documentation of [marginaleffects::comparisons],
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html) and
 #'   section _Comparison options_ below.
-#'   * String: One of `"pairwise"`, `"revpairwise"`, `"reference"`,
+#'   * String: One of `"pairwise"`, `"ratio"`, `"revpairwise"`, `"reference"`,
 #'     `"sequential"`, `"meandev"` `"meanotherdev"`, `"poly"`, `"helmert"`, or
 #'     `"trt_vs_ctrl"`. To test multiple hypotheses jointly (usually used for
 #'     factorial designs), `comparison` can also be `"joint"` or `"omnibus"`. In
@@ -121,6 +121,9 @@
 #'   a factor has levels A, B, and C, it would compute A-B, A-C, and B-C.
 #' - `comparison = "revpairwise"`: Like `"pairwise"`, but reverses the order
 #'   of levels when comparing, e.g. B-A, C-A, and C-B.
+#' - `comparison = "ratio"`: This method computes all possible unique
+#'   ratios between pairs of levels of the focal predictor (not differences, like
+#'   the default).
 #' - `comparison = "reference"`: This compares each level of the focal predictor
 #'   to a specified reference level (by default, the first level). For example,
 #'   if levels are A, B, C, and A is the reference, it computes B-A and C-A.
