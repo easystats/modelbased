@@ -307,8 +307,9 @@ format.marginaleffects_contrasts <- function(
   }
 
   # check type of contrast
-  is_ratio_comparison <- inherits(comparison, "formula") &&
-    identical(deparse(comparison[[2]]), "ratio")
+  is_ratio_comparison <- (inherits(comparison, "formula") &&
+    identical(deparse(comparison[[2]]), "ratio")) ||
+    identical(comparison, "ratio")
 
   # Column name for coefficient - fix needed for contrasting slopes and ratios
   colnames(x)[colnames(x) == "Slope"] <- "Difference"

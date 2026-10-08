@@ -450,8 +450,14 @@ get_marginalcontrasts <- function(
       }
       # for some comparisons, we need an empty left-hand side. else, we default
       # to "difference".
-      formula_lhs <- switch(comparison, poly = , helmert = "", "difference")
-      formula_rhs <- comparison
+      formula_lhs <- switch(
+        comparison,
+        poly = ,
+        helmert = "",
+        ratio = "ratio",
+        "difference"
+      )
+      formula_rhs <- switch(comparison, ratio = "pairwise", comparison)
     }
     if (omnibus_test) {
       comparison <- NULL
@@ -553,6 +559,7 @@ get_marginalcontrasts <- function(
 .valid_hypothesis_strings <- function() {
   c(
     "pairwise",
+    "ratio",
     "reference",
     "sequential",
     "meandev",

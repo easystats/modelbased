@@ -161,7 +161,7 @@ described below, see documentation of \link[marginaleffects:comparisons]{margina
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website} and
 section \emph{Comparison options} below.
 \itemize{
-\item String: One of \code{"pairwise"}, \code{"revpairwise"}, \code{"reference"},
+\item String: One of \code{"pairwise"}, \code{"ratio"}, \code{"revpairwise"}, \code{"reference"},
 \code{"sequential"}, \code{"meandev"} \code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or
 \code{"trt_vs_ctrl"}. To test multiple hypotheses jointly (usually used for
 factorial designs), \code{comparison} can also be \code{"joint"} or \code{"omnibus"}. In

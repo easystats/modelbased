@@ -144,7 +144,7 @@ described below, see documentation of \link[marginaleffects:comparisons]{margina
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website} and
 section \emph{Comparison options} below.
 \itemize{
-\item String: One of \code{"pairwise"}, \code{"revpairwise"}, \code{"reference"},
+\item String: One of \code{"pairwise"}, \code{"ratio"}, \code{"revpairwise"}, \code{"reference"},
 \code{"sequential"}, \code{"meandev"} \code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or
 \code{"trt_vs_ctrl"}. To test multiple hypotheses jointly (usually used for
 factorial designs), \code{comparison} can also be \code{"joint"} or \code{"omnibus"}. In
@@ -397,11 +397,15 @@ condition (using \code{\link[=estimate_slopes]{estimate_slopes()}}).
 \section{Comparison options}{
 
 \itemize{
-\item \code{comparison = "pairwise"}: This method computes all possible unique
-differences between pairs of levels of the focal predictor. For example, if
-a factor has levels A, B, and C, it would compute A-B, A-C, and B-C.
+\item \code{comparison = "pairwise"} (default): This method computes all possible
+unique differences between pairs of levels of the focal predictor. For
+example, if a factor has levels A, B, and C, it would compute A-B, A-C, and
+B-C. The formula notation would be \code{comparison = difference ~ pairwise}.
 \item \code{comparison = "revpairwise"}: Like \code{"pairwise"}, but reverses the order
 of levels when comparing, e.g. B-A, C-A, and C-B.
+\item \code{comparison = "ratio"}: This method computes all possible unique ratios
+between pairs of levels of the focal predictor (not differences, like the
+default). It is basically a shortcut for \code{comparison = ratio ~ pairwise}.
 \item \code{comparison = "reference"}: This compares each level of the focal predictor
 to a specified reference level (by default, the first level). For example,
 if levels are A, B, C, and A is the reference, it computes B-A and C-A.
