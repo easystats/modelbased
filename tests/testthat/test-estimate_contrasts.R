@@ -1974,3 +1974,23 @@ test_that("estimate_contrast, don't let group labels appear in comparison labels
     )
   )
 })
+
+
+test_that("estimate_contrast, shortcut 'ratio' works", {
+  skip_if_not_installed("datawizard")
+  data(stigma, package = "modelbased")
+
+  stigma$symptoms_unreal <- datawizard::recode_into(
+    symptoms_unreal %in% c("strongly disagree", "disagree") ~ "(strongly) disagree",
+    symptoms_unreal %in% c("strongly agree", "agree") ~ "(strongly) agree",
+    data = stigma
+  )
+
+  stigma$symptoms_unreal <- as.factor(stigma$symptoms_unreal)
+  stigma$symptoms_unreal <- relevel(stigma$symptoms_unreal, ref = "(strongly) disagree")
+
+  m <- glm(symptoms_unreal ~ sex, data = stigma, family = binomial())
+  out <- estimate_contrasts(m, "sex", comparison = "ratio")
+  expect_named(out, c("Level1", "Level2", "Ratio", "SE", "CI_low", "CI_high", "z", "p"))
+  expect_equal(out$Ratio, 6.14634, tolerance = 1e-4)
+})
