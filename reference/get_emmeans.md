@@ -195,15 +195,15 @@ get_marginaltrends(
     [this website](https://marginaleffects.com/bonus/hypothesis.html)
     and section *Comparison options* below.
 
-    - String: One of `"pairwise"`, `"revpairwise"`, `"reference"`,
-      `"sequential"`, `"meandev"` `"meanotherdev"`, `"poly"`,
-      `"helmert"`, or `"trt_vs_ctrl"`. To test multiple hypotheses
-      jointly (usually used for factorial designs), `comparison` can
-      also be `"joint"` or `"omnibus"`. In this case, use the `test`
-      argument to specify which test should be conducted: `"F"`
-      (default) or `"Chi2"`, and use argument `null` to specify the
-      null-hypothesis to test against. For `"omnibus"`, `null` is set to
-      the overall mean or prevalence/proportion.
+    - String: One of `"pairwise"`, `"ratio"`, `"revpairwise"`,
+      `"reference"`, `"sequential"`, `"meandev"` `"meanotherdev"`,
+      `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test multiple
+      hypotheses jointly (usually used for factorial designs),
+      `comparison` can also be `"joint"` or `"omnibus"`. In this case,
+      use the `test` argument to specify which test should be conducted:
+      `"F"` (default) or `"Chi2"`, and use argument `null` to specify
+      the null-hypothesis to test against. For `"omnibus"`, `null` is
+      set to the overall mean or prevalence/proportion.
 
     - String: Special string options are `"inequality"`,
       `"inequality_ratio"`, and `"inequality_pairwise"`.

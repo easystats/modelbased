@@ -336,9 +336,9 @@ correlated**!.
 Then, the empirical scores for accuracy and condition, corresponding to
 the “raw” average of RT, correlate **almost perfectly with their
 model-based counterpart**
-(r\_{empirical\\accuracy/Coefficient\\Intercept} = 1;
-r\_{empirical\\condition/Coefficient\\conditionspeed} \> .99). That’s
-reassuring, it means that our model has managed to estimate some
+(r\_{empirical\\\_accuracy/Coefficient\\\_Intercept} = 1;
+r\_{empirical\\\_condition/Coefficient\\\_conditionspeed} \> .99).
+That’s reassuring, it means that our model has managed to estimate some
 intuitive parameters!
 
 Finally, we can observe that there is a strong and negative correlation
