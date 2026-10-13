@@ -301,6 +301,43 @@ test_that("estimate_means, backend emmeans, clmm shows response level names", {
 })
 
 
+test_that("estimate_means, backend emmeans, clmm threshold names, all threshold types", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(wine, package = "ordinal")
+  text_levels <- c("vbad", "bad", "ok", "good", "vgood")
+  threshold_names <- c("vbad|bad", "bad|ok", "ok|good", "good|vgood")
+  wine$rating_text <- factor(wine$rating, labels = text_levels, ordered = TRUE)
+
+  # for "symmetric" and "equidistant", the model parameters are not one per
+  # threshold, but emmeans still returns one row per threshold
+  for (threshold in c("flexible", "symmetric", "equidistant")) {
+    m <- ordinal::clmm(
+      rating_text ~ temp + (1 | judge),
+      data = wine,
+      threshold = threshold
+    )
+    for (mode in c("cum.prob", "exc.prob", "linear.predictor")) {
+      out <- estimate_means(m, "temp", predict = mode, backend = "emmeans")
+      expected <- as.data.frame(suppressMessages(emmeans::emmeans(
+        m,
+        ~ temp | cut,
+        mode = mode
+      )))
+      code <- as.integer(sub("\\|.*", "", as.character(expected$cut)))
+      expect_identical(
+        as.character(out$Threshold),
+        threshold_names[code],
+        info = paste(threshold, mode)
+      )
+      expect_identical(levels(out$Threshold), threshold_names, info = paste(threshold, mode))
+    }
+    out <- estimate_means(m, "temp", backend = "emmeans")
+    expect_identical(levels(out$Response), text_levels, info = threshold)
+  }
+})
+
+
 test_that("estimate_means, backend emmeans, ordinal level names unchanged", {
   skip_if_not_installed("emmeans")
   skip_if_not_installed("ordinal")
