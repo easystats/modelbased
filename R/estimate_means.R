@@ -538,6 +538,12 @@ estimate_means <- function(
   # add attributes from workhorse function
   attributes(means) <- utils::modifyList(attributes(means), info[.info_elements()])
 
+  # output from the emmeans backend has no `model_info` attribute, which we
+  # need for plotting, e.g. to color the response categories of ordinal models
+  if (backend == "emmeans") {
+    attr(means, "model_info") <- insight::model_info(model, response = 1, verbose = FALSE)
+  }
+
   # Output
   class(means) <- unique(c("estimate_means", class(means)))
   means

@@ -167,7 +167,7 @@ test_that("estimate_means() - posterior draws, emmeans", {
     c(
       "names", "class", "row.names", "table_title", "table_footer",
       "model", "response", "ci", "backend", "coef_name", "call", "at", "by",
-      "focal_terms", "predict", "transform", "keep_iterations"
+      "focal_terms", "predict", "transform", "keep_iterations", "model_info"
     )
   )
   # fmt: skip
@@ -187,7 +187,7 @@ test_that("estimate_means() - posterior draws, emmeans", {
     c(
       "names", "class", "row.names", "table_title", "table_footer",
       "model", "response", "ci", "backend", "coef_name", "call", "at", "by",
-      "focal_terms", "predict", "transform", "keep_iterations"
+      "focal_terms", "predict", "transform", "keep_iterations", "model_info"
     )
   )
   expect_identical(dim(out), c(10L, 4005L))

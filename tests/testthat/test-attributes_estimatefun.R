@@ -12,7 +12,7 @@ test_that("attributes_means, means", {
     c(
       "names", "row.names", "class", "at", "by", "table_title", "table_footer",
       "model", "response", "ci", "backend", "coef_name", "call", "focal_terms",
-      "predict", "transform", "keep_iterations"
+      "predict", "transform", "keep_iterations", "model_info"
     )
   )
   estim <- suppressMessages(estimate_means(model, "Species", backend = "marginaleffects"))

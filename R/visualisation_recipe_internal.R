@@ -37,6 +37,17 @@
     data$Response <- factor(data$Response, levels = unique(data$Response))
   }
 
+  # ordinal models, emmeans backend: cumulative or exceedance probabilities and
+  # the linear predictor are returned for each threshold. We skip this when
+  # a focal predictor is named "Threshold"
+  if (has_response_levels && "Threshold" %in% colnames(data) && !"Threshold" %in% by) {
+    by <- c(by, "Threshold")
+    # emmeans returns a factor with the thresholds in model order
+    if (!is.factor(data$Threshold)) {
+      data$Threshold <- factor(data$Threshold, levels = unique(data$Threshold))
+    }
+  }
+
   # mixture models? if so, we need one more stratification in "by"
   if (isTRUE(model_info$is_mixture) && "Class" %in% colnames(data)) {
     by <- c(by, "Class")
@@ -502,7 +513,10 @@
   if (
     !is.null(response_scale) &&
       response_scale %in%
-        c("response", "expectation", "invlink(link)", "prob", "probs") &&
+        c(
+          "response", "expectation", "invlink(link)", "prob", "probs",
+          "cum.prob", "exc.prob"
+        ) &&
       isTRUE(
         model_info$is_logit |
           model_info$is_binomial |
