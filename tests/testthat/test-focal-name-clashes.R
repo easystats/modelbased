@@ -16,14 +16,16 @@ focal_reported_names <- c(
 )
 
 focal_data <- function(name, numeric = FALSE) {
-  d <- mtcars
+  d <- datasets::mtcars
   d$am_f <- factor(d$am)
   d[[name]] <- if (numeric) d$wt else factor(d$cyl)
   d
 }
 
-focal_formula <- function(rhs) {
-  stats::as.formula(paste("mpg ~", rhs))
+# the formula environment is the calling function, so that the data `d` is
+# found there and not in the global environment
+focal_formula <- function(rhs, env = parent.frame()) {
+  stats::as.formula(paste("mpg ~", rhs), env = env)
 }
 
 focal_calls <- list(
@@ -189,7 +191,7 @@ test_that("estimate_means() keeps numeric focal variables for glm", {
   names <- setdiff(focal_reported_names, c("Mean", "s.value"))
   call <- function(name) {
     d <- focal_data(name, numeric = TRUE)
-    d$vs <- mtcars$vs
+    d$vs <- datasets::mtcars$vs
     m <- stats::glm(
       stats::as.formula(paste0("vs ~ am_f * `", name, "`")),
       family = stats::binomial(),
