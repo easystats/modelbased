@@ -128,8 +128,9 @@ test_that("estimate_contrasts() keeps by-variables named like renamed columns", 
 
 
 test_that("focal variable names that worked before still work", {
-  # names that matched on upstream main b964ea75, computed once with the
-  # 99-name probe list
+  # names that matched on upstream main b964ea75, computed once from a list
+  # of 99 candidate names (the reported names and other column, argument and
+  # output names)
   matched_before <- list(
     means = c(
       "z", "rowidcf", "wts", "predicted_lo", "predicted_hi", "emmean",

@@ -48,9 +48,9 @@
 * With `backend = "marginaleffects"`, `estimate_means()`, `estimate_slopes()`
   and `estimate_contrasts()` no longer drop or rename a `by` variable with a
   name such as `type`, `n` or `value`. They also no longer mislabel other
-  columns because of such a name. Before, a `by` variable named `type` was
-  dropped, and `n` became `n_Obs`. A variable named `Median` was labeled
-  `Mean`, and the means were labeled `Coefficient`.
+  columns because of such a name. Before, for example, `estimate_means()`
+  dropped a `by` variable named `type` and renamed `n` to `n_Obs`. It also
+  labeled a variable named `Median` as `Mean`, and the means as `Coefficient`.
 
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed
