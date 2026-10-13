@@ -303,6 +303,31 @@ get_emmeans <- function(
   pseudo_factor <- .emmeans_ordinal_pseudo_factor(model, ordinal_mode)
   if (!is.null(pseudo_factor) && pseudo_factor %in% colnames(means)) {
     new_name <- if (ordinal_mode == "prob") "Response" else "Threshold"
+    # for clmm models, emmeans codes the response categories and thresholds
+    # as 1, 2, 3, ... - we replace these codes by the names from the model
+    if (inherits(model, "clmm")) {
+      response_levels <- model$y.levels
+      n_levels <- length(response_levels)
+      values <- as.character(means[[pseudo_factor]])
+      if (ordinal_mode == "prob") {
+        level_names <- response_levels
+        codes <- as.character(seq_len(n_levels))
+      } else {
+        # threshold codes look like "1|2". We don't use `names(model$alpha)`,
+        # because these are not the thresholds for `threshold = "symmetric"`,
+        # `"symmetric2"` or `"equidistant"`
+        level_names <- paste(response_levels[-n_levels], response_levels[-1], sep = "|")
+        codes <- paste(seq_len(n_levels - 1), seq_len(n_levels)[-1], sep = "|")
+      }
+      # we only replace the values when they are exactly the codes, and when
+      # each code gets its own name (level names can contain "|")
+      if (setequal(values, codes) && !anyDuplicated(level_names)) {
+        means[[pseudo_factor]] <- factor(
+          level_names[match(values, codes)],
+          levels = level_names
+        )
+      }
+    }
     colnames(means)[colnames(means) == pseudo_factor] <- new_name
   }
   means

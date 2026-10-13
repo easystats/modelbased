@@ -238,6 +238,180 @@ test_that("estimate_means, backend emmeans, ordinal, transformed response", {
 })
 
 
+test_that("estimate_means, backend emmeans, clmm shows response level names", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(wine, package = "ordinal")
+  # emmeans codes the response categories and thresholds of clmm models as
+  # 1, 2, 3, ..., so we check that each code is replaced by its level name
+  text_levels <- c("vbad", "bad", "ok", "good", "vgood")
+  number_levels <- c("2", "4", "6", "8", "10")
+  reversed_levels <- c("5", "4", "3", "2", "1")
+  wine$rating_text <- factor(wine$rating, labels = text_levels, ordered = TRUE)
+  wine$rating_number <- factor(as.integer(wine$rating) * 2, ordered = TRUE)
+  wine$rating_reversed <- factor(
+    as.character(wine$rating),
+    levels = reversed_levels,
+    ordered = TRUE
+  )
+  all_levels <- list(
+    rating_text = text_levels,
+    rating_number = number_levels,
+    rating_reversed = reversed_levels
+  )
+
+  for (response in names(all_levels)) {
+    response_levels <- all_levels[[response]]
+    threshold_names <- paste(response_levels[-5], response_levels[-1], sep = "|")
+    f <- stats::as.formula(paste(response, "~ temp + contact + (1 | judge)"))
+    m <- ordinal::clmm(f, data = wine)
+    expect_identical(m$y.levels, response_levels)
+    expect_identical(names(m$alpha), threshold_names)
+
+    for (by in list("temp", c("temp", "contact"))) {
+      # response categories
+      out <- estimate_means(m, by, backend = "emmeans")
+      expected <- as.data.frame(suppressMessages(emmeans::emmeans(
+        m,
+        stats::as.formula(paste("~", paste(by, collapse = "+"), "|", response)),
+        mode = "prob"
+      )))
+      expect_identical(nrow(out), nrow(expected))
+      expect_identical(
+        as.character(out$Response),
+        response_levels[as.integer(as.character(expected[[response]]))]
+      )
+      expect_identical(levels(out$Response), response_levels)
+      expect_equal(out$Probability, expected$prob, tolerance = 1e-6)
+
+      # thresholds
+      modes <- c(
+        cum.prob = "Probability",
+        exc.prob = "Probability",
+        linear.predictor = "Linear_predictor"
+      )
+      for (mode in names(modes)) {
+        out <- estimate_means(m, by, predict = mode, backend = "emmeans")
+        expected <- as.data.frame(suppressMessages(emmeans::emmeans(
+          m,
+          stats::as.formula(paste("~", paste(by, collapse = "+"), "| cut")),
+          mode = mode
+        )))
+        code <- as.integer(sub("\\|.*", "", as.character(expected$cut)))
+        expect_identical(nrow(out), nrow(expected))
+        expect_identical(as.character(out$Threshold), threshold_names[code])
+        expect_identical(levels(out$Threshold), threshold_names)
+        estimate_column <- setdiff(
+          colnames(expected),
+          c(by, "cut", "SE", "df", "asymp.LCL", "asymp.UCL")
+        )
+        expect_equal(out[[modes[[mode]]]], expected[[estimate_column]], tolerance = 1e-6)
+      }
+    }
+  }
+})
+
+
+test_that("estimate_means, backend emmeans, clmm threshold names, all threshold types", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(wine, package = "ordinal")
+  text_levels <- c("vbad", "bad", "ok", "good", "vgood")
+  threshold_names <- c("vbad|bad", "bad|ok", "ok|good", "good|vgood")
+  wine$rating_text <- factor(wine$rating, labels = text_levels, ordered = TRUE)
+
+  # for "symmetric", "symmetric2" and "equidistant", the model parameters are
+  # not one per threshold, but emmeans still returns one row per threshold
+  for (threshold in c("flexible", "symmetric", "symmetric2", "equidistant")) {
+    m <- ordinal::clmm(
+      rating_text ~ temp + (1 | judge),
+      data = wine,
+      threshold = threshold
+    )
+    for (mode in c("cum.prob", "exc.prob", "linear.predictor")) {
+      out <- estimate_means(m, "temp", predict = mode, backend = "emmeans")
+      expected <- as.data.frame(suppressMessages(emmeans::emmeans(
+        m,
+        ~ temp | cut,
+        mode = mode
+      )))
+      code <- as.integer(sub("\\|.*", "", as.character(expected$cut)))
+      expect_identical(
+        as.character(out$Threshold),
+        threshold_names[code],
+        info = paste(threshold, mode)
+      )
+      expect_identical(levels(out$Threshold), threshold_names, info = paste(threshold, mode))
+    }
+    out <- estimate_means(m, "temp", backend = "emmeans")
+    expect_identical(levels(out$Response), text_levels, info = threshold)
+  }
+})
+
+
+test_that("estimate_means, backend emmeans, ordinal level names unchanged", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+  housing$SatNum <- as.integer(housing$Sat)
+  data(wine, package = "ordinal")
+
+  sat_levels <- c("Low", "Medium", "High")
+  models <- list(
+    polr = list(
+      MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing, Hess = TRUE),
+      sat_levels
+    ),
+    polr_transformed = list(
+      MASS::polr(factor(SatNum) ~ Infl + Type + Cont, weights = Freq, data = housing, Hess = TRUE),
+      c("1", "2", "3")
+    ),
+    clm = list(
+      ordinal::clm(Sat ~ Infl + Type + Cont, weights = Freq, data = housing),
+      sat_levels
+    ),
+    clmm = list(
+      ordinal::clmm(rating ~ temp + contact + (1 | judge), data = wine),
+      c("1", "2", "3", "4", "5")
+    )
+  )
+  # ordinal family in glmmTMB requires glmmTMB >= 1.1.15.2
+  if (
+    requireNamespace("glmmTMB", quietly = TRUE) &&
+      utils::packageVersion("glmmTMB") >= "1.1.15.2"
+  ) {
+    models$glmmTMB <- list(
+      glmmTMB::glmmTMB(
+        Sat ~ Infl + Type + Cont,
+        weights = Freq,
+        data = housing,
+        family = glmmTMB::ordinal()
+      ),
+      sat_levels
+    )
+  }
+
+  for (i in names(models)) {
+    m <- models[[i]][[1]]
+    response_levels <- models[[i]][[2]]
+    by <- if (i == "clmm") "temp" else "Type"
+    k <- length(response_levels)
+    threshold_names <- paste(response_levels[-k], response_levels[-1], sep = "|")
+
+    out <- estimate_means(m, by, predict = "prob", backend = "emmeans")
+    expect_identical(unique(as.character(out$Response)), response_levels, info = i)
+    for (mode in c("cum.prob", "exc.prob", "linear.predictor")) {
+      out <- estimate_means(m, by, predict = mode, backend = "emmeans")
+      expect_identical(
+        unique(as.character(out$Threshold)),
+        threshold_names,
+        info = paste(i, mode)
+      )
+    }
+  }
+})
+
+
 test_that("estimate_means, print bracl", {
   skip_if_not_installed("brglm2")
   # required for the penguins dataset, which was added in R 4.5.0
