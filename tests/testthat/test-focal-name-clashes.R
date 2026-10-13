@@ -162,7 +162,7 @@ test_that("print() and plot() use the suffixed focal column", {
     p <- plot(out)
     expect_no_error(ggplot2::ggplot_build(p))
     x_mappings <- unlist(lapply(p$layers, function(l) {
-      if (is.null(l$mapping$x)) NULL else rlang::as_label(l$mapping$x)
+      if (is.null(l$mapping$x)) NULL else ggplot2::as_label(l$mapping$x)
     }))
     expect_true(
       length(x_mappings) > 0 && all(x_mappings == paste0(name, ".1")),
