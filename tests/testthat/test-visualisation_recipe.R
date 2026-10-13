@@ -246,7 +246,7 @@ test_that("visualization_recipe, emmeans ordinal, color by Response", {
 
   data(housing, package = "MASS")
   models <- list(
-    polr = MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing),
+    polr = MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE),
     clm = ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing)
   )
   for (m in models) {
@@ -301,7 +301,7 @@ test_that("visualization_recipe, emmeans ordinal, color by Threshold", {
 
   data(housing, package = "MASS")
   models <- list(
-    polr = MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing),
+    polr = MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE),
     clm = ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing)
   )
   for (m in models) {
@@ -335,7 +335,7 @@ test_that("visualization_recipe, emmeans ordinal, color by Threshold", {
     levels = rating_levels,
     ordered = TRUE
   )
-  m <- MASS::polr(rating ~ temp + contact, data = wine)
+  m <- MASS::polr(rating ~ temp + contact, data = wine, Hess = TRUE)
   x <- estimate_means(m, by = "temp", backend = "emmeans", predict = "cum.prob")
   out <- .recipe_mapping(x)
   expect_identical(out$color, "Threshold")
@@ -348,6 +348,25 @@ test_that("visualization_recipe, emmeans ordinal, color by Threshold", {
     c("very low|low", "low|medium", "medium|high", "high|very high")
   )
   .expect_same_print(x)
+})
+
+
+test_that("visualization_recipe, ordinal, focal predictor named Threshold", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
+
+  data(housing, package = "MASS")
+  d <- housing
+  d$Threshold <- d$Infl
+  m <- MASS::polr(Sat ~ Threshold + Type, weights = Freq, data = d, Hess = TRUE)
+  for (backend in c("emmeans", "marginaleffects")) {
+    x <- estimate_means(m, by = "Threshold", backend = backend)
+    out <- .recipe_mapping(x)
+    expect_identical(out$x, "Threshold")
+    expect_identical(out$color, "Response")
+    expect_null(out$facet)
+  }
 })
 
 
@@ -406,7 +425,7 @@ test_that("visualization_recipe, emmeans, recipes that do not change", {
   .expect_same_print(x)
 
   data(housing, package = "MASS")
-  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing)
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
   for (p in c("mean.class", "latent")) {
     x <- estimate_means(m, by = "Infl", backend = "emmeans", predict = p)
     out <- .recipe_mapping(x)

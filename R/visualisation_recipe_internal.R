@@ -31,10 +31,14 @@
   }
 
   # ordinal models, emmeans backend: cumulative or exceedance probabilities and
-  # the linear predictor are returned for each threshold
-  if (has_response_levels && "Threshold" %in% colnames(data)) {
+  # the linear predictor are returned for each threshold. We skip this when
+  # a focal predictor is named "Threshold"
+  if (has_response_levels && "Threshold" %in% colnames(data) && !"Threshold" %in% by) {
     by <- c(by, "Threshold")
-    data$Threshold <- factor(data$Threshold, levels = unique(data$Threshold))
+    # emmeans returns a factor with the thresholds in model order
+    if (!is.factor(data$Threshold)) {
+      data$Threshold <- factor(data$Threshold, levels = unique(data$Threshold))
+    }
   }
 
   # mixture models? if so, we need one more stratification in "by"

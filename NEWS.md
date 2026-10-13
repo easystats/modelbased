@@ -30,14 +30,12 @@
 
 * For ordinal models, `plot()` of `estimate_means()` output with
   `backend = "emmeans"` now maps the `Response` or `Threshold` column to the
-  color with one `by` variable and to the facets with more. The `Threshold`
-  column is returned for `predict = "cum.prob"`, `"exc.prob"` and
-  `"linear.predictor"`. The `"marginaleffects"` backend already does this for
-  `Response`.
+  color with one `by` variable and to the facets with more. The
+  `"marginaleffects"` backend already does this for `Response`.
 
-* With `backend = "emmeans"`, `plot()` now shows predicted probabilities of
-  binomial and ordinal models on a percent y-axis, `"cum.prob"` and
-  `"exc.prob"` included.
+* With `backend = "emmeans"`, `plot()` now shows predicted probabilities on a
+  percent y-axis, `"cum.prob"` and `"exc.prob"` included. This applies to
+  binomial, beta, ordinal, and multinomial models.
 
 * `comparison = "ratio"` is a new shortcut to compute pairwise comparisons
   as ratios.
