@@ -28,6 +28,12 @@
   now `predict = "prob"`, which returns the same probabilities as the
   `"marginaleffects"` backend.
 
+* For ordinal models, `plot()` of `estimate_means()` output with
+  `backend = "emmeans"` now maps the `Response` or `Threshold` column to the
+  color or the facets. The `"marginaleffects"` backend does the same for
+  `Response`. For logistic models and for `predict = "cum.prob"` or
+  `"exc.prob"`, the y-axis shows percentages.
+
 * `comparison = "ratio"` is a new shortcut to compute pairwise comparisons
   as ratios.
 
