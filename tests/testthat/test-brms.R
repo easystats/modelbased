@@ -23,7 +23,16 @@ test_that("estimate_means - brms", {
   estim2 <- estimate_means(model, iterations = 200, backend = "marginaleffects")
   expect_identical(attributes(estim2)$iterations, 200)
 
-  expect_true(all(abs(estim1$Median - estim2$Median) > 0.001))
+  # a random subsample of 200 draws gives other medians than all draws. The
+  # differences can be smaller than 0.001, so we only test that they differ.
+  expect_false(isTRUE(all.equal(estim1$Median, estim2$Median, tolerance = 0)))
+  estim3 <- estimate_means(
+    model,
+    iterations = 200,
+    keep_iterations = TRUE,
+    backend = "marginaleffects"
+  )
+  expect_length(grep("^iter_", colnames(estim3)), 200)
 })
 
 test_that("estimate_relation - brms", {
