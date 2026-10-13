@@ -839,7 +839,7 @@ equivalence_columns <- c(
   }
 
   # restore original names of protected focal terms. A focal term with the
-  # name of another output column (e.g. "p" or "SE") gets the suffix ".1", so
+  # name of another output column (e.g. "p" or "t") gets the suffix ".1", so
   # that the output column keeps its name.
   renamed_focal <- NULL
   restore_data <- model_data
@@ -1020,7 +1020,8 @@ equivalence_columns <- c(
 # in the "renamed_focal" attribute. This function uses the new names in the
 # attributes that name focal terms, and in the columns of the data grid. It
 # must be called again each time these attributes are copied back from the
-# unformatted object.
+# unformatted object. `estimate_contrasts()` for `estimate_relation()` output
+# does not call it, because that path does not suffix focal terms.
 
 #' @keywords internal
 .rename_focal_attributes <- function(x) {
