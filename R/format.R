@@ -1039,8 +1039,13 @@ equivalence_columns <- c(
       attr(x, a) <- new_names(value)
     }
   }
+  # `utils::modifyList()` merges the data grid column by column, so a copy-back
+  # can add the column with the old name next to the renamed one. We then
+  # remove the column with the old name.
   datagrid <- attr(x, "datagrid", exact = TRUE)
   if (is.data.frame(datagrid)) {
+    renamed_before <- names(renamed)[renamed %in% colnames(datagrid)]
+    datagrid[intersect(renamed_before, colnames(datagrid))] <- NULL
     colnames(datagrid) <- new_names(colnames(datagrid))
     attr(x, "datagrid") <- datagrid
   }

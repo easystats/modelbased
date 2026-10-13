@@ -91,6 +91,11 @@ focal_difference <- function(ref, out, name) {
       return(paste0("attribute ", a, " differs"))
     }
   }
+  ref_grid <- swap(colnames(attr(ref, "datagrid", exact = TRUE)))
+  out_grid <- colnames(attr(out, "datagrid", exact = TRUE))
+  if (!identical(ref_grid, out_grid)) {
+    return(paste0("datagrid columns [", toString(out_grid), "]"))
+  }
   NULL
 }
 
