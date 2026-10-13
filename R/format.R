@@ -946,19 +946,27 @@ equivalence_columns <- c(
   if (is.null(focal_terms) || .is_bayesian_marginaleffects(x)) {
     return(character(0))
   }
-  datagrid <- attr(x, "datagrid", exact = TRUE)
-  if (is.null(datagrid)) {
-    datagrid <- .safe(marginaleffects::components(x, "newdata"))
-  }
-  if (is.null(datagrid)) {
+  # the grid used for predictions is the "newdata" component, which differs
+  # from the "datagrid" attribute when users provide their own `newdata`
+  grids <- list(
+    .safe(marginaleffects::components(x, "newdata")),
+    attr(x, "datagrid", exact = TRUE)
+  )
+  grids <- grids[!vapply(grids, is.null, logical(1))]
+  if (!length(grids)) {
     return(character(0))
   }
   protected <- vapply(
     focal_terms,
     function(i) {
       i %in% colnames(x) &&
-        i %in% colnames(datagrid) &&
-        all(as.character(x[[i]]) %in% as.character(datagrid[[i]]))
+        any(vapply(
+          grids,
+          function(g) {
+            i %in% colnames(g) && all(as.character(x[[i]]) %in% as.character(g[[i]]))
+          },
+          logical(1)
+        ))
     },
     logical(1)
   )
@@ -966,7 +974,11 @@ equivalence_columns <- c(
   if (!length(protected)) {
     return(character(0))
   }
-  stats::setNames(protected, paste0(".modelbased_focal_", seq_along(protected)))
+  # temporary names must not match any existing column
+  temporary <- make.unique(
+    c(colnames(x), paste0(".modelbased_focal_", seq_along(protected)))
+  )[-seq_along(colnames(x))]
+  stats::setNames(protected, temporary)
 }
 
 

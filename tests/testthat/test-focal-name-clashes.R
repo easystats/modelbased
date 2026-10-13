@@ -207,3 +207,22 @@ test_that("estimate_means() keeps numeric focal variables for glm", {
     expect_null(diff, label = paste0("glm(\"", name, "\"): ", diff))
   }
 })
+
+
+test_that("estimate_means() keeps focal variables with custom newdata", {
+  # the values in `newdata` are not part of the generated data grid
+  names <- setdiff(focal_reported_names, c("Mean", "s.value"))
+  call <- function(name) {
+    d <- focal_data(name, numeric = TRUE)
+    m <- stats::lm(focal_formula(paste0("`", name, "` + hp")), data = d)
+    newdata <- data.frame(x = c(2.123, 4.567), hp = 150)
+    colnames(newdata)[1] <- name
+    estimate_means(m, by = name, newdata = newdata)
+  }
+  ref <- call("safe_var")
+  for (name in names) {
+    out <- tryCatch(suppressWarnings(call(name)), error = function(e) e)
+    diff <- focal_difference(ref, out, name)
+    expect_null(diff, label = paste0("newdata(\"", name, "\"): ", diff))
+  }
+})
