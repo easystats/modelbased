@@ -15,8 +15,12 @@
 
   # Find predictors - only those that are columns in the data can be mapped
   # to aesthetics (e.g., for intercept-only models, the response is returned
-  # as focal term, but is not a column in the data)
+  # as focal term, but is not a column in the data, and for the emmeans
+  # backend, focal terms can be a formula like `~1`)
   by <- att$focal_terms
+  if (!is.character(by)) {
+    by <- NULL
+  }
   by <- by[by %in% colnames(data)]
 
   # flag for ordinal and alike models

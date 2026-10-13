@@ -227,4 +227,11 @@ test_that("visualization_recipe, informative error when nothing goes on x-axis",
   )
   x <- estimate_prediction(model, by = "wt")
   expect_s3_class(visualisation_recipe(x), "visualisation_recipe")
+  # emmeans backend returns `~1` as focal term
+  skip_if_not_installed("emmeans")
+  model <- lm(qsec ~ 1, data = mtcars)
+  expect_error(
+    visualisation_recipe(estimate_means(model, by = NULL, backend = "emmeans")),
+    regex = "intercept-only"
+  )
 })
