@@ -303,6 +303,20 @@ get_emmeans <- function(
   pseudo_factor <- .emmeans_ordinal_pseudo_factor(model, ordinal_mode)
   if (!is.null(pseudo_factor) && pseudo_factor %in% colnames(means)) {
     new_name <- if (ordinal_mode == "prob") "Response" else "Threshold"
+    # for clmm models, emmeans codes the response categories and thresholds
+    # as 1, 2, 3, ... - we replace these codes by the names from the model
+    if (inherits(model, "clmm")) {
+      level_names <- if (ordinal_mode == "prob") model$y.levels else names(model$alpha)
+      codes <- as.character(means[[pseudo_factor]])
+      if (ordinal_mode != "prob") {
+        # threshold codes look like "1|2"
+        codes <- sub("\\|.*", "", codes)
+      }
+      means[[pseudo_factor]] <- factor(
+        level_names[as.integer(codes)],
+        levels = level_names
+      )
+    }
     colnames(means)[colnames(means) == pseudo_factor] <- new_name
   }
   means

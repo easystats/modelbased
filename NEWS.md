@@ -33,6 +33,10 @@
 
 ## Bug fixes
 
+* `estimate_means()` with `backend = "emmeans"` now shows the response level
+  names for models from `ordinal::clmm()`. Before, the `Response` column showed
+  `1`, `2`, `3`, and the `Threshold` column showed `1|2`, `2|3`.
+
 * Fixed issue in `estimate_contrasts()` with wrong assignment of estimates in
   custom comparisons (e.g., when `comparison = "(b1 - b12) = (b4 - b18)"`),
   when some of the indexed coefficients contained the same digit (in this case,
