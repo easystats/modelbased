@@ -209,7 +209,7 @@ test_that("visualization_recipe", {
 })
 
 
-# ordinal models, emmeans backend --------------------------------------------
+# emmeans backend: ordinal and other models ----------------------------------
 
 .recipe_mapping <- function(x, ...) {
   r <- visualisation_recipe(x, ...)
