@@ -40,7 +40,14 @@
 * `comparison = "ratio"` is a new shortcut to compute pairwise comparisons
   as ratios.
 
+* The printed footer of `estimate_prediction()` and similar functions now
+  names prediction intervals as such (#485).
+
 ## Bug fixes
+
+* `estimate_means()` with `backend = "emmeans"` now shows the response level
+  names for models from `ordinal::clmm()`. Before, the `Response` column showed
+  `1`, `2`, `3`, and the `Threshold` column showed `1|2`, `2|3`.
 
 * Fixed issue in `estimate_contrasts()` with wrong assignment of estimates in
   custom comparisons (e.g., when `comparison = "(b1 - b12) = (b4 - b18)"`),
@@ -52,6 +59,10 @@
 
 * Fixed issues with using offsets and predicting grand mean (i.e. when model
   contains offset and `by = NULL`).
+
+* `plot()` now gives an informative error when there is nothing to put on the
+  x-axis, e.g. for predictions from intercept-only models, or for
+  `estimate_prediction()` without the `by` argument.
 
 # modelbased 0.17.0
 

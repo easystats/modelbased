@@ -13,8 +13,15 @@
   model_data <- .safe(insight::get_data(attributes(x)$model, verbose = FALSE))
   model_response <- attributes(x)$response
 
-  # Find predictors
+  # Find predictors - only those that are columns in the data can be mapped
+  # to aesthetics (e.g., for intercept-only models, the response is returned
+  # as focal term, but is not a column in the data, and for the emmeans
+  # backend, focal terms can be a formula like `~1`)
   by <- att$focal_terms
+  if (!is.character(by)) {
+    by <- NULL
+  }
+  by <- by[by %in% colnames(data)]
 
   # flag for ordinal and alike models
   has_response_levels <- isTRUE(
@@ -149,12 +156,19 @@
   }
 
   # Assign predictors to aes
-  if (is.null(by)) {
+  if (length(by) == 0) {
     by <- att$by
+    by <- by[by %in% colnames(data)]
   }
   if (length(by) == 0) {
+    if (isTRUE(.safe(insight::is_nullmodel(att$model)))) {
+      insight::format_error(
+        "The model has no predictors (e.g., it is an intercept-only model), so there is nothing to put on the x-axis."
+      )
+    }
     insight::format_error(
-      "No `by` variable was detected, so nothing to put in the x-axis."
+      "No `by` variable was detected, so there is nothing to put on the x-axis.",
+      "Use the `by` argument to specify the predictors to plot, e.g. `estimate_prediction(model, by = \"x\")`."
     )
   }
 
