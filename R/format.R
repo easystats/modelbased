@@ -838,10 +838,28 @@ equivalence_columns <- c(
     params <- .safe(datawizard::data_rename(params, "group", "Class"), params)
   }
 
-  # restore original names of protected focal terms
+  # restore original names of protected focal terms. A focal term with the
+  # name of another output column (e.g. "p" or "SE") gets the suffix ".1", so
+  # that the output column keeps its name.
+  renamed_focal <- NULL
+  restore_data <- model_data
   if (length(protected_focal)) {
     restore <- match(names(protected_focal), colnames(params))
-    colnames(params)[restore[!is.na(restore)]] <- protected_focal[!is.na(restore)]
+    focal_names <- protected_focal[!is.na(restore)]
+    clashes <- focal_names %in% colnames(params)
+    if (any(clashes)) {
+      renamed_focal <- stats::setNames(
+        paste0(focal_names[clashes], ".1"),
+        focal_names[clashes]
+      )
+      focal_names[clashes] <- renamed_focal
+      # suffixed columns get the data type of the original variable, and the
+      # output columns with the original names keep their own type
+      in_data <- names(renamed_focal) %in% colnames(restore_data)
+      restore_data[renamed_focal[in_data]] <- restore_data[names(renamed_focal)[in_data]]
+      restore_data[names(renamed_focal)[in_data]] <- NULL
+    }
+    colnames(params)[restore[!is.na(restore)]] <- focal_names
   }
 
   # extract information for potential inequality analysis
@@ -907,7 +925,7 @@ equivalence_columns <- c(
   }
 
   # finally, make sure we have original data types
-  params <- data.frame(datawizard::data_restoretype(params, model_data))
+  params <- data.frame(datawizard::data_restoretype(params, restore_data))
 
   # add posterior draws?
   insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
@@ -930,6 +948,8 @@ equivalence_columns <- c(
     }
   }
 
+  # `.rename_focal_attributes()` uses this to update the focal attributes
+  attr(params, "renamed_focal") <- renamed_focal
   params
 }
 
@@ -991,7 +1011,40 @@ equivalence_columns <- c(
     attributes(formatted_params),
     attributes(x)[.info_elements()]
   )
-  formatted_params
+  .rename_focal_attributes(formatted_params)
+}
+
+
+# Focal terms with the name of an output column get the suffix ".1" in
+# `.standardize_marginaleffects_columns()`, which saves the old and new names
+# in the "renamed_focal" attribute. This function uses the new names in the
+# attributes that name focal terms, and in the columns of the data grid. It
+# must be called again each time these attributes are copied back from the
+# unformatted object.
+
+#' @keywords internal
+.rename_focal_attributes <- function(x) {
+  renamed <- attr(x, "renamed_focal", exact = TRUE)
+  if (!length(renamed)) {
+    return(x)
+  }
+  new_names <- function(value) {
+    clashes <- value %in% names(renamed)
+    value[clashes] <- unname(renamed[value[clashes]])
+    value
+  }
+  for (a in c("focal_terms", "by", "at")) {
+    value <- attr(x, a, exact = TRUE)
+    if (is.character(value)) {
+      attr(x, a) <- new_names(value)
+    }
+  }
+  datagrid <- attr(x, "datagrid", exact = TRUE)
+  if (is.data.frame(datagrid)) {
+    colnames(datagrid) <- new_names(colnames(datagrid))
+    attr(x, "datagrid") <- datagrid
+  }
+  x
 }
 
 

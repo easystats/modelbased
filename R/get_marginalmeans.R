@@ -689,7 +689,7 @@ get_marginalmeans <- function(
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
     "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
     "iterations", "keep_iterations", "joint_test", "omnibus_test", "vcov",
-    "equivalence", "context_effects"
+    "equivalence", "context_effects", "renamed_focal"
   )
 }
 

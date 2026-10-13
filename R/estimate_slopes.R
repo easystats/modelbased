@@ -220,6 +220,7 @@ estimate_slopes <- function(
 
   # add attributes from workhorse function
   attributes(trends) <- utils::modifyList(attributes(trends), info[.info_elements()])
+  trends <- .rename_focal_attributes(trends)
 
   # Output
   class(trends) <- c("estimate_slopes_summary", "estimate_slopes", class(trends))

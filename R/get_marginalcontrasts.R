@@ -193,6 +193,7 @@ get_marginalcontrasts <- function(
       keep_iterations = keep_iterations
     )
   )
+  out <- .rename_focal_attributes(out)
 
   # adjust p-values - we do this here because we need all the information
   # from the attributes

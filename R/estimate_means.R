@@ -537,6 +537,7 @@ estimate_means <- function(
 
   # add attributes from workhorse function
   attributes(means) <- utils::modifyList(attributes(means), info[.info_elements()])
+  means <- .rename_focal_attributes(means)
 
   # output from the emmeans backend has no `model_info` attribute, which we
   # need for plotting, e.g. to color the response categories of ordinal models
