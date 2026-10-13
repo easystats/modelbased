@@ -1028,9 +1028,14 @@ equivalence_columns <- c(
   if (!length(renamed)) {
     return(x)
   }
+  # renames exact names, and the names in filters such as "p='4'" or
+  # "p = c('4', '6')"
   new_names <- function(value) {
-    clashes <- value %in% names(renamed)
-    value[clashes] <- unname(renamed[value[clashes]])
+    for (i in names(renamed)) {
+      rest <- substring(value, nchar(i) + 1)
+      matches <- startsWith(value, i) & (rest == "" | grepl("^\\s*[=\\[]", rest))
+      value[matches] <- paste0(renamed[[i]], rest[matches])
+    }
     value
   }
   for (a in c("focal_terms", "by", "at")) {
@@ -1050,6 +1055,21 @@ equivalence_columns <- c(
     attr(x, "datagrid") <- datagrid
   }
   x
+}
+
+
+# Returns the names in the model data for focal terms that
+# `.rename_focal_attributes()` renamed to "<name>.1". `renamed` is the
+# "renamed_focal" attribute.
+
+#' @keywords internal
+.original_focal_names <- function(focal_names, renamed) {
+  if (!length(renamed) || !length(focal_names)) {
+    return(focal_names)
+  }
+  matches <- match(focal_names, renamed)
+  focal_names[!is.na(matches)] <- names(renamed)[matches[!is.na(matches)]]
+  focal_names
 }
 
 

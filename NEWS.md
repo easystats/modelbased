@@ -60,7 +60,9 @@
   with `estimate_slopes()` and `estimate_contrasts()`, and for `SE`, `CI_low`
   and `CI_high` with `estimate_slopes()`. Before, for example,
   `estimate_means()` kept a `by` variable named `Mean` and renamed the means
-  to `Mean.1`, and `estimate_contrasts()` renamed the p-values to `p.1`.
+  to `Mean.1`, and `estimate_contrasts()` renamed the p-values to `p.1`. As
+  for the fix above, this does not yet apply to Bayesian models or to
+  inequality comparisons.
 
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed

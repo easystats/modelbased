@@ -221,13 +221,24 @@ get_marginalcontrasts <- function(
   # we don't filter using the data grid; due to the flexible way of defining
   # comparisons, we need the full data grid and filter here (e.g., when we have
   # `by="Petal.Width=c(1, 2)"`)
-  if (!is.null(my_args$by_filter) && all(names(my_args$by_filter) %in% colnames(out))) {
-    for (i in names(my_args$by_filter)) {
-      filter_ok <- any(my_args$by_filter[[i]] %in% out[[i]])
+  # by-variables with the name of an output column have the suffix ".1" in
+  # `out`, see `.rename_focal_attributes()`
+  renamed <- attr(out, "renamed_focal", exact = TRUE)
+  filter_columns <- names(my_args$by_filter)
+  clashes <- filter_columns %in% names(renamed)
+  filter_columns[clashes] <- unname(renamed[filter_columns[clashes]])
+  if (!is.null(my_args$by_filter) && all(filter_columns %in% colnames(out))) {
+    for (j in seq_along(filter_columns)) {
+      i <- names(my_args$by_filter)[j]
+      column <- filter_columns[j]
+      filter_ok <- any(my_args$by_filter[[i]] %in% out[[column]])
       # stop if not...
       if (!filter_ok) {
         # set up informative message
-        example_values <- sample(unique(out[[i]]), pmin(3, insight::n_unique(out[[i]])))
+        example_values <- sample(
+          unique(out[[column]]),
+          pmin(3, insight::n_unique(out[[column]]))
+        )
         # tell user...
         insight::format_error(paste0(
           "None of the values specified for the predictor `",
@@ -239,7 +250,7 @@ get_marginalcontrasts <- function(
           "."
         ))
       }
-      out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
+      out <- out[out[[column]] %in% my_args$by_filter[[i]], ]
     }
     # sanity check - do we have any rows left?
     .check_filter_args(out, "No rows left after filtering.")
