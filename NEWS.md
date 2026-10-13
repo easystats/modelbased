@@ -54,6 +54,14 @@
   This fix does not yet apply to Bayesian models or to inequality comparisons
   (for example `comparison = "inequality"`).
 
+* With `backend = "marginaleffects"`, a `by` variable with the name of the
+  estimate column (for example `Mean`) or of the `t` column is now returned as
+  `<name>.1`. The output column keeps its name. This also holds for `p`
+  with `estimate_slopes()` and `estimate_contrasts()`, and for `SE`, `CI_low`
+  and `CI_high` with `estimate_slopes()`. Before, for example,
+  `estimate_means()` kept a `by` variable named `Mean` and renamed the means
+  to `Mean.1`, and `estimate_contrasts()` renamed the p-values to `p.1`.
+
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed
   `1`, `2`, `3`, and the `Threshold` column showed `1|2`, `2|3`.
