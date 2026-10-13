@@ -162,6 +162,12 @@
     }
   }
 
+  # tell user about prediction intervals -------------------------------------
+
+  if (identical(type, "predictions") && identical(info$predict, "prediction")) {
+    table_footer <- paste0(table_footer, "\nIntervals are prediction intervals.")
+  }
+
   # Parameter labels for special hypothesis testing --------------------------
 
   # for special hypothesis testing, like "(b1 - b2) = (b4 - b3)", we want to
