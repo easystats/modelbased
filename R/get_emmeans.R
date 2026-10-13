@@ -319,8 +319,9 @@ get_emmeans <- function(
         level_names <- paste(response_levels[-n_levels], response_levels[-1], sep = "|")
         codes <- paste(seq_len(n_levels - 1), seq_len(n_levels)[-1], sep = "|")
       }
-      # only replace codes, in case emmeans returns level names in the future
-      if (setequal(values, codes)) {
+      # we only replace the values when they are exactly the codes, and when
+      # each code gets its own name (level names can contain "|")
+      if (setequal(values, codes) && !anyDuplicated(level_names)) {
         means[[pseudo_factor]] <- factor(
           level_names[match(values, codes)],
           levels = level_names

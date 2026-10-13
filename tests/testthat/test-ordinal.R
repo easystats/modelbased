@@ -246,11 +246,22 @@ test_that("estimate_means, backend emmeans, clmm shows response level names", {
   # 1, 2, 3, ..., so we check that each code is replaced by its level name
   text_levels <- c("vbad", "bad", "ok", "good", "vgood")
   number_levels <- c("2", "4", "6", "8", "10")
+  reversed_levels <- c("5", "4", "3", "2", "1")
   wine$rating_text <- factor(wine$rating, labels = text_levels, ordered = TRUE)
   wine$rating_number <- factor(as.integer(wine$rating) * 2, ordered = TRUE)
+  wine$rating_reversed <- factor(
+    as.character(wine$rating),
+    levels = reversed_levels,
+    ordered = TRUE
+  )
+  all_levels <- list(
+    rating_text = text_levels,
+    rating_number = number_levels,
+    rating_reversed = reversed_levels
+  )
 
-  for (response in c("rating_text", "rating_number")) {
-    response_levels <- if (response == "rating_text") text_levels else number_levels
+  for (response in names(all_levels)) {
+    response_levels <- all_levels[[response]]
     threshold_names <- paste(response_levels[-5], response_levels[-1], sep = "|")
     f <- stats::as.formula(paste(response, "~ temp + contact + (1 | judge)"))
     m <- ordinal::clmm(f, data = wine)
@@ -341,7 +352,6 @@ test_that("estimate_means, backend emmeans, clmm threshold names, all threshold 
 test_that("estimate_means, backend emmeans, ordinal level names unchanged", {
   skip_if_not_installed("emmeans")
   skip_if_not_installed("ordinal")
-  skip_if_not_installed("glmmTMB", minimum_version = "1.1.15.2")
   data(housing, package = "MASS")
   housing$SatNum <- as.integer(housing$Sat)
   data(wine, package = "ordinal")
@@ -360,7 +370,17 @@ test_that("estimate_means, backend emmeans, ordinal level names unchanged", {
       ordinal::clm(Sat ~ Infl + Type + Cont, weights = Freq, data = housing),
       sat_levels
     ),
-    glmmTMB = list(
+    clmm = list(
+      ordinal::clmm(rating ~ temp + contact + (1 | judge), data = wine),
+      c("1", "2", "3", "4", "5")
+    )
+  )
+  # ordinal family in glmmTMB requires glmmTMB >= 1.1.15.2
+  if (
+    requireNamespace("glmmTMB", quietly = TRUE) &&
+      utils::packageVersion("glmmTMB") >= "1.1.15.2"
+  ) {
+    models$glmmTMB <- list(
       glmmTMB::glmmTMB(
         Sat ~ Infl + Type + Cont,
         weights = Freq,
@@ -368,12 +388,8 @@ test_that("estimate_means, backend emmeans, ordinal level names unchanged", {
         family = glmmTMB::ordinal()
       ),
       sat_levels
-    ),
-    clmm = list(
-      ordinal::clmm(rating ~ temp + contact + (1 | judge), data = wine),
-      c("1", "2", "3", "4", "5")
     )
-  )
+  }
 
   for (i in names(models)) {
     m <- models[[i]][[1]]
