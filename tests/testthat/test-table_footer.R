@@ -32,6 +32,10 @@ test_that("table_footer, prediction intervals", {
   out <- utils::capture.output(estimate_relation(m_lm, predict = "prediction", length = 3))
   expect_identical(sum(out == pi_line), 1L)
 
+  # no intervals, no line
+  out <- utils::capture.output(estimate_prediction(m_lm, data = "grid", length = 3, ci = NULL))
+  expect_false(pi_line %in% out)
+
   # no prediction intervals
   for (m in list(m_lm, m_glm)) {
     out <- utils::capture.output(estimate_expectation(m, data = "grid", length = 3))

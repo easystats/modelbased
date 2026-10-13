@@ -164,7 +164,11 @@
 
   # tell user about prediction intervals -------------------------------------
 
-  if (identical(type, "predictions") && identical(info$predict_used, "prediction")) {
+  if (
+    identical(type, "predictions") &&
+      identical(info$predict_used, "prediction") &&
+      "CI_low" %in% colnames(x)
+  ) {
     table_footer <- paste0(table_footer, "\nIntervals are prediction intervals.")
   }
 
