@@ -47,6 +47,10 @@
 * Fixed issues with using offsets and predicting grand mean (i.e. when model
   contains offset and `by = NULL`).
 
+* `plot()` now gives an informative error when there is nothing to put on the
+  x-axis, e.g. for predictions from intercept-only models, or for
+  `estimate_prediction()` without the `by` argument.
+
 # modelbased 0.17.0
 
 ## Breaking Changes

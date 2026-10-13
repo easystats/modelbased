@@ -207,3 +207,31 @@ test_that("visualization_recipe", {
   expect_identical(aes$color, "Comparison")
   # plot(modelbased:::.visualization_recipe(x))
 })
+
+test_that("visualization_recipe, informative error when nothing goes on x-axis", {
+  # intercept-only model
+  model <- lm(qsec ~ 1, data = mtcars)
+  expect_error(
+    visualisation_recipe(estimate_prediction(model)),
+    regex = "intercept-only"
+  )
+  expect_error(
+    visualisation_recipe(estimate_relation(model)),
+    regex = "intercept-only"
+  )
+  # no `by` variable
+  model <- lm(qsec ~ wt, data = mtcars)
+  expect_error(
+    visualisation_recipe(estimate_prediction(model)),
+    regex = "Use the `by` argument"
+  )
+  x <- estimate_prediction(model, by = "wt")
+  expect_s3_class(visualisation_recipe(x), "visualisation_recipe")
+  # emmeans backend returns `~1` as focal term
+  skip_if_not_installed("emmeans")
+  model <- lm(qsec ~ 1, data = mtcars)
+  expect_error(
+    visualisation_recipe(estimate_means(model, by = NULL, backend = "emmeans")),
+    regex = "intercept-only"
+  )
+})
