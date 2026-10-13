@@ -51,6 +51,8 @@
   columns because of such a name. Before, for example, `estimate_means()`
   dropped a `by` variable named `type` and renamed `n` to `n_Obs`. It also
   labeled a variable named `Median` as `Mean`, and the means as `Coefficient`.
+  This fix does not yet apply to Bayesian models or to inequality comparisons
+  (for example `comparison = "inequality"`).
 
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed
