@@ -309,9 +309,9 @@ test_that("estimate_means, backend emmeans, clmm threshold names, all threshold 
   threshold_names <- c("vbad|bad", "bad|ok", "ok|good", "good|vgood")
   wine$rating_text <- factor(wine$rating, labels = text_levels, ordered = TRUE)
 
-  # for "symmetric" and "equidistant", the model parameters are not one per
-  # threshold, but emmeans still returns one row per threshold
-  for (threshold in c("flexible", "symmetric", "equidistant")) {
+  # for "symmetric", "symmetric2" and "equidistant", the model parameters are
+  # not one per threshold, but emmeans still returns one row per threshold
+  for (threshold in c("flexible", "symmetric", "symmetric2", "equidistant")) {
     m <- ordinal::clmm(
       rating_text ~ temp + (1 | judge),
       data = wine,

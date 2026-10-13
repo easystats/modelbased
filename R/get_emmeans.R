@@ -314,8 +314,8 @@ get_emmeans <- function(
         codes <- as.character(seq_len(n_levels))
       } else {
         # threshold codes look like "1|2". We don't use `names(model$alpha)`,
-        # because these are not the thresholds for `threshold = "symmetric"`
-        # or `"equidistant"`
+        # because these are not the thresholds for `threshold = "symmetric"`,
+        # `"symmetric2"` or `"equidistant"`
         level_names <- paste(response_levels[-n_levels], response_levels[-1], sep = "|")
         codes <- paste(seq_len(n_levels - 1), seq_len(n_levels)[-1], sep = "|")
       }
