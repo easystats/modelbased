@@ -434,6 +434,9 @@ test_that("visualization_recipe, emmeans, recipes that do not change", {
     expect_null(out$color)
     .expect_same_print(x)
   }
+})
+
+
 test_that("visualization_recipe, informative error when nothing goes on x-axis", {
   # intercept-only model
   model <- lm(qsec ~ 1, data = mtcars)
