@@ -722,6 +722,16 @@ equivalence_columns <- c(
   is_contrast_analysis = FALSE,
   ...
 ) {
+  # focal terms can have names that `model_parameters()` renames or that we
+  # remove below (e.g. "type", "n" or "p"). We give these columns temporary
+  # names and restore the original names after all renaming is done.
+  focal_terms <- attr(x, "focal_terms", exact = TRUE)
+  protected_focal <- .protected_focal_columns(x, focal_terms)
+  if (length(protected_focal)) {
+    colnames(x)[match(protected_focal, colnames(x))] <- names(protected_focal)
+    focal_terms[match(protected_focal, focal_terms)] <- names(protected_focal)
+  }
+
   # tidy output - we want to tidy the output, using `model_parameters()` or
   # `describe_posterior()` for Bayesian models. We also need to know how the
   # coefficient column is named, because we replace that column name with an
@@ -783,9 +793,8 @@ equivalence_columns <- c(
   params <- params[c(setdiff(colnames(params), relocate_columns), relocate_columns)]
 
   # relocate focal terms to the beginning
-  by <- attr(x, "focal_terms", exact = TRUE)
-  if (!is.null(by) && all(by %in% colnames(params))) {
-    params <- datawizard::data_reorder(params, by, verbose = FALSE)
+  if (!is.null(focal_terms) && all(focal_terms %in% colnames(params))) {
+    params <- datawizard::data_reorder(params, focal_terms, verbose = FALSE)
   }
 
   # rename coefficient name and statistics columns
@@ -827,6 +836,12 @@ equivalence_columns <- c(
     params <- .safe(datawizard::data_rename(params, "group", "Response"), params)
   } else if (info$is_mixture) {
     params <- .safe(datawizard::data_rename(params, "group", "Class"), params)
+  }
+
+  # restore original names of protected focal terms
+  if (length(protected_focal)) {
+    restore <- match(names(protected_focal), colnames(params))
+    colnames(params)[restore[!is.na(restore)]] <- protected_focal[!is.na(restore)]
   }
 
   # extract information for potential inequality analysis
@@ -916,6 +931,54 @@ equivalence_columns <- c(
   }
 
   params
+}
+
+
+# Returns the focal terms that are columns of the marginaleffects output `x`
+# and hold the values of the data grid, named with temporary column names.
+# Columns that marginaleffects writes itself (e.g. "hypothesis" or "s.value")
+# do not hold the data grid values, so these are not protected. Bayesian
+# models are tidied by `describe_posterior()`, which may drop unknown columns,
+# so we do not protect focal terms there.
+
+#' @keywords internal
+.protected_focal_columns <- function(x, focal_terms) {
+  if (is.null(focal_terms) || .is_bayesian_marginaleffects(x)) {
+    return(character(0))
+  }
+  # the grid used for predictions is the "newdata" component, which differs
+  # from the "datagrid" attribute when users provide their own `newdata`
+  grids <- list(
+    .safe(marginaleffects::components(x, "newdata")),
+    attr(x, "datagrid", exact = TRUE)
+  )
+  grids <- grids[!vapply(grids, is.null, logical(1))]
+  if (!length(grids)) {
+    return(character(0))
+  }
+  protected <- vapply(
+    focal_terms,
+    function(i) {
+      i %in% colnames(x) &&
+        any(vapply(
+          grids,
+          function(g) {
+            i %in% colnames(g) && all(as.character(x[[i]]) %in% as.character(g[[i]]))
+          },
+          logical(1)
+        ))
+    },
+    logical(1)
+  )
+  protected <- unname(focal_terms[protected])
+  if (!length(protected)) {
+    return(character(0))
+  }
+  # temporary names must not match any existing column
+  temporary <- make.unique(
+    c(colnames(x), paste0(".modelbased_focal_", seq_along(protected)))
+  )[-seq_along(colnames(x))]
+  stats::setNames(protected, temporary)
 }
 
 
