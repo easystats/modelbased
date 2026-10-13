@@ -31,6 +31,9 @@
 * `comparison = "ratio"` is a new shortcut to compute pairwise comparisons
   as ratios.
 
+* The printed footer of `estimate_prediction()` and similar functions now
+  names prediction intervals as such (#485).
+
 ## Bug fixes
 
 * Fixed issue in `estimate_contrasts()` with wrong assignment of estimates in

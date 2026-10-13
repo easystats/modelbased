@@ -591,12 +591,21 @@ estimate_relation <- function(
   attr(out, "coef_name") <- "Predicted"
   attr(out, "model_info") <- insight::model_info(model, response = 1)
   attr(out, "predict") <- predict
+  # for the prediction-interval line in the footer, we use the type of
+  # predictions that insight actually used, because insight may change
+  # "prediction" into "expectation" for some models
+  footer_predict <- attr(predictions, "predict", exact = TRUE)
+  if (is.null(footer_predict)) {
+    footer_predict <- predict
+  }
+  footer_info <- c(grid_specs, list(predict = predict), transform = !is.null(transform))
+  footer_info$predict_used <- footer_predict
   attr(out, "table_footer") <- .table_footer(
     out,
     by = grid_specs$at,
     type = "predictions",
     model = model,
-    info = c(grid_specs, list(predict = predict), transform = !is.null(transform))
+    info = footer_info
   )
 
   attributes(out) <- c(

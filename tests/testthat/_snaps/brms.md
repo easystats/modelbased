@@ -25,6 +25,7 @@
       
       Variable predicted: rt, response
       Predictions are on the response-scale.
+      Intervals are prediction intervals.
 
 ---
 
@@ -53,4 +54,5 @@
       
       Variable predicted: rt, response
       Predictions are on the response-scale.
+      Intervals are prediction intervals.
 
