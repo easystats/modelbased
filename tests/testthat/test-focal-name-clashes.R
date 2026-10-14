@@ -74,6 +74,11 @@ focal_calls <- list(
     m <- stats::lm(focal_formula(paste0("am_f + `", name, "`")), data = d)
     estimate_means(m, "am_f")
   },
+  contrasts_covariate = function(name) {
+    d <- focal_data(name, numeric = TRUE)
+    m <- stats::lm(focal_formula(paste0("am_f + `", name, "`")), data = d)
+    estimate_contrasts(m, "am_f")
+  },
   slopes_covariate = function(name) {
     d <- focal_data(name, numeric = TRUE)
     d$hp_s <- d$hp / 100
@@ -87,6 +92,7 @@ focal_calls <- list(
 focal_error_cells <- list(
   means_two = c("Predicted", "SE", "CI_low", "CI_high", "df", "rowid", "s.value"),
   means_covariate = c("SE", "CI_low", "CI_high", "df"),
+  contrasts_covariate = c("SE", "CI_low", "CI_high", "df"),
   contrasts_by = c("Predicted", "SE", "CI_low", "CI_high", "df", "rowid", "s.value"),
   contrasts = c("SE", "CI_low", "CI_high", "df", "rowid"),
   slopes_by = c("df", "rowid", "s.value", "predicted", "predicted_hi", "predicted_lo")
@@ -153,14 +159,14 @@ test_that("names that marginaleffects overwrites give an informative error", {
       n_cells <- n_cells + 1
       out <- tryCatch(suppressWarnings(focal_calls[[call_name]](name)), error = function(e) e)
       label <- paste0(call_name, "(\"", name, "\")")
-      expect_s3_class(out, "error")
+      expect_true(inherits(out, "error"), label = label)
       msg <- if (inherits(out, "error")) conditionMessage(out) else ""
       expect_true(grepl(paste0("`", name, "`"), msg, fixed = TRUE), label = label)
       expect_true(grepl("rename", msg, fixed = TRUE), label = label)
       expect_false(grepl("Sorry, calculating", msg, fixed = TRUE), label = label)
     }
   }
-  expect_identical(n_cells, 29)
+  expect_identical(n_cells, 33)
 })
 
 

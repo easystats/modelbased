@@ -76,7 +76,8 @@
     `df`, `rowid` and `s.value`.
   * a factor `contrast` variable of `estimate_contrasts()`: `SE`, `CI_low`,
     `CI_high`, `df` and `rowid`.
-  * other predictors of `estimate_means()`: `SE`, `CI_low`, `CI_high` and `df`.
+  * other predictors of `estimate_means()` and `estimate_contrasts()`: `SE`,
+    `CI_low`, `CI_high` and `df`.
   * `by` variables of `estimate_slopes()`: `df`, `rowid`, `s.value`,
     `predicted`, `predicted_hi` and `predicted_lo`.
 
@@ -90,7 +91,9 @@
   variable named `Parameter`. Before, the output had two columns with the same
   name, the contrast labels were not split into `Level1` and `Level2`, or the
   call failed with an unclear error. If `<name>.1` is already a variable name,
-  the suffix is the next free number, for example `p.2`.
+  the suffix is the next free number, for example `p.2`. As for the fixes
+  above, the `Level1`, `Level2` and `hypothesis` fixes do not yet apply to
+  Bayesian models or to inequality comparisons.
 
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed

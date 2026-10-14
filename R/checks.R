@@ -259,7 +259,7 @@
       names_text,
       if (length(bad) > 1) " have names " else " has a name ",
       "that the marginaleffects package uses for its own columns, so the results",
-      " would be wrong. Please rename ",
+      " would be wrong or the call would fail. Please rename ",
       names_text,
       " in your data and fit the model again."
     ))
