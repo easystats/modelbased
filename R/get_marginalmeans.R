@@ -657,6 +657,8 @@ get_marginalmeans <- function(
 # - slope: the type of slope, e.g. "dx/dy". equals the "slope" argument when
 #   calling avg_slopes()
 # - model_info: object from insight::model_info()
+# - renamed_focal: focal terms with the name of an output column, named by
+#   their old names, with the new names "<name>.1" as values
 #' @keywords internal
 .add_attributes <- function(x, by = NULL, model_info = NULL, info = NULL) {
   attr(x, "at") <- by
@@ -689,7 +691,7 @@ get_marginalmeans <- function(
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
     "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
     "iterations", "keep_iterations", "joint_test", "omnibus_test", "vcov",
-    "equivalence", "context_effects"
+    "equivalence", "context_effects", "renamed_focal"
   )
 }
 

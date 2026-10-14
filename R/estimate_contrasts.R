@@ -607,6 +607,7 @@ estimate_contrasts.default <- function(
 
   # add attributes from workhorse function
   attributes(out) <- utils::modifyList(attributes(out), info[.info_elements()])
+  out <- .rename_focal_attributes(out)
 
   # Output
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))

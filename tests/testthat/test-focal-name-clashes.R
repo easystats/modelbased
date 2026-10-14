@@ -49,6 +49,21 @@ focal_calls <- list(
     m <- stats::lm(focal_formula(paste0("`", name, "` * am_f")), data = d)
     estimate_contrasts(m, "am_f", by = name)
   },
+  contrasts_by_filter = function(name) {
+    d <- focal_data(name)
+    m <- stats::lm(focal_formula(paste0("`", name, "` * am_f")), data = d)
+    estimate_contrasts(m, "am_f", by = paste0(name, "=c('4', '6')"))
+  },
+  contrasts_by_filter_average = function(name) {
+    d <- focal_data(name)
+    m <- stats::lm(focal_formula(paste0("`", name, "` * am_f")), data = d)
+    estimate_contrasts(
+      m,
+      "am_f",
+      by = paste0(name, "='4'"),
+      estimate = "average"
+    )
+  },
   contrasts = function(name) {
     d <- focal_data(name)
     m <- stats::lm(focal_formula(paste0("`", name, "` + hp")), data = d)
@@ -91,15 +106,20 @@ focal_difference <- function(ref, out, name) {
       return(paste0("attribute ", a, " differs"))
     }
   }
+  ref_grid <- swap(colnames(attr(ref, "datagrid", exact = TRUE)))
+  out_grid <- colnames(attr(out, "datagrid", exact = TRUE))
+  if (!identical(ref_grid, out_grid)) {
+    return(paste0("datagrid columns [", toString(out_grid), "]"))
+  }
   NULL
 }
 
-expect_focal_names_match <- function(call_name, names) {
+expect_focal_names_match <- function(call_name, names, suffix = "") {
   call <- focal_calls[[call_name]]
   ref <- call("safe_var")
   for (name in names) {
     out <- tryCatch(suppressWarnings(call(name)), error = function(e) e)
-    diff <- focal_difference(ref, out, name)
+    diff <- focal_difference(ref, out, paste0(name, suffix))
     expect_null(diff, label = paste0(call_name, "(\"", name, "\"): ", diff))
   }
 }
@@ -124,6 +144,71 @@ test_that("estimate_contrasts() keeps by-variables named like renamed columns", 
     c("p", "s.value", "hypothesis", "Difference")
   )
   expect_focal_names_match("contrasts_by", names)
+})
+
+
+# A by-variable with the name of an output column gets the suffix ".1", and the
+# output column keeps its name. The expected output is the output for
+# "safe_var", with "safe_var" replaced by "<name>.1".
+
+# marginaleffects renames columns named "Predicted", "SE", "CI_low" and
+# "CI_high" for means and contrasts, so these names are not tested there.
+
+test_that("estimate_means() suffixes focal variables named like output columns", {
+  names <- c("Mean", "t")
+  expect_focal_names_match("means", names, suffix = ".1")
+  expect_focal_names_match("means_two", names, suffix = ".1")
+})
+
+
+test_that("estimate_slopes() suffixes by-variables named like output columns", {
+  names <- c("Slope", "SE", "CI_low", "CI_high", "t", "p")
+  expect_focal_names_match("slopes_by", names, suffix = ".1")
+})
+
+
+test_that("estimate_contrasts() suffixes by-variables named like output columns", {
+  names <- c("Difference", "t", "p")
+  expect_focal_names_match("contrasts_by", names, suffix = ".1")
+})
+
+
+test_that("estimate_contrasts() filters suffixed by-variables", {
+  names <- c("Difference", "t", "p")
+  expect_focal_names_match("contrasts_by_filter", names, suffix = ".1")
+  expect_focal_names_match("contrasts_by_filter_average", names, suffix = ".1")
+})
+
+
+test_that("print() and plot() use the suffixed focal column", {
+  skip_if_not_installed("ggplot2")
+  skip_if_not_installed("see")
+  for (name in c("Mean", "t")) {
+    out <- focal_calls$means(name)
+    expect_no_error(utils::capture.output(print(out)))
+    p <- plot(out)
+    expect_no_error(ggplot2::ggplot_build(p))
+    x_mappings <- unlist(lapply(p$layers, function(l) {
+      if (is.null(l$mapping$x)) NULL else ggplot2::as_label(l$mapping$x)
+    }))
+    expect_true(
+      length(x_mappings) > 0 && all(x_mappings == paste0(name, ".1")),
+      label = paste0("x mappings for \"", name, "\": ", toString(x_mappings))
+    )
+  }
+})
+
+
+test_that("plot() uses the variable label of a suffixed focal variable", {
+  skip_if_not_installed("ggplot2")
+  skip_if_not_installed("see")
+  for (name in c("safe_var", "Mean", "t")) {
+    d <- focal_data(name)
+    attr(d[[name]], "label") <- "Cylinders"
+    m <- stats::lm(focal_formula(paste0("`", name, "` + hp")), data = d)
+    p <- plot(estimate_means(m, name))
+    expect_identical(p$labels$x, "Cylinders", label = paste0("x label for \"", name, "\""))
+  }
 })
 
 

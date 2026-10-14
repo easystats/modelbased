@@ -260,11 +260,13 @@
     } else {
       ylab <- paste(y_prefix, "of", ylab)
     }
+    # names of the focal terms in the model data
+    model_by <- .original_focal_names(by, att$renamed_focal)
     # main predictor - mapped to x-axis
-    xlab <- .safe(attr(model_data[[by[1]]], "label", exact = TRUE))
+    xlab <- .safe(attr(model_data[[model_by[1]]], "label", exact = TRUE))
     # first grouping variable (2nd in "by") - mapped to legend
     if (length(by) > 1) {
-      colour <- .safe(attr(model_data[[by[[2]]]], "label", exact = TRUE))
+      colour <- .safe(attr(model_data[[model_by[[2]]]], "label", exact = TRUE))
     } else {
       colour <- NULL
     }

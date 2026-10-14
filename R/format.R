@@ -838,10 +838,28 @@ equivalence_columns <- c(
     params <- .safe(datawizard::data_rename(params, "group", "Class"), params)
   }
 
-  # restore original names of protected focal terms
+  # restore original names of protected focal terms. A focal term with the
+  # name of another output column (e.g. "p" or "t") gets the suffix ".1", so
+  # that the output column keeps its name.
+  renamed_focal <- NULL
+  restore_data <- model_data
   if (length(protected_focal)) {
     restore <- match(names(protected_focal), colnames(params))
-    colnames(params)[restore[!is.na(restore)]] <- protected_focal[!is.na(restore)]
+    focal_names <- protected_focal[!is.na(restore)]
+    clashes <- focal_names %in% colnames(params)
+    if (any(clashes)) {
+      renamed_focal <- stats::setNames(
+        paste0(focal_names[clashes], ".1"),
+        focal_names[clashes]
+      )
+      focal_names[clashes] <- renamed_focal
+      # suffixed columns get the data type of the original variable, and the
+      # output columns with the original names keep their own type
+      in_data <- names(renamed_focal) %in% colnames(restore_data)
+      restore_data[renamed_focal[in_data]] <- restore_data[names(renamed_focal)[in_data]]
+      restore_data[names(renamed_focal)[in_data]] <- NULL
+    }
+    colnames(params)[restore[!is.na(restore)]] <- focal_names
   }
 
   # extract information for potential inequality analysis
@@ -907,7 +925,7 @@ equivalence_columns <- c(
   }
 
   # finally, make sure we have original data types
-  params <- data.frame(datawizard::data_restoretype(params, model_data))
+  params <- data.frame(datawizard::data_restoretype(params, restore_data))
 
   # add posterior draws?
   insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
@@ -930,6 +948,8 @@ equivalence_columns <- c(
     }
   }
 
+  # `.rename_focal_attributes()` uses this to update the focal attributes
+  attr(params, "renamed_focal") <- renamed_focal
   params
 }
 
@@ -991,7 +1011,66 @@ equivalence_columns <- c(
     attributes(formatted_params),
     attributes(x)[.info_elements()]
   )
-  formatted_params
+  .rename_focal_attributes(formatted_params)
+}
+
+
+# Focal terms with the name of an output column get the suffix ".1" in
+# `.standardize_marginaleffects_columns()`, which saves the old and new names
+# in the "renamed_focal" attribute. This function uses the new names in the
+# attributes that name focal terms, and in the columns of the data grid. It
+# must be called again each time these attributes are copied back from the
+# unformatted object. `estimate_contrasts()` for `estimate_relation()` output
+# does not call it, because that path does not suffix focal terms.
+
+#' @keywords internal
+.rename_focal_attributes <- function(x) {
+  renamed <- attr(x, "renamed_focal", exact = TRUE)
+  if (!length(renamed)) {
+    return(x)
+  }
+  # renames exact names, and the names in filters such as "p='4'" or
+  # "p = c('4', '6')"
+  new_names <- function(value) {
+    for (i in names(renamed)) {
+      rest <- substring(value, nchar(i) + 1)
+      matches <- startsWith(value, i) & (rest == "" | grepl("^\\s*[=\\[]", rest))
+      value[matches] <- paste0(renamed[[i]], rest[matches])
+    }
+    value
+  }
+  for (a in c("focal_terms", "by", "at")) {
+    value <- attr(x, a, exact = TRUE)
+    if (is.character(value)) {
+      attr(x, a) <- new_names(value)
+    }
+  }
+  # `utils::modifyList()` merges the data grid column by column, so a copy-back
+  # can add the column with the old name next to the renamed one. We then
+  # remove the column with the old name.
+  datagrid <- attr(x, "datagrid", exact = TRUE)
+  if (is.data.frame(datagrid)) {
+    renamed_before <- names(renamed)[renamed %in% colnames(datagrid)]
+    datagrid[intersect(renamed_before, colnames(datagrid))] <- NULL
+    colnames(datagrid) <- new_names(colnames(datagrid))
+    attr(x, "datagrid") <- datagrid
+  }
+  x
+}
+
+
+# Returns the names in the model data for focal terms that
+# `.rename_focal_attributes()` renamed to "<name>.1". `renamed` is the
+# "renamed_focal" attribute.
+
+#' @keywords internal
+.original_focal_names <- function(focal_names, renamed) {
+  if (!length(renamed) || !length(focal_names)) {
+    return(focal_names)
+  }
+  matches <- match(focal_names, renamed)
+  focal_names[!is.na(matches)] <- names(renamed)[matches[!is.na(matches)]]
+  focal_names
 }
 
 
