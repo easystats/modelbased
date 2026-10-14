@@ -730,6 +730,15 @@ equivalence_columns <- c(
   if (length(protected_focal)) {
     colnames(x)[match(protected_focal, colnames(x))] <- names(protected_focal)
     focal_terms[match(protected_focal, focal_terms)] <- names(protected_focal)
+    # for a focal term named "hypothesis", marginaleffects names its own
+    # "hypothesis" column "hypothesis.1"
+    if (
+      "hypothesis" %in% protected_focal &&
+        !"hypothesis.1" %in% protected_focal &&
+        "hypothesis.1" %in% colnames(x)
+    ) {
+      colnames(x)[colnames(x) == "hypothesis.1"] <- "hypothesis"
+    }
   }
 
   # tidy output - we want to tidy the output, using `model_parameters()` or
@@ -773,7 +782,13 @@ equivalence_columns <- c(
   ) {
     estimate_name <- coefficient_name
   }
-  # rename the "term" and "hypothesis" column (which we get from contrasts)
+  # rename the "term" and "hypothesis" column (which we get from contrasts).
+  # A "Parameter" column that is not a protected focal term holds these
+  # labels, so the data type of a variable named "Parameter" is not restored.
+  restore_data <- model_data
+  if (!"Parameter" %in% protected_focal) {
+    restore_data[["Parameter"]] <- NULL
+  }
   colnames(params)[colnames(params) == "term"] <- "Parameter"
   colnames(params)[colnames(params) == "hypothesis"] <- "Parameter"
 
@@ -841,12 +856,17 @@ equivalence_columns <- c(
   # restore original names of protected focal terms. A focal term with the
   # name of another output column (e.g. "p" or "t") gets the suffix ".1", so
   # that the output column keeps its name.
+  # Contrasts get the columns "Level1" and "Level2" later, from the "Parameter"
+  # column.
   renamed_focal <- NULL
-  restore_data <- model_data
   if (length(protected_focal)) {
     restore <- match(names(protected_focal), colnames(params))
     focal_names <- protected_focal[!is.na(restore)]
-    clashes <- focal_names %in% colnames(params)
+    output_names <- colnames(params)
+    if (is_contrast_analysis && "Parameter" %in% output_names) {
+      output_names <- c(output_names, "Level1", "Level2")
+    }
+    clashes <- focal_names %in% output_names
     if (any(clashes)) {
       renamed_focal <- stats::setNames(
         paste0(focal_names[clashes], ".1"),

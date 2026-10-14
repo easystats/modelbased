@@ -212,6 +212,28 @@ test_that("estimate_contrasts() suffixes by-variables named like output columns"
 })
 
 
+test_that("estimate_contrasts() suffixes by-variables named Level1 or Level2", {
+  names <- c("Level1", "Level2")
+  expect_focal_names_match("contrasts_by", names, suffix = ".1")
+  for (name in names) {
+    out <- focal_calls$contrasts_by(name)
+    expect_false(anyDuplicated(colnames(out)) > 0, label = name)
+  }
+})
+
+
+test_that("estimate_contrasts() keeps by-variables named hypothesis", {
+  expect_focal_names_match("contrasts_by", "hypothesis")
+  out <- focal_calls$contrasts_by("hypothesis")
+  expect_true(all(c("Level1", "Level2", "hypothesis") %in% colnames(out)))
+})
+
+
+test_that("estimate_contrasts() works for a contrast variable named Parameter", {
+  expect_focal_names_match("contrasts", "Parameter")
+})
+
+
 test_that("estimate_contrasts() filters suffixed by-variables", {
   names <- c("Difference", "t", "p")
   expect_focal_names_match("contrasts_by_filter", names, suffix = ".1")
@@ -285,7 +307,7 @@ test_that("focal variable names that worked before still work", {
     contrasts_by = c(
       "z", "rowidcf", "wts", "predicted_lo", "predicted_hi", "emmean",
       "prob", "rate", "lower.CL", "upper.CL", "asymp.LCL", "asymp.UCL",
-      "Level1", "Level2", "Comparison", "Response", "Threshold", "Row",
+      "Comparison", "Response", "Threshold", "Row",
       "Residuals", "Group", "Level", "Probability", "Contrast", "Component",
       "Effects", "Type", "Ratio", "iter_1", "x", "model", "data", "at", "ci",
       "trend", "predict", "comparison", "length", "range", "fun", "i", "out",
