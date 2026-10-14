@@ -164,6 +164,38 @@ test_that("names that marginaleffects overwrites give an informative error", {
 })
 
 
+test_that("names outside the error cells give the same output as safe names", {
+  grid_names <- c(
+    "Predicted", "SE", "CI_low", "CI_high", "df", "rowid", "s.value",
+    "predicted", "predicted_hi", "predicted_lo", "Parameter", "Level1",
+    "Level2", "hypothesis"
+  )
+  grid_calls <- c(
+    "means_two", "means_covariate", "contrasts_by", "contrasts", "slopes_by",
+    "slopes_covariate"
+  )
+  # a covariate named "rowid" is not part of this check
+  excluded <- list(means_covariate = "rowid", slopes_covariate = "rowid")
+  n_combinations <- 0
+  for (call_name in grid_calls) {
+    call <- focal_calls[[call_name]]
+    ref <- call("safe_var")
+    skip_names <- c(focal_error_cells[[call_name]], excluded[[call_name]])
+    for (name in setdiff(grid_names, skip_names)) {
+      n_combinations <- n_combinations + 1
+      out <- tryCatch(suppressWarnings(call(name)), error = function(e) e)
+      diff <- focal_difference(ref, out, name)
+      # the variable may also get the suffix ".1"
+      if (!is.null(diff)) {
+        diff <- focal_difference(ref, out, paste0(name, ".1"))
+      }
+      expect_null(diff, label = paste0(call_name, "(\"", name, "\"): ", diff))
+    }
+  }
+  expect_identical(n_combinations, 53)
+})
+
+
 test_that("estimate_means() keeps focal variables named like renamed columns", {
   names <- setdiff(focal_reported_names, c("Mean", "s.value"))
   expect_focal_names_match("means", names)
