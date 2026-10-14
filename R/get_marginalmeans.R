@@ -88,6 +88,14 @@ get_marginalmeans <- function(
     dots <- out$dots
   }
 
+  # stop for variable names that marginaleffects overwrites
+  .check_marginaleffects_names(
+    model,
+    model_info,
+    focal = datagrid_info$at_specs$varname,
+    contrast = original_contrast
+  )
+
   # Third step: prepare arguments for marginaleffects ------------------------
   # --------------------------------------------------------------------------
 

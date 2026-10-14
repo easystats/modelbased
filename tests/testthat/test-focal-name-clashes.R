@@ -68,7 +68,28 @@ focal_calls <- list(
     d <- focal_data(name)
     m <- stats::lm(focal_formula(paste0("`", name, "` + hp")), data = d)
     estimate_contrasts(m, name)
+  },
+  means_covariate = function(name) {
+    d <- focal_data(name, numeric = TRUE)
+    m <- stats::lm(focal_formula(paste0("am_f + `", name, "`")), data = d)
+    estimate_means(m, "am_f")
+  },
+  slopes_covariate = function(name) {
+    d <- focal_data(name, numeric = TRUE)
+    d$hp_s <- d$hp / 100
+    m <- stats::lm(focal_formula(paste0("hp_s * am_f + `", name, "`")), data = d)
+    estimate_slopes(m, "hp_s", by = "am_f")
   }
+)
+
+# Names that marginaleffects overwrites or uses itself, for each call. These
+# calls give an error that asks users to rename the variable.
+focal_error_cells <- list(
+  means_two = c("Predicted", "SE", "CI_low", "CI_high", "df", "rowid", "s.value"),
+  means_covariate = c("SE", "CI_low", "CI_high", "df"),
+  contrasts_by = c("Predicted", "SE", "CI_low", "CI_high", "df", "rowid", "s.value"),
+  contrasts = c("SE", "CI_low", "CI_high", "df", "rowid"),
+  slopes_by = c("df", "rowid", "s.value", "predicted", "predicted_hi", "predicted_lo")
 )
 
 # Returns NULL when `out` equals `ref` with "safe_var" replaced by `name`,
@@ -123,6 +144,24 @@ expect_focal_names_match <- function(call_name, names, suffix = "") {
     expect_null(diff, label = paste0(call_name, "(\"", name, "\"): ", diff))
   }
 }
+
+
+test_that("names that marginaleffects overwrites give an informative error", {
+  n_cells <- 0
+  for (call_name in names(focal_error_cells)) {
+    for (name in focal_error_cells[[call_name]]) {
+      n_cells <- n_cells + 1
+      out <- tryCatch(suppressWarnings(focal_calls[[call_name]](name)), error = function(e) e)
+      label <- paste0(call_name, "(\"", name, "\")")
+      expect_s3_class(out, "error")
+      msg <- if (inherits(out, "error")) conditionMessage(out) else ""
+      expect_true(grepl(paste0("`", name, "`"), msg, fixed = TRUE), label = label)
+      expect_true(grepl("rename", msg, fixed = TRUE), label = label)
+      expect_false(grepl("Sorry, calculating", msg, fixed = TRUE), label = label)
+    }
+  }
+  expect_identical(n_cells, 29)
+})
 
 
 test_that("estimate_means() keeps focal variables named like renamed columns", {

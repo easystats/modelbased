@@ -78,6 +78,15 @@ get_marginaltrends <- function(
     }
   }
 
+  # stop for variable names that marginaleffects overwrites
+  .check_marginaleffects_names(
+    model,
+    model_info,
+    focal = myargs$by,
+    trend = myargs$trend,
+    type = "trends"
+  )
+
   # Second step: prepare arguments for marginaleffects ------------------------
   # ---------------------------------------------------------------------------
 
