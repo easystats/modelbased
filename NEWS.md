@@ -71,15 +71,17 @@
   columns, and ask users to rename the variable. Before, these names gave
   wrong estimates, standard errors or confidence intervals, missing columns,
   or unclear errors. The names are:
-  * `by` variables of `estimate_means()` and `estimate_contrasts()`:
-    `Predicted`, `SE`, `CI_low`, `CI_high`, `df`, `rowid` and `s.value`.
-  * the `contrast` variable of `estimate_contrasts()`: `SE`, `CI_low`,
+  * `by` variables of `estimate_means()`, and of `estimate_contrasts()` when
+    the contrast variable is a factor: `Predicted`, `SE`, `CI_low`, `CI_high`,
+    `df`, `rowid` and `s.value`.
+  * a factor `contrast` variable of `estimate_contrasts()`: `SE`, `CI_low`,
     `CI_high`, `df` and `rowid`.
   * other predictors of `estimate_means()`: `SE`, `CI_low`, `CI_high` and `df`.
   * `by` variables of `estimate_slopes()`: `df`, `rowid`, `s.value`,
     `predicted`, `predicted_hi` and `predicted_lo`.
 
-  This does not apply to Bayesian models.
+  Bayesian models are not checked yet. For them, these names can still give
+  missing columns or unclear errors.
 
 * With `backend = "marginaleffects"`, `estimate_contrasts()` now returns a
   `by` variable named `Level1` or `Level2` as `Level1.1` or `Level2.1`, next

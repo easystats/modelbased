@@ -217,7 +217,8 @@
   trend = NULL,
   type = "means"
 ) {
-  # describe_posterior() handles the output of Bayesian models
+  # Bayesian models are not checked yet: describe_posterior() tidies their
+  # output, and which names break it has not been worked out
   if (isTRUE(model_info$is_bayesian)) {
     return(invisible(NULL))
   }
