@@ -336,8 +336,9 @@ A data frame of estimated contrasts.
 }
 \description{
 Run a contrast analysis by estimating the differences between each level of a
-factor. See also other related functions such as \code{\link[=estimate_means]{estimate_means()}}
-and \code{\link[=estimate_slopes]{estimate_slopes()}}.
+factor. For plotting, check the examples in \code{\link[see:plot.see_estimate_contrasts]{see::plot.see_estimate_contrasts()}}.
+See also other related functions such as \code{\link[=estimate_means]{estimate_means()}} and
+\code{\link[=estimate_slopes]{estimate_slopes()}}.
 }
 \details{
 The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}}
@@ -807,4 +808,8 @@ Nominal and Ordinal Variables. Sociological Science, 12, 115–157.
 confidence bands: Theory, implementation, and an application to SVARs.
 Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
 }
+}
+\seealso{
+There is a \code{plot()} method, which is documented here:
+\code{\link[see:plot.see_estimate_contrasts]{see::plot.see_estimate_contrasts()}}
 }

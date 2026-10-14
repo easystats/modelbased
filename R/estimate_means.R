@@ -3,8 +3,8 @@
 #' Estimate average values of the response variable at each factor level or
 #' at representative values, respectively at values defined in a "data grid" or
 #' "reference grid". For plotting, check the examples in
-#' [visualisation_recipe()]. See also other related functions such as
-#' [estimate_contrasts()] and [estimate_slopes()].
+#' [`visualisation_recipe.estimate_predicted()`]. See also other related
+#' functions such as [estimate_contrasts()] and [estimate_slopes()].
 #'
 #' @param model A statistical model.
 #' @param by The (focal) predictor variable(s) at which to evaluate the desired
@@ -180,6 +180,9 @@
 #'   to fix the offset at a specific value. Or use `estimate = "average"` or
 #'   `estimate = "population"` without specifying the `offset`, to average
 #'   predictions over the distribution of the offset (if appropriate).
+#'
+#' @seealso There is a `plot()` method, which is documented here:
+#' [`visualisation_recipe.estimate_predicted()`]
 #'
 #' @details
 #' The [estimate_slopes()], [estimate_means()] and [estimate_contrasts()]

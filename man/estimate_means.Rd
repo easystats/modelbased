@@ -215,8 +215,8 @@ A data frame of estimated marginal means.
 Estimate average values of the response variable at each factor level or
 at representative values, respectively at values defined in a "data grid" or
 "reference grid". For plotting, check the examples in
-\code{\link[=visualisation_recipe]{visualisation_recipe()}}. See also other related functions such as
-\code{\link[=estimate_contrasts]{estimate_contrasts()}} and \code{\link[=estimate_slopes]{estimate_slopes()}}.
+\code{\link[=visualisation_recipe.estimate_predicted]{visualisation_recipe.estimate_predicted()}}. See also other related
+functions such as \code{\link[=estimate_contrasts]{estimate_contrasts()}} and \code{\link[=estimate_slopes]{estimate_slopes()}}.
 }
 \details{
 The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}}
@@ -493,4 +493,8 @@ Is Not Only for Causal Inference. European Journal of Epidemiology 35 (7):
 
 Heiss, A. (2022). Marginal and conditional effects for GLMMs with
 {marginaleffects}. Andrew Heiss. \doi{10.59350/xwnfm-x1827}
+}
+\seealso{
+There is a \code{plot()} method, which is documented here:
+\code{\link[=visualisation_recipe.estimate_predicted]{visualisation_recipe.estimate_predicted()}}
 }

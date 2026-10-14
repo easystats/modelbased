@@ -1,8 +1,9 @@
 #' Estimate Marginal Contrasts
 #'
 #' Run a contrast analysis by estimating the differences between each level of a
-#' factor. See also other related functions such as [estimate_means()]
-#' and [estimate_slopes()].
+#' factor. For plotting, check the examples in [`see::plot.see_estimate_contrasts()`].
+#' See also other related functions such as [estimate_means()] and
+#' [estimate_slopes()].
 #'
 #' @param contrast A character vector indicating the name of the variable(s) for
 #' which to compute the contrasts, optionally including representative values or
@@ -109,6 +110,9 @@
 #' @inheritParams estimate_means
 #'
 #' @inherit estimate_means details
+#'
+#' @seealso There is a `plot()` method, which is documented here:
+#' [`see::plot.see_estimate_contrasts()`]
 #'
 #' @inheritSection estimate_means Predictions and contrasts at meaningful values (data grids)
 #'
