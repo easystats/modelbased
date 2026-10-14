@@ -1,7 +1,9 @@
 # Estimate Marginal Contrasts
 
 Run a contrast analysis by estimating the differences between each level
-of a factor. See also other related functions such as
+of a factor. For plotting, check the examples in
+[`see::plot.see_estimate_contrasts()`](https://easystats.github.io/see/reference/plot.see_estimate_contrasts.html).
+See also other related functions such as
 [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
 and
 [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md).
@@ -754,6 +756,12 @@ because averaging across random effects groups is then more accurate.
   confidence bands: Theory, implementation, and an application to SVARs.
   Journal of Applied Econometrics, 34(1), 1–17.
   [doi:10.1002/jae.2656](https://doi.org/10.1002/jae.2656)
+
+## See also
+
+There is a [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
+method, which is documented here:
+[`see::plot.see_estimate_contrasts()`](https://easystats.github.io/see/reference/plot.see_estimate_contrasts.html)
 
 ## Examples
 

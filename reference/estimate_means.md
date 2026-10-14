@@ -3,7 +3,7 @@
 Estimate average values of the response variable at each factor level or
 at representative values, respectively at values defined in a "data
 grid" or "reference grid". For plotting, check the examples in
-[`visualisation_recipe()`](https://easystats.github.io/datawizard/reference/visualisation_recipe.html).
+[`visualisation_recipe.estimate_predicted()`](https://easystats.github.io/modelbased/reference/visualisation_recipe.estimate_predicted.md).
 See also other related functions such as
 [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
 and
@@ -513,6 +513,12 @@ Epidemiology 35 (7): 615–17.
 Heiss, A. (2022). Marginal and conditional effects for GLMMs with
 marginaleffects. Andrew Heiss.
 [doi:10.59350/xwnfm-x1827](https://doi.org/10.59350/xwnfm-x1827)
+
+## See also
+
+There is a [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
+method, which is documented here:
+[`visualisation_recipe.estimate_predicted()`](https://easystats.github.io/modelbased/reference/visualisation_recipe.estimate_predicted.md)
 
 ## Examples
 
