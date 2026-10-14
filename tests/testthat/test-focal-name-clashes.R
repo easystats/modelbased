@@ -234,6 +234,36 @@ test_that("estimate_contrasts() works for a contrast variable named Parameter", 
 })
 
 
+test_that("the suffix skips names that are already taken", {
+  two_focal <- function(names, call) {
+    d <- datasets::mtcars
+    d[[names[1]]] <- factor(d$cyl)
+    d[[names[2]]] <- factor(d$am)
+    rhs <- paste0("wt * `", names[1], "` + `", names[2], "`")
+    m <- stats::lm(focal_formula(rhs), data = d)
+    call(m, names)
+  }
+  slopes <- function(m, names) estimate_slopes(m, "wt", by = names)
+  means <- function(m, names) estimate_means(m, names)
+
+  ref <- two_focal(c("s1", "s2"), slopes)
+  out <- two_focal(c("p", "p.1"), slopes)
+  expect_identical(colnames(out)[1:2], c("p.2", "p.1"))
+  expect_identical(as.character(out$p.2), as.character(ref$s1))
+  expect_identical(as.character(out$p.1), as.character(ref$s2))
+  expect_equal(out$Slope, ref$Slope, tolerance = 1e-10)
+  expect_equal(out$p, ref$p, tolerance = 1e-10)
+
+  ref <- two_focal(c("s1", "s2"), means)
+  out <- two_focal(c("t", "t.1"), means)
+  expect_identical(colnames(out)[1:2], c("t.2", "t.1"))
+  expect_identical(as.character(out$t.2), as.character(ref$s1))
+  expect_identical(as.character(out$t.1), as.character(ref$s2))
+  expect_equal(out$Mean, ref$Mean, tolerance = 1e-10)
+  expect_equal(out$t, ref$t, tolerance = 1e-10)
+})
+
+
 test_that("estimate_contrasts() filters suffixed by-variables", {
   names <- c("Difference", "t", "p")
   expect_focal_names_match("contrasts_by_filter", names, suffix = ".1")

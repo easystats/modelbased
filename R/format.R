@@ -855,7 +855,8 @@ equivalence_columns <- c(
 
   # restore original names of protected focal terms. A focal term with the
   # name of another output column (e.g. "p" or "t") gets the suffix ".1", so
-  # that the output column keeps its name.
+  # that the output column keeps its name. If "<name>.1" is already taken, the
+  # suffix is the next free number (".2", ".3", ...).
   # Contrasts get the columns "Level1" and "Level2" later, from the "Parameter"
   # column.
   renamed_focal <- NULL
@@ -868,10 +869,16 @@ equivalence_columns <- c(
     }
     clashes <- focal_names %in% output_names
     if (any(clashes)) {
-      renamed_focal <- stats::setNames(
-        paste0(focal_names[clashes], ".1"),
-        focal_names[clashes]
-      )
+      taken <- c(output_names, colnames(model_data), focal_names)
+      new_names <- character(0)
+      for (i in focal_names[clashes]) {
+        k <- 1
+        while (paste0(i, ".", k) %in% c(taken, new_names)) {
+          k <- k + 1
+        }
+        new_names <- c(new_names, paste0(i, ".", k))
+      }
+      renamed_focal <- stats::setNames(new_names, focal_names[clashes])
       focal_names[clashes] <- renamed_focal
       # suffixed columns get the data type of the original variable, and the
       # output columns with the original names keep their own type
