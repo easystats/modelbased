@@ -107,8 +107,10 @@ print.estimate_contrasts <- function(
   attr <- attr[setdiff(names(attr), c("names", "row.names"))]
 
   # handle exceptions, e.g. drift diffusion (Wiener) models
-  if ((isTRUE(attr$model_info$is_wiener) || isTRUE(attr$model_info$is_rtchoice)) &&
-    "Component" %in% colnames(x)) {
+  if (
+    (isTRUE(attr$model_info$is_wiener) || isTRUE(attr$model_info$is_rtchoice)) &&
+      "Component" %in% colnames(x)
+  ) {
     out <- .print_drift_diffusion(out, select, ...)
     align <- NULL
   } else {
@@ -201,7 +203,9 @@ print.estimate_grouplevel <- print.estimate_contrasts
     # for Wiener models, we have one column per response component (reaction time,
     # discrete choice), we want only one of the two columns for each component
     other <- setdiff(names(out), i)
-    if (length(other)) out[[i]][[other]] <- NULL
+    if (length(other)) {
+      out[[i]][[other]] <- NULL
+    }
 
     # modify table title (add component name)
     tt <- attributes(out[[i]])$table_title
