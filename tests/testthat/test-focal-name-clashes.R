@@ -68,7 +68,34 @@ focal_calls <- list(
     d <- focal_data(name)
     m <- stats::lm(focal_formula(paste0("`", name, "` + hp")), data = d)
     estimate_contrasts(m, name)
+  },
+  means_covariate = function(name) {
+    d <- focal_data(name, numeric = TRUE)
+    m <- stats::lm(focal_formula(paste0("am_f + `", name, "`")), data = d)
+    estimate_means(m, "am_f")
+  },
+  contrasts_covariate = function(name) {
+    d <- focal_data(name, numeric = TRUE)
+    m <- stats::lm(focal_formula(paste0("am_f + `", name, "`")), data = d)
+    estimate_contrasts(m, "am_f")
+  },
+  slopes_covariate = function(name) {
+    d <- focal_data(name, numeric = TRUE)
+    d$hp_s <- d$hp / 100
+    m <- stats::lm(focal_formula(paste0("hp_s * am_f + `", name, "`")), data = d)
+    estimate_slopes(m, "hp_s", by = "am_f")
   }
+)
+
+# Names that marginaleffects overwrites or uses itself, for each call. These
+# calls give an error that asks users to rename the variable.
+focal_error_cells <- list(
+  means_two = c("Predicted", "SE", "CI_low", "CI_high", "df", "rowid", "s.value"),
+  means_covariate = c("SE", "CI_low", "CI_high", "df"),
+  contrasts_covariate = c("SE", "CI_low", "CI_high", "df"),
+  contrasts_by = c("Predicted", "SE", "CI_low", "CI_high", "df", "rowid", "s.value"),
+  contrasts = c("SE", "CI_low", "CI_high", "df", "rowid"),
+  slopes_by = c("df", "rowid", "s.value", "predicted", "predicted_hi", "predicted_lo")
 )
 
 # Returns NULL when `out` equals `ref` with "safe_var" replaced by `name`,
@@ -125,6 +152,56 @@ expect_focal_names_match <- function(call_name, names, suffix = "") {
 }
 
 
+test_that("names that marginaleffects overwrites give an informative error", {
+  n_cells <- 0
+  for (call_name in names(focal_error_cells)) {
+    for (name in focal_error_cells[[call_name]]) {
+      n_cells <- n_cells + 1
+      out <- tryCatch(suppressWarnings(focal_calls[[call_name]](name)), error = function(e) e)
+      label <- paste0(call_name, "(\"", name, "\")")
+      expect_true(inherits(out, "error"), label = label)
+      msg <- if (inherits(out, "error")) conditionMessage(out) else ""
+      expect_true(grepl(paste0("`", name, "`"), msg, fixed = TRUE), label = label)
+      expect_true(grepl("rename", msg, fixed = TRUE), label = label)
+      expect_false(grepl("Sorry, calculating", msg, fixed = TRUE), label = label)
+    }
+  }
+  expect_identical(n_cells, 33)
+})
+
+
+test_that("names outside the error cells give the same output as safe names", {
+  grid_names <- c(
+    "Predicted", "SE", "CI_low", "CI_high", "df", "rowid", "s.value",
+    "predicted", "predicted_hi", "predicted_lo", "Parameter", "Level1",
+    "Level2", "hypothesis"
+  )
+  grid_calls <- c(
+    "means_two", "means_covariate", "contrasts_by", "contrasts", "slopes_by",
+    "slopes_covariate"
+  )
+  # a covariate named "rowid" is not part of this check
+  excluded <- list(means_covariate = "rowid", slopes_covariate = "rowid")
+  n_combinations <- 0
+  for (call_name in grid_calls) {
+    call <- focal_calls[[call_name]]
+    ref <- call("safe_var")
+    skip_names <- c(focal_error_cells[[call_name]], excluded[[call_name]])
+    for (name in setdiff(grid_names, skip_names)) {
+      n_combinations <- n_combinations + 1
+      out <- tryCatch(suppressWarnings(call(name)), error = function(e) e)
+      diff <- focal_difference(ref, out, name)
+      # the variable may also get the suffix ".1"
+      if (!is.null(diff)) {
+        diff <- focal_difference(ref, out, paste0(name, ".1"))
+      }
+      expect_null(diff, label = paste0(call_name, "(\"", name, "\"): ", diff))
+    }
+  }
+  expect_identical(n_combinations, 53)
+})
+
+
 test_that("estimate_means() keeps focal variables named like renamed columns", {
   names <- setdiff(focal_reported_names, c("Mean", "s.value"))
   expect_focal_names_match("means", names)
@@ -170,6 +247,58 @@ test_that("estimate_slopes() suffixes by-variables named like output columns", {
 test_that("estimate_contrasts() suffixes by-variables named like output columns", {
   names <- c("Difference", "t", "p")
   expect_focal_names_match("contrasts_by", names, suffix = ".1")
+})
+
+
+test_that("estimate_contrasts() suffixes by-variables named Level1 or Level2", {
+  names <- c("Level1", "Level2")
+  expect_focal_names_match("contrasts_by", names, suffix = ".1")
+  for (name in names) {
+    out <- focal_calls$contrasts_by(name)
+    expect_false(anyDuplicated(colnames(out)) > 0, label = name)
+  }
+})
+
+
+test_that("estimate_contrasts() keeps by-variables named hypothesis", {
+  expect_focal_names_match("contrasts_by", "hypothesis")
+  out <- focal_calls$contrasts_by("hypothesis")
+  expect_true(all(c("Level1", "Level2", "hypothesis") %in% colnames(out)))
+})
+
+
+test_that("estimate_contrasts() works for a contrast variable named Parameter", {
+  expect_focal_names_match("contrasts", "Parameter")
+})
+
+
+test_that("the suffix skips names that are already taken", {
+  two_focal <- function(names, call) {
+    d <- datasets::mtcars
+    d[[names[1]]] <- factor(d$cyl)
+    d[[names[2]]] <- factor(d$am)
+    rhs <- paste0("wt * `", names[1], "` + `", names[2], "`")
+    m <- stats::lm(focal_formula(rhs), data = d)
+    call(m, names)
+  }
+  slopes <- function(m, names) estimate_slopes(m, "wt", by = names)
+  means <- function(m, names) estimate_means(m, names)
+
+  ref <- two_focal(c("s1", "s2"), slopes)
+  out <- two_focal(c("p", "p.1"), slopes)
+  expect_identical(colnames(out)[1:2], c("p.2", "p.1"))
+  expect_identical(as.character(out$p.2), as.character(ref$s1))
+  expect_identical(as.character(out$p.1), as.character(ref$s2))
+  expect_equal(out$Slope, ref$Slope, tolerance = 1e-10)
+  expect_equal(out$p, ref$p, tolerance = 1e-10)
+
+  ref <- two_focal(c("s1", "s2"), means)
+  out <- two_focal(c("t", "t.1"), means)
+  expect_identical(colnames(out)[1:2], c("t.2", "t.1"))
+  expect_identical(as.character(out$t.2), as.character(ref$s1))
+  expect_identical(as.character(out$t.1), as.character(ref$s2))
+  expect_equal(out$Mean, ref$Mean, tolerance = 1e-10)
+  expect_equal(out$t, ref$t, tolerance = 1e-10)
 })
 
 
@@ -246,7 +375,7 @@ test_that("focal variable names that worked before still work", {
     contrasts_by = c(
       "z", "rowidcf", "wts", "predicted_lo", "predicted_hi", "emmean",
       "prob", "rate", "lower.CL", "upper.CL", "asymp.LCL", "asymp.UCL",
-      "Level1", "Level2", "Comparison", "Response", "Threshold", "Row",
+      "Comparison", "Response", "Threshold", "Row",
       "Residuals", "Group", "Level", "Probability", "Contrast", "Component",
       "Effects", "Type", "Ratio", "iter_1", "x", "model", "data", "at", "ci",
       "trend", "predict", "comparison", "length", "range", "fun", "i", "out",

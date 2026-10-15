@@ -67,6 +67,36 @@
   inequality comparisons. It also does not apply to `estimate_contrasts()` on
   the output of `estimate_relation()`.
 
+* With `backend = "marginaleffects"`, `estimate_means()`,
+  `estimate_contrasts()` and `estimate_slopes()` now stop with an informative
+  error when a variable has a name that *marginaleffects* uses for its own
+  columns, and ask users to rename the variable. Before, these names gave
+  wrong estimates, standard errors or confidence intervals, missing columns,
+  or unclear errors. The names are:
+  * `by` variables of `estimate_means()`, and of `estimate_contrasts()` when
+    the contrast variable is a factor: `Predicted`, `SE`, `CI_low`, `CI_high`,
+    `df`, `rowid` and `s.value`.
+  * a factor `contrast` variable of `estimate_contrasts()`: `SE`, `CI_low`,
+    `CI_high`, `df` and `rowid`.
+  * other predictors of `estimate_means()` and `estimate_contrasts()`: `SE`,
+    `CI_low`, `CI_high` and `df`.
+  * `by` variables of `estimate_slopes()`: `df`, `rowid`, `s.value`,
+    `predicted`, `predicted_hi` and `predicted_lo`.
+
+  Bayesian models are not checked yet. For them, these names can still give
+  missing columns or unclear errors.
+
+* With `backend = "marginaleffects"`, `estimate_contrasts()` now returns a
+  `by` variable named `Level1` or `Level2` as `Level1.1` or `Level2.1`, next
+  to the `Level1` and `Level2` columns of the contrasts. It also returns the
+  contrasts for a `by` variable named `hypothesis` and for a `contrast`
+  variable named `Parameter`. Before, the output had two columns with the same
+  name, the contrast labels were not split into `Level1` and `Level2`, or the
+  call failed with an unclear error. If `<name>.1` is already a variable name,
+  the suffix is the next free number, for example `p.2`. As for the fixes
+  above, the `Level1`, `Level2` and `hypothesis` fixes do not yet apply to
+  Bayesian models or to inequality comparisons.
+
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed
   `1`, `2`, `3`, and the `Threshold` column showed `1|2`, `2|3`.

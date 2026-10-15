@@ -209,6 +209,67 @@
 
 #' @keywords internal
 #' @noRd
+.check_marginaleffects_names <- function(
+  model,
+  model_info,
+  focal = NULL,
+  contrast = NULL,
+  trend = NULL,
+  type = "means"
+) {
+  # Bayesian models are not checked yet: describe_posterior() tidies their
+  # output, and which names break it has not been worked out
+  if (isTRUE(model_info$is_bayesian)) {
+    return(invisible(NULL))
+  }
+  # remove filters such as "p='4'" or "x=[sd]" from names
+  clean <- function(x) {
+    if (is.null(x)) {
+      return(NULL)
+    }
+    insight::trim_ws(sub("\\s*[=\\[].*$", "", x))
+  }
+  focal <- clean(focal)
+  by_vars <- setdiff(focal, clean(c(contrast, trend)))
+
+  # marginaleffects renames, overwrites or uses columns with these names, so
+  # that the output for variables with these names is wrong
+  if (identical(type, "means")) {
+    covariates <- setdiff(
+      insight::find_predictors(model, effects = "all", component = "all", flatten = TRUE),
+      focal
+    )
+    bad <- c(
+      intersect(c("SE", "CI_low", "CI_high", "df"), c(focal, covariates)),
+      intersect("rowid", focal),
+      intersect(c("Predicted", "s.value"), by_vars)
+    )
+  } else {
+    bad <- intersect(
+      c("df", "rowid", "s.value", "predicted", "predicted_hi", "predicted_lo"),
+      by_vars
+    )
+  }
+  bad <- unique(bad)
+
+  if (length(bad)) {
+    names_text <- datawizard::text_concatenate(bad, enclose = "`")
+    insight::format_error(paste0(
+      if (length(bad) > 1) "Variables " else "Variable ",
+      names_text,
+      if (length(bad) > 1) " have names " else " has a name ",
+      "that the marginaleffects package uses for its own columns, so the results",
+      " would be wrong or the call would fail. Please rename ",
+      names_text,
+      " in your data and fit the model again."
+    ))
+  }
+  invisible(NULL)
+}
+
+
+#' @keywords internal
+#' @noRd
 .check_dots_data <- function(dots, verbose) {
   if (!is.null(dots$data)) {
     if (!is.null(dots$newdata) && verbose) {
