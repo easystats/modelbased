@@ -307,12 +307,15 @@ format.marginaleffects_contrasts <- function(
   }
 
   # check type of contrast
-  is_ratio_comparison <- (inherits(comparison, "formula") &&
-    identical(deparse(comparison[[2]]), "ratio")) ||
-    identical(comparison, "ratio")
+  is_ratio_comparison <- .is_ratio_comparison(comparison)
 
-  # Column name for coefficient - fix needed for contrasting slopes and ratios
-  colnames(x)[colnames(x) == "Slope"] <- "Difference"
+  # Column name for coefficient - fix needed for contrasting slopes and ratios.
+  # Contrasts of means already have the estimate column "Difference", so a
+  # focal column named "Slope" keeps its name. A focal column named "Ratio"
+  # already has a suffix, see `.standardize_marginaleffects_columns()`.
+  if (inherits(x, "estimate_slopes")) {
+    colnames(x)[colnames(x) == "Slope"] <- "Difference"
+  }
   separator <- "-"
 
   # for ratios, we want different column name, and we need to set the separator
@@ -581,6 +584,15 @@ format.marginaleffects_contrasts <- function(
 
 # Helper ----------------------------------------------------------------------
 # -----------------------------------------------------------------------------
+
+# "comparison" can be a string or a formula, e.g. `ratio ~ pairwise | x`
+
+#' @keywords internal
+.is_ratio_comparison <- function(comparison) {
+  (inherits(comparison, "formula") &&
+    identical(deparse(comparison[[2]]), "ratio")) ||
+    identical(comparison, "ratio")
+}
 
 # since we combine levels from different factors, we have to make
 # sure levels are unique across different terms. If not, paste
@@ -867,7 +879,7 @@ equivalence_columns <- c(
   # that the output column keeps its name. If "<name>.1" is already taken, the
   # suffix is the next free number (".2", ".3", ...).
   # Contrasts get the columns "Level1" and "Level2" later, from the "Parameter"
-  # column.
+  # column, and ratios rename the column "Difference" to "Ratio" later.
   renamed_focal <- NULL
   restore_focal <- setdiff(output_focal, names(protected_focal))
   if (length(protected_focal)) {
@@ -876,6 +888,9 @@ equivalence_columns <- c(
     output_names <- colnames(params)
     if (is_contrast_analysis && "Parameter" %in% output_names) {
       output_names <- c(output_names, "Level1", "Level2")
+    }
+    if (is_contrast_analysis && .is_ratio_comparison(list(...)$hypothesis)) {
+      output_names <- c(output_names, "Ratio")
     }
     clashes <- focal_names %in% output_names
     if (any(clashes)) {
