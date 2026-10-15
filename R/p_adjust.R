@@ -9,10 +9,14 @@
   # extract information
   datagrid <- attributes(params)$datagrid
 
-  # when contrasting slopes, we need "by" as focal term. `get_marginaltrends()`
-  # adjusts the unformatted marginaleffects output, where "by" is also the
-  # focal term
-  if (inherits(params, c("estimate_slopes", "marginaleffects_slopes"))) {
+  # `get_marginaltrends()` adjusts the unformatted marginaleffects output, with
+  # the columns "p.value" and "statistic", and one test per row. Other callers
+  # pass formatted output with the columns "p" and "t" or "z". A focal term can
+  # have one of these names in either output.
+  is_unformatted <- inherits(params, "marginaleffects_slopes")
+
+  # when contrasting slopes, we need "by" as focal term
+  if (inherits(params, "estimate_slopes")) {
     focal <- .safe(insight::trim_ws(gsub("=.*", "\\1", attributes(params)$by)))
   } else {
     focal <- .safe(insight::trim_ws(gsub("=.*", "\\1", attributes(params)$contrast)))
@@ -63,16 +67,16 @@
 
   # needed for rank adjustment
   focal_terms <- .safe(datagrid[focal])
-  if (is.null(focal_terms)) {
+  if (is_unformatted) {
+    rank_adjust <- nrow(params)
+  } else if (is.null(focal_terms)) {
     rank_adjust <- 1
   } else {
     rank_adjust <- prod(vapply(focal_terms, insight::n_unique, numeric(1)))
   }
 
-  # the unformatted marginaleffects output has the columns "p.value" and
-  # "statistic". A focal term can be named "p" or "t" there.
-  p_column <- intersect(c("p.value", "p"), colnames(params))[1]
-  if (is.na(p_column)) {
+  p_column <- if (is_unformatted) "p.value" else "p"
+  if (!p_column %in% colnames(params)) {
     if (verbose) {
       insight::format_alert("No p-values found. P-values were not adjusted.")
     }
@@ -84,10 +88,11 @@
     p_adjust <- switch(p_adjust, bh = "BH", by = "BY", p_adjust)
     params[[p_column]] <- stats::p.adjust(params[[p_column]], method = p_adjust)
   } else if (p_adjust == "tukey") {
-    # find first occurence of one of the following columns: "statistic", "t" or "z"
+    # find first occurence of one of the following columns: "t", "z", or "statistic"
+    stat_columns <- if (is_unformatted) "statistic" else c("t", "z", "statistic")
     stat_col_name <- Find(
       function(col) col %in% colnames(params),
-      c("statistic", "t", "z")
+      stat_columns
     )
     if (!is.null(stat_col_name)) {
       statistic <- params[[stat_col_name]]

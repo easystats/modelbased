@@ -314,6 +314,39 @@ test_that("estimate_slopes, p_adjust with a by-variable named p", {
   }
 })
 
+
+test_that("estimate_slopes, p_adjust counts one test per row", {
+  d <- datasets::mtcars
+  d$cyl_f <- factor(d$cyl)
+  m <- lm(mpg ~ wt * cyl_f, data = d)
+  # a single custom hypothesis is one test, so sidak does not change it
+  p0 <- estimate_slopes(m, "wt", by = "cyl_f", comparison = "b2=b1")$p
+  out <- estimate_slopes(m, "wt", by = "cyl_f", comparison = "b2=b1", p_adjust = "sidak")
+  expect_identical(nrow(out), 1L)
+  expect_equal(out$p, p0, tolerance = 1e-10)
+
+  # ordinal models have one row per response level and by-level
+  skip_if_not_installed("MASS")
+  d$gear_o <- factor(d$gear, ordered = TRUE)
+  m <- MASS::polr(gear_o ~ wt + cyl_f, data = d, Hess = TRUE)
+  p0 <- estimate_slopes(m, "wt", by = "cyl_f")$p
+  out <- estimate_slopes(m, "wt", by = "cyl_f", p_adjust = "sidak")
+  k <- nrow(out)
+  expect_identical(k, 9L)
+  expect_equal(out$p, 1 - (1 - p0)^k, tolerance = 1e-10)
+})
+
+
+test_that("p_adjust alerts when there are no p-values", {
+  m <- lm(mpg ~ wt, data = datasets::mtcars)
+  params <- data.frame(Slope = 1)
+  expect_message(
+    out <- modelbased:::.p_adjust(m, params, "holm"),
+    "No p-values found"
+  )
+  expect_identical(out, params)
+})
+
 skip_on_cran()
 
 test_that("estimate_slopes, works with lme4", {

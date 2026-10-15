@@ -577,3 +577,36 @@ test_that("output columns keep their values for focal names like output columns"
   expect_identical(n_errors, 26)
   expect_identical(n_compared, 76)
 })
+
+
+test_that("ratio contrasts as formula suffix a by-variable named Ratio", {
+  call <- function(name) {
+    estimate_contrasts(
+      clash_model(name, "am_f"),
+      "am_f",
+      by = name,
+      comparison = ratio ~ pairwise
+    )
+  }
+  ref <- call("safe_var")
+  out <- call("Ratio")
+  expect_null(clash_difference(ref, out, "Ratio.1"))
+})
+
+
+test_that("p_adjust in contrasts of estimate_relation() adjusts the p-values", {
+  call <- function(name, p_adjust) {
+    d <- clash_data(name)
+    m <- stats::lm(focal_formula(paste0("am_f * `", name, "`")), data = d)
+    estimate_contrasts(
+      estimate_relation(m, by = c("am_f", name)),
+      "am_f",
+      by = name,
+      p_adjust = p_adjust
+    )
+  }
+  out0 <- call("p.value", "none")
+  out <- call("p.value", "holm")
+  expect_identical(as.character(out$p.value), c("4", "6", "8"))
+  expect_equal(out$p, stats::p.adjust(out0$p, "holm"), tolerance = 1e-10)
+})
