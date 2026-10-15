@@ -955,3 +955,90 @@ test_that("estimate_contrasts and estimate_slopes, backend emmeans, ordinal foot
   out <- utils::capture.output(print(estimate_slopes(m, "wt", backend = "emmeans")))
   expect_false(any(grepl("Slopes are on the", out, fixed = TRUE)))
 })
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, latent contrasts as before", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+  # the former default, before probabilities became the default
+  out <- estimate_contrasts(m, "Type", predict = "latent", backend = "emmeans")
+  expect_identical(
+    paste(out$Level1, out$Level2),
+    c(
+      "Apartment Tower",
+      "Atrium Apartment",
+      "Atrium Tower",
+      "Terrace Apartment",
+      "Terrace Atrium",
+      "Terrace Tower"
+    )
+  )
+  expect_equal(
+    out$Difference,
+    c(-0.5723501, 0.2061636, -0.3661866, -0.5186648, -0.7248283, -1.0910149),
+    tolerance = 1e-6
+  )
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, names of response and predictors", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  set.seed(1)
+  housing$x <- as.numeric(housing$Cont) + stats::rnorm(nrow(housing))
+  sat_levels <- c("Low", "Medium", "High")
+
+  # responses named like emmeans output columns
+  for (response in c("response", "prob", "rate", "ratio")) {
+    d <- housing
+    d[[response]] <- d$Sat
+    f <- stats::as.formula(paste(response, "~ Infl + Type + Cont"))
+    m <- MASS::polr(f, weights = Freq, data = d, Hess = TRUE)
+    out <- estimate_contrasts(m, "Infl", backend = "emmeans")
+    expect_identical(levels(out$Response), sat_levels, info = response)
+    expect_type(out$Difference, "double")
+
+    f <- stats::as.formula(paste(response, "~ Infl * x"))
+    m <- MASS::polr(f, weights = Freq, data = d, Hess = TRUE)
+    out <- estimate_contrasts(m, "x", by = "Infl", backend = "emmeans")
+    expect_identical(levels(out$Response), sat_levels, info = response)
+    expect_type(out$Difference, "double")
+  }
+
+  # a predictor named `Response` keeps its column, and the response
+  # categories get a suffix, as for `estimate_means()`
+  d <- housing
+  d$Response <- d$Infl
+  m <- MASS::polr(Sat ~ Response + Type + Cont, weights = Freq, data = d, Hess = TRUE)
+  out <- estimate_means(m, c("Type", "Response"), backend = "emmeans")
+  expect_identical(colnames(out)[1:3], c("Type", "Response", "Response.1"))
+  out <- estimate_contrasts(m, "Type", by = "Response", backend = "emmeans")
+  expect_identical(nrow(out), 54L)
+  expect_true(all(c("Response", "Response.1") %in% colnames(out)))
+  expect_length(unique(paste(out$Response, out$Response.1)), 9)
+  expect_identical(levels(out$Response.1), sat_levels)
+})
+
+
+test_that("estimate_slopes, backend emmeans, ordinal glmmTMB", {
+  skip_if_not_installed("emmeans")
+  # ordinal family in glmmTMB requires glmmTMB >= 1.1.15.2
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.15.2")
+  data(housing, package = "MASS")
+  set.seed(1)
+  housing$x <- as.numeric(housing$Cont) + stats::rnorm(nrow(housing))
+  # the same model, fitted with polr and glmmTMB
+  m_polr <- MASS::polr(Sat ~ Infl * x, weights = Freq, data = housing, Hess = TRUE)
+  m_glmmTMB <- glmmTMB::glmmTMB(
+    Sat ~ Infl * x,
+    weights = Freq,
+    data = housing,
+    family = glmmTMB::ordinal()
+  )
+  out_polr <- estimate_slopes(m_polr, "x", by = "Infl", backend = "emmeans")
+  out <- estimate_slopes(m_glmmTMB, "x", by = "Infl", backend = "emmeans")
+  expect_identical(nrow(out), 9L)
+  expect_identical(paste(out$Infl, out$Response), paste(out_polr$Infl, out_polr$Response))
+  expect_equal(out$Slope, out_polr$Slope, tolerance = 1e-4)
+})

@@ -148,7 +148,12 @@ get_emcontrasts <- function(
   attr(out, "predict") <- predict
   attr(out, "at") <- my_args$by
   attr(out, "by") <- my_args$by
-  attr(out, "focal_terms") <- emm_by
+  # the pseudo-factor of ordinal models is no focal term
+  focal_terms <- setdiff(emm_by, ordinal$pseudo_factor)
+  if (!length(focal_terms)) {
+    focal_terms <- NULL
+  }
+  attr(out, "focal_terms") <- focal_terms
   attr(out, "p_adjust") <- list(...)$adjust
   attr(out, "comparison") <- comparison
   attr(out, "joint_test") <- joint_test
@@ -221,23 +226,35 @@ get_emcontrasts <- function(
     )
     out <- .clean_names_bayesian(out, model, predict, type = "contrast")
   } else {
+    ordinal_mode <- attributes(estimated)$ordinal_mode
     if (isTRUE(attributes(estimated)$joint_test)) {
       out <- as.data.frame(estimated)
     } else {
-      # for ordinal models, we keep the order of emmeans, else the response
-      # categories or thresholds are sorted alphabetically
+      estimated_data <- as.data.frame(estimated)
       out <- as.data.frame(merge(
-        as.data.frame(estimated),
-        stats::confint(estimated, level = ci, adjust = p_adjust),
-        sort = is.null(attributes(estimated)$ordinal_mode)
+        estimated_data,
+        stats::confint(estimated, level = ci, adjust = p_adjust)
       ))
+      # for ordinal models with response categories or thresholds, we keep
+      # the order of emmeans, else these are sorted alphabetically
+      if (
+        !is.null(ordinal_mode) &&
+          !is.null(.emmeans_ordinal_pseudo_factor(model, ordinal_mode))
+      ) {
+        key_columns <- colnames(estimated_data)[
+          !vapply(estimated_data, is.numeric, logical(1))
+        ]
+        row_keys <- function(d) {
+          do.call(paste, c(lapply(d[key_columns], as.character), sep = "\r"))
+        }
+        out <- out[match(row_keys(estimated_data), row_keys(out)), , drop = FALSE]
+        rownames(out) <- NULL
+      }
     }
+    # the response categories or thresholds are renamed first, because the
+    # response can have the name of an output column (e.g. "response")
+    out <- .clean_pseudo_factor_emmeans_ordinal(out, model, ordinal_mode)
     out <- .clean_names_frequentist(out, predict, m_info)
-    out <- .clean_pseudo_factor_emmeans_ordinal(
-      out,
-      model,
-      attributes(estimated)$ordinal_mode
-    )
   }
   out$null <- NULL # introduced in emmeans 1.6.1 (#115)
 

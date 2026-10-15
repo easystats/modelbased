@@ -331,6 +331,10 @@ get_emmeans <- function(
   pseudo_factor <- .emmeans_ordinal_pseudo_factor(model, ordinal_mode)
   if (!is.null(pseudo_factor) && pseudo_factor %in% colnames(means)) {
     new_name <- if (ordinal_mode == "prob") "Response" else "Threshold"
+    # a predictor can have the same name, so we add a suffix ("Response.1")
+    if (new_name != pseudo_factor && new_name %in% colnames(means)) {
+      new_name <- make.unique(c(colnames(means), new_name))[ncol(means) + 1]
+    }
     # for clmm models, emmeans codes the response categories and thresholds
     # as 1, 2, 3, ... - we replace these codes by the names from the model
     if (inherits(model, "clmm")) {
