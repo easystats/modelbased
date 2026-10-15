@@ -852,3 +852,75 @@ test_that("estimate_slopes, backend emmeans, clmm", {
     expect_identical(levels(out$Threshold), threshold_names, info = response)
   }
 })
+
+
+test_that("estimate_slopes, backend emmeans, ordinal, predict = 'response' and no by", {
+  skip_if_not_installed("emmeans")
+  m <- .ordinal_slope_models()$simulated
+
+  # predict = "response" returns probabilities, same as the default
+  out <- estimate_slopes(m, "x", by = "g", predict = "response", backend = "emmeans")
+  out_default <- estimate_slopes(m, "x", by = "g", backend = "emmeans")
+  expect_identical(paste(out$g, out$Response), paste(out_default$g, out_default$Response))
+  expect_equal(out$Slope, out_default$Slope, tolerance = 1e-10)
+
+  # no `by`: slopes of the probabilities, from the cumulative probabilities
+  out <- as.data.frame(estimate_slopes(m, "x", backend = "emmeans"))
+  expect_identical(as.character(out$Response), c("lo", "mid", "hi"))
+  cumulative <- as.data.frame(suppressMessages(emmeans::emtrends(
+    m,
+    ~cut,
+    var = "x",
+    mode = "cum.prob"
+  )))$x.trend
+  expect_equal(
+    out$Slope,
+    c(cumulative[1], cumulative[2] - cumulative[1], -cumulative[2]),
+    tolerance = 1e-6
+  )
+
+  # no `by`: the mean class is 1 + the sum of the exceedance probabilities
+  out <- as.data.frame(estimate_slopes(m, "x", predict = "mean.class", backend = "emmeans"))
+  out_exceedance <- estimate_slopes(m, "x", predict = "exc.prob", backend = "emmeans")
+  expect_identical(nrow(out), 1L)
+  expect_equal(out$Slope, sum(out_exceedance$Slope), tolerance = 1e-6)
+})
+
+
+test_that("estimate_contrasts and estimate_slopes, backend emmeans, ordinal footer", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing, Hess = TRUE)
+  expect_output(
+    print(estimate_contrasts(m, "Infl", backend = "emmeans")),
+    "Contrasts are on the prob-scale.",
+    fixed = TRUE
+  )
+  expect_output(
+    print(estimate_contrasts(m, "Infl", predict = "response", backend = "emmeans")),
+    "Contrasts are on the prob-scale.",
+    fixed = TRUE
+  )
+  expect_output(
+    print(estimate_contrasts(m, "Infl", predict = "cum.prob", backend = "emmeans")),
+    "Contrasts are on the cum.prob-scale.",
+    fixed = TRUE
+  )
+
+  m <- .ordinal_slope_models()$housing
+  expect_output(
+    print(estimate_slopes(m, "x", by = "g", backend = "emmeans")),
+    "Slopes are on the prob-scale.",
+    fixed = TRUE
+  )
+  expect_output(
+    print(estimate_slopes(m, "x", by = "g", predict = "latent", backend = "emmeans")),
+    "Slopes are on the latent-scale.",
+    fixed = TRUE
+  )
+
+  # no scale line for the slopes of other models
+  m <- lm(mpg ~ wt * factor(am), data = mtcars)
+  out <- utils::capture.output(print(estimate_slopes(m, "wt", backend = "emmeans")))
+  expect_false(any(grepl("Slopes are on the", out, fixed = TRUE)))
+})
