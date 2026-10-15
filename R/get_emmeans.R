@@ -80,28 +80,15 @@ get_emmeans <- function(
     }
   } else {
     dpars <- FALSE
-    # for ordinal models, emmeans ignores `type = "response"`, and we need the
-    # `mode` argument instead. Probabilities are the default.
-    ordinal_model <- .is_emmeans_ordinal(model)
-    if (ordinal_model && identical(predict, "response")) {
-      predict <- "prob"
-    }
+    ordinal <- .emmeans_ordinal_mode(model, predict)
+    predict <- ordinal$predict
     if (predict %in% .emmeans_ordinal_types) {
       fun_args$mode <- predict
       # some modes add a pseudo-factor to the reference grid (the response
       # categories, or the thresholds). We add it to `specs`, else emmeans
       # averages over it
-      if (ordinal_model) {
-        ordinal_mode <- predict
-        pseudo_factor <- .emmeans_ordinal_pseudo_factor(model, predict)
-        if (!is.null(pseudo_factor)) {
-          if (inherits(fun_args$specs, "formula")) {
-            fun_args$specs <- pseudo_factor
-          } else {
-            fun_args$specs <- c(fun_args$specs, pseudo_factor)
-          }
-        }
-      }
+      ordinal_mode <- ordinal$mode
+      fun_args$specs <- .add_emmeans_pseudo_factor(fun_args$specs, ordinal$pseudo_factor)
     } else {
       fun_args$type <- predict
     }
@@ -195,6 +182,37 @@ get_emmeans <- function(
     linear.predictor = "cut",
     NULL
   )
+}
+
+
+# for ordinal models, emmeans ignores `type = "response"`, and we need the
+# `mode` argument instead. Probabilities are the default. Returns `predict`
+# (changed to "prob" for the default), and for ordinal models the emmeans mode
+# and the pseudo-factor that this mode adds to the reference grid
+.emmeans_ordinal_mode <- function(model, predict) {
+  ordinal_model <- .is_emmeans_ordinal(model)
+  if (ordinal_model && (is.null(predict) || identical(predict, "response"))) {
+    predict <- "prob"
+  }
+  out <- list(predict = predict, mode = NULL, pseudo_factor = NULL)
+  if (ordinal_model && !is.null(predict) && predict %in% .emmeans_ordinal_types) {
+    out$mode <- predict
+    out$pseudo_factor <- .emmeans_ordinal_pseudo_factor(model, predict)
+  }
+  out
+}
+
+
+# adds the pseudo-factor of ordinal models to `specs`
+.add_emmeans_pseudo_factor <- function(specs, pseudo_factor) {
+  if (is.null(pseudo_factor)) {
+    return(specs)
+  }
+  if (is.null(specs) || inherits(specs, "formula")) {
+    pseudo_factor
+  } else {
+    c(specs, pseudo_factor)
+  }
 }
 
 
@@ -299,6 +317,16 @@ get_emmeans <- function(
   estimate_name <- x@misc$estName
   if (!is.null(estimate_name) && estimate_name %in% colnames(means)) {
     colnames(means)[colnames(means) == estimate_name] <- .emmeans_ordinal_estimate_names[[ordinal_mode]]
+  }
+  .clean_pseudo_factor_emmeans_ordinal(means, model, ordinal_mode)
+}
+
+
+# for ordinal models, renames the pseudo-factor column (response categories
+# or thresholds) to `Response` or `Threshold`
+.clean_pseudo_factor_emmeans_ordinal <- function(means, model, ordinal_mode) {
+  if (is.null(ordinal_mode)) {
+    return(means)
   }
   pseudo_factor <- .emmeans_ordinal_pseudo_factor(model, ordinal_mode)
   if (!is.null(pseudo_factor) && pseudo_factor %in% colnames(means)) {
