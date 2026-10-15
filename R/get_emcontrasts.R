@@ -95,8 +95,8 @@ get_emcontrasts <- function(
       estimated <- suppressMessages(do.call(emmeans::emtrends, fun_args))
       emm_by <- NULL
     } else {
-      # ordinal models: we contrast the slopes within each response category
-      # or threshold
+      # ordinal models: for modes with response categories or thresholds, we
+      # contrast the slopes within each one
       fun_args <- .emtrends_ordinal_arguments(fun_args, ordinal)
       estimated <- suppressMessages(do.call(emmeans::emtrends, fun_args))
       if (ordinal$mode %in% c("prob", "mean.class")) {
