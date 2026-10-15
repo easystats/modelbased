@@ -138,9 +138,9 @@ get_emtrends <- function(
     # names of the response categories, as emmeans labels them for
     # `mode = "prob"`
     pseudo_factor <- .emmeans_ordinal_pseudo_factor(model, "prob")
-    categories <- suppressMessages(
-      emmeans::ref_grid(model, mode = "prob")@levels[[pseudo_factor]]
-    )
+    categories <- suppressMessages(emmeans::ref_grid(model, mode = "prob")@levels[[
+      pseudo_factor
+    ]])
     coefficients <- lapply(seq_len(n_cuts + 1), function(k) {
       weights <- numeric(n_cuts)
       if (k <= n_cuts) {

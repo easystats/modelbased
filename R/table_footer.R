@@ -242,7 +242,12 @@
   }
   # ordinal models, emmeans backend: tell user about the prediction mode
   if (!is.null(info$ordinal_mode)) {
-    table_footer <- paste0(table_footer, "\nSlopes are on the ", info$ordinal_mode, "-scale.")
+    table_footer <- paste0(
+      table_footer,
+      "\nSlopes are on the ",
+      info$ordinal_mode,
+      "-scale."
+    )
   }
   if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
     # add information about response transformation

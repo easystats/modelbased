@@ -431,7 +431,10 @@ test_that("estimate_means, print bracl", {
   )
   out <- as.data.frame(contrasts)
   ci <- as.data.frame(stats::confint(contrasts, adjust = "none"))
-  contrast_levels <- do.call(rbind, strsplit(as.character(out$contrast), " - ", fixed = TRUE))
+  contrast_levels <- do.call(
+    rbind,
+    strsplit(as.character(out$contrast), " - ", fixed = TRUE)
+  )
   data.frame(
     Level1 = contrast_levels[, 1],
     Level2 = contrast_levels[, 2],
@@ -554,7 +557,11 @@ test_that("estimate_contrasts, backend emmeans, ordinal modes", {
   for (mode in names(group_columns)) {
     group <- group_columns[[mode]]
     pseudo_factor <- switch(mode, prob = "Sat", latent = , mean.class = NULL, "cut")
-    specs <- if (is.null(pseudo_factor)) ~Infl else stats::as.formula(paste("~ Infl |", pseudo_factor))
+    specs <- if (is.null(pseudo_factor)) {
+      ~Infl
+    } else {
+      stats::as.formula(paste("~ Infl |", pseudo_factor))
+    }
     expected <- .emmeans_ordinal_contrasts(m, specs, mode, pseudo_factor)
 
     out <- estimate_contrasts(m, "Infl", predict = mode, backend = "emmeans")
@@ -594,7 +601,11 @@ test_that("estimate_contrasts, backend emmeans, clmm shows level names", {
       out <- estimate_contrasts(m, "temp", predict = mode, backend = "emmeans")
       expect_identical(nrow(out), 4L, info = paste(response, mode))
       expect_setequal(as.character(out$Threshold), threshold_names)
-      expect_identical(levels(out$Threshold), threshold_names, info = paste(response, mode))
+      expect_identical(
+        levels(out$Threshold),
+        threshold_names,
+        info = paste(response, mode)
+      )
     }
   }
 })
@@ -678,10 +689,12 @@ test_that("estimate_slopes, backend emmeans, ordinal", {
       # which uses a forward difference with a step of 0.001 times the range
       # of `x`. For the simulated fit, single slopes differ by up to 1.2%
       # (emmeans 2.0.4, marginaleffects 1.0.0)
-      matched <- out_marginaleffects[match(
-        paste(out$g, out$Response),
-        paste(out_marginaleffects$g, out_marginaleffects$Response)
-      ), ]
+      matched <- out_marginaleffects[
+        match(
+          paste(out$g, out$Response),
+          paste(out_marginaleffects$g, out_marginaleffects$Response)
+        ),
+      ]
       expect_false(anyNA(matched$Slope), info = i)
       expect_equal(out$Slope, matched$Slope, tolerance = 1e-2, info = i)
       expect_equal(out$SE, matched$SE, tolerance = 1e-2, info = i)
@@ -717,13 +730,15 @@ test_that("estimate_slopes, backend emmeans, ordinal", {
         info = paste(i, mode)
       )
       out_group <- if (mode == "latent") "" else as.character(out$Threshold)
-      matched <- out[match(
-        paste(expected$g, expected_group),
-        paste(out$g, out_group)
-      ), ]
+      matched <- out[match(paste(expected$g, expected_group), paste(out$g, out_group)), ]
       expect_identical(nrow(out), nrow(expected), info = paste(i, mode))
       expect_false(anyNA(matched$Slope), info = paste(i, mode))
-      expect_equal(matched$Slope, expected$x.trend, tolerance = 1e-6, info = paste(i, mode))
+      expect_equal(
+        matched$Slope,
+        expected$x.trend,
+        tolerance = 1e-6,
+        info = paste(i, mode)
+      )
       expect_equal(matched$SE, expected$SE, tolerance = 1e-6, info = paste(i, mode))
     }
 
@@ -776,7 +791,9 @@ test_that("estimate_contrasts, backend emmeans, ordinal slopes", {
 
     # differences of the slopes within each response category
     slope_of <- function(g, response) {
-      slopes$Slope[as.character(slopes$g) == g & as.character(slopes$Response) == response]
+      slopes$Slope[
+        as.character(slopes$g) == g & as.character(slopes$Response) == response
+      ]
     }
     expected <- mapply(
       function(level1, level2, response) {
@@ -826,10 +843,9 @@ test_that("estimate_slopes, backend emmeans, clmm", {
     finite_difference <- (upper$prob - lower$prob) / (2 * h)
     # emmeans codes the response categories of clmm models as 1, 2, 3, ...
     upper_levels <- response_levels[as.integer(as.character(upper[[response]]))]
-    matched <- out[match(
-      paste(upper$contact, upper_levels),
-      paste(out$contact, out$Response)
-    ), ]
+    matched <- out[
+      match(paste(upper$contact, upper_levels), paste(out$contact, out$Response)),
+    ]
     expect_false(anyNA(matched$Slope), info = response)
     expect_equal(matched$Slope, finite_difference, tolerance = 1e-3, info = response)
 
@@ -842,13 +858,23 @@ test_that("estimate_slopes, backend emmeans, clmm", {
         backend = "emmeans"
       ))
       expect_identical(nrow(out), 8L, info = paste(response, mode))
-      expect_identical(levels(out$Threshold), threshold_names, info = paste(response, mode))
+      expect_identical(
+        levels(out$Threshold),
+        threshold_names,
+        info = paste(response, mode)
+      )
     }
 
     # contrasts of slopes keep the level names
     out <- estimate_contrasts(m, "x", by = "contact", backend = "emmeans")
     expect_identical(levels(out$Response), response_levels, info = response)
-    out <- estimate_contrasts(m, "x", by = "contact", predict = "cum.prob", backend = "emmeans")
+    out <- estimate_contrasts(
+      m,
+      "x",
+      by = "contact",
+      predict = "cum.prob",
+      backend = "emmeans"
+    )
     expect_identical(levels(out$Threshold), threshold_names, info = response)
   }
 })
@@ -880,7 +906,12 @@ test_that("estimate_slopes, backend emmeans, ordinal, predict = 'response' and n
   )
 
   # no `by`: the mean class is 1 + the sum of the exceedance probabilities
-  out <- as.data.frame(estimate_slopes(m, "x", predict = "mean.class", backend = "emmeans"))
+  out <- as.data.frame(estimate_slopes(
+    m,
+    "x",
+    predict = "mean.class",
+    backend = "emmeans"
+  ))
   out_exceedance <- estimate_slopes(m, "x", predict = "exc.prob", backend = "emmeans")
   expect_identical(nrow(out), 1L)
   expect_equal(out$Slope, sum(out_exceedance$Slope), tolerance = 1e-6)
