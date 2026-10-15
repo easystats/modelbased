@@ -740,6 +740,11 @@ equivalence_columns <- c(
       colnames(x)[colnames(x) == "hypothesis.1"] <- "hypothesis"
     }
   }
+  # focal terms that are columns of `x`. Only these columns are moved to the
+  # front and get the data type of the variable. Output columns can have the
+  # name of a focal term that is not a column of `x`, e.g. "p" or "Difference"
+  # in contrasts.
+  output_focal <- focal_terms[focal_terms %in% colnames(x)]
 
   # tidy output - we want to tidy the output, using `model_parameters()` or
   # `describe_posterior()` for Bayesian models. We also need to know how the
@@ -808,7 +813,11 @@ equivalence_columns <- c(
   params <- params[c(setdiff(colnames(params), relocate_columns), relocate_columns)]
 
   # relocate focal terms to the beginning
-  if (!is.null(focal_terms) && all(focal_terms %in% colnames(params))) {
+  if (
+    !is.null(focal_terms) &&
+      all(focal_terms %in% output_focal) &&
+      all(focal_terms %in% colnames(params))
+  ) {
     params <- datawizard::data_reorder(params, focal_terms, verbose = FALSE)
   }
 
@@ -860,6 +869,7 @@ equivalence_columns <- c(
   # Contrasts get the columns "Level1" and "Level2" later, from the "Parameter"
   # column.
   renamed_focal <- NULL
+  restore_focal <- setdiff(output_focal, names(protected_focal))
   if (length(protected_focal)) {
     restore <- match(names(protected_focal), colnames(params))
     focal_names <- protected_focal[!is.na(restore)]
@@ -887,6 +897,7 @@ equivalence_columns <- c(
       restore_data[names(renamed_focal)[in_data]] <- NULL
     }
     colnames(params)[restore[!is.na(restore)]] <- focal_names
+    restore_focal <- c(restore_focal, focal_names)
   }
 
   # extract information for potential inequality analysis
@@ -951,7 +962,8 @@ equivalence_columns <- c(
     }
   }
 
-  # finally, make sure we have original data types
+  # finally, make sure we have original data types for the focal columns
+  restore_data <- restore_data[intersect(restore_focal, colnames(restore_data))]
   params <- data.frame(datawizard::data_restoretype(params, restore_data))
 
   # add posterior draws?
