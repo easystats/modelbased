@@ -104,4 +104,67 @@ test_that("estimate_means - brms, Wiener", {
   set.seed(123)
   out <- estimate_prediction(m, data = d, keep_iterations = 3)
   expect_snapshot(print(out, table_width = Inf))
+
+  est <- estimate_means(m, by = NULL)
+  expect_identical(
+    capture.output(print(est)),
+    c(
+      "Estimated Marginal Means",
+      "",
+      "Median |       95% CI |   pd |          ROPE | % in ROPE",
+      "--------------------------------------------------------",
+      "0.84   | [0.82, 0.86] | 100% | [-0.10, 0.10] |        0%",
+      "",
+      "Variable predicted: rt, response",
+      "Predictions are on the response-scale."
+    )
+  )
+})
+
+
+test_that("estimate_means - brms, Wiener, printing", {
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("RWiener")
+
+  m <- insight::download_model("brms_wiener_1")
+  skip_if(is.null(m))
+
+  old_opt <- getOption("wiener_backend")
+  options(wiener_backend = "rtdists")
+  on.exit(options(wiener_backend = old_opt))
+
+  est <- estimate_means(m, by = "x", predict = "mu")
+  expect_identical(
+    capture.output(print(est)),
+    c(
+      "Estimated Marginal Means",
+      "",
+      "x |   Mu |       95% CI |   pd |          ROPE | % in ROPE",
+      "----------------------------------------------------------",
+      "a | 0.63 | [0.37, 0.87] | 100% | [-0.10, 0.10] |        0%",
+      "b | 1.81 | [1.50, 2.14] | 100% | [-0.10, 0.10] |        0%",
+      "",
+      "Variable predicted: rt, resp",
+      "Predictors modulated: x",
+      "Predictions are on the mu-scale."
+    )
+  )
+
+  cont <- estimate_contrasts(m, contrast = "x", predict = "mu")
+  expect_identical(
+    capture.output(print(cont)),
+    c(
+      "Marginal Contrasts Analysis",
+      "",
+      "Level1 | Level2 | Median |       95% CI |   pd |          ROPE | % in ROPE",
+      "--------------------------------------------------------------------------",
+      "b      | a      |   1.18 | [0.82, 1.54] | 100% | [-0.10, 0.10] |        0%",
+      "",
+      "Variable predicted: rt, resp",
+      "Predictors contrasted: x",
+      "Contrasts are on the mu-scale."
+    )
+  )
 })
