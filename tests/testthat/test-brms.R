@@ -131,6 +131,10 @@ test_that("estimate_means - brms, Wiener, printing", {
   m <- insight::download_model("brms_wiener_1")
   skip_if(is.null(m))
 
+  old_opt <- getOption("wiener_backend")
+  options(wiener_backend = "rtdists")
+  on.exit(options(wiener_backend = old_opt))
+
   est <- estimate_means(m, by = "x", predict = "mu")
   expect_identical(
     capture.output(print(est)),
