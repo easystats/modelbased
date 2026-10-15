@@ -54,6 +54,8 @@
   This fix does not yet apply to Bayesian models or to inequality comparisons
   (for example `comparison = "inequality"`).
 
+* Fixed printing error for brms-Wiener models without `component` column.
+
 * With `backend = "marginaleffects"`, a `by` variable with the name of the
   estimate column (for example `Mean`) or of the `t` column is now returned as
   `<name>.1`. The output column keeps its name. This also holds for `p`
