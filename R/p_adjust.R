@@ -9,8 +9,10 @@
   # extract information
   datagrid <- attributes(params)$datagrid
 
-  # when contrasting slopes, we need "by" as focal term
-  if (inherits(params, "estimate_slopes")) {
+  # when contrasting slopes, we need "by" as focal term. `get_marginaltrends()`
+  # adjusts the unformatted marginaleffects output, where "by" is also the
+  # focal term
+  if (inherits(params, c("estimate_slopes", "marginaleffects_slopes"))) {
     focal <- .safe(insight::trim_ws(gsub("=.*", "\\1", attributes(params)$by)))
   } else {
     focal <- .safe(insight::trim_ws(gsub("=.*", "\\1", attributes(params)$contrast)))
@@ -67,15 +69,25 @@
     rank_adjust <- prod(vapply(focal_terms, insight::n_unique, numeric(1)))
   }
 
+  # the unformatted marginaleffects output has the columns "p.value" and
+  # "statistic". A focal term can be named "p" or "t" there.
+  p_column <- intersect(c("p.value", "p"), colnames(params))[1]
+  if (is.na(p_column)) {
+    if (verbose) {
+      insight::format_alert("No p-values found. P-values were not adjusted.")
+    }
+    return(params)
+  }
+
   if (p_adjust %in% tolower(stats::p.adjust.methods)) {
     # base R adjustments - need to convert BH and BY back to uppercase before
     p_adjust <- switch(p_adjust, bh = "BH", by = "BY", p_adjust)
-    params[["p"]] <- stats::p.adjust(params[["p"]], method = p_adjust)
+    params[[p_column]] <- stats::p.adjust(params[[p_column]], method = p_adjust)
   } else if (p_adjust == "tukey") {
-    # find first occurence of one of the following columns: "t", "z", or "statistic"
+    # find first occurence of one of the following columns: "statistic", "t" or "z"
     stat_col_name <- Find(
       function(col) col %in% colnames(params),
-      c("t", "z", "statistic")
+      c("statistic", "t", "z")
     )
     if (!is.null(stat_col_name)) {
       statistic <- params[[stat_col_name]]
@@ -97,7 +109,7 @@
         }
       } else {
         # tukey adjustment
-        params[["p"]] <- stats::ptukey(
+        params[[p_column]] <- stats::ptukey(
           sqrt(2) * abs(statistic),
           rank_adjust,
           dof,
@@ -109,7 +121,7 @@
     }
   } else if (p_adjust == "sidak") {
     # sidak adjustment
-    params[["p"]] <- 1 - (1 - params[["p"]])^rank_adjust
+    params[[p_column]] <- 1 - (1 - params[[p_column]])^rank_adjust
   }
 
   params

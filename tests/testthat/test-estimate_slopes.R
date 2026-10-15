@@ -257,6 +257,63 @@ test_that("estimate_slopes, custom comparison", {
   expect_equal(out$Difference, -0.08782885, tolerance = 1e-4)
 })
 
+
+test_that("estimate_slopes, p_adjust methods adjust the p-values", {
+  d <- datasets::mtcars
+  d$safe_var <- factor(d$cyl)
+  calls <- list(
+    numeric_by = function(m) {
+      estimate_slopes(
+        lm(mpg ~ wt * hp, data = d),
+        "wt",
+        by = "hp",
+        length = 4,
+        p_adjust = m
+      )
+    },
+    factor_by = function(m) {
+      estimate_slopes(lm(mpg ~ wt * safe_var, data = d), "wt", by = "safe_var", p_adjust = m)
+    }
+  )
+  methods <- c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr")
+  for (call_name in names(calls)) {
+    call <- calls[[call_name]]
+    out0 <- call("none")
+    p0 <- out0$p
+    k <- nrow(out0)
+    expect_gt(k, 1)
+    for (m in methods) {
+      out <- call(m)
+      expect_equal(out$p, stats::p.adjust(p0, m), tolerance = 1e-10, label = paste(call_name, m))
+    }
+    out <- call("sidak")
+    expect_equal(out$p, 1 - (1 - p0)^k, tolerance = 1e-10, label = paste(call_name, "sidak"))
+    expect_silent(out <- call("tukey"))
+    expect_equal(
+      out$p,
+      stats::ptukey(sqrt(2) * abs(out$t), k, out$df, lower.tail = FALSE),
+      tolerance = 1e-10,
+      label = paste(call_name, "tukey")
+    )
+    expect_false(isTRUE(all.equal(out$p, p0)), label = paste(call_name, "tukey changed"))
+  }
+})
+
+
+test_that("estimate_slopes, p_adjust with a by-variable named p", {
+  d <- datasets::mtcars
+  d$safe_var <- factor(d$cyl)
+  d$p <- factor(d$cyl)
+  for (m in c("holm", "sidak")) {
+    ref <- estimate_slopes(lm(mpg ~ wt * safe_var, data = d), "wt", by = "safe_var", p_adjust = m)
+    out <- estimate_slopes(lm(mpg ~ wt * p, data = d), "wt", by = "p", p_adjust = m)
+    expect_true(is.factor(out$p.1), label = m)
+    expect_identical(levels(out$p.1), levels(d$p), label = m)
+    expect_identical(as.character(out$p.1), as.character(ref$safe_var), label = m)
+    expect_equal(out$p, ref$p, tolerance = 1e-10, label = m)
+  }
+})
+
 skip_on_cran()
 
 test_that("estimate_slopes, works with lme4", {
