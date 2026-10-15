@@ -440,3 +440,140 @@ test_that("estimate_means() keeps focal variables with custom newdata", {
     expect_null(diff, label = paste0("newdata(\"", name, "\"): ", diff))
   }
 })
+
+
+# Contrasts, ratios, custom hypotheses and slope contrasts, with focal
+# variables named like output columns. The output column with that name must
+# keep its values and its position.
+
+clash_names <- c(
+  "Difference", "Ratio", "Slope", "Mean", "SE", "CI_low", "CI_high", "t", "z",
+  "df", "p", "Predicted", "Parameter", "Level1", "Statistic", "s.value",
+  "hypothesis"
+)
+
+clash_data <- function(name) {
+  d <- datasets::mtcars
+  d$am_f <- factor(d$am, levels = 0:1, labels = c("auto", "manual"))
+  d[[name]] <- factor(d$cyl)
+  d
+}
+
+clash_model <- function(name, rhs) {
+  d <- clash_data(name)
+  stats::lm(focal_formula(paste0(rhs, " * `", name, "`")), data = d)
+}
+
+clash_calls <- list(
+  contrast = function(name) {
+    estimate_contrasts(clash_model(name, "am_f"), name, by = "am_f")
+  },
+  contrasts_by = function(name) {
+    estimate_contrasts(clash_model(name, "am_f"), "am_f", by = name)
+  },
+  contrasts_by_ratio = function(name) {
+    estimate_contrasts(
+      clash_model(name, "am_f"),
+      "am_f",
+      by = name,
+      comparison = "ratio"
+    )
+  },
+  contrasts_by_hypothesis = function(name) {
+    estimate_contrasts(
+      clash_model(name, "am_f"),
+      "am_f",
+      by = name,
+      comparison = "b2=b1"
+    )
+  },
+  slope_contrasts_by = function(name) {
+    estimate_contrasts(clash_model(name, "wt"), "wt", by = name)
+  },
+  slopes_by_hypothesis = function(name) {
+    estimate_slopes(clash_model(name, "wt"), "wt", by = name, comparison = "b2=b1")
+  }
+)
+
+# names that give the error of `.check_marginaleffects_names()`
+clash_error_cells <- list(
+  contrast = c("SE", "CI_low", "CI_high", "df"),
+  contrasts_by = c("Predicted", "SE", "CI_low", "CI_high", "df", "s.value"),
+  contrasts_by_ratio = c("Predicted", "SE", "CI_low", "CI_high", "df", "s.value"),
+  contrasts_by_hypothesis = c("Predicted", "SE", "CI_low", "CI_high", "df", "s.value"),
+  slope_contrasts_by = c("df", "s.value"),
+  slopes_by_hypothesis = c("df", "s.value")
+)
+
+# Returns NULL when `out` equals `ref` with "safe_var" replaced by `name`,
+# otherwise a short description of the difference. Label columns (factors and
+# character vectors) are compared as character.
+clash_difference <- function(ref, out, name) {
+  if (inherits(out, "error")) {
+    return(paste("error:", conditionMessage(out)))
+  }
+  if (anyDuplicated(colnames(out))) {
+    return(paste0("duplicated columns [", toString(colnames(out)), "]"))
+  }
+  expected <- gsub("safe_var", name, colnames(ref), fixed = TRUE)
+  if (!identical(expected, colnames(out))) {
+    return(paste0(
+      "columns [", toString(colnames(out)), "], expected [",
+      toString(expected), "]"
+    ))
+  }
+  for (i in seq_along(ref)) {
+    r <- ref[[i]]
+    o <- out[[i]]
+    if (is.factor(r) || is.character(r)) {
+      r <- gsub("safe_var", name, as.character(r), fixed = TRUE)
+      o <- if (is.factor(o) || is.character(o)) as.character(o) else o
+    }
+    if (!identical(class(r), class(o))) {
+      return(paste0("column ", colnames(out)[i], " has class ", class(o)[1]))
+    }
+    if (!isTRUE(all.equal(r, o, check.attributes = FALSE))) {
+      return(paste0("column ", colnames(out)[i], " has other values"))
+    }
+  }
+  NULL
+}
+
+test_that("output columns keep their values for focal names like output columns", {
+  n_errors <- 0
+  n_compared <- 0
+  for (call_name in names(clash_calls)) {
+    call <- clash_calls[[call_name]]
+    ref <- call("safe_var")
+    for (name in clash_names) {
+      out <- tryCatch(suppressWarnings(call(name)), error = function(e) e)
+      label <- paste0(call_name, "(\"", name, "\")")
+      if (name %in% clash_error_cells[[call_name]]) {
+        n_errors <- n_errors + 1
+        msg <- if (inherits(out, "error")) conditionMessage(out) else "no error"
+        msg <- gsub("\\s+", " ", msg)
+        expect_match(
+          msg,
+          paste0("Variable `", name, "` has a name that the marginaleffects package uses"),
+          fixed = TRUE,
+          label = label
+        )
+        next
+      }
+      n_compared <- n_compared + 1
+      # the variable has its own name, or a suffix ".1", ".2", ...
+      for (new_name in c(name, paste0(name, ".", 1:3))) {
+        diff <- clash_difference(ref, out, new_name)
+        if (is.null(diff)) {
+          break
+        }
+      }
+      if (!is.null(diff)) {
+        diff <- clash_difference(ref, out, name)
+      }
+      expect_null(diff, label = paste0(label, ": ", diff))
+    }
+  }
+  expect_identical(n_errors, 26)
+  expect_identical(n_compared, 76)
+})
