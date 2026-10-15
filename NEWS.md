@@ -99,12 +99,14 @@
 
 * If a variable has the name of an output column, `estimate_contrasts()` and
   `estimate_slopes()` with `backend = "marginaleffects"` now keep the values
-  and the order of that column. This applies to the `contrast` variable and to
-  `by` variables of contrasts of slopes. It also applies to `by` variables of
-  contrasts with a custom `comparison`, for example `comparison = "b2=b1"`.
-  Before, a `contrast` variable named `t` turned the `t` column into a factor.
-  A `contrast` variable named `p` moved the p-values to the front. A `by`
-  variable named `Slope` gave two `Difference` columns. With
+  and the order of that column. This applies to the `contrast` variable, and
+  to `by` variables of contrasts and of contrasts of slopes. It also applies to
+  `by` variables of contrasts with a custom `comparison`, for example
+  `comparison = "b2=b1"`. Before, a `contrast` variable named `t` turned the
+  `t` column into a factor. A `contrast` variable named `p` replaced the
+  p-values with missing values and moved the `p` column to the front. In
+  contrasts, a `by` variable named `Slope` gave two `Difference` columns. In
+  contrasts of slopes, it replaced the differences with missing values. With
   `comparison = "ratio"`, a `by` variable named `Ratio` or `Slope` gave two
   `Ratio` columns. Now a `by` variable named `Ratio` becomes `Ratio.1` there.
 
