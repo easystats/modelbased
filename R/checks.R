@@ -253,7 +253,7 @@
   bad <- unique(bad)
 
   if (length(bad)) {
-    names_text <- paste0("`", bad, "`", collapse = ", ")
+    names_text <- datawizard::text_concatenate(bad, enclose = "`")
     insight::format_error(paste0(
       if (length(bad) > 1) "Variables " else "Variable ",
       names_text,
