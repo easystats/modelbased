@@ -590,6 +590,7 @@ test_that("estimate_contrasts, backend emmeans, ordinal, numeric by", {
   # 3 pairs of levels, 3 values of x, 3 response categories
   expect_identical(nrow(out), 27L)
   expect_length(unique(out$x), 3)
+  expect_equal(range(out$x), range(housing$x), tolerance = 1e-3)
   expect_identical(
     anyDuplicated(as.data.frame(out)[c("Level1", "Level2", "x", "Response")]),
     0L
