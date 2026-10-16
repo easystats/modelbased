@@ -579,6 +579,45 @@ test_that("estimate_contrasts, backend emmeans, ordinal modes", {
 })
 
 
+test_that("estimate_contrasts, backend emmeans, ordinal, numeric by", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  set.seed(1)
+  housing$x <- stats::rnorm(nrow(housing))
+  m <- MASS::polr(Sat ~ Infl * x, weights = Freq, data = housing, Hess = TRUE)
+
+  out <- estimate_contrasts(m, "Infl", by = "x", length = 3, backend = "emmeans")
+  # 3 pairs of levels, 3 values of x, 3 response categories
+  expect_identical(nrow(out), 27L)
+  expect_length(unique(out$x), 3)
+  expect_identical(
+    anyDuplicated(as.data.frame(out)[c("Level1", "Level2", "x", "Response")]),
+    0L
+  )
+
+  expected <- emmeans::contrast(
+    emmeans::emmeans(m, ~ Infl | x + Sat, at = list(x = unique(out$x)), mode = "prob"),
+    "revpairwise",
+    adjust = "none"
+  )
+  ci <- as.data.frame(stats::confint(expected))
+  expected <- as.data.frame(expected)
+  key_out <- paste(out$Level1, out$Level2, format(out$x), out$Response)
+  key_expected <- paste(
+    gsub(" - .*", "", expected$contrast),
+    gsub(".* - ", "", expected$contrast),
+    format(expected$x),
+    expected$Sat
+  )
+  matched <- match(key_expected, key_out)
+  expect_false(anyNA(matched))
+  expect_equal(out$Difference[matched], expected$estimate, tolerance = 1e-6)
+  expect_equal(out$SE[matched], expected$SE, tolerance = 1e-6)
+  expect_equal(out$CI_low[matched], ci$asymp.LCL, tolerance = 1e-6)
+  expect_equal(out$CI_high[matched], ci$asymp.UCL, tolerance = 1e-6)
+})
+
+
 test_that("estimate_contrasts, backend emmeans, clmm shows level names", {
   skip_if_not_installed("emmeans")
   skip_if_not_installed("ordinal")

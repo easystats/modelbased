@@ -241,11 +241,10 @@ get_emcontrasts <- function(
         !is.null(ordinal_mode) &&
           !is.null(.emmeans_ordinal_pseudo_factor(model, ordinal_mode))
       ) {
-        key_columns <- colnames(estimated_data)[
-          !vapply(estimated_data, is.numeric, logical(1))
-        ]
+        # all columns form the key, because a numeric column can also
+        # identify the rows (e.g. a numeric `by` variable)
         row_keys <- function(d) {
-          do.call(paste, c(lapply(d[key_columns], as.character), sep = "\r"))
+          do.call(paste, c(lapply(d[colnames(estimated_data)], as.character), sep = "\r"))
         }
         out <- out[match(row_keys(estimated_data), row_keys(out)), , drop = FALSE]
         rownames(out) <- NULL
