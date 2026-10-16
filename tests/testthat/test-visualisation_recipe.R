@@ -209,6 +209,40 @@ test_that("visualization_recipe", {
 })
 
 
+test_that("visualization_recipe, grid argument modifies facet_grid layer", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
+
+  data <- iris
+  data$fac <- rep_len(c("A", "B"), 150)
+  data$fac2 <- rep_len(c("X", "X", "X", "Y", "Y", "Y"), 150)
+  model <- lm(Sepal.Length ~ Species * fac * Sepal.Width * fac2, data = data)
+  x <- estimate_relation(model, by = c("Species", "Sepal.Width", "fac", "fac2"))
+
+  .grid_layer <- function(r) {
+    geoms <- vapply(r, function(l) l$geom, character(1))
+    r[[which(geoms == "facet_grid")]]
+  }
+
+  # default
+  out <- .grid_layer(visualisation_recipe(x))
+  expect_identical(out$scales, "free_x")
+
+  # grid argument is used for the facet_grid layer
+  out <- .grid_layer(visualisation_recipe(x, grid = list(scales = "free")))
+  expect_identical(out$scales, "free")
+  expect_identical(deparse(out$rows), "fac2 ~ fac")
+
+  # facet argument does not change the facet_grid layer
+  out <- .grid_layer(visualisation_recipe(
+    x,
+    grid = list(scales = "free"),
+    facet = list(scales = "free_y")
+  ))
+  expect_identical(out$scales, "free")
+})
+
+
 # emmeans backend: ordinal and other models ----------------------------------
 
 .recipe_mapping <- function(x, ...) {
