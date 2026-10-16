@@ -611,6 +611,8 @@ test_that("estimate_contrasts, backend emmeans, ordinal, numeric by", {
   )
   matched <- match(key_expected, key_out)
   expect_false(anyNA(matched))
+  # rows are in the order of emmeans
+  expect_identical(matched, seq_len(nrow(out)))
   expect_equal(out$Difference[matched], expected$estimate, tolerance = 1e-6)
   expect_equal(out$SE[matched], expected$SE, tolerance = 1e-6)
   expect_equal(out$CI_low[matched], ci$asymp.LCL, tolerance = 1e-6)
