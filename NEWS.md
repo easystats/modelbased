@@ -111,6 +111,25 @@
   above, the `Level1`, `Level2` and `hypothesis` fixes do not yet apply to
   Bayesian models or to inequality comparisons.
 
+* If a variable has the name of an output column, `estimate_contrasts()` and
+  `estimate_slopes()` with `backend = "marginaleffects"` now keep the values
+  and the order of that column. This applies to the `contrast` variable, and
+  to `by` variables of contrasts and of contrasts of slopes. It also applies to
+  `by` variables of contrasts with a custom `comparison`, for example
+  `comparison = "b2=b1"`. Before, a `contrast` variable named `t` turned the
+  `t` column into a factor. A `contrast` variable named `p` replaced the
+  p-values with missing values and moved the `p` column to the front. In
+  contrasts, a `by` variable named `Slope` gave two `Difference` columns. In
+  contrasts of slopes, it replaced the differences with missing values. With
+  `comparison = "ratio"`, a `by` variable named `Ratio` or `Slope` gave two
+  `Ratio` columns. Now a `by` variable named `Ratio` becomes `Ratio.1` there.
+
+* `estimate_slopes()` with `backend = "marginaleffects"` now adjusts the
+  p-values for `p_adjust = "holm"`, `"hochberg"`, `"hommel"`, `"bonferroni"`,
+  `"BH"`, `"BY"`, `"fdr"`, `"sidak"` and `"tukey"`. Before, all but `"tukey"`
+  failed with the error "replacement has 0 rows", and `"tukey"` returned the
+  unadjusted p-values.
+
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed
   `1`, `2`, `3`, and the `Threshold` column showed `1|2`, `2|3`.
@@ -129,6 +148,16 @@
 * `plot()` now gives an informative error when there is nothing to put on the
   x-axis, e.g. for predictions from intercept-only models, or for
   `estimate_prediction()` without the `by` argument.
+
+* Fixed an "invalid regular expression" error in `estimate_contrasts()` for
+  multivariate models (for example from *brms*) with many observations.
+  `estimate_contrasts()` now uses the names of the response variables, not
+  their observed values, to find the response in the contrast labels.
+
+* The `grid` argument of `visualisation_recipe()` and `plot()` now changes the
+  facet grid of plots with four or more `by` variables. Before, these functions
+  applied the `facet` argument to the facet grid instead. If `facet` was not
+  set, `grid` gave an error.
 
 # modelbased 0.17.0
 
