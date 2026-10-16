@@ -87,24 +87,15 @@ test_that("estimate_means, backend emmeans, ordinal, default predict", {
   )
   expect_equal(out_default$Probability, out_prob$Probability, tolerance = 1e-6)
 
-  # contrasts are not affected by the new default for means
+  # contrasts also default to probabilities, same as predict = "prob"
   out <- estimate_contrasts(m, "Type", backend = "emmeans")
+  out_prob <- estimate_contrasts(m, "Type", predict = "prob", backend = "emmeans")
+  expect_identical(nrow(out), 18L)
   expect_identical(
-    paste(out$Level1, out$Level2),
-    c(
-      "Apartment Tower",
-      "Atrium Apartment",
-      "Atrium Tower",
-      "Terrace Apartment",
-      "Terrace Atrium",
-      "Terrace Tower"
-    )
+    paste(out$Level1, out$Level2, out$Response),
+    paste(out_prob$Level1, out_prob$Level2, out_prob$Response)
   )
-  expect_equal(
-    out$Difference,
-    c(-0.5723501, 0.2061636, -0.3661866, -0.5186648, -0.7248283, -1.0910149),
-    tolerance = 1e-6
-  )
+  expect_equal(out$Difference, out_prob$Difference, tolerance = 1e-6)
 })
 
 
@@ -426,4 +417,670 @@ test_that("estimate_means, print bracl", {
   m <- nnet::multinom(species ~ island + sex, data = penguins)
   out <- estimate_means(m, by = "island")
   expect_snapshot(print(out, zap_small = TRUE), variant = "windows")
+})
+
+
+# contrasts from emmeans, with the contrast split into `Level1` and `Level2`,
+# and the values of the pseudo-factor (response categories or thresholds) in
+# `group`
+.emmeans_ordinal_contrasts <- function(m, specs, mode, group = NULL) {
+  contrasts <- emmeans::contrast(
+    suppressMessages(emmeans::emmeans(m, specs, mode = mode)),
+    "revpairwise",
+    adjust = "none"
+  )
+  out <- as.data.frame(contrasts)
+  ci <- as.data.frame(stats::confint(contrasts, adjust = "none"))
+  contrast_levels <- do.call(
+    rbind,
+    strsplit(as.character(out$contrast), " - ", fixed = TRUE)
+  )
+  data.frame(
+    Level1 = contrast_levels[, 1],
+    Level2 = contrast_levels[, 2],
+    group = if (is.null(group)) "" else as.character(out[[group]]),
+    estimate = out$estimate,
+    SE = out$SE,
+    p = out$p.value,
+    CI_low = ci$asymp.LCL,
+    CI_high = ci$asymp.UCL,
+    stringsAsFactors = FALSE
+  )
+}
+
+
+# rows of `out` in the order of `expected`, matched by levels and the group
+# column (`Response` or `Threshold`)
+.match_ordinal_contrasts <- function(out, expected, group = NULL) {
+  out_group <- if (is.null(group)) "" else as.character(out[[group]])
+  out_keys <- paste(out$Level1, out$Level2, out_group)
+  expected_keys <- paste(expected$Level1, expected$Level2, expected$group)
+  as.data.frame(out)[match(expected_keys, out_keys), ]
+}
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, probability default", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+  data(wine, package = "ordinal")
+
+  models <- list(
+    polr = list(
+      MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing, Hess = TRUE),
+      "Infl",
+      "Sat"
+    ),
+    clm = list(
+      ordinal::clm(Sat ~ Infl + Type + Cont, weights = Freq, data = housing),
+      "Infl",
+      "Sat"
+    ),
+    clmm = list(
+      ordinal::clmm(rating ~ temp + contact + (1 | judge), data = wine),
+      "temp",
+      "rating"
+    )
+  )
+  # ordinal family in glmmTMB requires glmmTMB >= 1.1.15.2
+  if (
+    requireNamespace("glmmTMB", quietly = TRUE) &&
+      utils::packageVersion("glmmTMB") >= "1.1.15.2"
+  ) {
+    models$glmmTMB <- list(
+      glmmTMB::glmmTMB(
+        Sat ~ Infl + Type + Cont,
+        weights = Freq,
+        data = housing,
+        family = glmmTMB::ordinal()
+      ),
+      "Infl",
+      "Sat"
+    )
+  }
+
+  for (i in names(models)) {
+    m <- models[[i]][[1]]
+    focal <- models[[i]][[2]]
+    response <- models[[i]][[3]]
+    expected <- .emmeans_ordinal_contrasts(
+      m,
+      stats::as.formula(paste("~", focal, "|", response)),
+      "prob",
+      response
+    )
+
+    # differences of probabilities within each response category, for the
+    # default and for predict = "response"
+    for (predict in list(NULL, "response")) {
+      out <- estimate_contrasts(m, focal, predict = predict, backend = "emmeans")
+      expect_identical(nrow(out), nrow(expected), info = i)
+      expect_true("Response" %in% colnames(out), info = i)
+      matched <- .match_ordinal_contrasts(out, expected, "Response")
+      expect_false(anyNA(matched$Difference), info = i)
+      expect_equal(matched$Difference, expected$estimate, tolerance = 1e-6, info = i)
+      expect_equal(matched$SE, expected$SE, tolerance = 1e-6, info = i)
+      expect_equal(matched$p, expected$p, tolerance = 1e-6, info = i)
+      expect_equal(matched$CI_low, expected$CI_low, tolerance = 1e-6, info = i)
+      expect_equal(matched$CI_high, expected$CI_high, tolerance = 1e-6, info = i)
+    }
+
+    # same differences as the marginaleffects backend, for contrasts within one
+    # response category. marginaleffects does not support clmm, and ordinal
+    # glmmTMB requires marginaleffects >= 1.0.1
+    if (i %in% c("polr", "clm")) {
+      out <- as.data.frame(estimate_contrasts(m, focal))
+      out <- out[as.character(out$Response1) == as.character(out$Response2), ]
+      out$Response <- out$Response1
+      matched <- .match_ordinal_contrasts(out, expected, "Response")
+      expect_false(anyNA(matched$Difference), info = i)
+      expect_equal(matched$Difference, expected$estimate, tolerance = 1e-4, info = i)
+    }
+  }
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal modes", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing, Hess = TRUE)
+
+  # the column that holds the pseudo-factor, if any
+  group_columns <- list(
+    latent = NULL,
+    linear.predictor = "Threshold",
+    cum.prob = "Threshold",
+    exc.prob = "Threshold",
+    prob = "Response",
+    mean.class = NULL
+  )
+  for (mode in names(group_columns)) {
+    group <- group_columns[[mode]]
+    pseudo_factor <- switch(mode, prob = "Sat", latent = , mean.class = NULL, "cut")
+    specs <- if (is.null(pseudo_factor)) {
+      ~Infl
+    } else {
+      stats::as.formula(paste("~ Infl |", pseudo_factor))
+    }
+    expected <- .emmeans_ordinal_contrasts(m, specs, mode, pseudo_factor)
+
+    out <- estimate_contrasts(m, "Infl", predict = mode, backend = "emmeans")
+    expect_identical(
+      intersect(c("Response", "Threshold"), colnames(out)),
+      if (is.null(group)) character(0) else group,
+      info = mode
+    )
+    expect_identical(nrow(out), nrow(expected), info = mode)
+    matched <- .match_ordinal_contrasts(out, expected, group)
+    expect_false(anyNA(matched$Difference), info = mode)
+    expect_equal(matched$Difference, expected$estimate, tolerance = 1e-6, info = mode)
+    expect_equal(matched$SE, expected$SE, tolerance = 1e-6, info = mode)
+  }
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, numeric by", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  set.seed(1)
+  housing$x <- stats::rnorm(nrow(housing))
+  m <- MASS::polr(Sat ~ Infl * x, weights = Freq, data = housing, Hess = TRUE)
+
+  out <- estimate_contrasts(m, "Infl", by = "x", length = 3, backend = "emmeans")
+  # 3 pairs of levels, 3 values of x, 3 response categories
+  expect_identical(nrow(out), 27L)
+  expect_length(unique(out$x), 3)
+  expect_equal(range(out$x), range(housing$x), tolerance = 1e-3)
+  expect_identical(
+    anyDuplicated(as.data.frame(out)[c("Level1", "Level2", "x", "Response")]),
+    0L
+  )
+
+  expected <- emmeans::contrast(
+    emmeans::emmeans(m, ~ Infl | x + Sat, at = list(x = unique(out$x)), mode = "prob"),
+    "revpairwise",
+    adjust = "none"
+  )
+  ci <- as.data.frame(stats::confint(expected))
+  expected <- as.data.frame(expected)
+  key_out <- paste(out$Level1, out$Level2, format(out$x), out$Response)
+  key_expected <- paste(
+    gsub(" - .*", "", expected$contrast),
+    gsub(".* - ", "", expected$contrast),
+    format(expected$x),
+    expected$Sat
+  )
+  matched <- match(key_expected, key_out)
+  expect_false(anyNA(matched))
+  # rows are in the order of emmeans
+  expect_identical(matched, seq_len(nrow(out)))
+  expect_equal(out$Difference[matched], expected$estimate, tolerance = 1e-6)
+  expect_equal(out$SE[matched], expected$SE, tolerance = 1e-6)
+  expect_equal(out$CI_low[matched], ci$asymp.LCL, tolerance = 1e-6)
+  expect_equal(out$CI_high[matched], ci$asymp.UCL, tolerance = 1e-6)
+})
+
+
+test_that("estimate_contrasts, backend emmeans, clmm shows level names", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(wine, package = "ordinal")
+  wine$rating_text <- factor(wine$rating, labels = letters[1:5], ordered = TRUE)
+  all_levels <- list(rating = as.character(1:5), rating_text = letters[1:5])
+
+  for (response in names(all_levels)) {
+    response_levels <- all_levels[[response]]
+    threshold_names <- paste(response_levels[-5], response_levels[-1], sep = "|")
+    f <- stats::as.formula(paste(response, "~ temp + contact + (1 | judge)"))
+    m <- ordinal::clmm(f, data = wine)
+
+    out <- estimate_contrasts(m, "temp", backend = "emmeans")
+    expect_identical(nrow(out), 5L, info = response)
+    expect_setequal(as.character(out$Response), response_levels)
+    expect_identical(levels(out$Response), response_levels, info = response)
+
+    for (mode in c("cum.prob", "exc.prob", "linear.predictor")) {
+      out <- estimate_contrasts(m, "temp", predict = mode, backend = "emmeans")
+      expect_identical(nrow(out), 4L, info = paste(response, mode))
+      expect_setequal(as.character(out$Threshold), threshold_names)
+      expect_identical(
+        levels(out$Threshold),
+        threshold_names,
+        info = paste(response, mode)
+      )
+    }
+  }
+})
+
+
+# polr fits with a numeric predictor `x` and a factor `g`, for slopes. For the
+# second fit, `emmeans::emtrends(mode = "prob")` fails with "Irregular
+# reference grid" (emmeans 2.0.4)
+.ordinal_slope_models <- function() {
+  data(housing, package = "MASS")
+  set.seed(1)
+  housing$x <- as.numeric(housing$Cont) + stats::rnorm(nrow(housing))
+  housing$g <- housing$Infl
+  set.seed(2)
+  n <- 400
+  simulated <- data.frame(
+    x = stats::rnorm(n),
+    g = factor(sample(c("a", "b", "c"), n, replace = TRUE))
+  )
+  simulated$y <- cut(
+    simulated$x + as.numeric(simulated$g) + stats::rlogis(n),
+    c(-Inf, 1, 2.5, Inf),
+    labels = c("lo", "mid", "hi"),
+    ordered_result = TRUE
+  )
+  list(
+    housing = MASS::polr(Sat ~ g * x, weights = Freq, data = housing, Hess = TRUE),
+    simulated = MASS::polr(y ~ x * g, data = simulated, Hess = TRUE)
+  )
+}
+
+
+test_that("estimate_slopes, backend emmeans, ordinal", {
+  skip_if_not_installed("emmeans")
+  models <- .ordinal_slope_models()
+
+  for (i in names(models)) {
+    m <- models[[i]]
+
+    # slopes of the probability of each response category, for the default
+    # and for predict = "prob". P(y = k) = P(y <= k) - P(y <= k - 1), so each
+    # slope is the slope of the cumulative probability at the threshold above
+    # the category, less the one at the threshold below (0 if there is none)
+    cumulative <- as.data.frame(suppressMessages(emmeans::emtrends(
+      m,
+      ~ g | cut,
+      var = "x",
+      mode = "cum.prob"
+    )))
+    response_levels <- m$lev
+    n_cuts <- length(response_levels) - 1
+    cumulative_slope <- function(g, k) {
+      if (k < 1 || k > n_cuts) {
+        return(0)
+      }
+      cumulative$x.trend[
+        as.character(cumulative$g) == g & as.integer(cumulative$cut) == k
+      ]
+    }
+    out_marginaleffects <- as.data.frame(estimate_slopes(m, "x", by = "g"))
+    for (predict in list(NULL, "prob")) {
+      out <- as.data.frame(estimate_slopes(
+        m,
+        "x",
+        by = "g",
+        predict = predict,
+        backend = "emmeans"
+      ))
+      expect_identical(nrow(out), 9L, info = i)
+      expect_true("Response" %in% colnames(out), info = i)
+      expected <- mapply(
+        function(g, response) {
+          k <- match(response, response_levels)
+          cumulative_slope(g, k) - cumulative_slope(g, k - 1)
+        },
+        as.character(out$g),
+        as.character(out$Response)
+      )
+      expect_equal(out$Slope, unname(expected), tolerance = 1e-6, info = i)
+      # marginaleffects computes the slopes with a smaller step than emtrends(),
+      # which uses a forward difference with a step of 0.001 times the range
+      # of `x`. For the simulated fit, single slopes differ by up to 1.2%
+      # (emmeans 2.0.4, marginaleffects 1.0.0)
+      matched <- out_marginaleffects[
+        match(
+          paste(out$g, out$Response),
+          paste(out_marginaleffects$g, out_marginaleffects$Response)
+        ),
+      ]
+      expect_false(anyNA(matched$Slope), info = i)
+      expect_equal(out$Slope, matched$Slope, tolerance = 1e-2, info = i)
+      expect_equal(out$SE, matched$SE, tolerance = 1e-2, info = i)
+      # the probabilities sum to 1, so their slopes sum to 0
+      expect_equal(
+        as.vector(tapply(out$Slope, out$g, sum)),
+        c(0, 0, 0),
+        tolerance = 1e-8,
+        info = i
+      )
+    }
+
+    # modes with slopes from emtrends()
+    for (mode in c("latent", "linear.predictor", "cum.prob", "exc.prob")) {
+      specs <- if (mode == "latent") ~g else ~ g | cut
+      expected <- as.data.frame(suppressMessages(emmeans::emtrends(
+        m,
+        specs,
+        var = "x",
+        mode = mode
+      )))
+      expected_group <- if (mode == "latent") "" else as.character(expected$cut)
+      out <- as.data.frame(estimate_slopes(
+        m,
+        "x",
+        by = "g",
+        predict = mode,
+        backend = "emmeans"
+      ))
+      expect_identical(
+        intersect(c("Response", "Threshold"), colnames(out)),
+        if (mode == "latent") character(0) else "Threshold",
+        info = paste(i, mode)
+      )
+      out_group <- if (mode == "latent") "" else as.character(out$Threshold)
+      matched <- out[match(paste(expected$g, expected_group), paste(out$g, out_group)), ]
+      expect_identical(nrow(out), nrow(expected), info = paste(i, mode))
+      expect_false(anyNA(matched$Slope), info = paste(i, mode))
+      expect_equal(
+        matched$Slope,
+        expected$x.trend,
+        tolerance = 1e-6,
+        info = paste(i, mode)
+      )
+      expect_equal(matched$SE, expected$SE, tolerance = 1e-6, info = paste(i, mode))
+    }
+
+    # the mean class is 1 + the sum of the exceedance probabilities
+    out <- as.data.frame(estimate_slopes(
+      m,
+      "x",
+      by = "g",
+      predict = "mean.class",
+      backend = "emmeans"
+    ))
+    out_exceedance <- as.data.frame(estimate_slopes(
+      m,
+      "x",
+      by = "g",
+      predict = "exc.prob",
+      backend = "emmeans"
+    ))
+    expect_identical(nrow(out), 3L, info = i)
+    expect_length(intersect(c("Response", "Threshold"), colnames(out)), 0)
+    sums <- tapply(out_exceedance$Slope, as.character(out_exceedance$g), sum)
+    expect_equal(
+      out$Slope,
+      as.vector(sums[as.character(out$g)]),
+      tolerance = 1e-6,
+      info = i
+    )
+  }
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal slopes", {
+  skip_if_not_installed("emmeans")
+  models <- .ordinal_slope_models()
+
+  for (i in names(models)) {
+    m <- models[[i]]
+    slopes <- as.data.frame(estimate_slopes(m, "x", by = "g", backend = "emmeans"))
+    out <- as.data.frame(estimate_contrasts(m, "x", by = "g", backend = "emmeans"))
+    expect_true("Response" %in% colnames(out), info = i)
+    expect_identical(nrow(out), 9L, info = i)
+
+    # each later level minus each earlier level ("revpairwise")
+    g_levels <- levels(slopes$g)
+    pairs <- utils::combn(seq_along(g_levels), 2)
+    expect_setequal(
+      paste(out$Level1, out$Level2),
+      paste(g_levels[pairs[2, ]], g_levels[pairs[1, ]])
+    )
+
+    # differences of the slopes within each response category
+    slope_of <- function(g, response) {
+      slopes$Slope[
+        as.character(slopes$g) == g & as.character(slopes$Response) == response
+      ]
+    }
+    expected <- mapply(
+      function(level1, level2, response) {
+        slope_of(level1, response) - slope_of(level2, response)
+      },
+      as.character(out$Level1),
+      as.character(out$Level2),
+      as.character(out$Response)
+    )
+    expect_equal(out$Difference, unname(expected), tolerance = 1e-6, info = i)
+  }
+})
+
+
+test_that("estimate_slopes, backend emmeans, clmm", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(wine, package = "ordinal")
+  set.seed(3)
+  wine$x <- stats::rnorm(nrow(wine)) + as.numeric(wine$temp)
+  wine$rating_text <- factor(wine$rating, labels = letters[1:5], ordered = TRUE)
+  all_levels <- list(rating = as.character(1:5), rating_text = letters[1:5])
+
+  for (response in names(all_levels)) {
+    response_levels <- all_levels[[response]]
+    threshold_names <- paste(response_levels[-5], response_levels[-1], sep = "|")
+    f <- stats::as.formula(paste(response, "~ x * contact + (1 | judge)"))
+    m <- ordinal::clmm(f, data = wine)
+
+    out <- as.data.frame(estimate_slopes(m, "x", by = "contact", backend = "emmeans"))
+    expect_identical(nrow(out), 10L, info = response)
+    expect_identical(levels(out$Response), response_levels, info = response)
+
+    # slopes of the probabilities, compared with a central finite difference
+    # of the probabilities at the mean of `x`
+    h <- 1e-4
+    probabilities <- function(x) {
+      as.data.frame(suppressMessages(emmeans::emmeans(
+        m,
+        stats::as.formula(paste("~ contact |", response)),
+        at = list(x = x),
+        mode = "prob"
+      )))
+    }
+    upper <- probabilities(mean(wine$x) + h)
+    lower <- probabilities(mean(wine$x) - h)
+    finite_difference <- (upper$prob - lower$prob) / (2 * h)
+    # emmeans codes the response categories of clmm models as 1, 2, 3, ...
+    upper_levels <- response_levels[as.integer(as.character(upper[[response]]))]
+    matched <- out[
+      match(paste(upper$contact, upper_levels), paste(out$contact, out$Response)),
+    ]
+    expect_false(anyNA(matched$Slope), info = response)
+    expect_equal(matched$Slope, finite_difference, tolerance = 1e-3, info = response)
+
+    for (mode in c("cum.prob", "exc.prob", "linear.predictor")) {
+      out <- as.data.frame(estimate_slopes(
+        m,
+        "x",
+        by = "contact",
+        predict = mode,
+        backend = "emmeans"
+      ))
+      expect_identical(nrow(out), 8L, info = paste(response, mode))
+      expect_identical(
+        levels(out$Threshold),
+        threshold_names,
+        info = paste(response, mode)
+      )
+    }
+
+    # contrasts of slopes keep the level names
+    out <- estimate_contrasts(m, "x", by = "contact", backend = "emmeans")
+    expect_identical(levels(out$Response), response_levels, info = response)
+    out <- estimate_contrasts(
+      m,
+      "x",
+      by = "contact",
+      predict = "cum.prob",
+      backend = "emmeans"
+    )
+    expect_identical(levels(out$Threshold), threshold_names, info = response)
+  }
+})
+
+
+test_that("estimate_slopes, backend emmeans, ordinal, predict = 'response' and no by", {
+  skip_if_not_installed("emmeans")
+  m <- .ordinal_slope_models()$simulated
+
+  # predict = "response" returns probabilities, same as the default
+  out <- estimate_slopes(m, "x", by = "g", predict = "response", backend = "emmeans")
+  out_default <- estimate_slopes(m, "x", by = "g", backend = "emmeans")
+  expect_identical(paste(out$g, out$Response), paste(out_default$g, out_default$Response))
+  expect_equal(out$Slope, out_default$Slope, tolerance = 1e-10)
+
+  # no `by`: slopes of the probabilities, from the cumulative probabilities
+  out <- as.data.frame(estimate_slopes(m, "x", backend = "emmeans"))
+  expect_identical(as.character(out$Response), c("lo", "mid", "hi"))
+  cumulative <- as.data.frame(suppressMessages(emmeans::emtrends(
+    m,
+    ~cut,
+    var = "x",
+    mode = "cum.prob"
+  )))$x.trend
+  expect_equal(
+    out$Slope,
+    c(cumulative[1], cumulative[2] - cumulative[1], -cumulative[2]),
+    tolerance = 1e-6
+  )
+
+  # no `by`: the mean class is 1 + the sum of the exceedance probabilities
+  out <- as.data.frame(estimate_slopes(
+    m,
+    "x",
+    predict = "mean.class",
+    backend = "emmeans"
+  ))
+  out_exceedance <- estimate_slopes(m, "x", predict = "exc.prob", backend = "emmeans")
+  expect_identical(nrow(out), 1L)
+  expect_equal(out$Slope, sum(out_exceedance$Slope), tolerance = 1e-6)
+})
+
+
+test_that("estimate_contrasts and estimate_slopes, backend emmeans, ordinal footer", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing, Hess = TRUE)
+  expect_output(
+    print(estimate_contrasts(m, "Infl", backend = "emmeans")),
+    "Contrasts are on the prob-scale.",
+    fixed = TRUE
+  )
+  expect_output(
+    print(estimate_contrasts(m, "Infl", predict = "response", backend = "emmeans")),
+    "Contrasts are on the prob-scale.",
+    fixed = TRUE
+  )
+  expect_output(
+    print(estimate_contrasts(m, "Infl", predict = "cum.prob", backend = "emmeans")),
+    "Contrasts are on the cum.prob-scale.",
+    fixed = TRUE
+  )
+
+  m <- .ordinal_slope_models()$housing
+  expect_output(
+    print(estimate_slopes(m, "x", by = "g", backend = "emmeans")),
+    "Slopes are on the prob-scale.",
+    fixed = TRUE
+  )
+  expect_output(
+    print(estimate_slopes(m, "x", by = "g", predict = "latent", backend = "emmeans")),
+    "Slopes are on the latent-scale.",
+    fixed = TRUE
+  )
+
+  # no scale line for the slopes of other models
+  m <- lm(mpg ~ wt * factor(am), data = mtcars)
+  out <- utils::capture.output(print(estimate_slopes(m, "wt", backend = "emmeans")))
+  expect_false(any(grepl("Slopes are on the", out, fixed = TRUE)))
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, latent contrasts as before", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+  # the former default, before probabilities became the default
+  out <- estimate_contrasts(m, "Type", predict = "latent", backend = "emmeans")
+  expect_identical(
+    paste(out$Level1, out$Level2),
+    c(
+      "Apartment Tower",
+      "Atrium Apartment",
+      "Atrium Tower",
+      "Terrace Apartment",
+      "Terrace Atrium",
+      "Terrace Tower"
+    )
+  )
+  expect_equal(
+    out$Difference,
+    c(-0.5723501, 0.2061636, -0.3661866, -0.5186648, -0.7248283, -1.0910149),
+    tolerance = 1e-6
+  )
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, names of response and predictors", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  set.seed(1)
+  housing$x <- as.numeric(housing$Cont) + stats::rnorm(nrow(housing))
+  sat_levels <- c("Low", "Medium", "High")
+
+  # responses named like emmeans output columns
+  for (response in c("response", "prob", "rate", "ratio")) {
+    d <- housing
+    d[[response]] <- d$Sat
+    f <- stats::as.formula(paste(response, "~ Infl + Type + Cont"))
+    m <- MASS::polr(f, weights = Freq, data = d, Hess = TRUE)
+    out <- estimate_contrasts(m, "Infl", backend = "emmeans")
+    expect_identical(levels(out$Response), sat_levels, info = response)
+    expect_type(out$Difference, "double")
+
+    f <- stats::as.formula(paste(response, "~ Infl * x"))
+    m <- MASS::polr(f, weights = Freq, data = d, Hess = TRUE)
+    out <- estimate_contrasts(m, "x", by = "Infl", backend = "emmeans")
+    expect_identical(levels(out$Response), sat_levels, info = response)
+    expect_type(out$Difference, "double")
+  }
+
+  # a predictor named `Response` keeps its column, and the response
+  # categories get a suffix, as for `estimate_means()`
+  d <- housing
+  d$Response <- d$Infl
+  m <- MASS::polr(Sat ~ Response + Type + Cont, weights = Freq, data = d, Hess = TRUE)
+  out <- estimate_means(m, c("Type", "Response"), backend = "emmeans")
+  expect_identical(colnames(out)[1:3], c("Type", "Response", "Response.1"))
+  out <- estimate_contrasts(m, "Type", by = "Response", backend = "emmeans")
+  expect_identical(nrow(out), 54L)
+  expect_true(all(c("Response", "Response.1") %in% colnames(out)))
+  expect_length(unique(paste(out$Response, out$Response.1)), 9)
+  expect_identical(levels(out$Response.1), sat_levels)
+})
+
+
+test_that("estimate_slopes, backend emmeans, ordinal glmmTMB", {
+  skip_if_not_installed("emmeans")
+  # ordinal family in glmmTMB requires glmmTMB >= 1.1.15.2
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.15.2")
+  data(housing, package = "MASS")
+  set.seed(1)
+  housing$x <- as.numeric(housing$Cont) + stats::rnorm(nrow(housing))
+  # the same model, fitted with polr and glmmTMB
+  m_polr <- MASS::polr(Sat ~ Infl * x, weights = Freq, data = housing, Hess = TRUE)
+  m_glmmTMB <- glmmTMB::glmmTMB(
+    Sat ~ Infl * x,
+    weights = Freq,
+    data = housing,
+    family = glmmTMB::ordinal()
+  )
+  out_polr <- estimate_slopes(m_polr, "x", by = "Infl", backend = "emmeans")
+  out <- estimate_slopes(m_glmmTMB, "x", by = "Infl", backend = "emmeans")
+  expect_identical(nrow(out), 9L)
+  expect_identical(paste(out$Infl, out$Response), paste(out_polr$Infl, out_polr$Response))
+  expect_equal(out$Slope, out_polr$Slope, tolerance = 1e-4)
 })

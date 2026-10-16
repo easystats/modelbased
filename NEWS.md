@@ -1,5 +1,19 @@
 # modelbased (devel)
 
+## Breaking Changes
+
+* For ordinal models (for example from `MASS::polr()`, `ordinal::clm()` or
+  `ordinal::clmm()`), `estimate_contrasts()` and `estimate_slopes()` with
+  `backend = "emmeans"` now return probabilities by default and for
+  `predict = "response"`, as `estimate_means()` already does. Contrasts compare
+  the focal levels within each response category, and slopes are the slopes of
+  the probability of each response category. Before, both returned values on
+  the latent scale, and the table footer of `estimate_contrasts()` said they
+  were on the response scale. The ordinal modes of *emmeans* (`"prob"`,
+  `"cum.prob"`, `"exc.prob"`, `"linear.predictor"`, `"latent"` and
+  `"mean.class"`) can be passed to `predict`. Use `predict = "latent"` to get
+  the former results.
+
 ## Changes
 
 * Post-processing in `estimate_contrasts()` including group-variable (e.g.,
