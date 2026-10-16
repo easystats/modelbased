@@ -241,8 +241,8 @@ get_emcontrasts <- function(
         !is.null(ordinal_mode) &&
           !is.null(.emmeans_ordinal_pseudo_factor(model, ordinal_mode))
       ) {
-        # all columns form the key, because a numeric column can also
-        # identify the rows (e.g. a numeric `by` variable)
+        # all columns of the emmeans summary form the key, because a numeric
+        # column can also identify the rows (e.g. a numeric `by` variable)
         row_keys <- function(d) {
           do.call(paste, c(lapply(d[colnames(estimated_data)], as.character), sep = "\r"))
         }
