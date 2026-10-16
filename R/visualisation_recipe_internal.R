@@ -494,7 +494,7 @@
       scales = "free_x"
     )
     if (!is.null(grid)) {
-      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], grid)
     }
     l <- l + 1
   }
