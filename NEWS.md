@@ -116,6 +116,11 @@
   x-axis, e.g. for predictions from intercept-only models, or for
   `estimate_prediction()` without the `by` argument.
 
+* The `grid` argument of `visualisation_recipe()` and `plot()` now changes the
+  facet grid of plots with four or more `by` variables. Before, these functions
+  applied the `facet` argument to the facet grid instead. If `facet` was not
+  set, `grid` gave an error.
+
 # modelbased 0.17.0
 
 ## Breaking Changes
