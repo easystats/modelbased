@@ -624,7 +624,11 @@ format.marginaleffects_contrasts <- function(
   # the response levels (e.g., factor level order), so that "Response1" and
   # "Response2" use a meaningful, consistent level order
   response <- .safe(insight::get_response(model, verbose = FALSE))
-  if (is.factor(response)) {
+  # for multivariate models, the response is a data frame or matrix, and the
+  # response levels are its column names, not the observed values
+  if (is.matrix(response) || is.data.frame(response)) {
+    response_levels <- colnames(response)
+  } else if (is.factor(response)) {
     response_levels <- levels(response)
   } else {
     response_levels <- unique(as.character(response))

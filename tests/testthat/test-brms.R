@@ -87,6 +87,36 @@ test_that("estimate_means - brms, multivariate", {
 })
 
 
+test_that("estimate_contrasts - brms, multivariate, many observations", {
+  # the response values must not be used as response levels, else the
+  # regular expressions built from them grow too long and fail
+  set.seed(123)
+  d <- data.frame(
+    y1 = rnorm(600),
+    y2 = rnorm(600),
+    g = factor(sample(c("a", "b", "c"), 600, replace = TRUE))
+  )
+  m <- suppressWarnings(brms::brm(
+    brms::mvbind(y1, y2) ~ g,
+    data = d,
+    refresh = 0,
+    iter = 500,
+    chains = 1,
+    seed = 123
+  ))
+
+  out <- estimate_contrasts(m, "g", resp = "y1")
+  expect_identical(nrow(out), 3L)
+  expect_identical(as.character(out$Level1), c("b", "c", "c"))
+  expect_identical(as.character(out$Level2), c("a", "a", "b"))
+
+  out <- estimate_contrasts(m, "g")
+  expect_identical(nrow(out), 15L)
+  expect_true(all(c("Response1", "Response2") %in% colnames(out)))
+  expect_identical(levels(out$Response1), c("y1", "y2"))
+})
+
+
 test_that("estimate_means - brms, Wiener", {
   skip_if_not_installed("curl")
   skip_if_offline()

@@ -116,6 +116,11 @@
   x-axis, e.g. for predictions from intercept-only models, or for
   `estimate_prediction()` without the `by` argument.
 
+* Fixed an "invalid regular expression" error in `estimate_contrasts()` for
+  multivariate models (for example from *brms*) with many observations.
+  `estimate_contrasts()` now uses the names of the response variables, not
+  their observed values, to find the response in the contrast labels.
+
 # modelbased 0.17.0
 
 ## Breaking Changes
