@@ -352,6 +352,26 @@ test_that("estimate_slopes, p_adjust = 'tukey' keeps tukey for pairwise comparis
   expect_identical(nrow(out), nrow(ref))
   expect_equal(out$Slope, ref$Difference, tolerance = 1e-6)
   expect_equal(out$p, ref$p, tolerance = 1e-6)
+
+  # with `post_process`, the rows are also comparisons of slopes
+  expect_no_message(
+    out <- estimate_slopes(
+      m,
+      "wt",
+      by = "cyl_f",
+      post_process = ~pairwise,
+      p_adjust = "tukey"
+    ),
+    message = "Sidak"
+  )
+  expect_equal(as.numeric(out$p), ref$p, tolerance = 1e-6)
+
+  # with one slope, there is nothing to adjust
+  expect_message(
+    out <- estimate_slopes(m, "wt", p_adjust = "tukey"),
+    regexp = "at least 2 groups"
+  )
+  expect_equal(out$p, estimate_slopes(m, "wt")$p, tolerance = 1e-10)
 })
 
 

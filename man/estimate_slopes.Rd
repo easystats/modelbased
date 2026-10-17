@@ -168,9 +168,10 @@ one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonfe
 \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
 simultaneous confidence bands, also called sup-t confidence band (Montiel
 Olea & Plagborg-Møller, 2019). The Tukey adjustment is only appropriate for
-pairwise comparisons, so for slopes that are each tested against 0,
-\code{"tukey"} is replaced by \code{"sidak"} (with a message), as in \strong{emmeans}. When
-slopes are compared with the \code{comparison} argument, \code{"tukey"} is kept.}
+pairwise comparisons, so for slopes that are each tested against 0
+(\code{backend = "marginaleffects"}), \code{"tukey"} is replaced by \code{"sidak"} (with a
+message), as in \strong{emmeans}. When slopes are compared with the \code{comparison}
+or \code{post_process} argument, \code{"tukey"} is kept.}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns

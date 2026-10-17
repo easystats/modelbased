@@ -120,9 +120,10 @@
   `backend = "marginaleffects"` now use the Sidak adjustment for
   `p_adjust = "tukey"`, and say so in a message. The Tukey adjustment is only
   appropriate for pairwise comparisons, but these slopes are each tested
-  against 0, and the Tukey p-values were too small. emmeans makes the same
-  substitution. Slopes compared with the `comparison` argument keep the Tukey
-  adjustment.
+  against 0. The Tukey p-values came from the wrong distribution, and were
+  too small for some slopes and too large for others. emmeans makes the same
+  substitution. Slopes compared with the `comparison` or `post_process`
+  argument keep the Tukey adjustment.
 
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed

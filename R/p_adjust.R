@@ -55,16 +55,20 @@
     ))
   }
 
-  # slopes from `get_marginaltrends()` are each tested against 0. The Tukey
-  # adjustment is only for one set of pairwise comparisons, so we use Sidak
-  # instead, as emmeans does. With a `comparison` (or `hypothesis`), the rows
-  # are comparisons of slopes, and we keep Tukey.
+  # slopes from `get_marginaltrends()` are each tested against 0, unless
+  # `comparison` (or `hypothesis`) or `post_process` is used. In that case,
+  # the rows are comparisons of slopes, and we keep Tukey. Else, we use Sidak,
+  # as emmeans does, because the Tukey adjustment is only for one set of
+  # pairwise comparisons. With one slope, the Tukey branch below says that no
+  # adjustment was made.
   dots <- list(...)
   if (
     p_adjust == "tukey" &&
       is_unformatted &&
+      nrow(params) > 1 &&
       is.null(dots$comparison) &&
-      is.null(dots$hypothesis)
+      is.null(dots$hypothesis) &&
+      is.null(dots$post_process)
   ) {
     if (verbose) {
       insight::format_alert(
