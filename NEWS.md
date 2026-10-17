@@ -116,6 +116,14 @@
   failed with the error "replacement has 0 rows", and `"tukey"` returned the
   unadjusted p-values.
 
+* `estimate_slopes()` and `get_marginaltrends()` with
+  `backend = "marginaleffects"` now use the Sidak adjustment for
+  `p_adjust = "tukey"`, and say so in a message. The Tukey adjustment is only
+  appropriate for pairwise comparisons, but these slopes are each tested
+  against 0, and the Tukey p-values were too small. emmeans makes the same
+  substitution. Slopes compared with the `comparison` argument keep the Tukey
+  adjustment.
+
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed
   `1`, `2`, `3`, and the `Threshold` column showed `1|2`, `2|3`.

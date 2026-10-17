@@ -33,7 +33,10 @@
 #' one of `"none"` (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`,
 #' `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, or `"holm"`. `"sup-t"` computes
 #' simultaneous confidence bands, also called sup-t confidence band (Montiel
-#' Olea & Plagborg-Møller, 2019).
+#' Olea & Plagborg-Møller, 2019). The Tukey adjustment is only appropriate for
+#' pairwise comparisons, so for slopes that are each tested against 0,
+#' `"tukey"` is replaced by `"sidak"` (with a message), as in **emmeans**. When
+#' slopes are compared with the `comparison` argument, `"tukey"` is kept.
 #' @inheritParams estimate_means
 #' @inheritParams parameters::model_parameters.default
 #'
