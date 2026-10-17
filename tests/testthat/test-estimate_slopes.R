@@ -288,15 +288,69 @@ test_that("estimate_slopes, p_adjust methods adjust the p-values", {
     }
     out <- call("sidak")
     expect_equal(out$p, 1 - (1 - p0)^k, tolerance = 1e-10, label = paste(call_name, "sidak"))
-    expect_silent(out <- call("tukey"))
-    expect_equal(
-      out$p,
-      stats::ptukey(sqrt(2) * abs(out$t), k, out$df, lower.tail = FALSE),
-      tolerance = 1e-10,
-      label = paste(call_name, "tukey")
-    )
+    # slopes are tested against 0, not compared pairwise, so "tukey" is
+    # replaced by "sidak"
+    out <- suppressMessages(call("tukey"))
+    expect_equal(out$p, 1 - (1 - p0)^k, tolerance = 1e-10, label = paste(call_name, "tukey"))
     expect_false(isTRUE(all.equal(out$p, p0)), label = paste(call_name, "tukey changed"))
   }
+})
+
+
+test_that("estimate_slopes, p_adjust = 'tukey' uses sidak for slopes", {
+  skip_if_not_installed("emmeans")
+  d <- datasets::mtcars
+  d$cyl_f <- factor(d$cyl)
+  m <- lm(mpg ~ wt * cyl_f, data = d)
+
+  p0 <- estimate_slopes(m, "wt", by = "cyl_f", p_adjust = "none")$p
+  expect_message(
+    out <- estimate_slopes(m, "wt", by = "cyl_f", p_adjust = "tukey"),
+    regexp = "Tukey.*Sidak"
+  )
+  expect_silent(estimate_slopes(m, "wt", by = "cyl_f", p_adjust = "tukey", verbose = FALSE))
+  sidak <- estimate_slopes(m, "wt", by = "cyl_f", p_adjust = "sidak")
+
+  expect_equal(out$p, sidak$p, tolerance = 1e-10)
+  expect_false(isTRUE(all.equal(out$p, p0)))
+  # closed form
+  expect_equal(out$p, 1 - (1 - p0)^3, tolerance = 1e-6)
+  # emmeans replaces "tukey" by "sidak" for tests that are not pairwise
+  em <- suppressMessages(as.data.frame(
+    emmeans::test(emmeans::emtrends(m, ~cyl_f, var = "wt"), adjust = "tukey")
+  ))
+  expect_equal(out$p, em$p.value, tolerance = 1e-6)
+
+  # the exported getter adjusts the same way
+  gm_tukey <- suppressMessages(
+    get_marginaltrends(m, trend = "wt", by = "cyl_f", p_adjust = "tukey")
+  )
+  gm_sidak <- get_marginaltrends(m, trend = "wt", by = "cyl_f", p_adjust = "sidak")
+  gm_none <- get_marginaltrends(m, trend = "wt", by = "cyl_f", p_adjust = "none")
+  expect_equal(gm_tukey$p.value, gm_sidak$p.value, tolerance = 1e-10)
+  expect_false(isTRUE(all.equal(gm_tukey$p.value, gm_none$p.value)))
+})
+
+
+test_that("estimate_slopes, p_adjust = 'tukey' keeps tukey for pairwise comparisons", {
+  d <- datasets::mtcars
+  d$cyl_f <- factor(d$cyl)
+  m <- lm(mpg ~ wt * cyl_f, data = d)
+
+  expect_no_message(
+    out <- estimate_slopes(
+      m,
+      "wt",
+      by = "cyl_f",
+      comparison = ~pairwise,
+      p_adjust = "tukey"
+    ),
+    message = "Sidak"
+  )
+  ref <- estimate_contrasts(m, contrast = "wt", by = "cyl_f", p_adjust = "tukey")
+  expect_identical(nrow(out), nrow(ref))
+  expect_equal(out$Slope, ref$Difference, tolerance = 1e-6)
+  expect_equal(out$p, ref$p, tolerance = 1e-6)
 })
 
 
