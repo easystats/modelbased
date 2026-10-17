@@ -313,7 +313,14 @@ test_that("estimate_slopes, p_adjust = 'tukey' uses sidak for slopes", {
   sidak <- estimate_slopes(m, "wt", by = "cyl_f", p_adjust = "sidak")
 
   expect_equal(out$p, sidak$p, tolerance = 1e-10)
+  expect_identical(attr(out, "p_adjust"), "sidak")
   expect_false(isTRUE(all.equal(out$p, p0)))
+
+  # without p-values, nothing is adjusted, and Sidak is not mentioned
+  expect_no_message(
+    estimate_slopes(m, "wt", by = "cyl_f", p_adjust = "tukey", ci = NA),
+    message = "Sidak"
+  )
   # closed form
   expect_equal(out$p, 1 - (1 - p0)^3, tolerance = 1e-6)
   # emmeans replaces "tukey" by "sidak" for tests that are not pairwise
