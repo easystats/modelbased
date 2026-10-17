@@ -306,7 +306,8 @@ test_that("estimate_slopes, p_adjust = 'tukey' uses sidak for slopes", {
   p0 <- estimate_slopes(m, "wt", by = "cyl_f", p_adjust = "none")$p
   expect_message(
     out <- estimate_slopes(m, "wt", by = "cyl_f", p_adjust = "tukey"),
-    regexp = "Tukey.*Sidak"
+    regexp = "(?s)Tukey.*Sidak",
+    perl = TRUE
   )
   expect_silent(estimate_slopes(m, "wt", by = "cyl_f", p_adjust = "tukey", verbose = FALSE))
   sidak <- estimate_slopes(m, "wt", by = "cyl_f", p_adjust = "sidak")
