@@ -140,6 +140,12 @@
   `estimate_contrasts()` now uses the names of the response variables, not
   their observed values, to find the response in the contrast labels.
 
+* `estimate_contrasts()` now returns separate `Response1` and `Response2`
+  columns for multivariate *brms* models with dots in the response names, for
+  example `mvbind(Sepal.Length, Petal.Length) ~ Species`. Before, the response
+  names stayed in the `Level1` and `Level2` columns, because *brms* removes the
+  dots from the response names.
+
 * The `grid` argument of `visualisation_recipe()` and `plot()` now changes the
   facet grid of plots with four or more `by` variables. Before, these functions
   applied the `facet` argument to the facet grid instead. If `facet` was not
