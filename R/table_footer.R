@@ -131,9 +131,10 @@
       predict
     )
     # we may have link-scale and transformation. to avoid confusion, tell this
-    # here
-    if (predict == "link" && !is.null(transform)) {
-      predict <- paste0(transform, "-transformed ", predict)
+    # here. `info$transform` is often only a logical (and always `TRUE` for
+    # emmeans), so we use the `transform` argument as passed by the user
+    if (predict == "link") {
+      predict <- .link_transform_label(info$transform_arg, model)
     }
     # if we have contrasts of slope for GLMs, the default is to calculate
     # ORs or IRRs - in this case, we don't add information about the scale
@@ -222,6 +223,29 @@
   }
 
   c(paste0(table_footer, "\n"), "yellow")
+}
+
+
+# name of the link-scale, including a transformation -------------------------
+
+.link_transform_label <- function(transform, model = NULL) {
+  if (is.character(transform) && length(transform) == 1) {
+    # transformation given by name, like "exp"
+    paste0(transform, "-transformed link")
+  } else if (is.function(transform)) {
+    "transformed link"
+  } else if (isTRUE(transform)) {
+    # `transform = TRUE` applies the inverse of the response transformation,
+    # which changes nothing if the response is not transformed
+    trans_fun <- .safe(insight::find_transformation(model))
+    if (is.null(trans_fun) || all(trans_fun == "identity")) {
+      "link"
+    } else {
+      "transformed link"
+    }
+  } else {
+    "link"
+  }
 }
 
 
