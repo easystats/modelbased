@@ -240,7 +240,7 @@ models, as it computes the means for each class separately.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors modulated: education`\
-`#> Predictions are on the FALSE-transformed link-scale.`
+`#> Predictions are on the link-scale.`
 
 This table gives us the expected mean `QoL` for each education level,
 conditional on class membership. For instance, a patient with “low”
@@ -305,7 +305,7 @@ More interestingly, we can set `predict = "link"` to get contrasts both
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: education`\
-`#> Contrasts are on the FALSE-transformed link-scale.`
+`#> Contrasts are on the link-scale.`
 
 The output is rich with information. For example, `2 high | 2 low` shows
 the contrast between high and low education *within Class 2* (an

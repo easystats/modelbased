@@ -96,7 +96,7 @@ this case as *log-odds*. To do so, use `predict = "link"`.
 `#> Predictors contrasted: x1`\
 `#> Predictors averaged: x2 (10), x3`\
 `#> p-values are uncorrected.`\
-`#> Contrasts are on the FALSE-transformed link-scale.`
+`#> Contrasts are on the link-scale.`
 
 The `transform` argument in
 [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
