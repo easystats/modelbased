@@ -130,7 +130,18 @@ get_marginaltrends(
   [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
   `by` defaults to `"auto"`, which automatically selects the first focal
   predictor found in the model. If `by = NULL`, the grand mean of the
-  response is predicted.
+  response is predicted. For frequentist ordinal models (for example
+  from [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html),
+  [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html) or
+  [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html)), `by`
+  can also name the response with values, for example
+  `by = c("x", "y = c('low', 'high')")`.
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  and
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  then keep only the rows of these response categories. This filter
+  works with `backend = "emmeans"` and `predict = "prob"` (the default).
 
 - predict:
 
