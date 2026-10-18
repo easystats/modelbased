@@ -583,6 +583,7 @@ estimate_relation <- function(
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
   attr(out, "transform") <- !is.null(transform)
+  attr(out, "transform_arg") <- transform
   attr(out, "model") <- model
   attr(out, "datagrid") <- data
   attr(out, "focal_terms") <- grid_specs$at_specs$varname
@@ -599,6 +600,7 @@ estimate_relation <- function(
     footer_predict <- predict
   }
   footer_info <- c(grid_specs, list(predict = predict), transform = !is.null(transform))
+  footer_info$transform_arg <- transform
   footer_info$predict_used <- footer_predict
   attr(out, "table_footer") <- .table_footer(
     out,
@@ -610,7 +612,7 @@ estimate_relation <- function(
 
   attributes(out) <- c(
     attributes(out),
-    grid_specs[!names(grid_specs) %in% names(attributes(out))]
+    grid_specs[!names(grid_specs) %in% c(names(attributes(out)), "transform_arg")]
   )
 
   # Class

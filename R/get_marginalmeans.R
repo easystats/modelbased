@@ -318,6 +318,7 @@ get_marginalmeans <- function(
         estimate = estimate,
         datagrid = datagrid,
         transform = !is.null(transform),
+        transform_arg = transform,
         iterations = iterations,
         keep_iterations = keep_iterations,
         joint_test = joint_test,
@@ -696,7 +697,7 @@ get_marginalmeans <- function(
   # fmt: skip
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
-    "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
+    "contrast", "estimate", "p_adjust", "transform", "transform_arg", "datagrid", "preserve_range",
     "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
     "iterations", "keep_iterations", "joint_test", "omnibus_test", "vcov",
     "equivalence", "context_effects", "renamed_focal"
