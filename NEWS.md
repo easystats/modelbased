@@ -1,4 +1,4 @@
-# modelbased (devel)
+# modelbased 0.18.0
 
 ## Breaking Changes
 
