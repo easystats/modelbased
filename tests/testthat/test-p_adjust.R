@@ -24,11 +24,17 @@ emmeans_p <- function(out, em, by = NULL) {
   em <- as.data.frame(summary(em))
   pairs_em <- strsplit(as.character(em$contrast), " - ", fixed = TRUE)
   key_em <- vapply(pairs_em, function(i) paste(sort(gsub("[()]", "", i)), collapse = "|"), "")
-  key_out <- vapply(
-    seq_len(nrow(out)),
-    function(i) paste(sort(c(as.character(out$Level1[i]), as.character(out$Level2[i]))), collapse = "|"),
-    ""
-  )
+  if (all(c("Level1", "Level2") %in% colnames(out))) {
+    key_out <- vapply(
+      seq_len(nrow(out)),
+      function(i) paste(sort(c(as.character(out$Level1[i]), as.character(out$Level2[i]))), collapse = "|"),
+      ""
+    )
+  } else {
+    # compared slopes, labelled like "(b) - (a)"
+    pairs_out <- strsplit(as.character(out$Parameter), " - ", fixed = TRUE)
+    key_out <- vapply(pairs_out, function(i) paste(sort(gsub("[()]", "", i)), collapse = "|"), "")
+  }
   if (!is.null(by)) {
     key_em <- paste(key_em, em[[by]])
     key_out <- paste(key_out, out[[by]])
@@ -130,4 +136,70 @@ test_that("p_adjust sidak, contrasts, family size, marginaleffects", {
     em_p <- as.data.frame(summary(emmeans::contrast(em, methods[i], adjust = "sidak")))$p.value
     expect_equal(out$p, em_p, tolerance = 1e-5)
   }
+})
+
+
+test_that("p_adjust tukey and sidak, compared slopes, marginaleffects", {
+  em <- emmeans::emtrends(m2, "g", var = "x")
+  for (p_adjust in c("tukey", "sidak")) {
+    em_pairs <- pairs(em, adjust = p_adjust)
+    expect_no_message(
+      {
+        out <- estimate_slopes(m2, "x", by = "g", comparison = ~pairwise, p_adjust = p_adjust)
+      },
+      message = "Sidak"
+    )
+    expect_equal(out$p, emmeans_p(out, em_pairs), tolerance = 1e-5)
+    expect_no_message(
+      {
+        out <- estimate_contrasts(m2, contrast = "x", by = "g", p_adjust = p_adjust)
+      },
+      message = "Sidak"
+    )
+    expect_equal(out$p, emmeans_p(out, em_pairs), tolerance = 1e-5)
+  }
+
+  # post-processing: unadjusted p-values are based on z, so we only check the
+  # number of slopes in the Tukey adjustment, which uses the model's df
+  out <- suppressMessages(estimate_slopes(
+    m2,
+    "x",
+    by = "g",
+    post_process = ~pairwise,
+    p_adjust = "tukey"
+  ))
+  z <- intersect(c("z", "t", "statistic"), colnames(out))[1]
+  expect_equal(
+    as.vector(out$p),
+    stats::ptukey(sqrt(2) * abs(as.vector(out[[z]])), 4, stats::df.residual(m2), lower.tail = FALSE),
+    tolerance = 1e-8
+  )
+})
+
+
+test_that("p_adjust tukey, slopes tested against a value, marginaleffects", {
+  expect_message(
+    {
+      out <- estimate_slopes(m2, "x", by = "g", hypothesis = 1, p_adjust = "tukey")
+    },
+    regexp = sidak_message,
+    perl = TRUE
+  )
+  em_p <- as.data.frame(summary(emmeans::test(
+    emmeans::emtrends(m2, "g", var = "x"),
+    null = 1,
+    adjust = "sidak"
+  )))$p.value
+  expect_equal(out$p, em_p, tolerance = 1e-5)
+  expect_identical(attributes(out)$p_adjust, "sidak")
+
+  # partly matched `hypothesis` argument
+  em_pairs <- pairs(emmeans::emtrends(m2, "g", var = "x"), adjust = "tukey")
+  expect_no_message(
+    {
+      out <- estimate_slopes(m2, "x", by = "g", hypo = ~pairwise, p_adjust = "tukey")
+    },
+    message = "Sidak"
+  )
+  expect_equal(out$p, emmeans_p(out, em_pairs), tolerance = 1e-5)
 })

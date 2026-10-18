@@ -56,28 +56,56 @@
   }
 
   # slopes from `get_marginaltrends()` are each tested against 0, unless
-  # `comparison` (or `hypothesis`) or `post_process` is used. In that case,
-  # the rows are comparisons of slopes, and we keep Tukey. Else, we use Sidak,
-  # as emmeans does, because the Tukey adjustment is only for one set of
-  # pairwise comparisons. With one slope, or without p-values, the code below
-  # says that no adjustment was made.
+  # `comparison` (or `hypothesis`, also when partly matched, like `hypo`) or
+  # `post_process` is used. The Tukey adjustment is only for one set of
+  # pairwise comparisons, so we keep Tukey only for pairwise comparisons of
+  # slopes. Else, we use Sidak, as emmeans does. With one slope, or without
+  # p-values, the code below says that no adjustment was made.
   dots <- list(...)
-  if (
-    p_adjust == "tukey" &&
-      is_unformatted &&
-      nrow(params) > 1 &&
-      "p.value" %in% colnames(params) &&
-      is.null(dots[["comparison"]]) &&
-      is.null(dots[["hypothesis"]]) &&
-      is.null(dots[["post_process"]])
-  ) {
-    if (verbose) {
-      insight::format_alert(
-        "The Tukey adjustment is only appropriate for pairwise comparisons. Slopes are tested against 0, so p-values were adjusted with the Sidak method instead."
-      )
+  n_slopes <- NULL
+  if (p_adjust == "tukey" && is_unformatted && "p.value" %in% colnames(params)) {
+    dots_names <- names(dots)
+    if (is.null(dots_names)) {
+      dots_names <- character(0)
     }
-    p_adjust <- "sidak"
-    attr(params, "p_adjust") <- "sidak"
+    hypothesis_arg <- dots_names[nzchar(dots_names) & startsWith("hypothesis", dots_names)]
+    slope_comparison <- c(
+      dots["comparison"],
+      dots[hypothesis_arg],
+      dots["post_process"]
+    )
+    slope_comparison <- Filter(Negate(is.null), slope_comparison)
+    reason <- NULL
+    if (!length(slope_comparison)) {
+      if (nrow(params) > 1) {
+        reason <- "Slopes are tested against 0"
+      }
+    } else if (is.numeric(slope_comparison[[1]])) {
+      reason <- paste0(
+        "Slopes are tested against ",
+        toString(insight::format_value(slope_comparison[[1]], protect_integers = TRUE))
+      )
+    } else if (.is_pairwise_comparison(slope_comparison[[1]])) {
+      # for k slopes, we have k * (k - 1) / 2 pairwise comparisons
+      n_slopes <- (1 + sqrt(1 + 8 * nrow(params))) / 2
+      if (n_slopes != round(n_slopes)) {
+        n_slopes <- NULL
+        reason <- "The number of compared slopes could not be found"
+      }
+    } else {
+      reason <- "Slopes are not compared pairwise"
+    }
+    if (!is.null(reason)) {
+      if (verbose) {
+        insight::format_alert(paste0(
+          "The Tukey adjustment is only appropriate for pairwise comparisons. ",
+          reason,
+          ", so p-values were adjusted with the Sidak method instead."
+        ))
+      }
+      p_adjust <- "sidak"
+      attr(params, "p_adjust") <- "sidak"
+    }
   }
 
   # contrasts (formatted output): the Tukey adjustment is only appropriate for
@@ -112,7 +140,10 @@
 
   # needed for rank adjustment
   focal_terms <- .safe(datagrid[focal])
-  if (is_unformatted) {
+  if (!is.null(n_slopes)) {
+    # pairwise comparisons of slopes
+    rank_adjust <- n_slopes
+  } else if (is_unformatted) {
     rank_adjust <- nrow(params)
   } else if (is.null(focal_terms)) {
     rank_adjust <- 1
