@@ -50,9 +50,9 @@
   footer appears, for example, with `estimate_link()`, or with
   `estimate_means()` and `predict = "link"`. Without `transform`, the footer
   now says "link-scale". Except with `backend = "emmeans"`, a function as
-  `transform` gives "transformed link-scale". `estimate_contrasts()` with `predict = "link"` and a function
-  as `transform` (for example `transform = exp`) no longer fails with an
-  error. If the output of an earlier call is the `data` argument, the footer
+  `transform` gives "transformed link-scale". `estimate_contrasts()` with
+  `predict = "link"` and a function as `transform` (for example
+  `transform = exp`) no longer fails with an error. If the output of an earlier call is the `data` argument, the footer
   of `estimate_expectation()`, `estimate_prediction()` and `estimate_link()`
   now names the right scale.
 
