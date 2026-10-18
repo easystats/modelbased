@@ -1221,3 +1221,23 @@ test_that("estimate_means, backend emmeans, ordinal, response named in by withou
   expect_response_filter_rows(out, out_all, levels(housing$Sat))
   expect_identical(nrow(out), 9L)
 })
+
+
+test_that("estimate_slopes, backend emmeans, ordinal, by filter on the response", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  set.seed(1)
+  housing$x <- as.numeric(housing$Cont) + stats::rnorm(nrow(housing))
+  m <- MASS::polr(Sat ~ Infl * x, weights = Freq, data = housing, Hess = TRUE)
+
+  out_all <- estimate_slopes(m, "x", by = "Infl", backend = "emmeans")
+  out <- estimate_slopes(m, "x", by = c("Infl", "Sat='Low'"), backend = "emmeans")
+  expect_response_filter_rows(out, out_all, "Low")
+  expect_identical(nrow(out), 3L)
+
+  # contrasts of slopes
+  out_all <- estimate_contrasts(m, "x", by = "Infl", backend = "emmeans")
+  out <- estimate_contrasts(m, "x", by = c("Infl", "Sat='Low'"), backend = "emmeans")
+  expect_response_filter_rows(out, out_all, "Low")
+  expect_identical(nrow(out), 3L)
+})
