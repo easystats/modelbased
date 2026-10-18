@@ -1084,3 +1084,255 @@ test_that("estimate_slopes, backend emmeans, ordinal glmmTMB", {
   expect_identical(paste(out$Infl, out$Response), paste(out_polr$Infl, out_polr$Response))
   expect_equal(out$Slope, out_polr$Slope, tolerance = 1e-4)
 })
+
+
+# `by` filters on the response categories, emmeans backend --------------------
+
+# the output of a call with a `by` filter on the response categories must be
+# the rows of the same call without that filter, for the chosen categories
+expect_response_filter_rows <- function(out, out_all, response_levels, info = NULL) {
+  expected <- out_all[as.character(out_all$Response) %in% response_levels, , drop = FALSE]
+  expect_identical(nrow(out), nrow(expected), info = info)
+  expect_gt(nrow(out), 0)
+  expect_identical(colnames(out), colnames(out_all), info = info)
+  for (column in colnames(expected)) {
+    if (is.numeric(expected[[column]])) {
+      expect_equal(
+        out[[column]],
+        expected[[column]],
+        tolerance = 1e-10,
+        info = paste(info, column)
+      )
+    } else {
+      expect_identical(
+        as.character(out[[column]]),
+        as.character(expected[[column]]),
+        info = paste(info, column)
+      )
+    }
+  }
+}
+
+
+ordinal_filter_models <- function() {
+  data(housing, package = "MASS", envir = environment())
+  data(wine, package = "ordinal", envir = environment())
+  wine_letters <- wine
+  levels(wine_letters$rating) <- letters[1:5]
+  list(
+    polr = list(
+      model = MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing, Hess = TRUE),
+      factor = "Infl",
+      response = "Sat",
+      one = "Low",
+      two = c("Low", "High")
+    ),
+    clm = list(
+      model = ordinal::clm(Sat ~ Infl + Type + Cont, weights = Freq, data = housing),
+      factor = "Infl",
+      response = "Sat",
+      one = "Medium",
+      two = c("Low", "High")
+    ),
+    clmm = list(
+      model = ordinal::clmm(rating ~ temp + contact + (1 | judge), data = wine),
+      factor = "temp",
+      response = "rating",
+      one = "2",
+      two = c("1", "3")
+    ),
+    clmm_letters = list(
+      model = ordinal::clmm(rating ~ temp + contact + (1 | judge), data = wine_letters),
+      factor = "temp",
+      response = "rating",
+      one = "b",
+      two = c("a", "c")
+    )
+  )
+}
+
+
+response_filter_term <- function(response, response_levels) {
+  if (length(response_levels) == 1) {
+    paste0(response, "='", response_levels, "'")
+  } else {
+    paste0(response, "=c(", toString(paste0("'", response_levels, "'")), ")")
+  }
+}
+
+
+test_that("estimate_means, backend emmeans, ordinal, by filter on the response", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  models <- ordinal_filter_models()
+  for (name in names(models)) {
+    fit <- models[[name]]
+    out_all <- estimate_means(fit$model, fit$factor, backend = "emmeans")
+    for (response_levels in list(fit$one, fit$two)) {
+      term <- response_filter_term(fit$response, response_levels)
+      out <- estimate_means(fit$model, c(fit$factor, term), backend = "emmeans")
+      expect_response_filter_rows(out, out_all, response_levels, info = paste(name, term))
+    }
+  }
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, by filter on the response", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  models <- ordinal_filter_models()
+  for (name in names(models)) {
+    fit <- models[[name]]
+    p_adjusts <- if (name %in% c("polr", "clm")) c("none", "holm") else "none"
+    for (p_adjust in p_adjusts) {
+      out_all <- estimate_contrasts(
+        fit$model,
+        fit$factor,
+        backend = "emmeans",
+        p_adjust = p_adjust
+      )
+      for (response_levels in list(fit$one, fit$two)) {
+        term <- response_filter_term(fit$response, response_levels)
+        out <- estimate_contrasts(
+          fit$model,
+          fit$factor,
+          by = term,
+          backend = "emmeans",
+          p_adjust = p_adjust
+        )
+        expect_response_filter_rows(
+          out,
+          out_all,
+          response_levels,
+          info = paste(name, term, p_adjust)
+        )
+      }
+    }
+  }
+})
+
+
+test_that("estimate_means, backend emmeans, ordinal, response named in by without values", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+  out_all <- estimate_means(m, "Infl", backend = "emmeans")
+  out <- estimate_means(m, c("Infl", "Sat"), backend = "emmeans")
+  expect_response_filter_rows(out, out_all, levels(housing$Sat))
+  expect_identical(nrow(out), 9L)
+})
+
+
+test_that("estimate_slopes, backend emmeans, ordinal, by filter on the response", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  set.seed(1)
+  housing$x <- as.numeric(housing$Cont) + stats::rnorm(nrow(housing))
+  m <- MASS::polr(Sat ~ Infl * x, weights = Freq, data = housing, Hess = TRUE)
+
+  out_all <- estimate_slopes(m, "x", by = "Infl", backend = "emmeans")
+  out <- estimate_slopes(m, "x", by = c("Infl", "Sat='Low'"), backend = "emmeans")
+  expect_response_filter_rows(out, out_all, "Low")
+  expect_identical(nrow(out), 3L)
+
+  # contrasts of slopes
+  out_all <- estimate_contrasts(m, "x", by = "Infl", backend = "emmeans")
+  out <- estimate_contrasts(m, "x", by = c("Infl", "Sat='Low'"), backend = "emmeans")
+  expect_response_filter_rows(out, out_all, "Low")
+  expect_identical(nrow(out), 3L)
+
+  # slopes use `"cum.prob"` internally, but the mode check uses `predict`
+  err <- expect_error(estimate_slopes(
+    m,
+    "x",
+    by = c("Infl", "Sat='Low'"),
+    predict = "cum.prob",
+    backend = "emmeans"
+  ))
+  expect_match(
+    gsub("\\s+", " ", conditionMessage(err)),
+    "The response `Sat` can only be used in `by` with `predict = \"prob\"`",
+    fixed = TRUE
+  )
+})
+
+
+test_that("estimate_means and estimate_contrasts, backend emmeans, ordinal, errors for response filters", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing, Hess = TRUE)
+  # the messages are wrapped at spaces, so we compare them on one line
+  error_message <- function(expr) {
+    err <- expect_error(expr)
+    gsub("\\s+", " ", conditionMessage(err))
+  }
+
+  # the response categories can only be filtered for `predict = "prob"`
+  modes <- c("cum.prob", "exc.prob", "linear.predictor", "latent", "mean.class")
+  for (mode in modes) {
+    messages <- c(
+      error_message(estimate_means(
+        m,
+        c("Infl", "Sat='Low'"),
+        predict = mode,
+        backend = "emmeans"
+      )),
+      error_message(estimate_contrasts(
+        m,
+        "Infl",
+        by = "Sat='Low'",
+        predict = mode,
+        backend = "emmeans"
+      ))
+    )
+    for (msg in messages) {
+      expect_match(msg, "The response `Sat` can only be used in `by`", fixed = TRUE, info = mode)
+      expect_match(msg, "`predict = \"prob\"`", fixed = TRUE, info = mode)
+    }
+  }
+
+  # values that are no response categories
+  messages <- c(
+    error_message(estimate_means(m, c("Infl", "Sat='Lowest'"), backend = "emmeans")),
+    error_message(estimate_contrasts(m, "Infl", by = "Sat='Lowest'", backend = "emmeans"))
+  )
+  for (msg in messages) {
+    expect_match(msg, "The response `Sat` has no category `Lowest`.", fixed = TRUE)
+  }
+  msg <- error_message(estimate_means(
+    m,
+    c("Infl", "Sat=c('Lowest','Highest','Low')"),
+    backend = "emmeans"
+  ))
+  expect_match(msg, "has no categories `Lowest` and `Highest`.", fixed = TRUE)
+
+  # values that cannot be read as response categories
+  msg <- error_message(estimate_means(m, c("Infl", "Sat=[fivenum]"), backend = "emmeans"))
+  expect_match(msg, "Could not read the response categories in `Sat=[fivenum]`.", fixed = TRUE)
+
+  # a category of the data that the model does not have
+  skip_if_not_installed("ordinal")
+  data(wine, package = "ordinal")
+  wine$rating <- factor(wine$rating, levels = 1:6, ordered = TRUE)
+  m_clm <- ordinal::clm(rating ~ temp, data = wine)
+  msg <- error_message(estimate_means(m_clm, c("temp", "rating='6'"), backend = "emmeans"))
+  expect_match(msg, "The response `rating` has no category `6`.", fixed = TRUE)
+})
+
+
+test_that("estimate_means, backend emmeans, ordinal, several by terms on the response", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+  out_all <- estimate_means(m, "Infl", backend = "emmeans")
+
+  # the categories of all terms are kept
+  out <- estimate_means(m, c("Infl", "Sat='Low'", "Sat='High'"), backend = "emmeans")
+  expect_response_filter_rows(out, out_all, c("Low", "High"))
+  expect_identical(nrow(out), 6L)
+
+  # the response without values does not undo the filter
+  out <- estimate_means(m, c("Infl", "Sat", "Sat='Low'"), backend = "emmeans")
+  expect_response_filter_rows(out, out_all, "Low")
+  expect_identical(nrow(out), 3L)
+})
