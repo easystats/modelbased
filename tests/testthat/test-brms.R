@@ -117,6 +117,27 @@ test_that("estimate_contrasts - brms, multivariate, many observations", {
 })
 
 
+test_that("estimate_contrasts - brms, multivariate, response names with dots", {
+  # brms drops the dot from response names ("Sepal.Length" -> "SepalLength"),
+  # and the contrast labels use the brms names
+  m <- suppressWarnings(brms::brm(
+    brms::mvbind(Sepal.Length, Petal.Length) ~ Species,
+    data = iris,
+    refresh = 0,
+    iter = 500,
+    chains = 1,
+    seed = 123
+  ))
+
+  out <- estimate_contrasts(m, "Species")
+  expect_identical(nrow(out), 15L)
+  expect_true(all(c("Response1", "Response2") %in% colnames(out)))
+  expect_identical(levels(out$Response1), c("SepalLength", "PetalLength"))
+  expect_true(all(as.character(out$Level1) %in% levels(iris$Species)))
+  expect_true(all(as.character(out$Level2) %in% levels(iris$Species)))
+})
+
+
 test_that("estimate_means - brms, Wiener", {
   skip_if_not_installed("curl")
   skip_if_offline()

@@ -646,7 +646,15 @@ format.marginaleffects_contrasts <- function(
     response_levels <- unique(as.character(response))
   }
   if (is_multivariate) {
-    response_levels <- unique(c(response_levels, insight::find_response(model)))
+    # brms drops dots from response names (e.g., "Sepal.Length" becomes
+    # "SepalLength"), and uses these names in the contrast labels. The names
+    # of `find_response()` hold these brms names
+    model_response <- insight::find_response(model)
+    response_levels <- unique(c(
+      response_levels,
+      model_response,
+      names(model_response)
+    ))
   }
   if (!length(response_levels)) {
     return(params)
