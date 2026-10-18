@@ -564,7 +564,9 @@ estimate_relation <- function(
     out$Residuals <- response - out$Predicted
   }
 
-  # transform reponse?
+  # transform response? we keep the argument as passed by the user for the
+  # table footer
+  transform_arg <- transform
   if (isTRUE(transform)) {
     trans_fun <- insight::get_transformation(model, verbose = FALSE)$inverse
   } else {
@@ -582,8 +584,7 @@ estimate_relation <- function(
   attr(out, "iterations") <- iterations
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
-  attr(out, "transform") <- !is.null(transform)
-  attr(out, "transform_arg") <- transform
+  attr(out, "transform") <- transform_arg
   attr(out, "model") <- model
   attr(out, "datagrid") <- data
   attr(out, "focal_terms") <- grid_specs$at_specs$varname
@@ -603,8 +604,7 @@ estimate_relation <- function(
   # attributes in `grid_specs`, so we replace them with those of this call
   footer_info <- grid_specs
   footer_info$predict <- predict
-  footer_info$transform <- !is.null(transform)
-  footer_info$transform_arg <- transform
+  footer_info$transform <- transform_arg
   footer_info$predict_used <- footer_predict
   attr(out, "table_footer") <- .table_footer(
     out,
@@ -616,7 +616,7 @@ estimate_relation <- function(
 
   attributes(out) <- c(
     attributes(out),
-    grid_specs[!names(grid_specs) %in% c(names(attributes(out)), "transform_arg")]
+    grid_specs[!names(grid_specs) %in% names(attributes(out))]
   )
 
   # Class

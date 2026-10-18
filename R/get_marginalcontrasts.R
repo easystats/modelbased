@@ -184,7 +184,6 @@ get_marginalcontrasts <- function(
       contrast = my_args$contrast,
       predict = predict,
       transform = transform,
-      transform_arg = transform,
       comparison = my_args$comparison,
       estimate = estimate,
       p_adjust = p_adjust,

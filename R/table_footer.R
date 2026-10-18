@@ -134,7 +134,7 @@
     # here. `info$transform` is often only a logical (and always `TRUE` for
     # emmeans), so we use the `transform` argument as passed by the user
     if (predict == "link") {
-      predict <- .link_transform_label(info$transform_arg, model)
+      predict <- .link_transform_label(info$transform, model)
     }
     # if we have contrasts of slope for GLMs, the default is to calculate
     # ORs or IRRs - in this case, we don't add information about the scale
