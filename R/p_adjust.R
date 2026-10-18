@@ -73,6 +73,8 @@
     if (is.null(dots_names)) {
       dots_names <- character(0)
     }
+    # names that are a prefix of "hypothesis", like `hypo`, which R matches
+    # to the `hypothesis` argument of `avg_slopes()`
     hypothesis_arg <- dots_names[nzchar(dots_names) & startsWith("hypothesis", dots_names)]
     # `post_process` is applied last, so it defines the rows of the output
     slope_comparison <- c(

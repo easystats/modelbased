@@ -267,7 +267,7 @@ test_that("p_adjust, families of grouped contrasts and of contrasts of predictio
 
   # missing values of a `by` variable form their own family
   expect_identical(
-    .p_adjust_family_size(data.frame(h = c("a", NA, "a", "b")), by = "h"),
+    modelbased:::.p_adjust_family_size(data.frame(h = c("a", NA, "a", "b")), by = "h"),
     c(2L, 1L, 2L, 1L)
   )
 })
