@@ -45,6 +45,17 @@
 
 ## Bug fixes
 
+* For non-linear models, the footer of predictions or contrasts on the
+  link-scale no longer says "FALSE-transformed" or "TRUE-transformed". This
+  footer appears, for example, with `estimate_link()`, or with
+  `estimate_means()` and `predict = "link"`. If a `transform` function changed
+  the values, the footer now says "transformed link-scale". Otherwise it says
+  "link-scale". `estimate_contrasts()` with `predict = "link"` and a function
+  as `transform` (for example `transform = exp`) no longer fails with an
+  error. If the output of an earlier call is the `data` argument, the footer
+  of `estimate_expectation()`, `estimate_prediction()` and `estimate_link()`
+  now names the right scale.
+
 * With `backend = "marginaleffects"`, `estimate_means()`, `estimate_slopes()`
   and `estimate_contrasts()` no longer drop or rename a `by` variable with a
   name such as `type`, `n` or `value`. They also no longer mislabel other
