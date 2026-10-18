@@ -92,6 +92,7 @@ get_emmeans <- function(
     } else {
       fun_args$type <- predict
     }
+    .check_ordinal_response_filter(my_args$response_filter, ordinal_mode)
   }
 
   # add dots
@@ -449,6 +450,20 @@ get_emmeans <- function(
   if (any(grepl("=", response_terms, fixed = TRUE))) {
     grid <- insight::get_datagrid(data[response], by = response_terms)
     values <- unique(as.character(grid[[response]]))
+    response_levels <- levels(as.factor(data[[response]]))
+    unknown <- setdiff(values, response_levels)
+    if (length(unknown)) {
+      insight::format_error(paste0(
+        "The response `",
+        response,
+        "` has no ",
+        if (length(unknown) == 1) "category " else "categories ",
+        datawizard::text_concatenate(unknown, enclose = "`"),
+        ". Its categories are ",
+        datawizard::text_concatenate(response_levels, enclose = "`"),
+        "."
+      ))
+    }
   }
   args$by <- args$by[!is_response]
   if (!length(args$by)) {
@@ -456,6 +471,20 @@ get_emmeans <- function(
   }
   args$response_filter <- list(response = response, values = values)
   args
+}
+
+
+# the response categories are only in the output for `predict = "prob"`, so
+# we cannot use the response in `by` for the other modes. `ordinal_mode` is
+# the mode the user asked for, not the mode that we use internally for slopes
+.check_ordinal_response_filter <- function(response_filter, ordinal_mode) {
+  if (!is.null(response_filter) && !identical(ordinal_mode, "prob")) {
+    insight::format_error(paste0(
+      "The response `",
+      response_filter$response,
+      "` can only be used in `by` with `predict = \"prob\"`, which returns the probability of each response category."
+    ))
+  }
 }
 
 

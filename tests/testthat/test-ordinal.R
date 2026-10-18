@@ -1240,4 +1240,69 @@ test_that("estimate_slopes, backend emmeans, ordinal, by filter on the response"
   out <- estimate_contrasts(m, "x", by = c("Infl", "Sat='Low'"), backend = "emmeans")
   expect_response_filter_rows(out, out_all, "Low")
   expect_identical(nrow(out), 3L)
+
+  # slopes use `"cum.prob"` internally, but the mode check uses `predict`
+  err <- expect_error(estimate_slopes(
+    m,
+    "x",
+    by = c("Infl", "Sat='Low'"),
+    predict = "cum.prob",
+    backend = "emmeans"
+  ))
+  expect_match(
+    gsub("\\s+", " ", conditionMessage(err)),
+    "The response `Sat` can only be used in `by` with `predict = \"prob\"`",
+    fixed = TRUE
+  )
+})
+
+
+test_that("estimate_means and estimate_contrasts, backend emmeans, ordinal, errors for response filters", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing, Hess = TRUE)
+  # the messages are wrapped at spaces, so we compare them on one line
+  error_message <- function(expr) {
+    err <- expect_error(expr)
+    gsub("\\s+", " ", conditionMessage(err))
+  }
+
+  # the response categories can only be filtered for `predict = "prob"`
+  modes <- c("cum.prob", "exc.prob", "linear.predictor", "latent", "mean.class")
+  for (mode in modes) {
+    messages <- c(
+      error_message(estimate_means(
+        m,
+        c("Infl", "Sat='Low'"),
+        predict = mode,
+        backend = "emmeans"
+      )),
+      error_message(estimate_contrasts(
+        m,
+        "Infl",
+        by = "Sat='Low'",
+        predict = mode,
+        backend = "emmeans"
+      ))
+    )
+    for (msg in messages) {
+      expect_match(msg, "The response `Sat` can only be used in `by`", fixed = TRUE, info = mode)
+      expect_match(msg, "`predict = \"prob\"`", fixed = TRUE, info = mode)
+    }
+  }
+
+  # values that are no response categories
+  messages <- c(
+    error_message(estimate_means(m, c("Infl", "Sat='Lowest'"), backend = "emmeans")),
+    error_message(estimate_contrasts(m, "Infl", by = "Sat='Lowest'", backend = "emmeans"))
+  )
+  for (msg in messages) {
+    expect_match(msg, "The response `Sat` has no category `Lowest`.", fixed = TRUE)
+  }
+  msg <- error_message(estimate_means(
+    m,
+    c("Infl", "Sat=c('Lowest','Highest','Low')"),
+    backend = "emmeans"
+  ))
+  expect_match(msg, "has no categories `Lowest` and `Highest`.", fixed = TRUE)
 })

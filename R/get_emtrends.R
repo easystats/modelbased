@@ -64,6 +64,7 @@ get_emtrends <- function(
     } else {
       fun_args <- .emtrends_ordinal_arguments(fun_args, ordinal)
     }
+    .check_ordinal_response_filter(my_args$response_filter, ordinal_mode)
   }
 
   # Run emtrends

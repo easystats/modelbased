@@ -70,6 +70,7 @@ get_emcontrasts <- function(
     } else {
       fun_args$mode <- ordinal$mode
     }
+    .check_ordinal_response_filter(my_args$response_filter, ordinal$mode)
   }
 
   # add dots
