@@ -33,7 +33,12 @@
 #' one of `"none"` (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`,
 #' `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, or `"holm"`. `"sup-t"` computes
 #' simultaneous confidence bands, also called sup-t confidence band (Montiel
-#' Olea & Plagborg-Møller, 2019).
+#' Olea & Plagborg-Møller, 2019). The Tukey adjustment is only appropriate for
+#' pairwise comparisons. When **marginaleffects** computes slopes that are each
+#' tested against 0, `"tukey"` is therefore replaced by `"sidak"` (with a
+#' message), as `emmeans::test()` does. This replacement is not made when
+#' slopes are compared, for example with the `comparison` or `post_process`
+#' argument.
 #' @inheritParams estimate_means
 #' @inheritParams parameters::model_parameters.default
 #'
@@ -221,6 +226,23 @@ estimate_slopes <- function(
   # add attributes from workhorse function
   attributes(trends) <- utils::modifyList(attributes(trends), info[.info_elements()])
   trends <- .rename_focal_attributes(trends)
+
+  # ordinal models, emmeans backend: we need the `model_info` and
+  # `focal_terms` attributes for plotting, to color the response categories
+  # or thresholds, and to keep the `by` variables on the x-axis
+  if (!is.null(info$ordinal_mode)) {
+    attr(trends, "model_info") <- insight::model_info(
+      model,
+      response = 1,
+      verbose = FALSE
+    )
+    if (is.null(attributes(trends)$focal_terms)) {
+      focal_terms <- intersect(.get_emmeans_arg_vars(info$by), colnames(trends))
+      if (length(focal_terms)) {
+        attr(trends, "focal_terms") <- focal_terms
+      }
+    }
+  }
 
   # Output
   class(trends) <- c("estimate_slopes_summary", "estimate_slopes", class(trends))
