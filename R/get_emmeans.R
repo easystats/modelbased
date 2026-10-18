@@ -92,6 +92,7 @@ get_emmeans <- function(
     } else {
       fun_args$type <- predict
     }
+    .check_ordinal_response_filter(my_args$response_filter, ordinal_mode)
   }
 
   # add dots
@@ -128,6 +129,7 @@ get_emmeans <- function(
   attr(estimated, "transform") <- TRUE
   attr(estimated, "keep_iterations") <- keep_iterations
   attr(estimated, "ordinal_mode") <- ordinal_mode
+  attr(estimated, "response_filter") <- my_args$response_filter
 
   estimated
 }
@@ -318,13 +320,24 @@ get_emmeans <- function(
   if (!is.null(estimate_name) && estimate_name %in% colnames(means)) {
     colnames(means)[colnames(means) == estimate_name] <- .emmeans_ordinal_estimate_names[[ordinal_mode]]
   }
-  .clean_pseudo_factor_emmeans_ordinal(means, model, ordinal_mode)
+  .clean_pseudo_factor_emmeans_ordinal(
+    means,
+    model,
+    ordinal_mode,
+    attributes(x)$response_filter
+  )
 }
 
 
 # for ordinal models, renames the pseudo-factor column (response categories
-# or thresholds) to `Response` or `Threshold`
-.clean_pseudo_factor_emmeans_ordinal <- function(means, model, ordinal_mode) {
+# or thresholds) to `Response` or `Threshold`. With `response_filter`, keeps
+# only the rows of the chosen response categories
+.clean_pseudo_factor_emmeans_ordinal <- function(
+  means,
+  model,
+  ordinal_mode,
+  response_filter = NULL
+) {
   if (is.null(ordinal_mode)) {
     return(means)
   }
@@ -359,6 +372,9 @@ get_emmeans <- function(
           levels = level_names
         )
       }
+    }
+    if (ordinal_mode == "prob") {
+      means <- .filter_ordinal_response_rows(means, pseudo_factor, response_filter)
     }
     colnames(means)[colnames(means) == pseudo_factor] <- new_name
   }
@@ -412,8 +428,115 @@ get_emmeans <- function(
   }
 }
 
+# For ordinal models, a `by` term can name the response, to keep only some
+# response categories (e.g. `"Sat='Low'"`). emmeans ignores `at` for the
+# response categories with `mode = "prob"`, so we remove the term from `by`,
+# and filter the formatted rows on the response categories. Returns `args`
+# with the term removed from `by`, and with `response_filter`: the name of
+# the response, and the chosen categories (`NULL` when the term has no values)
+.extract_ordinal_response_filter <- function(model, args, data) {
+  if (!is.character(args$by) || !length(args$by)) {
+    return(args)
+  }
+  response <- insight::find_response(model)
+  if (length(response) != 1) {
+    return(args)
+  }
+  is_response <- .grep_cleaned_by_vars(args$by) == response
+  if (
+    !any(is_response) ||
+      !response %in% colnames(data) ||
+      !.is_emmeans_ordinal(model)
+  ) {
+    return(args)
+  }
+  # terms with values, e.g. "Sat='Low'" or "rating=c(1, 3)". Numeric values
+  # are matched with the names of the response categories as character. The
+  # categories of all terms are kept, and a term without values adds none
+  value_terms <- args$by[is_response & grepl("=", args$by, fixed = TRUE)]
+  values <- NULL
+  if (length(value_terms)) {
+    values <- unique(unlist(lapply(value_terms, function(term) {
+      grid <- tryCatch(
+        suppressWarnings(insight::get_datagrid(data[response], by = term)),
+        error = function(e) NULL
+      )
+      term_values <- if (is.null(grid)) NA else as.character(grid[[response]])
+      if (!length(term_values) || anyNA(term_values)) {
+        insight::format_error(paste0(
+          "Could not read the response categories in `",
+          term,
+          "`. Please name the categories in quotes, e.g. `",
+          response,
+          " = c('a', 'b')`."
+        ))
+      }
+      term_values
+    })))
+    # the categories of the model, which can differ from the factor levels in
+    # the data (e.g. `clm()` drops unused levels)
+    response_levels <- model$y.levels
+    if (is.null(response_levels)) {
+      response_levels <- model$lev
+    }
+    if (is.null(response_levels)) {
+      response_levels <- levels(droplevels(as.factor(data[[response]])))
+    }
+    unknown <- setdiff(values, response_levels)
+    if (length(unknown)) {
+      insight::format_error(paste0(
+        "The response `",
+        response,
+        "` has no ",
+        if (length(unknown) == 1) "category " else "categories ",
+        datawizard::text_concatenate(unknown, enclose = "`"),
+        ". Its categories are ",
+        datawizard::text_concatenate(response_levels, enclose = "`"),
+        "."
+      ))
+    }
+  }
+  args$by <- args$by[!is_response]
+  if (!length(args$by)) {
+    args$by <- NULL
+  }
+  args$response_filter <- list(response = response, values = values)
+  args
+}
+
+
+# the response categories are only in the output for `predict = "prob"`, so
+# we cannot use the response in `by` for the other modes. `ordinal_mode` is
+# the mode the user asked for, not the mode that we use internally for slopes
+.check_ordinal_response_filter <- function(response_filter, ordinal_mode) {
+  if (!is.null(response_filter) && !identical(ordinal_mode, "prob")) {
+    insight::format_error(paste0(
+      "The response `",
+      response_filter$response,
+      "` can only be used in `by` with `predict = \"prob\"` (the default), which returns the probability of each response category."
+    ))
+  }
+}
+
+
+# keeps the rows of the response categories that a `by` filter chose (see
+# `.extract_ordinal_response_filter()`). `column` holds the response categories
+.filter_ordinal_response_rows <- function(x, column, response_filter) {
+  values <- response_filter$values
+  if (is.null(values) || !column %in% colnames(x)) {
+    return(x)
+  }
+  x <- x[as.character(x[[column]]) %in% values, , drop = FALSE]
+  rownames(x) <- NULL
+  x
+}
+
+
 #' @keywords internal
 .process_emmeans_arguments <- function(model, args, data, ...) {
+  # ordinal models: a `by` term on the response filters the response categories
+  args <- .extract_ordinal_response_filter(model, args, data)
+
   # Create the data_matrix
   # ---------------------------
   # data <- insight::get_data(model, verbose = FALSE)

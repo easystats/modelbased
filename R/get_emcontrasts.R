@@ -70,6 +70,7 @@ get_emcontrasts <- function(
     } else {
       fun_args$mode <- ordinal$mode
     }
+    .check_ordinal_response_filter(my_args$response_filter, ordinal$mode)
   }
 
   # add dots
@@ -160,6 +161,7 @@ get_emcontrasts <- function(
   attr(out, "transform") <- TRUE
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "ordinal_mode") <- ordinal$mode
+  attr(out, "response_filter") <- my_args$response_filter
 
   out
 }
@@ -252,7 +254,12 @@ get_emcontrasts <- function(
     }
     # the response categories or thresholds are renamed first, because the
     # response can have the name of an output column (e.g. "response")
-    out <- .clean_pseudo_factor_emmeans_ordinal(out, model, ordinal_mode)
+    out <- .clean_pseudo_factor_emmeans_ordinal(
+      out,
+      model,
+      ordinal_mode,
+      attributes(estimated)$response_filter
+    )
     out <- .clean_names_frequentist(out, predict, m_info)
   }
   out$null <- NULL # introduced in emmeans 1.6.1 (#115)

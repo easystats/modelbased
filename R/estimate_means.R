@@ -19,7 +19,13 @@
 #' [`insight::get_datagrid()`] to learn more about how to create data grids for
 #' predictors of interest. For `estimate_means()`, `by` defaults to `"auto"`,
 #' which automatically selects the first focal predictor found in the model. If
-#' `by = NULL`, the grand mean of the response is predicted.
+#' `by = NULL`, the grand mean of the response is predicted. For frequentist
+#' ordinal models (for example from `MASS::polr()`, `ordinal::clm()` or
+#' `ordinal::clmm()`), `by` can also name the response with values, for example
+#' `by = c("x", "y = c('low', 'high')")`. `estimate_means()`,
+#' `estimate_contrasts()` and `estimate_slopes()` then keep only the rows of
+#' these response categories. This filter works with `backend = "emmeans"` and
+#' `predict = "prob"` (the default).
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). Valid options for `predict` are:

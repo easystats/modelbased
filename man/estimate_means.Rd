@@ -32,7 +32,13 @@ case, \code{by} can also be list of named elements. See details in
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
 predictors of interest. For \code{estimate_means()}, \code{by} defaults to \code{"auto"},
 which automatically selects the first focal predictor found in the model. If
-\code{by = NULL}, the grand mean of the response is predicted.}
+\code{by = NULL}, the grand mean of the response is predicted. For frequentist
+ordinal models (for example from \code{MASS::polr()}, \code{ordinal::clm()} or
+\code{ordinal::clmm()}), \code{by} can also name the response with values, for example
+\code{by = c("x", "y = c('low', 'high')")}. \code{estimate_means()},
+\code{estimate_contrasts()} and \code{estimate_slopes()} then keep only the rows of
+these response categories. This filter works with \code{backend = "emmeans"} and
+\code{predict = "prob"} (the default).}
 
 \item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when

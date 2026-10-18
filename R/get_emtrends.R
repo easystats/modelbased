@@ -64,6 +64,7 @@ get_emtrends <- function(
     } else {
       fun_args <- .emtrends_ordinal_arguments(fun_args, ordinal)
     }
+    .check_ordinal_response_filter(my_args$response_filter, ordinal_mode)
   }
 
   # Run emtrends
@@ -89,6 +90,7 @@ get_emtrends <- function(
   attr(estimated, "transform") <- TRUE
   attr(estimated, "keep_iterations") <- keep_iterations
   attr(estimated, "ordinal_mode") <- ordinal_mode
+  attr(estimated, "response_filter") <- my_args$response_filter
 
   estimated
 }
@@ -249,7 +251,12 @@ get_emtrends <- function(
   # them right before the slopes
   ordinal_mode <- attributes(estimated)$ordinal_mode
   if (!is.null(ordinal_mode)) {
-    trends <- .clean_pseudo_factor_emmeans_ordinal(trends, model, ordinal_mode)
+    trends <- .clean_pseudo_factor_emmeans_ordinal(
+      trends,
+      model,
+      ordinal_mode,
+      attributes(estimated)$response_filter
+    )
     pseudo_column <- intersect(c("Response", "Threshold"), colnames(trends))
     if (length(pseudo_column)) {
       trends <- datawizard::data_relocate(trends, pseudo_column, before = "Slope")

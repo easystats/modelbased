@@ -59,6 +59,18 @@
 
 ## Bug fixes
 
+* `estimate_means()`, `estimate_contrasts()` and `estimate_slopes()` now
+  filter the response categories of ordinal models, for example from
+  `MASS::polr()`, `ordinal::clm()` or `ordinal::clmm()`. The filter is a `by`
+  term that names the response with values, for example
+  `by = c("Infl", "Sat = 'Low'")`. The output then has only the rows of these
+  response categories. The filter works with `backend = "emmeans"` and
+  `predict = "prob"` (the default). Before, means and contrasts of factors
+  ignored the filter, and slopes and contrasts of slopes stopped with an
+  unclear error. If `predict` has another value, these functions now stop with
+  a clear error. If a value is not a response category, they also stop with an
+  error.
+
 * For non-linear models, the footer of predictions or contrasts on the
   link-scale no longer says "FALSE-transformed" or "TRUE-transformed". This
   footer appears, for example, with `estimate_link()`, or with
