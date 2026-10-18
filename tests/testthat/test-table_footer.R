@@ -95,6 +95,11 @@ test_that("table_footer, link-scale with transform", {
   # transform = TRUE
   out <- utils::capture.output(estimate_link(g, by = "cyl", transform = TRUE))
   expect_false(any(grepl("TRUE-transformed|FALSE-transformed", out)))
+  # the response is not transformed, so `transform = TRUE` changes nothing
+  out <- utils::capture.output(
+    estimate_means(g, "cyl", predict = "link", transform = TRUE)
+  )
+  expect_true("Predictions are on the link-scale." %in% out)
 
   # name of the transformation
   out <- utils::capture.output(

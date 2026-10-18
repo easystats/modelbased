@@ -238,7 +238,9 @@ get_marginalmeans <- function(
     fun_args$vcov <- FALSE
   }
 
-  # transform reponse?
+  # transform reponse? we keep the argument as passed by the user for the
+  # table footer
+  transform_arg <- transform
   if (isTRUE(transform)) {
     transform <- insight::get_transformation(model, verbose = FALSE)$inverse
   }
@@ -318,7 +320,7 @@ get_marginalmeans <- function(
         estimate = estimate,
         datagrid = datagrid,
         transform = !is.null(transform),
-        transform_arg = transform,
+        transform_arg = transform_arg,
         iterations = iterations,
         keep_iterations = keep_iterations,
         joint_test = joint_test,
