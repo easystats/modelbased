@@ -1,3 +1,16 @@
+# modelbased (devel)
+
+## Bug fixes
+
+* `estimate_contrasts()` now applies the filter values in `by` to contrasts of
+  slopes with `estimate = "average"` and with `backend = "emmeans"`, for
+  example `estimate_contrasts(m, "wt", by = c("cyl = '4'", "am"))`, where
+  `cyl` and `am` are factors. Before,
+  these contrasts compared the slopes of all levels and ignored the filter. If
+  the filter leaves fewer than two slopes to compare, `estimate_contrasts()`
+  now stops with a clear error for every `estimate` option and for
+  `backend = "emmeans"`.
+
 # modelbased 0.18.0
 
 ## Breaking Changes
