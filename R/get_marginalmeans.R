@@ -238,7 +238,7 @@ get_marginalmeans <- function(
     fun_args$vcov <- FALSE
   }
 
-  # transform reponse? we keep the argument as passed by the user for the
+  # transform response? we keep the argument as passed by the user for the
   # table footer
   transform_arg <- transform
   if (isTRUE(transform)) {
