@@ -55,6 +55,31 @@
     ))
   }
 
+  # slopes from `get_marginaltrends()` are each tested against 0, unless
+  # `comparison` (or `hypothesis`) or `post_process` is used. In that case,
+  # the rows are comparisons of slopes, and we keep Tukey. Else, we use Sidak,
+  # as emmeans does, because the Tukey adjustment is only for one set of
+  # pairwise comparisons. With one slope, or without p-values, the code below
+  # says that no adjustment was made.
+  dots <- list(...)
+  if (
+    p_adjust == "tukey" &&
+      is_unformatted &&
+      nrow(params) > 1 &&
+      "p.value" %in% colnames(params) &&
+      is.null(dots[["comparison"]]) &&
+      is.null(dots[["hypothesis"]]) &&
+      is.null(dots[["post_process"]])
+  ) {
+    if (verbose) {
+      insight::format_alert(
+        "The Tukey adjustment is only appropriate for pairwise comparisons. Slopes are tested against 0, so p-values were adjusted with the Sidak method instead."
+      )
+    }
+    p_adjust <- "sidak"
+    attr(params, "p_adjust") <- "sidak"
+  }
+
   # esarey is specifically for johnson-neyman intervals
   if (p_adjust == "esarey") {
     return(.p_adjust_esarey(params))

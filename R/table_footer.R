@@ -264,6 +264,15 @@
   if (!is.null(attributes(x)$slope)) {
     table_footer <- paste0(table_footer, "\nType of slope was ", attributes(x)$slope)
   }
+  # ordinal models, emmeans backend: tell user about the prediction mode
+  if (!is.null(info$ordinal_mode)) {
+    table_footer <- paste0(
+      table_footer,
+      "\nSlopes are on the ",
+      info$ordinal_mode,
+      "-scale."
+    )
+  }
   if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(model))

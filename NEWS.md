@@ -1,5 +1,19 @@
 # modelbased (devel)
 
+## Breaking Changes
+
+* For ordinal models (for example from `MASS::polr()`, `ordinal::clm()` or
+  `ordinal::clmm()`), `estimate_contrasts()` and `estimate_slopes()` with
+  `backend = "emmeans"` now return probabilities by default and for
+  `predict = "response"`, as `estimate_means()` already does. Contrasts compare
+  the focal levels within each response category, and slopes are the slopes of
+  the probability of each response category. Before, both returned values on
+  the latent scale, and the table footer of `estimate_contrasts()` said they
+  were on the response scale. The ordinal modes of *emmeans* (`"prob"`,
+  `"cum.prob"`, `"exc.prob"`, `"linear.predictor"`, `"latent"` and
+  `"mean.class"`) can be passed to `predict`. Use `predict = "latent"` to get
+  the former results.
+
 ## Changes
 
 * Post-processing in `estimate_contrasts()` including group-variable (e.g.,
@@ -125,7 +139,12 @@
   p-values for `p_adjust = "holm"`, `"hochberg"`, `"hommel"`, `"bonferroni"`,
   `"BH"`, `"BY"`, `"fdr"`, `"sidak"` and `"tukey"`. Before, all but `"tukey"`
   failed with the error "replacement has 0 rows", and `"tukey"` returned the
-  unadjusted p-values.
+  unadjusted p-values. For `"tukey"`, `estimate_slopes()` and
+  `get_marginaltrends()` now use the Sidak adjustment and say so in a message.
+  The Tukey adjustment is only appropriate for pairwise comparisons, but these
+  slopes are each tested against 0. `emmeans::test()` makes the same
+  substitution. Slopes that are compared, for example with the `comparison`
+  or `post_process` argument, keep the Tukey adjustment.
 
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed
