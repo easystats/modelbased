@@ -135,9 +135,15 @@ get_marginalcontrasts <- function(
     } else {
       slope_filter <- .parse_by_filter(my_args$by)
     }
-    # sanity check - we need at least two slopes to compare
-    if (!.is_custom_comparison(comparison) && !is.function(comparison) && !is.matrix(comparison)) {
-      .check_slope_contrast_filter(model, my_args$cleaned_by, slope_filter, estimate)
+    slope_filter <- .present_filter_values(insight::get_data(model, verbose = FALSE), slope_filter)
+    # sanity check - we need at least two slopes to compare. We use the
+    # original `by`, because a group in a `comparison` formula replaces it
+    if (
+      !.is_custom_comparison(comparison) &&
+        !is.function(comparison) &&
+        !is.matrix(comparison)
+    ) {
+      .check_slope_contrast_filter(model, by, slope_filter, estimate)
     }
     # call slopes with hypothesis argument
     .contrast_slopes <- function(slope_by = my_args$by, ...) {
@@ -325,6 +331,19 @@ get_marginalcontrasts <- function(
 }
 
 
+# for factors and character vectors, keep only the filter values that are
+# levels in the data
+.present_filter_values <- function(data, by_filter) {
+  for (i in names(by_filter)) {
+    if (!is.null(data[[i]]) && !is.numeric(data[[i]])) {
+      values <- as.character(by_filter[[i]])
+      by_filter[[i]] <- values[values %in% unique(as.character(data[[i]]))]
+    }
+  }
+  by_filter
+}
+
+
 # keep only the data rows whose values pass the filters in `by`
 .filter_data_by <- function(data, by_filter) {
   keep <- rep(TRUE, nrow(data))
@@ -340,6 +359,12 @@ get_marginalcontrasts <- function(
 # stop when the filters in `by` leave fewer than two slopes to compare
 .check_slope_contrast_filter <- function(model, by, by_filter, estimate = NULL) {
   if (!length(by_filter) || !length(by)) {
+    return(invisible(NULL))
+  }
+  # models with response categories have one slope per category, so we
+  # cannot count the slopes from `by` alone
+  model_info <- insight::model_info(model, response = 1, verbose = FALSE)
+  if (isTRUE(model_info$is_ordinal) || isTRUE(model_info$is_multinomial) || isTRUE(model_info$is_categorical)) {
     return(invisible(NULL))
   }
   model_data <- insight::get_data(model, verbose = FALSE)
@@ -374,7 +399,7 @@ get_marginalcontrasts <- function(
     values <- by_filter[[i]]
     if (is.null(values)) {
       # numeric variables without filter have more than one value in the grid
-      n <- ifelse(is.numeric(x), 2, insight::n_unique(x))
+      n <- if (is.numeric(x)) 2 else insight::n_unique(x)
     } else if (is.numeric(x)) {
       # the data grid uses all filter values of numeric variables
       n <- insight::n_unique(values)

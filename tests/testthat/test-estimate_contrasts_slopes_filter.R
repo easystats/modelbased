@@ -166,6 +166,28 @@ test_that("estimate_contrasts, slopes, by-filters leave fewer than two slopes", 
 })
 
 
+test_that("estimate_contrasts, slopes, by-filter values that are not levels", {
+  oracle <- .oracle(m3, filters$F1)
+  out <- estimate_contrasts(m3, "wt", by = c("g=c('4','5')", "a"), estimate = "average")
+  expect_matches_oracle(out, oracle, filters$F1$allowed)
+  out <- estimate_contrasts(m3, "wt", by = c("g=c('4','5')", "a"), backend = "emmeans")
+  expect_matches_oracle(out, oracle, filters$F1$allowed)
+})
+
+
+test_that("estimate_contrasts, slopes, emmeans, numeric by or factors from the formula", {
+  # emmeans does not filter these, but still returns all contrasts
+  m_factor <- lm(mpg ~ wt * factor(cyl), data = mtcars)
+  out <- estimate_contrasts(m_factor, "wt", by = "cyl=c(4,6)", backend = "emmeans")
+  expect_identical(nrow(out), 3L)
+  expect_true(all(is.finite(out$Difference)))
+  m_numeric <- lm(mpg ~ wt * hp * g, data = mt)
+  out <- estimate_contrasts(m_numeric, "wt", by = c("g='4'", "hp"), backend = "emmeans")
+  expect_identical(nrow(out), 3L)
+  expect_true(all(is.finite(out$Difference)))
+})
+
+
 test_that("estimate_contrasts, slopes, no by-filter", {
   oracle <- pairs(emmeans::emtrends(m3, ~ g * a, "wt"), adjust = "none")
   allowed <- list(g = c("4", "6", "8"), a = c("0", "1"))

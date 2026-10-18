@@ -97,6 +97,14 @@ get_emcontrasts <- function(
       intersect(names(slope_filter), my_args$by),
       c(my_args$contrast, my_args$response_filter$response)
     )]
+    # emmeans holds numeric variables in `by` at their mean, and `at` does not
+    # work for factors that are created in the model formula. So we only
+    # filter when all variables in `by` are factors or character vectors
+    numeric_by <- vapply(my_args$by, function(i) is.numeric(model_data[[i]]), logical(1))
+    if (any(numeric_by)) {
+      slope_filter <- list()
+    }
+    slope_filter <- .present_filter_values(model_data, slope_filter)
     # sanity check - we need at least two slopes to compare
     if (
       (is.character(comparison) && !.is_custom_comparison(comparison)) ||
@@ -108,7 +116,7 @@ get_emcontrasts <- function(
     # contrasted
     fun_args <- c(fun_args, list(specs = my_args$by, var = my_args$contrast))
     if (length(slope_filter)) {
-      fun_args$at <- my_args$emmeans_at[names(slope_filter)]
+      fun_args$at <- slope_filter
     }
     if (is.null(ordinal$mode)) {
       estimated <- suppressMessages(do.call(emmeans::emtrends, fun_args))
