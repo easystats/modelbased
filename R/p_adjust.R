@@ -80,6 +80,26 @@
     attr(params, "p_adjust") <- "sidak"
   }
 
+  # contrasts (formatted output): the Tukey adjustment is only appropriate for
+  # pairwise comparisons. For other comparisons, like "reference" or
+  # "sequential", we use Sidak, as emmeans does.
+  comparison <- attributes(params)$comparison
+  if (
+    p_adjust == "tukey" &&
+      !is_unformatted &&
+      !is.null(comparison) &&
+      !.is_pairwise_comparison(comparison) &&
+      "p" %in% colnames(params)
+  ) {
+    if (verbose) {
+      insight::format_alert(
+        "The Tukey adjustment is only appropriate for pairwise comparisons, so p-values were adjusted with the Sidak method instead."
+      )
+    }
+    p_adjust <- "sidak"
+    attr(params, "p_adjust") <- "sidak"
+  }
+
   # esarey is specifically for johnson-neyman intervals
   if (p_adjust == "esarey") {
     return(.p_adjust_esarey(params))
@@ -150,11 +170,48 @@
       insight::format_alert("No test-statistic found. P-values were not adjusted.")
     }
   } else if (p_adjust == "sidak") {
-    # sidak adjustment
-    params[[p_column]] <- 1 - (1 - params[[p_column]])^rank_adjust
+    # sidak adjustment. The family is the set of tests: for slopes, all rows,
+    # and for contrasts, the rows within each group of the `by` variables
+    # (like emmeans).
+    if (is_unformatted) {
+      family_size <- nrow(params)
+    } else {
+      family_size <- .p_adjust_family_size(params)
+    }
+    params[[p_column]] <- 1 - (1 - params[[p_column]])^family_size
   }
 
   params
+}
+
+
+# TRUE if a comparison is a formula whose right side is `pairwise` or
+# `revpairwise`, with or without a `| group` term, e.g. `difference ~ pairwise`
+.is_pairwise_comparison <- function(comparison) {
+  if (is.character(comparison)) {
+    return(length(comparison) == 1 && comparison %in% c("pairwise", "revpairwise"))
+  }
+  if (!inherits(comparison, "formula")) {
+    return(FALSE)
+  }
+  rhs <- comparison[[length(comparison)]]
+  if (is.call(rhs) && identical(rhs[[1]], as.name("|"))) {
+    rhs <- rhs[[2]]
+  }
+  is.name(rhs) && as.character(rhs) %in% c("pairwise", "revpairwise")
+}
+
+
+# number of contrasts in the family of each row: the rows with the same values
+# of the `by` variables
+.p_adjust_family_size <- function(params) {
+  by <- .safe(insight::trim_ws(gsub("=.*", "", attributes(params)$by)))
+  by <- intersect(by, colnames(params))
+  if (!length(by)) {
+    return(rep(nrow(params), nrow(params)))
+  }
+  groups <- interaction(params[by], drop = TRUE)
+  as.vector(table(groups)[as.character(groups)])
 }
 
 
