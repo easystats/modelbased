@@ -90,8 +90,23 @@ get_emcontrasts <- function(
         "Please specify the `by` argument to calculate contrasts of slopes."
       )
     }
-    # Run emmeans
+    # filter values in `by`, but not for the response categories of ordinal
+    # models, which are filtered later
+    slope_filter <- .parse_by_filter(by)
+    slope_filter <- slope_filter[setdiff(
+      intersect(names(slope_filter), my_args$by),
+      c(my_args$contrast, my_args$response_filter$response)
+    )]
+    # sanity check - we need at least two slopes to compare
+    if (is.character(comparison) || inherits(comparison, "formula")) {
+      .check_slope_contrast_filter(model, my_args$by, slope_filter)
+    }
+    # Run emmeans. Filters in `by` go into `at`, so only those slopes are
+    # contrasted
     fun_args <- c(fun_args, list(specs = my_args$by, var = my_args$contrast))
+    if (length(slope_filter)) {
+      fun_args$at <- my_args$emmeans_at[names(slope_filter)]
+    }
     if (is.null(ordinal$mode)) {
       estimated <- suppressMessages(do.call(emmeans::emtrends, fun_args))
       emm_by <- NULL
