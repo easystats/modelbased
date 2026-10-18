@@ -227,6 +227,23 @@ estimate_slopes <- function(
   attributes(trends) <- utils::modifyList(attributes(trends), info[.info_elements()])
   trends <- .rename_focal_attributes(trends)
 
+  # ordinal models, emmeans backend: we need the `model_info` and
+  # `focal_terms` attributes for plotting, to color the response categories
+  # or thresholds, and to keep the `by` variables on the x-axis
+  if (!is.null(info$ordinal_mode)) {
+    attr(trends, "model_info") <- insight::model_info(
+      model,
+      response = 1,
+      verbose = FALSE
+    )
+    if (is.null(attributes(trends)$focal_terms)) {
+      focal_terms <- intersect(.get_emmeans_arg_vars(info$by), colnames(trends))
+      if (length(focal_terms)) {
+        attr(trends, "focal_terms") <- focal_terms
+      }
+    }
+  }
+
   # Output
   class(trends) <- c("estimate_slopes_summary", "estimate_slopes", class(trends))
   trends
