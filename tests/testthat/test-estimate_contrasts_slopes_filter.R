@@ -147,6 +147,13 @@ test_that("estimate_contrasts, slopes, by-filters leave fewer than two slopes", 
       regexp = "at least two"
     )
   }
+  # spaces around "=", and `estimate = "specific"`
+  expect_error(
+    estimate_contrasts(m3, "wt", by = c("g = '4'", "a = '1'"), estimate = "specific"),
+    regexp = "at least two"
+  )
+  out <- estimate_contrasts(m3, "wt", by = c("g = '4'", "a"), estimate = "average")
+  expect_matches_oracle(out, .oracle(m3, filters$F1), filters$F1$allowed)
 })
 
 
