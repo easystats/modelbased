@@ -130,6 +130,31 @@ test_that("table_footer, scale of predictions with earlier output as data", {
 })
 
 
+test_that("table_footer, link-scale for contrasts of predictions and slopes", {
+  d <- mtcars
+  d$cyl <- factor(d$cyl)
+  g <- glm(am ~ wt + cyl, data = d, family = binomial)
+
+  # contrasts of an earlier output
+  out <- utils::capture.output(estimate_contrasts(estimate_link(g, by = "cyl")))
+  expect_true("Contrasts are on the link-scale." %in% out)
+  out <- utils::capture.output(
+    estimate_contrasts(estimate_link(g, by = "cyl", transform = exp))
+  )
+  expect_true("Contrasts are on the transformed link-scale." %in% out)
+
+  # contrasts of slopes
+  out <- utils::capture.output(
+    estimate_contrasts(g, "wt", by = "cyl", predict = "link")
+  )
+  expect_true("Contrasts are on the link-scale." %in% out)
+  out <- utils::capture.output(
+    estimate_contrasts(g, "wt", by = "cyl", predict = "link", transform = exp)
+  )
+  expect_true("Contrasts are on the transformed link-scale." %in% out)
+})
+
+
 test_that("table_footer, no prediction intervals if insight falls back", {
   skip_if_not_installed("mgcv")
   m <- mgcv::gam(mpg ~ s(wt), data = mtcars)

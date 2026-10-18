@@ -668,6 +668,8 @@ get_marginalmeans <- function(
 # - slope: the type of slope, e.g. "dx/dy". equals the "slope" argument when
 #   calling avg_slopes()
 # - model_info: object from insight::model_info()
+# - transform_arg: the `transform` argument as passed by the user (`transform`
+#   is often only a logical), used for the scale line of the table footer
 # - renamed_focal: focal terms with the name of an output column, named by
 #   their old names, with the new names "<name>.1" as values
 #' @keywords internal
@@ -699,8 +701,8 @@ get_marginalmeans <- function(
   # fmt: skip
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
-    "contrast", "estimate", "p_adjust", "transform", "transform_arg", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
+    "contrast", "estimate", "p_adjust", "transform", "transform_arg", "datagrid",
+    "preserve_range", "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
     "iterations", "keep_iterations", "joint_test", "omnibus_test", "vcov",
     "equivalence", "context_effects", "renamed_focal"
   )
