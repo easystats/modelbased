@@ -170,13 +170,14 @@
     is replaced by `"sidak"` with a message.
   * The Tukey adjustment of slopes compared pairwise with `estimate_slopes()`
     now counts the slopes, not the comparisons. Before, 4 slopes were counted
-    as 6 groups, which made the p-values too large. With a group term, for
+    as 6, the number of comparisons, which made the p-values too large. With a group term, for
     example `comparison = ~pairwise | group`, the slopes and the comparisons
     are counted in each group.
   * The Sidak adjustment of contrasts now counts the comparisons in each group
     of the `by` variables. Before, it counted the levels of the contrast
     variable, so for 4 levels and 6 pairwise comparisons, the p-values were
-    too small.
+    too small. A joint test, or another output with one test in each group,
+    is therefore no longer changed by `"sidak"`.
   * A partly matched `hypothesis` argument, for example `hypo = ~pairwise`, is
     now treated as `hypothesis`.
 

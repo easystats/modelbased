@@ -41,9 +41,10 @@
 #' `"tukey"` is replaced by `"sidak"` (with a message), as `emmeans::test()`
 #' does. The Sidak adjustment counts the tests (rows) and the Tukey adjustment
 #' the compared slopes, in the whole output or, for comparisons with a group
-#' term (for example `comparison = ~pairwise | group`), in each group. With
-#' `backend = "emmeans"`, only the `stats::p.adjust()` methods, `"tukey"` and
-#' `"sidak"` are applied to the slopes, and other methods are ignored.
+#' term (for example `comparison = ~pairwise | group`), in each group. In
+#' `estimate_slopes()` with `backend = "emmeans"`, only the `stats::p.adjust()`
+#' methods, `"tukey"` and `"sidak"` are applied to the slopes, and other
+#' methods are ignored.
 #' @inheritParams estimate_means
 #' @inheritParams parameters::model_parameters.default
 #'
@@ -196,20 +197,29 @@ estimate_slopes <- function(
       ...
     )
     # p-value adjustment, done by `parameters::model_parameters()` for the
-    # "adjust" setting of the emmeans object
+    # "adjust" setting of the emmeans object. Not for Bayesian models, which
+    # have no p-values, and not for ordinal models.
     emmeans_adjust <- c(stats::p.adjust.methods, "tukey", "sidak")
-    if (!is.null(p_adjust) && tolower(p_adjust) %in% tolower(emmeans_adjust)) {
+    emmeans_method <- emmeans_adjust[match(tolower(p_adjust), tolower(emmeans_adjust))]
+    if (
+      length(emmeans_method) == 1 &&
+        !is.na(emmeans_method) &&
+        emmeans_method != "none" &&
+        is.null(attributes(estimated)$ordinal_mode) &&
+        !insight::model_info(model, response = 1)$is_bayesian
+    ) {
       # slopes are tested against 0, so we use Sidak instead of Tukey, as
       # `emmeans::test()` does
-      if (tolower(p_adjust) == "tukey") {
-        if (verbose) {
+      if (emmeans_method == "tukey") {
+        if (verbose && nrow(estimated@grid) > 1) {
           insight::format_alert(
             "The Tukey adjustment is only appropriate for pairwise comparisons. Slopes are tested against 0, so p-values were adjusted with the Sidak method instead."
           )
         }
-        p_adjust <- "sidak"
+        emmeans_method <- "sidak"
       }
-      estimated <- stats::update(estimated, adjust = p_adjust)
+      estimated <- stats::update(estimated, adjust = emmeans_method)
+      attr(estimated, "p_adjust") <- emmeans_method
     }
     trends <- .format_emmeans_slopes(model, estimated, ci, ...)
   } else {

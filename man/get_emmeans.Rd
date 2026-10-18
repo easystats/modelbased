@@ -377,9 +377,10 @@ example \code{hypothesis = 1}), and for slopes that are not compared pairwise,
 \code{"tukey"} is replaced by \code{"sidak"} (with a message), as \code{emmeans::test()}
 does. The Sidak adjustment counts the tests (rows) and the Tukey adjustment
 the compared slopes, in the whole output or, for comparisons with a group
-term (for example \code{comparison = ~pairwise | group}), in each group. With
-\code{backend = "emmeans"}, only the \code{stats::p.adjust()} methods, \code{"tukey"} and
-\code{"sidak"} are applied to the slopes, and other methods are ignored.}
+term (for example \code{comparison = ~pairwise | group}), in each group. In
+\code{estimate_slopes()} with \code{backend = "emmeans"}, only the \code{stats::p.adjust()}
+methods, \code{"tukey"} and \code{"sidak"} are applied to the slopes, and other
+methods are ignored.}
 
 \item{iterations}{This argument has two distinct effects, depending on the
 context. When \code{effectsize = "boot"}, it defines the number of bootstrap

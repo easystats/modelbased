@@ -240,3 +240,79 @@ test_that("p_adjust tukey and sidak, slopes compared pairwise within groups", {
     expect_equal(out$p, emmeans_p(out, pairs(em, adjust = p_adjust), by = "h"), tolerance = 1e-5)
   }
 })
+
+
+test_that("p_adjust, families of grouped contrasts and of contrasts of predictions", {
+  # contrasts of slopes with a group term, Tukey counts the slopes in each group
+  m3 <- lm(y ~ x * g * h, data = d_adjust)
+  out <- estimate_contrasts(
+    m3,
+    contrast = "x",
+    by = c("g", "h"),
+    comparison = ~ pairwise | h,
+    p_adjust = "tukey"
+  )
+  em <- emmeans::emtrends(m3, "g", by = "h", var = "x")
+  expect_equal(out$p, emmeans_p(out, pairs(em, adjust = "tukey"), by = "h"), tolerance = 1e-5)
+
+  # contrasts of `estimate_relation()` output, Sidak counts within `by` groups
+  out <- estimate_contrasts(
+    estimate_relation(m1, by = c("g", "h")),
+    contrast = "g",
+    by = "h",
+    p_adjust = "sidak"
+  )
+  em <- suppressMessages(emmeans::emmeans(m1, "g", by = "h"))
+  expect_equal(out$p, emmeans_p(out, pairs(em, adjust = "sidak"), by = "h"), tolerance = 1e-5)
+
+  # missing values of a `by` variable form their own family
+  expect_identical(
+    .p_adjust_family_size(data.frame(h = c("a", NA, "a", "b")), by = "h"),
+    c(2L, 1L, 2L, 1L)
+  )
+})
+
+
+test_that("p_adjust, no Sidak message when nothing is adjusted, and method names", {
+  # one contrast or one slope: Sidak does not change the p-value
+  expect_no_message(
+    estimate_contrasts(m1, "g", comparison = "b1 = b2", p_adjust = "tukey"),
+    message = "Sidak"
+  )
+  expect_no_message(
+    estimate_slopes(lm(mpg ~ wt, data = mtcars), "wt", hypothesis = 1, p_adjust = "tukey"),
+    message = "Sidak"
+  )
+  # a matrix hypothesis is not a test against a value
+  expect_message(
+    estimate_slopes(
+      m2,
+      "x",
+      by = "g",
+      hypothesis = matrix(c(-1, 1, 0, 0, 0, -1, 1, 0), 4),
+      p_adjust = "tukey"
+    ),
+    regexp = "not compared pairwise"
+  )
+
+  # emmeans backend: method names in any case, and the `p_adjust` attribute
+  mt <- mtcars
+  mt$cyl <- factor(mt$cyl)
+  m4 <- lm(mpg ~ wt * cyl, data = mt)
+  em <- emmeans::emtrends(m4, "cyl", var = "wt")
+  out <- estimate_slopes(m4, "wt", by = "cyl", backend = "emmeans", p_adjust = "bh")
+  expect_equal(
+    out$p,
+    as.data.frame(summary(emmeans::test(em, adjust = "BH")))$p.value,
+    tolerance = 1e-5
+  )
+  expect_identical(attributes(out)$p_adjust, "BH")
+  out <- suppressMessages(estimate_slopes(
+    m4,
+    "wt",
+    by = "cyl",
+    backend = "emmeans",
+    p_adjust = "tukey"
+  ))
+  expect_identical(attributes(out)$p_adjust, "sidak")
+})
