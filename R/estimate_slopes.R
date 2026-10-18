@@ -39,9 +39,9 @@
 #' slopes that are each tested against 0 or against another value (for
 #' example `hypothesis = 1`), and for slopes that are not compared pairwise,
 #' `"tukey"` is replaced by `"sidak"` (with a message), as `emmeans::test()`
-#' does. The Tukey and Sidak adjustments count all tests (all rows) of the
-#' output, or, for comparisons with a group term (for example
-#' `comparison = ~pairwise | group`), the tests in each group. With
+#' does. The Sidak adjustment counts the tests (rows) and the Tukey adjustment
+#' the compared slopes, in the whole output or, for comparisons with a group
+#' term (for example `comparison = ~pairwise | group`), in each group. With
 #' `backend = "emmeans"`, only the `stats::p.adjust()` methods, `"tukey"` and
 #' `"sidak"` are applied to the slopes, and other methods are ignored.
 #' @inheritParams estimate_means

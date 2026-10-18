@@ -375,9 +375,9 @@ example with \code{comparison = ~pairwise} or \code{post_process = ~pairwise}. F
 slopes that are each tested against 0 or against another value (for
 example \code{hypothesis = 1}), and for slopes that are not compared pairwise,
 \code{"tukey"} is replaced by \code{"sidak"} (with a message), as \code{emmeans::test()}
-does. The Tukey and Sidak adjustments count all tests (all rows) of the
-output, or, for comparisons with a group term (for example
-\code{comparison = ~pairwise | group}), the tests in each group. With
+does. The Sidak adjustment counts the tests (rows) and the Tukey adjustment
+the compared slopes, in the whole output or, for comparisons with a group
+term (for example \code{comparison = ~pairwise | group}), in each group. With
 \code{backend = "emmeans"}, only the \code{stats::p.adjust()} methods, \code{"tukey"} and
 \code{"sidak"} are applied to the slopes, and other methods are ignored.}
 
