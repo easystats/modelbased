@@ -65,10 +65,11 @@
   term that names the response with values, for example
   `by = c("Infl", "Sat = 'Low'")`. The output then has only the rows of these
   response categories. The filter works with `backend = "emmeans"` and
-  `predict = "prob"`. Before, `estimate_means()` and `estimate_contrasts()`
-  ignored the filter, and `estimate_slopes()` stopped with an error. If
-  `predict` has another value, or if a value is not a response category, these
-  functions now stop with an error.
+  `predict = "prob"` (the default). Before, means and contrasts of factors
+  ignored the filter, and slopes and contrasts of slopes stopped with an
+  unclear error. If `predict` has another value, these functions now stop with
+  a clear error. If a value is not a response category, they also stop with an
+  error.
 
 * For non-linear models, the footer of predictions or contrasts on the
   link-scale no longer says "FALSE-transformed" or "TRUE-transformed". This

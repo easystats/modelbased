@@ -482,7 +482,7 @@ get_emmeans <- function(
     insight::format_error(paste0(
       "The response `",
       response_filter$response,
-      "` can only be used in `by` with `predict = \"prob\"`, which returns the probability of each response category."
+      "` can only be used in `by` with `predict = \"prob\"` (the default), which returns the probability of each response category."
     ))
   }
 }

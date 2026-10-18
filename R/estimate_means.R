@@ -25,7 +25,7 @@
 #' `by = c("x", "y = c('low', 'high')")`. `estimate_means()`,
 #' `estimate_contrasts()` and `estimate_slopes()` then keep only the rows of
 #' these response categories. This filter works with `backend = "emmeans"` and
-#' `predict = "prob"`.
+#' `predict = "prob"` (the default).
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). Valid options for `predict` are:

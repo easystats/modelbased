@@ -38,7 +38,7 @@ ordinal models (for example from \code{MASS::polr()}, \code{ordinal::clm()} or
 \code{by = c("x", "y = c('low', 'high')")}. \code{estimate_means()},
 \code{estimate_contrasts()} and \code{estimate_slopes()} then keep only the rows of
 these response categories. This filter works with \code{backend = "emmeans"} and
-\code{predict = "prob"}.}
+\code{predict = "prob"} (the default).}
 
 \item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
