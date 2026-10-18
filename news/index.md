@@ -1,5 +1,290 @@
 # Changelog
 
+## modelbased 0.18.0
+
+### Breaking Changes
+
+- For ordinal models (for example from
+  [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html),
+  [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html) or
+  [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html)),
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  and
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  with `backend = "emmeans"` now return probabilities by default and for
+  `predict = "response"`, as
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+  already does. Contrasts compare the focal levels within each response
+  category, and slopes are the slopes of the probability of each
+  response category. Before, both returned values on the latent scale,
+  and the table footer of
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  said they were on the response scale. The ordinal modes of *emmeans*
+  (`"prob"`, `"cum.prob"`, `"exc.prob"`, `"linear.predictor"`,
+  `"latent"` and `"mean.class"`) can be passed to `predict`. Use
+  `predict = "latent"` to get the former results.
+
+### Changes
+
+- Post-processing in
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  including group-variable (e.g.,
+  `post_process = ~ pairwise | group_var`) now no longer prints levels
+  from `group_var` in both the group and comparison columns
+  (i.e. redundant labels have been removed from the output).
+
+- [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  with custom comparisons (e.g., when
+  `comparison = "(b1 - b12) = (b4 - b18)"`) can yield incorrect results
+  when `estimate = "average"` and predictions are filtered (e.g. when
+  `contrast = c("x=c(2,4)")`). This does not happen in general, but may
+  happen. Therefore, now an informative warning is printed in such
+  edge-cases.
+
+- Added a new vignette, “The Modelisation Approach”, which demonstrates
+  a complete analytical workflow from setting up models using DAGs to
+  extracting meaningful predictions, slopes, and interaction contrasts
+  using modelbased post-estimation functions.
+
+- [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+  with `backend = "emmeans"` now supports ordinal models, e.g. from
+  [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html) or
+  [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html).
+  `predict` accepts the ordinal modes of *emmeans* (`"prob"`,
+  `"cum.prob"`, `"exc.prob"`, `"linear.predictor"`, `"latent"` and
+  `"mean.class"`). For `"prob"`, the output has one row per response
+  category, in a `Response` column. For `"cum.prob"`, `"exc.prob"` and
+  `"linear.predictor"`, the output has one row per threshold, in a
+  `Threshold` column. For ordinal models, the default is now
+  `predict = "prob"`, which returns the same probabilities as the
+  `"marginaleffects"` backend.
+
+- For ordinal models,
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) of
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+  output with `backend = "emmeans"` now maps the `Response` or
+  `Threshold` column to the color with one `by` variable and to the
+  facets with more. The `"marginaleffects"` backend already does this
+  for `Response`.
+
+- With `backend = "emmeans"`,
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) now shows
+  predicted probabilities on a percent y-axis, `"cum.prob"` and
+  `"exc.prob"` included. This applies to binomial, beta, ordinal, and
+  multinomial models.
+
+- `comparison = "ratio"` is a new shortcut to compute pairwise
+  comparisons as ratios.
+
+- The printed footer of
+  [`estimate_prediction()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)
+  and similar functions now names prediction intervals as such
+  ([\#485](https://github.com/easystats/modelbased/issues/485)).
+
+### Bug fixes
+
+- [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  and
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  now filter the response categories of ordinal models, for example from
+  [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html),
+  [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html) or
+  [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html). The
+  filter is a `by` term that names the response with values, for example
+  `by = c("Infl", "Sat = 'Low'")`. The output then has only the rows of
+  these response categories. The filter works with `backend = "emmeans"`
+  and `predict = "prob"` (the default). Before, means and contrasts of
+  factors ignored the filter, and slopes and contrasts of slopes stopped
+  with an unclear error. If `predict` has another value, these functions
+  now stop with a clear error. If a value is not a response category,
+  they also stop with an error.
+
+- For non-linear models, the footer of predictions or contrasts on the
+  link-scale no longer says “FALSE-transformed” or “TRUE-transformed”.
+  This footer appears, for example, with
+  [`estimate_link()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md),
+  or with
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+  and `predict = "link"`. Without `transform`, the footer now says
+  “link-scale”. Except with `backend = "emmeans"`, a function as
+  `transform` gives “transformed link-scale”.
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  with `predict = "link"` and a function as `transform` (for example
+  `transform = exp`) no longer fails with an error. If the output of an
+  earlier call is the `data` argument, the footer of
+  [`estimate_expectation()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md),
+  [`estimate_prediction()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)
+  and
+  [`estimate_link()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)
+  now names the right scale.
+
+- With `backend = "marginaleffects"`,
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  and
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  no longer drop or rename a `by` variable with a name such as `type`,
+  `n` or `value`. They also no longer mislabel other columns because of
+  such a name. Before, for example,
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+  dropped a `by` variable named `type` and renamed `n` to `n_Obs`. It
+  also labeled a variable named `Median` as `Mean`, and the means as
+  `Coefficient`. This fix does not yet apply to Bayesian models or to
+  inequality comparisons (for example `comparison = "inequality"`).
+
+- Fixed printing error for brms-Wiener models without `component`
+  column.
+
+- With `backend = "marginaleffects"`, a `by` variable with the name of
+  the estimate column (for example `Mean`) or of the `t` column is now
+  returned as `<name>.1`. The output column keeps its name. This also
+  holds for `p` with
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  and
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md),
+  and for `SE`, `CI_low` and `CI_high` with
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md).
+  Before, for example,
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+  kept a `by` variable named `Mean` and renamed the means to `Mean.1`,
+  and
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  renamed the p-values to `p.1`. As for the fix above, this does not yet
+  apply to Bayesian models or to inequality comparisons. It also does
+  not apply to
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  on the output of
+  [`estimate_relation()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md).
+
+- With `backend = "marginaleffects"`,
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  and
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  now stop with an informative error when a variable has a name that
+  *marginaleffects* uses for its own columns, and ask users to rename
+  the variable. Before, these names gave wrong estimates, standard
+  errors or confidence intervals, missing columns, or unclear errors.
+  The names are:
+
+  - `by` variables of
+    [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+    and of
+    [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+    when the contrast variable is a factor: `Predicted`, `SE`, `CI_low`,
+    `CI_high`, `df`, `rowid` and `s.value`.
+  - a factor `contrast` variable of
+    [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md):
+    `SE`, `CI_low`, `CI_high`, `df` and `rowid`.
+  - other predictors of
+    [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+    and
+    [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md):
+    `SE`, `CI_low`, `CI_high` and `df`.
+  - `by` variables of
+    [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md):
+    `df`, `rowid`, `s.value`, `predicted`, `predicted_hi` and
+    `predicted_lo`.
+
+  Bayesian models are not checked yet. For them, these names can still
+  give missing columns or unclear errors.
+
+- With `backend = "marginaleffects"`,
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  now returns a `by` variable named `Level1` or `Level2` as `Level1.1`
+  or `Level2.1`, next to the `Level1` and `Level2` columns of the
+  contrasts. It also returns the contrasts for a `by` variable named
+  `hypothesis` and for a `contrast` variable named `Parameter`. Before,
+  the output had two columns with the same name, the contrast labels
+  were not split into `Level1` and `Level2`, or the call failed with an
+  unclear error. If `<name>.1` is already a variable name, the suffix is
+  the next free number, for example `p.2`. As for the fixes above, the
+  `Level1`, `Level2` and `hypothesis` fixes do not yet apply to Bayesian
+  models or to inequality comparisons.
+
+- If a variable has the name of an output column,
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  and
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  with `backend = "marginaleffects"` now keep the values and the order
+  of that column. This applies to the `contrast` variable, and to `by`
+  variables of contrasts and of contrasts of slopes. It also applies to
+  `by` variables of contrasts with a custom `comparison`, for example
+  `comparison = "b2=b1"`. Before, a `contrast` variable named `t` turned
+  the `t` column into a factor. A `contrast` variable named `p` replaced
+  the p-values with missing values and moved the `p` column to the
+  front. In contrasts, a `by` variable named `Slope` gave two
+  `Difference` columns. In contrasts of slopes, it replaced the
+  differences with missing values. With `comparison = "ratio"`, a `by`
+  variable named `Ratio` or `Slope` gave two `Ratio` columns. Now a `by`
+  variable named `Ratio` becomes `Ratio.1` there.
+
+- [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  with `backend = "marginaleffects"` now adjusts the p-values for
+  `p_adjust = "holm"`, `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`,
+  `"BY"`, `"fdr"`, `"sidak"` and `"tukey"`. Before, all but `"tukey"`
+  failed with the error “replacement has 0 rows”, and `"tukey"` returned
+  the unadjusted p-values. For `"tukey"`,
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  and
+  [`get_marginaltrends()`](https://easystats.github.io/modelbased/reference/get_emmeans.md)
+  now use the Sidak adjustment and say so in a message. The Tukey
+  adjustment is only appropriate for pairwise comparisons, but these
+  slopes are each tested against 0.
+  [`emmeans::test()`](https://rvlenth.github.io/emmeans/reference/summary.emmGrid.html)
+  makes the same substitution. Slopes that are compared, for example
+  with the `comparison` or `post_process` argument, keep the Tukey
+  adjustment.
+
+- [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+  with `backend = "emmeans"` now shows the response level names for
+  models from
+  [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html).
+  Before, the `Response` column showed `1`, `2`, `3`, and the
+  `Threshold` column showed `1|2`, `2|3`.
+
+- Fixed issue in
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  with wrong assignment of estimates in custom comparisons (e.g., when
+  `comparison = "(b1 - b12) = (b4 - b18)"`), when some of the indexed
+  coefficients contained the same digit (in this case, `1` in `b1` and
+  `b12`).
+
+- Fixed issues in offset handling when the offset was specified via the
+  `offset` argument in the model call instead of inside the formula.
+
+- Fixed issues with using offsets and predicting grand mean (i.e. when
+  model contains offset and `by = NULL`).
+
+- [`plot()`](https://rdrr.io/r/graphics/plot.default.html) now gives an
+  informative error when there is nothing to put on the x-axis, e.g. for
+  predictions from intercept-only models, or for
+  [`estimate_prediction()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)
+  without the `by` argument.
+
+- Fixed an “invalid regular expression” error in
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  for multivariate models (for example from *brms*) with many
+  observations.
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  now uses the names of the response variables, not their observed
+  values, to find the response in the contrast labels.
+
+- [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  now returns separate `Response1` and `Response2` columns for
+  multivariate *brms* models with dots in the response names, for
+  example `mvbind(Sepal.Length, Petal.Length) ~ Species`. Before, the
+  response names stayed in the `Level1` and `Level2` columns, because
+  *brms* removes the dots from the response names.
+
+- The `grid` argument of
+  [`visualisation_recipe()`](https://easystats.github.io/datawizard/reference/visualisation_recipe.html)
+  and [`plot()`](https://rdrr.io/r/graphics/plot.default.html) now
+  changes the facet grid of plots with four or more `by` variables.
+  Before, these functions applied the `facet` argument to the facet grid
+  instead. If `facet` was not set, `grid` gave an error.
+
 ## modelbased 0.17.0
 
 CRAN release: 2026-08-28
