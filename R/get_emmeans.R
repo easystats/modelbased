@@ -435,22 +435,53 @@ get_emmeans <- function(
 # with the term removed from `by`, and with `response_filter`: the name of
 # the response, and the chosen categories (`NULL` when the term has no values)
 .extract_ordinal_response_filter <- function(model, args, data) {
-  if (!is.character(args$by) || !length(args$by) || !.is_emmeans_ordinal(model)) {
+  if (!is.character(args$by) || !length(args$by)) {
     return(args)
   }
   response <- insight::find_response(model)
-  is_response <- .grep_cleaned_by_vars(args$by) == response
-  if (!any(is_response) || !response %in% colnames(data)) {
+  if (length(response) != 1) {
     return(args)
   }
-  response_terms <- args$by[is_response]
+  is_response <- .grep_cleaned_by_vars(args$by) == response
+  if (
+    !any(is_response) ||
+      !response %in% colnames(data) ||
+      !.is_emmeans_ordinal(model)
+  ) {
+    return(args)
+  }
+  # terms with values, e.g. "Sat='Low'" or "rating=c(1, 3)". Numeric values
+  # are matched with the names of the response categories as character. The
+  # categories of all terms are kept, and a term without values adds none
+  value_terms <- args$by[is_response & grepl("=", args$by, fixed = TRUE)]
   values <- NULL
-  # a term with values, e.g. "Sat='Low'" or "rating=c(1, 3)". Numeric values
-  # are matched with the names of the response categories as character
-  if (any(grepl("=", response_terms, fixed = TRUE))) {
-    grid <- insight::get_datagrid(data[response], by = response_terms)
-    values <- unique(as.character(grid[[response]]))
-    response_levels <- levels(as.factor(data[[response]]))
+  if (length(value_terms)) {
+    values <- unique(unlist(lapply(value_terms, function(term) {
+      grid <- tryCatch(
+        suppressWarnings(insight::get_datagrid(data[response], by = term)),
+        error = function(e) NULL
+      )
+      term_values <- if (is.null(grid)) NA else as.character(grid[[response]])
+      if (!length(term_values) || anyNA(term_values)) {
+        insight::format_error(paste0(
+          "Could not read the response categories in `",
+          term,
+          "`. Please name the categories in quotes, e.g. `",
+          response,
+          " = c('a', 'b')`."
+        ))
+      }
+      term_values
+    })))
+    # the categories of the model, which can differ from the factor levels in
+    # the data (e.g. `clm()` drops unused levels)
+    response_levels <- model$y.levels
+    if (is.null(response_levels)) {
+      response_levels <- model$lev
+    }
+    if (is.null(response_levels)) {
+      response_levels <- levels(droplevels(as.factor(data[[response]])))
+    }
     unknown <- setdiff(values, response_levels)
     if (length(unknown)) {
       insight::format_error(paste0(

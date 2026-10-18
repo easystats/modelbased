@@ -1305,4 +1305,34 @@ test_that("estimate_means and estimate_contrasts, backend emmeans, ordinal, erro
     backend = "emmeans"
   ))
   expect_match(msg, "has no categories `Lowest` and `Highest`.", fixed = TRUE)
+
+  # values that cannot be read as response categories
+  msg <- error_message(estimate_means(m, c("Infl", "Sat=[fivenum]"), backend = "emmeans"))
+  expect_match(msg, "Could not read the response categories in `Sat=[fivenum]`.", fixed = TRUE)
+
+  # a category of the data that the model does not have
+  skip_if_not_installed("ordinal")
+  data(wine, package = "ordinal")
+  wine$rating <- factor(wine$rating, levels = 1:6, ordered = TRUE)
+  m_clm <- ordinal::clm(rating ~ temp, data = wine)
+  msg <- error_message(estimate_means(m_clm, c("temp", "rating='6'"), backend = "emmeans"))
+  expect_match(msg, "The response `rating` has no category `6`.", fixed = TRUE)
+})
+
+
+test_that("estimate_means, backend emmeans, ordinal, several by terms on the response", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+  out_all <- estimate_means(m, "Infl", backend = "emmeans")
+
+  # the categories of all terms are kept
+  out <- estimate_means(m, c("Infl", "Sat='Low'", "Sat='High'"), backend = "emmeans")
+  expect_response_filter_rows(out, out_all, c("Low", "High"))
+  expect_identical(nrow(out), 6L)
+
+  # the response without values does not undo the filter
+  out <- estimate_means(m, c("Infl", "Sat", "Sat='Low'"), backend = "emmeans")
+  expect_response_filter_rows(out, out_all, "Low")
+  expect_identical(nrow(out), 3L)
 })
