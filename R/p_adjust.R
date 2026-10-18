@@ -63,7 +63,12 @@
   # p-values, the code below says that no adjustment was made.
   dots <- list(...)
   n_slopes <- NULL
-  if (p_adjust == "tukey" && is_unformatted && "p.value" %in% colnames(params)) {
+  slope_comparison <- NULL
+  # number of tests in the family of each row. Comparisons of slopes with a
+  # group term (like `~pairwise | group`) have one family per group, else
+  # all rows are one family
+  slope_family <- rep(nrow(params), nrow(params))
+  if (is_unformatted) {
     dots_names <- names(dots)
     if (is.null(dots_names)) {
       dots_names <- character(0)
@@ -75,6 +80,14 @@
       dots["post_process"]
     )
     slope_comparison <- Filter(Negate(is.null), slope_comparison)
+    if (length(slope_comparison)) {
+      slope_family <- .p_adjust_family_size(
+        params,
+        by = .comparison_group_terms(slope_comparison[[1]])
+      )
+    }
+  }
+  if (p_adjust == "tukey" && is_unformatted && "p.value" %in% colnames(params)) {
     reason <- NULL
     if (!length(slope_comparison)) {
       if (nrow(params) > 1) {
@@ -86,9 +99,15 @@
         toString(insight::format_value(slope_comparison[[1]], protect_integers = TRUE))
       )
     } else if (.is_pairwise_comparison(slope_comparison[[1]])) {
-      # for k slopes, we have k * (k - 1) / 2 pairwise comparisons
-      n_slopes <- (1 + sqrt(1 + 8 * nrow(params))) / 2
-      if (n_slopes != round(n_slopes)) {
+      # for k slopes, we have k * (k - 1) / 2 pairwise comparisons, in each
+      # group. Without the group columns, we cannot count them.
+      group_terms <- .comparison_group_terms(slope_comparison[[1]])
+      n_slopes <- (1 + sqrt(1 + 8 * slope_family)) / 2
+      if (
+        !all(group_terms %in% colnames(params)) ||
+          anyNA(n_slopes) ||
+          any(n_slopes != round(n_slopes))
+      ) {
         n_slopes <- NULL
         reason <- "The number of compared slopes could not be found"
       }
@@ -176,7 +195,7 @@
       statistic <- NULL
     }
     if (!is.null(statistic)) {
-      if (rank_adjust < 2) {
+      if (min(rank_adjust) < 2) {
         if (verbose) {
           insight::format_alert(
             "Tukey adjustment requires at least 2 groups. P-values were not adjusted."
@@ -205,7 +224,7 @@
     # and for contrasts, the rows within each group of the `by` variables
     # (like emmeans).
     if (is_unformatted) {
-      family_size <- nrow(params)
+      family_size <- slope_family
     } else {
       family_size <- .p_adjust_family_size(params)
     }
@@ -233,10 +252,24 @@
 }
 
 
-# number of contrasts in the family of each row: the rows with the same values
-# of the `by` variables
-.p_adjust_family_size <- function(params) {
-  by <- .safe(insight::trim_ws(gsub("=.*", "", attributes(params)$by)))
+# variables of the group term of a comparison formula, like `h` in
+# `~pairwise | h`, or NULL
+.comparison_group_terms <- function(comparison) {
+  if (!inherits(comparison, "formula")) {
+    return(NULL)
+  }
+  rhs <- comparison[[length(comparison)]]
+  if (is.call(rhs) && identical(rhs[[1]], as.name("|"))) {
+    return(all.vars(rhs[[3]]))
+  }
+  NULL
+}
+
+
+# number of tests in the family of each row: the rows with the same values of
+# the `by` variables (by default, the `by` attribute)
+.p_adjust_family_size <- function(params, by = attributes(params)$by) {
+  by <- .safe(insight::trim_ws(gsub("=.*", "", by)))
   by <- intersect(by, colnames(params))
   if (!length(by)) {
     return(rep(nrow(params), nrow(params)))

@@ -285,8 +285,10 @@ adjustment is only appropriate for pairwise comparisons. With
 \code{backend = "marginaleffects"}, \code{"tukey"} is therefore replaced by \code{"sidak"}
 (with a message) for comparisons that are not pairwise, for example
 \code{comparison = "reference"} or \code{"sequential"}, as \strong{emmeans} does. The Sidak
-adjustment counts the comparisons within each group of the \code{by} variables,
-and for contrasts of slopes, all comparisons.}
+adjustment counts the comparisons within each group of the \code{by} variables
+that are columns of the output. When the output has no such column, for
+example for contrasts of slopes without a group term in \code{comparison}, it
+counts all comparisons.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression

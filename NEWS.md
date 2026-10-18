@@ -170,7 +170,9 @@
     is replaced by `"sidak"` with a message.
   * The Tukey adjustment of slopes compared pairwise with `estimate_slopes()`
     now counts the slopes, not the comparisons. Before, 4 slopes were counted
-    as 6 groups, which made the p-values too large.
+    as 6 groups, which made the p-values too large. With a group term, for
+    example `comparison = ~pairwise | group`, the slopes and the comparisons
+    are counted in each group.
   * The Sidak adjustment of contrasts now counts the comparisons in each group
     of the `by` variables. Before, it counted the levels of the contrast
     variable, so for 4 levels and 6 pairwise comparisons, the p-values were
@@ -178,10 +180,11 @@
   * A partly matched `hypothesis` argument, for example `hypo = ~pairwise`, is
     now treated as `hypothesis`.
 
-* `estimate_slopes()` with `backend = "emmeans"` now applies `p_adjust`. Before,
-  it returned the unadjusted p-values for every method. As in
-  `emmeans::test()`, `"tukey"` is replaced by `"sidak"` with a message,
-  because the slopes are tested against 0.
+* `estimate_slopes()` with `backend = "emmeans"` now applies `p_adjust` for the
+  `stats::p.adjust()` methods, `"tukey"` and `"sidak"`. Before, it returned the
+  unadjusted p-values for every method. As in `emmeans::test()`, `"tukey"` is
+  replaced by `"sidak"` with a message, because the slopes are tested
+  against 0.
 
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed

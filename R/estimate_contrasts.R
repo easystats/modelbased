@@ -31,8 +31,10 @@
 #' `backend = "marginaleffects"`, `"tukey"` is therefore replaced by `"sidak"`
 #' (with a message) for comparisons that are not pairwise, for example
 #' `comparison = "reference"` or `"sequential"`, as **emmeans** does. The Sidak
-#' adjustment counts the comparisons within each group of the `by` variables,
-#' and for contrasts of slopes, all comparisons.
+#' adjustment counts the comparisons within each group of the `by` variables
+#' that are columns of the output. When the output has no such column, for
+#' example for contrasts of slopes without a group term in `comparison`, it
+#' counts all comparisons.
 #' @param comparison Specify the type of contrasts or tests that should be
 #' carried out. See also section *Comparison options* below for details.
 #' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"revpairwise"`,

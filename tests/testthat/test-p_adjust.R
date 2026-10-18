@@ -219,3 +219,24 @@ test_that("p_adjust, slopes, emmeans backend", {
   p_holm <- estimate_slopes(m4, "wt", by = "cyl", backend = "emmeans", p_adjust = "holm")$p
   expect_false(isTRUE(all.equal(p_none, p_holm)))
 })
+
+
+test_that("p_adjust tukey and sidak, slopes compared pairwise within groups", {
+  m3 <- lm(y ~ x * g * h, data = d_adjust)
+  em <- emmeans::emtrends(m3, ~ g | h, var = "x")
+  for (p_adjust in c("tukey", "sidak")) {
+    expect_no_message(
+      {
+        out <- estimate_slopes(
+          m3,
+          "x",
+          by = c("g", "h"),
+          comparison = ~ pairwise | h,
+          p_adjust = p_adjust
+        )
+      },
+      message = "Sidak"
+    )
+    expect_equal(out$p, emmeans_p(out, pairs(em, adjust = p_adjust), by = "h"), tolerance = 1e-5)
+  }
+})

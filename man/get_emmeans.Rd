@@ -375,9 +375,11 @@ example with \code{comparison = ~pairwise} or \code{post_process = ~pairwise}. F
 slopes that are each tested against 0 or against another value (for
 example \code{hypothesis = 1}), and for slopes that are not compared pairwise,
 \code{"tukey"} is replaced by \code{"sidak"} (with a message), as \code{emmeans::test()}
-does. The Sidak adjustment counts all tests (all rows) of the output. This
-also holds for \code{backend = "emmeans"}, which applies \code{p_adjust} to the
-slopes.}
+does. The Tukey and Sidak adjustments count all tests (all rows) of the
+output, or, for comparisons with a group term (for example
+\code{comparison = ~pairwise | group}), the tests in each group. With
+\code{backend = "emmeans"}, only the \code{stats::p.adjust()} methods, \code{"tukey"} and
+\code{"sidak"} are applied to the slopes, and other methods are ignored.}
 
 \item{iterations}{This argument has two distinct effects, depending on the
 context. When \code{effectsize = "boot"}, it defines the number of bootstrap
