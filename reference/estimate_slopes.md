@@ -109,13 +109,20 @@ estimate_slopes(
     For ordinal models (e.g. from
     [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html) or
     [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html)),
-    [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
-    also accepts the ordinal modes of *emmeans*: `"prob"`, `"cum.prob"`,
-    `"exc.prob"`, `"linear.predictor"`, `"latent"` and `"mean.class"`
-    (see
+    [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+    [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+    and `estimate_slopes()` also accept the ordinal modes of *emmeans*:
+    `"prob"`, `"cum.prob"`, `"exc.prob"`, `"linear.predictor"`,
+    `"latent"` and `"mean.class"` (see
     [`vignette("models", package = "emmeans")`](https://rvlenth.github.io/emmeans/articles/models.html)).
     For these models, the default is `"prob"`, which returns one
-    probability per response category.
+    probability per response category (column `Response`). The modes
+    `"cum.prob"`, `"exc.prob"` and `"linear.predictor"` return one value
+    per threshold (column `Threshold`). For modes with response
+    categories or thresholds, contrasts compare the focal levels within
+    each one. For `estimate_slopes()`, the slopes for `"prob"` and
+    `"mean.class"` are computed from the slopes of the cumulative
+    probabilities.
 
   See also section *Predictions on different scales*.
 
@@ -592,7 +599,7 @@ estimate_slopes(model, slope = "Petal.Length", by = "Petal.Length", length = 10)
 #> 1.00         |     0.27 | 0.17 | [-0.06, 0.60] |      1.63 | 0.106
 #> 1.66         |     0.25 | 0.13 | [-0.02, 0.51] |      1.86 | 0.066
 #> 2.31         |     0.14 | 0.12 | [-0.10, 0.39] |      1.16 | 0.249
-#> 2.97         |     0.05 | 0.10 | [-0.15, 0.26] |      0.53 | 0.599
+#> 2.97         |     0.05 | 0.10 | [-0.15, 0.26] |      0.53 | 0.600
 #> 3.62         | 5.50e-03 | 0.11 | [-0.21, 0.22] |      0.05 | 0.959
 #> 4.28         |    -0.02 | 0.13 | [-0.28, 0.23] |     -0.17 | 0.862
 #> 4.93         |    -0.02 | 0.17 | [-0.36, 0.32] |     -0.11 | 0.912

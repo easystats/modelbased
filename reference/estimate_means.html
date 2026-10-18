@@ -15,7 +15,7 @@ functions such as estimate_contrasts() and estimate_slopes().'><meta property="o
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -174,11 +174,17 @@ response scale.</p></li>
 transformation is selected (which usually is <code>"response"</code>). See also
 <a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.
 For ordinal models (e.g. from <code><a href="https://rdrr.io/pkg/MASS/man/polr.html" class="external-link">MASS::polr()</a></code> or <code><a href="https://rdrr.io/pkg/ordinal/man/clm.html" class="external-link">ordinal::clm()</a></code>),
-<code>estimate_means()</code> also accepts the ordinal modes of <em>emmeans</em>:
-<code>"prob"</code>, <code>"cum.prob"</code>, <code>"exc.prob"</code>, <code>"linear.predictor"</code>, <code>"latent"</code>
-and <code>"mean.class"</code> (see <code><a href="https://rvlenth.github.io/emmeans/articles/models.html" class="external-link">vignette("models", package = "emmeans")</a></code>). For
-these models, the default is <code>"prob"</code>, which returns one probability per
-response category.</p></li>
+<code>estimate_means()</code>, <code><a href="estimate_contrasts.html">estimate_contrasts()</a></code> and <code><a href="estimate_slopes.html">estimate_slopes()</a></code> also
+accept the ordinal modes of <em>emmeans</em>: <code>"prob"</code>, <code>"cum.prob"</code>,
+<code>"exc.prob"</code>, <code>"linear.predictor"</code>, <code>"latent"</code> and <code>"mean.class"</code> (see
+<code><a href="https://rvlenth.github.io/emmeans/articles/models.html" class="external-link">vignette("models", package = "emmeans")</a></code>). For these models, the default
+is <code>"prob"</code>, which returns one probability per response category (column
+<code>Response</code>). The modes <code>"cum.prob"</code>, <code>"exc.prob"</code> and <code>"linear.predictor"</code>
+return one value per threshold (column <code>Threshold</code>). For modes with
+response categories or thresholds, contrasts compare the focal levels
+within each one. For
+<code><a href="estimate_slopes.html">estimate_slopes()</a></code>, the slopes for <code>"prob"</code> and <code>"mean.class"</code> are
+computed from the slopes of the cumulative probabilities.</p></li>
 </ul><p>See also section <em>Predictions on different scales</em>.</p></dd>
 
 

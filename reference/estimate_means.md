@@ -80,12 +80,23 @@ estimate_means(
     For ordinal models (e.g. from
     [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html) or
     [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html)),
-    `estimate_means()` also accepts the ordinal modes of *emmeans*:
-    `"prob"`, `"cum.prob"`, `"exc.prob"`, `"linear.predictor"`,
-    `"latent"` and `"mean.class"` (see
+    `estimate_means()`,
+    [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+    and
+    [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+    also accept the ordinal modes of *emmeans*: `"prob"`, `"cum.prob"`,
+    `"exc.prob"`, `"linear.predictor"`, `"latent"` and `"mean.class"`
+    (see
     [`vignette("models", package = "emmeans")`](https://rvlenth.github.io/emmeans/articles/models.html)).
     For these models, the default is `"prob"`, which returns one
-    probability per response category.
+    probability per response category (column `Response`). The modes
+    `"cum.prob"`, `"exc.prob"` and `"linear.predictor"` return one value
+    per threshold (column `Threshold`). For modes with response
+    categories or thresholds, contrasts compare the focal levels within
+    each one. For
+    [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md),
+    the slopes for `"prob"` and `"mean.class"` are computed from the
+    slopes of the cumulative probabilities.
 
   See also section *Predictions on different scales*.
 
