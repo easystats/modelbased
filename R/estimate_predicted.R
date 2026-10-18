@@ -599,7 +599,11 @@ estimate_relation <- function(
   if (is.null(footer_predict)) {
     footer_predict <- predict
   }
-  footer_info <- c(grid_specs, list(predict = predict), transform = !is.null(transform))
+  # an earlier output passed as `data` has its own "predict" and "transform"
+  # attributes in `grid_specs`, so we replace them with those of this call
+  footer_info <- grid_specs
+  footer_info$predict <- predict
+  footer_info$transform <- !is.null(transform)
   footer_info$transform_arg <- transform
   footer_info$predict_used <- footer_predict
   attr(out, "table_footer") <- .table_footer(
