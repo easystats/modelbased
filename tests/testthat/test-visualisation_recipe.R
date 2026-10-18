@@ -498,3 +498,38 @@ test_that("visualization_recipe, informative error when nothing goes on x-axis",
     regex = "intercept-only"
   )
 })
+
+
+test_that("visualization_recipe, emmeans ordinal slopes, color by Response", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
+
+  data(housing, package = "MASS")
+  set.seed(1)
+  housing$x <- as.numeric(housing$Cont) + stats::rnorm(nrow(housing))
+  m <- MASS::polr(Sat ~ Infl * x, weights = Freq, data = housing, Hess = TRUE)
+  for (backend in c("emmeans", "marginaleffects")) {
+    out <- .recipe_mapping(estimate_slopes(m, "x", by = "Infl", backend = backend))
+    expect_identical(out$x, "Infl", info = backend)
+    expect_identical(out$color, "Response", info = backend)
+  }
+
+  # thresholds, and no grouping column for the latent scale
+  out <- .recipe_mapping(estimate_slopes(
+    m,
+    "x",
+    by = "Infl",
+    predict = "cum.prob",
+    backend = "emmeans"
+  ))
+  expect_identical(out$color, "Threshold")
+  out <- .recipe_mapping(estimate_slopes(
+    m,
+    "x",
+    by = "Infl",
+    predict = "latent",
+    backend = "emmeans"
+  ))
+  expect_null(out$color)
+})
