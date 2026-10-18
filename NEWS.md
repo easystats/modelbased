@@ -128,7 +128,12 @@
   p-values for `p_adjust = "holm"`, `"hochberg"`, `"hommel"`, `"bonferroni"`,
   `"BH"`, `"BY"`, `"fdr"`, `"sidak"` and `"tukey"`. Before, all but `"tukey"`
   failed with the error "replacement has 0 rows", and `"tukey"` returned the
-  unadjusted p-values.
+  unadjusted p-values. For `"tukey"`, `estimate_slopes()` and
+  `get_marginaltrends()` now use the Sidak adjustment and say so in a message.
+  The Tukey adjustment is only appropriate for pairwise comparisons, but these
+  slopes are each tested against 0. `emmeans::test()` makes the same
+  substitution. Slopes that are compared, for example with the `comparison`
+  or `post_process` argument, keep the Tukey adjustment.
 
 * `estimate_means()` with `backend = "emmeans"` now shows the response level
   names for models from `ordinal::clmm()`. Before, the `Response` column showed
