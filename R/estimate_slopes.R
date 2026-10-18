@@ -190,6 +190,28 @@ estimate_slopes <- function(
       verbose = verbose,
       ...
     )
+    # p-value adjustment, with the methods emmeans provides
+    emmeans_adjust <- c(
+      stats::p.adjust.methods,
+      "tukey",
+      "sidak",
+      "scheffe",
+      "mvt",
+      "dunnettx"
+    )
+    if (!is.null(p_adjust) && tolower(p_adjust) %in% tolower(emmeans_adjust)) {
+      # slopes are tested against 0, so we use Sidak instead of Tukey, as
+      # `emmeans::test()` does
+      if (tolower(p_adjust) == "tukey") {
+        if (verbose) {
+          insight::format_alert(
+            "The Tukey adjustment is only appropriate for pairwise comparisons. Slopes are tested against 0, so p-values were adjusted with the Sidak method instead."
+          )
+        }
+        p_adjust <- "sidak"
+      }
+      estimated <- stats::update(estimated, adjust = p_adjust)
+    }
     trends <- .format_emmeans_slopes(model, estimated, ci, ...)
   } else {
     # Marginaleffects --------------------------------------------------------

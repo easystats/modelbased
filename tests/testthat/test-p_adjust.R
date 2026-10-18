@@ -203,3 +203,19 @@ test_that("p_adjust tukey, slopes tested against a value, marginaleffects", {
   )
   expect_equal(out$p, emmeans_p(out, em_pairs), tolerance = 1e-5)
 })
+
+
+test_that("p_adjust, slopes, emmeans backend", {
+  mt <- mtcars
+  mt$cyl <- factor(mt$cyl)
+  m4 <- lm(mpg ~ wt * cyl, data = mt)
+  em <- emmeans::emtrends(m4, "cyl", var = "wt")
+  for (p_adjust in c("holm", "bonferroni", "sidak", "tukey", "none")) {
+    out <- estimate_slopes(m4, "wt", by = "cyl", backend = "emmeans", p_adjust = p_adjust)
+    em_p <- suppressMessages(as.data.frame(summary(emmeans::test(em, adjust = p_adjust)))$p.value)
+    expect_equal(out$p, em_p, tolerance = 1e-5)
+  }
+  p_none <- estimate_slopes(m4, "wt", by = "cyl", backend = "emmeans", p_adjust = "none")$p
+  p_holm <- estimate_slopes(m4, "wt", by = "cyl", backend = "emmeans", p_adjust = "holm")$p
+  expect_false(isTRUE(all.equal(p_none, p_holm)))
+})
