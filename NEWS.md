@@ -8,8 +8,8 @@
   `cyl` and `am` are factors. Before,
   these contrasts compared the slopes of all levels and ignored the filter. If
   the filter leaves fewer than two slopes to compare, `estimate_contrasts()`
-  now stops with a clear error for every `estimate` option and for
-  `backend = "emmeans"`.
+  now stops with a clear error. A custom hypothesis in `comparison`, such as
+  `"b1 = b2"`, a function or a matrix, gets no such check.
 
 # modelbased 0.18.0
 

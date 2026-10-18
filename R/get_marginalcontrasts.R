@@ -343,24 +343,18 @@ get_marginalcontrasts <- function(
     return(invisible(NULL))
   }
   model_data <- insight::get_data(model, verbose = FALSE)
-  n_slopes <- 1
-  for (i in insight::trim_ws(gsub("=.*", "", by))) {
-    x <- model_data[[i]]
-    # we cannot count the slopes for variables that are not in the data
-    if (is.null(x)) {
-      return(invisible(NULL))
-    }
-    values <- by_filter[[i]]
-    if (is.null(values)) {
-      # numeric variables without filter have more than one value in the grid
-      n <- ifelse(is.numeric(x), 2, insight::n_unique(x))
-    } else if (is.numeric(x) && !identical(estimate, "average")) {
-      # the data grid uses all filter values of numeric variables
-      n <- insight::n_unique(values)
-    } else {
-      n <- sum(unique(as.character(values)) %in% unique(as.character(x)))
-    }
-    n_slopes <- n_slopes * n
+  by <- insight::trim_ws(gsub("=.*", "", by))
+  # we cannot count the slopes for variables that are not in the data
+  if (!all(by %in% colnames(model_data))) {
+    return(invisible(NULL))
+  }
+  # for `estimate = "average"`, slopes are averaged over the data, so we count
+  # the combinations of the `by` variables in the filtered data
+  if (identical(estimate, "average")) {
+    filtered_data <- .filter_data_by(model_data, by_filter)
+    n_slopes <- nrow(unique(filtered_data[by]))
+  } else {
+    n_slopes <- .count_grid_slopes(model_data, by, by_filter)
   }
   if (n_slopes < 2) {
     insight::format_error(
@@ -368,6 +362,28 @@ get_marginalcontrasts <- function(
     )
   }
   invisible(NULL)
+}
+
+
+# number of slopes in the data grid, which has all combinations of the levels
+# or values of the `by` variables
+.count_grid_slopes <- function(model_data, by, by_filter) {
+  n_slopes <- 1
+  for (i in by) {
+    x <- model_data[[i]]
+    values <- by_filter[[i]]
+    if (is.null(values)) {
+      # numeric variables without filter have more than one value in the grid
+      n <- ifelse(is.numeric(x), 2, insight::n_unique(x))
+    } else if (is.numeric(x)) {
+      # the data grid uses all filter values of numeric variables
+      n <- insight::n_unique(values)
+    } else {
+      n <- sum(unique(as.character(values)) %in% unique(as.character(x)))
+    }
+    n_slopes <- n_slopes * n
+  }
+  n_slopes
 }
 
 

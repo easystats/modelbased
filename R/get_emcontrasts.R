@@ -98,7 +98,10 @@ get_emcontrasts <- function(
       c(my_args$contrast, my_args$response_filter$response)
     )]
     # sanity check - we need at least two slopes to compare
-    if (is.character(comparison) || inherits(comparison, "formula")) {
+    if (
+      (is.character(comparison) && !.is_custom_comparison(comparison)) ||
+        inherits(comparison, "formula")
+    ) {
       .check_slope_contrast_filter(model, my_args$by, slope_filter)
     }
     # Run emmeans. Filters in `by` go into `at`, so only those slopes are

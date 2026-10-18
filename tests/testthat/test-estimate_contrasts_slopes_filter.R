@@ -154,6 +154,15 @@ test_that("estimate_contrasts, slopes, by-filters leave fewer than two slopes", 
   )
   out <- estimate_contrasts(m3, "wt", by = c("g = '4'", "a"), estimate = "average")
   expect_matches_oracle(out, .oracle(m3, filters$F1), filters$F1$allowed)
+  # with `estimate = "average"`, only slopes with data count: for 5 gears,
+  # all cars have am = 1
+  mt$gear <- factor(mt$gear)
+  m7 <- lm(mpg ~ wt * a + gear, data = mt)
+  expect_error(
+    estimate_contrasts(m7, "wt", by = c("gear='5'", "a"), estimate = "average"),
+    regexp = "at least two"
+  )
+  expect_identical(nrow(estimate_contrasts(m7, "wt", by = c("gear='5'", "a"))), 1L)
 })
 
 
