@@ -280,7 +280,13 @@ confidence bands, also called sup-t confidence band (Montiel Olea &
 Plagborg-Møller, 2019). Details for the other options can be found in the
 p-value adjustment section of the \code{emmeans::test} documentation or
 \code{?stats::p.adjust}. Note that certain options provided by the \strong{emmeans}
-package are only available if you set \code{backend = "emmeans"}.}
+package are only available if you set \code{backend = "emmeans"}. The Tukey
+adjustment is only appropriate for pairwise comparisons. With
+\code{backend = "marginaleffects"}, \code{"tukey"} is therefore replaced by \code{"sidak"}
+(with a message) for comparisons that are not pairwise, for example
+\code{comparison = "reference"} or \code{"sequential"}, as \strong{emmeans} does. The Sidak
+adjustment counts the comparisons within each group of the \code{by} variables,
+and for contrasts of slopes, all comparisons.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression

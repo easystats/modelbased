@@ -26,7 +26,13 @@
 #' Plagborg-Møller, 2019). Details for the other options can be found in the
 #' p-value adjustment section of the `emmeans::test` documentation or
 #' `?stats::p.adjust`. Note that certain options provided by the **emmeans**
-#' package are only available if you set `backend = "emmeans"`.
+#' package are only available if you set `backend = "emmeans"`. The Tukey
+#' adjustment is only appropriate for pairwise comparisons. With
+#' `backend = "marginaleffects"`, `"tukey"` is therefore replaced by `"sidak"`
+#' (with a message) for comparisons that are not pairwise, for example
+#' `comparison = "reference"` or `"sequential"`, as **emmeans** does. The Sidak
+#' adjustment counts the comparisons within each group of the `by` variables,
+#' and for contrasts of slopes, all comparisons.
 #' @param comparison Specify the type of contrasts or tests that should be
 #' carried out. See also section *Comparison options* below for details.
 #' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"revpairwise"`,

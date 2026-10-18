@@ -172,19 +172,22 @@ appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
-Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-predictors (one specified in \code{slope}, one in \code{by}). In this case, the
-\code{"esarey"} or \code{"sup-t"} options are recommended, but \code{p_adjust} can also be
-one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
+comparisons, when several slopes are tested, or when slopes are compared.
+For Johnson-Neyman intervals, i.e. in case of interactions with two numeric
+predictors (one specified in \code{slope}, one in \code{by}), the \code{"esarey"} or
+\code{"sup-t"} options are recommended, but \code{p_adjust} can also be one of
+\code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
 \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
 simultaneous confidence bands, also called sup-t confidence band (Montiel
 Olea & Plagborg-Møller, 2019). The Tukey adjustment is only appropriate for
-pairwise comparisons. When \strong{marginaleffects} computes slopes that are each
-tested against 0, \code{"tukey"} is therefore replaced by \code{"sidak"} (with a
-message), as \code{emmeans::test()} does. This replacement is not made when
-slopes are compared, for example with the \code{comparison} or \code{post_process}
-argument.}
+pairwise comparisons. It is used when slopes are compared pairwise, for
+example with \code{comparison = ~pairwise} or \code{post_process = ~pairwise}. For
+slopes that are each tested against 0 or against another value (for
+example \code{hypothesis = 1}), and for slopes that are not compared pairwise,
+\code{"tukey"} is replaced by \code{"sidak"} (with a message), as \code{emmeans::test()}
+does. The Sidak adjustment counts all tests (all rows) of the output. This
+also holds for \code{backend = "emmeans"}, which applies \code{p_adjust} to the
+slopes.}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns

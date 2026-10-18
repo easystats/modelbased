@@ -26,19 +26,22 @@
 #' `slope` from the `by` argument. `trend` is an alias for `slope`, for backward
 #' compatibility. See 'Examples'.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#' comparisons. For `estimate_slopes()`, multiple comparison only occurs for
-#' Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-#' predictors (one specified in `slope`, one in `by`). In this case, the
-#' `"esarey"` or `"sup-t"` options are recommended, but `p_adjust` can also be
-#' one of `"none"` (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`,
+#' comparisons, when several slopes are tested, or when slopes are compared.
+#' For Johnson-Neyman intervals, i.e. in case of interactions with two numeric
+#' predictors (one specified in `slope`, one in `by`), the `"esarey"` or
+#' `"sup-t"` options are recommended, but `p_adjust` can also be one of
+#' `"none"` (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`,
 #' `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, or `"holm"`. `"sup-t"` computes
 #' simultaneous confidence bands, also called sup-t confidence band (Montiel
 #' Olea & Plagborg-Møller, 2019). The Tukey adjustment is only appropriate for
-#' pairwise comparisons. When **marginaleffects** computes slopes that are each
-#' tested against 0, `"tukey"` is therefore replaced by `"sidak"` (with a
-#' message), as `emmeans::test()` does. This replacement is not made when
-#' slopes are compared, for example with the `comparison` or `post_process`
-#' argument.
+#' pairwise comparisons. It is used when slopes are compared pairwise, for
+#' example with `comparison = ~pairwise` or `post_process = ~pairwise`. For
+#' slopes that are each tested against 0 or against another value (for
+#' example `hypothesis = 1`), and for slopes that are not compared pairwise,
+#' `"tukey"` is replaced by `"sidak"` (with a message), as `emmeans::test()`
+#' does. The Sidak adjustment counts all tests (all rows) of the output. This
+#' also holds for `backend = "emmeans"`, which applies `p_adjust` to the
+#' slopes.
 #' @inheritParams estimate_means
 #' @inheritParams parameters::model_parameters.default
 #'
@@ -190,15 +193,9 @@ estimate_slopes <- function(
       verbose = verbose,
       ...
     )
-    # p-value adjustment, with the methods emmeans provides
-    emmeans_adjust <- c(
-      stats::p.adjust.methods,
-      "tukey",
-      "sidak",
-      "scheffe",
-      "mvt",
-      "dunnettx"
-    )
+    # p-value adjustment, done by `parameters::model_parameters()` for the
+    # "adjust" setting of the emmeans object
+    emmeans_adjust <- c(stats::p.adjust.methods, "tukey", "sidak")
     if (!is.null(p_adjust) && tolower(p_adjust) %in% tolower(emmeans_adjust)) {
       # slopes are tested against 0, so we use Sidak instead of Tukey, as
       # `emmeans::test()` does
