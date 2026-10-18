@@ -482,7 +482,12 @@ predictors (one specified in <code>slope</code>, one in <code>by</code>). In thi
 one of <code>"none"</code> (default), <code>"hochberg"</code>, <code>"hommel"</code>, <code>"bonferroni"</code>, <code>"BH"</code>,
 <code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code>, <code>"sidak"</code>, or <code>"holm"</code>. <code>"sup-t"</code> computes
 simultaneous confidence bands, also called sup-t confidence band (Montiel
-Olea &amp; Plagborg-Møller, 2019).</p></dd>
+Olea &amp; Plagborg-Møller, 2019). The Tukey adjustment is only appropriate for
+pairwise comparisons. When <strong>marginaleffects</strong> computes slopes that are each
+tested against 0, <code>"tukey"</code> is therefore replaced by <code>"sidak"</code> (with a
+message), as <code><a href="https://rvlenth.github.io/emmeans/reference/summary.emmGrid.html" class="external-link">emmeans::test()</a></code> does. This replacement is not made when
+slopes are compared, for example with the <code>comparison</code> or <code>post_process</code>
+argument.</p></dd>
 
 
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>

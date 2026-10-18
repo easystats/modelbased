@@ -456,7 +456,13 @@ get_marginaltrends(
   (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`,
   `"fdr"`, `"tukey"`, `"sidak"`, or `"holm"`. `"sup-t"` computes
   simultaneous confidence bands, also called sup-t confidence band
-  (Montiel Olea & Plagborg-Møller, 2019).
+  (Montiel Olea & Plagborg-Møller, 2019). The Tukey adjustment is only
+  appropriate for pairwise comparisons. When **marginaleffects**
+  computes slopes that are each tested against 0, `"tukey"` is therefore
+  replaced by `"sidak"` (with a message), as
+  [`emmeans::test()`](https://rvlenth.github.io/emmeans/reference/summary.emmGrid.html)
+  does. This replacement is not made when slopes are compared, for
+  example with the `comparison` or `post_process` argument.
 
 - iterations:
 
