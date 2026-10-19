@@ -1496,3 +1496,18 @@ test_that("estimate_contrasts, backend emmeans, ordinal, joint tests of a predic
   })
   expect_identical(nrow(out), 12L)
 })
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, printed Chisq of joint tests", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  out <- estimate_contrasts(m, "Infl", comparison = "joint", backend = "emmeans")
+  printed <- capture.output(print(out))
+  # the Chisq values are 114.588, 20.014 and 104.514, printed with two
+  # decimals as the F column
+  for (chisq in c("114.59", "20.01", "104.51")) {
+    expect_true(any(grepl(paste0(" ", chisq, " |"), printed, fixed = TRUE)), info = chisq)
+  }
+  expect_false(any(grepl("114.588", printed, fixed = TRUE)))
+})
