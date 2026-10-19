@@ -362,19 +362,25 @@ subsequent, multi-step comparisons. After the initial comparison in
 specified post-process tests. See 'Examples'.}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
-Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-predictors (one specified in \code{slope}, one in \code{by}). In this case, the
-\code{"esarey"} or \code{"sup-t"} options are recommended, but \code{p_adjust} can also be
-one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
+comparisons, when several slopes are tested, or when slopes are compared.
+For Johnson-Neyman intervals, i.e. in case of interactions with two numeric
+predictors (one specified in \code{slope}, one in \code{by}), the \code{"esarey"} or
+\code{"sup-t"} options are recommended, but \code{p_adjust} can also be one of
+\code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
 \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
 simultaneous confidence bands, also called sup-t confidence band (Montiel
 Olea & Plagborg-Møller, 2019). The Tukey adjustment is only appropriate for
-pairwise comparisons. When \strong{marginaleffects} computes slopes that are each
-tested against 0, \code{"tukey"} is therefore replaced by \code{"sidak"} (with a
-message), as \code{emmeans::test()} does. This replacement is not made when
-slopes are compared, for example with the \code{comparison} or \code{post_process}
-argument.}
+pairwise comparisons. It is used when slopes are compared pairwise, for
+example with \code{comparison = ~pairwise} or \code{post_process = ~pairwise}. For
+slopes that are each tested against 0 or against another value (for
+example \code{hypothesis = 1}), and for slopes that are not compared pairwise,
+\code{"tukey"} is replaced by \code{"sidak"} (with a message), as \code{emmeans::test()}
+does. The Sidak adjustment counts the tests (rows) and the Tukey adjustment
+the compared slopes, in the whole output or, for comparisons with a group
+term (for example \code{comparison = ~pairwise | group}), in each group. In
+\code{estimate_slopes()} with \code{backend = "emmeans"}, only the \code{stats::p.adjust()}
+methods, \code{"tukey"} and \code{"sidak"} are applied to the slopes, and other
+methods are ignored.}
 
 \item{iterations}{This argument has two distinct effects, depending on the
 context. When \code{effectsize = "boot"}, it defines the number of bootstrap
