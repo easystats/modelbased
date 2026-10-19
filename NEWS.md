@@ -2,6 +2,17 @@
 
 ## Bug fixes
 
+* `estimate_contrasts()` now applies the filter values in `by` to contrasts of
+  slopes with `estimate = "average"` and with `backend = "emmeans"`, for
+  example `estimate_contrasts(m, "wt", by = c("cyl = '4'", "am"))`, where
+  `cyl` and `am` are factors. Before, these contrasts compared the slopes of
+  all levels and ignored the filter. With `backend = "emmeans"`, the filter
+  applies only to `by` variables that are all factors or character vectors.
+  If the filter leaves fewer than two slopes to compare,
+  `estimate_contrasts()` now stops with a clear error. Ordinal and
+  multinomial models, and a custom hypothesis in `comparison` (such as
+  `"b1 = b2"`, a function or a matrix), get no such check.
+
 * `p_adjust = "tukey"` and `p_adjust = "sidak"` now give the same p-values as
   *emmeans* in `estimate_contrasts()` and `estimate_slopes()` with
   `backend = "marginaleffects"`:

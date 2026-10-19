@@ -128,22 +128,74 @@ get_marginalcontrasts <- function(
         "Please specify the `by` argument to calculate contrasts of slopes."
       )
     }
+    # filter values in `by`. For `estimate = "average"`, they are already
+    # removed from `by` and saved in `by_filter`
+    if (identical(estimate, "average")) {
+      slope_filter <- my_args$by_filter
+    } else {
+      slope_filter <- .parse_by_filter(my_args$by)
+    }
+    slope_filter <- .present_filter_values(insight::get_data(model, verbose = FALSE), slope_filter)
+    # sanity check - we need at least two slopes to compare. We use the
+    # original `by`, because a group in a `comparison` formula replaces it
+    if (
+      !.is_custom_comparison(comparison) &&
+        !is.function(comparison) &&
+        !is.matrix(comparison)
+    ) {
+      .check_slope_contrast_filter(model, by, slope_filter, estimate)
+    }
     # call slopes with hypothesis argument
-    out <- estimate_slopes(
-      model = model,
-      trend = my_args$contrast,
-      by = my_args$by,
-      ci = ci,
-      estimate = estimate,
-      hypothesis = my_args$comparison_slopes,
-      backend = "marginaleffects",
-      transform = transform,
-      post_process = post_process,
-      iterations = iterations,
-      keep_iterations = keep_iterations,
-      verbose = verbose,
-      ...
-    )
+    .contrast_slopes <- function(slope_by = my_args$by, ...) {
+      estimate_slopes(
+        model = model,
+        trend = my_args$contrast,
+        by = slope_by,
+        ci = ci,
+        estimate = estimate,
+        hypothesis = my_args$comparison_slopes,
+        backend = "marginaleffects",
+        transform = transform,
+        post_process = post_process,
+        iterations = iterations,
+        keep_iterations = keep_iterations,
+        verbose = verbose,
+        ...
+      )
+    }
+    # for `estimate = "average"`, there is no data grid that we can filter, and
+    # the hypothesis compares all slopes, so we cannot filter the contrasts
+    # later. Instead, we only keep the data rows that pass the filter. The
+    # slopes are averaged within each group of `by`, so they don't change.
+    dots <- list(...)
+    if (
+      identical(estimate, "average") &&
+        length(slope_filter) &&
+        is.null(dots$newdata) &&
+        is.null(dots$data)
+    ) {
+      filtered_data <- .filter_data_by(
+        insight::get_data(model, verbose = FALSE),
+        slope_filter
+      )
+      # we add the filter back to `by`, so the data grid that is used to
+      # format the contrast labels only holds the filtered values
+      slope_by <- vapply(
+        my_args$by,
+        function(i) {
+          if (i %in% names(slope_filter)) {
+            paste0(i, "=", insight::safe_deparse(slope_filter[[i]]))
+          } else {
+            i
+          }
+        },
+        character(1),
+        USE.NAMES = FALSE
+      )
+      out <- .contrast_slopes(slope_by = slope_by, newdata = filtered_data, ...)
+    } else {
+      out <- .contrast_slopes(...)
+    }
   } else {
     # for contrasts of categorical predictors, we call avg_predictions
     # -------------------------------------------------------------------------
@@ -257,6 +309,106 @@ get_marginalcontrasts <- function(
     .check_filter_args(out, "No rows left after filtering.")
   }
   out
+}
+
+
+# filter values in `by` for contrasts of slopes -------------------------------
+
+# returns a named list with the filter values for each variable in `by` that
+# has a filter, like `by = c("Species='setosa'", "x")`
+.parse_by_filter <- function(by) {
+  by_filter <- list()
+  for (i in by[grepl("=", by, fixed = TRUE)]) {
+    filter_value <- insight::trim_ws(unlist(strsplit(i, "=", fixed = TRUE), use.names = FALSE))
+    if (length(filter_value) > 1) {
+      value <- .safe(eval(str2lang(filter_value[2])))
+      if (!is.null(value)) {
+        by_filter[[filter_value[1]]] <- value
+      }
+    }
+  }
+  by_filter
+}
+
+
+# for factors and character vectors, keep only the filter values that are
+# levels in the data
+.present_filter_values <- function(data, by_filter) {
+  for (i in names(by_filter)) {
+    if (!is.null(data[[i]]) && !is.numeric(data[[i]])) {
+      values <- as.character(by_filter[[i]])
+      by_filter[[i]] <- values[values %in% unique(as.character(data[[i]]))]
+    }
+  }
+  by_filter
+}
+
+
+# keep only the data rows whose values pass the filters in `by`
+.filter_data_by <- function(data, by_filter) {
+  keep <- rep(TRUE, nrow(data))
+  for (i in names(by_filter)) {
+    if (!is.null(data[[i]])) {
+      keep <- keep & as.character(data[[i]]) %in% as.character(by_filter[[i]])
+    }
+  }
+  data[keep, , drop = FALSE]
+}
+
+
+# stop when the filters in `by` leave fewer than two slopes to compare
+.check_slope_contrast_filter <- function(model, by, by_filter, estimate = NULL) {
+  if (!length(by_filter) || !length(by)) {
+    return(invisible(NULL))
+  }
+  # models with response categories have one slope per category, so we
+  # cannot count the slopes from `by` alone
+  model_info <- insight::model_info(model, response = 1, verbose = FALSE)
+  if (isTRUE(model_info$is_ordinal) || isTRUE(model_info$is_multinomial) || isTRUE(model_info$is_categorical)) {
+    return(invisible(NULL))
+  }
+  model_data <- insight::get_data(model, verbose = FALSE)
+  by <- insight::trim_ws(gsub("=.*", "", by))
+  # we cannot count the slopes for variables that are not in the data
+  if (!all(by %in% colnames(model_data))) {
+    return(invisible(NULL))
+  }
+  # for `estimate = "average"`, slopes are averaged over the data, so we count
+  # the combinations of the `by` variables in the filtered data
+  if (identical(estimate, "average")) {
+    filtered_data <- .filter_data_by(model_data, by_filter)
+    n_slopes <- nrow(unique(filtered_data[by]))
+  } else {
+    n_slopes <- .count_grid_slopes(model_data, by, by_filter)
+  }
+  if (n_slopes < 2) {
+    insight::format_error(
+      "The filter in `by` leaves fewer than two slopes to compare. Contrasts of slopes need at least two slopes. Remove the filter, or add more values to it."
+    )
+  }
+  invisible(NULL)
+}
+
+
+# number of slopes in the data grid, which has all combinations of the levels
+# or values of the `by` variables
+.count_grid_slopes <- function(model_data, by, by_filter) {
+  n_slopes <- 1
+  for (i in by) {
+    x <- model_data[[i]]
+    values <- by_filter[[i]]
+    if (is.null(values)) {
+      # numeric variables without filter have more than one value in the grid
+      n <- if (is.numeric(x)) 2 else insight::n_unique(x)
+    } else if (is.numeric(x)) {
+      # the data grid uses all filter values of numeric variables
+      n <- insight::n_unique(values)
+    } else {
+      n <- sum(unique(as.character(values)) %in% unique(as.character(x)))
+    }
+    n_slopes <- n_slopes * n
+  }
+  n_slopes
 }
 
 
