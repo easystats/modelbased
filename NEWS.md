@@ -2,6 +2,14 @@
 
 ## Bug fixes
 
+* If the filter in `by` keeps one level, `estimate_contrasts()` now returns
+  contrasts of slopes for ordinal models, such as `MASS::polr()` or
+  `ordinal::clm()`. An example is
+  `estimate_contrasts(m, "x", by = "Infl = 'Low'")`. The output compares the
+  slopes of the response categories at that level. Before, these calls stopped
+  with the error "No contrasts to show", for `estimate = "typical"` and
+  `estimate = "average"`.
+
 * `estimate_contrasts()` now applies the filter values in `by` to contrasts of
   slopes with `estimate = "average"` and with `backend = "emmeans"`, for
   example `estimate_contrasts(m, "wt", by = c("cyl = '4'", "am"))`, where
