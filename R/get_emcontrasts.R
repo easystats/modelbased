@@ -71,6 +71,7 @@ get_emcontrasts <- function(
       fun_args$mode <- ordinal$mode
     }
     .check_ordinal_response_filter(my_args$response_filter, ordinal$mode)
+    .check_ordinal_response_filter(my_args$contrast_filter, ordinal$mode, "contrast")
   }
 
   # add dots
@@ -137,6 +138,13 @@ get_emcontrasts <- function(
     specs <- .add_emmeans_pseudo_factor(my_args$emmeans_specs, ordinal$pseudo_factor)
     fun_args <- c(fun_args, list(specs = specs, at = my_args$emmeans_at))
     estimated <- suppressMessages(do.call(emmeans::emmeans, fun_args))
+    # ordinal models: a `contrast` term on the response with values keeps only
+    # those response categories, before they are contrasted
+    estimated <- .filter_ordinal_contrast_grid(
+      estimated,
+      ordinal$pseudo_factor,
+      my_args$contrast_filter
+    )
     # Find by variables
     emm_by <- specs[!specs %in% my_args$contrast]
     if (length(emm_by) == 0) {

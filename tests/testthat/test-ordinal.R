@@ -1486,3 +1486,82 @@ test_that("estimate_means and estimate_slopes, backend emmeans, ordinal, errors 
     }
   }
 })
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, contrast filter on the response", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  models <- ordinal_filter_form_models()
+  for (name in names(models)) {
+    m <- models[[name]]
+    out_all <- estimate_contrasts(m, "Sat", by = "Infl", backend = "emmeans")
+
+    # only the contrast of the two named categories, in each level of `Infl`
+    out <- estimate_contrasts(m, "Sat=c('Low','High')", by = "Infl", backend = "emmeans")
+    expect_identical(nrow(out), 3L, info = name)
+    expect_identical(as.character(out$Level1), rep("High", 3), info = name)
+    expect_identical(as.character(out$Level2), rep("Low", 3), info = name)
+    expect_identical(as.character(out$Infl), c("Low", "Medium", "High"), info = name)
+    expect_matching_rows(
+      out,
+      out_all,
+      c("Level1", "Level2", "Infl"),
+      c("Difference", "SE"),
+      info = name
+    )
+
+    # comparisons that are not pairwise use only the named categories
+    out <- estimate_contrasts(
+      m,
+      "Sat=c('Low','Medium')",
+      by = "Infl",
+      comparison = "poly",
+      backend = "emmeans"
+    )
+    expect_identical(nrow(out), 3L, info = name)
+    expect_identical(as.character(out$Level), rep("linear", 3), info = name)
+    pairwise <- out_all[out_all$Level1 == "Medium" & out_all$Level2 == "Low", ]
+    expect_equal(
+      out$Difference,
+      pairwise$Difference[match(out$Infl, pairwise$Infl)],
+      tolerance = 1e-10,
+      info = name
+    )
+
+    # one category cannot be contrasted
+    err <- expect_error(estimate_contrasts(m, "Sat='Low'", by = "Infl", backend = "emmeans"))
+    expect_match(
+      gsub("\\s+", " ", conditionMessage(err)),
+      "Contrasts of the response `Sat` need at least two response categories.",
+      fixed = TRUE,
+      info = name
+    )
+
+    # values that are no response categories, and modes without categories
+    err <- expect_error(estimate_contrasts(
+      m,
+      "Sat=c('Low','Bogus')",
+      by = "Infl",
+      backend = "emmeans"
+    ))
+    expect_match(
+      gsub("\\s+", " ", conditionMessage(err)),
+      "The response `Sat` has no category `Bogus`.",
+      fixed = TRUE,
+      info = name
+    )
+    err <- expect_error(estimate_contrasts(
+      m,
+      "Sat=c('Low','High')",
+      by = "Infl",
+      predict = "cum.prob",
+      backend = "emmeans"
+    ))
+    expect_match(
+      gsub("\\s+", " ", conditionMessage(err)),
+      "The response `Sat` can only be used in `contrast` with `predict = \"prob\"`",
+      fixed = TRUE,
+      info = name
+    )
+  }
+})
