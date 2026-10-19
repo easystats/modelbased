@@ -1540,13 +1540,23 @@ test_that("estimate_contrasts, backend emmeans, ordinal, joint tests in other mo
         ),
         by = by
       )))
-      out <- suppressWarnings(estimate_contrasts(
-        model,
-        "Infl",
-        comparison = "joint",
-        predict = mode,
-        backend = "emmeans"
-      ))
+      # for the clm fit, emmeans warns with "NaNs produced" in some of these
+      # modes, also on the reference above; other warnings are not muffled
+      out <- withCallingHandlers(
+        estimate_contrasts(
+          model,
+          "Infl",
+          comparison = "joint",
+          predict = mode,
+          backend = "emmeans"
+        ),
+        warning = function(w) {
+          if (identical(conditionMessage(w), "NaNs produced")) {
+            invokeRestart("muffleWarning")
+          }
+        }
+      )
+      expect_identical(nrow(out), nrow(ref), info = mode)
       expect_equal(out$Chisq, ref$Chisq, tolerance = 1e-6, ignore_attr = TRUE, info = mode)
     }
   }

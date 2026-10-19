@@ -138,8 +138,10 @@ get_emcontrasts <- function(
     fun_args <- c(fun_args, list(specs = specs, at = my_args$emmeans_at))
     estimated <- suppressMessages(do.call(emmeans::emmeans, fun_args))
     # Joint tests use the linear functions of the emmeans grid. For contrasts
-    # between the response categories of ordinal models, these gave values
-    # 4 to 52 times the Wald statistic of the contrasts (emmeans 2.0.4).
+    # between the response categories of ordinal models, these gave wrong
+    # values, for example 4 to 52 times the Wald statistic of the contrasts
+    # for `polr(Sat ~ Infl + Type, weights = Freq, data = MASS::housing)`
+    # (emmeans 2.0.4).
     # After `regrid()`, the joint tests equal the Wald statistic. Only the
     # "prob" mode is regridded: for "linear.predictor", `regrid()` would
     # back-transform the grid to cumulative probabilities.
