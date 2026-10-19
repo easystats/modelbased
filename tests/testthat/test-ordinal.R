@@ -1336,3 +1336,51 @@ test_that("estimate_means, backend emmeans, ordinal, several by terms on the res
   expect_response_filter_rows(out, out_all, "Low")
   expect_identical(nrow(out), 3L)
 })
+
+
+test_that("estimate_contrasts, ordinal slopes, by filter that keeps one level", {
+  skip_if_not_installed("ordinal")
+  d <- MASS::housing
+  set.seed(1)
+  d$x <- rnorm(nrow(d))
+  models <- list(
+    polr = MASS::polr(Sat ~ x * Infl + Type, data = d, Hess = TRUE),
+    clm = ordinal::clm(Sat ~ x * Infl + Type, data = d)
+  )
+  keys <- c("Level1", "Response1", "Level2", "Response2")
+
+  for (m in models) {
+    for (estimate in c("typical", "average")) {
+      out_all <- estimate_contrasts(m, "x", by = "Infl", estimate = estimate)
+
+      # one level: the contrasts between the response categories at that level
+      out <- estimate_contrasts(m, "x", by = "Infl='Low'", estimate = estimate)
+      expected <- out_all[out_all$Level1 == "Low" & out_all$Level2 == "Low", ]
+      expect_identical(nrow(out), 3L)
+      expect_identical(
+        lapply(as.data.frame(out)[keys], as.character),
+        lapply(as.data.frame(expected)[keys], as.character)
+      )
+      expect_equal(out$Difference, expected$Difference, tolerance = 1e-8)
+      expect_equal(out$SE, expected$SE, tolerance = 1e-8)
+
+      # two levels: the matching rows of the unfiltered output
+      out <- estimate_contrasts(m, "x", by = "Infl=c('Low','High')", estimate = estimate)
+      expect_identical(nrow(out), 15L)
+      out_keys <- do.call(paste, lapply(as.data.frame(out)[keys], as.character))
+      all_keys <- do.call(paste, lapply(as.data.frame(out_all)[keys], as.character))
+      matched <- out_all[match(out_keys, all_keys), ]
+      expect_false(anyNA(match(out_keys, all_keys)))
+      expect_equal(out$Difference, matched$Difference, tolerance = 1e-8)
+      expect_equal(out$SE, matched$SE, tolerance = 1e-8)
+    }
+  }
+
+  # models without response categories still need two slopes
+  mt <- transform(mtcars, g = factor(am))
+  expect_error(
+    estimate_contrasts(lm(mpg ~ wt * g, data = mt), "wt", by = "g='0'"),
+    "The filter in `by` leaves fewer than two slopes to compare",
+    fixed = TRUE
+  )
+})

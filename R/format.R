@@ -345,22 +345,37 @@ format.marginaleffects_contrasts <- function(
     # If we have, for example, `contrast = c("vs", "am"), by = "gear='5'"`, the
     # `by` column is the one with one unique value only, we thus have to update
     # `by`, and also `contrast` (the latter not(!) for numerics)...
+    all_by <- by
     by <- by[lengths(lapply(dgrid[by], unique)) > 1]
 
     # for slopes, we have our "levels" in the by-variable, because `by` indicates
     # the levels for which slopes are contrasted - thus, we replace contrast with by
+    one_level_slopes <- FALSE
     if (inherits(x, "estimate_slopes")) {
       contrast <- by
+      # models with response categories (e.g., ordinal models) have one slope
+      # per category. When the filter in `by` keeps one level, e.g.
+      # `by = "Infl='Low'"`, the slopes of the categories at that level are
+      # still contrasted. The labels from marginaleffects then hold only the
+      # response categories, e.g. "(Medium) - (Low)"
+      one_level_slopes <- !length(contrast) &&
+        length(all_by) > 0 &&
+        all(all_by %in% colnames(dgrid)) &&
+        all(lengths(lapply(dgrid[all_by], unique)) == 1) &&
+        .is_response_level_model(model, x)
+      if (one_level_slopes) {
+        contrast <- all_by
+      }
       by <- NULL
+    } else {
+      # for contrasts, we also filter variables with one unique value, but we
+      # keep numeric variables. When these are hold constant in the data grid,
+      # they are set to their mean value - meaning, they only have one unique
+      # value in the data grid, anyway. so we need to keep them.
+      keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 |
+        vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
+      contrast <- contrast[keep_contrasts]
     }
-
-    # for contrasts, we also filter variables with one unique value, but we
-    # keep numeric variables. When these are hold constant in the data grid,
-    # they are set to their mean value - meaning, they only have one unique
-    # value in the data grid, anyway. so we need to keep them.
-    keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 |
-      vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
-    contrast <- contrast[keep_contrasts]
 
     # set to NULL, if all by-values have been removed here
     if (!length(by)) {
@@ -374,7 +389,9 @@ format.marginaleffects_contrasts <- function(
     }
 
     # for more than one term, we have comma-separated levels.
-    if (length(contrast) > 1) {
+    if (one_level_slopes) {
+      new_colnames <- c("Response1", "Response2")
+    } else if (length(contrast) > 1) {
       # levels may contain the separator char. to be 100% certain we extract
       # levels correctly, we now replace levels with a special "token", and later
       # replace those tokens with the original levels again
@@ -488,7 +505,9 @@ format.marginaleffects_contrasts <- function(
       # by comma, and each the two "new contrast groups" go into separate
       # columns named "Level1" and "Level2". For one contrast term, we just
       # need to rename the columns
-      if (length(contrast) == 1) {
+      if (one_level_slopes) {
+        params <- .one_level_slope_labels(params, model, dgrid[all_by])
+      } else if (length(contrast) == 1) {
         # we define this object to avoid scoping issues in data_rename(),
         # see https://github.com/easystats/modelbased/issues/401
         rename_columns <- paste0(contrast, 1:2)
@@ -523,7 +542,9 @@ format.marginaleffects_contrasts <- function(
       # "setosa 3"). We split those into separate "Response1" and "Response2"
       # columns, so contrasted factor levels and response levels are not
       # confounded
-      params <- .split_contrast_response_levels(params, model, x)
+      if (!one_level_slopes) {
+        params <- .split_contrast_response_levels(params, model, x)
+      }
 
       # we need to update these variables, because these are the new column
       # names for contrasts and focal terms. We use `intersect()` here because
@@ -599,6 +620,53 @@ format.marginaleffects_contrasts <- function(
 # variable names to levels. We first find the intersection of all
 # levels from all current contrast terms
 
+# TRUE for models where predictions are made separately for each level of the
+# response (categorical, ordinal/cumulative, multinomial or multivariate models)
+
+.is_response_level_model <- function(model, x = NULL) {
+  if (is.null(model)) {
+    return(FALSE)
+  }
+  # prefer the model info already stored as attribute (consistent with how
+  # other format-methods retrieve model information), and only compute it
+  # ourselves as a fallback
+  model_info <- attr(x, "model_info", exact = TRUE)
+  if (is.null(model_info)) {
+    model_info <- .safe(insight::model_info(model, verbose = FALSE))
+  }
+  isTRUE(model_info$is_multinomial) ||
+    isTRUE(model_info$is_categorical) ||
+    isTRUE(model_info$is_ordinal) ||
+    isTRUE(model_info$is_cumulative) ||
+    isTRUE(.safe(insight::is_multivariate(model)))
+}
+
+# for contrasts of slopes of models with response categories, when the filter
+# in `by` keeps one level: `params` has the response categories in "Response1"
+# and "Response2", and "Level1" and "Level2" get the one level of `by`, from
+# the data grid. Several `by` variables are combined with ", ", as in
+# contrasts of more than one term
+
+.one_level_slope_labels <- function(params, model, by_grid) {
+  by_level <- paste(
+    vapply(by_grid, function(i) as.character(unique(i)), character(1)),
+    collapse = ", "
+  )
+  # keep the order of the response levels, as `.split_contrast_response_levels()`
+  response_levels <- unique(c(params$Response1, params$Response2))
+  response <- .safe(insight::get_response(model, verbose = FALSE))
+  if (is.factor(response)) {
+    response_levels <- intersect(levels(response), response_levels)
+  }
+  data.frame(
+    Level1 = factor(by_level),
+    Response1 = factor(params$Response1, levels = response_levels),
+    Level2 = factor(by_level),
+    Response2 = factor(params$Response2, levels = response_levels),
+    stringsAsFactors = FALSE
+  )
+}
+
 # for models where predictions are made separately for each level of the
 # response (categorical, ordinal/cumulative, multinomial or multivariate
 # models), marginaleffects merges the response level and the contrasted
@@ -613,23 +681,10 @@ format.marginaleffects_contrasts <- function(
     return(params)
   }
 
-  # prefer the model info already stored as attribute (consistent with how
-  # other format-methods retrieve model information), and only compute it
-  # ourselves as a fallback
-  model_info <- attr(x, "model_info", exact = TRUE)
-  if (is.null(model_info)) {
-    model_info <- .safe(insight::model_info(model, verbose = FALSE))
-  }
-  is_multivariate <- isTRUE(.safe(insight::is_multivariate(model)))
-  is_response_model <- isTRUE(model_info$is_multinomial) ||
-    isTRUE(model_info$is_categorical) ||
-    isTRUE(model_info$is_ordinal) ||
-    isTRUE(model_info$is_cumulative) ||
-    is_multivariate
-
-  if (!is_response_model) {
+  if (!.is_response_level_model(model, x)) {
     return(params)
   }
+  is_multivariate <- isTRUE(.safe(insight::is_multivariate(model)))
 
   # response levels, used to detect and split off the response-category
   # label from the contrasted factor level. We keep the original order of
