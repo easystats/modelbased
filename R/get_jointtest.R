@@ -142,8 +142,9 @@
     result <- try(as.data.frame(emmeans::joint_tests(means, by = by_arg)), silent = TRUE)
   } else {
     # ordinal models with a filter on the contrasted response categories:
-    # `joint_tests()` fails on the grid with only these categories, so we test
-    # the contrasts jointly, which gives the same values as `joint_tests()`
+    # `joint_tests()` fails when only two categories are kept (one contrast
+    # per `by` group), so we test the contrasts jointly, which gives the same
+    # values as `joint_tests()` when that works
     result <- try(
       {
         joint <- as.data.frame(emmeans::test(means, joint = TRUE, by = by_arg))

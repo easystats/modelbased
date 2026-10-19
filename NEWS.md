@@ -14,8 +14,8 @@
   * `estimate_contrasts()` now contrasts only the named response categories,
     for example `estimate_contrasts(m, "Sat = c('Low', 'High')", by = "Infl")`.
     Before, it ignored the values and contrasted all categories. A single
-    category, or a filter on the response in both `contrast` and `by`, gives
-    an error.
+    category gives an error, and so does a filter on the response in `by`
+    when the response is also in `contrast`.
   * For contrasts of slopes, a filter in `by` that leaves one level to
     compare, for example `by = "Infl = 'Low'"`, now gives a clear error.
     Before, `estimate_contrasts()` returned a table with empty contrasts.
@@ -28,9 +28,9 @@
   applies only to `by` variables that are all factors or character vectors.
   If the filter leaves fewer than two slopes to compare,
   `estimate_contrasts()` now stops with a clear error. Multinomial models,
-  ordinal models with `backend = "marginaleffects"`, and a custom hypothesis
-  in `comparison` (such as `"b1 = b2"`, a function or a matrix), get no such
-  check.
+  Bayesian ordinal models, frequentist ordinal models with
+  `backend = "marginaleffects"`, and a custom hypothesis in `comparison`
+  (such as `"b1 = b2"`, a function or a matrix), get no such check.
 
 * `p_adjust = "tukey"` and `p_adjust = "sidak"` now give the same p-values as
   *emmeans* in `estimate_contrasts()` and `estimate_slopes()` with
