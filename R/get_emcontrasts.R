@@ -140,8 +140,10 @@ get_emcontrasts <- function(
     # Joint tests use the linear functions of the emmeans grid. For contrasts
     # between the response categories of ordinal models, these gave values
     # 4 to 52 times the Wald statistic of the contrasts (emmeans 2.0.4).
-    # After `regrid()`, the joint tests equal the Wald statistic.
-    if (!is.null(ordinal$mode) && identical(comparison, "joint")) {
+    # After `regrid()`, the joint tests equal the Wald statistic. Only the
+    # "prob" mode is regridded: for "linear.predictor", `regrid()` would
+    # back-transform the grid to cumulative probabilities.
+    if (identical(ordinal$mode, "prob") && identical(comparison, "joint")) {
       estimated <- emmeans::regrid(estimated)
     }
     # Find by variables

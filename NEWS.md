@@ -49,10 +49,11 @@
   `estimate_contrasts(m, "Sat", by = "Infl", comparison = "joint",
   backend = "emmeans")`. Before, the F and Chi-squared statistics were too
   large, for example by a factor of 4 to 52 for
-  `polr(Sat ~ Infl + Type, data = MASS::housing)`. Joint tests of
-  ordinal models also no longer warn with "NaNs produced". The `Chisq`
-  column of joint tests with `backend = "emmeans"` now prints with two
-  decimals.
+  `polr(Sat ~ Infl + Type, weights = Freq, data = MASS::housing)`. Joint
+  tests of ordinal models also no longer warn with "NaNs produced". The
+  `Chisq` column of joint tests with `backend = "emmeans"` now prints with
+  two decimals, and `get_emcontrasts()` with `comparison = "joint"` now
+  returns a data frame that prints.
 
 # modelbased 0.18.0
 

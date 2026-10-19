@@ -1437,6 +1437,7 @@ test_that("estimate_contrasts, backend emmeans, ordinal, joint tests of the resp
     expect_identical(as.character(out$Infl), levels(housing$Infl))
     expect_identical(as.character(out$df1), rep("2", 3))
     expect_equal(out$Chisq, ref_delta, tolerance = 1e-3, ignore_attr = TRUE)
+    expect_equal(out$Chisq, ref_me, tolerance = 1e-3, ignore_attr = TRUE)
   }
 })
 
@@ -1511,4 +1512,70 @@ test_that("estimate_contrasts, backend emmeans, ordinal, printed Chisq of joint 
     expect_true(any(grepl(paste0(" ", chisq, " |"), printed, fixed = TRUE)), info = chisq)
   }
   expect_false(any(grepl("114.588", printed, fixed = TRUE)))
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, joint tests in other modes", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  mc <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing)
+  # emmeans' joint tests of the pairwise `Infl` contrasts, within each
+  # threshold (`cut`) where the mode has thresholds
+  specs <- list(
+    latent = ~Infl,
+    linear.predictor = ~ Infl | cut,
+    cum.prob = ~ Infl | cut,
+    exc.prob = ~ Infl | cut,
+    mean.class = ~Infl
+  )
+  for (model in list(m, mc)) {
+    for (mode in names(specs)) {
+      by <- if (mode %in% c("latent", "mean.class")) NULL else "cut"
+      ref <- suppressWarnings(as.data.frame(emmeans::joint_tests(
+        emmeans::contrast(
+          emmeans::emmeans(model, specs[[mode]], mode = mode),
+          "pairwise"
+        ),
+        by = by
+      )))
+      out <- suppressWarnings(estimate_contrasts(
+        model,
+        "Infl",
+        comparison = "joint",
+        predict = mode,
+        backend = "emmeans"
+      ))
+      expect_equal(out$Chisq, ref$Chisq, tolerance = 1e-6, ignore_attr = TRUE, info = mode)
+    }
+  }
+  # on the logit scale, the `Infl` effect is the same at each threshold, so
+  # both thresholds give the latent-scale value
+  out <- estimate_contrasts(
+    m,
+    "Infl",
+    comparison = "joint",
+    predict = "linear.predictor",
+    backend = "emmeans"
+  )
+  out_latent <- estimate_contrasts(
+    m,
+    "Infl",
+    comparison = "joint",
+    predict = "latent",
+    backend = "emmeans"
+  )
+  expect_equal(out$Chisq, rep(out_latent$Chisq, 2), tolerance = 1e-6)
+})
+
+
+test_that("get_emcontrasts, joint tests return a data frame", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  out <- get_emcontrasts(m, "Infl", comparison = "joint")
+  expect_identical(class(out), "data.frame")
+  expect_null(attr(out, "digits"))
+  expect_no_error(capture.output(print(out)))
 })
