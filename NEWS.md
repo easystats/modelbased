@@ -6,7 +6,8 @@
   `estimate_means()`, `estimate_contrasts()` and `estimate_slopes()` now also
   filter the response categories in a list or data-frame `by`, for example
   `by = list(Infl = "Low", Sat = "Low")`, where `Sat` is the response.
-  Before, they returned all response categories. With a list, a data frame or
+  Before, `estimate_means()` and `estimate_contrasts()` returned all response
+  categories, and `estimate_slopes()` gave an error. With a list, a data frame or
   a formula such as `by = ~ Infl + Sat`, the printed output no longer lists
   the response under "Predictors modulated".
 

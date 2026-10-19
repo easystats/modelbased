@@ -112,7 +112,8 @@ get_emcontrasts <- function(
         inherits(comparison, "formula")
     ) {
       # ordinal models: the slopes are contrasted within each response
-      # category or threshold
+      # category or threshold (or, for `mean.class`, once per level of `by`),
+      # so the slopes to compare are counted from `by`
       .check_slope_contrast_filter(
         model,
         my_args$by,

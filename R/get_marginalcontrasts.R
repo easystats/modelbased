@@ -357,9 +357,10 @@ get_marginalcontrasts <- function(
 
 
 # stop when the filters in `by` leave fewer than two slopes to compare.
-# `within_categories` is `TRUE` when the slopes of ordinal models are
-# contrasted within each response category or threshold (emmeans backend), so
-# that the slopes to compare are counted from `by` alone
+# `within_categories` is `TRUE` for ordinal models with the emmeans backend,
+# where slopes are contrasted within each response category or threshold (or
+# across `by` alone for `mean.class`), so the slopes to compare are counted
+# from `by` alone
 .check_slope_contrast_filter <- function(
   model,
   by,
