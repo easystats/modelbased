@@ -138,21 +138,20 @@
 
 .get_jointtest.emmGrid <- function(means, my_args, ...) {
   by_arg <- attributes(means)$misc$by.vars
-  if (is.null(my_args$response_contrast_filter$values)) {
-    result <- try(as.data.frame(emmeans::joint_tests(means, by = by_arg)), silent = TRUE)
-  } else {
+  result <- try(as.data.frame(emmeans::joint_tests(means, by = by_arg)), silent = TRUE)
+  if (
+    inherits(result, "try-error") &&
+      !is.null(my_args$response_contrast_filter$values) &&
+      length(my_args$contrast) == 1
+  ) {
     # ordinal models with a filter on the contrasted response categories:
     # `joint_tests()` fails when only two categories are kept (one contrast
-    # per `by` group), so we test the contrasts jointly, which gives the same
-    # values as `joint_tests()` when that works
-    result <- try(
-      {
-        joint <- as.data.frame(emmeans::test(means, joint = TRUE, by = by_arg))
-        joint$note <- NULL
-        cbind(`model term` = "contrast", joint)
-      },
-      silent = TRUE
-    )
+    # per `by` group), so we test that contrast in each `by` group
+    joint <- try(as.data.frame(emmeans::test(means, joint = TRUE, by = by_arg)), silent = TRUE)
+    if (!inherits(joint, "try-error") && !anyNA(joint$p.value)) {
+      joint$note <- NULL
+      result <- cbind(`model term` = "contrast", joint)
+    }
   }
 
   # check if everything was ok

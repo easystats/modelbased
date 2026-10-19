@@ -1622,6 +1622,16 @@ test_that("estimate_contrasts, backend emmeans, ordinal, joint test with a contr
   expect_identical(as.character(out$Infl), as.character(expected$Infl))
   expect_equal(out$Chisq, expected$Chisq, tolerance = 1e-6)
   expect_equal(out$p, expected$p.value, tolerance = 1e-6)
+
+  # with another term in `contrast`, the joint test fails as without a filter
+  err <- expect_error(estimate_contrasts(
+    m,
+    c("Infl", "Sat=c('Low','High')"),
+    by = "Type",
+    comparison = "joint",
+    backend = "emmeans"
+  ))
+  expect_match(conditionMessage(err), "Could not compute joint test", fixed = TRUE)
 })
 
 

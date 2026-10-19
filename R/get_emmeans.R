@@ -640,12 +640,12 @@ get_emmeans <- function(
   }
   categories <- as.character(estimated@grid[[pseudo_factor]])
   # for clmm models, emmeans codes the response categories as 1, 2, 3, ... -
-  # we match the codes with the names from the model (see
-  # `.clean_pseudo_factor_emmeans_ordinal()`)
+  # we match the codes with the names from the model, with the same rule as
+  # `.clean_pseudo_factor_emmeans_ordinal()`
   if (inherits(model, "clmm")) {
     response_levels <- model$y.levels
     codes <- as.character(seq_along(response_levels))
-    if (all(categories %in% codes)) {
+    if (setequal(categories, codes) && !anyDuplicated(response_levels)) {
       categories <- response_levels[match(categories, codes)]
     }
   }
@@ -668,7 +668,8 @@ get_emmeans <- function(
 
 #' @keywords internal
 .process_emmeans_arguments <- function(model, args, data, ...) {
-  # ordinal models: a `by` term on the response filters the response categories
+  # ordinal models: a `by` or `contrast` term on the response filters the
+  # response categories
   args <- .extract_ordinal_response_filter(model, args, data)
 
   # Create the data_matrix

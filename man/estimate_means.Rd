@@ -68,7 +68,7 @@ is \code{"prob"}, which returns one probability per response category (column
 \code{Response}). The modes \code{"cum.prob"}, \code{"exc.prob"} and \code{"linear.predictor"}
 return one value per threshold (column \code{Threshold}). For modes with
 response categories or thresholds, contrasts compare the focal levels
-within each one. For
+within each one, unless \code{contrast} names the response. For
 \code{estimate_slopes()}, the slopes for \code{"prob"} and \code{"mean.class"} are
 computed from the slopes of the cumulative probabilities.
 }

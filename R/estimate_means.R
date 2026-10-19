@@ -54,7 +54,7 @@
 #'   `Response`). The modes `"cum.prob"`, `"exc.prob"` and `"linear.predictor"`
 #'   return one value per threshold (column `Threshold`). For modes with
 #'   response categories or thresholds, contrasts compare the focal levels
-#'   within each one. For
+#'   within each one, unless `contrast` names the response. For
 #'   `estimate_slopes()`, the slopes for `"prob"` and `"mean.class"` are
 #'   computed from the slopes of the cumulative probabilities.
 #'
