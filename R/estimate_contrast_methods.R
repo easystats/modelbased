@@ -152,7 +152,9 @@ estimate_contrasts.estimate_predicted <- function(
     }
   }
 
-  # p-value adjustment?
+  # p-value adjustment? Formatting drops the "by" attribute, which defines the
+  # families of the Sidak adjustment
+  attr(out, "by") <- by
   out <- .p_adjust(model, out, p_adjust, verbose, ...)
 
   # Table formatting

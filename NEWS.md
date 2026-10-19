@@ -13,6 +13,36 @@
   multinomial models, and a custom hypothesis in `comparison` (such as
   `"b1 = b2"`, a function or a matrix), get no such check.
 
+* `p_adjust = "tukey"` and `p_adjust = "sidak"` now give the same p-values as
+  *emmeans* in `estimate_contrasts()` and `estimate_slopes()` with
+  `backend = "marginaleffects"`:
+  * For comparisons that are not pairwise, for example
+    `comparison = "reference"` or `"sequential"`, `"tukey"` is replaced by
+    `"sidak"` with a message. Before, the Tukey adjustment was applied.
+  * For slopes tested against a value other than 0, for example
+    `hypothesis = 1`, and for slopes that are not compared pairwise, `"tukey"`
+    is replaced by `"sidak"` with a message. Slopes compared pairwise, for
+    example with `comparison = ~pairwise` or `post_process = ~pairwise`, keep
+    the Tukey adjustment.
+  * The Tukey adjustment of slopes compared pairwise with `estimate_slopes()`
+    now counts the slopes, not the comparisons. Before, 4 slopes were counted
+    as 6, the number of comparisons, which made the p-values too large. With a
+    group term, for example `comparison = ~pairwise | group`, the slopes and
+    the comparisons are counted in each group.
+  * The Sidak adjustment of contrasts now counts the comparisons in each group
+    of the `by` variables. Before, it counted the levels of the contrast
+    variable, so for 4 levels and 6 pairwise comparisons, the p-values were
+    too small. A joint test, or another output with one test in each group,
+    is therefore no longer changed by `"sidak"`.
+  * A partly matched `hypothesis` argument, for example `hypo = ~pairwise`, is
+    now treated as `hypothesis`.
+
+* `estimate_slopes()` with `backend = "emmeans"` now applies `p_adjust` for the
+  `stats::p.adjust()` methods, `"tukey"` and `"sidak"`. Before, it returned the
+  unadjusted p-values for every method. As in `emmeans::test()`, `"tukey"` is
+  replaced by `"sidak"` with a message, because the slopes are tested
+  against 0.
+
 # modelbased 0.18.0
 
 ## Breaking Changes

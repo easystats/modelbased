@@ -56,24 +56,106 @@
   }
 
   # slopes from `get_marginaltrends()` are each tested against 0, unless
-  # `comparison` (or `hypothesis`) or `post_process` is used. In that case,
-  # the rows are comparisons of slopes, and we keep Tukey. Else, we use Sidak,
-  # as emmeans does, because the Tukey adjustment is only for one set of
-  # pairwise comparisons. With one slope, or without p-values, the code below
-  # says that no adjustment was made.
+  # `comparison` (or `hypothesis`, also when partly matched, like `hypo`) or
+  # `post_process` is used. The Tukey adjustment is only for one set of
+  # pairwise comparisons, so we keep Tukey only for pairwise comparisons of
+  # slopes. Else, we use Sidak, as emmeans does. With one slope, or without
+  # p-values, the code below says that no adjustment was made.
   dots <- list(...)
+  n_slopes <- NULL
+  slope_comparison <- NULL
+  # number of tests in the family of each row. Comparisons of slopes with a
+  # group term (like `~pairwise | group`) have one family per group, else
+  # all rows are one family
+  slope_family <- rep(nrow(params), nrow(params))
+  if (is_unformatted) {
+    dots_names <- names(dots)
+    if (is.null(dots_names)) {
+      dots_names <- character(0)
+    }
+    # names that are a prefix of "hypothesis", like `hypo`, which R matches
+    # to the `hypothesis` argument of `avg_slopes()`
+    hypothesis_arg <- dots_names[nzchar(dots_names) & startsWith("hypothesis", dots_names)]
+    # `post_process` is applied last, so it defines the rows of the output
+    slope_comparison <- c(
+      dots["post_process"],
+      dots["comparison"],
+      dots[hypothesis_arg]
+    )
+    slope_comparison <- Filter(Negate(is.null), slope_comparison)
+    if (length(slope_comparison)) {
+      slope_family <- .p_adjust_family_size(
+        params,
+        by = .comparison_group_terms(slope_comparison[[1]])
+      )
+    }
+  }
+  if (p_adjust == "tukey" && is_unformatted && "p.value" %in% colnames(params)) {
+    reason <- NULL
+    if (!length(slope_comparison)) {
+      if (nrow(params) > 1) {
+        reason <- "Slopes are tested against 0"
+      }
+    } else if (is.numeric(slope_comparison[[1]]) && is.null(dim(slope_comparison[[1]]))) {
+      reason <- paste0(
+        "Slopes are tested against ",
+        toString(insight::format_value(slope_comparison[[1]], protect_integers = TRUE))
+      )
+    } else if (.is_pairwise_comparison(slope_comparison[[1]])) {
+      # for k slopes, we have k * (k - 1) / 2 pairwise comparisons, in each
+      # group. Without the group columns, we cannot count them.
+      group_terms <- .comparison_group_terms(slope_comparison[[1]])
+      n_slopes <- (1 + sqrt(1 + 8 * slope_family)) / 2
+      if (
+        !all(group_terms %in% colnames(params)) ||
+          anyNA(n_slopes) ||
+          any(n_slopes != round(n_slopes))
+      ) {
+        n_slopes <- NULL
+        reason <- "The number of compared slopes could not be found"
+      }
+    } else {
+      reason <- "Slopes are not compared pairwise"
+    }
+    if (!is.null(reason)) {
+      # with one test per family, Sidak does not change the p-values, so we
+      # say nothing
+      if (verbose && max(slope_family) > 1) {
+        insight::format_alert(paste0(
+          "The Tukey adjustment is only appropriate for pairwise comparisons. ",
+          reason,
+          ", so p-values were adjusted with the Sidak method instead."
+        ))
+      }
+      p_adjust <- "sidak"
+      attr(params, "p_adjust") <- "sidak"
+    }
+  }
+
+  # contrasts (formatted output): the Tukey adjustment is only appropriate for
+  # pairwise comparisons. For other comparisons, like "reference" or
+  # "sequential", we use Sidak, as emmeans does.
+  comparison <- attributes(params)$comparison
+  # number of contrasts in the family of each row: the rows within each group
+  # of the `by` variables, or of the group term of `comparison`
+  if (!is_unformatted) {
+    contrast_family <- .p_adjust_family_size(
+      params,
+      by = c(attributes(params)$by, .comparison_group_terms(comparison))
+    )
+  }
   if (
     p_adjust == "tukey" &&
-      is_unformatted &&
-      nrow(params) > 1 &&
-      "p.value" %in% colnames(params) &&
-      is.null(dots[["comparison"]]) &&
-      is.null(dots[["hypothesis"]]) &&
-      is.null(dots[["post_process"]])
+      !is_unformatted &&
+      !is.null(comparison) &&
+      !.is_pairwise_comparison(comparison) &&
+      "p" %in% colnames(params)
   ) {
-    if (verbose) {
+    # with one contrast per family, Sidak does not change the p-values, so we
+    # say nothing
+    if (verbose && max(contrast_family) > 1) {
       insight::format_alert(
-        "The Tukey adjustment is only appropriate for pairwise comparisons. Slopes are tested against 0, so p-values were adjusted with the Sidak method instead."
+        "The Tukey adjustment is only appropriate for pairwise comparisons, so p-values were adjusted with the Sidak method instead."
       )
     }
     p_adjust <- "sidak"
@@ -92,12 +174,26 @@
 
   # needed for rank adjustment
   focal_terms <- .safe(datagrid[focal])
-  if (is_unformatted) {
+  if (!is.null(n_slopes)) {
+    # pairwise comparisons of slopes
+    rank_adjust <- n_slopes
+  } else if (is_unformatted) {
     rank_adjust <- nrow(params)
   } else if (is.null(focal_terms)) {
     rank_adjust <- 1
   } else {
     rank_adjust <- prod(vapply(focal_terms, insight::n_unique, numeric(1)))
+    # pairwise contrasts: k levels give k * (k - 1) / 2 contrasts in each
+    # family. This also counts the levels when a group term or filter makes
+    # the focal terms differ from the compared levels.
+    n_levels <- (1 + sqrt(1 + 8 * contrast_family)) / 2
+    if (
+      .is_pairwise_comparison(comparison) &&
+        !anyNA(n_levels) &&
+        all(n_levels == round(n_levels))
+    ) {
+      rank_adjust <- n_levels
+    }
   }
 
   p_column <- if (is_unformatted) "p.value" else "p"
@@ -125,7 +221,7 @@
       statistic <- NULL
     }
     if (!is.null(statistic)) {
-      if (rank_adjust < 2) {
+      if (min(rank_adjust) < 2) {
         if (verbose) {
           insight::format_alert(
             "Tukey adjustment requires at least 2 groups. P-values were not adjusted."
@@ -150,11 +246,64 @@
       insight::format_alert("No test-statistic found. P-values were not adjusted.")
     }
   } else if (p_adjust == "sidak") {
-    # sidak adjustment
-    params[[p_column]] <- 1 - (1 - params[[p_column]])^rank_adjust
+    # sidak adjustment. The family is the set of tests: for slopes, all rows,
+    # and for contrasts, the rows within each group of the `by` variables
+    # (like emmeans).
+    if (is_unformatted) {
+      family_size <- slope_family
+    } else {
+      family_size <- contrast_family
+    }
+    # 1 - (1 - p)^n, without losing precision for small p-values
+    params[[p_column]] <- -expm1(family_size * log1p(-params[[p_column]]))
   }
 
   params
+}
+
+
+# TRUE if a comparison is a formula whose right side is `pairwise` or
+# `revpairwise`, with or without a `| group` term, e.g. `difference ~ pairwise`
+.is_pairwise_comparison <- function(comparison) {
+  if (is.character(comparison)) {
+    return(length(comparison) == 1 && comparison %in% c("pairwise", "revpairwise"))
+  }
+  if (!inherits(comparison, "formula")) {
+    return(FALSE)
+  }
+  rhs <- comparison[[length(comparison)]]
+  if (is.call(rhs) && identical(rhs[[1]], as.name("|"))) {
+    rhs <- rhs[[2]]
+  }
+  is.name(rhs) && as.character(rhs) %in% c("pairwise", "revpairwise")
+}
+
+
+# variables of the group term of a comparison formula, like `h` in
+# `~pairwise | h`, or NULL
+.comparison_group_terms <- function(comparison) {
+  if (!inherits(comparison, "formula")) {
+    return(NULL)
+  }
+  rhs <- comparison[[length(comparison)]]
+  if (is.call(rhs) && identical(rhs[[1]], as.name("|"))) {
+    return(all.vars(rhs[[3]]))
+  }
+  NULL
+}
+
+
+# number of tests in the family of each row: the rows with the same values of
+# the `by` variables (by default, the `by` attribute)
+.p_adjust_family_size <- function(params, by = attributes(params)$by) {
+  by <- .safe(insight::trim_ws(gsub("=.*", "", by)))
+  by <- intersect(by, colnames(params))
+  if (!length(by)) {
+    return(rep(nrow(params), nrow(params)))
+  }
+  # missing values of a `by` variable form their own group
+  groups <- interaction(lapply(params[by], addNA), drop = TRUE)
+  as.vector(table(groups)[as.integer(groups)])
 }
 
 

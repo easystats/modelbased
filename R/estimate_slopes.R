@@ -26,19 +26,25 @@
 #' `slope` from the `by` argument. `trend` is an alias for `slope`, for backward
 #' compatibility. See 'Examples'.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#' comparisons. For `estimate_slopes()`, multiple comparison only occurs for
-#' Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-#' predictors (one specified in `slope`, one in `by`). In this case, the
-#' `"esarey"` or `"sup-t"` options are recommended, but `p_adjust` can also be
-#' one of `"none"` (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`,
+#' comparisons, when several slopes are tested, or when slopes are compared.
+#' For Johnson-Neyman intervals, i.e. in case of interactions with two numeric
+#' predictors (one specified in `slope`, one in `by`), the `"esarey"` or
+#' `"sup-t"` options are recommended, but `p_adjust` can also be one of
+#' `"none"` (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`,
 #' `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, or `"holm"`. `"sup-t"` computes
 #' simultaneous confidence bands, also called sup-t confidence band (Montiel
 #' Olea & Plagborg-Møller, 2019). The Tukey adjustment is only appropriate for
-#' pairwise comparisons. When **marginaleffects** computes slopes that are each
-#' tested against 0, `"tukey"` is therefore replaced by `"sidak"` (with a
-#' message), as `emmeans::test()` does. This replacement is not made when
-#' slopes are compared, for example with the `comparison` or `post_process`
-#' argument.
+#' pairwise comparisons. It is used when slopes are compared pairwise, for
+#' example with `comparison = ~pairwise` or `post_process = ~pairwise`. For
+#' slopes that are each tested against 0 or against another value (for
+#' example `hypothesis = 1`), and for slopes that are not compared pairwise,
+#' `"tukey"` is replaced by `"sidak"` (with a message), as `emmeans::test()`
+#' does. The Sidak adjustment counts the tests (rows) and the Tukey adjustment
+#' the compared slopes, in the whole output or, for comparisons with a group
+#' term (for example `comparison = ~pairwise | group`), in each group. In
+#' `estimate_slopes()` with `backend = "emmeans"`, only the `stats::p.adjust()`
+#' methods, `"tukey"` and `"sidak"` are applied to the slopes, and other
+#' methods are ignored.
 #' @inheritParams estimate_means
 #' @inheritParams parameters::model_parameters.default
 #'
@@ -190,6 +196,31 @@ estimate_slopes <- function(
       verbose = verbose,
       ...
     )
+    # p-value adjustment, done by `parameters::model_parameters()` for the
+    # "adjust" setting of the emmeans object. Not for Bayesian models, which
+    # have no p-values, and not for ordinal models.
+    emmeans_adjust <- c(stats::p.adjust.methods, "tukey", "sidak")
+    emmeans_method <- emmeans_adjust[match(tolower(p_adjust), tolower(emmeans_adjust))]
+    if (
+      length(emmeans_method) == 1 &&
+        !is.na(emmeans_method) &&
+        emmeans_method != "none" &&
+        is.null(attributes(estimated)$ordinal_mode) &&
+        !insight::model_info(model, response = 1)$is_bayesian
+    ) {
+      # slopes are tested against 0, so we use Sidak instead of Tukey, as
+      # `emmeans::test()` does
+      if (emmeans_method == "tukey") {
+        if (verbose && nrow(estimated@grid) > 1) {
+          insight::format_alert(
+            "The Tukey adjustment is only appropriate for pairwise comparisons. Slopes are tested against 0, so p-values were adjusted with the Sidak method instead."
+          )
+        }
+        emmeans_method <- "sidak"
+      }
+      estimated <- stats::update(estimated, adjust = emmeans_method)
+      attr(estimated, "p_adjust") <- emmeans_method
+    }
     trends <- .format_emmeans_slopes(model, estimated, ci, ...)
   } else {
     # Marginaleffects --------------------------------------------------------
