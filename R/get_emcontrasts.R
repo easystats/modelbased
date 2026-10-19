@@ -71,6 +71,7 @@ get_emcontrasts <- function(
       fun_args$mode <- ordinal$mode
     }
     .check_ordinal_response_filter(my_args$response_filter, ordinal$mode)
+    .check_ordinal_response_filter(my_args$response_contrast_filter, ordinal$mode, "contrast")
   }
 
   # add dots
@@ -110,7 +111,15 @@ get_emcontrasts <- function(
       (is.character(comparison) && !.is_custom_comparison(comparison)) ||
         inherits(comparison, "formula")
     ) {
-      .check_slope_contrast_filter(model, my_args$by, slope_filter)
+      # ordinal models: the slopes are contrasted within each response
+      # category or threshold (or, for `mean.class`, once per level of `by`),
+      # so the slopes to compare are counted from `by`
+      .check_slope_contrast_filter(
+        model,
+        my_args$by,
+        slope_filter,
+        within_categories = !is.null(ordinal$mode)
+      )
     }
     # Run emmeans. Filters in `by` go into `at`, so only those slopes are
     # contrasted
@@ -137,6 +146,14 @@ get_emcontrasts <- function(
     specs <- .add_emmeans_pseudo_factor(my_args$emmeans_specs, ordinal$pseudo_factor)
     fun_args <- c(fun_args, list(specs = specs, at = my_args$emmeans_at))
     estimated <- suppressMessages(do.call(emmeans::emmeans, fun_args))
+    # ordinal models: a `contrast` term on the response with values keeps only
+    # those response categories, before they are contrasted
+    estimated <- .filter_ordinal_contrast_grid(
+      estimated,
+      model,
+      ordinal$pseudo_factor,
+      my_args$response_contrast_filter
+    )
     # Find by variables
     emm_by <- specs[!specs %in% my_args$contrast]
     if (length(emm_by) == 0) {

@@ -356,16 +356,33 @@ get_marginalcontrasts <- function(
 }
 
 
-# stop when the filters in `by` leave fewer than two slopes to compare
-.check_slope_contrast_filter <- function(model, by, by_filter, estimate = NULL) {
+# stop when the filters in `by` leave fewer than two slopes to compare.
+# `within_categories` is `TRUE` for ordinal models with the emmeans backend,
+# where slopes are contrasted within each response category or threshold (or
+# across `by` alone for `mean.class`), so the slopes to compare are counted
+# from `by` alone
+.check_slope_contrast_filter <- function(
+  model,
+  by,
+  by_filter,
+  estimate = NULL,
+  within_categories = FALSE
+) {
   if (!length(by_filter) || !length(by)) {
     return(invisible(NULL))
   }
   # models with response categories have one slope per category, so we
-  # cannot count the slopes from `by` alone
-  model_info <- insight::model_info(model, response = 1, verbose = FALSE)
-  if (isTRUE(model_info$is_ordinal) || isTRUE(model_info$is_multinomial) || isTRUE(model_info$is_categorical)) {
-    return(invisible(NULL))
+  # cannot count the slopes from `by` alone - unless the slopes are contrasted
+  # within each category (`within_categories`)
+  if (!within_categories) {
+    model_info <- insight::model_info(model, response = 1, verbose = FALSE)
+    if (
+      isTRUE(model_info$is_ordinal) ||
+        isTRUE(model_info$is_multinomial) ||
+        isTRUE(model_info$is_categorical)
+    ) {
+      return(invisible(NULL))
+    }
   }
   model_data <- insight::get_data(model, verbose = FALSE)
   by <- insight::trim_ws(gsub("=.*", "", by))

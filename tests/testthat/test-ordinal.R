@@ -1336,3 +1336,328 @@ test_that("estimate_means, backend emmeans, ordinal, several by terms on the res
   expect_response_filter_rows(out, out_all, "Low")
   expect_identical(nrow(out), 3L)
 })
+
+
+# `by` as list, data frame or formula, with the response -----------------------
+
+ordinal_filter_form_models <- function() {
+  data(housing, package = "MASS", envir = environment())
+  list(
+    polr = MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE),
+    clm = ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing)
+  )
+}
+
+
+ordinal_filter_slope_model <- function() {
+  data(housing, package = "MASS", envir = environment())
+  set.seed(1)
+  housing$x <- stats::rnorm(nrow(housing))
+  MASS::polr(Sat ~ x * Infl + Type, data = housing, Hess = TRUE)
+}
+
+
+# the rows of `out` must be the rows of `out_all` with the same values in the
+# `keys` columns, with equal numeric columns
+expect_matching_rows <- function(out, out_all, keys, columns, info = NULL) {
+  key <- function(d) do.call(paste, c(lapply(d[keys], as.character), sep = "\r"))
+  expect_gt(nrow(out), 0)
+  matched <- match(key(out), key(out_all))
+  expect_false(anyNA(matched), info = info)
+  for (column in columns) {
+    expect_equal(
+      out[[column]],
+      out_all[[column]][matched],
+      tolerance = 1e-10,
+      info = paste(info, column)
+    )
+  }
+}
+
+
+test_that("estimate_means, backend emmeans, ordinal, list and data frame filter on the response", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  models <- ordinal_filter_form_models()
+  for (name in names(models)) {
+    m <- models[[name]]
+    out_all <- estimate_means(m, "Infl", backend = "emmeans")
+
+    out <- estimate_means(
+      m,
+      list(Infl = c("Low", "High"), Sat = "Low"),
+      backend = "emmeans"
+    )
+    expect_identical(nrow(out), 2L, info = name)
+    expect_identical(as.character(out$Response), c("Low", "Low"), info = name)
+    expect_identical(as.character(out$Infl), c("Low", "High"), info = name)
+    expect_matching_rows(out, out_all, c("Infl", "Response"), c("Probability", "SE"), info = name)
+
+    out <- estimate_means(m, data.frame(Infl = "Low", Sat = "Low"), backend = "emmeans")
+    expect_identical(nrow(out), 1L, info = name)
+    expect_identical(as.character(out$Response), "Low", info = name)
+    expect_identical(as.character(out$Infl), "Low", info = name)
+    expect_matching_rows(out, out_all, c("Infl", "Response"), c("Probability", "SE"), info = name)
+  }
+})
+
+
+test_that("estimate_contrasts and estimate_slopes, backend emmeans, ordinal, list and data frame filter on the response", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  models <- ordinal_filter_form_models()
+  for (name in names(models)) {
+    m <- models[[name]]
+    out_all <- estimate_contrasts(m, "Infl", by = "Sat", backend = "emmeans")
+    by_forms <- list(
+      list = list(Sat = c("Low", "High")),
+      data_frame = data.frame(Sat = c("Low", "High"))
+    )
+    for (form in names(by_forms)) {
+      out <- estimate_contrasts(m, "Infl", by = by_forms[[form]], backend = "emmeans")
+      expect_response_filter_rows(out, out_all, c("Low", "High"), info = paste(name, form))
+      expect_identical(nrow(out), 6L, info = paste(name, form))
+    }
+  }
+
+  m2 <- ordinal_filter_slope_model()
+  out_character <- estimate_slopes(m2, "x", by = "Sat='Low'", backend = "emmeans")
+  out <- estimate_slopes(m2, "x", by = list(Sat = "Low"), backend = "emmeans")
+  expect_identical(nrow(out), 1L)
+  expect_identical(as.character(out$Response), "Low")
+  expect_equal(out$Slope, out_character$Slope, tolerance = 1e-10)
+  expect_equal(out$SE, out_character$SE, tolerance = 1e-10)
+})
+
+
+test_that("estimate_means, backend emmeans, ordinal, footer for by forms with the response", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  footer_lines <- function(out) {
+    grep("^Predictors modulated", insight::trim_ws(utils::capture.output(print(out))), value = TRUE)
+  }
+  expect_identical(
+    footer_lines(estimate_means(m, c("Infl", "Sat"), backend = "emmeans")),
+    "Predictors modulated: Infl"
+  )
+  by_forms <- list(
+    formula = ~ Infl + Sat,
+    list = list(Infl = c("Low", "High"), Sat = "Low"),
+    data_frame = data.frame(Infl = "Low", Sat = "Low")
+  )
+  for (form in names(by_forms)) {
+    out <- estimate_means(m, by_forms[[form]], backend = "emmeans")
+    expect_identical(footer_lines(out), "Predictors modulated: Infl", info = form)
+  }
+  # the formula has no values, so all response categories are kept
+  out <- estimate_means(m, ~ Infl + Sat, backend = "emmeans")
+  expect_identical(nrow(out), 9L)
+})
+
+
+test_that("estimate_means and estimate_slopes, backend emmeans, ordinal, errors for list and data frame filters", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  error_message <- function(expr) {
+    err <- expect_error(expr)
+    gsub("\\s+", " ", conditionMessage(err))
+  }
+  by_forms <- function(value) {
+    list(
+      list = list(Infl = "Low", Sat = value),
+      data_frame = data.frame(Infl = "Low", Sat = value)
+    )
+  }
+  models <- ordinal_filter_form_models()
+  m2 <- ordinal_filter_slope_model()
+  calls <- list(
+    polr = function(by, ...) estimate_means(models$polr, by, backend = "emmeans", ...),
+    clm = function(by, ...) estimate_means(models$clm, by, backend = "emmeans", ...),
+    slopes = function(by, ...) estimate_slopes(m2, "x", by = by, backend = "emmeans", ...)
+  )
+  for (call in names(calls)) {
+    for (form in c("list", "data_frame")) {
+      info <- paste(call, form)
+      msg <- error_message(calls[[call]](by_forms("Bogus")[[form]]))
+      expect_match(msg, "The response `Sat` has no category `Bogus`.", fixed = TRUE, info = info)
+      msg <- error_message(calls[[call]](by_forms("Low")[[form]], predict = "cum.prob"))
+      expect_match(msg, "The response `Sat` can only be used in `by`", fixed = TRUE, info = info)
+    }
+  }
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, contrast filter on the response", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  models <- ordinal_filter_form_models()
+  for (name in names(models)) {
+    m <- models[[name]]
+    out_all <- estimate_contrasts(m, "Sat", by = "Infl", backend = "emmeans")
+
+    # only the contrast of the two named categories, in each level of `Infl`
+    out <- estimate_contrasts(m, "Sat=c('Low','High')", by = "Infl", backend = "emmeans")
+    expect_identical(nrow(out), 3L, info = name)
+    expect_identical(as.character(out$Level1), rep("High", 3), info = name)
+    expect_identical(as.character(out$Level2), rep("Low", 3), info = name)
+    expect_identical(as.character(out$Infl), c("Low", "Medium", "High"), info = name)
+    expect_matching_rows(
+      out,
+      out_all,
+      c("Level1", "Level2", "Infl"),
+      c("Difference", "SE"),
+      info = name
+    )
+
+    # comparisons that are not pairwise use only the named categories
+    out <- estimate_contrasts(
+      m,
+      "Sat=c('Low','Medium')",
+      by = "Infl",
+      comparison = "poly",
+      backend = "emmeans"
+    )
+    expect_identical(nrow(out), 3L, info = name)
+    expect_identical(as.character(out$Level), rep("linear", 3), info = name)
+    pairwise <- out_all[out_all$Level1 == "Medium" & out_all$Level2 == "Low", ]
+    expect_equal(
+      out$Difference,
+      pairwise$Difference[match(out$Infl, pairwise$Infl)],
+      tolerance = 1e-10,
+      info = name
+    )
+
+    # one category cannot be contrasted
+    err <- expect_error(estimate_contrasts(m, "Sat='Low'", by = "Infl", backend = "emmeans"))
+    expect_match(
+      gsub("\\s+", " ", conditionMessage(err)),
+      "Contrasts of the response `Sat` need at least two response categories.",
+      fixed = TRUE,
+      info = name
+    )
+
+    # values that are no response categories, and modes without categories
+    err <- expect_error(estimate_contrasts(
+      m,
+      "Sat=c('Low','Bogus')",
+      by = "Infl",
+      backend = "emmeans"
+    ))
+    expect_match(
+      gsub("\\s+", " ", conditionMessage(err)),
+      "The response `Sat` has no category `Bogus`.",
+      fixed = TRUE,
+      info = name
+    )
+    err <- expect_error(estimate_contrasts(
+      m,
+      "Sat=c('Low','High')",
+      by = "Infl",
+      predict = "cum.prob",
+      backend = "emmeans"
+    ))
+    expect_match(
+      gsub("\\s+", " ", conditionMessage(err)),
+      "The response `Sat` can only be used in `contrast` with `predict = \"prob\"`",
+      fixed = TRUE,
+      info = name
+    )
+  }
+
+  # the response cannot also be filtered in `by`
+  err <- expect_error(estimate_contrasts(
+    models$polr,
+    "Sat=c('Low','High')",
+    by = "Sat='Low'",
+    backend = "emmeans"
+  ))
+  expect_match(
+    gsub("\\s+", " ", conditionMessage(err)),
+    "The response `Sat` cannot be filtered in `by` when it is also in `contrast`.",
+    fixed = TRUE
+  )
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, contrast filter on the response of clmm", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(wine, package = "ordinal")
+  # emmeans codes the categories of clmm models as 1, 2, 3, ..., so we use
+  # names that are not the codes
+  levels(wine$rating) <- letters[1:5]
+  m <- ordinal::clmm(rating ~ temp + contact + (1 | judge), data = wine)
+  out_all <- estimate_contrasts(m, "rating", by = "temp", backend = "emmeans")
+  out <- estimate_contrasts(m, "rating=c('a','c')", by = "temp", backend = "emmeans")
+  # one contrast of the categories `c` and `a` (codes 3 and 1) per level of `temp`
+  expected <- out_all[out_all$Level1 == "rating3" & out_all$Level2 == "rating1", ]
+  expect_identical(nrow(out), 2L)
+  expect_identical(as.character(out$temp), as.character(expected$temp))
+  expect_equal(out$Difference, expected$Difference, tolerance = 1e-10)
+  expect_equal(out$SE, expected$SE, tolerance = 1e-10)
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, joint test with a contrast filter on the response", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  out <- estimate_contrasts(
+    m,
+    "Sat=c('Low','High')",
+    by = "Infl",
+    comparison = "joint",
+    backend = "emmeans"
+  )
+  # the joint test of the contrasts of the two named categories in emmeans
+  estimated <- emmeans::emmeans(m, specs = c("Infl", "Sat"), mode = "prob")
+  estimated <- estimated[which(as.character(estimated@grid$Sat) %in% c("Low", "High"))]
+  expected <- as.data.frame(emmeans::test(
+    emmeans::contrast(estimated, by = "Infl", method = "pairwise"),
+    joint = TRUE,
+    by = "Infl"
+  ))
+  expect_identical(nrow(out), 3L)
+  expect_identical(as.character(out$Infl), as.character(expected$Infl))
+  expect_equal(out$Chisq, expected$Chisq, tolerance = 1e-6)
+  expect_equal(out$p, expected$p.value, tolerance = 1e-6)
+
+  # with another term in `contrast`, the joint test fails as without a filter
+  err <- expect_error(estimate_contrasts(
+    m,
+    c("Infl", "Sat=c('Low','High')"),
+    by = "Type",
+    comparison = "joint",
+    backend = "emmeans"
+  ))
+  expect_match(conditionMessage(err), "Could not compute joint test", fixed = TRUE)
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, slopes with a by filter that keeps one level", {
+  skip_if_not_installed("emmeans")
+  m2 <- ordinal_filter_slope_model()
+
+  # slopes are contrasted within each response category, so one level of
+  # `Infl` leaves nothing to compare
+  err <- expect_error(estimate_contrasts(m2, "x", by = "Infl='Low'", backend = "emmeans"))
+  expect_match(
+    gsub("\\s+", " ", conditionMessage(err)),
+    "The filter in `by` leaves fewer than two slopes to compare",
+    fixed = TRUE
+  )
+
+  out_all <- estimate_contrasts(m2, "x", by = "Infl", backend = "emmeans")
+  out <- estimate_contrasts(m2, "x", by = "Infl=c('Low','High')", backend = "emmeans")
+  expect_identical(nrow(out), 3L)
+  expect_identical(as.character(out$Level1), rep("High", 3))
+  expect_identical(as.character(out$Level2), rep("Low", 3))
+  expect_identical(as.character(out$Response), c("Low", "Medium", "High"))
+  expect_matching_rows(
+    out,
+    out_all,
+    c("Level1", "Level2", "Response"),
+    c("Difference", "SE")
+  )
+})

@@ -22,10 +22,11 @@
 #' `by = NULL`, the grand mean of the response is predicted. For frequentist
 #' ordinal models (for example from `MASS::polr()`, `ordinal::clm()` or
 #' `ordinal::clmm()`), `by` can also name the response with values, for example
-#' `by = c("x", "y = c('low', 'high')")`. `estimate_means()`,
-#' `estimate_contrasts()` and `estimate_slopes()` then keep only the rows of
-#' these response categories. This filter works with `backend = "emmeans"` and
-#' `predict = "prob"` (the default).
+#' `by = c("x", "y = c('low', 'high')")`, or as an element of a list or a
+#' column of a data frame, for example `by = list(x = c(1, 2), y = "low")`.
+#' `estimate_means()`, `estimate_contrasts()` and `estimate_slopes()` then keep
+#' only the rows of these response categories. This filter works with
+#' `backend = "emmeans"` and `predict = "prob"` (the default).
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). Valid options for `predict` are:
@@ -53,7 +54,7 @@
 #'   `Response`). The modes `"cum.prob"`, `"exc.prob"` and `"linear.predictor"`
 #'   return one value per threshold (column `Threshold`). For modes with
 #'   response categories or thresholds, contrasts compare the focal levels
-#'   within each one. For
+#'   within each one, unless `contrast` names the response. For
 #'   `estimate_slopes()`, the slopes for `"prob"` and `"mean.class"` are
 #'   computed from the slopes of the cumulative probabilities.
 #'
