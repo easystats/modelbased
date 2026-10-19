@@ -43,6 +43,15 @@
   replaced by `"sidak"` with a message, because the slopes are tested
   against 0.
 
+* Joint tests with `comparison = "joint"` and `backend = "emmeans"` now give
+  the correct statistics for contrasts between the response categories of
+  ordinal models, such as `MASS::polr()` and `ordinal::clm()`. An example is
+  `estimate_contrasts(m, "Sat", by = "Infl", comparison = "joint")`. Before,
+  the F and Chi-squared statistics were about 50 times too large. Joint tests
+  of ordinal models also no longer warn with "NaNs produced". The `Chisq`
+  column of joint tests with `backend = "emmeans"` now prints with two
+  decimals.
+
 # modelbased 0.18.0
 
 ## Breaking Changes
