@@ -137,6 +137,13 @@ get_emcontrasts <- function(
     specs <- .add_emmeans_pseudo_factor(my_args$emmeans_specs, ordinal$pseudo_factor)
     fun_args <- c(fun_args, list(specs = specs, at = my_args$emmeans_at))
     estimated <- suppressMessages(do.call(emmeans::emmeans, fun_args))
+    # Joint tests use the linear functions of the emmeans grid. For contrasts
+    # between the response categories of ordinal models, these gave values
+    # about 50 times the Wald statistic of the contrasts (emmeans 2.0.4).
+    # After `regrid()`, the joint tests equal the Wald statistic.
+    if (!is.null(ordinal$mode) && identical(comparison, "joint")) {
+      estimated <- emmeans::regrid(estimated)
+    }
     # Find by variables
     emm_by <- specs[!specs %in% my_args$contrast]
     if (length(emm_by) == 0) {
