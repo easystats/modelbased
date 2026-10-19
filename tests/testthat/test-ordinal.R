@@ -1376,6 +1376,28 @@ test_that("estimate_contrasts, ordinal slopes, by filter that keeps one level", 
     }
   }
 
+  # response levels with parentheses keep a label
+  d2 <- d
+  levels(d2$Sat) <- c("Low (bad)", "Mid", "High (good)")
+  m <- MASS::polr(Sat ~ x * Infl + Type, data = d2, Hess = TRUE)
+  out <- estimate_contrasts(m, "x", by = "Infl='Low'")
+  expect_identical(nrow(out), 3L)
+  expect_false(anyNA(out$Response1))
+  expect_false(anyNA(out$Response2))
+  expect_identical(as.character(out$Response1), c("Mid", "High good", "High good"))
+
+  # custom hypotheses and group formulas are not labelled for one level
+  expect_error(
+    estimate_contrasts(models$polr, "x", by = "Infl='Low'", comparison = "b1=b2"),
+    "No contrasts to show",
+    fixed = TRUE
+  )
+  expect_error(
+    estimate_contrasts(models$polr, "x", by = "Infl='Low'", comparison = ~ pairwise | Infl),
+    "No contrasts to show",
+    fixed = TRUE
+  )
+
   # models without response categories still need two slopes
   mt <- transform(mtcars, g = factor(am))
   expect_error(

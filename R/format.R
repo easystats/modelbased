@@ -357,11 +357,16 @@ format.marginaleffects_contrasts <- function(
       # per category. When the filter in `by` keeps one level, e.g.
       # `by = "Infl='Low'"`, the slopes of the categories at that level are
       # still contrasted. The labels from marginaleffects then hold only the
-      # response categories, e.g. "(Medium) - (Low)"
+      # response categories, e.g. "(Medium) - (Low)". Custom hypotheses, such
+      # as "b1=b2", and group formulas, such as `~pairwise | Infl`, are not
+      # labelled this way, so these still stop with an error below
       one_level_slopes <- !length(contrast) &&
         length(all_by) > 0 &&
         all(all_by %in% colnames(dgrid)) &&
         all(lengths(lapply(dgrid[all_by], unique)) == 1) &&
+        !.is_custom_comparison(comparison) &&
+        !(inherits(comparison, "formula") &&
+          grepl("|", insight::safe_deparse(comparison), fixed = TRUE)) &&
         .is_response_level_model(model, x)
       if (one_level_slopes) {
         contrast <- all_by
@@ -388,7 +393,9 @@ format.marginaleffects_contrasts <- function(
       insight::format_error("No contrasts to show. Please adjust `contrast`.")
     }
 
-    # for more than one term, we have comma-separated levels.
+    # for slopes with a one-level filter in `by`, the two columns hold the
+    # contrasted response categories. For more than one term, we have
+    # comma-separated levels.
     if (one_level_slopes) {
       new_colnames <- c("Response1", "Response2")
     } else if (length(contrast) > 1) {
@@ -504,7 +511,8 @@ format.marginaleffects_contrasts <- function(
       # all contrast terms that belong to one "contrast group", separated
       # by comma, and each the two "new contrast groups" go into separate
       # columns named "Level1" and "Level2". For one contrast term, we just
-      # need to rename the columns
+      # need to rename the columns. For slopes with a one-level filter in `by`,
+      # "Level1" and "Level2" get that level, next to the response categories
       if (one_level_slopes) {
         params <- .one_level_slope_labels(params, model, dgrid[all_by])
       } else if (length(contrast) == 1) {
@@ -541,7 +549,8 @@ format.marginaleffects_contrasts <- function(
       # level and the contrasted factor level into the same string (e.g.,
       # "setosa 3"). We split those into separate "Response1" and "Response2"
       # columns, so contrasted factor levels and response levels are not
-      # confounded
+      # confounded. Slopes with a one-level filter in `by` already have these
+      # columns, because their labels hold only the response categories
       if (!one_level_slopes) {
         params <- .split_contrast_response_levels(params, model, x)
       }
@@ -549,7 +558,8 @@ format.marginaleffects_contrasts <- function(
       # we need to update these variables, because these are the new column
       # names for contrasts and focal terms. We use `intersect()` here because
       # "Response1"/"Response2" are only present if the contrasted factor and
-      # response category levels were successfully split above
+      # response category levels were successfully split above, or for slopes
+      # with a one-level filter in `by`
       contrast <- intersect(
         c("Level1", "Response1", "Level2", "Response2"),
         colnames(params)
@@ -647,14 +657,20 @@ format.marginaleffects_contrasts <- function(
     vapply(by_grid, function(i) as.character(unique(i)), character(1)),
     collapse = ", "
   )
-  # for factor responses, keep the order of the factor levels, as
-  # `.split_contrast_response_levels()` does; otherwise keep the order in
-  # which the labels appear
-  response_levels <- unique(c(params$Response1, params$Response2))
+  # keep the order of the response levels, as in
+  # `.split_contrast_response_levels()`. Labels that are no response level,
+  # e.g. because marginaleffects removes parentheses from the labels, follow
+  # in the order in which they appear, so that no label becomes `NA`
+  labels <- unique(c(params$Response1, params$Response2))
   response <- .safe(insight::get_response(model, verbose = FALSE))
   if (is.factor(response)) {
-    response_levels <- intersect(levels(response), response_levels)
+    known_levels <- levels(response)
+  } else if (is.null(dim(response))) {
+    known_levels <- unique(as.character(response))
+  } else {
+    known_levels <- colnames(response)
   }
+  response_levels <- c(intersect(known_levels, labels), setdiff(labels, known_levels))
   data.frame(
     Level1 = factor(by_level),
     Response1 = factor(params$Response1, levels = response_levels),
