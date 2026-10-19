@@ -13,7 +13,7 @@ estimate_slopes()."><meta property="og:image" content="https://easystats.github.
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,7 @@ estimate_slopes()."><meta property="og:image" content="https://easystats.github.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Estimate Marginal Contrasts</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/v0.18.0/R/estimate_contrasts.R" class="external-link"><code>R/estimate_contrasts.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/R/estimate_contrasts.R" class="external-link"><code>R/estimate_contrasts.R</code></a></small>
       <div class="d-none name"><code>estimate_contrasts.Rd</code></div>
     </div>
 
@@ -390,7 +390,15 @@ confidence bands, also called sup-t confidence band (Montiel Olea &amp;
 Plagborg-Møller, 2019). Details for the other options can be found in the
 p-value adjustment section of the <code><a href="https://rvlenth.github.io/emmeans/reference/summary.emmGrid.html" class="external-link">emmeans::test</a></code> documentation or
 <code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">?stats::p.adjust</a></code>. Note that certain options provided by the <strong>emmeans</strong>
-package are only available if you set <code>backend = "emmeans"</code>.</p></dd>
+package are only available if you set <code>backend = "emmeans"</code>. The Tukey
+adjustment is only appropriate for pairwise comparisons. With
+<code>backend = "marginaleffects"</code>, <code>"tukey"</code> is therefore replaced by <code>"sidak"</code>
+(with a message) for comparisons that are not pairwise, for example
+<code>comparison = "reference"</code> or <code>"sequential"</code>, as <strong>emmeans</strong> does. The Sidak
+adjustment counts the comparisons within each group of the <code>by</code> variables
+that are columns of the output. When the output has no such column, for
+example for contrasts of slopes without a group term in <code>comparison</code>, it
+counts all comparisons.</p></dd>
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>

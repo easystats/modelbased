@@ -457,23 +457,31 @@ get_marginaltrends(
 
 - p_adjust:
 
-  The p-values adjustment method for frequentist multiple comparisons.
-  For
-  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md),
-  multiple comparison only occurs for Johnson-Neyman intervals, i.e. in
-  case of interactions with two numeric predictors (one specified in
-  `slope`, one in `by`). In this case, the `"esarey"` or `"sup-t"`
-  options are recommended, but `p_adjust` can also be one of `"none"`
-  (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`,
-  `"fdr"`, `"tukey"`, `"sidak"`, or `"holm"`. `"sup-t"` computes
-  simultaneous confidence bands, also called sup-t confidence band
-  (Montiel Olea & Plagborg-Møller, 2019). The Tukey adjustment is only
-  appropriate for pairwise comparisons. When **marginaleffects**
-  computes slopes that are each tested against 0, `"tukey"` is therefore
-  replaced by `"sidak"` (with a message), as
+  The p-values adjustment method for frequentist multiple comparisons,
+  when several slopes are tested, or when slopes are compared. For
+  Johnson-Neyman intervals, i.e. in case of interactions with two
+  numeric predictors (one specified in `slope`, one in `by`), the
+  `"esarey"` or `"sup-t"` options are recommended, but `p_adjust` can
+  also be one of `"none"` (default), `"hochberg"`, `"hommel"`,
+  `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, or
+  `"holm"`. `"sup-t"` computes simultaneous confidence bands, also
+  called sup-t confidence band (Montiel Olea & Plagborg-Møller, 2019).
+  The Tukey adjustment is only appropriate for pairwise comparisons. It
+  is used when slopes are compared pairwise, for example with
+  `comparison = ~pairwise` or `post_process = ~pairwise`. For slopes
+  that are each tested against 0 or against another value (for example
+  `hypothesis = 1`), and for slopes that are not compared pairwise,
+  `"tukey"` is replaced by `"sidak"` (with a message), as
   [`emmeans::test()`](https://rvlenth.github.io/emmeans/reference/summary.emmGrid.html)
-  does. This replacement is not made when slopes are compared, for
-  example with the `comparison` or `post_process` argument.
+  does. The Sidak adjustment counts the tests (rows) and the Tukey
+  adjustment the compared slopes, in the whole output or, for
+  comparisons with a group term (for example
+  `comparison = ~pairwise | group`), in each group. In
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  with `backend = "emmeans"`, only the
+  [`stats::p.adjust()`](https://rdrr.io/r/stats/p.adjust.html) methods,
+  `"tukey"` and `"sidak"` are applied to the slopes, and other methods
+  are ignored.
 
 - iterations:
 

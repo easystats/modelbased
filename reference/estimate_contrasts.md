@@ -369,7 +369,15 @@ estimate_contrasts(
   documentation or
   [`?stats::p.adjust`](https://rdrr.io/r/stats/p.adjust.html). Note that
   certain options provided by the **emmeans** package are only available
-  if you set `backend = "emmeans"`.
+  if you set `backend = "emmeans"`. The Tukey adjustment is only
+  appropriate for pairwise comparisons. With
+  `backend = "marginaleffects"`, `"tukey"` is therefore replaced by
+  `"sidak"` (with a message) for comparisons that are not pairwise, for
+  example `comparison = "reference"` or `"sequential"`, as **emmeans**
+  does. The Sidak adjustment counts the comparisons within each group of
+  the `by` variables that are columns of the output. When the output has
+  no such column, for example for contrasts of slopes without a group
+  term in `comparison`, it counts all comparisons.
 
 - transform:
 

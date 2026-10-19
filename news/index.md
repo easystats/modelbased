@@ -2,6 +2,8 @@
 
 ## modelbased 0.18.0
 
+CRAN release: 2026-10-18
+
 ### Breaking Changes
 
 - For ordinal models (for example from
