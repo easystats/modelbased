@@ -428,16 +428,17 @@ get_emmeans <- function(
   }
 }
 
-# For ordinal models, a `by` term can name the response, to keep only some
-# response categories (e.g. `"Sat='Low'"`). emmeans ignores `at` for the
-# response categories with `mode = "prob"`, so we remove the term from `by`,
-# and filter the formatted rows on the response categories. Returns `args`
-# with the term removed from `by`, and with `response_filter`: the name of
-# the response, and the chosen categories (`NULL` when the term has no values).
-# `by` can also be a list or a data frame with a column for the response, or a
-# formula that names the response (which has no values). A `contrast` term on
-# the response with values (e.g. `"Sat=c('Low','High')"`) gives
-# `contrast_filter`, and the term is replaced by the name of the response
+# For ordinal models, a `by` or `contrast` term can name the response, to keep
+# only some response categories (e.g. `"Sat='Low'"`). emmeans ignores `at` for
+# the response categories with `mode = "prob"`, so we remove the term from
+# `by`, and filter the formatted rows on the response categories. Returns
+# `args` with the term removed from `by`, and with `response_filter`: the name
+# of the response, and the chosen categories (`NULL` when the term has no
+# values). `by` can also be a list or a data frame with a column for the
+# response, or a formula that names the response (which has no values). A
+# `contrast` term on the response with values (e.g. `"Sat=c('Low','High')"`)
+# gives `response_contrast_filter`, and the term is replaced by the name of
+# the response
 .extract_ordinal_response_filter <- function(model, args, data) {
   response <- insight::find_response(model)
   if (length(response) != 1) {
@@ -456,6 +457,17 @@ get_emmeans <- function(
     args <- .extract_ordinal_response_by(model, args, data, response, is_response_by)
   }
   if (any(is_response_contrast)) {
+    # when the response categories are contrasted, the output has no column
+    # with the response categories, so a filter in `by` cannot be applied
+    if (!is.null(args$response_filter$values)) {
+      insight::format_error(paste0(
+        "The response `",
+        response,
+        "` cannot be filtered in `by` when it is also in `contrast`. Please name the response categories in `contrast` only, e.g. `contrast = \"",
+        response,
+        " = c('a', 'b')\"`."
+      ))
+    }
     # only terms with values are a filter, e.g. `"Sat=c('Low','High')"`
     contrast <- args$contrast
     value_terms <- contrast[is_response_contrast & grepl("=", contrast, fixed = TRUE)]
@@ -464,7 +476,7 @@ get_emmeans <- function(
       .check_ordinal_response_values(model, data, response, values)
       contrast[is_response_contrast] <- response
       args$contrast <- unique(contrast)
-      args$contrast_filter <- list(response = response, values = values)
+      args$response_contrast_filter <- list(response = response, values = values)
     }
   }
   args
@@ -604,25 +616,40 @@ get_emmeans <- function(
 }
 
 
-# keeps the response categories of `contrast_filter` in the emmeans grid
-# `estimated`, so that only these categories are contrasted. `pseudo_factor`
-# is the grid column with the response categories
-.filter_ordinal_contrast_grid <- function(estimated, pseudo_factor, contrast_filter) {
-  values <- contrast_filter$values
+# keeps the response categories of `response_contrast_filter` in the emmeans
+# grid `estimated`, so that only these categories are contrasted.
+# `pseudo_factor` is the grid column with the response categories
+.filter_ordinal_contrast_grid <- function(
+  estimated,
+  model,
+  pseudo_factor,
+  response_contrast_filter
+) {
+  values <- response_contrast_filter$values
   if (is.null(values) || is.null(pseudo_factor)) {
     return(estimated)
   }
   if (length(values) < 2) {
     insight::format_error(paste0(
       "Contrasts of the response `",
-      contrast_filter$response,
+      response_contrast_filter$response,
       "` need at least two response categories. Please name two or more categories in `contrast`, e.g. `",
-      contrast_filter$response,
+      response_contrast_filter$response,
       " = c('a', 'b')`."
     ))
   }
-  keep <- as.character(estimated@grid[[pseudo_factor]]) %in% values
-  estimated[which(keep)]
+  categories <- as.character(estimated@grid[[pseudo_factor]])
+  # for clmm models, emmeans codes the response categories as 1, 2, 3, ... -
+  # we match the codes with the names from the model (see
+  # `.clean_pseudo_factor_emmeans_ordinal()`)
+  if (inherits(model, "clmm")) {
+    response_levels <- model$y.levels
+    codes <- as.character(seq_along(response_levels))
+    if (all(categories %in% codes)) {
+      categories <- response_levels[match(categories, codes)]
+    }
+  }
+  estimated[which(categories %in% values)]
 }
 
 

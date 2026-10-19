@@ -1564,6 +1564,64 @@ test_that("estimate_contrasts, backend emmeans, ordinal, contrast filter on the 
       info = name
     )
   }
+
+  # the response cannot also be filtered in `by`
+  err <- expect_error(estimate_contrasts(
+    models$polr,
+    "Sat=c('Low','High')",
+    by = "Sat='Low'",
+    backend = "emmeans"
+  ))
+  expect_match(
+    gsub("\\s+", " ", conditionMessage(err)),
+    "The response `Sat` cannot be filtered in `by` when it is also in `contrast`.",
+    fixed = TRUE
+  )
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, contrast filter on the response of clmm", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(wine, package = "ordinal")
+  # emmeans codes the categories of clmm models as 1, 2, 3, ..., so we use
+  # names that are not the codes
+  levels(wine$rating) <- letters[1:5]
+  m <- ordinal::clmm(rating ~ temp + contact + (1 | judge), data = wine)
+  out_all <- estimate_contrasts(m, "rating", by = "temp", backend = "emmeans")
+  out <- estimate_contrasts(m, "rating=c('a','c')", by = "temp", backend = "emmeans")
+  # one contrast of the categories `c` and `a` (codes 3 and 1) per level of `temp`
+  expected <- out_all[out_all$Level1 == "rating3" & out_all$Level2 == "rating1", ]
+  expect_identical(nrow(out), 2L)
+  expect_identical(as.character(out$temp), as.character(expected$temp))
+  expect_equal(out$Difference, expected$Difference, tolerance = 1e-10)
+  expect_equal(out$SE, expected$SE, tolerance = 1e-10)
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, joint test with a contrast filter on the response", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  out <- estimate_contrasts(
+    m,
+    "Sat=c('Low','High')",
+    by = "Infl",
+    comparison = "joint",
+    backend = "emmeans"
+  )
+  # the joint test of the contrasts of the two named categories in emmeans
+  estimated <- emmeans::emmeans(m, specs = c("Infl", "Sat"), mode = "prob")
+  estimated <- estimated[which(as.character(estimated@grid$Sat) %in% c("Low", "High"))]
+  expected <- as.data.frame(emmeans::test(
+    emmeans::contrast(estimated, by = "Infl", method = "pairwise"),
+    joint = TRUE,
+    by = "Infl"
+  ))
+  expect_identical(nrow(out), 3L)
+  expect_identical(as.character(out$Infl), as.character(expected$Infl))
+  expect_equal(out$Chisq, expected$Chisq, tolerance = 1e-6)
+  expect_equal(out$p, expected$p.value, tolerance = 1e-6)
 })
 
 

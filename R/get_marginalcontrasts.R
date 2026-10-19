@@ -372,15 +372,17 @@ get_marginalcontrasts <- function(
     return(invisible(NULL))
   }
   # models with response categories have one slope per category, so we
-  # cannot count the slopes from `by` alone
-  model_info <- insight::model_info(model, response = 1, verbose = FALSE)
-  if (
-    !within_categories &&
-      (isTRUE(model_info$is_ordinal) ||
+  # cannot count the slopes from `by` alone - unless the slopes are contrasted
+  # within each category (`within_categories`)
+  if (!within_categories) {
+    model_info <- insight::model_info(model, response = 1, verbose = FALSE)
+    if (
+      isTRUE(model_info$is_ordinal) ||
         isTRUE(model_info$is_multinomial) ||
-        isTRUE(model_info$is_categorical))
-  ) {
-    return(invisible(NULL))
+        isTRUE(model_info$is_categorical)
+    ) {
+      return(invisible(NULL))
+    }
   }
   model_data <- insight::get_data(model, verbose = FALSE)
   by <- insight::trim_ws(gsub("=.*", "", by))
