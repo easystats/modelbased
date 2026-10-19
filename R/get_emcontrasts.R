@@ -111,7 +111,14 @@ get_emcontrasts <- function(
       (is.character(comparison) && !.is_custom_comparison(comparison)) ||
         inherits(comparison, "formula")
     ) {
-      .check_slope_contrast_filter(model, my_args$by, slope_filter)
+      # ordinal models: the slopes are contrasted within each response
+      # category or threshold
+      .check_slope_contrast_filter(
+        model,
+        my_args$by,
+        slope_filter,
+        within_categories = !is.null(ordinal$mode)
+      )
     }
     # Run emmeans. Filters in `by` go into `at`, so only those slopes are
     # contrasted

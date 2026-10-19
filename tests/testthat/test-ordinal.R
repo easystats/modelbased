@@ -1565,3 +1565,31 @@ test_that("estimate_contrasts, backend emmeans, ordinal, contrast filter on the 
     )
   }
 })
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, slopes with a by filter that keeps one level", {
+  skip_if_not_installed("emmeans")
+  m2 <- ordinal_filter_slope_model()
+
+  # slopes are contrasted within each response category, so one level of
+  # `Infl` leaves nothing to compare
+  err <- expect_error(estimate_contrasts(m2, "x", by = "Infl='Low'", backend = "emmeans"))
+  expect_match(
+    gsub("\\s+", " ", conditionMessage(err)),
+    "The filter in `by` leaves fewer than two slopes to compare",
+    fixed = TRUE
+  )
+
+  out_all <- estimate_contrasts(m2, "x", by = "Infl", backend = "emmeans")
+  out <- estimate_contrasts(m2, "x", by = "Infl=c('Low','High')", backend = "emmeans")
+  expect_identical(nrow(out), 3L)
+  expect_identical(as.character(out$Level1), rep("High", 3))
+  expect_identical(as.character(out$Level2), rep("Low", 3))
+  expect_identical(as.character(out$Response), c("Low", "Medium", "High"))
+  expect_matching_rows(
+    out,
+    out_all,
+    c("Level1", "Level2", "Response"),
+    c("Difference", "SE")
+  )
+})
