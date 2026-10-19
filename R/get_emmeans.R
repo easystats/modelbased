@@ -433,16 +433,27 @@ get_emmeans <- function(
 # response categories with `mode = "prob"`, so we remove the term from `by`,
 # and filter the formatted rows on the response categories. Returns `args`
 # with the term removed from `by`, and with `response_filter`: the name of
-# the response, and the chosen categories (`NULL` when the term has no values)
+# the response, and the chosen categories (`NULL` when the term has no values).
+# `by` can also be a list or a data frame with a column for the response, or a
+# formula that names the response (which has no values)
 .extract_ordinal_response_filter <- function(model, args, data) {
-  if (!is.character(args$by) || !length(args$by)) {
+  by <- args$by
+  if (is.null(by) || !length(by)) {
     return(args)
   }
   response <- insight::find_response(model)
   if (length(response) != 1) {
     return(args)
   }
-  is_response <- .grep_cleaned_by_vars(args$by) == response
+  if (is.character(by)) {
+    is_response <- .grep_cleaned_by_vars(by) == response
+  } else if (is.list(by)) {
+    is_response <- names(by) == response
+  } else if (inherits(by, "formula")) {
+    is_response <- all.vars(by) == response
+  } else {
+    return(args)
+  }
   if (
     !any(is_response) ||
       !response %in% colnames(data) ||
@@ -450,58 +461,95 @@ get_emmeans <- function(
   ) {
     return(args)
   }
-  # terms with values, e.g. "Sat='Low'" or "rating=c(1, 3)". Numeric values
-  # are matched with the names of the response categories as character. The
-  # categories of all terms are kept, and a term without values adds none
-  value_terms <- args$by[is_response & grepl("=", args$by, fixed = TRUE)]
+
   values <- NULL
-  if (length(value_terms)) {
-    values <- unique(unlist(lapply(value_terms, function(term) {
-      grid <- tryCatch(
-        suppressWarnings(insight::get_datagrid(data[response], by = term)),
-        error = function(e) NULL
-      )
-      term_values <- if (is.null(grid)) NA else as.character(grid[[response]])
-      if (!length(term_values) || anyNA(term_values)) {
-        insight::format_error(paste0(
-          "Could not read the response categories in `",
-          term,
-          "`. Please name the categories in quotes, e.g. `",
-          response,
-          " = c('a', 'b')`."
-        ))
-      }
-      term_values
-    })))
-    # the categories of the model, which can differ from the factor levels in
-    # the data (e.g. `clm()` drops unused levels)
-    response_levels <- model$y.levels
-    if (is.null(response_levels)) {
-      response_levels <- model$lev
+  if (is.character(by)) {
+    # terms with values, e.g. "Sat='Low'" or "rating=c(1, 3)". Numeric values
+    # are matched with the names of the response categories as character. The
+    # categories of all terms are kept, and a term without values adds none
+    value_terms <- by[is_response & grepl("=", by, fixed = TRUE)]
+    if (length(value_terms)) {
+      values <- unique(unlist(lapply(value_terms, function(term) {
+        grid <- tryCatch(
+          suppressWarnings(insight::get_datagrid(data[response], by = term)),
+          error = function(e) NULL
+        )
+        term_values <- if (is.null(grid)) NA else as.character(grid[[response]])
+        if (!length(term_values) || anyNA(term_values)) {
+          insight::format_error(paste0(
+            "Could not read the response categories in `",
+            term,
+            "`. Please name the categories in quotes, e.g. `",
+            response,
+            " = c('a', 'b')`."
+          ))
+        }
+        term_values
+      })))
     }
-    if (is.null(response_levels)) {
-      response_levels <- levels(droplevels(as.factor(data[[response]])))
-    }
-    unknown <- setdiff(values, response_levels)
-    if (length(unknown)) {
+    by <- by[!is_response]
+  } else if (is.list(by)) {
+    # a list or data frame: the values of the response element or column
+    values <- unique(as.character(unlist(by[[response]], use.names = FALSE)))
+    if (!length(values) || anyNA(values)) {
       insight::format_error(paste0(
-        "The response `",
+        "Could not read the response categories in `by`. Please name the categories as character values, e.g. `",
         response,
-        "` has no ",
-        if (length(unknown) == 1) "category " else "categories ",
-        datawizard::text_concatenate(unknown, enclose = "`"),
-        ". Its categories are ",
-        datawizard::text_concatenate(response_levels, enclose = "`"),
-        "."
+        " = c('a', 'b')`."
       ))
     }
+    if (is.data.frame(by)) {
+      by <- unique(by[!is_response])
+      rownames(by) <- NULL
+      if (!ncol(by)) {
+        by <- NULL
+      }
+    } else {
+      by <- by[!is_response]
+    }
+  } else {
+    # a formula names variables only, so the response adds no filter
+    others <- all.vars(by)[!is_response]
+    by <- if (length(others)) stats::reformulate(others) else NULL
   }
-  args$by <- args$by[!is_response]
-  if (!length(args$by)) {
-    args$by <- NULL
+
+  if (!is.null(values)) {
+    .check_ordinal_response_values(model, data, response, values)
   }
+  if (!length(by)) {
+    by <- NULL
+  }
+  args$by <- by
   args$response_filter <- list(response = response, values = values)
   args
+}
+
+
+# stops when `values` are not categories of the ordinal response
+.check_ordinal_response_values <- function(model, data, response, values) {
+  # the categories of the model, which can differ from the factor levels in
+  # the data (e.g. `clm()` drops unused levels)
+  response_levels <- model$y.levels
+  if (is.null(response_levels)) {
+    response_levels <- model$lev
+  }
+  if (is.null(response_levels)) {
+    response_levels <- levels(droplevels(as.factor(data[[response]])))
+  }
+  unknown <- setdiff(values, response_levels)
+  if (length(unknown)) {
+    insight::format_error(paste0(
+      "The response `",
+      response,
+      "` has no ",
+      if (length(unknown) == 1) "category " else "categories ",
+      datawizard::text_concatenate(unknown, enclose = "`"),
+      ". Its categories are ",
+      datawizard::text_concatenate(response_levels, enclose = "`"),
+      "."
+    ))
+  }
+  invisible(NULL)
 }
 
 
