@@ -615,11 +615,6 @@ format.marginaleffects_contrasts <- function(
     identical(comparison, "ratio")
 }
 
-# since we combine levels from different factors, we have to make
-# sure levels are unique across different terms. If not, paste
-# variable names to levels. We first find the intersection of all
-# levels from all current contrast terms
-
 # TRUE for models where predictions are made separately for each level of the
 # response (categorical, ordinal/cumulative, multinomial or multivariate models)
 
@@ -652,7 +647,9 @@ format.marginaleffects_contrasts <- function(
     vapply(by_grid, function(i) as.character(unique(i)), character(1)),
     collapse = ", "
   )
-  # keep the order of the response levels, as `.split_contrast_response_levels()`
+  # for factor responses, keep the order of the factor levels, as
+  # `.split_contrast_response_levels()` does; otherwise keep the order in
+  # which the labels appear
   response_levels <- unique(c(params$Response1, params$Response2))
   response <- .safe(insight::get_response(model, verbose = FALSE))
   if (is.factor(response)) {
@@ -666,6 +663,11 @@ format.marginaleffects_contrasts <- function(
     stringsAsFactors = FALSE
   )
 }
+
+# since we combine levels from different factors, we have to make
+# sure levels are unique across different terms. If not, paste
+# variable names to levels. We first find the intersection of all
+# levels from all current contrast terms
 
 # for models where predictions are made separately for each level of the
 # response (categorical, ordinal/cumulative, multinomial or multivariate
