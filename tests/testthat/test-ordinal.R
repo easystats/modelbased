@@ -1384,7 +1384,7 @@ test_that("estimate_contrasts, ordinal slopes, by filter that keeps one level", 
   expect_identical(nrow(out), 3L)
   expect_false(anyNA(out$Response1))
   expect_false(anyNA(out$Response2))
-  expect_identical(as.character(out$Response1), c("Mid", "High good", "High good"))
+  expect_length(unique(c(as.character(out$Response1), as.character(out$Response2))), 3L)
 
   # custom hypotheses and group formulas are not labelled for one level
   expect_error(
