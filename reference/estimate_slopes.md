@@ -82,7 +82,9 @@ estimate_slopes(
   [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html) or
   [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html)), `by`
   can also name the response with values, for example
-  `by = c("x", "y = c('low', 'high')")`.
+  `by = c("x", "y = c('low', 'high')")`, or as an element of a list or a
+  column of a data frame, for example
+  `by = list(x = c(1, 2), y = "low")`.
   [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
   [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
   and `estimate_slopes()` then keep only the rows of these response
@@ -130,9 +132,9 @@ estimate_slopes(
     `"cum.prob"`, `"exc.prob"` and `"linear.predictor"` return one value
     per threshold (column `Threshold`). For modes with response
     categories or thresholds, contrasts compare the focal levels within
-    each one. For `estimate_slopes()`, the slopes for `"prob"` and
-    `"mean.class"` are computed from the slopes of the cumulative
-    probabilities.
+    each one, unless `contrast` names the response. For
+    `estimate_slopes()`, the slopes for `"prob"` and `"mean.class"` are
+    computed from the slopes of the cumulative probabilities.
 
   See also section *Predictions on different scales*.
 

@@ -110,7 +110,11 @@ get_marginaltrends(
   It is possible to compute pairwise comparisons of two average slopes
   at the levels of a third variable, by also adding that variable to the
   `contrast` argument, e.g. `contrast = c("num1", "num2", "factor")`.
-  See 'Examples'.
+  See 'Examples'. For frequentist ordinal models and
+  `backend = "emmeans"`, `contrast` can name the response with two or
+  more categories, for example `contrast = "y = c('low', 'high')"`, to
+  contrast only these response categories (with `predict = "prob"`, the
+  default).
 
 - by:
 
@@ -135,7 +139,9 @@ get_marginaltrends(
   [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html) or
   [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html)), `by`
   can also name the response with values, for example
-  `by = c("x", "y = c('low', 'high')")`.
+  `by = c("x", "y = c('low', 'high')")`, or as an element of a list or a
+  column of a data frame, for example
+  `by = list(x = c(1, 2), y = "low")`.
   [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
   [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
   and
@@ -186,7 +192,7 @@ get_marginaltrends(
     `"cum.prob"`, `"exc.prob"` and `"linear.predictor"` return one value
     per threshold (column `Threshold`). For modes with response
     categories or thresholds, contrasts compare the focal levels within
-    each one. For
+    each one, unless `contrast` names the response. For
     [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md),
     the slopes for `"prob"` and `"mean.class"` are computed from the
     slopes of the cumulative probabilities.

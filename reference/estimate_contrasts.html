@@ -13,7 +13,7 @@ estimate_slopes()."><meta property="og:image" content="https://easystats.github.
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -196,7 +196,11 @@ it is not possible to "filter" at certain values for two numeric predictors.
 For contrasting slopes, the <code>comparison</code> will always be <code>"pairwise"</code>. It is
 possible to compute pairwise comparisons of two average slopes at the levels
 of a third variable, by also adding that variable to the <code>contrast</code> argument,
-e.g. <code>contrast = c("num1", "num2", "factor")</code>. See 'Examples'.</p></dd>
+e.g. <code>contrast = c("num1", "num2", "factor")</code>. See 'Examples'. For
+frequentist ordinal models and <code>backend = "emmeans"</code>, <code>contrast</code> can name the
+response with two or more categories, for example
+<code>contrast = "y = c('low', 'high')"</code>, to contrast only these response
+categories (with <code>predict = "prob"</code>, the default).</p></dd>
 
 
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
@@ -215,10 +219,11 @@ which automatically selects the first focal predictor found in the model. If
 <code>by = NULL</code>, the grand mean of the response is predicted. For frequentist
 ordinal models (for example from <code><a href="https://rdrr.io/pkg/MASS/man/polr.html" class="external-link">MASS::polr()</a></code>, <code><a href="https://rdrr.io/pkg/ordinal/man/clm.html" class="external-link">ordinal::clm()</a></code> or
 <code><a href="https://rdrr.io/pkg/ordinal/man/clmm.html" class="external-link">ordinal::clmm()</a></code>), <code>by</code> can also name the response with values, for example
-<code>by = c("x", "y = c('low', 'high')")</code>. <code><a href="estimate_means.html">estimate_means()</a></code>,
-<code>estimate_contrasts()</code> and <code><a href="estimate_slopes.html">estimate_slopes()</a></code> then keep only the rows of
-these response categories. This filter works with <code>backend = "emmeans"</code> and
-<code>predict = "prob"</code> (the default).</p></dd>
+<code>by = c("x", "y = c('low', 'high')")</code>, or as an element of a list or a
+column of a data frame, for example <code>by = list(x = c(1, 2), y = "low")</code>.
+<code><a href="estimate_means.html">estimate_means()</a></code>, <code>estimate_contrasts()</code> and <code><a href="estimate_slopes.html">estimate_slopes()</a></code> then keep
+only the rows of these response categories. This filter works with
+<code>backend = "emmeans"</code> and <code>predict = "prob"</code> (the default).</p></dd>
 
 
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
@@ -247,7 +252,7 @@ is <code>"prob"</code>, which returns one probability per response category (col
 <code>Response</code>). The modes <code>"cum.prob"</code>, <code>"exc.prob"</code> and <code>"linear.predictor"</code>
 return one value per threshold (column <code>Threshold</code>). For modes with
 response categories or thresholds, contrasts compare the focal levels
-within each one. For
+within each one, unless <code>contrast</code> names the response. For
 <code><a href="estimate_slopes.html">estimate_slopes()</a></code>, the slopes for <code>"prob"</code> and <code>"mean.class"</code> are
 computed from the slopes of the cumulative probabilities.</p></li>
 </ul><p>See also section <em>Predictions on different scales</em>.</p></dd>
