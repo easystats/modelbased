@@ -46,9 +46,11 @@
 * Joint tests with `comparison = "joint"` and `backend = "emmeans"` now give
   the correct statistics for contrasts between the response categories of
   ordinal models, such as `MASS::polr()` and `ordinal::clm()`. An example is
-  `estimate_contrasts(m, "Sat", by = "Infl", comparison = "joint")`. Before,
-  the F and Chi-squared statistics were about 50 times too large. Joint tests
-  of ordinal models also no longer warn with "NaNs produced". The `Chisq`
+  `estimate_contrasts(m, "Sat", by = "Infl", comparison = "joint",
+  backend = "emmeans")`. Before, the F and Chi-squared statistics were too
+  large, for example by a factor of 4 to 52 for
+  `polr(Sat ~ Infl + Type, data = MASS::housing)`. Joint tests of
+  ordinal models also no longer warn with "NaNs produced". The `Chisq`
   column of joint tests with `backend = "emmeans"` now prints with two
   decimals.
 

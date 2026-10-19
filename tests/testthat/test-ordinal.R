@@ -1399,8 +1399,9 @@ test_that("estimate_contrasts, backend emmeans, ordinal, joint tests of the resp
   )
 
   # reference 2: marginaleffects, with the same contrasts of the 36 predicted
-  # probabilities (4 `Type` x 3 `Infl` x 3 `Sat`). Each column of `H` gives
-  # weight 1/4 to the probabilities of one category at one `Infl` level
+  # probabilities (4 `Type` x 3 `Infl` x 3 `Sat`). Each column of `H` is a
+  # contrast at one `Infl` level, with weight 1/4 on the probabilities of
+  # `Medium` (or `High`) and -1/4 on those of `Low`
   nd <- marginaleffects::datagrid(
     model = m,
     Infl = levels(housing$Infl),
@@ -1461,8 +1462,8 @@ test_that("estimate_contrasts, backend emmeans, ordinal, joint tests of a predic
 
   for (model in list(m, mc)) {
     # reference 2: emmeans' joint tests of the pairwise contrasts. For the clm
-    # fit, emmeans warns with "NaNs produced" in a step that does not change
-    # these values
+    # fit, emmeans warns with "NaNs produced" when it computes a p-value with
+    # `pf()`, which does not change these values
     ref_emmeans <- suppressWarnings(as.data.frame(emmeans::joint_tests(
       emmeans::contrast(
         emmeans::emmeans(model, ~ Infl | Sat, mode = "prob"),
