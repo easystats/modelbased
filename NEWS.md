@@ -2,6 +2,25 @@
 
 ## Bug fixes
 
+* For frequentist ordinal models with `backend = "emmeans"`,
+  `estimate_means()`, `estimate_contrasts()` and `estimate_slopes()` now also
+  filter the response categories in a list or data-frame `by`, for example
+  `by = list(Infl = "Low", Sat = "Low")`, where `Sat` is the response.
+  Before, they returned all response categories. With a list, a data frame or
+  a formula such as `by = ~ Infl + Sat`, the printed output no longer lists
+  the response under "Predictors modulated".
+
+* `estimate_contrasts()` with `backend = "emmeans"` now contrasts only the
+  named response categories of frequentist ordinal models, for example
+  `estimate_contrasts(m, "Sat = c('Low', 'High')", by = "Infl")`. Before, it
+  ignored the values and contrasted all categories. A single category gives
+  an error.
+
+* For contrasts of slopes of ordinal models with `backend = "emmeans"`, a
+  filter in `by` that leaves one level to compare, for example
+  `by = "Infl = 'Low'"`, now gives a clear error. Before,
+  `estimate_contrasts()` returned a table with empty contrasts.
+
 * `estimate_contrasts()` now applies the filter values in `by` to contrasts of
   slopes with `estimate = "average"` and with `backend = "emmeans"`, for
   example `estimate_contrasts(m, "wt", by = c("cyl = '4'", "am"))`, where
