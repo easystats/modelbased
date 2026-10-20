@@ -428,94 +428,228 @@ get_emmeans <- function(
   }
 }
 
-# For ordinal models, a `by` term can name the response, to keep only some
-# response categories (e.g. `"Sat='Low'"`). emmeans ignores `at` for the
-# response categories with `mode = "prob"`, so we remove the term from `by`,
-# and filter the formatted rows on the response categories. Returns `args`
-# with the term removed from `by`, and with `response_filter`: the name of
-# the response, and the chosen categories (`NULL` when the term has no values)
+# For ordinal models, a `by` or `contrast` term can name the response, to keep
+# only some response categories (e.g. `"Sat='Low'"`). emmeans ignores `at` for
+# the response categories with `mode = "prob"`, so we remove the term from
+# `by`, and filter the formatted rows on the response categories. Returns
+# `args` with the term removed from `by`, and with `response_filter`: the name
+# of the response, and the chosen categories (`NULL` when the term has no
+# values). `by` can also be a list or a data frame with a column for the
+# response, or a formula that names the response (which has no values). A
+# `contrast` term on the response with values (e.g. `"Sat=c('Low','High')"`)
+# gives `response_contrast_filter`, and the term is replaced by the name of
+# the response
 .extract_ordinal_response_filter <- function(model, args, data) {
-  if (!is.character(args$by) || !length(args$by)) {
-    return(args)
-  }
   response <- insight::find_response(model)
   if (length(response) != 1) {
     return(args)
   }
-  is_response <- .grep_cleaned_by_vars(args$by) == response
+  is_response_by <- .is_ordinal_response_term(args$by, response)
+  is_response_contrast <- .is_ordinal_response_term(args$contrast, response)
   if (
-    !any(is_response) ||
+    (!any(is_response_by) && !any(is_response_contrast)) ||
       !response %in% colnames(data) ||
       !.is_emmeans_ordinal(model)
   ) {
     return(args)
   }
-  # terms with values, e.g. "Sat='Low'" or "rating=c(1, 3)". Numeric values
-  # are matched with the names of the response categories as character. The
-  # categories of all terms are kept, and a term without values adds none
-  value_terms <- args$by[is_response & grepl("=", args$by, fixed = TRUE)]
-  values <- NULL
-  if (length(value_terms)) {
-    values <- unique(unlist(lapply(value_terms, function(term) {
-      grid <- tryCatch(
-        suppressWarnings(insight::get_datagrid(data[response], by = term)),
-        error = function(e) NULL
-      )
-      term_values <- if (is.null(grid)) NA else as.character(grid[[response]])
-      if (!length(term_values) || anyNA(term_values)) {
-        insight::format_error(paste0(
-          "Could not read the response categories in `",
-          term,
-          "`. Please name the categories in quotes, e.g. `",
-          response,
-          " = c('a', 'b')`."
-        ))
-      }
-      term_values
-    })))
-    # the categories of the model, which can differ from the factor levels in
-    # the data (e.g. `clm()` drops unused levels)
-    response_levels <- model$y.levels
-    if (is.null(response_levels)) {
-      response_levels <- model$lev
-    }
-    if (is.null(response_levels)) {
-      response_levels <- levels(droplevels(as.factor(data[[response]])))
-    }
-    unknown <- setdiff(values, response_levels)
-    if (length(unknown)) {
+  if (any(is_response_by)) {
+    args <- .extract_ordinal_response_by(model, args, data, response, is_response_by)
+  }
+  if (any(is_response_contrast)) {
+    # when the response categories are contrasted, the output has no column
+    # with the response categories, so a filter in `by` cannot be applied
+    if (!is.null(args$response_filter$values)) {
       insight::format_error(paste0(
         "The response `",
         response,
-        "` has no ",
-        if (length(unknown) == 1) "category " else "categories ",
-        datawizard::text_concatenate(unknown, enclose = "`"),
-        ". Its categories are ",
-        datawizard::text_concatenate(response_levels, enclose = "`"),
-        "."
+        "` cannot be filtered in `by` when it is also in `contrast`. Please name the response categories in `contrast` only, e.g. `contrast = \"",
+        response,
+        " = c('a', 'b')\"`."
       ))
     }
+    # only terms with values are a filter, e.g. `"Sat=c('Low','High')"`
+    contrast <- args$contrast
+    value_terms <- contrast[is_response_contrast & grepl("=", contrast, fixed = TRUE)]
+    if (length(value_terms)) {
+      values <- .read_ordinal_response_terms(value_terms, data, response)
+      .check_ordinal_response_values(model, data, response, values)
+      contrast[is_response_contrast] <- response
+      args$contrast <- unique(contrast)
+      args$response_contrast_filter <- list(response = response, values = values)
+    }
   }
-  args$by <- args$by[!is_response]
-  if (!length(args$by)) {
-    args$by <- NULL
+  args
+}
+
+
+# which elements of `x` (a `by` or `contrast` argument) name the response
+.is_ordinal_response_term <- function(x, response) {
+  if (is.null(x) || !length(x)) {
+    logical(0)
+  } else if (is.character(x)) {
+    .grep_cleaned_by_vars(x) == response
+  } else if (is.list(x)) {
+    names(x) == response
+  } else if (inherits(x, "formula")) {
+    all.vars(x) == response
+  } else {
+    logical(0)
   }
+}
+
+
+# reads the response categories of terms such as "Sat='Low'" or
+# "rating=c(1, 3)". Numeric values are matched with the names of the response
+# categories as character. The categories of all terms are kept
+.read_ordinal_response_terms <- function(terms, data, response) {
+  unique(unlist(lapply(terms, function(term) {
+    grid <- tryCatch(
+      suppressWarnings(insight::get_datagrid(data[response], by = term)),
+      error = function(e) NULL
+    )
+    term_values <- if (is.null(grid)) NA else as.character(grid[[response]])
+    if (!length(term_values) || anyNA(term_values)) {
+      insight::format_error(paste0(
+        "Could not read the response categories in `",
+        term,
+        "`. Please name the categories in quotes, e.g. `",
+        response,
+        " = c('a', 'b')`."
+      ))
+    }
+    term_values
+  })))
+}
+
+
+# removes the response from `by`, and adds `response_filter` to `args`
+.extract_ordinal_response_by <- function(model, args, data, response, is_response) {
+  by <- args$by
+  values <- NULL
+  if (is.character(by)) {
+    # a term without values adds no categories
+    value_terms <- by[is_response & grepl("=", by, fixed = TRUE)]
+    if (length(value_terms)) {
+      values <- .read_ordinal_response_terms(value_terms, data, response)
+    }
+    by <- by[!is_response]
+  } else if (is.list(by)) {
+    # a list or data frame: the values of the response element or column
+    values <- unique(as.character(unlist(by[[response]], use.names = FALSE)))
+    if (!length(values) || anyNA(values)) {
+      insight::format_error(paste0(
+        "Could not read the response categories in `by`. Please name the categories as character values, e.g. `",
+        response,
+        " = c('a', 'b')`."
+      ))
+    }
+    if (is.data.frame(by)) {
+      by <- unique(by[!is_response])
+      rownames(by) <- NULL
+      if (!ncol(by)) {
+        by <- NULL
+      }
+    } else {
+      by <- by[!is_response]
+    }
+  } else {
+    # a formula names variables only, so the response adds no filter
+    others <- all.vars(by)[!is_response]
+    by <- if (length(others)) stats::reformulate(others) else NULL
+  }
+
+  if (!is.null(values)) {
+    .check_ordinal_response_values(model, data, response, values)
+  }
+  if (!length(by)) {
+    by <- NULL
+  }
+  args$by <- by
   args$response_filter <- list(response = response, values = values)
   args
 }
 
 
+# stops when `values` are not categories of the ordinal response
+.check_ordinal_response_values <- function(model, data, response, values) {
+  # the categories of the model, which can differ from the factor levels in
+  # the data (e.g. `clm()` drops unused levels)
+  response_levels <- model$y.levels
+  if (is.null(response_levels)) {
+    response_levels <- model$lev
+  }
+  if (is.null(response_levels)) {
+    response_levels <- levels(droplevels(as.factor(data[[response]])))
+  }
+  unknown <- setdiff(values, response_levels)
+  if (length(unknown)) {
+    insight::format_error(paste0(
+      "The response `",
+      response,
+      "` has no ",
+      if (length(unknown) == 1) "category " else "categories ",
+      datawizard::text_concatenate(unknown, enclose = "`"),
+      ". Its categories are ",
+      datawizard::text_concatenate(response_levels, enclose = "`"),
+      "."
+    ))
+  }
+  invisible(NULL)
+}
+
+
 # the response categories are only in the output for `predict = "prob"`, so
-# we cannot use the response in `by` for the other modes. `ordinal_mode` is
-# the mode the user asked for, not the mode that we use internally for slopes
-.check_ordinal_response_filter <- function(response_filter, ordinal_mode) {
+# we cannot use the response in `by` (or `contrast`) for the other modes.
+# `ordinal_mode` is the mode the user asked for, not the mode that we use
+# internally for slopes
+.check_ordinal_response_filter <- function(response_filter, ordinal_mode, argument = "by") {
   if (!is.null(response_filter) && !identical(ordinal_mode, "prob")) {
     insight::format_error(paste0(
       "The response `",
       response_filter$response,
-      "` can only be used in `by` with `predict = \"prob\"` (the default), which returns the probability of each response category."
+      "` can only be used in `",
+      argument,
+      "` with `predict = \"prob\"` (the default), which returns the probability of each response category."
     ))
   }
+}
+
+
+# keeps the response categories of `response_contrast_filter` in the emmeans
+# grid `estimated`, so that only these categories are contrasted.
+# `pseudo_factor` is the grid column with the response categories
+.filter_ordinal_contrast_grid <- function(
+  estimated,
+  model,
+  pseudo_factor,
+  response_contrast_filter
+) {
+  values <- response_contrast_filter$values
+  if (is.null(values) || is.null(pseudo_factor)) {
+    return(estimated)
+  }
+  if (length(values) < 2) {
+    insight::format_error(paste0(
+      "Contrasts of the response `",
+      response_contrast_filter$response,
+      "` need at least two response categories. Please name two or more categories in `contrast`, e.g. `",
+      response_contrast_filter$response,
+      " = c('a', 'b')`."
+    ))
+  }
+  categories <- as.character(estimated@grid[[pseudo_factor]])
+  # for clmm models, emmeans codes the response categories as 1, 2, 3, ... -
+  # we match the codes with the names from the model, with the same rule as
+  # `.clean_pseudo_factor_emmeans_ordinal()`
+  if (inherits(model, "clmm")) {
+    response_levels <- model$y.levels
+    codes <- as.character(seq_along(response_levels))
+    if (setequal(categories, codes) && !anyDuplicated(response_levels)) {
+      categories <- response_levels[match(categories, codes)]
+    }
+  }
+  estimated[which(categories %in% values)]
 }
 
 
@@ -534,7 +668,8 @@ get_emmeans <- function(
 
 #' @keywords internal
 .process_emmeans_arguments <- function(model, args, data, ...) {
-  # ordinal models: a `by` term on the response filters the response categories
+  # ordinal models: a `by` or `contrast` term on the response filters the
+  # response categories
   args <- .extract_ordinal_response_filter(model, args, data)
 
   # Create the data_matrix
