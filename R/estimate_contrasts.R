@@ -246,8 +246,9 @@
 #' aren't part of the contrast.
 #'
 #' `effectsize = "emmeans"` uses [emmeans::eff_size] with
-#' `method = "identity"`. For Gaussian models, it uses
-#' `sigma = stats::sigma(model)` and `edf = stats::df.residual(model)`. This
+#' `method = "identity"`. For Gaussian models, it uses the residual SD as
+#' `sigma` and the residual degrees of freedom as `edf` (from
+#' `insight::get_sigma()` and `insight::get_df()`). This
 #' standardizes using the MSE (sigma). Some believe
 #' this works when the contrasts are the only predictors in the model, but not
 #' when there are covariates. The response variance accounted for by the
@@ -257,7 +258,9 @@
 #' latent variable: `pi / sqrt(3)` (the standard logistic distribution) for
 #' the logit link, and `1` (the standard normal distribution) for the probit
 #' link. With a `rescale` argument for *emmeans*, sigma is multiplied by the
-#' absolute value of `rescale[2]`, so the effect sizes do not change. Sigma is
+#' absolute value of `rescale[2]`, so the size of the effect sizes does not
+#' change. A negative `rescale[2]` reverses the sign of the contrasts and of
+#' the effect sizes. Sigma is
 #' taken as known, with `edf = Inf`, so the effect sizes are the contrasts
 #' divided by sigma, and their confidence limits are the unadjusted confidence
 #' limits of the contrasts divided by sigma. For all models, the confidence

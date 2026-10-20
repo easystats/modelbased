@@ -28,17 +28,20 @@ test_that("estimate_contrasts, effectsize emmeans, effect sizes with a by variab
 
 
 test_that("estimate_contrasts, effectsize emmeans, polynomial contrasts and ci level", {
-  g <- lm(Sepal.Length ~ Species, data = iris)
-  # the polynomial contrasts are sorted as "linear", "quadratic"
+  # with 6 levels, the polynomial contrasts ("linear" to "degree 5") are
+  # sorted in another order than in emmeans
+  w <- lm(weight ~ feed, data = chickwts)
   out <- estimate_contrasts(
-    g,
-    "Species",
+    w,
+    "feed",
     comparison = "poly",
     effectsize = "emmeans",
     backend = "emmeans"
   )
-  expect_identical(nrow(out), 2L)
-  expect_equal(out$partial_d, out$Difference / sigma(g), tolerance = 1e-6)
+  expect_identical(nrow(out), 5L)
+  expect_equal(out$partial_d, out$Difference / sigma(w), tolerance = 1e-6)
+
+  g <- lm(Sepal.Length ~ Species, data = iris)
 
   # the effect-size limits are at the level of `ci`
   e <- emmeans::eff_size(

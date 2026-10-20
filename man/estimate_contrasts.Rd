@@ -542,8 +542,9 @@ sigma adding back in the response variance associated with the variables that
 aren't part of the contrast.
 
 \code{effectsize = "emmeans"} uses \link[emmeans:eff_size]{emmeans::eff_size} with
-\code{method = "identity"}. For Gaussian models, it uses
-\code{sigma = stats::sigma(model)} and \code{edf = stats::df.residual(model)}. This
+\code{method = "identity"}. For Gaussian models, it uses the residual SD as
+\code{sigma} and the residual degrees of freedom as \code{edf} (from
+\code{insight::get_sigma()} and \code{insight::get_df()}). This
 standardizes using the MSE (sigma). Some believe
 this works when the contrasts are the only predictors in the model, but not
 when there are covariates. The response variance accounted for by the
@@ -553,7 +554,9 @@ covariates should not be removed from the SD used to standardize. Otherwise,
 latent variable: \code{pi / sqrt(3)} (the standard logistic distribution) for
 the logit link, and \code{1} (the standard normal distribution) for the probit
 link. With a \code{rescale} argument for \emph{emmeans}, sigma is multiplied by the
-absolute value of \code{rescale[2]}, so the effect sizes do not change. Sigma is
+absolute value of \code{rescale[2]}, so the size of the effect sizes does not
+change. A negative \code{rescale[2]} reverses the sign of the contrasts and of
+the effect sizes. Sigma is
 taken as known, with \code{edf = Inf}, so the effect sizes are the contrasts
 divided by sigma, and their confidence limits are the unadjusted confidence
 limits of the contrasts divided by sigma. For all models, the confidence
