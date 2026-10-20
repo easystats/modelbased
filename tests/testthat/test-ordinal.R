@@ -1986,3 +1986,154 @@ test_that("estimate_contrasts, backend emmeans, ordinal, slopes with a by filter
     c("Difference", "SE")
   )
 })
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, latent-scale effect sizes", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+
+  # the latent errors of the logit link follow the standard logistic
+  # distribution, with variance pi^2 / 3 (?stats::Logistic), and those of the
+  # probit link the standard normal distribution, with SD 1 (?stats::Normal)
+  sd_logit <- pi / sqrt(3)
+
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  out <- estimate_contrasts(
+    m,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans"
+  )
+  expect_identical(nrow(out), 3L)
+  # sigma is taken as known (`edf = Inf`), so the effect sizes and their
+  # confidence limits are the differences and their limits divided by sigma
+  expect_equal(out$partial_d, out$Difference / sd_logit, tolerance = 1e-6)
+  expect_equal(out$es_CI_low, out$CI_low / sd_logit, tolerance = 1e-6)
+  expect_equal(out$es_CI_high, out$CI_high / sd_logit, tolerance = 1e-6)
+  # with no interaction, the latent differences to `Low` are the coefficients,
+  # e.g. coef(m)["InflHigh"] / (pi / sqrt(3)) = 1.2373 / 1.8138 = 0.6822
+  row_ml <- out$Level1 == "Medium" & out$Level2 == "Low"
+  row_hl <- out$Level1 == "High" & out$Level2 == "Low"
+  expect_equal(
+    out$partial_d[row_ml],
+    unname(coef(m)["InflMedium"]) / sd_logit,
+    tolerance = 1e-6
+  )
+  expect_equal(
+    out$partial_d[row_hl],
+    unname(coef(m)["InflHigh"]) / sd_logit,
+    tolerance = 1e-6
+  )
+
+  mp <- MASS::polr(
+    Sat ~ Infl + Type,
+    weights = Freq,
+    data = housing,
+    Hess = TRUE,
+    method = "probit"
+  )
+  out_p <- estimate_contrasts(
+    mp,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans"
+  )
+  expect_identical(nrow(out_p), 3L)
+  expect_equal(out_p$partial_d, out_p$Difference, tolerance = 1e-6)
+  expect_equal(out_p$es_CI_low, out_p$CI_low, tolerance = 1e-6)
+  expect_equal(out_p$es_CI_high, out_p$CI_high, tolerance = 1e-6)
+  row_ml <- out_p$Level1 == "Medium" & out_p$Level2 == "Low"
+  row_hl <- out_p$Level1 == "High" & out_p$Level2 == "Low"
+  expect_equal(out_p$partial_d[row_ml], unname(coef(mp)["InflMedium"]), tolerance = 1e-6)
+  expect_equal(out_p$partial_d[row_hl], unname(coef(mp)["InflHigh"]), tolerance = 1e-6)
+
+  # clm fits of the same models give the same effect sizes
+  mc <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing)
+  out_c <- estimate_contrasts(
+    mc,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans"
+  )
+  expect_identical(nrow(out_c), 3L)
+  expect_identical(as.character(out_c$Level1), as.character(out$Level1))
+  expect_identical(as.character(out_c$Level2), as.character(out$Level2))
+  expect_equal(out_c$partial_d, out$partial_d, tolerance = 1e-3)
+
+  mcp <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing, link = "probit")
+  out_cp <- estimate_contrasts(
+    mcp,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans"
+  )
+  expect_identical(as.character(out_cp$Level1), as.character(out_p$Level1))
+  expect_identical(as.character(out_cp$Level2), as.character(out_p$Level2))
+  expect_equal(out_cp$partial_d, out_p$partial_d, tolerance = 1e-3)
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, effect size errors", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  mc <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing)
+
+  # effect sizes need the latent scale
+  for (model in list(m, mc)) {
+    err <- expect_error(
+      estimate_contrasts(model, "Infl", effectsize = "emmeans", backend = "emmeans")
+    )
+    expect_match(conditionMessage(err), "predict = \"latent\"", fixed = TRUE)
+  }
+
+  # only the logit and probit links have a known latent SD here
+  mcl <- MASS::polr(
+    Sat ~ Infl + Type,
+    weights = Freq,
+    data = housing,
+    Hess = TRUE,
+    method = "cloglog"
+  )
+  mcc <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing, link = "cloglog")
+  for (model in list(mcl, mcc)) {
+    err <- expect_error(
+      estimate_contrasts(
+        model,
+        "Infl",
+        predict = "latent",
+        effectsize = "emmeans",
+        backend = "emmeans"
+      )
+    )
+    expect_match(conditionMessage(err), "logit", fixed = TRUE)
+    expect_match(conditionMessage(err), "probit", fixed = TRUE)
+  }
+
+  # a scale formula makes the latent SD differ between observations
+  ms <- ordinal::clm(Sat ~ Infl + Type, scale = ~Cont, weights = Freq, data = housing)
+  err <- expect_error(
+    estimate_contrasts(
+      ms,
+      "Infl",
+      predict = "latent",
+      effectsize = "emmeans",
+      backend = "emmeans"
+    )
+  )
+  expect_match(conditionMessage(err), "scale", fixed = TRUE)
+
+  # the other effect sizes still need a Gaussian model
+  for (es in c("marginal", "boot")) {
+    err <- expect_error(
+      estimate_contrasts(m, "Infl", predict = "latent", effectsize = es, backend = "emmeans")
+    )
+    expect_match(conditionMessage(err), "non-Gaussian", fixed = TRUE)
+  }
+})
