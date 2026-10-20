@@ -267,6 +267,7 @@ get_emcontrasts <- function(
 .format_emmeans_contrasts <- function(model, estimated, ci, p_adjust, ...) {
   predict <- attributes(estimated)$predict
   m_info <- insight::model_info(model, response = 1)
+  emmeans_rows <- NULL
 
   # Summarize and clean
   if (m_info$is_bayesian) {
@@ -287,6 +288,9 @@ get_emcontrasts <- function(
       out <- as.data.frame(estimated)
     } else {
       estimated_data <- as.data.frame(estimated)
+      # `merge()` sorts the rows, so we keep the row of each contrast in the
+      # emmeans grid, to match other emmeans results (e.g. effect sizes)
+      estimated_data$.emmeans_row <- seq_len(nrow(estimated_data))
       out <- as.data.frame(merge(
         estimated_data,
         stats::confint(estimated, level = ci, adjust = p_adjust)
@@ -305,6 +309,8 @@ get_emcontrasts <- function(
         out <- out[match(row_keys(estimated_data), row_keys(out)), , drop = FALSE]
         rownames(out) <- NULL
       }
+      emmeans_rows <- out$.emmeans_row
+      out$.emmeans_row <- NULL
     }
     # the response categories or thresholds are renamed first, because the
     # response can have the name of an output column (e.g. "response")
@@ -367,5 +373,9 @@ get_emcontrasts <- function(
   }
 
   # add posterior draws?
-  .add_posterior_draws_emmeans(attributes(estimated), out)
+  out <- .add_posterior_draws_emmeans(attributes(estimated), out)
+  if (!is.null(emmeans_rows)) {
+    attr(out, "emmeans_rows") <- emmeans_rows
+  }
+  out
 }

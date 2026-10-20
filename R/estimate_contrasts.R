@@ -564,6 +564,7 @@ estimate_contrasts.default <- function(
       backend = backend
     )
   }
+  attr(out, "emmeans_rows") <- NULL
 
   # sanity check - did method return standard errors?
   .check_standard_errors(

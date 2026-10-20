@@ -33,11 +33,15 @@
     ))
   }
 
+  # For ordinal models, `effectsize = "emmeans"` standardizes the contrasts of
+  # the latent variable by the SD of its error distribution
+  latent_ordinal <- effectsize == "emmeans" && inherits(model, c("polr", "clm"))
+
   # Check if the model's response variable follows a Gaussian (normal)
   # distribution. Effect size calculations implemented in this function are
   # designed for Gaussian models and may not be appropriate or meaningful for
   # other types of distributions.
-  if (insight::get_family(model)$family != "gaussian") {
+  if (!latent_ordinal && insight::get_family(model)$family != "gaussian") {
     insight::format_error(paste0(
       "We strongly recommend not using the `effectsize` ",
       "argument with non-Gaussian models."
@@ -47,15 +51,28 @@
   switch(
     effectsize,
     emmeans = {
+      if (latent_ordinal) {
+        sigma <- .ordinal_latent_sigma(model, attributes(estimated)$predict)
+        edf <- Inf
+      } else {
+        sigma <- insight::get_sigma(model, verbose = FALSE)
+        edf <- insight::get_df(model)
+      }
       eff <- emmeans::eff_size(
         estimated,
-        sigma = insight::get_sigma(model, verbose = FALSE),
-        edf = insight::get_df(model),
+        sigma = sigma,
+        edf = edf,
         method = "identity"
       )
       eff <- as.data.frame(eff)
       eff <- eff[c(2, 5:6)]
       names(eff) <- c("partial_d", "es_CI_low", "es_CI_high")
+      # the contrasts are sorted in another order than the emmeans grid
+      emmeans_rows <- attributes(contrasts_results)$emmeans_rows
+      if (!is.null(emmeans_rows)) {
+        eff <- eff[emmeans_rows, , drop = FALSE]
+        rownames(eff) <- NULL
+      }
       contrasts_results <- cbind(contrasts_results, eff)
     },
     marginal = {
@@ -109,6 +126,37 @@
     }
   )
   .rename_es_columns(contrasts_results)
+}
+
+
+# SD of the error distribution of the latent variable of ordinal models, which
+# is the standard logistic (SD pi / sqrt(3)) for the logit link, and the
+# standard normal (SD 1) for the probit link
+.ordinal_latent_sigma <- function(model, predict) {
+  if (!identical(predict, "latent")) {
+    insight::format_error(paste0(
+      "Effect sizes for ordinal models are only possible on the latent scale. ",
+      "Please use `predict = \"latent\"`."
+    ))
+  }
+  if (inherits(model, "clm") && !is.null(model$formulas$scale)) {
+    insight::format_error(
+      "Effect sizes are not possible for ordinal models with a `scale` formula."
+    )
+  }
+  link <- if (inherits(model, "polr")) model$method else model$link
+  switch(
+    link,
+    logistic = ,
+    logit = pi / sqrt(3),
+    probit = 1,
+    insight::format_error(paste0(
+      "Effect sizes for ordinal models are only possible for the `logit` and ",
+      "`probit` links, but the model uses the `",
+      link,
+      "` link."
+    ))
+  )
 }
 
 
