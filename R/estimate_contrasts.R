@@ -103,7 +103,9 @@
 #' specified post-process tests. See 'Examples'.
 #' @param effectsize Desired measure of standardized effect size, one of
 #' `"emmeans"`, `"marginal"`, or `"boot"`. Default is `NULL`, i.e. no effect
-#' size will be computed.
+#' size will be computed. Effect sizes need a Gaussian model without random
+#' effects. Only `"emmeans"` also works for `polr` and `clm` models with
+#' `predict = "latent"` and a logit or probit link.
 #' @param es_type Specifies the type of effect-size measure to estimate when
 #' using `effectsize = "boot"`. One of `"unstandardized"`, `"cohens.d"`,
 #' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See `effect.type`
@@ -247,7 +249,13 @@
 #' this works when the contrasts are the only predictors in the model, but not
 #' when there are covariates. The response variance accounted for by the
 #' covariates should not be removed from the SD used to standardize. Otherwise,
-#' _d_ will be overestimated.
+#' _d_ will be overestimated. For `polr` and `clm` models with
+#' `predict = "latent"`, sigma is the SD of the error distribution of the
+#' latent variable: `pi / sqrt(3)` (the standard logistic distribution) for
+#' the logit link, and `1` (the standard normal distribution) for the probit
+#' link. Sigma is taken as known, with `edf = Inf`, so the effect sizes and
+#' their confidence limits are the contrasts and their limits divided by
+#' sigma.
 #'
 #' `effectsize = "marginal"` uses the following formula to compute effect
 #' size: `d_adj <- difference * (1- R2)/ sigma`. This standardizes
