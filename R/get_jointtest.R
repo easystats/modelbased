@@ -167,6 +167,13 @@
   result$df1 <- insight::format_value(result$df1, protect_integers = TRUE)
   result$df2 <- insight::format_value(result$df2, protect_integers = TRUE)
   result$`F.ratio` <- insight::format_value(result$`F.ratio`, protect_integers = TRUE)
+  # "insight::format_table()" uses the attribute "digits" as the default
+  # number of digits for numeric columns that are not formatted above, such
+  # as "Chisq". For objects of class "summary_emm", `as.data.frame()`
+  # sets it to `getOption("digits")` when it is missing, so we return a data
+  # frame without it
+  class(result) <- "data.frame"
+  attr(result, "digits") <- NULL
 
   # rename statistic column
   colnames(result)[1] <- "Contrast"
