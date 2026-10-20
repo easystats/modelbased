@@ -107,7 +107,7 @@
 #' effects. Only `"emmeans"` also works for `polr` and `clm` models with
 #' `predict = "latent"` and a logit or probit link, but not for `clm` models
 #' with a `scale` or `nominal` formula. Effect sizes are not possible for joint
-#' tests.
+#' or omnibus tests.
 #' @param es_type Specifies the type of effect-size measure to estimate when
 #' using `effectsize = "boot"`. One of `"unstandardized"`, `"cohens.d"`,
 #' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See `effect.type`
@@ -260,7 +260,7 @@
 #' link. With a `rescale` argument for *emmeans*, sigma is multiplied by the
 #' absolute value of `rescale[2]`, so the size of the effect sizes does not
 #' change. A negative `rescale[2]` reverses the sign of the contrasts and of
-#' the effect sizes. Sigma is
+#' the effect sizes. For these models, sigma is
 #' taken as known, with `edf = Inf`, so the effect sizes are the contrasts
 #' divided by sigma, and their confidence limits are the unadjusted confidence
 #' limits of the contrasts divided by sigma. For all models, the confidence
@@ -581,7 +581,7 @@ estimate_contrasts.default <- function(
       bootES_type = es_type,
       backend = backend,
       ci = ci,
-      rescale = list(...)[["rescale"]]
+      rescale = .rescale_argument(...)
     )
   }
   attr(out, "emmeans_rows") <- NULL

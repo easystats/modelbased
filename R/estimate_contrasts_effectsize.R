@@ -13,7 +13,7 @@
   insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "boot"))
 
   if (effectsize != "none" && isTRUE(attributes(estimated)$joint_test)) {
-    insight::format_error("Effect sizes are not possible for joint tests.")
+    insight::format_error("Effect sizes are not possible for joint or omnibus tests.")
   }
 
   if (effectsize == "emmeans" && backend != "emmeans") {
@@ -179,6 +179,22 @@
       "` link."
     ))
   )
+}
+
+
+# the `rescale` argument for emmeans, which emmeans also accepts partly
+# matched, e.g. `resc = c(0, 2)`
+.rescale_argument <- function(...) {
+  dots <- list(...)
+  dot_names <- names(dots)
+  if (is.null(dot_names)) {
+    return(NULL)
+  }
+  i <- which(nzchar(dot_names) & startsWith("rescale", dot_names))
+  if (length(i) == 0) {
+    return(NULL)
+  }
+  dots[[i[1]]]
 }
 
 

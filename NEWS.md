@@ -31,8 +31,12 @@
 
 * `estimate_contrasts()` with `effectsize = "emmeans"` now computes the
   confidence limits of the effect sizes at the level of `ci`. Before, they
-  were always 95% limits. With `comparison = "joint"`, effect sizes now give
-  a clear error.
+  were always 95% limits.
+
+* `estimate_contrasts()` with an `effectsize` and `comparison = "joint"`, or
+  `comparison = "omnibus"` with `backend = "marginaleffects"`, now gives a
+  clear error. Before, the emmeans effect sizes gave an internal error, and
+  `effectsize = "marginal"` returned `NA` effect sizes.
 
 * Filters on the response categories of frequentist ordinal models with
   `backend = "emmeans"`, where `Sat` is the response:

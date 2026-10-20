@@ -2202,6 +2202,29 @@ test_that("estimate_contrasts, backend emmeans, ordinal, effect sizes with ci, p
   expect_equal(out_r$Difference, 2 * out$Difference, tolerance = 1e-6)
   expect_equal(out_r$partial_d, out$partial_d, tolerance = 1e-6)
   expect_equal(out_r$es_CI_low, out$es_CI_low, tolerance = 1e-6)
+  # a partly matched name reaches emmeans too
+  out_resc <- estimate_contrasts(
+    m,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans",
+    resc = c(0, 2)
+  )
+  expect_equal(out_resc$Difference, 2 * out$Difference, tolerance = 1e-6)
+  expect_equal(out_resc$partial_d, out$partial_d, tolerance = 1e-6)
+  # a negative scale reverses the sign of the contrasts and effect sizes
+  out_neg <- estimate_contrasts(
+    m,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans",
+    rescale = c(1, -3)
+  )
+  expect_equal(out_neg$Difference, -3 * out$Difference, tolerance = 1e-6)
+  expect_equal(out_neg$partial_d, -out$partial_d, tolerance = 1e-6)
+  expect_equal(out_neg$es_CI_low, -out$es_CI_high, tolerance = 1e-6)
 
   # nominal effects make the thresholds differ between groups
   mn <- ordinal::clm(Sat ~ Infl, nominal = ~Type, weights = Freq, data = housing)
@@ -2222,5 +2245,5 @@ test_that("estimate_contrasts, backend emmeans, ordinal, effect sizes with ci, p
       backend = "emmeans"
     )
   )
-  expect_match(conditionMessage(err), "not possible for joint tests", fixed = TRUE)
+  expect_match(gsub("\\s+", " ", conditionMessage(err)), "not possible for joint or omnibus tests", fixed = TRUE)
 })

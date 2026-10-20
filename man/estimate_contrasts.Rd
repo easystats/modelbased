@@ -323,7 +323,7 @@ size will be computed. Effect sizes need a Gaussian model without random
 effects. Only \code{"emmeans"} also works for \code{polr} and \code{clm} models with
 \code{predict = "latent"} and a logit or probit link, but not for \code{clm} models
 with a \code{scale} or \code{nominal} formula. Effect sizes are not possible for joint
-tests.}
+or omnibus tests.}
 
 \item{iterations}{This argument has two distinct effects, depending on the
 context. When \code{effectsize = "boot"}, it defines the number of bootstrap
@@ -556,7 +556,7 @@ the logit link, and \code{1} (the standard normal distribution) for the probit
 link. With a \code{rescale} argument for \emph{emmeans}, sigma is multiplied by the
 absolute value of \code{rescale[2]}, so the size of the effect sizes does not
 change. A negative \code{rescale[2]} reverses the sign of the contrasts and of
-the effect sizes. Sigma is
+the effect sizes. For these models, sigma is
 taken as known, with \code{edf = Inf}, so the effect sizes are the contrasts
 divided by sigma, and their confidence limits are the unadjusted confidence
 limits of the contrasts divided by sigma. For all models, the confidence
