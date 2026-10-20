@@ -1338,6 +1338,259 @@ test_that("estimate_means, backend emmeans, ordinal, several by terms on the res
 })
 
 
+# Wald statistic of probability contrasts of a polr model, by the delta method.
+# For `polr(Sat ~ Infl + Type)`, P(Sat <= k) = plogis(zeta_k - eta), with eta
+# the linear predictor. The category probabilities are differences of these
+# cumulative probabilities, averaged over the levels of `Type` with equal
+# weights, as emmeans does. `contrast_fun` maps the 3 x 3 matrix of
+# probabilities (rows `Infl`, columns `Sat`) to a vector of contrasts `e`. The
+# Jacobian `J` of `e` comes from central finite differences of the parameters,
+# so the covariance of `e` is `J V J'`, and the Wald statistic is
+# `e' (J V J')^-1 e`.
+ordinal_wald_chisq <- function(model, contrast_fun) {
+  grid <- expand.grid(
+    Infl = levels(MASS::housing$Infl),
+    Type = levels(MASS::housing$Type)
+  )
+  design <- stats::model.matrix(~ Infl + Type, grid)[, -1]
+  n_beta <- length(stats::coef(model))
+  probabilities <- function(theta) {
+    eta <- drop(design %*% theta[seq_len(n_beta)])
+    zeta <- theta[-seq_len(n_beta)]
+    cum_low <- stats::plogis(zeta[1] - eta)
+    cum_medium <- stats::plogis(zeta[2] - eta)
+    p <- cbind(Low = cum_low, Medium = cum_medium - cum_low, High = 1 - cum_medium)
+    out <- t(sapply(levels(MASS::housing$Infl), function(i) {
+      colMeans(p[grid$Infl == i, , drop = FALSE])
+    }))
+    out
+  }
+  theta <- c(stats::coef(model), model$zeta)
+  e <- contrast_fun(probabilities(theta))
+  h <- 1e-6
+  J <- sapply(seq_along(theta), function(j) {
+    up <- down <- theta
+    up[j] <- up[j] + h
+    down[j] <- down[j] - h
+    (contrast_fun(probabilities(up)) - contrast_fun(probabilities(down))) / (2 * h)
+  })
+  V <- J %*% stats::vcov(model) %*% t(J)
+  drop(t(e) %*% solve(V) %*% e)
+}
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, joint tests of the response categories", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  mc <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing)
+
+  # reference 1: delta method. Within each `Infl` level, the contrasts are
+  # Medium - Low and High - Low of the category probabilities
+  ref_delta <- vapply(
+    levels(housing$Infl),
+    function(i) {
+      ordinal_wald_chisq(m, function(p) {
+        c(p[i, "Medium"] - p[i, "Low"], p[i, "High"] - p[i, "Low"])
+      })
+    },
+    numeric(1)
+  )
+
+  # reference 2: marginaleffects, with the same contrasts of the 36 predicted
+  # probabilities (4 `Type` x 3 `Infl` x 3 `Sat`). Each column of `H` is a
+  # contrast at one `Infl` level, with weight 1/4 on the probabilities of
+  # `Medium` (or `High`) and -1/4 on those of `Low`
+  nd <- marginaleffects::datagrid(
+    model = m,
+    Infl = levels(housing$Infl),
+    Type = levels(housing$Type)
+  )
+  pr <- marginaleffects::predictions(m, newdata = nd, type = "probs")
+  ref_me <- vapply(
+    levels(housing$Infl),
+    function(i) {
+      w <- (pr$Infl == i) / 4
+      H <- cbind(
+        w * (pr$group == "Medium") - w * (pr$group == "Low"),
+        w * (pr$group == "High") - w * (pr$group == "Low")
+      )
+      pc <- marginaleffects::predictions(m, newdata = nd, type = "probs", hypothesis = H)
+      marginaleffects::hypotheses(pc, joint = TRUE, joint_test = "chisq")$statistic
+    },
+    numeric(1)
+  )
+  expect_equal(ref_delta, ref_me, tolerance = 1e-3, ignore_attr = TRUE)
+
+  for (model in list(m, mc)) {
+    expect_no_warning({
+      out <- estimate_contrasts(
+        model,
+        "Sat",
+        by = "Infl",
+        comparison = "joint",
+        backend = "emmeans"
+      )
+    })
+    expect_identical(nrow(out), 3L)
+    expect_identical(as.character(out$Infl), levels(housing$Infl))
+    expect_identical(as.character(out$df1), rep("2", 3))
+    expect_equal(out$Chisq, ref_delta, tolerance = 1e-3, ignore_attr = TRUE)
+    expect_equal(out$Chisq, ref_me, tolerance = 1e-3, ignore_attr = TRUE)
+  }
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, joint tests of a predictor", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  mc <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing)
+
+  # reference 1: delta method. Within each response category, the contrasts
+  # are Medium - Low and High - Low of the `Infl` levels
+  ref_delta <- vapply(
+    levels(housing$Sat),
+    function(k) {
+      ordinal_wald_chisq(m, function(p) {
+        c(p["Medium", k] - p["Low", k], p["High", k] - p["Low", k])
+      })
+    },
+    numeric(1)
+  )
+
+  for (model in list(m, mc)) {
+    # reference 2: emmeans' joint tests of the pairwise contrasts. For the clm
+    # fit, emmeans warns with "NaNs produced" when it computes a p-value with
+    # `pf()`, which does not change these values
+    ref_emmeans <- suppressWarnings(as.data.frame(emmeans::joint_tests(
+      emmeans::contrast(
+        emmeans::emmeans(model, ~ Infl | Sat, mode = "prob"),
+        "pairwise"
+      ),
+      by = "Sat"
+    )))
+    expect_no_warning({
+      out <- estimate_contrasts(model, "Infl", comparison = "joint", backend = "emmeans")
+    })
+    expect_identical(nrow(out), 3L)
+    expect_identical(as.character(out$Response), levels(housing$Sat))
+    expect_equal(out$Chisq, ref_delta, tolerance = 1e-3, ignore_attr = TRUE)
+    expect_equal(
+      out$Chisq,
+      ref_emmeans$Chisq[match(levels(housing$Sat), ref_emmeans$Sat)],
+      tolerance = 1e-3,
+      ignore_attr = TRUE
+    )
+  }
+
+  # a joint test with another `by` variable gives no warning
+  expect_no_warning({
+    out <- estimate_contrasts(
+      m,
+      "Infl",
+      by = "Type",
+      comparison = "joint",
+      backend = "emmeans"
+    )
+  })
+  expect_identical(nrow(out), 12L)
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, printed Chisq of joint tests", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  out <- estimate_contrasts(m, "Infl", comparison = "joint", backend = "emmeans")
+  printed <- capture.output(print(out))
+  # the Chisq values are 114.588, 20.014 and 104.514, printed with two
+  # decimals as the F column
+  for (chisq in c("114.59", "20.01", "104.51")) {
+    expect_true(any(grepl(paste0(" ", chisq, " |"), printed, fixed = TRUE)), info = chisq)
+  }
+  expect_false(any(grepl("114.588", printed, fixed = TRUE)))
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, joint tests in other modes", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  mc <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing)
+  # emmeans' joint tests of the pairwise `Infl` contrasts, within each
+  # threshold (`cut`) where the mode has thresholds
+  specs <- list(
+    latent = ~Infl,
+    linear.predictor = ~ Infl | cut,
+    cum.prob = ~ Infl | cut,
+    exc.prob = ~ Infl | cut,
+    mean.class = ~Infl
+  )
+  for (model in list(m, mc)) {
+    for (mode in names(specs)) {
+      by <- if (mode %in% c("latent", "mean.class")) NULL else "cut"
+      ref <- suppressWarnings(as.data.frame(emmeans::joint_tests(
+        emmeans::contrast(
+          emmeans::emmeans(model, specs[[mode]], mode = mode),
+          "pairwise"
+        ),
+        by = by
+      )))
+      # for the clm fit, emmeans warns with "NaNs produced" in some of these
+      # modes, also on the reference above; other warnings are not muffled
+      out <- withCallingHandlers(
+        estimate_contrasts(
+          model,
+          "Infl",
+          comparison = "joint",
+          predict = mode,
+          backend = "emmeans"
+        ),
+        warning = function(w) {
+          if (identical(conditionMessage(w), "NaNs produced")) {
+            invokeRestart("muffleWarning")
+          }
+        }
+      )
+      expect_identical(nrow(out), nrow(ref), info = mode)
+      expect_equal(out$Chisq, ref$Chisq, tolerance = 1e-6, ignore_attr = TRUE, info = mode)
+    }
+  }
+  # on the logit scale, the `Infl` effect is the same at each threshold, so
+  # both thresholds give the latent-scale value
+  out <- estimate_contrasts(
+    m,
+    "Infl",
+    comparison = "joint",
+    predict = "linear.predictor",
+    backend = "emmeans"
+  )
+  out_latent <- estimate_contrasts(
+    m,
+    "Infl",
+    comparison = "joint",
+    predict = "latent",
+    backend = "emmeans"
+  )
+  expect_equal(out$Chisq, rep(out_latent$Chisq, 2), tolerance = 1e-6)
+})
+
+
+test_that("get_emcontrasts, joint tests return a data frame", {
+  skip_if_not_installed("emmeans")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  out <- get_emcontrasts(m, "Infl", comparison = "joint")
+  expect_identical(class(out), "data.frame")
+  expect_null(attr(out, "digits"))
+  expect_no_error(capture.output(print(out)))
+})
+
+
 # `by` as list, data frame or formula, with the response -----------------------
 
 ordinal_filter_form_models <- function() {
@@ -1610,9 +1863,11 @@ test_that("estimate_contrasts, backend emmeans, ordinal, joint test with a contr
     comparison = "joint",
     backend = "emmeans"
   )
-  # the joint test of the contrasts of the two named categories in emmeans
+  # the joint test of the contrasts of the two named categories in emmeans,
+  # after `regrid()` as in `get_emcontrasts()`
   estimated <- emmeans::emmeans(m, specs = c("Infl", "Sat"), mode = "prob")
   estimated <- estimated[which(as.character(estimated@grid$Sat) %in% c("Low", "High"))]
+  estimated <- emmeans::regrid(estimated)
   expected <- as.data.frame(emmeans::test(
     emmeans::contrast(estimated, by = "Infl", method = "pairwise"),
     joint = TRUE,
