@@ -5,10 +5,16 @@
   effectsize,
   bootstraps,
   bootES_type,
-  backend
+  backend,
+  ci = 0.95,
+  rescale = NULL
 ) {
   # Add standardized effect size
   insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "boot"))
+
+  if (effectsize != "none" && isTRUE(attributes(estimated)$joint_test)) {
+    insight::format_error("Effect sizes are not possible for joint tests.")
+  }
 
   if (effectsize == "emmeans" && backend != "emmeans") {
     insight::format_error(
@@ -40,7 +46,8 @@
   # Check if the model's response variable follows a Gaussian (normal)
   # distribution. Effect size calculations implemented in this function are
   # designed for Gaussian models and may not be appropriate or meaningful for
-  # other types of distributions.
+  # other types of distributions. Ordinal models with `effectsize = "emmeans"`
+  # are the exception, because the latent variable has a known error SD.
   if (!latent_ordinal && insight::get_family(model)$family != "gaussian") {
     insight::format_error(paste0(
       "We strongly recommend not using the `effectsize` ",
@@ -53,6 +60,11 @@
     emmeans = {
       if (latent_ordinal) {
         sigma <- .ordinal_latent_sigma(model, attributes(estimated)$predict)
+        # `rescale` (passed to emmeans) scales the latent variable, and so its
+        # error SD
+        if (!is.null(rescale)) {
+          sigma <- sigma * abs(rescale[2])
+        }
         edf <- Inf
       } else {
         sigma <- insight::get_sigma(model, verbose = FALSE)
@@ -64,7 +76,7 @@
         edf = edf,
         method = "identity"
       )
-      eff <- as.data.frame(eff)
+      eff <- as.data.frame(stats::confint(eff, level = ci, adjust = "none"))
       # select columns by name, because `by` variables add columns
       es_col <- intersect(c("effect.size", "estimate"), colnames(eff))[1]
       ci_low <- intersect(c("lower.CL", "asymp.LCL"), colnames(eff))[1]
@@ -146,6 +158,12 @@
   if (inherits(model, "clm") && !is.null(model$formulas$scale)) {
     insight::format_error(
       "Effect sizes are not possible for ordinal models with a `scale` formula."
+    )
+  }
+  # nominal effects make the thresholds differ between groups
+  if (inherits(model, "clm") && !is.null(model$formulas$nominal)) {
+    insight::format_error(
+      "Effect sizes are not possible for ordinal models with a `nominal` formula."
     )
   }
   link <- if (inherits(model, "polr")) model$method else model$link

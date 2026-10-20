@@ -7,9 +7,9 @@
   models with `predict = "latent"` and a logit or probit link. The contrasts
   of the latent variable are divided by the SD of its error distribution:
   `pi / sqrt(3)` for the logit link and `1` for the probit link. Other values
-  of `predict`, other links and `clm` models with a `scale` formula give an
-  error. `effectsize = "marginal"` and `effectsize = "boot"` still give an
-  error for ordinal models.
+  of `predict`, other links and `clm` models with a `scale` or `nominal`
+  formula give an error. `effectsize = "marginal"` and `effectsize = "boot"`
+  still give an error for ordinal models.
 
 ## Bug fixes
 
@@ -22,11 +22,17 @@
   calls with `estimate = "average"` ignored the filter.
 
 * `estimate_contrasts()` with `effectsize = "emmeans"` now puts each effect
-  size on the row of its own contrast. Before, if the factor levels were not
-  in alphabetical order, the contrasts were sorted in another order than in
-  *emmeans*, and some effect sizes were on the wrong rows. With a `by`
-  variable, the effect-size columns held the values of the `by` variable and
-  of other *emmeans* columns instead of the effect sizes.
+  size on the row of its own contrast. Before, the contrasts were sometimes sorted
+  in another order than in *emmeans*, for example with factor levels that
+  were not in alphabetical order or with `comparison = "poly"`, and then some
+  effect sizes were on the wrong rows. With a `by` variable, the effect-size
+  columns held the values of the `by` variable and of other *emmeans* columns
+  instead of the effect sizes.
+
+* `estimate_contrasts()` with `effectsize = "emmeans"` now computes the
+  confidence limits of the effect sizes at the level of `ci`. Before, they
+  were always 95% limits. With `comparison = "joint"`, effect sizes now give
+  a clear error.
 
 * Filters on the response categories of frequentist ordinal models with
   `backend = "emmeans"`, where `Sat` is the response:

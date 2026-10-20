@@ -2153,3 +2153,74 @@ test_that("estimate_contrasts, backend emmeans, ordinal, effect size errors", {
     expect_match(conditionMessage(err), "non-Gaussian", fixed = TRUE)
   }
 })
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, effect sizes with ci, p_adjust and rescale", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+  sd_logit <- pi / sqrt(3)
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  out <- estimate_contrasts(m, "Infl", predict = "latent", effectsize = "emmeans", backend = "emmeans")
+
+  # the effect-size limits are at the level of `ci`
+  out80 <- estimate_contrasts(
+    m,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans",
+    ci = 0.8
+  )
+  expect_equal(out80$es_CI_low, out80$CI_low / sd_logit, tolerance = 1e-6)
+  expect_equal(out80$es_CI_high, out80$CI_high / sd_logit, tolerance = 1e-6)
+  expect_true(all(out80$es_CI_low > out$es_CI_low))
+
+  # the effect-size limits are not adjusted for multiple comparisons
+  out_tukey <- estimate_contrasts(
+    m,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans",
+    p_adjust = "tukey"
+  )
+  expect_equal(out_tukey$partial_d, out$partial_d, tolerance = 1e-6)
+  expect_equal(out_tukey$es_CI_low, out$CI_low / sd_logit, tolerance = 1e-6)
+  expect_equal(out_tukey$es_CI_high, out$CI_high / sd_logit, tolerance = 1e-6)
+  expect_true(all(out_tukey$CI_low < out$CI_low))
+
+  # `rescale` scales the latent variable and its error SD alike
+  out_r <- estimate_contrasts(
+    m,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans",
+    rescale = c(0, 2)
+  )
+  expect_equal(out_r$Difference, 2 * out$Difference, tolerance = 1e-6)
+  expect_equal(out_r$partial_d, out$partial_d, tolerance = 1e-6)
+  expect_equal(out_r$es_CI_low, out$es_CI_low, tolerance = 1e-6)
+
+  # nominal effects make the thresholds differ between groups
+  mn <- ordinal::clm(Sat ~ Infl, nominal = ~Type, weights = Freq, data = housing)
+  err <- expect_error(
+    estimate_contrasts(mn, "Type", predict = "latent", effectsize = "emmeans", backend = "emmeans")
+  )
+  expect_match(gsub("\\s+", " ", conditionMessage(err)), "with a `nominal` formula", fixed = TRUE)
+
+  # joint tests have no contrasts to standardize
+  err <- expect_error(
+    estimate_contrasts(
+      m,
+      "Infl",
+      by = "Type",
+      comparison = "joint",
+      predict = "latent",
+      effectsize = "emmeans",
+      backend = "emmeans"
+    )
+  )
+  expect_match(conditionMessage(err), "not possible for joint tests", fixed = TRUE)
+})

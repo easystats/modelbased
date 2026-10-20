@@ -106,7 +106,8 @@
 #' size will be computed. Effect sizes need a Gaussian model without random
 #' effects. Only `"emmeans"` also works for `polr` and `clm` models with
 #' `predict = "latent"` and a logit or probit link, but not for `clm` models
-#' with a `scale` formula.
+#' with a `scale` or `nominal` formula. Effect sizes are not possible for joint
+#' tests.
 #' @param es_type Specifies the type of effect-size measure to estimate when
 #' using `effectsize = "boot"`. One of `"unstandardized"`, `"cohens.d"`,
 #' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See `effect.type`
@@ -245,8 +246,9 @@
 #' aren't part of the contrast.
 #'
 #' `effectsize = "emmeans"` uses [emmeans::eff_size] with
-#' `sigma = stats::sigma(model)`, `edf = stats::df.residual(model)` and
-#' `method = "identity"`. This standardizes using the MSE (sigma). Some believe
+#' `method = "identity"`. For Gaussian models, it uses
+#' `sigma = stats::sigma(model)` and `edf = stats::df.residual(model)`. This
+#' standardizes using the MSE (sigma). Some believe
 #' this works when the contrasts are the only predictors in the model, but not
 #' when there are covariates. The response variance accounted for by the
 #' covariates should not be removed from the SD used to standardize. Otherwise,
@@ -254,10 +256,13 @@
 #' `predict = "latent"`, sigma is the SD of the error distribution of the
 #' latent variable: `pi / sqrt(3)` (the standard logistic distribution) for
 #' the logit link, and `1` (the standard normal distribution) for the probit
-#' link. Sigma is taken as known, with `edf = Inf`, so the effect sizes are
-#' the contrasts divided by sigma. Their confidence limits are the unadjusted
-#' confidence limits of the contrasts divided by sigma, also when `p_adjust`
-#' is not `"none"`.
+#' link. With a `rescale` argument for *emmeans*, sigma is multiplied by the
+#' absolute value of `rescale[2]`, so the effect sizes do not change. Sigma is
+#' taken as known, with `edf = Inf`, so the effect sizes are the contrasts
+#' divided by sigma, and their confidence limits are the unadjusted confidence
+#' limits of the contrasts divided by sigma. For all models, the confidence
+#' limits of the effect sizes are not adjusted for multiple comparisons, also
+#' when `p_adjust` is not `"none"`.
 #'
 #' `effectsize = "marginal"` uses the following formula to compute effect
 #' size: `d_adj <- difference * (1- R2)/ sigma`. This standardizes
@@ -571,7 +576,9 @@ estimate_contrasts.default <- function(
       effectsize = effectsize,
       bootstraps = bootstraps,
       bootES_type = es_type,
-      backend = backend
+      backend = backend,
+      ci = ci,
+      rescale = list(...)[["rescale"]]
     )
   }
   attr(out, "emmeans_rows") <- NULL

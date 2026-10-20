@@ -322,7 +322,8 @@ to the output. You can reshape them to a long format by running
 size will be computed. Effect sizes need a Gaussian model without random
 effects. Only \code{"emmeans"} also works for \code{polr} and \code{clm} models with
 \code{predict = "latent"} and a logit or probit link, but not for \code{clm} models
-with a \code{scale} formula.}
+with a \code{scale} or \code{nominal} formula. Effect sizes are not possible for joint
+tests.}
 
 \item{iterations}{This argument has two distinct effects, depending on the
 context. When \code{effectsize = "boot"}, it defines the number of bootstrap
@@ -541,8 +542,9 @@ sigma adding back in the response variance associated with the variables that
 aren't part of the contrast.
 
 \code{effectsize = "emmeans"} uses \link[emmeans:eff_size]{emmeans::eff_size} with
-\code{sigma = stats::sigma(model)}, \code{edf = stats::df.residual(model)} and
-\code{method = "identity"}. This standardizes using the MSE (sigma). Some believe
+\code{method = "identity"}. For Gaussian models, it uses
+\code{sigma = stats::sigma(model)} and \code{edf = stats::df.residual(model)}. This
+standardizes using the MSE (sigma). Some believe
 this works when the contrasts are the only predictors in the model, but not
 when there are covariates. The response variance accounted for by the
 covariates should not be removed from the SD used to standardize. Otherwise,
@@ -550,10 +552,13 @@ covariates should not be removed from the SD used to standardize. Otherwise,
 \code{predict = "latent"}, sigma is the SD of the error distribution of the
 latent variable: \code{pi / sqrt(3)} (the standard logistic distribution) for
 the logit link, and \code{1} (the standard normal distribution) for the probit
-link. Sigma is taken as known, with \code{edf = Inf}, so the effect sizes are
-the contrasts divided by sigma. Their confidence limits are the unadjusted
-confidence limits of the contrasts divided by sigma, also when \code{p_adjust}
-is not \code{"none"}.
+link. With a \code{rescale} argument for \emph{emmeans}, sigma is multiplied by the
+absolute value of \code{rescale[2]}, so the effect sizes do not change. Sigma is
+taken as known, with \code{edf = Inf}, so the effect sizes are the contrasts
+divided by sigma, and their confidence limits are the unadjusted confidence
+limits of the contrasts divided by sigma. For all models, the confidence
+limits of the effect sizes are not adjusted for multiple comparisons, also
+when \code{p_adjust} is not \code{"none"}.
 
 \code{effectsize = "marginal"} uses the following formula to compute effect
 size: \code{d_adj <- difference * (1- R2)/ sigma}. This standardizes
