@@ -24,7 +24,9 @@
 * `estimate_contrasts()` with `effectsize = "emmeans"` now puts each effect
   size on the row of its own contrast. Before, if the factor levels were not
   in alphabetical order, the contrasts were sorted in another order than in
-  *emmeans*, and some effect sizes were on the wrong rows.
+  *emmeans*, and some effect sizes were on the wrong rows. With a `by`
+  variable, the effect-size columns held the values of the `by` variable and
+  of other *emmeans* columns instead of the effect sizes.
 
 * Filters on the response categories of frequentist ordinal models with
   `backend = "emmeans"`, where `Sat` is the response:

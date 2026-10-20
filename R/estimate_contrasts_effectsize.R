@@ -65,9 +65,13 @@
         method = "identity"
       )
       eff <- as.data.frame(eff)
-      eff <- eff[c(2, 5:6)]
+      # select columns by name, because `by` variables add columns
+      es_col <- intersect(c("effect.size", "estimate"), colnames(eff))[1]
+      ci_low <- intersect(c("lower.CL", "asymp.LCL"), colnames(eff))[1]
+      ci_high <- intersect(c("upper.CL", "asymp.UCL"), colnames(eff))[1]
+      eff <- eff[c(es_col, ci_low, ci_high)]
       names(eff) <- c("partial_d", "es_CI_low", "es_CI_high")
-      # the contrasts are sorted in another order than the emmeans grid
+      # the contrasts can be sorted in another order than the emmeans grid
       emmeans_rows <- attributes(contrasts_results)$emmeans_rows
       if (!is.null(emmeans_rows)) {
         eff <- eff[emmeans_rows, , drop = FALSE]

@@ -12,3 +12,16 @@ test_that("estimate_contrasts, effectsize emmeans, effect sizes follow their con
   # e.g. versicolor - setosa: 0.930 / sigma(g) = 0.930 / 0.5148 = 1.807
   expect_equal(out$partial_d, out$Difference / sigma(g), tolerance = 1e-6)
 })
+
+
+test_that("estimate_contrasts, effectsize emmeans, effect sizes with a by variable", {
+  d <- mtcars
+  d$cyl <- factor(d$cyl)
+  d$am <- factor(d$am)
+  m <- lm(mpg ~ cyl * am, data = d)
+  out <- estimate_contrasts(m, "cyl", by = "am", effectsize = "emmeans", backend = "emmeans")
+  expect_identical(nrow(out), 6L)
+  # e.g. cyl 6 - cyl 4 at am 0: -3.775 / sigma(m) = -3.775 / 3.032 = -1.245
+  expect_type(out$partial_d, "double")
+  expect_equal(out$partial_d, out$Difference / sigma(m), tolerance = 1e-6)
+})

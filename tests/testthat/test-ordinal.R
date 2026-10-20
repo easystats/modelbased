@@ -2075,6 +2075,22 @@ test_that("estimate_contrasts, backend emmeans, ordinal, latent-scale effect siz
   expect_identical(as.character(out_cp$Level1), as.character(out_p$Level1))
   expect_identical(as.character(out_cp$Level2), as.character(out_p$Level2))
   expect_equal(out_cp$partial_d, out_p$partial_d, tolerance = 1e-3)
+
+  # a `by` variable adds a column to the emmeans effect sizes
+  mi <- MASS::polr(Sat ~ Infl * Type, weights = Freq, data = housing, Hess = TRUE)
+  out_by <- estimate_contrasts(
+    mi,
+    "Infl",
+    by = "Type",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans"
+  )
+  expect_identical(nrow(out_by), 12L)
+  expect_type(out_by$partial_d, "double")
+  expect_equal(out_by$partial_d, out_by$Difference / sd_logit, tolerance = 1e-6)
+  expect_equal(out_by$es_CI_low, out_by$CI_low / sd_logit, tolerance = 1e-6)
+  expect_equal(out_by$es_CI_high, out_by$CI_high / sd_logit, tolerance = 1e-6)
 })
 
 
@@ -2093,7 +2109,7 @@ test_that("estimate_contrasts, backend emmeans, ordinal, effect size errors", {
     expect_match(conditionMessage(err), "predict = \"latent\"", fixed = TRUE)
   }
 
-  # only the logit and probit links have a known latent SD here
+  # only the logit and probit links are supported here
   mcl <- MASS::polr(
     Sat ~ Infl + Type,
     weights = Freq,
