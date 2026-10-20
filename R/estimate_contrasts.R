@@ -15,7 +15,11 @@
 #' For contrasting slopes, the `comparison` will always be `"pairwise"`. It is
 #' possible to compute pairwise comparisons of two average slopes at the levels
 #' of a third variable, by also adding that variable to the `contrast` argument,
-#' e.g. `contrast = c("num1", "num2", "factor")`. See 'Examples'.
+#' e.g. `contrast = c("num1", "num2", "factor")`. See 'Examples'. For
+#' frequentist ordinal models and `backend = "emmeans"`, `contrast` can name the
+#' response with two or more categories, for example
+#' `contrast = "y = c('low', 'high')"`, to contrast only these response
+#' categories (with `predict = "prob"`, the default).
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
 #' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"sup-t"`,

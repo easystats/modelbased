@@ -2,6 +2,24 @@
 
 ## Bug fixes
 
+* Filters on the response categories of frequentist ordinal models with
+  `backend = "emmeans"`, where `Sat` is the response:
+  * `estimate_means()`, `estimate_contrasts()` and `estimate_slopes()` now
+    also filter the response categories in a list or data-frame `by`, for
+    example `by = list(Infl = "Low", Sat = "Low")`. Before,
+    `estimate_means()` and `estimate_contrasts()` returned all response
+    categories, and `estimate_slopes()` gave an error. With a list, a data
+    frame or a formula such as `by = ~ Infl + Sat`, the printed output no
+    longer lists the response under "Predictors modulated".
+  * `estimate_contrasts()` now contrasts only the named response categories,
+    for example `estimate_contrasts(m, "Sat = c('Low', 'High')", by = "Infl")`.
+    Before, it ignored the values and contrasted all categories. A single
+    category gives an error, and so does a filter on the response in `by`
+    when the response is also in `contrast`.
+  * For contrasts of slopes, a filter in `by` that leaves one level to
+    compare, for example `by = "Infl = 'Low'"`, now gives a clear error.
+    Before, `estimate_contrasts()` returned a table with empty contrasts.
+
 * `estimate_contrasts()` now applies the filter values in `by` to contrasts of
   slopes with `estimate = "average"` and with `backend = "emmeans"`, for
   example `estimate_contrasts(m, "wt", by = c("cyl = '4'", "am"))`, where
@@ -9,9 +27,10 @@
   all levels and ignored the filter. With `backend = "emmeans"`, the filter
   applies only to `by` variables that are all factors or character vectors.
   If the filter leaves fewer than two slopes to compare,
-  `estimate_contrasts()` now stops with a clear error. Ordinal and
-  multinomial models, and a custom hypothesis in `comparison` (such as
-  `"b1 = b2"`, a function or a matrix), get no such check.
+  `estimate_contrasts()` now stops with a clear error. Multinomial models,
+  Bayesian ordinal models, frequentist ordinal models with
+  `backend = "marginaleffects"`, and a custom hypothesis in `comparison`
+  (such as `"b1 = b2"`, a function or a matrix), get no such check.
 
 * `p_adjust = "tukey"` and `p_adjust = "sidak"` now give the same p-values as
   *emmeans* in `estimate_contrasts()` and `estimate_slopes()` with
