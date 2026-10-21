@@ -2,8 +2,7 @@ skip_on_cran()
 skip_if_not_installed("emmeans")
 
 test_that("estimate_contrasts, effectsize emmeans, effect sizes follow their contrasts", {
-  # the levels are not in alphabetical order, so the contrast rows are sorted
-  # in another order than the rows of emmeans
+  # levels not in alphabetical order
   d <- iris
   d$Species <- factor(d$Species, levels = c("virginica", "setosa", "versicolor"))
   g <- lm(Sepal.Length ~ Species, data = d)
@@ -28,8 +27,7 @@ test_that("estimate_contrasts, effectsize emmeans, effect sizes with a by variab
 
 
 test_that("estimate_contrasts, effectsize emmeans, polynomial contrasts and ci level", {
-  # with 6 levels, the polynomial contrasts ("linear" to "degree 5") are
-  # sorted in another order than in emmeans
+  # with 6 levels, polynomial contrasts are sorted differently than in emmeans
   w <- lm(weight ~ feed, data = chickwts)
   out <- estimate_contrasts(
     w,
@@ -51,8 +49,7 @@ test_that("estimate_contrasts, effectsize emmeans, polynomial contrasts and ci l
   )
   e80 <- as.data.frame(confint(e, level = 0.8, adjust = "none"))
   out80 <- estimate_contrasts(g, "Species", effectsize = "emmeans", backend = "emmeans", ci = 0.8)
-  # emmeans contrasts the levels in the other direction, so the rows are
-  # matched by the absolute effect size, and the half-widths are compared
+  # emmeans contrasts in the other direction, so compare absolute values
   idx <- match(round(abs(out80$partial_d), 6), round(abs(e80$effect.size), 6))
   expect_false(anyNA(idx))
   expect_equal(

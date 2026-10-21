@@ -103,11 +103,9 @@
 #' specified post-process tests. See 'Examples'.
 #' @param effectsize Desired measure of standardized effect size, one of
 #' `"emmeans"`, `"marginal"`, or `"boot"`. Default is `NULL`, i.e. no effect
-#' size will be computed. Effect sizes need a Gaussian model without random
-#' effects. Only `"emmeans"` also works for `polr` and `clm` models with
-#' `predict = "latent"` and a logit or probit link, but not for `clm` models
-#' with a `scale` or `nominal` formula. Effect sizes are not possible for joint
-#' or omnibus tests.
+#' size will be computed. Effect sizes are only available for Gaussian models
+#' without random effects, and (only for `"emmeans"`) for ordinal models on the
+#' latent scale (see 'Details').
 #' @param es_type Specifies the type of effect-size measure to estimate when
 #' using `effectsize = "boot"`. One of `"unstandardized"`, `"cohens.d"`,
 #' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See `effect.type`
@@ -246,26 +244,19 @@
 #' aren't part of the contrast.
 #'
 #' `effectsize = "emmeans"` uses [emmeans::eff_size] with
-#' `method = "identity"`. For Gaussian models, it uses the residual SD as
-#' `sigma` and the residual degrees of freedom as `edf` (from
-#' `insight::get_sigma()` and `insight::get_df()`). This
-#' standardizes using the MSE (sigma). Some believe
+#' `sigma = stats::sigma(model)`, `edf = stats::df.residual(model)` and
+#' `method = "identity"`. This standardizes using the MSE (sigma). Some believe
 #' this works when the contrasts are the only predictors in the model, but not
 #' when there are covariates. The response variance accounted for by the
 #' covariates should not be removed from the SD used to standardize. Otherwise,
-#' _d_ will be overestimated. For `polr` and `clm` models with
-#' `predict = "latent"`, sigma is the SD of the error distribution of the
-#' latent variable: `pi / sqrt(3)` (the standard logistic distribution) for
-#' the logit link, and `1` (the standard normal distribution) for the probit
-#' link. With a `rescale` argument for *emmeans*, sigma is multiplied by the
-#' absolute value of `rescale[2]`, so the size of the effect sizes does not
-#' change. A negative `rescale[2]` reverses the sign of the contrasts and of
-#' the effect sizes. For these models, sigma is
-#' taken as known, with `edf = Inf`, so the effect sizes are the contrasts
-#' divided by sigma, and their confidence limits are the unadjusted confidence
-#' limits of the contrasts divided by sigma. For all models, the confidence
-#' limits of the effect sizes are not adjusted for multiple comparisons, also
-#' when `p_adjust` is not `"none"`.
+#' _d_ will be overestimated.
+#'
+#' For `polr` and `clm` models with `predict = "latent"` and a logit or probit
+#' link, `effectsize = "emmeans"` uses the SD of the latent error as sigma, i.e.
+#' `pi / sqrt(3)` (logit) or `1` (probit), with `edf = Inf`. A `rescale`
+#' argument passed to *emmeans* also rescales sigma. `clm` models with a `scale`
+#' or `nominal` formula are not supported. The confidence intervals of the
+#' effect sizes are not adjusted for multiple comparisons.
 #'
 #' `effectsize = "marginal"` uses the following formula to compute effect
 #' size: `d_adj <- difference * (1- R2)/ sigma`. This standardizes

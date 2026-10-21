@@ -2,14 +2,10 @@
 
 ## Changes
 
-* `estimate_contrasts()` with `backend = "emmeans"` and
-  `effectsize = "emmeans"` now returns effect sizes for `polr` and `clm`
-  models with `predict = "latent"` and a logit or probit link. The contrasts
-  of the latent variable are divided by the SD of its error distribution:
-  `pi / sqrt(3)` for the logit link and `1` for the probit link. Other values
-  of `predict`, other links and `clm` models with a `scale` or `nominal`
-  formula give an error. `effectsize = "marginal"` and `effectsize = "boot"`
-  still give an error for ordinal models.
+* `effectsize = "emmeans"` in `estimate_contrasts()` now also works for `polr`
+  and `clm` models with `predict = "latent"` and a logit or probit link. The
+  contrasts of the latent variable are divided by the SD of the latent error,
+  i.e. `pi / sqrt(3)` (logit) or `1` (probit).
 
 ## Bug fixes
 
@@ -21,22 +17,15 @@
   `estimate = "typical"` stopped with the error "No contrasts to show", and
   calls with `estimate = "average"` ignored the filter.
 
-* `estimate_contrasts()` with `effectsize = "emmeans"` now puts each effect
-  size on the row of its own contrast. Before, the contrasts were sometimes sorted
-  in another order than in *emmeans*, for example with factor levels that
-  were not in alphabetical order or with `comparison = "poly"`, and then some
-  effect sizes were on the wrong rows. With a `by` variable, the effect-size
-  columns held the values of the `by` variable and of other *emmeans* columns
-  instead of the effect sizes.
+* Fixed issue where `effectsize = "emmeans"` in `estimate_contrasts()` returned
+  effect sizes in the wrong rows (e.g., when factor levels were not sorted
+  alphabetically) or in the wrong columns (when `by` was specified).
 
-* `estimate_contrasts()` with `effectsize = "emmeans"` now computes the
-  confidence limits of the effect sizes at the level of `ci`. Before, they
-  were always 95% limits.
+* The confidence intervals of effect sizes from `effectsize = "emmeans"` now
+  use the level of `ci`. Before, they were always 95% intervals.
 
-* `estimate_contrasts()` with an `effectsize` and `comparison = "joint"`, or
-  `comparison = "omnibus"` with `backend = "marginaleffects"`, now gives a
-  clear error. Before, the emmeans effect sizes gave an internal error, and
-  `effectsize = "marginal"` returned `NA` effect sizes.
+* `estimate_contrasts()` now gives an informative error when effect sizes are
+  requested for joint or omnibus tests.
 
 * Filters on the response categories of frequentist ordinal models with
   `backend = "emmeans"`, where `Sat` is the response:

@@ -319,11 +319,9 @@ to the output. You can reshape them to a long format by running
 
 \item{effectsize}{Desired measure of standardized effect size, one of
 \code{"emmeans"}, \code{"marginal"}, or \code{"boot"}. Default is \code{NULL}, i.e. no effect
-size will be computed. Effect sizes need a Gaussian model without random
-effects. Only \code{"emmeans"} also works for \code{polr} and \code{clm} models with
-\code{predict = "latent"} and a logit or probit link, but not for \code{clm} models
-with a \code{scale} or \code{nominal} formula. Effect sizes are not possible for joint
-or omnibus tests.}
+size will be computed. Effect sizes are only available for Gaussian models
+without random effects, and (only for \code{"emmeans"}) for ordinal models on the
+latent scale (see 'Details').}
 
 \item{iterations}{This argument has two distinct effects, depending on the
 context. When \code{effectsize = "boot"}, it defines the number of bootstrap
@@ -542,26 +540,19 @@ sigma adding back in the response variance associated with the variables that
 aren't part of the contrast.
 
 \code{effectsize = "emmeans"} uses \link[emmeans:eff_size]{emmeans::eff_size} with
-\code{method = "identity"}. For Gaussian models, it uses the residual SD as
-\code{sigma} and the residual degrees of freedom as \code{edf} (from
-\code{insight::get_sigma()} and \code{insight::get_df()}). This
-standardizes using the MSE (sigma). Some believe
+\code{sigma = stats::sigma(model)}, \code{edf = stats::df.residual(model)} and
+\code{method = "identity"}. This standardizes using the MSE (sigma). Some believe
 this works when the contrasts are the only predictors in the model, but not
 when there are covariates. The response variance accounted for by the
 covariates should not be removed from the SD used to standardize. Otherwise,
-\emph{d} will be overestimated. For \code{polr} and \code{clm} models with
-\code{predict = "latent"}, sigma is the SD of the error distribution of the
-latent variable: \code{pi / sqrt(3)} (the standard logistic distribution) for
-the logit link, and \code{1} (the standard normal distribution) for the probit
-link. With a \code{rescale} argument for \emph{emmeans}, sigma is multiplied by the
-absolute value of \code{rescale[2]}, so the size of the effect sizes does not
-change. A negative \code{rescale[2]} reverses the sign of the contrasts and of
-the effect sizes. For these models, sigma is
-taken as known, with \code{edf = Inf}, so the effect sizes are the contrasts
-divided by sigma, and their confidence limits are the unadjusted confidence
-limits of the contrasts divided by sigma. For all models, the confidence
-limits of the effect sizes are not adjusted for multiple comparisons, also
-when \code{p_adjust} is not \code{"none"}.
+\emph{d} will be overestimated.
+
+For \code{polr} and \code{clm} models with \code{predict = "latent"} and a logit or probit
+link, \code{effectsize = "emmeans"} uses the SD of the latent error as sigma, i.e.
+\code{pi / sqrt(3)} (logit) or \code{1} (probit), with \code{edf = Inf}. A \code{rescale}
+argument passed to \emph{emmeans} also rescales sigma. \code{clm} models with a \code{scale}
+or \code{nominal} formula are not supported. The confidence intervals of the
+effect sizes are not adjusted for multiple comparisons.
 
 \code{effectsize = "marginal"} uses the following formula to compute effect
 size: \code{d_adj <- difference * (1- R2)/ sigma}. This standardizes

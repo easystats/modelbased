@@ -1993,9 +1993,7 @@ test_that("estimate_contrasts, backend emmeans, ordinal, latent-scale effect siz
   skip_if_not_installed("ordinal")
   data(housing, package = "MASS")
 
-  # the latent errors of the logit link follow the standard logistic
-  # distribution, with variance pi^2 / 3 (?stats::Logistic), and those of the
-  # probit link the standard normal distribution, with SD 1 (?stats::Normal)
+  # SD of the latent error: pi / sqrt(3) for logit, 1 for probit
   sd_logit <- pi / sqrt(3)
 
   m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
@@ -2007,8 +2005,7 @@ test_that("estimate_contrasts, backend emmeans, ordinal, latent-scale effect siz
     backend = "emmeans"
   )
   expect_identical(nrow(out), 3L)
-  # sigma is taken as known (`edf = Inf`), so the effect sizes and their
-  # confidence limits are the differences and their limits divided by sigma
+  # with `edf = Inf`, effect sizes and limits are the contrasts divided by sigma
   expect_equal(out$partial_d, out$Difference / sd_logit, tolerance = 1e-6)
   expect_equal(out$es_CI_low, out$CI_low / sd_logit, tolerance = 1e-6)
   expect_equal(out$es_CI_high, out$CI_high / sd_logit, tolerance = 1e-6)

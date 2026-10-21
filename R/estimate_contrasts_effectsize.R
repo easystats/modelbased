@@ -39,15 +39,14 @@
     ))
   }
 
-  # For ordinal models, `effectsize = "emmeans"` standardizes the contrasts of
-  # the latent variable by the SD of its error distribution
+  # ordinal models are standardized by the SD of the latent error
   latent_ordinal <- effectsize == "emmeans" && inherits(model, c("polr", "clm"))
 
   # Check if the model's response variable follows a Gaussian (normal)
   # distribution. Effect size calculations implemented in this function are
   # designed for Gaussian models and may not be appropriate or meaningful for
-  # other types of distributions. Ordinal models with `effectsize = "emmeans"`
-  # are the exception, because the latent variable has a known error SD.
+  # other types of distributions. Ordinal models on the latent scale are an
+  # exception for `effectsize = "emmeans"`.
   if (!latent_ordinal && insight::get_family(model)$family != "gaussian") {
     insight::format_error(paste0(
       "We strongly recommend not using the `effectsize` ",
@@ -60,8 +59,7 @@
     emmeans = {
       if (latent_ordinal) {
         sigma <- .ordinal_latent_sigma(model, attributes(estimated)$predict)
-        # `rescale` (passed to emmeans) scales the latent variable, and so its
-        # error SD
+        # `rescale` also rescales the latent error SD
         if (!is.null(rescale)) {
           sigma <- sigma * abs(rescale[2])
         }
@@ -83,7 +81,7 @@
       ci_high <- intersect(c("upper.CL", "asymp.UCL"), colnames(eff))[1]
       eff <- eff[c(es_col, ci_low, ci_high)]
       names(eff) <- c("partial_d", "es_CI_low", "es_CI_high")
-      # the contrasts can be sorted in another order than the emmeans grid
+      # match effect sizes to the contrasts, which may be sorted differently
       emmeans_rows <- attributes(contrasts_results)$emmeans_rows
       if (!is.null(emmeans_rows)) {
         eff <- eff[emmeans_rows, , drop = FALSE]
@@ -145,9 +143,7 @@
 }
 
 
-# SD of the error distribution of the latent variable of ordinal models, which
-# is the standard logistic (SD pi / sqrt(3)) for the logit link, and the
-# standard normal (SD 1) for the probit link
+# SD of the latent error of ordinal models: pi / sqrt(3) for logit, 1 for probit
 .ordinal_latent_sigma <- function(model, predict) {
   if (!identical(predict, "latent")) {
     insight::format_error(paste0(
@@ -182,8 +178,7 @@
 }
 
 
-# the `rescale` argument for emmeans, which emmeans also accepts partly
-# matched, e.g. `resc = c(0, 2)`
+# `rescale` argument for emmeans from `...`, also when partly matched
 .rescale_argument <- function(...) {
   dots <- list(...)
   dot_names <- names(dots)
