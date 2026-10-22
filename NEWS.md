@@ -1,5 +1,12 @@
 # modelbased (devel)
 
+## Changes
+
+* `effectsize = "emmeans"` in `estimate_contrasts()` now also works for `polr`
+  and `clm` models with `predict = "latent"` and a logit or probit link. The
+  contrasts of the latent variable are divided by the SD of the latent error,
+  i.e. `pi / sqrt(3)` (logit) or `1` (probit).
+
 ## Bug fixes
 
 * If the filter in `by` keeps one level, `estimate_contrasts()` with
@@ -9,6 +16,16 @@
   slopes of the response categories at that level. Before, calls with
   `estimate = "typical"` stopped with the error "No contrasts to show", and
   calls with `estimate = "average"` ignored the filter.
+
+* Fixed issue where `effectsize = "emmeans"` in `estimate_contrasts()` returned
+  effect sizes in the wrong rows (e.g., when factor levels were not sorted
+  alphabetically) or in the wrong columns (when `by` was specified).
+
+* The confidence intervals of effect sizes from `effectsize = "emmeans"` now
+  use the level of `ci`. Before, they were always 95% intervals.
+
+* `estimate_contrasts()` now gives an informative error when effect sizes are
+  requested for joint or omnibus tests.
 
 * Filters on the response categories of frequentist ordinal models with
   `backend = "emmeans"`, where `Sat` is the response:

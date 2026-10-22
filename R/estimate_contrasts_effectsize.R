@@ -5,10 +5,16 @@
   effectsize,
   bootstraps,
   bootES_type,
-  backend
+  backend,
+  ci = 0.95,
+  rescale = NULL
 ) {
   # Add standardized effect size
   insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "boot"))
+
+  if (effectsize != "none" && isTRUE(attributes(estimated)$joint_test)) {
+    insight::format_error("Effect sizes are not possible for joint or omnibus tests.")
+  }
 
   if (effectsize == "emmeans" && backend != "emmeans") {
     insight::format_error(
@@ -33,11 +39,15 @@
     ))
   }
 
+  # ordinal models are standardized by the SD of the latent error
+  latent_ordinal <- effectsize == "emmeans" && inherits(model, c("polr", "clm"))
+
   # Check if the model's response variable follows a Gaussian (normal)
   # distribution. Effect size calculations implemented in this function are
   # designed for Gaussian models and may not be appropriate or meaningful for
-  # other types of distributions.
-  if (insight::get_family(model)$family != "gaussian") {
+  # other types of distributions. Ordinal models on the latent scale are an
+  # exception for `effectsize = "emmeans"`.
+  if (!latent_ordinal && insight::get_family(model)$family != "gaussian") {
     insight::format_error(paste0(
       "We strongly recommend not using the `effectsize` ",
       "argument with non-Gaussian models."
@@ -47,15 +57,36 @@
   switch(
     effectsize,
     emmeans = {
+      if (latent_ordinal) {
+        sigma <- .ordinal_latent_sigma(model, attributes(estimated)$predict)
+        # `rescale` also rescales the latent error SD
+        if (!is.null(rescale)) {
+          sigma <- sigma * abs(rescale[2])
+        }
+        edf <- Inf
+      } else {
+        sigma <- insight::get_sigma(model, verbose = FALSE)
+        edf <- insight::get_df(model)
+      }
       eff <- emmeans::eff_size(
         estimated,
-        sigma = insight::get_sigma(model, verbose = FALSE),
-        edf = insight::get_df(model),
+        sigma = sigma,
+        edf = edf,
         method = "identity"
       )
-      eff <- as.data.frame(eff)
-      eff <- eff[c(2, 5:6)]
+      eff <- as.data.frame(stats::confint(eff, level = ci, adjust = "none"))
+      # select columns by name, because `by` variables add columns
+      es_col <- intersect(c("effect.size", "estimate"), colnames(eff))[1]
+      ci_low <- intersect(c("lower.CL", "asymp.LCL"), colnames(eff))[1]
+      ci_high <- intersect(c("upper.CL", "asymp.UCL"), colnames(eff))[1]
+      eff <- eff[c(es_col, ci_low, ci_high)]
       names(eff) <- c("partial_d", "es_CI_low", "es_CI_high")
+      # match effect sizes to the contrasts, which may be sorted differently
+      emmeans_rows <- attributes(contrasts_results)$emmeans_rows
+      if (!is.null(emmeans_rows)) {
+        eff <- eff[emmeans_rows, , drop = FALSE]
+        rownames(eff) <- NULL
+      }
       contrasts_results <- cbind(contrasts_results, eff)
     },
     marginal = {
@@ -109,6 +140,56 @@
     }
   )
   .rename_es_columns(contrasts_results)
+}
+
+
+# SD of the latent error of ordinal models: pi / sqrt(3) for logit, 1 for probit
+.ordinal_latent_sigma <- function(model, predict) {
+  if (!identical(predict, "latent")) {
+    insight::format_error(paste0(
+      "Effect sizes for ordinal models are only possible on the latent scale. ",
+      "Please use `predict = \"latent\"`."
+    ))
+  }
+  if (inherits(model, "clm") && !is.null(model$formulas$scale)) {
+    insight::format_error(
+      "Effect sizes are not possible for ordinal models with a `scale` formula."
+    )
+  }
+  # nominal effects make the thresholds differ between groups
+  if (inherits(model, "clm") && !is.null(model$formulas$nominal)) {
+    insight::format_error(
+      "Effect sizes are not possible for ordinal models with a `nominal` formula."
+    )
+  }
+  link <- if (inherits(model, "polr")) model$method else model$link
+  switch(
+    link,
+    logistic = ,
+    logit = pi / sqrt(3),
+    probit = 1,
+    insight::format_error(paste0(
+      "Effect sizes for ordinal models are only possible for the `logit` and ",
+      "`probit` links, but the model uses the `",
+      link,
+      "` link."
+    ))
+  )
+}
+
+
+# `rescale` argument for emmeans from `...`, also when partly matched
+.rescale_argument <- function(...) {
+  dots <- list(...)
+  dot_names <- names(dots)
+  if (is.null(dot_names)) {
+    return(NULL)
+  }
+  i <- which(nzchar(dot_names) & startsWith("rescale", dot_names))
+  if (length(i) == 0) {
+    return(NULL)
+  }
+  dots[[i[1]]]
 }
 
 

@@ -319,7 +319,9 @@ to the output. You can reshape them to a long format by running
 
 \item{effectsize}{Desired measure of standardized effect size, one of
 \code{"emmeans"}, \code{"marginal"}, or \code{"boot"}. Default is \code{NULL}, i.e. no effect
-size will be computed.}
+size will be computed. Effect sizes are only available for Gaussian models
+without random effects, and (only for \code{"emmeans"}) for ordinal models on the
+latent scale (see 'Details').}
 
 \item{iterations}{This argument has two distinct effects, depending on the
 context. When \code{effectsize = "boot"}, it defines the number of bootstrap
@@ -544,6 +546,13 @@ this works when the contrasts are the only predictors in the model, but not
 when there are covariates. The response variance accounted for by the
 covariates should not be removed from the SD used to standardize. Otherwise,
 \emph{d} will be overestimated.
+
+For \code{polr} and \code{clm} models with \code{predict = "latent"} and a logit or probit
+link, \code{effectsize = "emmeans"} uses the SD of the latent error as sigma, i.e.
+\code{pi / sqrt(3)} (logit) or \code{1} (probit), with \code{edf = Inf}. A \code{rescale}
+argument passed to \emph{emmeans} also rescales sigma. \code{clm} models with a \code{scale}
+or \code{nominal} formula are not supported. The confidence intervals of the
+effect sizes are not adjusted for multiple comparisons.
 
 \code{effectsize = "marginal"} uses the following formula to compute effect
 size: \code{d_adj <- difference * (1- R2)/ sigma}. This standardizes
