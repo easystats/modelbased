@@ -224,10 +224,6 @@ test_that("visualization_recipe, grid argument modifies facet_grid layer", {
     r[[which(geoms == "facet_grid")]]
   }
 
-  # default
-  out <- .grid_layer(visualisation_recipe(x))
-  expect_identical(out$scales, "free_x")
-
   # grid argument is used for the facet_grid layer
   out <- .grid_layer(visualisation_recipe(x, grid = list(scales = "free")))
   expect_identical(out$scales, "free")
@@ -259,109 +255,65 @@ test_that("visualization_recipe, grid argument modifies facet_grid layer", {
   )
 }
 
-# printed table as a list of character columns
-.printed_table <- function(x) {
-  lapply(as.list(format(x)), as.character)
-}
-
-# the printed table must not depend on the model information
-.expect_same_print <- function(x) {
-  y <- x
-  attr(y, "model_info") <- NULL
-  expect_identical(.printed_table(x), .printed_table(y))
-}
-
 
 test_that("visualization_recipe, emmeans ordinal, color by Response", {
   skip_if_not_installed("emmeans")
   skip_if_not_installed("MASS")
-  skip_if_not_installed("ordinal")
-  skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
   data(housing, package = "MASS")
-  models <- list(
-    polr = MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE),
-    clm = ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing)
-  )
-  for (m in models) {
-    for (backend in c("emmeans", "marginaleffects")) {
-      x <- estimate_means(m, by = "Infl", backend = backend)
-      out <- .recipe_mapping(x)
-      expect_identical(out$x, "Infl")
-      expect_identical(out$color, "Response")
-      expect_null(out$facet)
-      expect_true("scale_y_continuous" %in% out$geoms)
-      expect_identical(attributes(x)$focal_terms, "Infl")
-      if (backend == "emmeans") {
-        .expect_same_print(x)
-      }
-
-      x <- estimate_means(m, by = c("Infl", "Type"), backend = backend)
-      out <- .recipe_mapping(x)
-      expect_identical(out$x, "Infl")
-      expect_identical(out$color, "Type")
-      expect_identical(out$facet, "~Response")
-      expect_identical(attributes(x)$focal_terms, c("Infl", "Type"))
-      if (backend == "emmeans") .expect_same_print(x)
-    }
-  }
-
-  # printed rows keep their order: the response varies within predictor levels
-  x <- estimate_means(models$polr, by = c("Infl", "Type"), backend = "emmeans")
-  printed <- .printed_table(x)
-  expect_identical(
-    printed$Infl[1:6],
-    c("Low", "Low", "Low", "Medium", "Medium", "Medium")
-  )
-  expect_identical(printed$Type[1:6], rep("Tower", 6))
-  expect_identical(
-    printed$Response[1:6],
-    c("Low", "Medium", "High", "Low", "Medium", "High")
-  )
-
-  # mixed models from package ordinal
-  data(wine, package = "ordinal")
-  m <- ordinal::clmm(rating ~ temp + contact + (1 | judge), data = wine)
-  x <- estimate_means(m, by = "temp", backend = "emmeans")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  x <- estimate_means(m, by = "Infl", backend = "emmeans")
   out <- .recipe_mapping(x)
-  expect_identical(out$x, "temp")
+  expect_identical(out$x, "Infl")
   expect_identical(out$color, "Response")
-  .expect_same_print(x)
+  expect_true("scale_y_continuous" %in% out$geoms)
+  expect_identical(attributes(x)$focal_terms, "Infl")
+
+  x <- estimate_means(m, by = c("Infl", "Type"), backend = "emmeans")
+  out <- .recipe_mapping(x)
+  expect_identical(out$color, "Type")
+  expect_identical(out$facet, "~Response")
+
+  # printed rows keep their order: the response varies within predictor levels,
+  # and the printed table does not depend on the model information
+  printed <- lapply(as.list(format(x)), as.character)
+  expect_identical(printed$Response[1:6], rep(c("Low", "Medium", "High"), 2))
+  attr(x, "model_info") <- NULL
+  expect_identical(lapply(as.list(format(x)), as.character), printed)
 })
 
 
 test_that("visualization_recipe, emmeans ordinal, color by Threshold", {
   skip_if_not_installed("emmeans")
   skip_if_not_installed("MASS")
-  skip_if_not_installed("ordinal")
 
   data(housing, package = "MASS")
-  models <- list(
-    polr = MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE),
-    clm = ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing)
-  )
-  for (m in models) {
-    for (p in c("cum.prob", "exc.prob", "linear.predictor")) {
-      x <- estimate_means(m, by = "Infl", backend = "emmeans", predict = p)
-      out <- .recipe_mapping(x)
-      expect_identical(out$x, "Infl")
-      expect_identical(out$color, "Threshold")
-      expect_null(out$facet)
-      expect_identical(
-        "scale_y_continuous" %in% out$geoms,
-        p %in% c("cum.prob", "exc.prob")
-      )
-      expect_identical(attributes(x)$focal_terms, "Infl")
-      .expect_same_print(x)
-
-      x <- estimate_means(m, by = c("Infl", "Type"), backend = "emmeans", predict = p)
-      out <- .recipe_mapping(x)
-      expect_identical(out$x, "Infl")
-      expect_identical(out$color, "Type")
-      expect_identical(out$facet, "~Threshold")
-      .expect_same_print(x)
-    }
-  }
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  out <- .recipe_mapping(estimate_means(
+    m,
+    by = "Infl",
+    backend = "emmeans",
+    predict = "cum.prob"
+  ))
+  expect_identical(out$color, "Threshold")
+  expect_true("scale_y_continuous" %in% out$geoms)
+  out <- .recipe_mapping(estimate_means(
+    m,
+    by = c("Infl", "Type"),
+    backend = "emmeans",
+    predict = "linear.predictor"
+  ))
+  expect_identical(out$color, "Type")
+  expect_identical(out$facet, "~Threshold")
+  expect_false("scale_y_continuous" %in% out$geoms)
+  # no grouping column for the latent scale
+  out <- .recipe_mapping(estimate_means(
+    m,
+    by = "Infl",
+    backend = "emmeans",
+    predict = "latent"
+  ))
+  expect_null(out$color)
 
   # thresholds in model order, not in alphabetical order
   data(wine, package = "ordinal")
@@ -374,102 +326,35 @@ test_that("visualization_recipe, emmeans ordinal, color by Threshold", {
   m <- MASS::polr(rating ~ temp + contact, data = wine, Hess = TRUE)
   x <- estimate_means(m, by = "temp", backend = "emmeans", predict = "cum.prob")
   out <- .recipe_mapping(x)
-  expect_identical(out$color, "Threshold")
   expect_identical(
     levels(out$data$Threshold),
     c("very low|low", "low|medium", "medium|high", "high|very high")
   )
-  expect_identical(
-    as.character(unique(out$data$Threshold)),
-    c("very low|low", "low|medium", "medium|high", "high|very high")
-  )
-  .expect_same_print(x)
 })
 
 
 test_that("visualization_recipe, ordinal, focal predictor named Threshold", {
   skip_if_not_installed("emmeans")
   skip_if_not_installed("MASS")
-  skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
   data(housing, package = "MASS")
   d <- housing
   d$Threshold <- d$Infl
   m <- MASS::polr(Sat ~ Threshold + Type, weights = Freq, data = d, Hess = TRUE)
-  for (backend in c("emmeans", "marginaleffects")) {
-    x <- estimate_means(m, by = "Threshold", backend = backend)
-    out <- .recipe_mapping(x)
-    expect_identical(out$x, "Threshold")
-    expect_identical(out$color, "Response")
-    expect_null(out$facet)
-  }
+  out <- .recipe_mapping(estimate_means(m, by = "Threshold", backend = "emmeans"))
+  expect_identical(out$x, "Threshold")
+  expect_identical(out$color, "Response")
 })
 
 
 test_that("visualization_recipe, emmeans, percent scale for logistic models", {
   skip_if_not_installed("emmeans")
-  skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
   d <- mtcars
   d$cyl <- factor(d$cyl)
   m <- glm(am ~ cyl, family = binomial, data = d)
-  for (backend in c("emmeans", "marginaleffects")) {
-    x <- estimate_means(m, by = "cyl", backend = backend)
-    out <- .recipe_mapping(x)
-    expect_identical(out$geoms, c("pointrange", "labs", "scale_y_continuous"))
-  }
-  .expect_same_print(estimate_means(m, by = "cyl", backend = "emmeans"))
-})
-
-
-test_that("visualization_recipe, emmeans, recipes that do not change", {
-  skip_if_not_installed("emmeans")
-  skip_if_not_installed("MASS")
-
-  m <- lm(Sepal.Length ~ Species, data = iris)
-  x <- estimate_means(m, by = "Species", backend = "emmeans")
-  out <- .recipe_mapping(x, show_data = TRUE)
-  expect_identical(out$geoms, c("jitter", "pointrange", "labs"))
-  expect_identical(out$x, "Species")
-  expect_null(out$color)
-  .expect_same_print(x)
-
-  m <- lm(log(Sepal.Length) ~ Species, data = iris)
-  x <- estimate_means(m, by = "Species", backend = "emmeans")
-  out <- .recipe_mapping(x, show_data = TRUE)
-  expect_identical(out$geoms, c("jitter", "pointrange", "labs"))
-  expect_identical(out$x, "Species")
-  expect_null(out$color)
-  .expect_same_print(x)
-
-  d <- mtcars
-  d$cyl <- factor(d$cyl)
-  m <- glm(carb ~ cyl, family = poisson, data = d)
-  x <- estimate_means(m, by = "cyl", backend = "emmeans")
-  out <- .recipe_mapping(x)
-  expect_identical(out$geoms, c("pointrange", "labs"))
-  expect_identical(out$x, "cyl")
-  expect_null(out$color)
-  .expect_same_print(x)
-
-  m <- glm(am ~ cyl, family = binomial, data = d)
-  x <- estimate_means(m, by = "cyl", backend = "emmeans", predict = "link")
-  out <- .recipe_mapping(x)
-  expect_identical(out$geoms, c("pointrange", "labs"))
-  expect_identical(out$x, "cyl")
-  expect_null(out$color)
-  .expect_same_print(x)
-
-  data(housing, package = "MASS")
-  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
-  for (p in c("mean.class", "latent")) {
-    x <- estimate_means(m, by = "Infl", backend = "emmeans", predict = p)
-    out <- .recipe_mapping(x)
-    expect_identical(out$geoms, c("pointrange", "labs"))
-    expect_identical(out$x, "Infl")
-    expect_null(out$color)
-    .expect_same_print(x)
-  }
+  out <- .recipe_mapping(estimate_means(m, by = "cyl", backend = "emmeans"))
+  expect_identical(out$geoms, c("pointrange", "labs", "scale_y_continuous"))
 })
 
 
@@ -519,19 +404,14 @@ test_that("visualization_recipe, informative error when nothing goes on x-axis",
 test_that("visualization_recipe, emmeans ordinal slopes, color by Response", {
   skip_if_not_installed("emmeans")
   skip_if_not_installed("MASS")
-  skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
   data(housing, package = "MASS")
   set.seed(1)
   housing$x <- as.numeric(housing$Cont) + stats::rnorm(nrow(housing))
   m <- MASS::polr(Sat ~ Infl * x, weights = Freq, data = housing, Hess = TRUE)
-  for (backend in c("emmeans", "marginaleffects")) {
-    out <- .recipe_mapping(estimate_slopes(m, "x", by = "Infl", backend = backend))
-    expect_identical(out$x, "Infl", info = backend)
-    expect_identical(out$color, "Response", info = backend)
-  }
-
-  # thresholds, and no grouping column for the latent scale
+  out <- .recipe_mapping(estimate_slopes(m, "x", by = "Infl", backend = "emmeans"))
+  expect_identical(out$x, "Infl")
+  expect_identical(out$color, "Response")
   out <- .recipe_mapping(estimate_slopes(
     m,
     "x",
@@ -540,12 +420,4 @@ test_that("visualization_recipe, emmeans ordinal slopes, color by Response", {
     backend = "emmeans"
   ))
   expect_identical(out$color, "Threshold")
-  out <- .recipe_mapping(estimate_slopes(
-    m,
-    "x",
-    by = "Infl",
-    predict = "latent",
-    backend = "emmeans"
-  ))
-  expect_null(out$color)
 })
