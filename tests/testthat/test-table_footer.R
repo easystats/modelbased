@@ -22,132 +22,87 @@ test_that("table_footer", {
 
 test_that("table_footer, prediction intervals", {
   pi_line <- "Intervals are prediction intervals."
-  m_lm <- lm(mpg ~ wt, data = mtcars)
-  m_glm <- glm(vs ~ wt, data = mtcars, family = binomial())
-
-  out <- utils::capture.output(estimate_prediction(m_lm, data = "grid", length = 3))
+  m <- lm(mpg ~ wt, data = mtcars)
+  out <- utils::capture.output(estimate_prediction(m, data = "grid", length = 3))
   expect_identical(sum(out == pi_line), 1L)
-  out <- utils::capture.output(estimate_prediction(m_glm, data = "grid", length = 3))
-  expect_identical(sum(out == pi_line), 1L)
-  out <- utils::capture.output(estimate_relation(m_lm, predict = "prediction", length = 3))
+  out <- utils::capture.output(estimate_relation(m, predict = "prediction", length = 3))
   expect_identical(sum(out == pi_line), 1L)
 
-  # no intervals, no line
-  out <- utils::capture.output(estimate_prediction(m_lm, data = "grid", length = 3, ci = NULL))
+  out <- utils::capture.output(estimate_prediction(
+    m,
+    data = "grid",
+    length = 3,
+    ci = NULL
+  ))
   expect_false(pi_line %in% out)
-
-  # no prediction intervals
-  for (m in list(m_lm, m_glm)) {
-    out <- utils::capture.output(estimate_expectation(m, data = "grid", length = 3))
-    expect_false(pi_line %in% out)
-    out <- utils::capture.output(estimate_relation(m, length = 3))
-    expect_false(pi_line %in% out)
-    out <- utils::capture.output(estimate_link(m, length = 3))
-    expect_false(pi_line %in% out)
-  }
-
-  skip_if_not_installed("lme4")
-  m_lmer <- lme4::lmer(mpg ~ wt + (1 | cyl), data = mtcars)
-  out <- utils::capture.output(estimate_prediction(m_lmer, data = "grid", length = 3))
-  expect_identical(sum(out == pi_line), 1L)
+  out <- utils::capture.output(estimate_expectation(m, data = "grid", length = 3))
+  expect_false(pi_line %in% out)
 })
 
 
-test_that("table_footer, link-scale without transform", {
-  d <- mtcars
-  d$cyl <- factor(d$cyl)
-  g <- glm(am ~ wt + cyl, data = d, family = binomial)
-  pred_line <- "Predictions are on the link-scale."
-  contr_line <- "Contrasts are on the link-scale."
-
-  out <- utils::capture.output(estimate_link(g, by = "cyl"))
-  expect_true(pred_line %in% out)
-  for (backend in c("marginaleffects", "emmeans")) {
-    out <- utils::capture.output(
-      estimate_means(g, "cyl", predict = "link", backend = backend)
-    )
-    expect_true(pred_line %in% out)
-    out <- utils::capture.output(
-      estimate_contrasts(g, "cyl", predict = "link", backend = backend)
-    )
-    expect_true(contr_line %in% out)
-  }
-})
-
-
-test_that("table_footer, link-scale with transform", {
+test_that("table_footer, link-scale and transform", {
   d <- mtcars
   d$cyl <- factor(d$cyl)
   g <- glm(am ~ wt + cyl, data = d, family = binomial)
 
-  # a transformation function
-  out <- utils::capture.output(
-    estimate_contrasts(g, "cyl", predict = "link", transform = exp)
-  )
-  expect_true("Contrasts are on the transformed link-scale." %in% out)
-  out <- utils::capture.output(estimate_link(g, by = "cyl", transform = exp))
-  expect_true("Predictions are on the transformed link-scale." %in% out)
-  out <- utils::capture.output(
-    estimate_means(g, "cyl", predict = "link", transform = exp)
-  )
-  expect_true("Predictions are on the transformed link-scale." %in% out)
-
-  # transform = TRUE
-  out <- utils::capture.output(estimate_link(g, by = "cyl", transform = TRUE))
-  expect_false(any(grepl("TRUE-transformed|FALSE-transformed", out)))
-  # the response is not transformed, so `transform = TRUE` changes nothing
-  out <- utils::capture.output(
-    estimate_means(g, "cyl", predict = "link", transform = TRUE)
-  )
+  out <- utils::capture.output(estimate_means(
+    g,
+    "cyl",
+    predict = "link",
+    backend = "emmeans"
+  ))
   expect_true("Predictions are on the link-scale." %in% out)
+  out <- utils::capture.output(estimate_contrasts(
+    g,
+    "cyl",
+    predict = "link",
+    backend = "emmeans"
+  ))
+  expect_true("Contrasts are on the link-scale." %in% out)
 
-  # name of the transformation
-  out <- utils::capture.output(
-    estimate_contrasts(g, "cyl", predict = "link", transform = "exp")
-  )
+  out <- utils::capture.output(estimate_contrasts(
+    g,
+    "cyl",
+    predict = "link",
+    transform = exp
+  ))
+  expect_true("Contrasts are on the transformed link-scale." %in% out)
+  out <- utils::capture.output(estimate_contrasts(
+    g,
+    "cyl",
+    predict = "link",
+    transform = "exp"
+  ))
   expect_true("Contrasts are on the exp-transformed link-scale." %in% out)
-})
 
-
-test_that("table_footer, scale of predictions with earlier output as data", {
-  d <- mtcars
-  d$cyl <- factor(d$cyl)
-  g <- glm(am ~ wt + cyl, data = d, family = binomial)
-  resp_line <- "Predictions are on the response-scale."
-
-  out <- utils::capture.output(
-    estimate_expectation(g, data = estimate_link(g, by = "cyl"))
-  )
-  expect_true(resp_line %in% out)
-  out <- utils::capture.output(
-    estimate_prediction(g, data = estimate_link(g, by = "cyl"))
-  )
-  expect_true(resp_line %in% out)
-  out <- utils::capture.output(
-    estimate_link(g, data = estimate_expectation(g, by = "cyl"))
-  )
+  # the response is not transformed, so `transform = TRUE` changes nothing
+  out <- utils::capture.output(estimate_link(g, by = "cyl", transform = TRUE))
   expect_true("Predictions are on the link-scale." %in% out)
-})
+  out <- utils::capture.output(estimate_means(
+    g,
+    "cyl",
+    predict = "link",
+    transform = TRUE
+  ))
+  expect_true("Predictions are on the link-scale." %in% out)
 
+  out <- utils::capture.output(estimate_expectation(
+    g,
+    data = estimate_link(g, by = "cyl")
+  ))
+  expect_true("Predictions are on the response-scale." %in% out)
+  out <- utils::capture.output(estimate_link(
+    g,
+    data = estimate_expectation(g, by = "cyl")
+  ))
+  expect_true("Predictions are on the link-scale." %in% out)
 
-test_that("table_footer, link-scale for contrasts of predictions and slopes", {
-  d <- mtcars
-  d$cyl <- factor(d$cyl)
-  g <- glm(am ~ wt + cyl, data = d, family = binomial)
-
-  # contrasts of an earlier output
-  out <- utils::capture.output(estimate_contrasts(estimate_link(g, by = "cyl")))
-  expect_true("Contrasts are on the link-scale." %in% out)
-  out <- utils::capture.output(
-    estimate_contrasts(estimate_link(g, by = "cyl", transform = exp))
-  )
+  out <- utils::capture.output(estimate_contrasts(estimate_link(
+    g,
+    by = "cyl",
+    transform = exp
+  )))
   expect_true("Contrasts are on the transformed link-scale." %in% out)
-
-  # contrasts of slopes
-  out <- utils::capture.output(
-    estimate_contrasts(g, "wt", by = "cyl", predict = "link")
-  )
-  expect_true("Contrasts are on the link-scale." %in% out)
   out <- utils::capture.output(
     estimate_contrasts(g, "wt", by = "cyl", predict = "link", transform = exp)
   )

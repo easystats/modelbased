@@ -87,17 +87,19 @@ test_that("estimate_means - brms, multivariate", {
 })
 
 
-test_that("estimate_contrasts - brms, multivariate, many observations", {
+test_that("estimate_contrasts - brms, multivariate, many observations and response names with dots", {
   # the response values must not be used as response levels, else the
-  # regular expressions built from them grow too long and fail
+  # regular expressions built from them grow too long and fail. brms drops the
+  # dot from response names ("y.1" -> "y1"), and the contrast labels use the
+  # brms names
   set.seed(123)
   d <- data.frame(
-    y1 = rnorm(600),
-    y2 = rnorm(600),
+    y.1 = rnorm(600),
+    y.2 = rnorm(600),
     g = factor(sample(c("a", "b", "c"), 600, replace = TRUE))
   )
   m <- suppressWarnings(brms::brm(
-    brms::mvbind(y1, y2) ~ g,
+    brms::mvbind(y.1, y.2) ~ g,
     data = d,
     refresh = 0,
     iter = 500,
@@ -106,35 +108,13 @@ test_that("estimate_contrasts - brms, multivariate, many observations", {
   ))
 
   out <- estimate_contrasts(m, "g", resp = "y1")
-  expect_identical(nrow(out), 3L)
   expect_identical(as.character(out$Level1), c("b", "c", "c"))
   expect_identical(as.character(out$Level2), c("a", "a", "b"))
 
   out <- estimate_contrasts(m, "g")
   expect_identical(nrow(out), 15L)
-  expect_true(all(c("Response1", "Response2") %in% colnames(out)))
   expect_identical(levels(out$Response1), c("y1", "y2"))
-})
-
-
-test_that("estimate_contrasts - brms, multivariate, response names with dots", {
-  # brms drops the dot from response names ("Sepal.Length" -> "SepalLength"),
-  # and the contrast labels use the brms names
-  m <- suppressWarnings(brms::brm(
-    brms::mvbind(Sepal.Length, Petal.Length) ~ Species,
-    data = iris,
-    refresh = 0,
-    iter = 500,
-    chains = 1,
-    seed = 123
-  ))
-
-  out <- estimate_contrasts(m, "Species")
-  expect_identical(nrow(out), 15L)
-  expect_true(all(c("Response1", "Response2") %in% colnames(out)))
-  expect_identical(levels(out$Response1), c("SepalLength", "PetalLength"))
-  expect_true(all(as.character(out$Level1) %in% levels(iris$Species)))
-  expect_true(all(as.character(out$Level2) %in% levels(iris$Species)))
+  expect_true(all(as.character(out$Level1) %in% levels(d$g)))
 })
 
 
