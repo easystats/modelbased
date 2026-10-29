@@ -1986,3 +1986,91 @@ test_that("estimate_contrasts, backend emmeans, ordinal, slopes with a by filter
     c("Difference", "SE")
   )
 })
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, latent-scale effect sizes", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+  es_cols <- c("partial_d", "es_CI_low", "es_CI_high")
+  ci_cols <- c("Difference", "CI_low", "CI_high")
+
+  # logit: the latent error SD is pi / sqrt(3)
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+  out <- estimate_contrasts(m, "Infl", predict = "latent", effectsize = "emmeans", backend = "emmeans")
+  expect_identical(nrow(out), 3L)
+  expect_equal(out[es_cols], out[ci_cols] / (pi / sqrt(3)), tolerance = 1e-6, ignore_attr = TRUE)
+
+  # probit: the latent error SD is 1
+  mp <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing, link = "probit")
+  out <- estimate_contrasts(mp, "Infl", predict = "latent", effectsize = "emmeans", backend = "emmeans")
+  expect_equal(out[es_cols], out[ci_cols], tolerance = 1e-6, ignore_attr = TRUE)
+
+  # the effect-size limits are at the level of `ci`
+  out <- estimate_contrasts(
+    m,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans",
+    ci = 0.8
+  )
+  expect_equal(out[es_cols], out[ci_cols] / (pi / sqrt(3)), tolerance = 1e-6, ignore_attr = TRUE)
+
+  # a partly matched, negative `rescale` also rescales the latent error SD
+  out_r <- estimate_contrasts(
+    m,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans",
+    resc = c(1, -3)
+  )
+  expect_equal(out_r$Difference, -3 * out$Difference, tolerance = 1e-6)
+  expect_equal(out_r$partial_d, -out$partial_d, tolerance = 1e-6)
+})
+
+
+test_that("estimate_contrasts, backend emmeans, ordinal, effect size errors", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ordinal")
+  data(housing, package = "MASS")
+  m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
+
+  expect_error(
+    estimate_contrasts(m, "Infl", effectsize = "emmeans", backend = "emmeans"),
+    "latent"
+  )
+  expect_error(
+    estimate_contrasts(m, "Infl", predict = "latent", effectsize = "marginal", backend = "emmeans"),
+    "non-Gaussian"
+  )
+  expect_error(
+    estimate_contrasts(
+      m,
+      "Infl",
+      by = "Type",
+      comparison = "joint",
+      predict = "latent",
+      effectsize = "emmeans",
+      backend = "emmeans"
+    ),
+    "omnibus"
+  )
+
+  mc <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing, link = "cloglog")
+  expect_error(
+    estimate_contrasts(mc, "Infl", predict = "latent", effectsize = "emmeans", backend = "emmeans"),
+    "cloglog"
+  )
+  ms <- ordinal::clm(Sat ~ Infl + Type, scale = ~Cont, weights = Freq, data = housing)
+  expect_error(
+    estimate_contrasts(ms, "Infl", predict = "latent", effectsize = "emmeans", backend = "emmeans"),
+    "scale"
+  )
+  mn <- ordinal::clm(Sat ~ Infl, nominal = ~Type, weights = Freq, data = housing)
+  expect_error(
+    estimate_contrasts(mn, "Type", predict = "latent", effectsize = "emmeans", backend = "emmeans"),
+    "nominal"
+  )
+})
