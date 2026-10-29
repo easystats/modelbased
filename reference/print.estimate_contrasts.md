@@ -219,7 +219,7 @@ print(out, full_labels = FALSE, select = "{estimate} ({se})")
 #> c161sex | c172code | e16sex |    Mean (SE)
 #> ------------------------------------------
 #> Male    | low      | male   |  9.47 (1.00)
-#> Female  |          |        | 12.13 (0.48)
+#> Female  |          |        | 12.12 (0.48)
 #> Male    | mid      |        | 12.16 (0.68)
 #> Female  |          |        | 12.48 (0.35)
 #> Male    | high     |        | 12.31 (1.07)

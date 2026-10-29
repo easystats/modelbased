@@ -432,8 +432,8 @@ intercept and random effect of condition for the participants.
     > 
     > Parameter         | Log-Odds |   SE |         95% CI |      z |      p
     > ----------------------------------------------------------------------
-    > (Intercept)       |    -2.91 | 0.19 | [-3.28, -2.53] | -15.16 | < .001
-    > condition [speed] |     1.32 | 0.15 | [ 1.02,  1.61] |   8.73 | < .001
+    > (Intercept)       |    -2.91 | 0.19 | [-3.28, -2.53] | -15.09 | < .001
+    > condition [speed] |     1.32 | 0.15 | [ 1.02,  1.61] |   8.66 | < .001
 
 The parameters suggest that in general, participants indeed make more
 errors in the speed condition as compared to the accuracy condition. We

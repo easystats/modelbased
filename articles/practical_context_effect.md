@@ -87,7 +87,7 @@ First, we start with calculating the within- and between-effects from
 | education (mid)  | 5.01        | 2.35 | (0.40, 9.62)   | 2.14   | 0.033   |
 | education (high) | 5.52        | 2.75 | (0.11, 10.93)  | 2.00   | 0.046   |
 
-Model Summary {#tinytable_fsjm4qsrfu3xwaqupawg .table .tinytable
+Model Summary {#tinytable_g2htqbj17ldc83n26fps .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -149,7 +149,7 @@ different from each other, we can estimate their contrast:
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_0laf6r03gz2ocn8rht7s .table
+Marginal Contrasts Analysis {#tinytable_9ihurzu9pw0ckmebn4mn .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -195,7 +195,7 @@ measurement (`time`) and our two centered variables (`phq4_within` and
 | time × phq4 within  | 0.33        | 0.61 | (-0.87, 1.52)  | 0.54   | 0.592   |
 | time × phq4 between | -0.66       | 0.37 | (-1.39, 0.07)  | -1.77  | 0.077   |
 
-Model Summary {#tinytable_q2i18qvs6krvoymcd749 .table .tinytable
+Model Summary {#tinytable_wwmtzrhvqzw4kzg81g3z .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -261,7 +261,7 @@ understand the underlying dynamics.
 
 [TABLE]
 
-Estimated Marginal Effects {#tinytable_yo6w1pp6t9yqfkgxbhhw .table
+Estimated Marginal Effects {#tinytable_e95ncd7z94ehz1s1e55t .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -271,7 +271,7 @@ quarto-disable-processing="true"}
 
 [TABLE]
 
-Estimated Marginal Effects {#tinytable_1uu8mstrq806iml3ntaj .table
+Estimated Marginal Effects {#tinytable_dn3ua4wl18mklhpgn9pp .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -296,7 +296,7 @@ marginal contrasts at each specific time point.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_20hfiyik1yqgbz9dgnby .table
+Marginal Contrasts Analysis {#tinytable_vlh4ki2lq6cngptyext5 .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -342,7 +342,7 @@ points.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_0ke2fxfqoyuik7wf0eod .table
+Marginal Contrasts Analysis {#tinytable_w2ego98e2cgzfnroodm9 .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -377,7 +377,7 @@ the within- and between-effects without stratifying by time.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_l7k4vcxjnnb9codq2jip .table
+Marginal Contrasts Analysis {#tinytable_wk7s770d02vu50uuwy5u .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -421,7 +421,7 @@ variables.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_ns9q1pf8blkg2h9ytcom .table
+Marginal Contrasts Analysis {#tinytable_xaos2fesyoig250y3s4s .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -482,7 +482,7 @@ term to our contrast statement.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_fuifbfi2bvu2jetdf7zz .table
+Marginal Contrasts Analysis {#tinytable_tahrnncjpjp7e9gx2fq5 .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -522,7 +522,7 @@ statistical significance.
 
 Bell, Andrew, Kelvyn Jones, and Malcolm Fairbrother. 2018.
 “Understanding and Misunderstanding Group Mean Centering: A Commentary
-on Kelley Et Al.’s Dangerous Practice.” *Quality & Quantity* 52 (5):
+on Kelley et Al.’s Dangerous Practice.” *Quality & Quantity* 52 (5):
 2031–36. <https://doi.org/10.1007/s11135-017-0593-5>.
 
 Rohrer, Julia M., and Kou Murayama. 2023. “These Are Not the Effects You

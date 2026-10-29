@@ -418,7 +418,9 @@ estimate_contrasts(
 
   Desired measure of standardized effect size, one of `"emmeans"`,
   `"marginal"`, or `"boot"`. Default is `NULL`, i.e. no effect size will
-  be computed.
+  be computed. Effect sizes are only available for Gaussian models
+  without random effects, and (only for `"emmeans"`) for ordinal models
+  on the latent scale (see 'Details').
 
 - iterations:
 
@@ -685,6 +687,13 @@ believe this works when the contrasts are the only predictors in the
 model, but not when there are covariates. The response variance
 accounted for by the covariates should not be removed from the SD used
 to standardize. Otherwise, *d* will be overestimated.
+
+For `polr` and `clm` models with `predict = "latent"` and a logit or
+probit link, `effectsize = "emmeans"` uses the SD of the latent error as
+sigma, i.e. `pi / sqrt(3)` (logit) or `1` (probit), with `edf = Inf`. A
+`rescale` argument passed to *emmeans* also rescales sigma. `clm` models
+with a `scale` or `nominal` formula are not supported. The confidence
+intervals of the effect sizes are not adjusted for multiple comparisons.
 
 `effectsize = "marginal"` uses the following formula to compute effect
 size: `d_adj <- difference * (1- R2)/ sigma`. This standardizes using

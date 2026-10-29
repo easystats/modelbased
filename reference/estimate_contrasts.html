@@ -13,7 +13,7 @@ estimate_slopes()."><meta property="og:image" content="https://easystats.github.
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -437,7 +437,9 @@ to the output. You can reshape them to a long format by running
 <dt id="arg-effectsize">effectsize<a class="anchor" aria-label="anchor" href="#arg-effectsize"></a></dt>
 <dd><p>Desired measure of standardized effect size, one of
 <code>"emmeans"</code>, <code>"marginal"</code>, or <code>"boot"</code>. Default is <code>NULL</code>, i.e. no effect
-size will be computed.</p></dd>
+size will be computed. Effect sizes are only available for Gaussian models
+without random effects, and (only for <code>"emmeans"</code>) for ordinal models on the
+latent scale (see 'Details').</p></dd>
 
 
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
@@ -660,6 +662,12 @@ this works when the contrasts are the only predictors in the model, but not
 when there are covariates. The response variance accounted for by the
 covariates should not be removed from the SD used to standardize. Otherwise,
 <em>d</em> will be overestimated.</p>
+<p>For <code>polr</code> and <code>clm</code> models with <code>predict = "latent"</code> and a logit or probit
+link, <code>effectsize = "emmeans"</code> uses the SD of the latent error as sigma, i.e.
+<code>pi / sqrt(3)</code> (logit) or <code>1</code> (probit), with <code>edf = Inf</code>. A <code>rescale</code>
+argument passed to <em>emmeans</em> also rescales sigma. <code>clm</code> models with a <code>scale</code>
+or <code>nominal</code> formula are not supported. The confidence intervals of the
+effect sizes are not adjusted for multiple comparisons.</p>
 <p><code>effectsize = "marginal"</code> uses the following formula to compute effect
 size: <code>d_adj &lt;- difference * (1- R2)/ sigma</code>. This standardizes
 using the response SD with only the between-groups variance on the focal
