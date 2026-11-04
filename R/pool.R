@@ -203,7 +203,7 @@ pool_slopes <- pool_predictions
     # pooled standard error
     pooled_se <- unlist(lapply(original_x, function(j) j$SE[i]), use.names = FALSE)
     ubar <- mean(pooled_se^2, na.rm = TRUE)
-    b_vec[i] <- stats::var(pooled_pred, na.rm = TRUE)
+    b_vec[i] <- stats::var(pooled_pred)
     tmp <- ubar + (1 + 1 / len) * b_vec[i]
     pooled_predictions$SE[i] <- sqrt(tmp)
   }
@@ -273,7 +273,7 @@ pool_slopes <- pool_predictions
   dfold <- (n_imputations - 1) / lambda^2
   dfobs <- (dfcom + 1) / (dfcom + 3) * dfcom * (1 - lambda)
   result <- dfold * dfobs / (dfold + dfobs)
-  pmax(result, 1, na.rm = TRUE)
+  pmax(result, 1)
 }
 
 .stat_column_names <- function() {
