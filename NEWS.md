@@ -27,6 +27,9 @@
 * `estimate_contrasts()` now gives an informative error when effect sizes are
   requested for joint or omnibus tests.
 
+* Fixed issue with wrong calculation of degrees of freedom when pooling predictions
+  or contrasts.
+
 * Filters on the response categories of frequentist ordinal models with
   `backend = "emmeans"`, where `Sat` is the response:
   * `estimate_means()`, `estimate_contrasts()` and `estimate_slopes()` now

@@ -51,7 +51,13 @@ pool_contrasts <- function(x, ...) {
   pooled_comparisons <- .pool_estimates(original_x, estimate_name, original_x[[1]])
 
   # confidence intervals ----
-  pooled_comparisons <- .pool_ci_and_stats(pooled_comparisons, estimate_name, ci, dof)
+  pooled_comparisons <- .pool_ci_and_stats(
+    pooled_comparisons,
+    estimate_name,
+    ci = ci,
+    dof = dof,
+    n_imputations = length(original_x)
+  )
 
   attributes(pooled_comparisons) <- utils::modifyList(
     attributes(original_x[[1]]),
@@ -152,7 +158,13 @@ pool_predictions <- function(x, transform = NULL, ...) {
   pooled_predictions <- .pool_estimates(original_x, estimate_name, original_x[[1]])
 
   # confidence intervals ----
-  pooled_predictions <- .pool_ci_and_stats(pooled_predictions, estimate_name, ci, dof)
+  pooled_predictions <- .pool_ci_and_stats(
+    pooled_estimates = pooled_predictions,
+    estimate_name = estimate_name,
+    ci = ci,
+    dof = dof,
+    n_imputations = length(original_x)
+  )
 
   # back-transform response and CI?
   if (!is.null(transform_fun)) {
@@ -178,6 +190,7 @@ pool_slopes <- pool_predictions
 .pool_estimates <- function(original_x, estimate_name, pooled_predictions) {
   n_rows <- nrow(original_x[[1]])
   len <- length(original_x)
+  b_vec <- numeric(n_rows)
 
   for (i in 1:n_rows) {
     # pooled estimate
@@ -190,7 +203,8 @@ pool_slopes <- pool_predictions
     # pooled standard error
     pooled_se <- unlist(lapply(original_x, function(j) j$SE[i]), use.names = FALSE)
     ubar <- mean(pooled_se^2, na.rm = TRUE)
-    tmp <- ubar + (1 + 1 / len) * stats::var(pooled_pred)
+    b_vec[i] <- stats::var(pooled_pred)
+    tmp <- ubar + (1 + 1 / len) * b_vec[i]
     pooled_predictions$SE[i] <- sqrt(tmp)
   }
 
@@ -201,16 +215,20 @@ pool_slopes <- pool_predictions
     )
   }
 
+  attr(pooled_predictions, "b_variance") <- b_vec
   pooled_predictions
 }
 
 
-# caluclate confidence intervals for pooled estimates
-.pool_ci_and_stats <- function(pooled_estimates, estimate_name, ci, dof) {
+# calculate confidence intervals for pooled estimates
+.pool_ci_and_stats <- function(pooled_estimates, estimate_name, ci, dof, n_imputations) {
+  b_vec <- attr(pooled_estimates, "b_variance")
+  attr(pooled_estimates, "b_variance") <- NULL
+
   # pooled degrees of freedom for t-statistics
   pooled_df <- .barnad_rubin(
-    m = nrow(pooled_estimates),
-    b = stats::var(pooled_estimates[[estimate_name]]),
+    n_imputations = n_imputations,
+    b = b_vec,
     t = pooled_estimates$SE^2,
     dfcom = dof
   )
@@ -229,7 +247,7 @@ pool_slopes <- pool_predictions
     pooled_estimates[[stat_column]] <- statistic
   }
 
-  # udpate df and p-value
+  # update df and p-value
   pooled_estimates$df <- pooled_df
   if ("p" %in% colnames(pooled_estimates)) {
     pooled_estimates$p <- 2 *
@@ -241,23 +259,22 @@ pool_slopes <- pool_predictions
 
 
 # adjustment for degrees of freedom
-.barnad_rubin <- function(m, b, t, dfcom = 999999) {
+.barnad_rubin <- function(n_imputations, b, t, dfcom = 999999) {
   # fix for z-statistic
   if (is.null(dfcom) || all(is.na(dfcom)) || all(is.infinite(dfcom))) {
     return(Inf)
   }
-  # fix for 1-row data - we have no variance of the estimates
-  if (is.na(b)) {
+  # fix if only 1 object was passed or variance is NA
+  if (all(is.na(b)) || n_imputations <= 1) {
     return(dfcom)
   }
-  lambda <- (1 + 1 / m) * b / t
+  lambda <- (1 + 1 / n_imputations) * b / t
   lambda[lambda < 1e-04] <- 1e-04
-  dfold <- (m - 1) / lambda^2
+  dfold <- (n_imputations - 1) / lambda^2
   dfobs <- (dfcom + 1) / (dfcom + 3) * dfcom * (1 - lambda)
   result <- dfold * dfobs / (dfold + dfobs)
-  pmax(round(mean(result, na.rm = TRUE)), 1)
+  pmax(result, 1)
 }
-
 
 .stat_column_names <- function() {
   t_names <- c("t", "t-value", "t value", "t.value", "Pr(>|t|)")
