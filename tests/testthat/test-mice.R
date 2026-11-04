@@ -12,7 +12,7 @@ test_that("pool_predictions", {
   })
   out <- pool_predictions(predictions)
   expect_equal(out$Mean, c(29.84661, 25.20021, 23.14022), tolerance = 1e-2)
-  expect_equal(out$CI_low, c(2.10117, 3.44548, -5.79522), tolerance = 1e-2)
+  expect_equal(out$CI_low, c(24.07862, 21.27385, 17.36916), tolerance = 1e-2)
 
   # transformed response
   predictions <- lapply(1:5, function(i) {
@@ -21,7 +21,7 @@ test_that("pool_predictions", {
   })
   out <- pool_predictions(predictions, transform = TRUE)
   expect_equal(out$Mean, c(29.67473, 24.99382, 23.19148), tolerance = 1e-2)
-  expect_equal(out$CI_low, c(10.58962, 11.13011, 7.43196), tolerance = 1e-2)
+  expect_equal(out$CI_low, c(24.14493, 21.69388, 18.55699), tolerance = 1e-2)
 
   # glm, logistic
   predictions <- lapply(1:5, function(i) {
@@ -48,8 +48,8 @@ test_that("pool_contrasts", {
   })
   out <- pool_contrasts(comparisons)
   expect_equal(out$Difference, c(-4.6464, -6.70639, -2.05999), tolerance = 1e-2)
-  expect_equal(out$CI_low, c(-12.31066, -18.92406, -11.94194), tolerance = 1e-2)
-  expect_equal(out$p, c(0.14926, 0.17899, 0.55449), tolerance = 1e-2)
+  expect_equal(out$CI_low, c(-10.17755, -17.75063, -10.16441), tolerance = 1e-2)
+  expect_equal(out$p, c(0.08897, 0.16194, 0.53783), tolerance = 1e-2)
 })
 
 
@@ -63,11 +63,8 @@ test_that("pool_slopes", {
   })
   out <- pool_slopes(slopes)
   expect_equal(out$Slope, 0.05666, tolerance = 1e-2)
-  expect_equal(out$CI_low, 0.0005592606, tolerance = 1e-2)
-  expect_named(
-    out,
-    c("Slope", "SE", "CI_low", "CI_high", "t", "df", "p")
-  )
+  expect_equal(out$CI_low, -0.00808, tolerance = 1e-2)
+  expect_named(out, c("Slope", "SE", "CI_low", "CI_high", "t", "df", "p"))
 
   slopes <- lapply(1:5, function(i) {
     m <- lm(bmi ~ age + hyp + chl, data = mice::complete(imp, action = i))
@@ -75,9 +72,6 @@ test_that("pool_slopes", {
   })
   out <- pool_slopes(slopes)
   expect_equal(out$Slope, c(-4.6464, -6.70639), tolerance = 1e-2)
-  expect_equal(out$CI_low, c(-10.83711, -16.57506), tolerance = 1e-2)
-  expect_named(
-    out,
-    c("Comparison", "Slope", "SE", "CI_low", "CI_high", "t", "df", "p")
-  )
+  expect_equal(out$CI_low, c(-10.17755, -17.75063), tolerance = 1e-2)
+  expect_named(out, c("Comparison", "Slope", "SE", "CI_low", "CI_high", "t", "df", "p"))
 })

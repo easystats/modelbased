@@ -158,7 +158,13 @@ pool_predictions <- function(x, transform = NULL, ...) {
   pooled_predictions <- .pool_estimates(original_x, estimate_name, original_x[[1]])
 
   # confidence intervals ----
-  pooled_predictions <- .pool_ci_and_stats(pooled_predictions, estimate_name, ci, dof)
+  pooled_predictions <- .pool_ci_and_stats(
+    pooled_estimates = pooled_predictions,
+    estimate_name = estimate_name,
+    ci = ci,
+    dof = dof,
+    n_imputations = length(original_x)
+  )
 
   # back-transform response and CI?
   if (!is.null(transform_fun)) {
