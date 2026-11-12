@@ -3,7 +3,7 @@
     Code
       estimate_means(m, c("mined", "spp"), backend = "marginaleffects", predict = "inverse_link")
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       mined | spp   | Mean |   SE |       95% CI |     z
       --------------------------------------------------
@@ -32,7 +32,7 @@
     Code
       estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       mined | spp   | Mean |   SE |        95% CI |    z
       --------------------------------------------------
@@ -61,7 +61,7 @@
     Code
       estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       mined | spp   | Mean |       95% CI
       -----------------------------------
