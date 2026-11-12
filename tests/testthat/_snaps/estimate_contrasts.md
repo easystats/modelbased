@@ -228,3 +228,83 @@
       p-value adjustment method: Holm (1979)
       Contrasts are on the response-scale.
 
+# estimate_contrasts - filtering works
+
+    Code
+      print(estimate_contrasts(fit, c("c161sex", "c172code"), backend = "marginaleffects"),
+      table_width = Inf, zap_small = TRUE)
+    Output
+      Conditional Contrasts
+      
+      Level1       | Level2      | Difference |   SE |        95% CI | t(825) |     p
+      -------------------------------------------------------------------------------
+      Male, mid    | Male, low   |       0.29 | 0.71 | [-1.10, 1.68] |   0.41 | 0.684
+      Male, high   | Male, low   |       0.69 | 0.83 | [-0.95, 2.32] |   0.82 | 0.410
+      Female, low  | Male, low   |       1.05 | 0.69 | [-0.31, 2.40] |   1.51 | 0.131
+      Female, mid  | Male, low   |       0.85 | 0.64 | [-0.40, 2.10] |   1.33 | 0.183
+      Female, high | Male, low   |       1.65 | 0.71 | [ 0.24, 3.05] |   2.30 | 0.022
+      Male, high   | Male, mid   |       0.40 | 0.68 | [-0.94, 1.73] |   0.59 | 0.558
+      Female, low  | Male, mid   |       0.76 | 0.50 | [-0.22, 1.73] |   1.52 | 0.129
+      Female, mid  | Male, mid   |       0.56 | 0.42 | [-0.26, 1.38] |   1.35 | 0.178
+      Female, high | Male, mid   |       1.36 | 0.53 | [ 0.32, 2.39] |   2.58 | 0.010
+      Female, low  | Male, high  |       0.36 | 0.66 | [-0.95, 1.66] |   0.54 | 0.589
+      Female, mid  | Male, high  |       0.16 | 0.61 | [-1.03, 1.35] |   0.27 | 0.789
+      Female, high | Male, high  |       0.96 | 0.69 | [-0.39, 2.30] |   1.40 | 0.163
+      Female, mid  | Female, low |      -0.20 | 0.39 | [-0.96, 0.57] |  -0.51 | 0.613
+      Female, high | Female, low |       0.60 | 0.51 | [-0.39, 1.59] |   1.18 | 0.236
+      Female, high | Female, mid |       0.80 | 0.43 | [-0.04, 1.63] |   1.87 | 0.061
+      
+      Variable predicted: neg_c_7
+      Predictors contrasted: c161sex, c172code
+      Predictors averaged: e16sex
+      p-values are uncorrected.
+
+# estimate_contrasts - examples from docs work as intendec
+
+    Code
+      print(estimate_contrasts(model, contrast = "Petal.Width", by = "Species"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Conditional Contrasts
+      
+      Level1     | Level2     | Difference |   SE |        95% CI | t(144) |     p
+      ----------------------------------------------------------------------------
+      versicolor | setosa     |       0.22 | 0.46 | [-0.70, 1.13] |   0.47 | 0.640
+      virginica  | setosa     |      -0.21 | 0.44 | [-1.07, 0.66] |  -0.47 | 0.638
+      virginica  | versicolor |      -0.42 | 0.27 | [-0.95, 0.11] |  -1.58 | 0.116
+      
+      Variable predicted: Sepal.Width
+      Predictors contrasted: Petal.Width
+      Predictors averaged: Petal.Width (1.2)
+      p-values are uncorrected.
+
+# estimate_contrast, slopes with emmeans-2
+
+    Code
+      print(out, table_width = Inf)
+    Output
+      Conditional Contrasts
+      
+      Level1    | Level2    | Difference |        95% CI |     p
+      ----------------------------------------------------------
+      0, 0.725  | 0, -2.012 |       1.12 | [0.37,  3.43] | 0.839
+      0, 3.463  | 0, -2.012 |       1.26 | [0.14, 11.76] | 0.839
+      1, -2.012 | 0, -2.012 |       1.00 | [0.35,  2.82] | 0.999
+      1, 0.725  | 0, -2.012 |       1.12 | [0.23,  5.43] | 0.887
+      1, 3.463  | 0, -2.012 |       1.26 | [0.10, 15.76] | 0.858
+      0, 3.463  | 0, 0.725  |       1.12 | [0.37,  3.43] | 0.839
+      1, -2.012 | 0, 0.725  |       0.89 | [0.20,  3.87] | 0.877
+      1, 0.725  | 0, 0.725  |       1.00 | [0.35,  2.82] | 0.999
+      1, 3.463  | 0, 0.725  |       1.12 | [0.23,  5.43] | 0.887
+      1, -2.012 | 0, 3.463  |       0.79 | [0.07,  8.71] | 0.849
+      1, 0.725  | 0, 3.463  |       0.89 | [0.20,  3.87] | 0.877
+      1, 3.463  | 0, 3.463  |       1.00 | [0.35,  2.82] | 0.999
+      1, 0.725  | 1, -2.012 |       1.12 | [0.37,  3.43] | 0.839
+      1, 3.463  | 1, -2.012 |       1.26 | [0.14, 11.76] | 0.839
+      1, 3.463  | 1, 0.725  |       1.12 | [0.37,  3.43] | 0.839
+      
+      Variable predicted: outcome
+      Predictors contrasted: var_binom, var_cont
+      p-values are uncorrected.
+      Contrasts are on the exp-transformed link-scale.
+
