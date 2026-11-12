@@ -20,6 +20,7 @@
   }
 
   # name of predicted response -----------------------------------------------
+  # --------------------------------------------------------------------------
 
   if (isTRUE(info$joint_test)) {
     table_footer <- NULL
@@ -31,6 +32,7 @@
   }
 
   # modulated predictors (focal terms) ---------------------------------------
+  # --------------------------------------------------------------------------
 
   if (!is.null(by) && !isTRUE(info$joint_test) && !inherits(by, "formula")) {
     modulate_string <- switch(type, inequality = , contrasts = "contrasted", "modulated")
@@ -44,6 +46,8 @@
   }
 
   # predictors controlled (non-focal terms) ----------------------------------
+  # --------------------------------------------------------------------------
+
   if (!is.null(adjusted_for) && length(adjusted_for) >= 1 && !all(is.na(adjusted_for))) {
     # if we have values of adjusted terms, add these here
     if (all(adjusted_for %in% colnames(x))) {
@@ -121,6 +125,7 @@
   }
 
   # Random effects handling ------------------------------------------------
+  # --------------------------------------------------------------------------
 
   if (!is.null(re_intercept) && !isTRUE(re_form_na) && !is.null(marginalization)) {
     if (marginalization %in% c("average", "population", "counterfactual")) {
@@ -144,6 +149,7 @@
   }
 
   # P-value adjustment footer ------------------------------------------------
+  # --------------------------------------------------------------------------
 
   if (!is.null(p_adjust) && "p" %in% names(x)) {
     if (p_adjust == "none") {
@@ -158,6 +164,7 @@
   }
 
   # leave early for joint tests ----------------------------------------------
+  # --------------------------------------------------------------------------
 
   if (isTRUE(info$joint_test)) {
     if (!is.null(info$null) && info$omnibus_test) {
@@ -171,6 +178,7 @@
   }
 
   # tell user about scale of predictions / contrasts -------------------------
+  # --------------------------------------------------------------------------
 
   result_type <- switch(
     type,
@@ -223,6 +231,7 @@
   }
 
   # tell user about prediction intervals -------------------------------------
+  # --------------------------------------------------------------------------
 
   if (
     identical(type, "predictions") &&
@@ -233,6 +242,7 @@
   }
 
   # Parameter labels for special hypothesis testing --------------------------
+  # --------------------------------------------------------------------------
 
   # for special hypothesis testing, like "(b1 - b2) = (b4 - b3)", we want to
   # add information about the parameter names
@@ -268,7 +278,9 @@
     }
   }
 
-  # ROPE?
+  # ROPE? --------------------------------------------------------------------
+  # --------------------------------------------------------------------------
+
   if (!is.null(rope)) {
     table_footer <- paste0(
       table_footer,
@@ -286,6 +298,7 @@
 
 
 # name of the link-scale, including a transformation -------------------------
+# ----------------------------------------------------------------------------
 
 .link_transform_label <- function(transform, model = NULL) {
   if (is.character(transform) && length(transform) == 1) {
