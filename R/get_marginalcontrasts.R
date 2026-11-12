@@ -248,10 +248,9 @@ get_marginalcontrasts <- function(
       iterations = iterations,
       keep_iterations = keep_iterations
     ),
-    # some additional information for mixed models
-    response = insight::find_response(model, combine = FALSE),
-    re_intercept = insight::find_random(model, flatten = TRUE, split_nested = TRUE),
-    no_re_intercept = !is.null(dots$re.form) && is.na(dots$re.form)
+    # needed for some additional information for mixed models
+    model = model,
+    re_form = isTRUE(dots$re.form) || isTRUE(dots$re_formula)
   )
   out <- .rename_focal_attributes(out)
 

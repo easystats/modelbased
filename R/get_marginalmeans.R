@@ -330,10 +330,9 @@ get_marginalmeans <- function(
         equivalence = dots$equivalence
       )
     ),
-    # some additional information for mixed models
-    response = insight::find_response(model, combine = FALSE),
-    re_intercept = insight::find_random(model, flatten = TRUE, split_nested = TRUE),
-    no_re_intercept = !is.null(dots$re.form) && is.na(dots$re.form)
+    # needed for some additional information for mixed models
+    model = model,
+    re_form = isTRUE(dots$re.form) || isTRUE(dots$re_formula)
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
 
@@ -682,28 +681,36 @@ get_marginalmeans <- function(
   by = NULL,
   model_info = NULL,
   info = NULL,
-  response = NULL,
-  re_intercept = NULL,
-  no_re_intercept = FALSE
+  model = NULL,
+  re_form = NULL
 ) {
   attr(x, "at") <- by
   attr(x, "by") <- by
   attr(x, "model_info") <- model_info
 
+  # extract information, required for mixed models handling
+  if (!is.null(model)) {
+    response <- insight::find_response(model, combine = FALSE)
+    re_intercept <- insight::find_random(model, flatten = TRUE, split_nested = TRUE)
+    no_re_intercept <- !is.null(re_form) && is.na(re_form)
+  } else {
+    response <- re_intercept <- no_re_intercept <- NULL
+  }
+
   # compact list
   info <- insight::compact_list(info)
 
-  # some special handling for mixed models
+  # some special handling for mixed models - we need this information for
+  # printing an informative table footer.
   if (isTRUE(model_info$is_mixed)) {
     # if we have mixed models, we don't want the response in the adusted-for
     # information, so we check and remove it here, if necessary
     if (!is.null(info$adjusted_for) && !is.null(response)) {
       info$adjusted_for <- setdiff(info$adjusted_for, response)
     }
-    # we definitely don't want
+    # we definitely don't want the random-intercept in the "adjusted for" list
     info$adjusted_for <- setdiff(info$adjusted_for, re_intercept)
-    # if we have mixed models, and re.form = NA, we want to remove the random
-    # intercept from the footer
+    # save information about random effects (cluster/grouping variable)
     if (!isTRUE(no_re_intercept)) {
       info$re_intercept <- re_intercept
     }
