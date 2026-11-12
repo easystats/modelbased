@@ -53,12 +53,14 @@
     } else {
       ref_cat_data <- NULL
     }
+
+    # if we have values at which non-focal terms are held constant, we want
+    # them in a separate string; same for predictors we average over
+    averaged_over <- held_constant <- list()
+
     if (!is.null(ref_cat_data)) {
       # get values at which non-focal terms are hold constant
       adjusted_values <- lapply(adjusted_for, function(i) ref_cat_data[[i]][1])
-      # if we have values at which non-focal terms are held constant, we want
-      # them in a separate string; same for predictors we average over
-      averaged_over <- held_constant <- list()
       # at values to names of non-focal terms (table_footer). we have to iterate
       # over the list, because we may have different types of data
       for (av in seq_along(adjusted_values)) {
