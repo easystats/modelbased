@@ -4,7 +4,7 @@
       print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear", backend = "marginaleffects"),
       zap_small = TRUE, table_width = Inf)
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | gear | Difference |   SE |         95% CI | t(25) |      p
       ------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@
       print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects",
       p_adjust = "none"), zap_small = TRUE, table_width = Inf)
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1             | Level2            | Difference |   SE |         95% CI | t(113) |      p
       ---------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@
       p_adjust = "none", comparison = ratio ~ reference | coffee), zap_small = TRUE,
       table_width = Inf)
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1    | Level2  | coffee  | Ratio |   SE |       95% CI | t(113) |     p
       ----------------------------------------------------------------------------
@@ -90,7 +90,7 @@
       p_adjust = "none", comparison = "(b2-b1)=(b4-b3)"), zap_small = TRUE,
       table_width = Inf)
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Parameter   | Difference |   SE |        95% CI | t(113) |     p
       ----------------------------------------------------------------
@@ -112,7 +112,7 @@
       print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects",
       p_adjust = "none", comparison = "b5=b3"), zap_small = TRUE, table_width = Inf)
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Parameter | Difference |   SE |        95% CI | t(113) |     p
       --------------------------------------------------------------
@@ -132,7 +132,7 @@
       estimate_contrasts(fit, c("e42dep", "c172code"), comparison = "b6-b3=0",
       backend = "marginaleffects")
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Parameter | Difference |   SE |        95% CI | t(800) |     p
       --------------------------------------------------------------
@@ -154,7 +154,7 @@
       No variable was specified for contrast estimation. Selecting `contrast =
         "Species"`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |         95% CI |   SE |     z |      p
       -----------------------------------------------------------------------------
@@ -174,7 +174,7 @@
     Message
       We selected `contrast=c("Species")`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |   SE |         95% CI |     z |      p
       -----------------------------------------------------------------------------
@@ -195,7 +195,7 @@
       No variable was specified for contrast estimation. Selecting `contrast =
         "Species"`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |        95% CI |   SE |     z |      p
       ----------------------------------------------------------------------------
@@ -215,7 +215,7 @@
     Message
       We selected `contrast=c("Species")`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |   SE |         95% CI |     z |      p
       -----------------------------------------------------------------------------

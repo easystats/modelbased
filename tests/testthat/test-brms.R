@@ -140,7 +140,7 @@ test_that("estimate_means - brms, Wiener", {
   expect_identical(
     capture.output(print(est)),
     c(
-      "Estimated Marginal Means",
+      "onditional Predictions",
       "",
       "Median |       95% CI |   pd |          ROPE | % in ROPE",
       "--------------------------------------------------------",
@@ -170,7 +170,7 @@ test_that("estimate_means - brms, Wiener, printing", {
   expect_identical(
     capture.output(print(est)),
     c(
-      "Estimated Marginal Means",
+      "Conditional Predictions",
       "",
       "x |   Mu |       95% CI |   pd |          ROPE | % in ROPE",
       "----------------------------------------------------------",
@@ -187,7 +187,7 @@ test_that("estimate_means - brms, Wiener, printing", {
   expect_identical(
     capture.output(print(cont)),
     c(
-      "Marginal Contrasts Analysis",
+      "Conditional Contrasts",
       "",
       "Level1 | Level2 | Median |       95% CI |   pd |          ROPE | % in ROPE",
       "--------------------------------------------------------------------------",
