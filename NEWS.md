@@ -1,5 +1,18 @@
 # modelbased (devel)
 
+## BreakingChanges
+
+* Table headers and footers are now harmonized to conceptually align with the
+  package documentation (see the `estimate` argument in `?estimate_means`, as
+  well as the vignettes on the modelisation-approach
+  (https://easystats.github.io/modelbased/articles/post_estimation_framework.html)
+  and technical details on marginalization
+  (https://easystats.github.io/modelbased/articles/technical_marginalization.html)).
+  Specifically, `estimate` defines the *unit of interest* for your *estimand*,
+  distinguishing between predictions *conditioned* on specific, theoretical
+  individual levels and *marginal* predictions averaged over empirical observations
+  at the sample or population level.
+
 ## Changes
 
 * `effectsize = "emmeans"` in `estimate_contrasts()` now also works for `polr`
