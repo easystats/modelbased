@@ -20,7 +20,7 @@
       
       Variable predicted: yield
       Predictors modulated: batch
-      Predictors averaged: temp (3.3e+02)
+      Predictors held at: temp (3.3e+02)
       Predictions are on the response-scale.
 
 # estimate_relation for betareg
@@ -45,6 +45,6 @@
       
       Variable predicted: yield
       Predictors modulated: batch
-      Predictors controlled: temp (3.3e+02)
+      Predictors held at: temp (3.3e+02)
       Predictions are on the response-scale.
 

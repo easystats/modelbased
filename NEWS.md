@@ -11,7 +11,9 @@
   Specifically, `estimate` defines the *unit of interest* for your *estimand*,
   distinguishing between predictions *conditioned* on specific, theoretical
   individual levels and *marginal* predictions averaged over empirical observations
-  at the sample or population level.
+  at the sample or population level. Furthermore, table footer are now more
+  informative for mixed models and describe the handling of random effects more
+  in detail.
 
 ## Changes
 
