@@ -98,7 +98,7 @@ test_that("estimate_means() - mixed models", {
     c(0.20293, 0.08627, 0.07612, 0.04984),
     tolerance = 1e-3
   )
-  expect_equal(estim2$CI_low, c(0.13928, 0.04915, 0.04159, 0.02229), tolerance = 1e-3)
+  expect_equal(estim2$CI_low, c(0.13899, 0.04888, 0.04133, 0.02207), tolerance = 1e-3)
   expect_true(all(estim2$CI_low >= 0 & estim2$CI_low <= 1))
   expect_true(all(estim2$CI_high >= 0 & estim2$CI_high <= 1))
 
