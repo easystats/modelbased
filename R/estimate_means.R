@@ -529,8 +529,8 @@ estimate_means <- function(
       estimate,
       specific = ,
       typical = "Conditional Predictions",
-      average = ,
-      population = "Marginal Predictions"
+      average = "Marginal Predictions",
+      population = "Marginal Predictions (G-computation)"
     ),
     "blue"
   )

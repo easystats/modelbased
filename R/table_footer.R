@@ -68,11 +68,14 @@
         }
       }
     }
-    # The "predictors averaged" line does not strictly apply to `estimate =
-    # "average"`, because we average across all predictions, we do not take an
-    # "average value" of a non-focal predictor. Thus, we skip this line in the
-    # footer
-    if (!identical(marginalization, "average")) {
+    # The "predictors averaged" line does not strictly apply to marginal
+    # predictions like `estimate = "average"` or `estimate = "population"`,
+    # because we average across all predictions, we do not take an "average
+    # value" of a non-focal predictor. Thus, we skip this line in the footer
+    if (
+      !is.null(marginalization) &&
+        !marginalization %in% c("average", "population", "counterfactual")
+    ) {
       average_string <- switch(type, predictions = "controlled", "averaged")
       table_footer <- paste0(
         table_footer,
