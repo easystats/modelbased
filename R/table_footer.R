@@ -99,7 +99,7 @@
       !is.null(averaged_over) && !is.null(marginalization) && length(marginalization) == 1
     ) {
       average_string <- paste(
-        "Predictors averaged",
+        "Predictors averaged over",
         switch(
           marginalization,
           typical = "(balanced)",

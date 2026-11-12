@@ -135,7 +135,10 @@ get_marginalcontrasts <- function(
     } else {
       slope_filter <- .parse_by_filter(my_args$by)
     }
-    slope_filter <- .present_filter_values(insight::get_data(model, verbose = FALSE), slope_filter)
+    slope_filter <- .present_filter_values(
+      insight::get_data(model, verbose = FALSE),
+      slope_filter
+    )
     # sanity check - we need at least two slopes to compare. We use the
     # original `by`, because a group in a `comparison` formula replaces it
     if (
@@ -244,7 +247,11 @@ get_marginalcontrasts <- function(
       context_effects = my_args$context_effects,
       iterations = iterations,
       keep_iterations = keep_iterations
-    )
+    ),
+    # some additional information for mixed models
+    response = insight::find_response(model, combine = FALSE),
+    re_intercept = insight::find_random(model, flatten = TRUE, split_nested = TRUE),
+    no_re_intercept = !is.null(dots$re.form) && is.na(dots$re.form)
   )
   out <- .rename_focal_attributes(out)
 
@@ -319,7 +326,10 @@ get_marginalcontrasts <- function(
 .parse_by_filter <- function(by) {
   by_filter <- list()
   for (i in by[grepl("=", by, fixed = TRUE)]) {
-    filter_value <- insight::trim_ws(unlist(strsplit(i, "=", fixed = TRUE), use.names = FALSE))
+    filter_value <- insight::trim_ws(unlist(
+      strsplit(i, "=", fixed = TRUE),
+      use.names = FALSE
+    ))
     if (length(filter_value) > 1) {
       value <- .safe(eval(str2lang(filter_value[2])))
       if (!is.null(value)) {

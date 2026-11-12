@@ -329,7 +329,11 @@ get_marginalmeans <- function(
         vcov = vcov_means,
         equivalence = dots$equivalence
       )
-    )
+    ),
+    # some additional information for mixed models
+    response = insight::find_response(model, combine = FALSE),
+    re_intercept = insight::find_random(model, flatten = TRUE, split_nested = TRUE),
+    no_re_intercept = !is.null(dots$re.form) && is.na(dots$re.form)
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
 
@@ -673,13 +677,35 @@ get_marginalmeans <- function(
 # - renamed_focal: focal terms with the name of an output column, named by
 #   their old names, with the new names "<name>.1" as values
 #' @keywords internal
-.add_attributes <- function(x, by = NULL, model_info = NULL, info = NULL) {
+.add_attributes <- function(
+  x,
+  by = NULL,
+  model_info = NULL,
+  info = NULL,
+  response = NULL,
+  re_intercept = NULL,
+  no_re_intercept = FALSE
+) {
   attr(x, "at") <- by
   attr(x, "by") <- by
   attr(x, "model_info") <- model_info
 
   # compact list
   info <- insight::compact_list(info)
+
+  # some special handling for mixed models
+  if (isTRUE(model_info$is_mixed)) {
+    # if we have mixed models, we don't want the response in the adusted-for
+    # information, so we check and remove it here, if necessary
+    if (!is.null(info$adjusted_for) && !is.null(response)) {
+      info$adjusted_for <- setdiff(info$adjusted_for, response)
+    }
+    # if we have mixed models, and re.form = NA, we want to remove the random
+    # intercept from the footer
+    if (isTRUE(no_re_intercept)) {
+      info$adjusted_for <- setdiff(info$adjusted_for, re_intercept)
+    }
+  }
 
   if (!is.null(info) && length(info)) {
     if (!is.null(info$at_specs$varname)) {
@@ -704,7 +730,7 @@ get_marginalmeans <- function(
     "contrast", "estimate", "p_adjust", "transform", "transform_arg", "datagrid",
     "preserve_range", "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
     "iterations", "keep_iterations", "joint_test", "omnibus_test", "vcov",
-    "equivalence", "context_effects", "renamed_focal"
+    "equivalence", "context_effects", "renamed_focal", "re_intercept"
   )
 }
 
