@@ -8,6 +8,7 @@
   p_adjust <- info$p_adjust
   adjusted_for <- info$adjusted_for
   re_intercept <- info$re_intercept
+  re_form_na <- info$re_form_na
   transform <- info$transform
   model_info <- info$model_info
   marginalization <- info$estimate
@@ -103,10 +104,10 @@
         "Predictors averaged over",
         switch(
           marginalization,
-          typical = "(balanced)",
-          average = "(within groups)",
+          typical = "(balanced grid)",
+          average = ,
           population = ,
-          counterfactual = "(full sample)",
+          counterfactual = "(sample)",
           ""
         )
       )
@@ -119,21 +120,25 @@
 
   # Random effects handling ------------------------------------------------
 
-  if (!is.null(re_intercept) && !is.null(marginalization)) {
+  if (!is.null(re_intercept) && !isTRUE(re_form_na) && !is.null(marginalization)) {
     if (marginalization %in% c("average", "population", "counterfactual")) {
       table_footer <- paste0(
         table_footer,
-        paste0(
-          "\nResults are marginalized over random effects levels of: ",
-          toString(re_intercept)
-        )
+        "\nRandom effects marginalized across clusters."
       )
     } else {
       table_footer <- paste0(
         table_footer,
-        "\nResults refer to a typical or to an average random effects group."
+        "\nRandom effects averaged over balanced grid of cluster levels."
       )
     }
+  }
+
+  if (isTRUE(re_form_na)) {
+    table_footer <- paste0(
+      table_footer,
+      "\nRandom effects: Conditional on a typical cluster."
+    )
   }
 
   # P-value adjustment footer ------------------------------------------------

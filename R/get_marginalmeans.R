@@ -707,6 +707,8 @@ get_marginalmeans <- function(
     if (!isTRUE(no_re_intercept)) {
       info$re_intercept <- re_intercept
     }
+    # save info if re.form was NA
+    info$re_form_na <- isTRUE(no_re_intercept)
   }
 
   if (!is.null(info) && length(info)) {
@@ -732,7 +734,7 @@ get_marginalmeans <- function(
     "contrast", "estimate", "p_adjust", "transform", "transform_arg", "datagrid",
     "preserve_range", "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
     "iterations", "keep_iterations", "joint_test", "omnibus_test", "vcov",
-    "equivalence", "context_effects", "renamed_focal", "re_intercept"
+    "equivalence", "context_effects", "renamed_focal", "re_intercept", "re_form_na"
   )
 }
 
