@@ -68,7 +68,7 @@ NULL
 
 
 #' @docType data
-#' @title Sample dataset from patients with somatic symptons
+#' @title Sample dataset from patients with somatic symptoms
 #' @name stigma
 #' @keywords data
 #'

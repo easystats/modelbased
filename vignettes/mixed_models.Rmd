@@ -126,7 +126,7 @@ estimate_means(model, "sex", estimate = "average")
 estimate_means(model, "sex", estimate = "average", re.form = NA)
 ```
 
-### Excourse: Technical Details
+### Excursus: Technical Details
 
 ::: custom_note
 To better understand how these predictions are computed under the hood, let's break down the underlying workflow. The code below illustrates the manual step-by-step procedures for grid-based versus sample-averaged predictions.
