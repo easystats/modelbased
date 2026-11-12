@@ -124,12 +124,12 @@
     if (marginalization %in% c("average", "population", "counterfactual")) {
       table_footer <- paste0(
         table_footer,
-        "\nRandom effects marginalized across clusters."
+        "\nRandom effects: Marginalized across clusters."
       )
     } else {
       table_footer <- paste0(
         table_footer,
-        "\nRandom effects averaged over balanced grid of cluster levels."
+        "\nRandom effects: Averaged over a balanced grid of cluster levels."
       )
     }
   }
