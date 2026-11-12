@@ -3,7 +3,7 @@
     Code
       print(out, zap_small = TRUE)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       batch | Proportion |   SE |       95% CI |     z
       ------------------------------------------------
@@ -28,7 +28,7 @@
     Code
       print(out, zap_small = TRUE)
     Output
-      Model-based Predictions
+      Conditional Predictions
       
       batch | Predicted |       95% CI
       --------------------------------
