@@ -18,6 +18,7 @@ get_marginalcontrasts <- function(
 ) {
   # check if available
   insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
+  dots <- list(...)
 
   # temporarily overwrite settings that error on "too many" rows
   me_option <- getOption("marginaleffects_safe")
@@ -170,7 +171,6 @@ get_marginalcontrasts <- function(
     # the hypothesis compares all slopes, so we cannot filter the contrasts
     # later. Instead, we only keep the data rows that pass the filter. The
     # slopes are averaged within each group of `by`, so they don't change.
-    dots <- list(...)
     if (
       identical(estimate, "average") &&
         length(slope_filter) &&

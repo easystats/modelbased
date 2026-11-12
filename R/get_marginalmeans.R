@@ -700,10 +700,12 @@ get_marginalmeans <- function(
     if (!is.null(info$adjusted_for) && !is.null(response)) {
       info$adjusted_for <- setdiff(info$adjusted_for, response)
     }
+    # we definitely don't want
+    info$adjusted_for <- setdiff(info$adjusted_for, re_intercept)
     # if we have mixed models, and re.form = NA, we want to remove the random
     # intercept from the footer
-    if (isTRUE(no_re_intercept)) {
-      info$adjusted_for <- setdiff(info$adjusted_for, re_intercept)
+    if (!isTRUE(no_re_intercept)) {
+      info$re_intercept <- re_intercept
     }
   }
 

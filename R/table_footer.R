@@ -7,6 +7,7 @@
   datagrid <- info$datagrid
   p_adjust <- info$p_adjust
   adjusted_for <- info$adjusted_for
+  re_intercept <- info$re_intercept
   transform <- info$transform
   model_info <- info$model_info
   marginalization <- info$estimate
@@ -112,6 +113,25 @@
       table_footer <- paste0(
         table_footer,
         paste0("\n", average_string, ": ", toString(averaged_over))
+      )
+    }
+  }
+
+  # Random effects handling ------------------------------------------------
+
+  if (!is.null(re_intercept) && !is.null(marginalization)) {
+    if (marginalization %in% c("average", "population", "counterfactual")) {
+      table_footer <- paste0(
+        table_footer,
+        paste0(
+          "\nResults are marginalized over random effects levels of: ",
+          toString(re_intercept)
+        )
+      )
+    } else {
+      table_footer <- paste0(
+        table_footer,
+        "\nResults refer to a typical or to an average random effects group."
       )
     }
   }
