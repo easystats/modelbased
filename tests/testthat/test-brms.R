@@ -140,7 +140,7 @@ test_that("estimate_means - brms, Wiener", {
   expect_identical(
     capture.output(print(est)),
     c(
-      "onditional Predictions",
+      "Conditional Predictions",
       "",
       "Median |       95% CI |   pd |          ROPE | % in ROPE",
       "--------------------------------------------------------",
