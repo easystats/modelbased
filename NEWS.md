@@ -1,6 +1,6 @@
 # modelbased (devel)
 
-## BreakingChanges
+## Breaking Changes
 
 * Table headers and footers are now harmonized to conceptually align with the
   package documentation (see the `estimate` argument in `?estimate_means`, as
