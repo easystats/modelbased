@@ -23,7 +23,10 @@ test_that("estimate_contrast, marginal effects inequalities", {
   # inequality works without default estimate
   out <- estimate_contrasts(m, "species", comparison = "inequality")
   expect_equal(out$Mean_Difference, 0.5580707, tolerance = 1e-4)
-  expect_identical(attributes(out)$table_title, c("Marginal Inequality Analysis", "blue"))
+  expect_identical(
+    attributes(out)$table_title,
+    c("Conditional Inequality Analysis", "blue")
+  )
 
   # pairwise inequality requires `by`
   expect_error(
