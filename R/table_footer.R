@@ -73,7 +73,7 @@
     # because we average across all predictions, we do not take an "average
     # value" of a non-focal predictor. Thus, we skip this line in the footer
     if (
-      !is.null(marginalization) &&
+      is.null(marginalization) ||
         !marginalization %in% c("average", "population", "counterfactual")
     ) {
       average_string <- switch(type, predictions = "controlled", "averaged")
