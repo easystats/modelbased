@@ -55,7 +55,7 @@
       
       Variable predicted: mpg
       Predictors contrasted: am
-      Predictors averaged: three, vs
+      Predictors averaged over (balanced grid): three, vs
       p-values are uncorrected.
 
 # estimate_contrasts - filtering works
@@ -74,7 +74,7 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: c172code
-      Predictors averaged: e16sex, c161sex
+      Predictors averaged over (balanced grid): e16sex, c161sex
       p-values are uncorrected.
 
 ---
@@ -93,7 +93,7 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: c161sex
-      Predictors averaged: e16sex
+      Predictors averaged over (balanced grid): e16sex
       p-values are uncorrected.
 
 ---
@@ -144,7 +144,8 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: barthtot
-      Predictors averaged: e16sex, barthtot (65)
+      Predictors held at: barthtot (65)
+      Predictors averaged over (balanced grid): e16sex
       p-values are uncorrected.
 
 ---
@@ -175,7 +176,7 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: barthtot
-      Predictors averaged: barthtot (65)
+      Predictors held at: barthtot (65)
       p-values are uncorrected.
 
 # estimate_contrasts - simple contrasts and with - in levels works
@@ -194,7 +195,7 @@
       
       Variable predicted: Sepal.Length
       Predictors contrasted: Species
-      Predictors averaged: Sepal.Width (3.1)
+      Predictors held at: Sepal.Width (3.1)
       p-values are uncorrected.
 
 ---
@@ -225,7 +226,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
-      Predictors averaged: sex
+      Predictors averaged over (balanced grid): sex
       p-values are uncorrected.
 
 ---
@@ -247,7 +248,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time
-      Predictors averaged: sex
+      Predictors averaged over (balanced grid): sex
       p-values are uncorrected.
 
 ---
@@ -354,7 +355,8 @@
       
       Variable predicted: count
       Predictors contrasted: mined, spp
-      Predictors averaged: cover (8.7e-11), site
+      Predictors held at: cover (8.7e-11)
+      Random effects: Averaged over a balanced grid of cluster levels.
       p-values are uncorrected.
       Contrasts are on the response-scale.
 
@@ -378,7 +380,8 @@
       
       Variable predicted: count
       Predictors contrasted: mined
-      Predictors averaged: cover (8.7e-11), site
+      Predictors held at: cover (8.7e-11)
+      Random effects: Averaged over a balanced grid of cluster levels.
       p-values are uncorrected.
       Contrasts are on the response-scale.
 
@@ -575,7 +578,7 @@
       
       Variable predicted: score
       Predictors contrasted: grp
-      Predictors averaged: x
+      Predictors averaged over (balanced grid): x
       p-values are uncorrected.
 
 ---

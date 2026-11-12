@@ -18,7 +18,8 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors averaged: mined, site
+      Predictors averaged over (balanced grid): mined
+      Random effects: Averaged over a balanced grid of cluster levels.
       Predictions are on the response-scale.
 
 ---
@@ -41,6 +42,8 @@
       
       Variable predicted: count
       Predictors modulated: spp
+      Predictors averaged over (sample): mined
+      Random effects: Marginalized across clusters.
       Predictions are on the response-scale.
 
 ---
@@ -63,7 +66,8 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors averaged: mined, site
+      Predictors averaged over (balanced grid): mined
+      Random effects: Averaged over a balanced grid of cluster levels.
       Predictions are on the response-scale.
 
 ---
@@ -86,6 +90,8 @@
       
       Variable predicted: count
       Predictors modulated: spp
+      Predictors averaged over (sample): mined
+      Random effects: Marginalized across clusters.
       Predictions are on the response-scale.
 
 ---
@@ -111,7 +117,7 @@
       
       Variable predicted: Reaction
       Predictors modulated: Days
-      Predictors averaged: Subject
+      Random effects: Averaged over a balanced grid of cluster levels.
 
 ---
 
@@ -136,4 +142,5 @@
       
       Variable predicted: Reaction
       Predictors modulated: Days
+      Random effects: Marginalized across clusters.
 
