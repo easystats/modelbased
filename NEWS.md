@@ -10,10 +10,10 @@
   (https://easystats.github.io/modelbased/articles/technical_marginalization.html)).
   Specifically, `estimate` defines the *unit of interest* for your *estimand*,
   distinguishing between predictions *conditioned* on specific, theoretical
-  individual levels and *marginal* predictions averaged over empirical observations
-  at the sample or population level. Furthermore, table footer are now more
-  informative for mixed models and describe the handling of random effects more
-  in detail.
+  individual levels and *marginal* predictions averaged over empirical
+  observations at the sample or population level. Furthermore, table footers for
+  mixed models are now more informative, detailing how random effects are
+  handled.
 
 ## Changes
 
