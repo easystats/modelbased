@@ -59,7 +59,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
-      Predictors averaged: sex
+      Predictors averaged over (balanced grid): sex
       p-values are uncorrected.
 
 ---
@@ -80,7 +80,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time
-      Predictors averaged: sex
+      Predictors averaged over (balanced grid): sex
       p-values are uncorrected.
 
 ---
@@ -98,7 +98,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
-      Predictors averaged: sex
+      Predictors averaged over (balanced grid): sex
       p-values are uncorrected.
       Parameters:
       b2 = time [noon], coffee [coffee]
@@ -120,7 +120,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
-      Predictors averaged: sex
+      Predictors averaged over (balanced grid): sex
       p-values are uncorrected.
       Parameters:
       b5 = time [noon], coffee [control]
@@ -140,7 +140,8 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: e42dep, c172code
-      Predictors averaged: c12hour (42), barthtot (65), c161sex
+      Predictors held at: c12hour (42), barthtot (65)
+      Predictors averaged over (balanced grid): c161sex
       p-values are uncorrected.
       Parameters:
       b6 = e42dep [slightly dependent], c172code [intermediate level of education]
@@ -256,7 +257,7 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: c161sex, c172code
-      Predictors averaged: e16sex
+      Predictors averaged over (balanced grid): e16sex
       p-values are uncorrected.
 
 # estimate_contrasts - examples from docs work as intendec
@@ -275,7 +276,7 @@
       
       Variable predicted: Sepal.Width
       Predictors contrasted: Petal.Width
-      Predictors averaged: Petal.Width (1.2)
+      Predictors held at: Petal.Width (1.2)
       p-values are uncorrected.
 
 # estimate_contrast, slopes with emmeans-2
