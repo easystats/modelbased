@@ -42,6 +42,10 @@ if (getRversion() < "4.1.0") {
   margin-bottom: 10px;
   font-size: 0.9em;
 }
+[data-bs-theme="dark"] .custom_note {
+  border-left-color: hsl(220, 100%, 65%);
+  background-color: hsl(220, 40%, 20%);
+}
 ```
 
 This vignette provides a quick overview with different examples that show how to plot estimated marginal means, like [in this vignette](https://easystats.github.io/modelbased/articles/plotting.html), however, here we use the [`{tinyplot}`](https://grantmcdermott.com/tinyplot/) package instead of `{ggplot2}` to create the plots.

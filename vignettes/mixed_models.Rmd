@@ -48,6 +48,10 @@ if (can_evaluate) {
   margin-bottom: 10px;
   font-size: 0.9em;
 }
+[data-bs-theme="dark"] .custom_note {
+  border-left-color: hsl(220, 100%, 65%);
+  background-color: hsl(220, 40%, 20%);
+}
 ```
 
 ## Estimated Marginal Means in Mixed Effects Models: Navigating Conditional and Marginal Effects

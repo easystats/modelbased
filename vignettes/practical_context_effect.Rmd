@@ -47,6 +47,10 @@ set.seed(333)
   margin-bottom: 10px;
   font-size: 0.9em;
 }
+[data-bs-theme="dark"] .custom_note {
+  border-left-color: hsl(220, 100%, 65%);
+  background-color: hsl(220, 40%, 20%);
+}
 ```
 
 When analyzing longitudinal or clustered data, a standard mixed-effects model often blends two completely different processes into a single coefficient: the overall differences between individuals (or groups) and the acute fluctuations within an individual. However, separating these effects is just the first step. By evaluating them side-by-side, we can uncover a third, crucial piece of the puzzle: the *context effect*.
