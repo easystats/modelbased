@@ -48,7 +48,7 @@ test_that("estimate_contrasts - joint test, 2-way", {
       "------------------------",
       "3   | 114 | 2.35 | 0.076",
       "",
-      "Predictors averaged: coffee",
+      "Predictors averaged over (balanced grid): coffee",
       "p-values are uncorrected.",
       "Null-hypothesis: Group means equal 16.20"
     )
@@ -73,6 +73,7 @@ test_that("estimate_contrasts - joint test, 2-way", {
       "------------------------",
       "3   | 114 | 2.35 | 0.076",
       "",
+      "Predictors averaged over (sample): coffee",
       "p-values are uncorrected.",
       "Null-hypothesis: Group means equal 16.20"
     )

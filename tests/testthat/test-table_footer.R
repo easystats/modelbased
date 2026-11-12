@@ -5,18 +5,30 @@ test_that("table_footer", {
   data(efc, package = "modelbased")
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
   m <- lm(neg_c_7 ~ c12hour + barthtot + c161sex + e42dep + c172code, data = efc)
-  out <- utils::capture.output(estimate_means(m, "c172code", estimate = "specific", verbose = FALSE))
+  out <- utils::capture.output(estimate_means(
+    m,
+    "c172code",
+    estimate = "specific",
+    verbose = FALSE
+  ))
   expect_identical(
     out[11],
-    "Predictors controlled: c12hour (42), barthtot (65), c161sex (Male), e42dep (independent)"
+    "Predictors held at: c12hour (42), barthtot (65), c161sex (Male), e42dep (independent)"
   )
-  out <- utils::capture.output(estimate_means(m, "c172code", estimate = "typical", verbose = FALSE))
-  expect_identical(
-    out[11],
-    "Predictors averaged: c12hour (42), barthtot (65), c161sex, e42dep"
-  )
-  out <- utils::capture.output(estimate_means(m, "c172code", estimate = "average", verbose = FALSE))
-  expect_length(out, 10)
+  out <- utils::capture.output(estimate_means(
+    m,
+    "c172code",
+    estimate = "typical",
+    verbose = FALSE
+  ))
+  expect_identical(out[11], "Predictors held at: c12hour (42), barthtot (65)")
+  out <- utils::capture.output(estimate_means(
+    m,
+    "c172code",
+    estimate = "average",
+    verbose = FALSE
+  ))
+  expect_length(out, 12)
 })
 
 
@@ -103,9 +115,13 @@ test_that("table_footer, link-scale and transform", {
     transform = exp
   )))
   expect_true("Contrasts are on the transformed link-scale." %in% out)
-  out <- utils::capture.output(
-    estimate_contrasts(g, "wt", by = "cyl", predict = "link", transform = exp)
-  )
+  out <- utils::capture.output(estimate_contrasts(
+    g,
+    "wt",
+    by = "cyl",
+    predict = "link",
+    transform = exp
+  ))
   expect_true("Contrasts are on the transformed link-scale." %in% out)
 })
 
@@ -119,6 +135,10 @@ test_that("table_footer, no prediction intervals if insight falls back", {
     "predict"
   )
   skip_if(identical(predict_type, "prediction"))
-  out <- utils::capture.output(suppressWarnings(estimate_prediction(m, data = "grid", length = 3)))
+  out <- utils::capture.output(suppressWarnings(estimate_prediction(
+    m,
+    data = "grid",
+    length = 3
+  )))
   expect_false("Intervals are prediction intervals." %in% out)
 })
