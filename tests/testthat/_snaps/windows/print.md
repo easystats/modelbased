@@ -109,7 +109,7 @@
       print(estimate_means(fit, c("c12hour", "c172code", "c161sex"), length = 4,
       backend = "marginaleffects"), table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c12hour | c172code                        | c161sex |  Mean |   SE |         95% CI | t(791)
       --------------------------------------------------------------------------------------------
@@ -148,7 +148,7 @@
       print(estimate_means(fit, c("c12hour", "barthtot = [sd]", "c161sex", "c172code",
         "e16sex"), backend = "marginaleffects", length = 3), table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c12hour | barthtot | c161sex | c172code                        | e16sex |  Mean |    SE |           95% CI | t(766)
       -------------------------------------------------------------------------------------------------------------------
@@ -270,7 +270,7 @@
       print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"),
       backend = "marginaleffects"), table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c161sex | c172code                        | e16sex | nur_pst         |   Mean |   SE |          95% CI | t(402)
       ---------------------------------------------------------------------------------------------------------------
@@ -320,7 +320,7 @@
       print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"),
       backend = "marginaleffects"), full_labels = FALSE, table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c161sex | c172code                        | e16sex | nur_pst         |   Mean |   SE |          95% CI | t(402)
       ---------------------------------------------------------------------------------------------------------------
@@ -370,7 +370,7 @@
       print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst",
         "negc7d"), backend = "marginaleffects"), table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c161sex | c172code                        | e16sex | nur_pst         | negc7d |  Mean |   SE |          95% CI | t(370)
       -----------------------------------------------------------------------------------------------------------------------
@@ -456,7 +456,7 @@
       print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst",
         "negc7d"), backend = "marginaleffects"), full_labels = FALSE, table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c161sex | c172code                        | e16sex | nur_pst         | negc7d |  Mean |   SE |          95% CI | t(370)
       -----------------------------------------------------------------------------------------------------------------------
@@ -541,7 +541,7 @@
     Code
       estimate_expectation(model, by = c("c160age=[fivenum]", "c161sex"))
     Output
-      Model-based Predictions
+      Conditional Predictions
       
       c160age | c161sex | Predicted |   SE |         95% CI
       -----------------------------------------------------
@@ -563,7 +563,7 @@
     Code
       estimate_means(model, by = c("c160age=[fivenum]", "c161sex"), backend = "marginaleffects")
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c160age | c161sex |  Mean |   SE |         95% CI | t(865)
       ----------------------------------------------------------

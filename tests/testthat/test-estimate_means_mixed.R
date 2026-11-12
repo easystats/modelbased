@@ -105,7 +105,7 @@ test_that("estimate_means() - mixed models", {
   estim3 <- estimate_means(gm1, backend = "marginaleffects", verbose = FALSE)
   expect_identical(dim(estim3), c(4L, 6L))
   expect_equal(estim3$Probability, c(0.21521, 0.0954, 0.08453, 0.05599), tolerance = 1e-3)
-  expect_equal(estim3$CI_low, c(0.14233, 0.04475, 0.03608, 0.01266), tolerance = 1e-3)
+  expect_equal(estim3$CI_low, c(0.14194, 0.04428, 0.03559, 0.01215), tolerance = 1e-3)
 })
 
 
