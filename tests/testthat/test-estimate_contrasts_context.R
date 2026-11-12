@@ -76,7 +76,7 @@ test_that("estimate_contrast, context effects, linear", {
   expect_identical(
     capture.output(out),
     c(
-      "Marginal Contrasts Analysis",
+      "Conditional Contrasts",
       "",
       "sex    | year | Difference |   SE |         95% CI |     z |      p",
       "-------------------------------------------------------------------",
@@ -100,7 +100,7 @@ test_that("estimate_contrast, context effects, linear", {
   expect_identical(
     capture.output(out),
     c(
-      "Marginal Contrasts Analysis",
+      "Conditional Contrasts",
       "",
       "Level1 | Level2 | year | Difference |   SE |        95% CI |     z |     p",
       "--------------------------------------------------------------------------",

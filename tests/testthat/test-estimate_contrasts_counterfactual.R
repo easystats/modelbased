@@ -35,7 +35,7 @@ test_that("estimate_contrast, counterfactual", {
   )
   expect_identical(
     attributes(out2)$table_title,
-    c("Counterfactual Contrasts Analysis (G-computation)", "blue")
+    c("Marginal Contrasts (G-computation)", "blue")
   )
 
   out1 <- marginaleffects::avg_comparisons(

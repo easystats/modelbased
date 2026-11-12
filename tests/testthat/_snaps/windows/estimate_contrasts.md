@@ -4,7 +4,7 @@
       print(estimate_contrasts(model, contrast = c("three", "vs", "am"), backend = "marginaleffects"),
       digits = 1, zap_small = TRUE, table_width = Inf)
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1              | Level2              | Difference |  SE |         95% CI | t(24) |      p
       ----------------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@
       print(estimate_contrasts(model, contrast = "am", backend = "marginaleffects"),
       zap_small = TRUE, table_width = Inf)
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1 | Level2 | Difference |   SE |       95% CI | t(24) |      p
       -------------------------------------------------------------------
