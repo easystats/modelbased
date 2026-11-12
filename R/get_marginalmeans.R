@@ -309,6 +309,11 @@ get_marginalmeans <- function(
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
+  # handle brms-alias
+  if (!is.null(dots$re_formula)) {
+    dots$re.form <- dots$re_formula
+  }
+
   means <- .add_attributes(
     means,
     by = my_args$by,
@@ -332,7 +337,7 @@ get_marginalmeans <- function(
     ),
     # needed for some additional information for mixed models
     model = model,
-    re_form = isTRUE(dots$re.form) || isTRUE(dots$re_formula)
+    re_form_na = !is.null(dots$re.form) && is.na(dots$re.form)
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
 
@@ -682,7 +687,7 @@ get_marginalmeans <- function(
   model_info = NULL,
   info = NULL,
   model = NULL,
-  re_form = NULL
+  re_form_na = NULL
 ) {
   attr(x, "at") <- by
   attr(x, "by") <- by
@@ -692,9 +697,8 @@ get_marginalmeans <- function(
   if (!is.null(model)) {
     response <- insight::find_response(model, combine = FALSE)
     re_intercept <- insight::find_random(model, flatten = TRUE, split_nested = TRUE)
-    no_re_intercept <- !is.null(re_form) && is.na(re_form)
   } else {
-    response <- re_intercept <- no_re_intercept <- NULL
+    response <- re_form_na <- no_re_intercept <- NULL
   }
 
   # compact list
@@ -711,11 +715,11 @@ get_marginalmeans <- function(
     # we definitely don't want the random-intercept in the "adjusted for" list
     info$adjusted_for <- setdiff(info$adjusted_for, re_intercept)
     # save information about random effects (cluster/grouping variable)
-    if (!isTRUE(no_re_intercept)) {
+    if (!isTRUE(re_form_na)) {
       info$re_intercept <- re_intercept
     }
     # save info if re.form was NA
-    info$re_form_na <- isTRUE(no_re_intercept)
+    info$re_form_na <- isTRUE(re_form_na)
   }
 
   if (!is.null(info) && length(info)) {

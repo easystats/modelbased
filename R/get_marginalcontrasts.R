@@ -231,6 +231,11 @@ get_marginalcontrasts <- function(
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
+  # handle brms-alias
+  if (!is.null(dots$re_formula)) {
+    dots$re.form <- dots$re_formula
+  }
+
   out <- .add_attributes(
     out,
     by = my_args$by,
@@ -250,7 +255,7 @@ get_marginalcontrasts <- function(
     ),
     # needed for some additional information for mixed models
     model = model,
-    re_form = isTRUE(dots$re.form) || isTRUE(dots$re_formula)
+    re_form_na = !is.null(dots$re.form) && is.na(dots$re.form)
   )
   out <- .rename_focal_attributes(out)
 

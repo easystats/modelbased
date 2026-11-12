@@ -29,7 +29,7 @@
       Variable predicted: body_mass
       Predictors modulated: sex
       Predictors held at: bill_len (44)
-      Predictors averaged over (balanced): species
+      Predictors averaged over (balanced grid): species
 
 ---
 
@@ -46,7 +46,7 @@
       Variable predicted: body_mass
       Predictors modulated: sex
       Predictors held at: bill_len (44)
-      Predictors averaged over (within groups): species
+      Predictors averaged over (sample): species
 
 ---
 
@@ -63,7 +63,7 @@
       Variable predicted: body_mass
       Predictors modulated: sex
       Predictors held at: bill_len (44)
-      Predictors averaged over (full sample): species
+      Predictors averaged over (sample): species
 
 ---
 
@@ -81,7 +81,7 @@
       
       Variable predicted: cbind(incidence, size - incidence)
       Predictors modulated: period
-      Results refer to a typical or to an average random effects group.
+      Random effects: Averaged over a balanced grid of cluster levels.
       Predictions are on the response-scale.
 
 ---
@@ -100,6 +100,7 @@
       
       Variable predicted: cbind(incidence, size - incidence)
       Predictors modulated: period
+      Random effects: Conditional on a typical cluster.
       Predictions are on the response-scale.
 
 ---
@@ -118,7 +119,7 @@
       
       Variable predicted: cbind(incidence, size - incidence)
       Predictors modulated: period
-      Results are marginalized over random effects levels of: herd
+      Random effects: Marginalized across clusters.
       Predictions are on the response-scale.
 
 ---
@@ -137,5 +138,6 @@
       
       Variable predicted: cbind(incidence, size - incidence)
       Predictors modulated: period
+      Random effects: Conditional on a typical cluster.
       Predictions are on the response-scale.
 
