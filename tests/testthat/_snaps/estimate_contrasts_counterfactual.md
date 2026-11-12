@@ -11,6 +11,9 @@
       
       Variable predicted: QoL
       Predictors contrasted: treatment
+      Predictors held at: hospital (0.95), age (0.22), phq4 (-0.076)
+      Predictors averaged over (sample): time, education
+      Random effects: Marginalized across clusters.
       p-values are uncorrected.
 
 ---
@@ -28,5 +31,8 @@
       
       Variable predicted: QoL
       Predictors contrasted: treatment
+      Predictors held at: hospital (0.95), age (0.22), phq4 (-0.076)
+      Predictors averaged over (sample): education
+      Random effects: Marginalized across clusters.
       p-values are uncorrected.
 
