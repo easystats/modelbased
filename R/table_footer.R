@@ -54,6 +54,9 @@
     if (!is.null(ref_cat_data)) {
       # get values at which non-focal terms are hold constant
       adjusted_values <- lapply(adjusted_for, function(i) ref_cat_data[[i]][1])
+      # if we have values at which non-focal terms are held constant, we want
+      # them in a separate string; same for predictors we average over
+      averaged_over <- held_constant <- list()
       # at values to names of non-focal terms (table_footer). we have to iterate
       # over the list, because we may have different types of data
       for (av in seq_along(adjusted_values)) {
@@ -63,26 +66,52 @@
             adjusted_for[av],
             adjusted_values[[av]]
           )
+          # add to final list
+          held_constant <- c(held_constant, adjusted_for[av])
         } else if (identical(type, "predictions")) {
           adjusted_for[av] <- sprintf("%s (%s)", adjusted_for[av], adjusted_values[[av]])
+          # add to final list
+          held_constant <- c(held_constant, adjusted_for[av])
+        } else {
+          # add to final list - we have factors that are averaged over levels,
+          # not hold constant at a certain level
+          averaged_over <- c(averaged_over, adjusted_for[av])
         }
       }
     }
-    # The "predictors averaged" line does not strictly apply to marginal
-    # predictions like `estimate = "average"` or `estimate = "population"`,
-    # because we average across all predictions, we do not take an "average
-    # value" of a non-focal predictor. Thus, we skip this line in the footer
-    if (
-      is.null(marginalization) ||
-        !marginalization %in% c("average", "population", "counterfactual")
-    ) {
-      average_string <- switch(type, predictions = "controlled", "averaged")
+
+    # convert to strings
+    held_constant <- unlist(held_constant, use.names = FALSE)
+    averaged_over <- unlist(averaged_over, use.names = FALSE)
+
+    # first, information about non-focal terms that were hold constant at
+    # specific values or levels
+    if (!is.null(held_constant)) {
       table_footer <- paste0(
         table_footer,
-        "\nPredictors ",
-        average_string,
-        ": ",
-        toString(adjusted_for)
+        paste0("\nPredictors held at: ", toString(held_constant))
+      )
+    }
+
+    # then, information about non-focal terms that were averaged over levels
+    # or within groups
+    if (
+      !is.null(averaged_over) && !is.null(marginalization) && length(marginalization) == 1
+    ) {
+      average_string <- paste(
+        "Predictors averaged",
+        switch(
+          marginalization,
+          typical = "(balanced)",
+          average = "(within groups)",
+          population = ,
+          counterfactual = "(full sample)",
+          ""
+        )
+      )
+      table_footer <- paste0(
+        table_footer,
+        paste0("\n", average_string, ": ", toString(averaged_over))
       )
     }
   }
