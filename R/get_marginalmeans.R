@@ -698,7 +698,7 @@ get_marginalmeans <- function(
     response <- insight::find_response(model, combine = FALSE)
     re_intercept <- insight::find_random(model, flatten = TRUE, split_nested = TRUE)
   } else {
-    response <- re_form_na <- no_re_intercept <- NULL
+    response <- re_form_na <- re_intercept <- NULL
   }
 
   # compact list
