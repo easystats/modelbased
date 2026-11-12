@@ -24,7 +24,7 @@
       
       Variable predicted: count
       Predictors modulated: mined, spp
-      Predictors averaged: site
+      Random effects: Averaged over a balanced grid of cluster levels.
       Predictions are on the response-scale.
 
 ---
@@ -53,7 +53,7 @@
       
       Variable predicted: count
       Predictors modulated: mined, spp
-      Predictors averaged: site
+      Random effects: Averaged over a balanced grid of cluster levels.
       Predictions are on the response-scale.
 
 ---
