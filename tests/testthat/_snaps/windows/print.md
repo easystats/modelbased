@@ -140,7 +140,7 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c12hour, c172code, c161sex
-      Predictors averaged: barthtot (65)
+      Predictors held at: barthtot (65)
 
 ---
 
@@ -406,7 +406,7 @@
       Female  | high level of education         | male   | Care Level 3/3+ | 0      | 11.00 | 2.28 | [  6.51, 15.49] |   4.82
       Male    | low level of education          | female | Care Level 3/3+ | 0      |  8.50 | 1.61 | [  5.33, 11.67] |   5.27
       Female  | low level of education          | female | Care Level 3/3+ | 0      |  8.67 | 1.32 | [  6.08, 11.26] |   6.58
-      Male    | intermediate level of education | female | Care Level 3/3+ | 0      |  9.13 | 0.81 | [  7.54, 10.71] |  11.31
+      Male    | intermediate level of education | female | Care Level 3/3+ | 0      |  9.12 | 0.81 | [  7.54, 10.71] |  11.31
       Female  | intermediate level of education | female | Care Level 3/3+ | 0      |  9.78 | 0.76 | [  8.28, 11.27] |  12.86
       Male    | high level of education         | female | Care Level 3/3+ | 0      |  9.00 | 2.28 | [  4.51, 13.49] |   3.94
       Female  | high level of education         | female | Care Level 3/3+ | 0      |  9.00 | 1.32 | [  6.41, 11.59] |   6.83
@@ -492,7 +492,7 @@
       Female  |                                 |        |                 |        | 11.00 | 2.28 | [  6.51, 15.49] |   4.82
       Male    | low level of education          | female |                 |        |  8.50 | 1.61 | [  5.33, 11.67] |   5.27
       Female  |                                 |        |                 |        |  8.67 | 1.32 | [  6.08, 11.26] |   6.58
-      Male    | intermediate level of education |        |                 |        |  9.13 | 0.81 | [  7.54, 10.71] |  11.31
+      Male    | intermediate level of education |        |                 |        |  9.12 | 0.81 | [  7.54, 10.71] |  11.31
       Female  |                                 |        |                 |        |  9.78 | 0.76 | [  8.28, 11.27] |  12.86
       Male    | high level of education         |        |                 |        |  9.00 | 2.28 | [  4.51, 13.49] |   3.94
       Female  |                                 |        |                 |        |  9.00 | 1.32 | [  6.41, 11.59] |   6.83
@@ -556,7 +556,7 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c160age=[fivenum], c161sex
-      Predictors controlled: barthtot (65), e16sex (male)
+      Predictors held at: barthtot (65), e16sex (male)
 
 ---
 
@@ -580,5 +580,6 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c160age=[fivenum], c161sex
-      Predictors averaged: barthtot (65), e16sex
+      Predictors held at: barthtot (65)
+      Predictors averaged over (balanced grid): e16sex
 
