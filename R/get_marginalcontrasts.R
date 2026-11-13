@@ -18,6 +18,7 @@ get_marginalcontrasts <- function(
 ) {
   # check if available
   insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
+  dots <- list(...)
 
   # temporarily overwrite settings that error on "too many" rows
   me_option <- getOption("marginaleffects_safe")
@@ -135,7 +136,10 @@ get_marginalcontrasts <- function(
     } else {
       slope_filter <- .parse_by_filter(my_args$by)
     }
-    slope_filter <- .present_filter_values(insight::get_data(model, verbose = FALSE), slope_filter)
+    slope_filter <- .present_filter_values(
+      insight::get_data(model, verbose = FALSE),
+      slope_filter
+    )
     # sanity check - we need at least two slopes to compare. We use the
     # original `by`, because a group in a `comparison` formula replaces it
     if (
@@ -167,7 +171,6 @@ get_marginalcontrasts <- function(
     # the hypothesis compares all slopes, so we cannot filter the contrasts
     # later. Instead, we only keep the data rows that pass the filter. The
     # slopes are averaged within each group of `by`, so they don't change.
-    dots <- list(...)
     if (
       identical(estimate, "average") &&
         length(slope_filter) &&
@@ -228,6 +231,11 @@ get_marginalcontrasts <- function(
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
+  # handle brms-alias
+  if (!is.null(dots$re_formula)) {
+    dots$re.form <- dots$re_formula
+  }
+
   out <- .add_attributes(
     out,
     by = my_args$by,
@@ -244,7 +252,10 @@ get_marginalcontrasts <- function(
       context_effects = my_args$context_effects,
       iterations = iterations,
       keep_iterations = keep_iterations
-    )
+    ),
+    # needed for some additional information for mixed models
+    model = model,
+    re_form_na = !is.null(dots$re.form) && is.na(dots$re.form)
   )
   out <- .rename_focal_attributes(out)
 
@@ -319,7 +330,10 @@ get_marginalcontrasts <- function(
 .parse_by_filter <- function(by) {
   by_filter <- list()
   for (i in by[grepl("=", by, fixed = TRUE)]) {
-    filter_value <- insight::trim_ws(unlist(strsplit(i, "=", fixed = TRUE), use.names = FALSE))
+    filter_value <- insight::trim_ws(unlist(
+      strsplit(i, "=", fixed = TRUE),
+      use.names = FALSE
+    ))
     if (length(filter_value) > 1) {
       value <- .safe(eval(str2lang(filter_value[2])))
       if (!is.null(value)) {

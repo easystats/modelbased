@@ -7,6 +7,8 @@
   datagrid <- info$datagrid
   p_adjust <- info$p_adjust
   adjusted_for <- info$adjusted_for
+  re_intercept <- info$re_intercept
+  re_form_na <- info$re_form_na
   transform <- info$transform
   model_info <- info$model_info
   marginalization <- info$estimate
@@ -18,6 +20,7 @@
   }
 
   # name of predicted response -----------------------------------------------
+  # --------------------------------------------------------------------------
 
   if (isTRUE(info$joint_test)) {
     table_footer <- NULL
@@ -29,6 +32,7 @@
   }
 
   # modulated predictors (focal terms) ---------------------------------------
+  # --------------------------------------------------------------------------
 
   if (!is.null(by) && !isTRUE(info$joint_test) && !inherits(by, "formula")) {
     modulate_string <- switch(type, inequality = , contrasts = "contrasted", "modulated")
@@ -42,6 +46,8 @@
   }
 
   # predictors controlled (non-focal terms) ----------------------------------
+  # --------------------------------------------------------------------------
+
   if (!is.null(adjusted_for) && length(adjusted_for) >= 1 && !all(is.na(adjusted_for))) {
     # if we have values of adjusted terms, add these here
     if (all(adjusted_for %in% colnames(x))) {
@@ -51,6 +57,11 @@
     } else {
       ref_cat_data <- NULL
     }
+
+    # if we have values at which non-focal terms are held constant, we want
+    # them in a separate string; same for predictors we average over
+    averaged_over <- held_constant <- list()
+
     if (!is.null(ref_cat_data)) {
       # get values at which non-focal terms are hold constant
       adjusted_values <- lapply(adjusted_for, function(i) ref_cat_data[[i]][1])
@@ -63,28 +74,82 @@
             adjusted_for[av],
             adjusted_values[[av]]
           )
+          # add to final list
+          held_constant <- c(held_constant, adjusted_for[av])
         } else if (identical(type, "predictions")) {
           adjusted_for[av] <- sprintf("%s (%s)", adjusted_for[av], adjusted_values[[av]])
+          # add to final list
+          held_constant <- c(held_constant, adjusted_for[av])
+        } else {
+          # add to final list - we have factors that are averaged over levels,
+          # not hold constant at a certain level
+          averaged_over <- c(averaged_over, adjusted_for[av])
         }
       }
     }
-    # The "predictors averaged" line does not strictly apply to `estimate =
-    # "average"`, because we average across all predictions, we do not take an
-    # "average value" of a non-focal predictor. Thus, we skip this line in the
-    # footer
-    if (!identical(marginalization, "average")) {
-      average_string <- switch(type, predictions = "controlled", "averaged")
+
+    # convert to strings
+    held_constant <- unlist(held_constant, use.names = FALSE)
+    averaged_over <- unlist(averaged_over, use.names = FALSE)
+
+    # first, information about non-focal terms that were hold constant at
+    # specific values or levels
+    if (!is.null(held_constant)) {
       table_footer <- paste0(
         table_footer,
-        "\nPredictors ",
-        average_string,
-        ": ",
-        toString(adjusted_for)
+        paste0("\nPredictors held at: ", toString(held_constant))
+      )
+    }
+
+    # then, information about non-focal terms that were averaged over levels
+    # or within groups
+    if (
+      !is.null(averaged_over) && !is.null(marginalization) && length(marginalization) == 1
+    ) {
+      average_string <- paste(
+        "Predictors averaged over",
+        switch(
+          marginalization,
+          typical = "(balanced grid)",
+          average = ,
+          population = ,
+          counterfactual = "(sample)",
+          ""
+        )
+      )
+      table_footer <- paste0(
+        table_footer,
+        paste0("\n", average_string, ": ", toString(averaged_over))
       )
     }
   }
 
+  # Random effects handling ------------------------------------------------
+  # --------------------------------------------------------------------------
+
+  if (!is.null(re_intercept) && !isTRUE(re_form_na) && !is.null(marginalization)) {
+    if (marginalization %in% c("average", "population", "counterfactual")) {
+      table_footer <- paste0(
+        table_footer,
+        "\nRandom effects: Marginalized across clusters."
+      )
+    } else {
+      table_footer <- paste0(
+        table_footer,
+        "\nRandom effects: Averaged over a balanced grid of cluster levels."
+      )
+    }
+  }
+
+  if (isTRUE(re_form_na)) {
+    table_footer <- paste0(
+      table_footer,
+      "\nRandom effects: Conditional on a typical cluster."
+    )
+  }
+
   # P-value adjustment footer ------------------------------------------------
+  # --------------------------------------------------------------------------
 
   if (!is.null(p_adjust) && "p" %in% names(x)) {
     if (p_adjust == "none") {
@@ -99,6 +164,7 @@
   }
 
   # leave early for joint tests ----------------------------------------------
+  # --------------------------------------------------------------------------
 
   if (isTRUE(info$joint_test)) {
     if (!is.null(info$null) && info$omnibus_test) {
@@ -112,6 +178,7 @@
   }
 
   # tell user about scale of predictions / contrasts -------------------------
+  # --------------------------------------------------------------------------
 
   result_type <- switch(
     type,
@@ -164,6 +231,7 @@
   }
 
   # tell user about prediction intervals -------------------------------------
+  # --------------------------------------------------------------------------
 
   if (
     identical(type, "predictions") &&
@@ -174,6 +242,7 @@
   }
 
   # Parameter labels for special hypothesis testing --------------------------
+  # --------------------------------------------------------------------------
 
   # for special hypothesis testing, like "(b1 - b2) = (b4 - b3)", we want to
   # add information about the parameter names
@@ -209,7 +278,9 @@
     }
   }
 
-  # ROPE?
+  # ROPE? --------------------------------------------------------------------
+  # --------------------------------------------------------------------------
+
   if (!is.null(rope)) {
     table_footer <- paste0(
       table_footer,
@@ -227,6 +298,7 @@
 
 
 # name of the link-scale, including a transformation -------------------------
+# ----------------------------------------------------------------------------
 
 .link_transform_label <- function(transform, model = NULL) {
   if (is.character(transform) && length(transform) == 1) {

@@ -35,7 +35,7 @@ test_that("estimate_contrast, counterfactual", {
   )
   expect_identical(
     attributes(out2)$table_title,
-    c("Counterfactual Contrasts Analysis (G-computation)", "blue")
+    c("Marginal Contrasts (G-computation)", "blue")
   )
 
   out1 <- marginaleffects::avg_comparisons(
@@ -167,7 +167,7 @@ test_that("estimate_contrast, counterfactual, custom hypothesis", {
   expect_equal(out$Difference, -4.591834, tolerance = 1e-3)
   expect_identical(
     attributes(out)$table_footer[1],
-    "\nVariable predicted: QoL\nPredictors contrasted: treatment\nPredictors averaged: education, hospital (0.95), age (0.22), phq4 (-0.076), ID\np-values are uncorrected.\nParameters:\nb3 = treatment [0], time [2]\nb1 = treatment [0], time [1]\nb4 = treatment [1], time [2]\nb2 = treatment [1], time [1]\n"
+    "\nVariable predicted: QoL\nPredictors contrasted: treatment\nPredictors held at: hospital (0.95), age (0.22), phq4 (-0.076)\nPredictors averaged over (sample): education\nRandom effects: Marginalized across clusters.\np-values are uncorrected.\nParameters:\nb3 = treatment [0], time [2]\nb1 = treatment [0], time [1]\nb4 = treatment [1], time [2]\nb2 = treatment [1], time [1]\n"
   )
 })
 

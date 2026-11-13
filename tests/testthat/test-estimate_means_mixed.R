@@ -98,14 +98,14 @@ test_that("estimate_means() - mixed models", {
     c(0.20293, 0.08627, 0.07612, 0.04984),
     tolerance = 1e-3
   )
-  expect_equal(estim2$CI_low, c(0.13928, 0.04915, 0.04159, 0.02229), tolerance = 1e-3)
+  expect_equal(estim2$CI_low, c(0.13899, 0.04888, 0.04133, 0.02207), tolerance = 1e-3)
   expect_true(all(estim2$CI_low >= 0 & estim2$CI_low <= 1))
   expect_true(all(estim2$CI_high >= 0 & estim2$CI_high <= 1))
 
   estim3 <- estimate_means(gm1, backend = "marginaleffects", verbose = FALSE)
   expect_identical(dim(estim3), c(4L, 6L))
   expect_equal(estim3$Probability, c(0.21521, 0.0954, 0.08453, 0.05599), tolerance = 1e-3)
-  expect_equal(estim3$CI_low, c(0.14233, 0.04475, 0.03608, 0.01266), tolerance = 1e-3)
+  expect_equal(estim3$CI_low, c(0.14194, 0.04428, 0.03559, 0.01215), tolerance = 1e-3)
 })
 
 

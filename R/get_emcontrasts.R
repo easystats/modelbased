@@ -71,7 +71,11 @@ get_emcontrasts <- function(
       fun_args$mode <- ordinal$mode
     }
     .check_ordinal_response_filter(my_args$response_filter, ordinal$mode)
-    .check_ordinal_response_filter(my_args$response_contrast_filter, ordinal$mode, "contrast")
+    .check_ordinal_response_filter(
+      my_args$response_contrast_filter,
+      ordinal$mode,
+      "contrast"
+    )
   }
 
   # add dots
@@ -197,6 +201,11 @@ get_emcontrasts <- function(
     attr(out, "posterior_draws") <- insight::get_parameters(estimated)
   } else {
     keep_iterations <- FALSE
+  }
+
+  # emmeans is always conditioning on a typical cluster
+  if (insight::is_mixed_model(model)) {
+    attr(estimated, "re_form_na") <- TRUE
   }
 
   attr(out, "contrast") <- my_args$contrast

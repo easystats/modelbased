@@ -527,10 +527,10 @@ estimate_means <- function(
   attr(means, "table_title") <- c(
     switch(
       estimate,
-      specific = "Model-based Predictions",
-      typical = "Estimated Marginal Means",
-      average = "Average Predictions",
-      population = "Average Counterfactual Predictions"
+      specific = ,
+      typical = "Conditional Predictions",
+      average = "Marginal Predictions",
+      population = "Marginal Predictions (G-computation)"
     ),
     "blue"
   )

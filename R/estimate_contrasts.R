@@ -600,15 +600,15 @@ estimate_contrasts.default <- function(
     suffix <- "Inequality Analysis"
     type <- "inequality"
   } else {
-    suffix <- "Contrasts Analysis"
+    suffix <- "Contrasts"
   }
   attr(out, "table_title") <- c(
     switch(
       estimate,
-      specific = paste("Model-based", suffix),
-      typical = paste("Marginal", suffix),
-      average = paste("Averaged", suffix),
-      population = paste("Counterfactual", suffix, "(G-computation)")
+      specific = ,
+      typical = paste("Conditional", suffix),
+      average = paste("Marginal", suffix),
+      population = paste("Marginal", suffix, "(G-computation)")
     ),
     "blue"
   )

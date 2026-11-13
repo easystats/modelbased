@@ -3,7 +3,7 @@
     Code
       estimate_means(m, c("mined", "spp"), backend = "marginaleffects", predict = "inverse_link")
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       mined | spp   | Mean |   SE |       95% CI |     z
       --------------------------------------------------
@@ -24,7 +24,7 @@
       
       Variable predicted: count
       Predictors modulated: mined, spp
-      Predictors averaged: site
+      Random effects: Averaged over a balanced grid of cluster levels.
       Predictions are on the response-scale.
 
 ---
@@ -32,7 +32,7 @@
     Code
       estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       mined | spp   | Mean |   SE |        95% CI |    z
       --------------------------------------------------
@@ -53,7 +53,7 @@
       
       Variable predicted: count
       Predictors modulated: mined, spp
-      Predictors averaged: site
+      Random effects: Averaged over a balanced grid of cluster levels.
       Predictions are on the response-scale.
 
 ---
@@ -61,7 +61,7 @@
     Code
       estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       mined | spp   | Mean |       95% CI
       -----------------------------------

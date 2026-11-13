@@ -81,7 +81,7 @@ knitr::include_graphics("../man/figures/from-model-to-meaning-final.png")
 
 ## Defining the Estimands: Five Questions, One Model
 
-Before setting up any statistical model, researchers must explicitly spell out their theoretical estimands in precise terms. An estimand is the specific target quantity (and unit) that directly answers the research question [@lundberg_what_2021]. Instead of passively interpreting whatever coefficients the software returns, we must actively decide whether our question requires us to estimate *predictions*, *slopes*, or *comparisons* (*quantity*),and determine to which target population we want to generalize our results (*unit*) [@rohrer_models_2026; @rohrer_these_2023].
+Before setting up any statistical model, researchers must explicitly spell out their theoretical estimands in precise terms. An estimand is the specific target quantity (and unit) that directly answers the research question [@lundberg_what_2021]. Instead of passively interpreting whatever coefficients the software returns, we must actively decide whether our question requires us to estimate *predictions*, *slopes*, or *comparisons* (*quantity*), and determine to which target population we want to generalize our results (*unit*) [@rohrer_models_2026; @rohrer_these_2023].
 
 ---
 
@@ -102,7 +102,7 @@ In this vignette, we will use a single model to target five distinct estimands:
 Once these target quantities are clearly defined, we can proceed to construct the mathematical model that will allow us to estimate them.
 
 ::: custom_note
-**The estimand - quantity and unit of interests**
+**The estimand - quantity and unit of interest**
 
 Defining your *estimand* requires specifying both the *quantity* and the *unit* of interest. Thus, determining your target population (*unit*) - whether that is a specific individual, an average across individuals, or a broader population - is just as crucial as choosing between predictions, contrasts or slopes (*quantity*) [@lundberg_what_2021; @rohrer_models_2026].
 
@@ -209,7 +209,7 @@ model <- glmmTMB(
 
 ## Interpreting the output
 
-When looking at the standard regression table, it is crucial to interpret these coefficients as *descriptive comparisons*. Specifically, coefficients generally represent *conditional effects*, meaning they describe an association while *strictly holding all other covariates constant* (@gelman_regression_2020; Chapter 6.3), i.e., comparing individuals who are identical regarding these characteristics.
+When looking at the standard regression table, it is crucial to interpret these coefficients as *descriptive comparisons*. Specifically, coefficients generally represent *conditional effects*, meaning they describe an association while *strictly holding all other covariates constant* (@gelman_regression_2020; Chapter 6.3), i.e., comparing individuals who are **identical** regarding these characteristics.
 
 ```{r, }
 result <- model_parameters(model, effects = "fixed")
@@ -221,11 +221,15 @@ display(
 
 ### The Interpretation Trap
 
-The "interpretation trap" occurs when researchers forget that regression coefficients must be interpreted conditionally - meaning they only compare individuals who share the exact same characteristics across all other variables.
+The "interpretation trap" occurs when researchers forget that regression coefficients must be interpreted conditionally - meaning they only compare individuals who share **the exact same** characteristics across all other variables.
 
-- **Categorical Predictors:** Estimates are interpreted relative to a baseline reference category. For instance, the coefficient for `symptoms_unreal ((strongly) disagree)` is `r round(result$Coefficient[result$Parameter == "symptoms_unreal(strongly) disagree"], 2)`. This indicates that, holding `time`, `sex`, `age`, and all other covariates constant, patients who disagree that their symptoms are "unreal" score `r abs(round(result$Coefficient[result$Parameter == "symptoms_unreal(strongly) disagree"], 2))` points lower on the PHQ-15 than those in the implicit reference category (who agree).
+- **Categorical Predictors:** Estimates are interpreted relative to a baseline reference category. For instance, the coefficient for `symptoms_unreal ((strongly) disagree)` is `r if (isTRUE(knitr::opts_chunk$get("eval"))) round(result$Coefficient[result$Parameter == "symptoms_unreal(strongly) disagree"], 2) else -1.36`. This indicates that, holding `time`, `sex`, `age`, and all other covariates constant, patients who disagree that their symptoms are "unreal" score `r if (isTRUE(knitr::opts_chunk$get("eval"))) abs(round(result$Coefficient[result$Parameter == "symptoms_unreal(strongly) disagree"], 2)) else 1.36` points lower on the PHQ-15 than those in the implicit reference category (who agree).
 
-- **Continuous Predictors:** Estimates reflect the expected change associated with a one-unit increase in the predictor. The `time` coefficient of `r round(result$Coefficient[result$Parameter == "time"], 2)` suggests a `r abs(round(result$Coefficient[result$Parameter == "time"], 2))`-point decrease in PHQ-15 scores for every single unit of time passed, again, assuming *all other variables are held constant*.
+- **Continuous Predictors:** Estimates reflect the expected change associated with a one-unit increase in the predictor. The `time` coefficient of `r if (isTRUE(knitr::opts_chunk$get("eval"))) round(result$Coefficient[result$Parameter == "time"], 2) else -0.69` suggests a `r if (isTRUE(knitr::opts_chunk$get("eval"))) abs(round(result$Coefficient[result$Parameter == "time"], 2)) else 0.69`-point decrease in PHQ-15 scores for every single unit of time passed, again, assuming *all other variables are held constant*.
+
+::: custom_note
+Conditioning on covariates means we *might* end up comparing individuals who do not exist in our sample - such as an unmarried, highly educated 67-year-old man and woman. While this *can* be a meaningful comparison, it often is not, which is why regression coefficients rarely answer our research questions directly. After all, do we want to compare 67-year-old, highly educated, unmarried women and men - or women and men in general? See the callout-box above, "The estimand - quantity and unit of interest".
+:::
 
 ---
 

@@ -588,7 +588,7 @@ estimate_relation <- function(
   attr(out, "datagrid") <- data
   attr(out, "focal_terms") <- grid_specs$at_specs$varname
   attr(out, "preserve_range") <- grid_specs$preserve_range
-  attr(out, "table_title") <- c("Model-based Predictions", "blue")
+  attr(out, "table_title") <- c("Conditional Predictions", "blue")
   attr(out, "coef_name") <- "Predicted"
   attr(out, "model_info") <- insight::model_info(model, response = 1)
   attr(out, "predict") <- predict

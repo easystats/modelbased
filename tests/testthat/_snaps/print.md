@@ -33,9 +33,9 @@
       | 100     | high level of education         | Female  | 13.21 | 0.84 | (11.56, 14.85) | 15.75  |
       +=========+=================================+=========+=======+======+================+========+
       | Variable predicted: neg_c_7<br>Predictors modulated: c12hour = c(50, 100), c172code,         |
-      | c161sex<br>Predictors averaged: barthtot (65)                                                |
+      | c161sex<br>Predictors held at: barthtot (65)                                                 |
       +=========+=================================+=========+=======+======+================+========+
-      Table: Estimated Marginal Means 
+      Table: Conditional Predictions 
 
 # estimate_contrasts - by with special character
 
@@ -43,7 +43,7 @@
       print(estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects",
         p_adjust = "holm"), table_width = Inf, zap_small = TRUE)
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1 | Level2 | barthtot | Difference |   SE |        95% CI | t(810) |      p
       --------------------------------------------------------------------------------
@@ -67,7 +67,7 @@
       print(estimate_contrasts(fit, c("c172code", "barthtot = [sd]"), backend = "marginaleffects",
       p_adjust = "holm"), table_width = Inf, zap_small = TRUE)
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1       | Level2       | Difference |   SE |         95% CI | t(810) |      p
       ----------------------------------------------------------------------------------
@@ -118,7 +118,7 @@
       print(estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects"),
       table_width = Inf, zap_small = TRUE)
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1 | Level2 | barthtot | Difference |   SE |        95% CI | t(810) |     p
       -------------------------------------------------------------------------------
@@ -142,7 +142,7 @@
       print(estimate_contrasts(fit, c("c172code", "barthtot = [sd]"), backend = "marginaleffects"),
       table_width = Inf, zap_small = TRUE)
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1       | Level2       | Difference |   SE |         95% CI | t(810) |      p
       ----------------------------------------------------------------------------------
@@ -194,7 +194,7 @@
         "Female", "Male")), backend = "marginaleffects"), table_width = Inf,
       zap_small = TRUE)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c172code | c161sex |  Mean |   SE |         95% CI | t(825)
       -----------------------------------------------------------
@@ -205,7 +205,7 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c172code = c('low', 'high'), c161sex = c('Female', 'Male')
-      Predictors averaged: e16sex
+      Predictors averaged over (balanced grid): e16sex
 
 ---
 
@@ -214,7 +214,7 @@
         "c161sex = c('Female', 'Male')"), backend = "marginaleffects"), table_width = Inf,
       zap_small = TRUE)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c172code | c161sex |  Mean |   SE |         95% CI | t(825)
       -----------------------------------------------------------
@@ -225,14 +225,14 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c172code = c('low', 'high'), c161sex = c('Female', 'Male')
-      Predictors averaged: e16sex
+      Predictors averaged over (balanced grid): e16sex
 
 # estimate_epectation - don't print empty RE columns
 
     Code
       print(estimate_expectation(m, by = "spp", predict = "conditional"), zap_small = TRUE)
     Output
-      Model-based Predictions
+      Conditional Predictions
       
       spp   | Predicted |   SE |           CI
       ---------------------------------------
@@ -246,7 +246,7 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors controlled: mined (yes)
+      Predictors held at: mined (yes)
       Predictions are on the conditional-scale.
 
 # print - layouts and include data grid
@@ -254,7 +254,7 @@
     Code
       print(out)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       Species    | Mean |   SE |       95% CI | t(147)
       ------------------------------------------------
@@ -270,9 +270,9 @@
     Code
       print(out, select = "minimal")
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
-      Species    |         Mean (CI)
+      Species    |     Mean (95% CI)
       ------------------------------
       setosa     | 1.46 (1.34, 1.58)
       versicolor | 4.26 (4.14, 4.38)
@@ -286,13 +286,13 @@
     Code
       print(out, select = "minimal")
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
-      Level1     | Level2     |   Difference (CI) |      p
-      ----------------------------------------------------
-      versicolor | setosa     | 2.80 (2.63, 2.97) | <0.001
-      virginica  | setosa     | 4.09 (3.92, 4.26) | <0.001
-      virginica  | versicolor | 1.29 (1.12, 1.46) | <0.001
+      Level1     | Level2     | Difference (95% CI) |      p
+      ------------------------------------------------------
+      versicolor | setosa     |   2.80 (2.63, 2.97) | <0.001
+      virginica  | setosa     |   4.09 (3.92, 4.26) | <0.001
+      virginica  | versicolor |   1.29 (1.12, 1.46) | <0.001
       
       Variable predicted: Petal.Length
       Predictors contrasted: Species
@@ -303,9 +303,9 @@
     Code
       print(out, select = "{estimate}{stars}|{ci}")
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
-      Level1     | Level2     | Difference |         CI
+      Level1     | Level2     | Difference |     95% CI
       -------------------------------------------------
       versicolor | setosa     |    2.80*** | 2.63, 2.97
       virginica  | setosa     |    4.09*** | 3.92, 4.26
@@ -320,7 +320,7 @@
     Code
       print(estimate_relation(m, by = "qsec"))
     Output
-      Model-based Predictions
+      Conditional Predictions
       
       qsec  | Predicted |   SE |       95% CI
       ---------------------------------------
@@ -337,14 +337,14 @@
       
       Variable predicted: wt
       Predictors modulated: qsec
-      Predictors controlled: mpg (20)
+      Predictors held at: mpg (20)
 
 ---
 
     Code
       print(estimate_relation(m, by = "qsec"), include_grid = TRUE)
     Output
-      Model-based Predictions
+      Conditional Predictions
       
       qsec  |   mpg | Predicted |   SE |       95% CI
       -----------------------------------------------
@@ -361,5 +361,5 @@
       
       Variable predicted: wt
       Predictors modulated: qsec
-      Predictors controlled: mpg (20)
+      Predictors held at: mpg (20)
 

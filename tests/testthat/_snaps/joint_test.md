@@ -3,7 +3,7 @@
     Code
       estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
     Output
-      Marginal Joint Test
+      Conditional Joint Test
       
       Contrast | coffee  | df1 | df2 |    F |     p
       ---------------------------------------------

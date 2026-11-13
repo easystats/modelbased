@@ -3,7 +3,7 @@
     Code
       print(out, zap_small = TRUE)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       batch | Proportion |   SE |       95% CI |     z
       ------------------------------------------------
@@ -20,7 +20,7 @@
       
       Variable predicted: yield
       Predictors modulated: batch
-      Predictors averaged: temp (3.3e+02)
+      Predictors held at: temp (3.3e+02)
       Predictions are on the response-scale.
 
 # estimate_relation for betareg
@@ -28,7 +28,7 @@
     Code
       print(out, zap_small = TRUE)
     Output
-      Model-based Predictions
+      Conditional Predictions
       
       batch | Predicted |       95% CI
       --------------------------------
@@ -45,6 +45,6 @@
       
       Variable predicted: yield
       Predictors modulated: batch
-      Predictors controlled: temp (3.3e+02)
+      Predictors held at: temp (3.3e+02)
       Predictions are on the response-scale.
 

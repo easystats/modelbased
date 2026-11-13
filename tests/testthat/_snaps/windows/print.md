@@ -109,7 +109,7 @@
       print(estimate_means(fit, c("c12hour", "c172code", "c161sex"), length = 4,
       backend = "marginaleffects"), table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c12hour | c172code                        | c161sex |  Mean |   SE |         95% CI | t(791)
       --------------------------------------------------------------------------------------------
@@ -140,7 +140,7 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c12hour, c172code, c161sex
-      Predictors averaged: barthtot (65)
+      Predictors held at: barthtot (65)
 
 ---
 
@@ -148,7 +148,7 @@
       print(estimate_means(fit, c("c12hour", "barthtot = [sd]", "c161sex", "c172code",
         "e16sex"), backend = "marginaleffects", length = 3), table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c12hour | barthtot | c161sex | c172code                        | e16sex |  Mean |    SE |           95% CI | t(766)
       -------------------------------------------------------------------------------------------------------------------
@@ -270,7 +270,7 @@
       print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"),
       backend = "marginaleffects"), table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c161sex | c172code                        | e16sex | nur_pst         |   Mean |   SE |          95% CI | t(402)
       ---------------------------------------------------------------------------------------------------------------
@@ -320,7 +320,7 @@
       print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"),
       backend = "marginaleffects"), full_labels = FALSE, table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c161sex | c172code                        | e16sex | nur_pst         |   Mean |   SE |          95% CI | t(402)
       ---------------------------------------------------------------------------------------------------------------
@@ -370,7 +370,7 @@
       print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst",
         "negc7d"), backend = "marginaleffects"), table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c161sex | c172code                        | e16sex | nur_pst         | negc7d |  Mean |   SE |          95% CI | t(370)
       -----------------------------------------------------------------------------------------------------------------------
@@ -406,7 +406,7 @@
       Female  | high level of education         | male   | Care Level 3/3+ | 0      | 11.00 | 2.28 | [  6.51, 15.49] |   4.82
       Male    | low level of education          | female | Care Level 3/3+ | 0      |  8.50 | 1.61 | [  5.33, 11.67] |   5.27
       Female  | low level of education          | female | Care Level 3/3+ | 0      |  8.67 | 1.32 | [  6.08, 11.26] |   6.58
-      Male    | intermediate level of education | female | Care Level 3/3+ | 0      |  9.13 | 0.81 | [  7.54, 10.71] |  11.31
+      Male    | intermediate level of education | female | Care Level 3/3+ | 0      |  9.12 | 0.81 | [  7.54, 10.71] |  11.31
       Female  | intermediate level of education | female | Care Level 3/3+ | 0      |  9.78 | 0.76 | [  8.28, 11.27] |  12.86
       Male    | high level of education         | female | Care Level 3/3+ | 0      |  9.00 | 2.28 | [  4.51, 13.49] |   3.94
       Female  | high level of education         | female | Care Level 3/3+ | 0      |  9.00 | 1.32 | [  6.41, 11.59] |   6.83
@@ -456,7 +456,7 @@
       print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst",
         "negc7d"), backend = "marginaleffects"), full_labels = FALSE, table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c161sex | c172code                        | e16sex | nur_pst         | negc7d |  Mean |   SE |          95% CI | t(370)
       -----------------------------------------------------------------------------------------------------------------------
@@ -492,7 +492,7 @@
       Female  |                                 |        |                 |        | 11.00 | 2.28 | [  6.51, 15.49] |   4.82
       Male    | low level of education          | female |                 |        |  8.50 | 1.61 | [  5.33, 11.67] |   5.27
       Female  |                                 |        |                 |        |  8.67 | 1.32 | [  6.08, 11.26] |   6.58
-      Male    | intermediate level of education |        |                 |        |  9.13 | 0.81 | [  7.54, 10.71] |  11.31
+      Male    | intermediate level of education |        |                 |        |  9.12 | 0.81 | [  7.54, 10.71] |  11.31
       Female  |                                 |        |                 |        |  9.78 | 0.76 | [  8.28, 11.27] |  12.86
       Male    | high level of education         |        |                 |        |  9.00 | 2.28 | [  4.51, 13.49] |   3.94
       Female  |                                 |        |                 |        |  9.00 | 1.32 | [  6.41, 11.59] |   6.83
@@ -541,7 +541,7 @@
     Code
       estimate_expectation(model, by = c("c160age=[fivenum]", "c161sex"))
     Output
-      Model-based Predictions
+      Conditional Predictions
       
       c160age | c161sex | Predicted |   SE |         95% CI
       -----------------------------------------------------
@@ -556,14 +556,14 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c160age=[fivenum], c161sex
-      Predictors controlled: barthtot (65), e16sex (male)
+      Predictors held at: barthtot (65), e16sex (male)
 
 ---
 
     Code
       estimate_means(model, by = c("c160age=[fivenum]", "c161sex"), backend = "marginaleffects")
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       c160age | c161sex |  Mean |   SE |         95% CI | t(865)
       ----------------------------------------------------------
@@ -580,5 +580,6 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c160age=[fivenum], c161sex
-      Predictors averaged: barthtot (65), e16sex
+      Predictors held at: barthtot (65)
+      Predictors averaged over (balanced grid): e16sex
 

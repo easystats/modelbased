@@ -68,7 +68,7 @@ The steps we are showing here are:
 
 1. Defining the intersectional strata.
 
-2. Fitting a *simple intersectional* model to see whether intersectional strata contribute to between-stratum variance (which can be considered as "inequalities", whether social or health related - also known as _discriminatory accucarcy_).
+2. Fitting a *simple intersectional* model to see whether intersectional strata contribute to between-stratum variance (which can be considered as "inequalities", whether social or health related - also known as _discriminatory accuracy_).
 
 3. Fitting *partially-adjusted intersectional* models and calculating proportional change in the between-stratum variance (PCVs) to quantify to what degree the different intersectional dimensions contribute to the between-stratum variance (inequalities)
 
@@ -138,7 +138,7 @@ m_null <- glmmTMB(qol ~ 1 + (1 | gender:employed:age), data = efc)
 # m_null <- glmmTMB(qol ~ 1 + (1 | strata), data = efc)
 ```
 
-The purpose of this model - which is sometimes also called *null model* or *base model* - is to quantify the "discriminatory accuracy", which is achieved by calculating the ICC (see [`performance::icc()`](https://easystats.github.io/performance/reference/icc.html)) of this model (sometimes also calles the _VPC_, the variance partition coefficient). The higher the ICC, the greater the degree of similarity _within the strata_ (regarding quality of life) and the greater the difference in quality of life _between the intersectional strata_. I.e., the higher the ICC, the better the model is at discriminating individuals with higher or lower quality of life score, as opposed to models with lower ICC.
+The purpose of this model - which is sometimes also called *null model* or *base model* - is to quantify the "discriminatory accuracy", which is achieved by calculating the ICC (see [`performance::icc()`](https://easystats.github.io/performance/reference/icc.html)) of this model (sometimes also called the _VPC_, the variance partition coefficient). The higher the ICC, the greater the degree of similarity _within the strata_ (regarding quality of life) and the greater the difference in quality of life _between the intersectional strata_. I.e., the higher the ICC, the better the model is at discriminating individuals with higher or lower quality of life score, as opposed to models with lower ICC.
 
 We now look at the model parameters and the ICC of our simple intersectional model.
 
@@ -319,7 +319,7 @@ As expected (because the PCV is 1, indicating we found no multiplicative effects
 
 Compared to a MAIHDA analysis using *linear* regression models, there are two important aspects to consider when using *binary logistic* regression models.
 
-### 7.1 Additive and multiplicatice effects
+### 7.1 Additive and multiplicative effects
 
 When applying this framework to dichotomous outcomes using logistic multilevel models, two important distinctions must be considered. First, the within-strata (level 1) variance is not estimated, as the variance of the binomial distribution is already known (and fixed, see [`?insight::get_variance`](https://easystats.github.io/insight/reference/get_variance.html) for Bernoulli models). Second, logistic models operate on a multiplicative scale rather than an additive one. According to Evans et al. (2018), it is inappropriate to use logistic models to examine strata-level residuals for additive interaction effects, since the inclusion of main effects may already account for some of these interactions. However, logistic models remain fully appropriate if the primary goal is to estimate strata-level effects to explore the overall patterning of inequalities across strata-groups [@evans_multilevel_2018].
 

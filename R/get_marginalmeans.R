@@ -309,6 +309,11 @@ get_marginalmeans <- function(
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
+  # handle brms-alias
+  if (!is.null(dots$re_formula)) {
+    dots$re.form <- dots$re_formula
+  }
+
   means <- .add_attributes(
     means,
     by = my_args$by,
@@ -329,7 +334,10 @@ get_marginalmeans <- function(
         vcov = vcov_means,
         equivalence = dots$equivalence
       )
-    )
+    ),
+    # needed for some additional information for mixed models
+    model = model,
+    re_form_na = !is.null(dots$re.form) && is.na(dots$re.form)
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
 
@@ -673,13 +681,46 @@ get_marginalmeans <- function(
 # - renamed_focal: focal terms with the name of an output column, named by
 #   their old names, with the new names "<name>.1" as values
 #' @keywords internal
-.add_attributes <- function(x, by = NULL, model_info = NULL, info = NULL) {
+.add_attributes <- function(
+  x,
+  by = NULL,
+  model_info = NULL,
+  info = NULL,
+  model = NULL,
+  re_form_na = NULL
+) {
   attr(x, "at") <- by
   attr(x, "by") <- by
   attr(x, "model_info") <- model_info
 
+  # extract information, required for mixed models handling
+  if (!is.null(model)) {
+    response <- insight::find_response(model, combine = FALSE)
+    re_intercept <- insight::find_random(model, flatten = TRUE, split_nested = TRUE)
+  } else {
+    response <- re_form_na <- re_intercept <- NULL
+  }
+
   # compact list
   info <- insight::compact_list(info)
+
+  # some special handling for mixed models - we need this information for
+  # printing an informative table footer.
+  if (isTRUE(model_info$is_mixed)) {
+    # if we have mixed models, we don't want the response in the adusted-for
+    # information, so we check and remove it here, if necessary
+    if (!is.null(info$adjusted_for) && !is.null(response)) {
+      info$adjusted_for <- setdiff(info$adjusted_for, response)
+    }
+    # we definitely don't want the random-intercept in the "adjusted for" list
+    info$adjusted_for <- setdiff(info$adjusted_for, re_intercept)
+    # save information about random effects (cluster/grouping variable)
+    if (!isTRUE(re_form_na)) {
+      info$re_intercept <- re_intercept
+    }
+    # save info if re.form was NA
+    info$re_form_na <- isTRUE(re_form_na)
+  }
 
   if (!is.null(info) && length(info)) {
     if (!is.null(info$at_specs$varname)) {
@@ -704,7 +745,7 @@ get_marginalmeans <- function(
     "contrast", "estimate", "p_adjust", "transform", "transform_arg", "datagrid",
     "preserve_range", "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
     "iterations", "keep_iterations", "joint_test", "omnibus_test", "vcov",
-    "equivalence", "context_effects", "renamed_focal"
+    "equivalence", "context_effects", "renamed_focal", "re_intercept", "re_form_na"
   )
 }
 

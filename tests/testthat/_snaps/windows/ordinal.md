@@ -3,7 +3,7 @@
     Code
       print(out, zap_small = TRUE)
     Output
-      Model-based Predictions
+      Conditional Predictions
       
       Row | Response   | Sepal.Width | Predicted |   SE |       95% CI
       ----------------------------------------------------------------
@@ -47,7 +47,7 @@
     Code
       print(out, zap_small = TRUE)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       Sepal.Width |   Response | Median |       95% CI |   pd |          ROPE | % in ROPE
       -----------------------------------------------------------------------------------
@@ -91,7 +91,7 @@
     Code
       print(out, zap_small = TRUE)
     Output
-      Model-based Predictions
+      Conditional Predictions
       
       Row | Response   | Sepal.Width | Predicted |       95% CI
       ---------------------------------------------------------
@@ -135,7 +135,7 @@
     Code
       print(out, zap_small = TRUE)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       Sepal.Width | Response   | Probability |   SE |        95% CI | t(147)
       ----------------------------------------------------------------------
@@ -179,7 +179,7 @@
     Code
       print(out, zap_small = TRUE)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       island    | Response  | Probability |   SE |        95% CI |     z
       ------------------------------------------------------------------
@@ -195,7 +195,7 @@
       
       Variable predicted: species
       Predictors modulated: island
-      Predictors averaged: sex
+      Predictors averaged over (balanced grid): sex
       Predictions are on the probs-scale.
 
 ---
@@ -203,7 +203,7 @@
     Code
       print(out, zap_small = TRUE)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       island    | Response  | Probability |   SE |        95% CI |  t(325)
       --------------------------------------------------------------------
@@ -219,6 +219,6 @@
       
       Variable predicted: species
       Predictors modulated: island
-      Predictors averaged: sex
+      Predictors averaged over (balanced grid): sex
       Predictions are on the probs-scale.
 

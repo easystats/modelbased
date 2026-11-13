@@ -42,13 +42,38 @@ test_that("estimate_contrasts - joint test, 2-way", {
   expect_identical(
     capture.output(out),
     c(
+      "Conditional Omnibus Test",
+      "",
+      "df1 | df2 |    F |     p",
+      "------------------------",
+      "3   | 114 | 2.35 | 0.076",
+      "",
+      "Predictors averaged over (balanced grid): coffee",
+      "p-values are uncorrected.",
+      "Null-hypothesis: Group means equal 16.20"
+    )
+  )
+
+  # omnibus test, marginal
+  out <- estimate_contrasts(
+    m,
+    contrast = "time",
+    comparison = "omnibus",
+    estimate = "average"
+  )
+  expect_equal(out$`F`, 2.352941, tolerance = 1e-3)
+  expect_equal(out$p, 0.07586666, tolerance = 1e-3)
+  expect_equal(attributes(out)$null, mean(predict(m)), tolerance = 1e-3)
+  expect_identical(
+    capture.output(out),
+    c(
       "Marginal Omnibus Test",
       "",
       "df1 | df2 |    F |     p",
       "------------------------",
       "3   | 114 | 2.35 | 0.076",
       "",
-      "Predictors averaged: coffee",
+      "Predictors averaged over (sample): coffee",
       "p-values are uncorrected.",
       "Null-hypothesis: Group means equal 16.20"
     )

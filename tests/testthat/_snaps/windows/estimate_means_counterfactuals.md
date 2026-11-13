@@ -4,7 +4,7 @@
       print(estimate_means(m, "spp", backend = "marginaleffects"), zap_small = TRUE,
       table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       spp   | Mean |   SE |       95% CI |    z
       -----------------------------------------
@@ -18,7 +18,8 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors averaged: mined, site
+      Predictors averaged over (balanced grid): mined
+      Random effects: Averaged over a balanced grid of cluster levels.
       Predictions are on the response-scale.
 
 ---
@@ -27,7 +28,7 @@
       print(estimate_means(m, "spp", backend = "marginaleffects", estimate = "population"),
       zap_small = TRUE, table_width = Inf)
     Output
-      Average Counterfactual Predictions
+      Marginal Predictions (G-computation)
       
       spp   | Mean |   SE |       95% CI |    z
       -----------------------------------------
@@ -41,7 +42,8 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors averaged: mined, site
+      Predictors averaged over (sample): mined
+      Random effects: Marginalized across clusters.
       Predictions are on the response-scale.
 
 ---
@@ -50,7 +52,7 @@
       print(estimate_means(m, "spp", backend = "marginaleffects", predict = "inverse_link"),
       zap_small = TRUE, table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       spp   | Mean |   SE |       95% CI |     z
       ------------------------------------------
@@ -64,7 +66,8 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors averaged: mined, site
+      Predictors averaged over (balanced grid): mined
+      Random effects: Averaged over a balanced grid of cluster levels.
       Predictions are on the response-scale.
 
 ---
@@ -73,7 +76,7 @@
       print(estimate_means(m, "spp", backend = "marginaleffects", estimate = "population",
         predict = "inverse_link"), zap_small = TRUE, table_width = Inf)
     Output
-      Average Counterfactual Predictions
+      Marginal Predictions (G-computation)
       
       spp   | Mean |   SE |       95% CI |     z
       ------------------------------------------
@@ -87,7 +90,8 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors averaged: mined, site
+      Predictors averaged over (sample): mined
+      Random effects: Marginalized across clusters.
       Predictions are on the response-scale.
 
 ---
@@ -96,7 +100,7 @@
       print(estimate_means(m, "Days", backend = "marginaleffects"), zap_small = TRUE,
       table_width = Inf)
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       Days |   Mean |    SE |           95% CI | t(174)
       -------------------------------------------------
@@ -113,7 +117,7 @@
       
       Variable predicted: Reaction
       Predictors modulated: Days
-      Predictors averaged: Subject
+      Random effects: Averaged over a balanced grid of cluster levels.
 
 ---
 
@@ -121,7 +125,7 @@
       print(estimate_means(m, "Days", backend = "marginaleffects", estimate = "population"),
       zap_small = TRUE, table_width = Inf)
     Output
-      Average Counterfactual Predictions
+      Marginal Predictions (G-computation)
       
       Days |   Mean |    SE |           95% CI | t(174)
       -------------------------------------------------
@@ -138,5 +142,5 @@
       
       Variable predicted: Reaction
       Predictors modulated: Days
-      Predictors averaged: Subject
+      Random effects: Marginalized across clusters.
 
