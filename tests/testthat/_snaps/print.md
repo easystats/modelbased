@@ -33,7 +33,7 @@
       | 100     | high level of education         | Female  | 13.21 | 0.84 | (11.56, 14.85) | 15.75  |
       +=========+=================================+=========+=======+======+================+========+
       | Variable predicted: neg_c_7<br>Predictors modulated: c12hour = c(50, 100), c172code,         |
-      | c161sex<br>Predictors averaged: barthtot (65)                                                |
+      | c161sex<br>Predictors held at: barthtot (65)                                                 |
       +=========+=================================+=========+=======+======+================+========+
       Table: Conditional Predictions 
 
@@ -205,7 +205,7 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c172code = c('low', 'high'), c161sex = c('Female', 'Male')
-      Predictors averaged: e16sex
+      Predictors averaged over (balanced grid): e16sex
 
 ---
 
@@ -225,7 +225,7 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c172code = c('low', 'high'), c161sex = c('Female', 'Male')
-      Predictors averaged: e16sex
+      Predictors averaged over (balanced grid): e16sex
 
 # estimate_epectation - don't print empty RE columns
 
@@ -246,7 +246,7 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors controlled: mined (yes)
+      Predictors held at: mined (yes)
       Predictions are on the conditional-scale.
 
 # print - layouts and include data grid
@@ -337,7 +337,7 @@
       
       Variable predicted: wt
       Predictors modulated: qsec
-      Predictors controlled: mpg (20)
+      Predictors held at: mpg (20)
 
 ---
 
@@ -361,5 +361,5 @@
       
       Variable predicted: wt
       Predictors modulated: qsec
-      Predictors controlled: mpg (20)
+      Predictors held at: mpg (20)
 
