@@ -61,6 +61,9 @@
     # if we have values at which non-focal terms are held constant, we want
     # them in a separate string; same for predictors we average over
     averaged_over <- held_constant <- list()
+    sample_average <- !is.null(marginalization) &&
+      length(marginalization) == 1 &&
+      marginalization %in% c("average", "population", "counterfactual")
 
     if (!is.null(ref_cat_data)) {
       # get values at which non-focal terms are hold constant
@@ -68,7 +71,7 @@
       # at values to names of non-focal terms (table_footer). we have to iterate
       # over the list, because we may have different types of data
       for (av in seq_along(adjusted_values)) {
-        if (is.numeric(adjusted_values[[av]])) {
+        if (is.numeric(adjusted_values[[av]]) && !sample_average) {
           adjusted_for[av] <- sprintf(
             "%s (%.2g)",
             adjusted_for[av],
@@ -76,7 +79,7 @@
           )
           # add to final list
           held_constant <- c(held_constant, adjusted_for[av])
-        } else if (identical(type, "predictions")) {
+        } else if (!is.numeric(adjusted_values[[av]]) && identical(type, "predictions")) {
           adjusted_for[av] <- sprintf("%s (%s)", adjusted_for[av], adjusted_values[[av]])
           # add to final list
           held_constant <- c(held_constant, adjusted_for[av])
@@ -128,7 +131,7 @@
   # --------------------------------------------------------------------------
 
   if (!is.null(re_intercept) && !isTRUE(re_form_na) && !is.null(marginalization)) {
-    if (marginalization %in% c("average", "population", "counterfactual")) {
+    if (sample_average) {
       table_footer <- paste0(
         table_footer,
         "\nRandom effects: Marginalized across clusters."
