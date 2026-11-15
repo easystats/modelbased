@@ -48,6 +48,12 @@
   # predictors controlled (non-focal terms) ----------------------------------
   # --------------------------------------------------------------------------
 
+  # flag whether the estimate-option indicates that we average over the
+  # sampe for non-focal terms
+  sample_average <- !is.null(marginalization) &&
+    length(marginalization) == 1 &&
+    marginalization %in% c("average", "population", "counterfactual")
+
   if (!is.null(adjusted_for) && length(adjusted_for) >= 1 && !all(is.na(adjusted_for))) {
     # if we have values of adjusted terms, add these here
     if (all(adjusted_for %in% colnames(x))) {
@@ -61,9 +67,6 @@
     # if we have values at which non-focal terms are held constant, we want
     # them in a separate string; same for predictors we average over
     averaged_over <- held_constant <- list()
-    sample_average <- !is.null(marginalization) &&
-      length(marginalization) == 1 &&
-      marginalization %in% c("average", "population", "counterfactual")
 
     if (!is.null(ref_cat_data)) {
       # get values at which non-focal terms are hold constant

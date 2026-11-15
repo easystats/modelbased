@@ -45,8 +45,7 @@
       
       Variable predicted: body_mass
       Predictors modulated: sex
-      Predictors held at: bill_len (44)
-      Predictors averaged over (sample): species
+      Predictors averaged over (sample): species, bill_len
 
 ---
 
@@ -62,8 +61,7 @@
       
       Variable predicted: body_mass
       Predictors modulated: sex
-      Predictors held at: bill_len (44)
-      Predictors averaged over (sample): species
+      Predictors averaged over (sample): species, bill_len
 
 ---
 
