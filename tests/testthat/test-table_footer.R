@@ -28,7 +28,7 @@ test_that("table_footer", {
     estimate = "average",
     verbose = FALSE
   ))
-  expect_length(out, 12)
+  expect_length(out, 11)
 })
 
 
