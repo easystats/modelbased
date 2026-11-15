@@ -1,10 +1,20 @@
-#' Estimate Marginal Means (Model-based average at each factor level)
+#' @title Estimate Marginal Means (Model-based average at each factor level)
+#' @name estimate_means
 #'
-#' Estimate average values of the response variable at each factor level or
-#' at representative values, respectively at values defined in a "data grid" or
+#' @description
+#' Estimate average values of the response variable at each factor level or at
+#' representative values, respectively at values defined in a "data grid" or
 #' "reference grid". For plotting, check the examples in
 #' [`visualisation_recipe.estimate_predicted()`]. See also other related
 #' functions such as [estimate_contrasts()] and [estimate_slopes()].
+#'
+#' Proper interpretation of the output requires understanding the assumptions
+#' behind your model predictions and which target quantity they refer to. We
+#' therefore strongly recommend thoroughly reading:
+#'
+#' - the documentation for the `estimate` argument,
+#' - the vignette on [marginalization methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html), and
+#' - the specific considerations for [mixed models](https://easystats.github.io/modelbased/articles/mixed_models.html).
 #'
 #' @param model A statistical model.
 #' @param by The (focal) predictor variable(s) at which to evaluate the desired

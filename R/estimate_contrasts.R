@@ -1,9 +1,19 @@
-#' Estimate Marginal Contrasts
+#' @title Estimate Marginal Contrasts
+#' @name estimate_contrasts
 #'
+#' @description
 #' Run a contrast analysis by estimating the differences between each level of a
 #' factor. For plotting, check the examples in [`see::plot.see_estimate_contrasts()`].
 #' See also other related functions such as [estimate_means()] and
 #' [estimate_slopes()].
+#'
+#' Proper interpretation of the output requires understanding the assumptions
+#' behind your model predictions and which target quantity they refer to. We
+#' therefore strongly recommend thoroughly reading:
+#'
+#' - the documentation for the `estimate` argument,
+#' - the vignette on [marginalization methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html), and
+#' - the specific considerations for [mixed models](https://easystats.github.io/modelbased/articles/mixed_models.html).
 #'
 #' @param contrast A character vector indicating the name of the variable(s) for
 #' which to compute the contrasts, optionally including representative values or
