@@ -98,6 +98,10 @@
     held_constant <- unlist(held_constant, use.names = FALSE)
     averaged_over <- unlist(averaged_over, use.names = FALSE)
 
+    # check if we have categorical focal terms - if these are all numeric,
+    # we do not average within levels
+    focal_factors <- vapply(ref_cat_data[by], is.factor, logical(1))
+
     # first, information about non-focal terms that were hold constant at
     # specific values or levels
     if (!is.null(held_constant)) {
@@ -112,16 +116,20 @@
     if (
       !is.null(averaged_over) && !is.null(marginalization) && length(marginalization) == 1
     ) {
-      average_string <- paste(
-        "Predictors averaged over",
-        switch(
-          marginalization,
-          typical = "(balanced grid)",
-          average = ,
-          population = ,
-          counterfactual = "(sample)",
-          ""
-        )
+      average_string <- switch(
+        marginalization,
+        typical = "Predictors averaged over a balanced grid",
+        average = if (any(focal_factors)) {
+          paste0(
+            "Predictors averaged within levels of ",
+            datawizard::text_concatenate(names(focal_factors)[focal_factors])
+          )
+        } else {
+          "Predictors averaged over the full sample"
+        },
+        population = ,
+        counterfactual = "Predictors averaged over the full sample",
+        ""
       )
       table_footer <- paste0(
         table_footer,
