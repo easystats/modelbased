@@ -6,16 +6,60 @@ test_that("estimate_means - print footer for estimate types and re.form", {
   skip_if(getRversion() < "4.5.0")
 
   data(penguins)
-  set.seed(123)
-  d <- penguins
-  d$weights <- abs(rnorm(nrow(d), 1, 0.2))
-  model <- lm(body_mass ~ species + sex + bill_len, data = d, weights = weights)
 
+  # one categorical
+  model <- lm(body_mass ~ species + sex + bill_len, data = penguins)
   expect_snapshot(print(estimate_means(model, "sex", estimate = "specific")))
   expect_snapshot(print(estimate_means(model, "sex", estimate = "typical")))
   expect_snapshot(print(estimate_means(model, "sex", estimate = "average")))
   expect_snapshot(print(estimate_means(model, "sex", estimate = "population")))
 
+  # one categorical, one numeric
+  model <- lm(body_mass ~ species + bill_dep * sex + bill_len, data = penguins)
+  expect_snapshot(print(estimate_means(
+    model,
+    c("sex", "bill_dep"),
+    estimate = "specific"
+  )))
+  expect_snapshot(print(estimate_means(
+    model,
+    c("sex", "bill_dep"),
+    estimate = "typical"
+  )))
+  expect_snapshot(print(estimate_means(
+    model,
+    c("sex", "bill_dep"),
+    estimate = "average"
+  )))
+  expect_snapshot(print(estimate_means(
+    model,
+    c("sex", "bill_dep"),
+    estimate = "population"
+  )))
+
+  # one numeric
+  model <- lm(body_mass ~ species + bill_dep + sex + bill_len, data = penguins)
+  expect_snapshot(print(estimate_means(model, "bill_dep", estimate = "specific")))
+  expect_snapshot(print(estimate_means(model, "bill_dep", estimate = "typical")))
+  expect_snapshot(print(estimate_means(model, "bill_dep", estimate = "average")))
+  expect_snapshot(print(estimate_means(model, "bill_dep", estimate = "population")))
+
+  # two categorical
+  model <- lm(body_mass ~ species * sex + bill_dep + bill_len, data = penguins)
+  expect_snapshot(print(estimate_means(
+    model,
+    c("sex", "species"),
+    estimate = "specific"
+  )))
+  expect_snapshot(print(estimate_means(model, c("sex", "species"), estimate = "typical")))
+  expect_snapshot(print(estimate_means(model, c("sex", "species"), estimate = "average")))
+  expect_snapshot(print(estimate_means(
+    model,
+    c("sex", "species"),
+    estimate = "population"
+  )))
+
+  # mixed models
   data(cbpp, package = "lme4")
   m <- lme4::glmer(
     cbind(incidence, size - incidence) ~ period + (1 | herd),
