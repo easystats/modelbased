@@ -617,8 +617,8 @@ estimate_contrasts.default <- function(
       estimate,
       specific = ,
       typical = paste("Conditional", suffix),
-      average = paste("Marginal", suffix),
-      population = paste("Marginal", suffix, "(G-computation)")
+      average = ,
+      population = paste("Marginal", suffix)
     ),
     "blue"
   )
