@@ -240,14 +240,14 @@ joint tests, set `comparison = "joint"`.
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, contrast ``=`` ``"time"``, by ``=`` ``"coffee"``)`\
 `#> Marginal Contrasts Analysis`\
 `#> `\
-`#> Level1    | Level2  | coffee  | Difference |   SE |        95% CI | t(114) |      p`\
-`#> -----------------------------------------------------------------------------------`\
-`#> noon      | morning | coffee  |      -1.93 | 2.05 | [-5.99, 2.14] |  -0.94 |  0.350`\
-`#> afternoon | morning | coffee  |       1.93 | 2.05 | [-2.14, 5.99] |   0.94 |  0.350`\
-`#> afternoon | noon    | coffee  |       3.86 | 2.05 | [-0.21, 7.92] |   1.88 |  0.063`\
-`#> noon      | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |   2.82 |  0.006`\
-`#> afternoon | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |   2.82 |  0.006`\
-`#> afternoon | noon    | control |       0.00 | 2.05 | [-4.07, 4.07] |   0.00 | > .999`\
+`#> Level1    | Level2  | coffee  | Difference |   SE |        95% CI |    t(114) |      p`\
+`#> --------------------------------------------------------------------------------------`\
+`#> noon      | morning | coffee  |      -1.93 | 2.05 | [-5.99, 2.14] |     -0.94 |  0.350`\
+`#> afternoon | morning | coffee  |       1.93 | 2.05 | [-2.14, 5.99] |      0.94 |  0.350`\
+`#> afternoon | noon    | coffee  |       3.86 | 2.05 | [-0.21, 7.92] |      1.88 |  0.063`\
+`#> noon      | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |      2.82 |  0.006`\
+`#> afternoon | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |      2.82 |  0.006`\
+`#> afternoon | noon    | control |  -3.55e-15 | 2.05 | [-4.07, 4.07] | -1.73e-15 | > .999`\
 `#> `\
 `#> Variable predicted: alertness`\
 `#> Predictors contrasted: time`\

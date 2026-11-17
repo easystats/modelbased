@@ -561,7 +561,7 @@ alternative.
 `#> `\
 `#> Level1 | Level2 |       Median (CI) |     pd`\
 `#> --------------------------------------------`\
-`#> 1      | 0      | 5.67 (1.81, 9.47) | 99.92%`\
+`#> 1      | 0      | 5.53 (1.58, 9.54) | 99.50%`\
 `#> `\
 `#> Variable predicted: QoL, ipw`\
 `#> Predictors contrasted: treatment`\

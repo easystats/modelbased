@@ -470,11 +470,11 @@ shown in the two plots above.
 [`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``m1``, trend ``=`` ``"time"``, by ``=`` ``"education"``)`\
 `#> Estimated Marginal Effects`\
 `#> `\
-`#> education |            Slope (CI) |      p`\
-`#> ------------------------------------------`\
-`#> low       | -6.71 (-12.99, -0.44) |  0.036`\
-`#> mid       |  0.40 ( -3.29,  4.09) |  0.831`\
-`#> high      |  0.00 ( -4.95,  4.95) | > .999`\
+`#> education |               Slope (CI) |      p`\
+`#> ---------------------------------------------`\
+`#> low       |    -6.71 (-12.99, -0.44) |  0.036`\
+`#> mid       |     0.40 ( -3.29,  4.09) |  0.831`\
+`#> high      | 7.11e-11 ( -4.95,  4.95) | > .999`\
 `#> `\
 `#> Marginal effects estimated for time`\
 `#> Type of slope was dY/dX`\
@@ -497,14 +497,14 @@ shown in the two plots above.
 [`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``m``, trend ``=`` ``"time"``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"education"``, ``"grp"``)``)`\
 `#> Estimated Marginal Effects`\
 `#> `\
-`#> education | grp     |               Slope (CI) |      p`\
-`#> -------------------------------------------------------`\
-`#> low       | Group 1 |    -6.71 (-12.93, -0.50) |  0.034`\
-`#> mid       | Group 1 |     0.40 ( -3.26,  4.06) |  0.830`\
-`#> high      | Group 1 | 7.11e-11 ( -4.90,  4.90) | > .999`\
-`#> low       | Group 2 |     3.24 ( -2.97,  9.46) |  0.306`\
-`#> mid       | Group 2 |     1.72 ( -1.98,  5.41) |  0.362`\
-`#> high      | Group 2 |     6.04 (  0.15, 11.94) |  0.045`\
+`#> education | grp     |            Slope (CI) |      p`\
+`#> ----------------------------------------------------`\
+`#> low       | Group 1 | -6.71 (-12.93, -0.50) |  0.034`\
+`#> mid       | Group 1 |  0.40 ( -3.26,  4.06) |  0.830`\
+`#> high      | Group 1 |  0.00 ( -4.90,  4.90) | > .999`\
+`#> low       | Group 2 |  3.24 ( -2.97,  9.46) |  0.306`\
+`#> mid       | Group 2 |  1.72 ( -1.98,  5.41) |  0.362`\
+`#> high      | Group 2 |  6.04 (  0.15, 11.94) |  0.045`\
 `#> `\
 `#> Marginal effects estimated for time`\
 `#> Type of slope was dY/dX`
