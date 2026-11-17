@@ -93,5 +93,8 @@ test_that("estimate_means - print footer for estimate types and re.form", {
   )
 
   # default is predict = "inverse_link"
+  expect_snapshot(print(estimate_means(m, "sex")))
+
+  # default is predict = "response"
   expect_snapshot(print(estimate_means(m, "sex", estimate = "average")))
 })

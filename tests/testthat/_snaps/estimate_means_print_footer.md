@@ -436,17 +436,35 @@
 ---
 
     Code
+      print(estimate_means(m, "sex"))
+    Output
+      Conditional Predictions
+      
+      sex    | Probability |       95% CI
+      -----------------------------------
+      female |        0.23 | [0.12, 0.39]
+      male   |        0.66 | [0.42, 0.83]
+      
+      Variable predicted: bill_dep
+      Predictors modulated: sex
+      Predictors held at: body_mass (4.2e+03)
+      Predictors averaged over a balanced grid: species
+      Predictions are on the inverse-link-scale.
+
+---
+
+    Code
       print(estimate_means(m, "sex", estimate = "average"))
     Output
       Marginal Predictions
       
-      sex    | Probability |       95% CI
-      -----------------------------------
-      female |        0.09 | [0.04, 0.18]
-      male   |        0.76 | [0.56, 0.89]
+      sex    | Probability |   SE |       95% CI |     z
+      --------------------------------------------------
+      female |        0.40 | 0.03 | [0.34, 0.46] | 13.90
+      male   |        0.63 | 0.01 | [0.61, 0.66] | 49.00
       
       Variable predicted: bill_dep
       Predictors modulated: sex
       Predictors averaged within levels of sex: species, body_mass
-      Predictions are on the inverse-link-scale.
+      Predictions are on the response-scale.
 

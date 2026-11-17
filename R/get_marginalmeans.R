@@ -60,6 +60,7 @@ get_marginalmeans <- function(
     model,
     predict,
     comparison,
+    estimate,
     model_info,
     omnibus_test,
     verbose,

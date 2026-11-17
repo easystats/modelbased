@@ -3,6 +3,7 @@
   model,
   predict = NULL,
   comparison = NULL,
+  estimate = NULL,
   model_info = NULL,
   omnibus_test = FALSE,
   verbose = TRUE,
@@ -51,6 +52,14 @@
       predict <- NA
       error_arg <- "predict"
     }
+  } else if (
+    is.null(predict) &&
+      identical(default_type, "invlink(link)") &&
+      estimate %in% c("average", "population", "counterfactual")
+  ) {
+    # for estimate = "average" or "population", the default is never
+    # inverse-link, but response
+    predict <- "response"
   }
 
   # validate predict-options
