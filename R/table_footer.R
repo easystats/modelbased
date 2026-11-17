@@ -207,8 +207,8 @@
       predict,
       none = "link",
       prediction = ,
-      expectation = ,
-      `invlink(link)` = "response",
+      expectation = "response",
+      `invlink(link)` = "inverse-link",
       predict
     )
     # we may have link-scale and transformation. to avoid confusion, tell this

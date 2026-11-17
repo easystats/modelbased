@@ -81,4 +81,17 @@ test_that("estimate_means - print footer for estimate types and re.form", {
     estimate = "average",
     re.form = NA
   )))
+
+  # inverse link
+  skip_if_not_installed("datawizard")
+  data(penguins)
+  penguins <- datawizard::categorize(penguins, "bill_dep")
+  m <- glm(
+    as.factor(bill_dep) ~ sex + species + body_mass,
+    data = penguins,
+    family = binomial()
+  )
+
+  # default is predict = "inverse_link"
+  expect_snapshot(print(estimate_means(m, "sex", estimate = "average")))
 })
