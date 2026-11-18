@@ -18,7 +18,7 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors averaged over (balanced grid): mined
+      Predictors averaged over a balanced grid: mined
       Random effects: Averaged over a balanced grid of cluster levels.
       Predictions are on the response-scale.
 
@@ -28,7 +28,7 @@
       print(estimate_means(m, "spp", backend = "marginaleffects", estimate = "population"),
       zap_small = TRUE, table_width = Inf)
     Output
-      Marginal Predictions (G-computation)
+      Marginal Predictions
       
       spp   | Mean |   SE |       95% CI |    z
       -----------------------------------------
@@ -42,7 +42,7 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors averaged over (sample): mined
+      Predictors averaged over the full sample: mined
       Random effects: Marginalized across clusters.
       Predictions are on the response-scale.
 
@@ -66,7 +66,7 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors averaged over (balanced grid): mined
+      Predictors averaged over a balanced grid: mined
       Random effects: Averaged over a balanced grid of cluster levels.
       Predictions are on the response-scale.
 
@@ -76,7 +76,7 @@
       print(estimate_means(m, "spp", backend = "marginaleffects", estimate = "population",
         predict = "inverse_link"), zap_small = TRUE, table_width = Inf)
     Output
-      Marginal Predictions (G-computation)
+      Marginal Predictions
       
       spp   | Mean |   SE |       95% CI |     z
       ------------------------------------------
@@ -90,7 +90,7 @@
       
       Variable predicted: count
       Predictors modulated: spp
-      Predictors averaged over (sample): mined
+      Predictors averaged over the full sample: mined
       Random effects: Marginalized across clusters.
       Predictions are on the response-scale.
 
@@ -125,7 +125,7 @@
       print(estimate_means(m, "Days", backend = "marginaleffects", estimate = "population"),
       zap_small = TRUE, table_width = Inf)
     Output
-      Marginal Predictions (G-computation)
+      Marginal Predictions
       
       Days |   Mean |    SE |           95% CI | t(174)
       -------------------------------------------------
