@@ -3,7 +3,7 @@
     Code
       print(out, table_width = Inf)
     Output
-      Marginal Contrasts (G-computation)
+      Marginal Contrasts
       
       Level1 | Level2  | Difference |   SE |       95% CI |    z |     p
       ------------------------------------------------------------------
@@ -11,7 +11,7 @@
       
       Variable predicted: QoL
       Predictors contrasted: treatment
-      Predictors averaged over (sample): time, education, hospital, age, phq4
+      Predictors averaged over the full sample: time, education, hospital, age, phq4
       Random effects: Marginalized across clusters.
       p-values are uncorrected.
 
@@ -20,7 +20,7 @@
     Code
       print(out, table_width = Inf)
     Output
-      Marginal Contrasts (G-computation)
+      Marginal Contrasts
       
       Level1 | Level2  | time | Difference |   SE |         95% CI |     z |      p
       -----------------------------------------------------------------------------
@@ -30,7 +30,7 @@
       
       Variable predicted: QoL
       Predictors contrasted: treatment
-      Predictors averaged over (sample): education, hospital, age, phq4
+      Predictors averaged over the full sample: education, hospital, age, phq4
       Random effects: Marginalized across clusters.
       p-values are uncorrected.
 
