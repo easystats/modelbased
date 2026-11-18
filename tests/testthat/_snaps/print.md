@@ -205,7 +205,7 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c172code = c('low', 'high'), c161sex = c('Female', 'Male')
-      Predictors averaged over (balanced grid): e16sex
+      Predictors averaged over a balanced grid: e16sex
 
 ---
 
@@ -225,7 +225,7 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c172code = c('low', 'high'), c161sex = c('Female', 'Male')
-      Predictors averaged over (balanced grid): e16sex
+      Predictors averaged over a balanced grid: e16sex
 
 # estimate_epectation - don't print empty RE columns
 

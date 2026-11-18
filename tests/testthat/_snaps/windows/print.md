@@ -581,5 +581,5 @@
       Variable predicted: neg_c_7
       Predictors modulated: c160age=[fivenum], c161sex
       Predictors held at: barthtot (65)
-      Predictors averaged over (balanced grid): e16sex
+      Predictors averaged over a balanced grid: e16sex
 
