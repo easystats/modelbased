@@ -82,5 +82,5 @@
       
       Variable predicted: count
       Predictors modulated: mined, spp
-      Predictions are on the response-scale.
+      Predictions are on the inverse-link-scale.
 

@@ -59,7 +59,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
-      Predictors averaged over (balanced grid): sex
+      Predictors averaged over a balanced grid: sex
       p-values are uncorrected.
 
 ---
@@ -80,7 +80,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time
-      Predictors averaged over (balanced grid): sex
+      Predictors averaged over a balanced grid: sex
       p-values are uncorrected.
 
 ---
@@ -98,7 +98,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
-      Predictors averaged over (balanced grid): sex
+      Predictors averaged over a balanced grid: sex
       p-values are uncorrected.
       Parameters:
       b2 = time [noon], coffee [coffee]
@@ -120,7 +120,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
-      Predictors averaged over (balanced grid): sex
+      Predictors averaged over a balanced grid: sex
       p-values are uncorrected.
       Parameters:
       b5 = time [noon], coffee [control]
@@ -141,7 +141,7 @@
       Variable predicted: neg_c_7
       Predictors contrasted: e42dep, c172code
       Predictors held at: c12hour (42), barthtot (65)
-      Predictors averaged over (balanced grid): c161sex
+      Predictors averaged over a balanced grid: c161sex
       p-values are uncorrected.
       Parameters:
       b6 = e42dep [slightly dependent], c172code [intermediate level of education]
@@ -186,7 +186,7 @@
       Variable predicted: y
       Predictors contrasted: Species
       p-values are uncorrected.
-      Contrasts are on the response-scale.
+      Contrasts are on the inverse-link-scale.
 
 ---
 
@@ -227,7 +227,7 @@
       Variable predicted: y
       Predictors contrasted: Species
       p-value adjustment method: Holm (1979)
-      Contrasts are on the response-scale.
+      Contrasts are on the inverse-link-scale.
 
 # estimate_contrasts - filtering works
 
@@ -257,7 +257,7 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: c161sex, c172code
-      Predictors averaged over (balanced grid): e16sex
+      Predictors averaged over a balanced grid: e16sex
       p-values are uncorrected.
 
 # estimate_contrasts - examples from docs work as intendec
