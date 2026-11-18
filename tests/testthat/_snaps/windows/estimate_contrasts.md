@@ -55,7 +55,7 @@
       
       Variable predicted: mpg
       Predictors contrasted: am
-      Predictors averaged over (balanced grid): three, vs
+      Predictors averaged over a balanced grid: three, vs
       p-values are uncorrected.
 
 # estimate_contrasts - filtering works
@@ -74,7 +74,7 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: c172code
-      Predictors averaged over (balanced grid): e16sex, c161sex
+      Predictors averaged over a balanced grid: e16sex, c161sex
       p-values are uncorrected.
 
 ---
@@ -93,7 +93,7 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: c161sex
-      Predictors averaged over (balanced grid): e16sex
+      Predictors averaged over a balanced grid: e16sex
       p-values are uncorrected.
 
 ---
@@ -145,7 +145,7 @@
       Variable predicted: neg_c_7
       Predictors contrasted: barthtot
       Predictors held at: barthtot (65)
-      Predictors averaged over (balanced grid): e16sex
+      Predictors averaged over a balanced grid: e16sex
       p-values are uncorrected.
 
 ---
@@ -226,7 +226,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
-      Predictors averaged over (balanced grid): sex
+      Predictors averaged over a balanced grid: sex
       p-values are uncorrected.
 
 ---
@@ -248,7 +248,7 @@
       
       Variable predicted: alertness
       Predictors contrasted: time
-      Predictors averaged over (balanced grid): sex
+      Predictors averaged over a balanced grid: sex
       p-values are uncorrected.
 
 ---
@@ -578,7 +578,7 @@
       
       Variable predicted: score
       Predictors contrasted: grp
-      Predictors averaged over (balanced grid): x
+      Predictors averaged over a balanced grid: x
       p-values are uncorrected.
 
 ---

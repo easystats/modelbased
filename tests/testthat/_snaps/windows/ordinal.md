@@ -195,7 +195,7 @@
       
       Variable predicted: species
       Predictors modulated: island
-      Predictors averaged over (balanced grid): sex
+      Predictors averaged over a balanced grid: sex
       Predictions are on the probs-scale.
 
 ---
@@ -219,6 +219,6 @@
       
       Variable predicted: species
       Predictors modulated: island
-      Predictors averaged over (balanced grid): sex
+      Predictors averaged over a balanced grid: sex
       Predictions are on the probs-scale.
 
