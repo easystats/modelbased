@@ -1,12 +1,21 @@
 # Table footer ===============================================================
 
-.table_footer <- function(x, by = NULL, type = "means", model = NULL, info = NULL) {
+.table_footer <- function(
+  x,
+  by = NULL,
+  type = "means",
+  model = NULL,
+  info = NULL,
+  verbose = TRUE
+) {
   # extract necessary information from attributes
   predict <- info$predict
   comparison <- info$comparison
   datagrid <- info$datagrid
   p_adjust <- info$p_adjust
   adjusted_for <- info$adjusted_for
+  re_intercept <- info$re_intercept
+  re_form_na <- info$re_form_na
   transform <- info$transform
   model_info <- info$model_info
   marginalization <- info$estimate
@@ -18,6 +27,7 @@
   }
 
   # name of predicted response -----------------------------------------------
+  # --------------------------------------------------------------------------
 
   if (isTRUE(info$joint_test)) {
     table_footer <- NULL
@@ -29,6 +39,7 @@
   }
 
   # modulated predictors (focal terms) ---------------------------------------
+  # --------------------------------------------------------------------------
 
   if (!is.null(by) && !isTRUE(info$joint_test) && !inherits(by, "formula")) {
     modulate_string <- switch(type, inequality = , contrasts = "contrasted", "modulated")
@@ -42,6 +53,20 @@
   }
 
   # predictors controlled (non-focal terms) ----------------------------------
+  # --------------------------------------------------------------------------
+
+  # flag whether the estimate-option indicates that we average over the
+  # sample for non-focal terms
+  sample_average <- !is.null(marginalization) &&
+    length(marginalization) == 1 &&
+    marginalization %in% c("average", "population", "counterfactual")
+
+  # for later use
+  cleaned_by <- .grep_cleaned_by_vars(by)
+
+  ## TODO: we have no "adjusted_for" when backend = "emmeans". We could also
+  ##       check adjustments here for a more comprehensive/informative footer
+
   if (!is.null(adjusted_for) && length(adjusted_for) >= 1 && !all(is.na(adjusted_for))) {
     # if we have values of adjusted terms, add these here
     if (all(adjusted_for %in% colnames(x))) {
@@ -51,40 +76,132 @@
     } else {
       ref_cat_data <- NULL
     }
+
+    # if we have values at which non-focal terms are held constant, we want
+    # them in a separate string; same for predictors we average over
+    averaged_over <- held_constant <- list()
+
     if (!is.null(ref_cat_data)) {
       # get values at which non-focal terms are hold constant
       adjusted_values <- lapply(adjusted_for, function(i) ref_cat_data[[i]][1])
       # at values to names of non-focal terms (table_footer). we have to iterate
       # over the list, because we may have different types of data
       for (av in seq_along(adjusted_values)) {
-        if (is.numeric(adjusted_values[[av]])) {
+        if (is.numeric(adjusted_values[[av]]) && !sample_average) {
           adjusted_for[av] <- sprintf(
             "%s (%.2g)",
             adjusted_for[av],
             adjusted_values[[av]]
           )
-        } else if (identical(type, "predictions")) {
+          # add to final list
+          held_constant <- c(held_constant, adjusted_for[av])
+        } else if (!is.numeric(adjusted_values[[av]]) && identical(type, "predictions")) {
           adjusted_for[av] <- sprintf("%s (%s)", adjusted_for[av], adjusted_values[[av]])
+          # add to final list
+          held_constant <- c(held_constant, adjusted_for[av])
+        } else {
+          # add to final list - we have factors that are averaged over levels,
+          # not hold constant at a certain level
+          averaged_over <- c(averaged_over, adjusted_for[av])
+        }
+      }
+
+      # Warn if numeric focal terms are used with marginalization = "average", as
+      # predictions will only reflect observed data points rather than a balanced
+      # grid
+      if (
+        verbose &&
+          identical(marginalization, "average") &&
+          !is.null(ref_cat_data) &&
+          all(cleaned_by %in% colnames(ref_cat_data))
+      ) {
+        # Check if any of the focal terms (`by`) are numeric, not likert-alike
+        numeric_by <- vapply(
+          ref_cat_data[cleaned_by],
+          function(n) {
+            is.numeric(n) && !.is_likert(n)
+          },
+          logical(1)
+        )
+        if (any(numeric_by)) {
+          insight::format_warning(paste0(
+            datawizard::text_concatenate(names(numeric_by)[numeric_by], enclose = "`"),
+            ifelse(
+              sum(numeric_by) > 1,
+              " are numeric focal terms. ",
+              " is a numeric focal term. "
+            ),
+            "With `estimate = \"average\"`, values are based only on the data points ",
+            "that actually exist. Consequently, the  output may not represent a ",
+            "balanced range or grid of values from your focal  term(s). Use ",
+            "`verbose = FALSE` to silence this warning."
+          ))
         }
       }
     }
-    # The "predictors averaged" line does not strictly apply to `estimate =
-    # "average"`, because we average across all predictions, we do not take an
-    # "average value" of a non-focal predictor. Thus, we skip this line in the
-    # footer
-    if (!identical(marginalization, "average")) {
-      average_string <- switch(type, predictions = "controlled", "averaged")
+
+    # convert to strings
+    held_constant <- unlist(held_constant, use.names = FALSE)
+    averaged_over <- unlist(averaged_over, use.names = FALSE)
+
+    # first, information about non-focal terms that were hold constant at
+    # specific values or levels
+    if (!is.null(held_constant)) {
       table_footer <- paste0(
         table_footer,
-        "\nPredictors ",
-        average_string,
-        ": ",
-        toString(adjusted_for)
+        paste0("\nPredictors held at: ", toString(held_constant))
+      )
+    }
+
+    # then, information about non-focal terms that were averaged over levels
+    # or within groups
+    if (
+      !is.null(averaged_over) && !is.null(marginalization) && length(marginalization) == 1
+    ) {
+      average_string <- switch(
+        marginalization,
+        typical = "Predictors averaged over a balanced grid",
+        average = paste0(
+          "Predictors averaged within levels of ",
+          datawizard::text_concatenate(cleaned_by)
+        ),
+        population = ,
+        counterfactual = "Predictors averaged over the full sample",
+        ""
+      )
+      table_footer <- paste0(
+        table_footer,
+        paste0("\n", average_string, ": ", toString(averaged_over))
       )
     }
   }
 
+  # Random effects handling ------------------------------------------------
+  # --------------------------------------------------------------------------
+
+  if (!is.null(re_intercept) && !isTRUE(re_form_na) && !is.null(marginalization)) {
+    if (sample_average) {
+      table_footer <- paste0(
+        table_footer,
+        "\nRandom effects: Marginalized across clusters."
+      )
+    } else {
+      table_footer <- paste0(
+        table_footer,
+        "\nRandom effects: Averaged over a balanced grid of cluster levels."
+      )
+    }
+  }
+
+  if (isTRUE(re_form_na)) {
+    table_footer <- paste0(
+      table_footer,
+      "\nRandom effects: Conditional on a typical cluster."
+    )
+  }
+
   # P-value adjustment footer ------------------------------------------------
+  # --------------------------------------------------------------------------
 
   if (!is.null(p_adjust) && "p" %in% names(x)) {
     if (p_adjust == "none") {
@@ -99,6 +216,7 @@
   }
 
   # leave early for joint tests ----------------------------------------------
+  # --------------------------------------------------------------------------
 
   if (isTRUE(info$joint_test)) {
     if (!is.null(info$null) && info$omnibus_test) {
@@ -112,6 +230,7 @@
   }
 
   # tell user about scale of predictions / contrasts -------------------------
+  # --------------------------------------------------------------------------
 
   result_type <- switch(
     type,
@@ -126,8 +245,8 @@
       predict,
       none = "link",
       prediction = ,
-      expectation = ,
-      `invlink(link)` = "response",
+      expectation = "response",
+      `invlink(link)` = "inverse-link",
       predict
     )
     # we may have link-scale and transformation. to avoid confusion, tell this
@@ -164,6 +283,7 @@
   }
 
   # tell user about prediction intervals -------------------------------------
+  # --------------------------------------------------------------------------
 
   if (
     identical(type, "predictions") &&
@@ -174,6 +294,7 @@
   }
 
   # Parameter labels for special hypothesis testing --------------------------
+  # --------------------------------------------------------------------------
 
   # for special hypothesis testing, like "(b1 - b2) = (b4 - b3)", we want to
   # add information about the parameter names
@@ -209,7 +330,9 @@
     }
   }
 
-  # ROPE?
+  # ROPE? --------------------------------------------------------------------
+  # --------------------------------------------------------------------------
+
   if (!is.null(rope)) {
     table_footer <- paste0(
       table_footer,
@@ -227,6 +350,7 @@
 
 
 # name of the link-scale, including a transformation -------------------------
+# ----------------------------------------------------------------------------
 
 .link_transform_label <- function(transform, model = NULL) {
   if (is.character(transform) && length(transform) == 1) {

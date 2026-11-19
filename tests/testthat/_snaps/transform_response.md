@@ -3,7 +3,7 @@
     Code
       out
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       speed | Mean |   SE |       95% CI | t(48)
       ------------------------------------------
@@ -27,7 +27,7 @@
     Code
       out1
     Output
-      Estimated Marginal Means
+      Conditional Predictions
       
       speed |   Mean |          95% CI | df
       -------------------------------------

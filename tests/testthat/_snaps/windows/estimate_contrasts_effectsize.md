@@ -6,7 +6,7 @@
       No variable was specified for contrast estimation. Selecting `contrast =
         "Species"`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
@@ -26,7 +26,7 @@
       No variable was specified for contrast estimation. Selecting `contrast =
         "Species"`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
@@ -46,7 +46,7 @@
       No variable was specified for contrast estimation. Selecting `contrast =
         "Species"`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
@@ -72,7 +72,7 @@
       No variable was specified for contrast estimation. Selecting `contrast =
         "Species"`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p | marginal_d
       -------------------------------------------------------------------------------------------
@@ -92,7 +92,7 @@
       No variable was specified for contrast estimation. Selecting `contrast =
         "Species"`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
@@ -119,7 +119,7 @@
       No variable was specified for contrast estimation. Selecting `contrast =
         "Species"`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
@@ -145,7 +145,7 @@
       No variable was specified for contrast estimation. Selecting `contrast =
         "Species"`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
       ------------------------------------------------------------------------------
@@ -170,7 +170,7 @@
     Message
       We selected `contrast=c("Species")`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p
       ------------------------------------------------------------------------------
@@ -189,7 +189,7 @@
     Message
       We selected `contrast=c("Species")`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p
       ------------------------------------------------------------------------------
@@ -208,7 +208,7 @@
     Message
       We selected `contrast=c("Species")`.
     Output
-      Marginal Contrasts Analysis
+      Conditional Contrasts
       
       Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p | marginal_d
       -------------------------------------------------------------------------------------------

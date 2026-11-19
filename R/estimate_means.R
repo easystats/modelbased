@@ -1,10 +1,20 @@
-#' Estimate Marginal Means (Model-based average at each factor level)
+#' @title Estimate Marginal Means (Model-based average at each factor level)
+#' @name estimate_means
 #'
-#' Estimate average values of the response variable at each factor level or
-#' at representative values, respectively at values defined in a "data grid" or
+#' @description
+#' Estimate average values of the response variable at each factor level or at
+#' representative values, respectively at values defined in a "data grid" or
 #' "reference grid". For plotting, check the examples in
 #' [`visualisation_recipe.estimate_predicted()`]. See also other related
 #' functions such as [estimate_contrasts()] and [estimate_slopes()].
+#'
+#' Proper interpretation of the output requires understanding the assumptions
+#' behind your model predictions and which target quantity they refer to. We
+#' therefore strongly recommend thoroughly reading:
+#'
+#' - the documentation for the `estimate` argument,
+#' - the vignette on [marginalization methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html), and
+#' - the specific considerations for [mixed models](https://easystats.github.io/modelbased/articles/mixed_models.html).
 #'
 #' @param model A statistical model.
 #' @param by The (focal) predictor variable(s) at which to evaluate the desired
@@ -495,6 +505,9 @@ estimate_means <- function(
       verbose = verbose,
       ...
     )
+    # for backend emmeans, we default "estimate" to "typical" - the argument
+    # is not used, but this makes sure the right table header is used.
+    estimate <- "typical"
     means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
     # Marginalmeans ----------------------------------------------------------
@@ -527,10 +540,10 @@ estimate_means <- function(
   attr(means, "table_title") <- c(
     switch(
       estimate,
-      specific = "Model-based Predictions",
-      typical = "Estimated Marginal Means",
-      average = "Average Predictions",
-      population = "Average Counterfactual Predictions"
+      specific = ,
+      typical = "Conditional Predictions",
+      average = ,
+      population = "Marginal Predictions"
     ),
     "blue"
   )
@@ -540,7 +553,8 @@ estimate_means <- function(
     type = ifelse(estimate == "specific", "predictions", "means"),
     by = info$by,
     model = model,
-    info = info
+    info = info,
+    verbose = verbose
   )
 
   # Add attributes

@@ -26,11 +26,7 @@ test_that("estimate_means correct inverse link for glm", {
     var1 = rbinom(100, 1, 0.1),
     var2 = rnorm(100, 10, 7)
   )
-  m <- glm(
-    outcome ~ var1 * var2,
-    data = data,
-    family = binomial(link = "logit")
-  )
+  m <- glm(outcome ~ var1 * var2, data = data, family = binomial(link = "logit"))
 
   out <- estimate_relation(m, by = c("var1", "var2"))
   expect_true(all(out$CI_low >= 0 & out$CI_low <= 1))
@@ -40,9 +36,10 @@ test_that("estimate_means correct inverse link for glm", {
   expect_true(all(out$CI_low >= 0 & out$CI_low <= 1))
   expect_true(all(out$CI_high >= 0 & out$CI_high <= 1))
 
+  # response scale - some CI < 0
   out <- estimate_means(m, by = c("var1", "var2"), estimate = "population")
-  expect_true(all(out$CI_low >= 0 & out$CI_low <= 1))
-  expect_true(all(out$CI_high >= 0 & out$CI_high <= 1))
+  expect_true(sum(out$CI_low < 0) > 0)
+  expect_true(sum(out$CI_high > 1) > 0)
 })
 
 
