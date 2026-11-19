@@ -136,6 +136,12 @@
 
     Code
       print(estimate_means(model, c("sex", "bill_dep"), estimate = "average"))
+    Condition
+      Warning:
+      One or all focal terms are numeric. With `estimate = "average"`, values
+        are only based on the data points that actually exist. Consequently, the
+        output may not represent a balanced range or grid of values from your
+        focal term(s). Use `verbose = FALSE` to silence this warning.
     Output
       Marginal Predictions
       
@@ -238,7 +244,7 @@
 ---
 
     Code
-      print(estimate_means(model, "bill_dep", estimate = "average"))
+      print(estimate_means(model, "bill_dep", estimate = "average", verbose = FALSE))
     Output
       Marginal Predictions
       
