@@ -87,7 +87,7 @@ First, we start with calculating the within- and between-effects from
 | education (mid)  | 5.01        | 2.35 | (0.40, 9.62)   | 2.14   | 0.033   |
 | education (high) | 5.52        | 2.75 | (0.11, 10.93)  | 2.00   | 0.046   |
 
-Model Summary {#tinytable_1al2e9lqyzlb14z5y80t .table .tinytable
+Model Summary {#tinytable_wqv4otcg6vcxjrf9unms .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -149,8 +149,8 @@ different from each other, we can estimate their contrast:
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_tcu7amoltyc9qrxiy2c3 .table
-.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+Conditional Contrasts {#tinytable_wuljspuu8pt4qyh37qe2 .table .tinytable
+style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
 The output shows a significant contrast of -2.41 between the within- and
@@ -195,7 +195,7 @@ measurement (`time`) and our two centered variables (`phq4_within` and
 | time × phq4 within  | 0.33        | 0.61 | (-0.87, 1.52)  | 0.54   | 0.592   |
 | time × phq4 between | -0.66       | 0.37 | (-1.39, 0.07)  | -1.77  | 0.077   |
 
-Model Summary {#tinytable_kmlpnrv13eqiea1b6bk9 .table .tinytable
+Model Summary {#tinytable_slecb5eqzfu0sw3wiv7f .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -261,7 +261,7 @@ understand the underlying dynamics.
 
 [TABLE]
 
-Estimated Marginal Effects {#tinytable_01sedbo26nd3jtrpt0f2 .table
+Estimated Marginal Effects {#tinytable_54p46g1dlq158m5q2ioy .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -271,7 +271,7 @@ quarto-disable-processing="true"}
 
 [TABLE]
 
-Estimated Marginal Effects {#tinytable_e7feemejpvvzq8po07la .table
+Estimated Marginal Effects {#tinytable_h8so6fe3spmtoi9txuxj .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -296,8 +296,8 @@ marginal contrasts at each specific time point.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_bpo4nwrh7rv3jyj3p936 .table
-.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+Conditional Contrasts {#tinytable_it49t9cy3pq6ozb1oil4 .table .tinytable
+style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
 The contrast analysis reveals a clear and interesting trajectory: the
@@ -342,8 +342,8 @@ points.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_lz091n9tkiw6nmww0aij .table
-.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+Conditional Contrasts {#tinytable_0go18p3glvlnd09sus54 .table .tinytable
+style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
 This pairwise comparison table adds a crucial statistical caveat to our
@@ -377,8 +377,8 @@ the within- and between-effects without stratifying by time.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_y1f1y2ent7j5btqx29uv .table
-.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+Conditional Contrasts {#tinytable_k74b3ttontt336y8ojus .table .tinytable
+style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
 **What does this mean practically?**
@@ -421,8 +421,8 @@ variables.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_cri0rjpjq5fpqnb0d6k7 .table
-.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+Conditional Contrasts {#tinytable_4ji6sutuafoc39s9b18n .table .tinytable
+style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
 The marginal contrasts analysis yields nuanced results that add an
@@ -482,8 +482,8 @@ term to our contrast statement.
 
 [TABLE]
 
-Marginal Contrasts Analysis {#tinytable_qsy90aabcf0qlekd2sks .table
-.tinytable style="width: auto; margin-left: auto; margin-right: auto;"
+Conditional Contrasts {#tinytable_xzbxqo822jv7k7e07pb1 .table .tinytable
+style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
 The output now displays the mathematical difference in the size of the

@@ -125,7 +125,7 @@ the three time points.
 \
 `# Estimate the average difference between each pair of education levels`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, contrast ``=`` ``"education"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 |     Difference (CI) |      p`\
 `#> ----------------------------------------------`\
@@ -135,7 +135,7 @@ the three time points.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: education`\
-`#> Predictors averaged: time (2)`\
+`#> Predictors held at: time (2)`\
 `#> p-values are uncorrected.`
 
 This table shows three specific comparisons. To get a single summary
@@ -152,7 +152,7 @@ values of all pairwise differences.
 \
 `# Compute the absolute inequality for the 'education' variable`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, contrast ``=`` ``"education"``, comparison ``=`` ``"inequality"``)`\
-`#> Marginal Inequality Analysis`\
+`#> Conditional Inequality Analysis`\
 `#> `\
 `#> Parameter | Mean Difference (CI) |      p`\
 `#> -----------------------------------------`\
@@ -185,7 +185,7 @@ initial `comparison` is completed.
 `  ``` # `comparison`, i.e. we calculate the mean of all pairs ``\
 `  post_process ``=`` ``~`[`I`](https://rdrr.io/r/base/AsIs.html)`(`[`mean`](https://rdrr.io/r/base/mean.html)`(``x``)``)`\
 `)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Parameter |    Difference (CI) |      p`\
 `#> ---------------------------------------`\
@@ -193,7 +193,7 @@ initial `comparison` is completed.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: education`\
-`#> Predictors averaged: time (2)`\
+`#> Predictors held at: time (2)`\
 `#> p-values are uncorrected.`
 
 ## 5. Relative Inequality
@@ -233,7 +233,7 @@ statistically significant.
 \
 `# Estimate the ratio of means for each pair of education levels`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, contrast ``=`` ``"education"``, comparison ``=`` ``ratio`` ``~`` ``pairwise``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 |        Ratio (CI) |      p`\
 `#> --------------------------------------------`\
@@ -243,7 +243,7 @@ statistically significant.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: education`\
-`#> Predictors averaged: time (2)`\
+`#> Predictors held at: time (2)`\
 `#> p-values are uncorrected.`
 
 ### Calculating the Inequality Ratio
@@ -254,7 +254,7 @@ we set `comparison = "inequality_ratio"`.
 \
 `# Compute the relative inequality (inequality ratio)`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, contrast ``=`` ``"education"``, comparison ``=`` ``"inequality_ratio"``)`\
-`#> Marginal Inequality Analysis`\
+`#> Conditional Inequality Analysis`\
 `#> `\
 `#> Parameter |   Mean Ratio (CI) |      p`\
 `#> --------------------------------------`\
@@ -282,7 +282,7 @@ average of all pairs of ratios.
 `  ``# again, we take the average of all pairs`\
 `  post_process ``=`` ``~`[`I`](https://rdrr.io/r/base/AsIs.html)`(`[`mean`](https://rdrr.io/r/base/mean.html)`(``x``)``)`\
 `)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Parameter |        Ratio (CI) |      p`\
 `#> --------------------------------------`\
@@ -290,7 +290,7 @@ average of all pairs of ratios.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: education`\
-`#> Predictors averaged: time (2)`\
+`#> Predictors held at: time (2)`\
 `#> p-values are uncorrected.`
 
 ## 6. Comparing Inequalities Across Groups and Time
@@ -328,7 +328,7 @@ confirm this by calculating the absolute inequality for each group.
 \
 `# Absolute inequality in Group 1`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m1``, contrast ``=`` ``"education"``, comparison ``=`` ``"inequality"``)`\
-`#> Marginal Inequality Analysis`\
+`#> Conditional Inequality Analysis`\
 `#> `\
 `#> Parameter | Mean Difference (CI) |      p`\
 `#> -----------------------------------------`\
@@ -340,7 +340,7 @@ confirm this by calculating the absolute inequality for each group.
 \
 `# Absolute inequality in Group 2`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m2``, contrast ``=`` ``"education"``, comparison ``=`` ``"inequality"``)`\
-`#> Marginal Inequality Analysis`\
+`#> Conditional Inequality Analysis`\
 `#> `\
 `#> Parameter | Mean Difference (CI) |     p`\
 `#> ----------------------------------------`\
@@ -371,7 +371,7 @@ directly:
 `  by ``=`` ``"grp"``,`\
 `  comparison ``=`` ``"inequality"`\
 `)`\
-`#> Marginal Inequality Analysis`\
+`#> Conditional Inequality Analysis`\
 `#> `\
 `#> Mean Difference (CI) |      p |     grp`\
 `#> ---------------------------------------`\
@@ -398,7 +398,7 @@ function:
 `  by ``=`` ``"grp"``,`\
 `  comparison ``=`` ``"inequality_pairwise"`\
 `)`\
-`#> Marginal Inequality Analysis`\
+`#> Conditional Inequality Analysis`\
 `#> `\
 `#> Parameter         | Mean Difference (CI) |     p`\
 `#> ------------------------------------------------`\
@@ -423,7 +423,7 @@ The same can be done for relative inequality:
 `  by ``=`` ``"grp"``,`\
 `  comparison ``=`` ``"inequality_ratio"`\
 `)`\
-`#> Marginal Inequality Analysis`\
+`#> Conditional Inequality Analysis`\
 `#> `\
 `#> Mean Ratio (CI)   |      p |     grp`\
 `#> ------------------------------------`\
@@ -441,7 +441,7 @@ The same can be done for relative inequality:
 `  by ``=`` ``"grp"``,`\
 `  comparison ``=`` ``"inequality_ratio_pairwise"`\
 `)`\
-`#> Marginal Inequality Analysis`\
+`#> Conditional Inequality Analysis`\
 `#> `\
 `#> Parameter         | Mean Ratio Difference (CI) |     p`\
 `#> ------------------------------------------------------`\
@@ -470,11 +470,11 @@ shown in the two plots above.
 [`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``m1``, trend ``=`` ``"time"``, by ``=`` ``"education"``)`\
 `#> Estimated Marginal Effects`\
 `#> `\
-`#> education |               Slope (CI) |      p`\
-`#> ---------------------------------------------`\
-`#> low       |    -6.71 (-12.99, -0.44) |  0.036`\
-`#> mid       |     0.40 ( -3.29,  4.09) |  0.831`\
-`#> high      | 7.11e-11 ( -4.95,  4.95) | > .999`\
+`#> education |            Slope (CI) |      p`\
+`#> ------------------------------------------`\
+`#> low       | -6.71 (-12.99, -0.44) |  0.036`\
+`#> mid       |  0.40 ( -3.29,  4.09) |  0.831`\
+`#> high      |  0.00 ( -4.95,  4.95) | > .999`\
 `#> `\
 `#> Marginal effects estimated for time`\
 `#> Type of slope was dY/dX`\
@@ -497,14 +497,14 @@ shown in the two plots above.
 [`estimate_slopes`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)`(``m``, trend ``=`` ``"time"``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"education"``, ``"grp"``)``)`\
 `#> Estimated Marginal Effects`\
 `#> `\
-`#> education | grp     |            Slope (CI) |      p`\
-`#> ----------------------------------------------------`\
-`#> low       | Group 1 | -6.71 (-12.93, -0.50) |  0.034`\
-`#> mid       | Group 1 |  0.40 ( -3.26,  4.06) |  0.830`\
-`#> high      | Group 1 |  0.00 ( -4.90,  4.90) | > .999`\
-`#> low       | Group 2 |  3.24 ( -2.97,  9.46) |  0.306`\
-`#> mid       | Group 2 |  1.72 ( -1.98,  5.41) |  0.362`\
-`#> high      | Group 2 |  6.04 (  0.15, 11.94) |  0.045`\
+`#> education | grp     |               Slope (CI) |      p`\
+`#> -------------------------------------------------------`\
+`#> low       | Group 1 |    -6.71 (-12.93, -0.50) |  0.034`\
+`#> mid       | Group 1 |     0.40 ( -3.26,  4.06) |  0.830`\
+`#> high      | Group 1 | 7.11e-11 ( -4.90,  4.90) | > .999`\
+`#> low       | Group 2 |     3.24 ( -2.97,  9.46) |  0.306`\
+`#> mid       | Group 2 |     1.72 ( -1.98,  5.41) |  0.362`\
+`#> high      | Group 2 |     6.04 (  0.15, 11.94) |  0.045`\
 `#> `\
 `#> Marginal effects estimated for time`\
 `#> Type of slope was dY/dX`
@@ -524,7 +524,7 @@ in inequality directly.
 `  comparison ``=`` ``"inequality"``,`\
 `  integer_as_continuous ``=`` ``TRUE`\
 `)`\
-`#> Marginal Inequality Analysis`\
+`#> Conditional Inequality Analysis`\
 `#> `\
 `#> Parameter          | Mean Difference (CI) |     p`\
 `#> -------------------------------------------------`\
@@ -563,7 +563,7 @@ perform a pairwise comparison of the slopes across groups:
 `  comparison ``=`` ``"inequality_pairwise"``,`\
 `  integer_as_continuous ``=`` ``TRUE`\
 `)`\
-`#> Marginal Inequality Analysis`\
+`#> Conditional Inequality Analysis`\
 `#> `\
 `#> Parameter         | Mean Difference (CI) |     p`\
 `#> ------------------------------------------------`\

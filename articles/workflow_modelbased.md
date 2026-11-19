@@ -44,14 +44,14 @@ coefficients.
 \
 `# coefficients`\
 [`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``, exponentiate ``=`` ``TRUE``)`\
-`#> Parameter                              | Odds Ratio |   SE |        95% CI |         z |      p`\
-`#> -----------------------------------------------------------------------------------------------`\
-`#> (Intercept)                            |       1.00 | 0.45 | [0.41,  2.44] | -2.34e-15 | > .999`\
-`#> treatment [control]                    |       0.33 | 0.23 | [0.08,  1.23] |     -1.61 | 0.108 `\
-`#> time [noon]                            |       0.54 | 0.35 | [0.15,  1.90] |     -0.96 | 0.339 `\
-`#> time [afternoon]                       |       3.00 | 2.05 | [0.81, 12.24] |      1.61 | 0.108 `\
-`#> treatment [control] × time [noon]      |      10.35 | 9.85 | [1.66, 70.73] |      2.45 | 0.014 `\
-`#> treatment [control] × time [afternoon] |       1.00 | 0.97 | [0.15,  6.74] | -2.45e-16 | > .999`\
+`#> Parameter                              | Odds Ratio |   SE |        95% CI |        z |      p`\
+`#> ----------------------------------------------------------------------------------------------`\
+`#> (Intercept)                            |       1.00 | 0.45 | [0.41,  2.44] | 3.20e-16 | > .999`\
+`#> treatment [control]                    |       0.33 | 0.23 | [0.08,  1.23] |    -1.61 | 0.108 `\
+`#> time [noon]                            |       0.54 | 0.35 | [0.15,  1.90] |    -0.96 | 0.339 `\
+`#> time [afternoon]                       |       3.00 | 2.05 | [0.81, 12.24] |     1.61 | 0.108 `\
+`#> treatment [control] × time [noon]      |      10.35 | 9.85 | [1.66, 70.73] |     2.45 | 0.014 `\
+`#> treatment [control] × time [afternoon] |       1.00 | 0.97 | [0.15,  6.74] | 9.22e-16 | > .999`\
 `#> `\
 `#> Uncertainty intervals (profile-likelihood) and p-values (two-tailed) computed using a Wald z-distribution approximation.`
 
@@ -85,7 +85,7 @@ of the outcome (higher alertness) depending on the predictor variables
 `# predicted probabilities`\
 `predictions`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"treatment"``)``)`\
 `predictions`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> time      | treatment | Probability |       95% CI`\
 `#> --------------------------------------------------`\
@@ -98,7 +98,7 @@ of the outcome (higher alertness) depending on the predictor variables
 `#> `\
 `#> Variable predicted: alertness`\
 `#> Predictors modulated: time, treatment`\
-`#> Predictions are on the response-scale.`
+`#> Predictions are on the inverse-link-scale.`
 
 We now see that high `alertness` was most likely for the `coffee` group
 in the `afternoon` time (about 75% probability of high alertness for the
@@ -133,30 +133,30 @@ above).
 \
 `# pairwise comparisons - quite long table`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, `[`c`](https://rdrr.io/r/base/c.html)`(``"time"``, ``"treatment"``)``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
-`#> Level1             | Level2            | Difference |   SE |        95% CI |        z |      p`\
-`#> ----------------------------------------------------------------------------------------------`\
-`#> morning, control   | morning, coffee   |      -0.25 | 0.15 | [-0.54, 0.04] |    -1.69 |  0.091`\
-`#> noon, coffee       | morning, coffee   |      -0.15 | 0.15 | [-0.45, 0.15] |    -0.97 |  0.332`\
-`#> noon, control      | morning, coffee   |       0.15 | 0.15 | [-0.15, 0.45] |     0.97 |  0.332`\
-`#> afternoon, coffee  | morning, coffee   |       0.25 | 0.15 | [-0.04, 0.54] |     1.69 |  0.091`\
-`#> afternoon, control | morning, coffee   |   2.22e-16 | 0.16 | [-0.31, 0.31] | 1.40e-15 | > .999`\
-`#> noon, coffee       | morning, control  |       0.10 | 0.14 | [-0.18, 0.38] |     0.69 |  0.488`\
-`#> noon, control      | morning, control  |       0.40 | 0.14 | [ 0.12, 0.68] |     2.78 |  0.005`\
-`#> afternoon, coffee  | morning, control  |       0.50 | 0.14 | [ 0.23, 0.77] |     3.65 | < .001`\
-`#> afternoon, control | morning, control  |       0.25 | 0.15 | [-0.04, 0.54] |     1.69 |  0.091`\
-`#> noon, control      | noon, coffee      |       0.30 | 0.15 | [ 0.00, 0.60] |     1.99 |  0.047`\
-`#> afternoon, coffee  | noon, coffee      |       0.40 | 0.14 | [ 0.12, 0.68] |     2.78 |  0.005`\
-`#> afternoon, control | noon, coffee      |       0.15 | 0.15 | [-0.15, 0.45] |     0.97 |  0.332`\
-`#> afternoon, coffee  | noon, control     |       0.10 | 0.14 | [-0.18, 0.38] |     0.69 |  0.488`\
-`#> afternoon, control | noon, control     |      -0.15 | 0.15 | [-0.45, 0.15] |    -0.97 |  0.332`\
-`#> afternoon, control | afternoon, coffee |      -0.25 | 0.15 | [-0.54, 0.04] |    -1.69 |  0.091`\
+`#> Level1             | Level2            | Difference |   SE |        95% CI |         z |      p`\
+`#> -----------------------------------------------------------------------------------------------`\
+`#> morning, control   | morning, coffee   |      -0.25 | 0.15 | [-0.54, 0.04] |     -1.69 |  0.091`\
+`#> noon, coffee       | morning, coffee   |      -0.15 | 0.15 | [-0.45, 0.15] |     -0.97 |  0.332`\
+`#> noon, control      | morning, coffee   |       0.15 | 0.15 | [-0.15, 0.45] |      0.97 |  0.332`\
+`#> afternoon, coffee  | morning, coffee   |       0.25 | 0.15 | [-0.04, 0.54] |      1.69 |  0.091`\
+`#> afternoon, control | morning, coffee   |  -2.22e-16 | 0.16 | [-0.31, 0.31] | -1.40e-15 | > .999`\
+`#> noon, coffee       | morning, control  |       0.10 | 0.14 | [-0.18, 0.38] |      0.69 |  0.488`\
+`#> noon, control      | morning, control  |       0.40 | 0.14 | [ 0.12, 0.68] |      2.78 |  0.005`\
+`#> afternoon, coffee  | morning, control  |       0.50 | 0.14 | [ 0.23, 0.77] |      3.65 | < .001`\
+`#> afternoon, control | morning, control  |       0.25 | 0.15 | [-0.04, 0.54] |      1.69 |  0.091`\
+`#> noon, control      | noon, coffee      |       0.30 | 0.15 | [ 0.00, 0.60] |      1.99 |  0.047`\
+`#> afternoon, coffee  | noon, coffee      |       0.40 | 0.14 | [ 0.12, 0.68] |      2.78 |  0.005`\
+`#> afternoon, control | noon, coffee      |       0.15 | 0.15 | [-0.15, 0.45] |      0.97 |  0.332`\
+`#> afternoon, coffee  | noon, control     |       0.10 | 0.14 | [-0.18, 0.38] |      0.69 |  0.488`\
+`#> afternoon, control | noon, control     |      -0.15 | 0.15 | [-0.45, 0.15] |     -0.97 |  0.332`\
+`#> afternoon, control | afternoon, coffee |      -0.25 | 0.15 | [-0.54, 0.04] |     -1.69 |  0.091`\
 `#> `\
 `#> Variable predicted: alertness`\
 `#> Predictors contrasted: time, treatment`\
 `#> p-values are uncorrected.`\
-`#> Contrasts are on the response-scale.`
+`#> Contrasts are on the inverse-link-scale.`
 
 In the above output, we see all possible pairwise comparisons of the
 predicted probabilities. The table is quite long, but we can also group
@@ -165,7 +165,7 @@ the comparisons, e.g. by the variable *time*.
 \
 `# group comparisons by "time"`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, ``"treatment"``, by ``=`` ``"time"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1  | Level2 | time      | Difference |   SE |        95% CI |     z |     p`\
 `#> --------------------------------------------------------------------------------`\
@@ -176,7 +176,7 @@ the comparisons, e.g. by the variable *time*.
 `#> Variable predicted: alertness`\
 `#> Predictors contrasted: treatment`\
 `#> p-values are uncorrected.`\
-`#> Contrasts are on the response-scale.`
+`#> Contrasts are on the inverse-link-scale.`
 
 The output shows that the differences between the *coffee* and the
 *control* group are statistically significant only in the noon time.

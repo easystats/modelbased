@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -216,7 +216,7 @@ package.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model1</span>, <span class="st">"episode"</span><span class="op">)</span></span>
 <span><span class="va">my_predictions</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; episode |           Mean (CI)</span></span>
 <span><span class="co">#&gt; -----------------------------</span></span>
@@ -226,7 +226,7 @@ package.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: outcome</span></span>
 <span><span class="co">#&gt; Predictors modulated: episode</span></span>
-<span><span class="co">#&gt; Predictors averaged: grp</span></span>
+<span><span class="co">#&gt; Predictors averaged over a balanced grid: grp</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_predictions</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_comparisons_1_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="672"></p>
@@ -248,7 +248,7 @@ comparisons.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># argument `comparison` defaults to "pairwise"</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model1</span>, <span class="st">"episode"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |     Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; ---------------------------------------------</span></span>
@@ -258,7 +258,7 @@ comparisons.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: outcome</span></span>
 <span><span class="co">#&gt; Predictors contrasted: episode</span></span>
-<span><span class="co">#&gt; Predictors averaged: grp</span></span>
+<span><span class="co">#&gt; Predictors averaged over a balanced grid: grp</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <p>For our quantity of interest, the contrast between episode levels 2
 and 1, we see the value 0.36, which is exactly the difference between
@@ -273,7 +273,7 @@ could specify the levels of <code>episode</code> directly, to simplify
 the output:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model1</span>, contrast <span class="op">=</span> <span class="st">"episode=c(1,2)"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; -------------------------------------------</span></span>
@@ -281,7 +281,7 @@ the output:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: outcome</span></span>
 <span><span class="co">#&gt; Predictors contrasted: episode=c(1,2)</span></span>
-<span><span class="co">#&gt; Predictors averaged: grp</span></span>
+<span><span class="co">#&gt; Predictors averaged over a balanced grid: grp</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 </div>
 </div>
@@ -309,7 +309,7 @@ combinations of the involved interaction term.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model2</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"episode"</span>, <span class="st">"grp"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">my_predictions</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; episode | grp       |            Mean (CI)</span></span>
 <span><span class="co">#&gt; ------------------------------------------</span></span>
@@ -343,7 +343,7 @@ interaction.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># we want "episode = 2-2" and "grp = control-treatment"</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model2</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"episode"</span>, <span class="st">"grp"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1       | Level2       |     Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; ---------------------------------------------------------</span></span>
@@ -385,7 +385,7 @@ argument.</p></li>
 </h5>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model2</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"episode"</span>, <span class="st">"grp"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; episode | grp       |            Mean (CI)</span></span>
 <span><span class="co">#&gt; ------------------------------------------</span></span>
@@ -410,7 +410,7 @@ switched). We can now calculate the desired comparison directly:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compute specific contrast directly</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model2</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"episode"</span>, <span class="st">"grp"</span><span class="op">)</span>, comparison <span class="op">=</span> <span class="st">"b2 = b5"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter |    Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; --------------------------------------</span></span>
@@ -433,7 +433,7 @@ syntax:</p>
 <code class="sourceCode R"><span><span class="co"># return pairwise comparisons for specific values, in</span></span>
 <span><span class="co"># this case for episode = 2 in both groups</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model2</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"episode=2"</span>, <span class="st">"grp"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1    | Level2  |     Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; -------------------------------------------------</span></span>
@@ -469,7 +469,7 @@ and four (c.f. above table of predicted values), thus we
 <code>comparison</code> whether <code>"b4 = b3"</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model2</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"episode"</span>, <span class="st">"grp"</span><span class="op">)</span>, comparison <span class="op">=</span> <span class="st">"b4 = b3"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter |     Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; ---------------------------------------</span></span>
@@ -487,7 +487,7 @@ values or levels</a> in the <code>by</code> or <code>contrast</code>
 argument:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model2</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"episode=c(1,3)"</span>, <span class="st">"grp"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; episode | grp       |            Mean (CI)</span></span>
 <span><span class="co">#&gt; ------------------------------------------</span></span>
@@ -508,7 +508,7 @@ desired comparison this way:</p>
 <span>  contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"episode = c(1, 3)"</span>, <span class="st">"grp"</span><span class="op">)</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"b3 = b2"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter |     Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; ---------------------------------------</span></span>
@@ -536,7 +536,7 @@ levels in the other group?</p>
 <p>As a reminder, we look at the table of predictions again:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"episode"</span>, <span class="st">"grp"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; episode | grp       |            Mean (CI)</span></span>
 <span><span class="co">#&gt; ------------------------------------------</span></span>
@@ -563,7 +563,7 @@ is that these two differences are equal:
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"episode"</span>, <span class="st">"grp"</span><span class="op">)</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"(b1 - b2) = (b4 - b5)"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter   |    Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; ----------------------------------------</span></span>
@@ -619,7 +619,7 @@ comparison of interest located in row 8.</p>
 <span><span class="op">)</span></span>
 <span><span class="co"># quite wide table - we find our comparison in row 8</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span>, table_width <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter                                           |      Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; ----------------------------------------------------------------------------------</span></span>

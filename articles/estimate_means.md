@@ -72,7 +72,7 @@ each level of predictor variable (here, `Species`).
 `means`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, by ``=`` ``"Species"``)`\
 `means`
 
-    > Estimated Marginal Means
+    > Conditional Predictions
     > 
     > Species    | Mean |   SE |       95% CI | t(147)
     > ------------------------------------------------
@@ -131,7 +131,7 @@ account) for variations of these other components.
 \
 `means_complex`
 
-    > Estimated Marginal Means
+    > Conditional Predictions
     > 
     > Species    | Mean |   SE |       95% CI | t(146)
     > ------------------------------------------------
@@ -141,7 +141,7 @@ account) for variations of these other components.
     > 
     > Variable predicted: Sepal.Width
     > Predictors modulated: Species
-    > Predictors averaged: Petal.Width (1.2)
+    > Predictors held at: Petal.Width (1.2)
 
 Now let’s add to our previous plot the marginal means from the more
 complex model (shown in purple) next to each other, which should help us

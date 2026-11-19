@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -208,7 +208,7 @@ a very “specific” observation in the dataset (here:
 <code>species = Adelie</code>).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"specific"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Model-based Predictions</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
 <span><span class="co">#&gt; --------------------------------</span></span>
@@ -217,11 +217,11 @@ a very “specific” observation in the dataset (here:
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
 <span><span class="co">#&gt; Predictors modulated: sex</span></span>
-<span><span class="co">#&gt; Predictors controlled: species (Adelie)</span></span>
+<span><span class="co">#&gt; Predictors held at: species (Adelie)</span></span>
 <span></span>
 <span><span class="co"># Alternative code (same result, different wrapper)</span></span>
 <span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">m</span>, by <span class="op">=</span> <span class="st">"sex"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Model-based Predictions</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |          Predicted (CI)</span></span>
 <span><span class="co">#&gt; --------------------------------</span></span>
@@ -230,7 +230,7 @@ a very “specific” observation in the dataset (here:
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
 <span><span class="co">#&gt; Predictors modulated: sex</span></span>
-<span><span class="co">#&gt; Predictors controlled: species (Adelie)</span></span></code></pre></div>
+<span><span class="co">#&gt; Predictors held at: species (Adelie)</span></span></code></pre></div>
 <p>To illustrate, we can calculate this manually. “Female” is the
 reference level for <code>sex</code> here. Since <code>species</code> is
 kept at its reference level (Adelie), the estimated marginal mean
@@ -320,7 +320,7 @@ regardless of how often it occurs in the actual empirical data.</p>
 <span></span>
 <span><span class="co"># This corresponds to the easystats default (estimate = "typical").</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
 <span><span class="co">#&gt; --------------------------------</span></span>
@@ -329,7 +329,7 @@ regardless of how often it occurs in the actual empirical data.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
 <span><span class="co">#&gt; Predictors modulated: sex</span></span>
-<span><span class="co">#&gt; Predictors averaged: species</span></span></code></pre></div>
+<span><span class="co">#&gt; Predictors averaged over a balanced grid: species</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="average-observation">3. “Average” Observation<a class="anchor" aria-label="anchor" href="#average-observation"></a>
@@ -358,7 +358,7 @@ terms retain their exact empirical distribution.</p>
 <span></span>
 <span><span class="co"># The corresponding easystats call:</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Average Predictions</span></span>
+<span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
 <span><span class="co">#&gt; --------------------------------</span></span>
@@ -366,7 +366,8 @@ terms retain their exact empirical distribution.</p>
 <span><span class="co">#&gt; male   | 204.51 (203.64, 205.38)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
-<span><span class="co">#&gt; Predictors modulated: sex</span></span></code></pre></div>
+<span><span class="co">#&gt; Predictors modulated: sex</span></span>
+<span><span class="co">#&gt; Predictors averaged within levels of sex: species</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="counterfactual-observation-also-population">4. “Counterfactual” Observation (also “Population”)<a class="anchor" aria-label="anchor" href="#counterfactual-observation-also-population"></a>
@@ -406,7 +407,7 @@ randomization).</p>
 <span></span>
 <span><span class="co"># The corresponding easystats call:</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"counterfactual"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Average Counterfactual Predictions</span></span>
+<span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
 <span><span class="co">#&gt; --------------------------------</span></span>
@@ -415,7 +416,7 @@ randomization).</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
 <span><span class="co">#&gt; Predictors modulated: sex</span></span>
-<span><span class="co">#&gt; Predictors averaged: species</span></span></code></pre></div>
+<span><span class="co">#&gt; Predictors averaged over the full sample: species</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -555,7 +556,7 @@ output displays enough decimal places for a precise comparison.</p>
 <code class="sourceCode R"><span><span class="co"># easystats: Sets numeric variables to their mean and factors</span></span>
 <span><span class="co"># to their reference level.</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"specific"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Model-based Predictions</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
 <span><span class="co">#&gt; --------------------------------</span></span>
@@ -564,7 +565,7 @@ output displays enough decimal places for a precise comparison.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
 <span><span class="co">#&gt; Predictors modulated: sex</span></span>
-<span><span class="co">#&gt; Predictors controlled: species (Adelie)</span></span>
+<span><span class="co">#&gt; Predictors held at: species (Adelie)</span></span>
 <span></span>
 <span><span class="co"># marginaleffects: The 'newdata = "mean"' argument replicates this</span></span>
 <span><span class="co"># "theoretical" observation behavior.</span></span>
@@ -581,7 +582,7 @@ output displays enough decimal places for a precise comparison.</p>
 <code class="sourceCode R"><span><span class="co"># easystats: Builds a balanced reference grid and weights each group</span></span>
 <span><span class="co"># equally (the default).</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"typical"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
 <span><span class="co">#&gt; --------------------------------</span></span>
@@ -590,7 +591,7 @@ output displays enough decimal places for a precise comparison.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
 <span><span class="co">#&gt; Predictors modulated: sex</span></span>
-<span><span class="co">#&gt; Predictors averaged: species</span></span>
+<span><span class="co">#&gt; Predictors averaged over a balanced grid: species</span></span>
 <span></span>
 <span><span class="co"># marginaleffects: 'newdata = "grid"' creates a similar balanced</span></span>
 <span><span class="co"># data grid.</span></span>
@@ -615,7 +616,7 @@ output displays enough decimal places for a precise comparison.</p>
 <code class="sourceCode R"><span><span class="co"># easystats: Calculates predictions for every observation in the</span></span>
 <span><span class="co"># empirical data and averages them.</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Average Predictions</span></span>
+<span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
 <span><span class="co">#&gt; --------------------------------</span></span>
@@ -624,6 +625,7 @@ output displays enough decimal places for a precise comparison.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
 <span><span class="co">#&gt; Predictors modulated: sex</span></span>
+<span><span class="co">#&gt; Predictors averaged within levels of sex: species</span></span>
 <span></span>
 <span><span class="co"># marginaleffects: Using 'by' without modifying 'newdata' averages</span></span>
 <span><span class="co"># predictions over the original empirical dataset.</span></span>
@@ -648,7 +650,7 @@ output displays enough decimal places for a precise comparison.</p>
 <code class="sourceCode R"><span><span class="co"># easystats: Uses G-computation (cloning the dataset to</span></span>
 <span><span class="co"># simulate pseudo-randomization).</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Average Counterfactual Predictions</span></span>
+<span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |               Mean (CI)</span></span>
 <span><span class="co">#&gt; --------------------------------</span></span>
@@ -657,7 +659,7 @@ output displays enough decimal places for a precise comparison.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: flipper_len</span></span>
 <span><span class="co">#&gt; Predictors modulated: sex</span></span>
-<span><span class="co">#&gt; Predictors averaged: species</span></span>
+<span><span class="co">#&gt; Predictors averaged over the full sample: species</span></span>
 <span></span>
 <span><span class="co"># marginaleffects: Using the 'variables' argument automatically</span></span>
 <span><span class="co"># triggers this counterfactual approach.</span></span>

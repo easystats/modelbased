@@ -114,7 +114,7 @@ the factual (`event = Post-Event`) and counterfactual
 
 \
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``mod``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"time=c(199,200)"``, ``"event"``)``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> time | event      |                  Mean (CI)`\
 `#> ----------------------------------------------`\
@@ -134,7 +134,7 @@ We ask for the difference between `event = Post-Event` and
 
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``mod``, contrast ``=`` ``"event"``, by ``=`` ``"time=200"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1     | Level2    | time |           Difference (CI) |      p`\
 `#> ------------------------------------------------------------------`\
@@ -177,7 +177,7 @@ this time contrasting the slopes of `time` across the levels of `event`.
 
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``mod``, contrast ``=`` ``"time"``, by ``=`` ``"event"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1     | Level2    |   Difference (CI) |      p`\
 `#> ---------------------------------------------------`\
@@ -185,7 +185,7 @@ this time contrasting the slopes of `time` across the levels of `event`.
 `#> `\
 `#> Variable predicted: outcome`\
 `#> Predictors contrasted: time`\
-`#> Predictors averaged: time (1.8e+02)`\
+`#> Predictors held at: time (1.8e+02)`\
 `#> p-values are uncorrected.`
 
 The result is a significant difference of approximately 5. This is our

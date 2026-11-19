@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -260,7 +260,7 @@ response, excluding the zero-inflation component.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># predicting the conditional mean</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"conditional"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; mined | Mean |   SE |       95% CI |     z</span></span>
 <span><span class="co">#&gt; ------------------------------------------</span></span>
@@ -269,11 +269,11 @@ response, excluding the zero-inflation component.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors modulated: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
+<span><span class="co">#&gt; Random effects: Averaged over a balanced grid of cluster levels.</span></span>
 <span><span class="co">#&gt; Predictions are on the conditional-scale.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"conditional"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |       95% CI |    z |      p</span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
@@ -281,7 +281,7 @@ response, excluding the zero-inflation component.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors contrasted: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
+<span><span class="co">#&gt; Random effects: Averaged over a balanced grid of cluster levels.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
 <span><span class="co">#&gt; Contrasts are on the conditional-scale.</span></span></code></pre></div>
 </div>
@@ -294,7 +294,7 @@ zero-inflation component.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># predicting the expected value of the response</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; mined | Mean |   SE |       95% CI |     z</span></span>
 <span><span class="co">#&gt; ------------------------------------------</span></span>
@@ -303,11 +303,11 @@ zero-inflation component.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors modulated: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
+<span><span class="co">#&gt; Random effects: Averaged over a balanced grid of cluster levels.</span></span>
 <span><span class="co">#&gt; Predictions are on the response-scale.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |       95% CI |    z |      p</span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
@@ -315,7 +315,7 @@ zero-inflation component.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors contrasted: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
+<span><span class="co">#&gt; Random effects: Averaged over a balanced grid of cluster levels.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
 <span><span class="co">#&gt; Contrasts are on the response-scale.</span></span></code></pre></div>
 </div>
@@ -327,7 +327,7 @@ not, use <code>predict = "zprob"</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># predicting the zero-inflation probabilities</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"zprob"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; mined | Probability |   SE |       95% CI |     z</span></span>
 <span><span class="co">#&gt; -------------------------------------------------</span></span>
@@ -336,11 +336,11 @@ not, use <code>predict = "zprob"</code>.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors modulated: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
+<span><span class="co">#&gt; Random effects: Averaged over a balanced grid of cluster levels.</span></span>
 <span><span class="co">#&gt; Predictions are on the zprob-scale.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"zprob"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |         95% CI |     z |      p</span></span>
 <span><span class="co">#&gt; ---------------------------------------------------------------------</span></span>
@@ -348,7 +348,7 @@ not, use <code>predict = "zprob"</code>.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors contrasted: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
+<span><span class="co">#&gt; Random effects: Averaged over a balanced grid of cluster levels.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
 <span><span class="co">#&gt; Contrasts are on the zprob-scale.</span></span></code></pre></div>
 </div>

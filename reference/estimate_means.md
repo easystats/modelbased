@@ -9,6 +9,19 @@ See also other related functions such as
 and
 [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md).
 
+Proper interpretation of the output requires understanding the
+assumptions behind your model predictions and which target quantity they
+refer to. We therefore strongly recommend thoroughly reading:
+
+- the documentation for the `estimate` argument,
+
+- the vignette on [marginalization
+  methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html),
+  and
+
+- the specific considerations for [mixed
+  models](https://easystats.github.io/modelbased/articles/mixed_models.html).
+
 ## Usage
 
 ``` r
@@ -555,7 +568,7 @@ model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 
 estimate_means(model)
 #> We selected `by=c("Species")`.
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Species    | Mean |   SE |       95% CI | t(144)
 #> ------------------------------------------------
@@ -565,13 +578,13 @@ estimate_means(model)
 #> 
 #> Variable predicted: Petal.Length
 #> Predictors modulated: Species
-#> Predictors averaged: Sepal.Width (3.1)
+#> Predictors held at: Sepal.Width (3.1)
 #> 
 
 # the `length` argument is passed to `insight::get_datagrid()` and modulates
 # the number of representative values to return for numeric predictors
 estimate_means(model, by = c("Species", "Sepal.Width"), length = 2)
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Species    | Sepal.Width | Mean |   SE |       95% CI | t(144)
 #> --------------------------------------------------------------
@@ -588,7 +601,7 @@ estimate_means(model, by = c("Species", "Sepal.Width"), length = 2)
 
 # an alternative way to setup your data grid is specify the values directly
 estimate_means(model, by = c("Species", "Sepal.Width = c(2, 4)"))
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Species    | Sepal.Width | Mean |   SE |       95% CI | t(144)
 #> --------------------------------------------------------------
@@ -607,7 +620,7 @@ estimate_means(model, by = c("Species", "Sepal.Width = c(2, 4)"))
 # data grid - to learn more about creating data grids, see help in
 # `?insight::get_datagrid`.
 estimate_means(model, by = c("Species", "Sepal.Width = [fivenum]"))
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Species    | Sepal.Width | Mean |   SE |       95% CI | t(144)
 #> --------------------------------------------------------------
@@ -634,7 +647,7 @@ estimate_means(model, by = c("Species", "Sepal.Width = [fivenum]"))
 # \dontrun{
 # same for factors: filter by specific levels
 estimate_means(model, by = "Species = c('versicolor', 'setosa')")
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Species    | Mean |   SE |       95% CI | t(144)
 #> ------------------------------------------------
@@ -643,10 +656,10 @@ estimate_means(model, by = "Species = c('versicolor', 'setosa')")
 #> 
 #> Variable predicted: Petal.Length
 #> Predictors modulated: Species = c('versicolor', 'setosa')
-#> Predictors averaged: Sepal.Width (3.1)
+#> Predictors held at: Sepal.Width (3.1)
 #> 
 estimate_means(model, by = c("Species", "Sepal.Width = 0"))
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Species    | Sepal.Width | Mean |   SE |       95% CI | t(144)
 #> --------------------------------------------------------------
@@ -660,7 +673,7 @@ estimate_means(model, by = c("Species", "Sepal.Width = 0"))
 
 # estimate marginal average of response at values for numeric predictor
 estimate_means(model, by = "Sepal.Width", length = 5)
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Sepal.Width | Mean |   SE |       95% CI | t(144)
 #> -------------------------------------------------
@@ -672,10 +685,10 @@ estimate_means(model, by = "Sepal.Width", length = 5)
 #> 
 #> Variable predicted: Petal.Length
 #> Predictors modulated: Sepal.Width
-#> Predictors averaged: Species
+#> Predictors averaged over a balanced grid: Species
 #> 
 estimate_means(model, by = "Sepal.Width = c(2, 4)")
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Sepal.Width | Mean |   SE |       95% CI | t(144)
 #> -------------------------------------------------
@@ -684,7 +697,7 @@ estimate_means(model, by = "Sepal.Width = c(2, 4)")
 #> 
 #> Variable predicted: Petal.Length
 #> Predictors modulated: Sepal.Width = c(2, 4)
-#> Predictors averaged: Species
+#> Predictors averaged over a balanced grid: Species
 #> 
 
 # or provide the definition of the data grid as list
@@ -692,7 +705,7 @@ estimate_means(
   model,
   by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa"))
 )
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Sepal.Width | Species    | Mean |   SE |       95% CI | t(144)
 #> --------------------------------------------------------------
@@ -708,7 +721,7 @@ estimate_means(
 # equivalence test: the null-hypothesis is that the estimate is outside
 # the equivalence bounds [-4.5, 4.5]
 estimate_means(model, by = "Species", equivalence = c(-4.5, 4.5))
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Species    | Mean |   SE |       95% CI | t(144) | p (Equivalence)
 #> ------------------------------------------------------------------
@@ -718,7 +731,7 @@ estimate_means(model, by = "Species", equivalence = c(-4.5, 4.5))
 #> 
 #> Variable predicted: Petal.Length
 #> Predictors modulated: Species
-#> Predictors averaged: Sepal.Width (3.1)
+#> Predictors held at: Sepal.Width (3.1)
 #> ROPE: [-4.50, 4.50]
 #> 
 
@@ -728,7 +741,7 @@ means <- estimate_means(model, by = c("Species", "Sepal.Width = 0"))
 plot(means) # which runs visualisation_recipe()
 
 standardize(means)
-#> Estimated Marginal Means (standardized)
+#> Conditional Predictions (standardized)
 #> 
 #> Species    | Sepal.Width |  Mean |   SE |         95% CI | t(144)
 #> -----------------------------------------------------------------
@@ -746,7 +759,7 @@ model <- lm(Sepal.Length ~ Sepal.Width * Petal.Length, data = iris)
 # create a "grid": value range for first numeric predictor, mean +/-1 SD
 # for remaining numeric predictors.
 estimate_means(model, c("Sepal.Width", "Petal.Length"), range = "grid")
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Sepal.Width | Petal.Length | Mean |   SE |       95% CI | t(146)
 #> ----------------------------------------------------------------
@@ -793,7 +806,7 @@ estimate_means(
   range = c("range", "sd"),
   length = c(4, 3)
 )
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Sepal.Width | Petal.Length | Mean |   SE |       95% CI | t(146)
 #> ----------------------------------------------------------------
@@ -823,7 +836,7 @@ model <- lme4::lmer(
 )
 estimate_means(model)
 #> We selected `by=c("Species")`.
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Species    | Mean |   SE |       95% CI | t(144)
 #> ------------------------------------------------
@@ -833,10 +846,11 @@ estimate_means(model)
 #> 
 #> Variable predicted: Petal.Length
 #> Predictors modulated: Species
-#> Predictors averaged: Sepal.Width (3.1), Petal.Length_factor
+#> Predictors held at: Sepal.Width (3.1)
+#> Random effects: Averaged over a balanced grid of cluster levels.
 #> 
 estimate_means(model, by = "Sepal.Width", length = 3)
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Sepal.Width | Mean |   SE |       95% CI | t(144)
 #> -------------------------------------------------
@@ -846,7 +860,8 @@ estimate_means(model, by = "Sepal.Width", length = 3)
 #> 
 #> Variable predicted: Petal.Length
 #> Predictors modulated: Sepal.Width
-#> Predictors averaged: Species, Petal.Length_factor
+#> Predictors averaged over a balanced grid: Species
+#> Random effects: Averaged over a balanced grid of cluster levels.
 #> 
 # }
 ```

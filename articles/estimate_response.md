@@ -22,7 +22,7 @@ the actual “true” values. This can be done by generating predictions:
 `pred_data`` ``<-`` `[`estimate_expectation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``)`\
 [`head`](https://rdrr.io/r/utils/head.html)`(``pred_data``)`
 
-    > Model-based Predictions
+    > Conditional Predictions
     > 
     > Sepal.Length | Predicted |   SE |       95% CI | Residuals
     > ----------------------------------------------------------

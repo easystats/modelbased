@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -230,7 +230,7 @@ research question <span class="citation">(Lundberg et al. 2021)</span>.
 Instead of passively interpreting whatever coefficients the software
 returns, we must actively decide whether our question requires us to
 estimate <em>predictions</em>, <em>slopes</em>, or <em>comparisons</em>
-(<em>quantity</em>),and determine to which target population we want to
+(<em>quantity</em>), and determine to which target population we want to
 generalize our results (<em>unit</em>) <span class="citation">(Rohrer
 and Arel-Bundock 2026; Rohrer and Murayama 2023)</span>.</p>
 <hr>
@@ -273,7 +273,7 @@ disease groups) to explore heterogeneity.</li>
 construct the mathematical model that will allow us to estimate
 them.</p>
 <div class="custom_note">
-<p><strong>The estimand - quantity and unit of interests</strong></p>
+<p><strong>The estimand - quantity and unit of interest</strong></p>
 <p>Defining your <em>estimand</em> requires specifying both the
 <em>quantity</em> and the <em>unit</em> of interest. Thus, determining
 your target population (<em>unit</em>) - whether that is a specific
@@ -426,7 +426,7 @@ interpret these coefficients as <em>descriptive comparisons</em>.
 Specifically, coefficients generally represent <em>conditional
 effects</em>, meaning they describe an association while <em>strictly
 holding all other covariates constant</em> (<span class="citation">Gelman et al. (2020)</span>; Chapter 6.3), i.e.,
-comparing individuals who are identical regarding these
+comparing individuals who are <strong>identical</strong> regarding these
 characteristics.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span>
@@ -525,8 +525,8 @@ effects shown)</caption>
 </h4>
 <p>The “interpretation trap” occurs when researchers forget that
 regression coefficients must be interpreted conditionally - meaning they
-only compare individuals who share the exact same characteristics across
-all other variables.</p>
+only compare individuals who share <strong>the exact same</strong>
+characteristics across all other variables.</p>
 <ul>
 <li><p><strong>Categorical Predictors:</strong> Estimates are
 interpreted relative to a baseline reference category. For instance, the
@@ -542,6 +542,16 @@ The <code>time</code> coefficient of -0.69 suggests a 0.69-point
 decrease in PHQ-15 scores for every single unit of time passed, again,
 assuming <em>all other variables are held constant</em>.</p></li>
 </ul>
+<div class="custom_note">
+<p>Conditioning on covariates means we <em>might</em> end up comparing
+individuals who do not exist in our sample - such as an unmarried,
+highly educated 67-year-old man and woman. While this <em>can</em> be a
+meaningful comparison, it often is not, which is why regression
+coefficients rarely answer our research questions directly. After all,
+do we want to compare 67-year-old, highly educated, unmarried women and
+men - or women and men in general? See the callout-box above, “The
+estimand - quantity and unit of interest”.</p>
+</div>
 <hr>
 <div class="figure" style="text-align: center">
 <img src="../reference/figures/these_are_not_the_effects.jpg" class="r-plt" alt="The Cognitive Overload of Conditional Effects" width="650px"><p class="caption">
@@ -688,7 +698,8 @@ with few unique values are correctly treated for slope contrasts.</p>
 <span>  contrast <span class="op">=</span> <span class="st">"time"</span>,</span>
 <span>  by <span class="op">=</span> <span class="st">"symptoms_unreal"</span>,</span>
 <span>  integer_as_continuous <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  estimate <span class="op">=</span> <span class="st">"average"</span></span>
+<span>  estimate <span class="op">=</span> <span class="st">"average"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <details><summary>
 Click to show code for plot generation

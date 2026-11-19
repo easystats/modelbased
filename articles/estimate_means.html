@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -210,7 +210,7 @@ model, and represent average of response variable (here,
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span><span class="va">means</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
 <span><span class="va">means</span></span></code></pre></div>
-<pre><code>&gt; Estimated Marginal Means
+<pre><code>&gt; Conditional Predictions
 &gt; 
 &gt; Species    | Mean |   SE |       95% CI | t(147)
 &gt; ------------------------------------------------
@@ -261,7 +261,7 @@ will take into account) for variations of these other components.</p>
 <span><span class="va">means_complex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">means_complex</span></span></code></pre></div>
-<pre><code>&gt; Estimated Marginal Means
+<pre><code>&gt; Conditional Predictions
 &gt; 
 &gt; Species    | Mean |   SE |       95% CI | t(146)
 &gt; ------------------------------------------------
@@ -271,7 +271,7 @@ will take into account) for variations of these other components.</p>
 &gt; 
 &gt; Variable predicted: Sepal.Width
 &gt; Predictors modulated: Species
-&gt; Predictors averaged: Petal.Width (1.2)</code></pre>
+&gt; Predictors held at: Petal.Width (1.2)</code></pre>
 <p>Now let’s add to our previous plot the marginal means from the more
 complex model (shown in purple) next to each other, which should help us
 notice how the adjusted means change depending on the predictors.</p>

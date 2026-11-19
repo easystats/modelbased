@@ -181,7 +181,7 @@ out <- estimate_means(model, "Species")
 
 # default
 print(out)
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Species    | Mean |   SE |       95% CI | t(147)
 #> ------------------------------------------------
@@ -195,7 +195,7 @@ print(out)
 
 # smaller set of columns
 print(out, select = "minimal")
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Species    |         Mean (CI)
 #> ------------------------------
@@ -214,12 +214,12 @@ levels(efc$c172code) <- c("low", "mid", "high")
 fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex, data = efc)
 out <- estimate_means(fit, c("c161sex", "c172code", "e16sex"))
 print(out, full_labels = FALSE, select = "{estimate} ({se})")
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> c161sex | c172code | e16sex |    Mean (SE)
 #> ------------------------------------------
 #> Male    | low      | male   |  9.47 (1.00)
-#> Female  |          |        | 12.12 (0.48)
+#> Female  |          |        | 12.13 (0.48)
 #> Male    | mid      |        | 12.16 (0.68)
 #> Female  |          |        | 12.48 (0.35)
 #> Male    | high     |        | 12.31 (1.07)

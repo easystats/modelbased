@@ -43,7 +43,7 @@ increases by one unit.
 
 \
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"Sepal.Length=c(4,5,6,7)"``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> Sepal.Length | Mean |   SE |       95% CI | t(146)`\
 `#> --------------------------------------------------`\
@@ -54,7 +54,7 @@ increases by one unit.
 `#> `\
 `#> Variable predicted: Sepal.Width`\
 `#> Predictors modulated: Sepal.Length=c(4,5,6,7)`\
-`#> Predictors averaged: Species`
+`#> Predictors averaged over a balanced grid: Species`
 
 Consequently, in this case of a simple slope, we see the same result for
 the estimated linear trend of `Sepal.Length`:
@@ -123,7 +123,7 @@ pairwise comparison between slopes. To do this, we use
 
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, ``"Sepal.Length"``, by ``=`` ``"Species"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1     | Level2     | Difference |   SE |         95% CI | t(144) |      p`\
 `#> ------------------------------------------------------------------------------`\
@@ -133,7 +133,7 @@ pairwise comparison between slopes. To do this, we use
 `#> `\
 `#> Variable predicted: Sepal.Width`\
 `#> Predictors contrasted: Sepal.Length`\
-`#> Predictors averaged: Sepal.Length (5.8)`\
+`#> Predictors held at: Sepal.Length (5.8)`\
 `#> p-values are uncorrected.`
 
 The linear trend of `Sepal.Length` within `setosa` is significantly
@@ -178,7 +178,7 @@ second difference is between levels `setosa` (0.80) and `virginica`
 `  by ``=`` ``"Species"``,`\
 `  comparison ``=`` ``"(b1 - b2) = (b1 - b3)"`\
 `)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Parameter   | Difference |   SE |        95% CI | t(144) |     p`\
 `#> ----------------------------------------------------------------`\
@@ -186,7 +186,7 @@ second difference is between levels `setosa` (0.80) and `virginica`
 `#> `\
 `#> Variable predicted: Sepal.Width`\
 `#> Predictors contrasted: Sepal.Length`\
-`#> Predictors averaged: Sepal.Length (5.8)`\
+`#> Predictors held at: Sepal.Length (5.8)`\
 `#> p-values are uncorrected.`\
 `#> Parameters:`\
 `#> b1 = Species [setosa]`\
@@ -254,7 +254,7 @@ the slope of the red line, and so on.
 
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, ``"Petal.Length"``, by ``=`` ``"Petal.Width=[sd]"``, digits ``=`` ``1``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 | Difference |   SE |       95% CI | t(146) |      p`\
 `#> --------------------------------------------------------------------`\
@@ -264,7 +264,7 @@ the slope of the red line, and so on.
 `#> `\
 `#> Variable predicted: Sepal.Width`\
 `#> Predictors contrasted: Petal.Length`\
-`#> Predictors averaged: Petal.Length (3.8)`\
+`#> Predictors held at: Petal.Length (3.8)`\
 `#> p-values are uncorrected.`
 
 #### Floodlight analysis and Johnson-Neyman intervals

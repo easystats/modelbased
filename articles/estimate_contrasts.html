@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -175,7 +175,7 @@ previous tutorial:</p>
 <code>estimate_contrasts</code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; Marginal Contrasts Analysis
+<pre><code>&gt; Conditional Contrasts
 &gt; 
 &gt; Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p
 &gt; ------------------------------------------------------------------------------
@@ -198,7 +198,7 @@ applied to more complex models:</p>
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
 <span><span class="va">contrasts</span></span></code></pre></div>
-<pre><code>&gt; Marginal Contrasts Analysis
+<pre><code>&gt; Conditional Contrasts
 &gt; 
 &gt; Level1     | Level2     | Difference |   SE |         95% CI | t(144) |      p
 &gt; ------------------------------------------------------------------------------
@@ -208,7 +208,7 @@ applied to more complex models:</p>
 &gt; 
 &gt; Variable predicted: Sepal.Width
 &gt; Predictors contrasted: Species
-&gt; Predictors averaged: Petal.Width (1.2)
+&gt; Predictors held at: Petal.Width (1.2)
 &gt; p-values are uncorrected.</code></pre>
 <p>For instance, if we add <code>Petal.Width</code> in the model, we can
 see that the difference between <em>versicolor</em> and

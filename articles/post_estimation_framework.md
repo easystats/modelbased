@@ -71,7 +71,7 @@ the specific target quantity (and unit) that directly answers the
 research question (Lundberg et al. 2021). Instead of passively
 interpreting whatever coefficients the software returns, we must
 actively decide whether our question requires us to estimate
-*predictions*, *slopes*, or *comparisons* (*quantity*),and determine to
+*predictions*, *slopes*, or *comparisons* (*quantity*), and determine to
 which target population we want to generalize our results (*unit*)
 (Rohrer and Arel-Bundock 2026; Rohrer and Murayama 2023).
 
@@ -112,7 +112,7 @@ estimands:
 Once these target quantities are clearly defined, we can proceed to
 construct the mathematical model that will allow us to estimate them.
 
-**The estimand - quantity and unit of interests**
+**The estimand - quantity and unit of interest**
 
 Defining your *estimand* requires specifying both the *quantity* and the
 *unit* of interest. Thus, determining your target population (*unit*) -
@@ -268,7 +268,7 @@ interpret these coefficients as *descriptive comparisons*. Specifically,
 coefficients generally represent *conditional effects*, meaning they
 describe an association while *strictly holding all other covariates
 constant* (Gelman et al. (2020); Chapter 6.3), i.e., comparing
-individuals who are identical regarding these characteristics.
+individuals who are **identical** regarding these characteristics.
 
 \
 `result`` ``<-`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``model``, effects ``=`` ``"fixed"``)`\
@@ -295,8 +295,8 @@ shown) {.table}
 
 The “interpretation trap” occurs when researchers forget that regression
 coefficients must be interpreted conditionally - meaning they only
-compare individuals who share the exact same characteristics across all
-other variables.
+compare individuals who share **the exact same** characteristics across
+all other variables.
 
 - **Categorical Predictors:** Estimates are interpreted relative to a
   baseline reference category. For instance, the coefficient for
@@ -311,6 +311,15 @@ other variables.
   coefficient of -0.69 suggests a 0.69-point decrease in PHQ-15 scores
   for every single unit of time passed, again, assuming *all other
   variables are held constant*.
+
+Conditioning on covariates means we *might* end up comparing individuals
+who do not exist in our sample - such as an unmarried, highly educated
+67-year-old man and woman. While this *can* be a meaningful comparison,
+it often is not, which is why regression coefficients rarely answer our
+research questions directly. After all, do we want to compare
+67-year-old, highly educated, unmarried women and men - or women and men
+in general? See the callout-box above, “The estimand - quantity and unit
+of interest”.
 
 ------------------------------------------------------------------------
 
@@ -468,7 +477,8 @@ slope contrasts.
 `  contrast ``=`` ``"time"``,`\
 `  by ``=`` ``"symptoms_unreal"``,`\
 `  integer_as_continuous ``=`` ``TRUE``,`\
-`  estimate ``=`` ``"average"`\
+`  estimate ``=`` ``"average"``,`\
+`  verbose ``=`` ``FALSE`\
 `)`
 
 Click to show code for plot generation

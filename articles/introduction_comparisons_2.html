@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -243,7 +243,7 @@ itself.</p>
 <span><span class="co"># to which factor level of interest. we want to average the two</span></span>
 <span><span class="co"># treatment level and compare it to the control level</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m2</span>, <span class="st">"dose_original"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; dose_original | Mean |   SE |       95% CI | t(24)</span></span>
 <span><span class="co">#&gt; --------------------------------------------------</span></span>
@@ -253,12 +253,12 @@ itself.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: happiness</span></span>
 <span><span class="co">#&gt; Predictors modulated: dose_original</span></span>
-<span><span class="co">#&gt; Predictors averaged: puppy_love (-5.9e-17)</span></span>
+<span><span class="co">#&gt; Predictors held at: puppy_love (-5.9e-17)</span></span>
 <span></span>
 <span><span class="co"># treat_vs_none (i.e. average of short and long vs. none)</span></span>
 <span><span class="co"># this contrasts corresponds to the estimate of the model m1, 1.94</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m2</span>, <span class="st">"dose_original"</span>, comparison <span class="op">=</span> <span class="st">"((b2+b3)/2) = b1"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter  | Difference |   SE |       95% CI | t(24) |     p</span></span>
 <span><span class="co">#&gt; -------------------------------------------------------------</span></span>
@@ -266,7 +266,7 @@ itself.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: happiness</span></span>
 <span><span class="co">#&gt; Predictors contrasted: dose_original</span></span>
-<span><span class="co">#&gt; Predictors averaged: puppy_love (-5.9e-17)</span></span>
+<span><span class="co">#&gt; Predictors held at: puppy_love (-5.9e-17)</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
 <span><span class="co">#&gt; Parameters:</span></span>
 <span><span class="co">#&gt; b2 = dose_original [15 mins]</span></span>
@@ -276,7 +276,7 @@ itself.</p>
 <span><span class="co"># short_vs_long</span></span>
 <span><span class="co"># this contrasts corresponds to the estimate of the model m1, 0.13</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m2</span>, <span class="st">"dose_original"</span>, comparison <span class="op">=</span> <span class="st">"b3 = b2"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter | Difference |   SE |        95% CI | t(24) |     p</span></span>
 <span><span class="co">#&gt; -------------------------------------------------------------</span></span>
@@ -284,7 +284,7 @@ itself.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: happiness</span></span>
 <span><span class="co">#&gt; Predictors contrasted: dose_original</span></span>
-<span><span class="co">#&gt; Predictors averaged: puppy_love (-5.9e-17)</span></span>
+<span><span class="co">#&gt; Predictors held at: puppy_love (-5.9e-17)</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
 <span><span class="co">#&gt; Parameters:</span></span>
 <span><span class="co">#&gt; b3 = dose_original [30 mins]</span></span>
@@ -373,16 +373,16 @@ joint tests, set <code>comparison = "joint"</code>.</p>
 <span><span class="co"># contrasts of pairwise comparisons of levels of "time" within the</span></span>
 <span><span class="co"># different levels of "coffee"</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"coffee"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1    | Level2  | coffee  | Difference |   SE |        95% CI |    t(114) |      p</span></span>
-<span><span class="co">#&gt; --------------------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; noon      | morning | coffee  |      -1.93 | 2.05 | [-5.99, 2.14] |     -0.94 |  0.350</span></span>
-<span><span class="co">#&gt; afternoon | morning | coffee  |       1.93 | 2.05 | [-2.14, 5.99] |      0.94 |  0.350</span></span>
-<span><span class="co">#&gt; afternoon | noon    | coffee  |       3.86 | 2.05 | [-0.21, 7.92] |      1.88 |  0.063</span></span>
-<span><span class="co">#&gt; noon      | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |      2.82 |  0.006</span></span>
-<span><span class="co">#&gt; afternoon | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |      2.82 |  0.006</span></span>
-<span><span class="co">#&gt; afternoon | noon    | control |  -3.55e-15 | 2.05 | [-4.07, 4.07] | -1.73e-15 | &gt; .999</span></span>
+<span><span class="co">#&gt; Level1    | Level2  | coffee  | Difference |   SE |        95% CI | t(114) |      p</span></span>
+<span><span class="co">#&gt; -----------------------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; noon      | morning | coffee  |      -1.93 | 2.05 | [-5.99, 2.14] |  -0.94 |  0.350</span></span>
+<span><span class="co">#&gt; afternoon | morning | coffee  |       1.93 | 2.05 | [-2.14, 5.99] |   0.94 |  0.350</span></span>
+<span><span class="co">#&gt; afternoon | noon    | coffee  |       3.86 | 2.05 | [-0.21, 7.92] |   1.88 |  0.063</span></span>
+<span><span class="co">#&gt; noon      | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |   2.82 |  0.006</span></span>
+<span><span class="co">#&gt; afternoon | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |   2.82 |  0.006</span></span>
+<span><span class="co">#&gt; afternoon | noon    | control |       0.00 | 2.05 | [-4.07, 4.07] |   0.00 | &gt; .999</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: alertness</span></span>
 <span><span class="co">#&gt; Predictors contrasted: time</span></span>
@@ -391,7 +391,7 @@ joint tests, set <code>comparison = "joint"</code>.</p>
 <span><span class="co"># jointly test whether the contrasts of all levels of time have an</span></span>
 <span><span class="co"># effect within each level of "coffee"</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"coffee"</span>, comparison <span class="op">=</span> <span class="st">"joint"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Joint Test</span></span>
+<span><span class="co">#&gt; Conditional Joint Test</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Contrast | coffee  | df1 | df2 |    F |     p</span></span>
 <span><span class="co">#&gt; ---------------------------------------------</span></span>
@@ -412,7 +412,7 @@ interactions.</p>
 <span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"coffee"</span>, <span class="st">"sex"</span><span class="op">)</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"joint"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Joint Test</span></span>
+<span><span class="co">#&gt; Conditional Joint Test</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Contrast | coffee  | sex    | df1 | df2 |     F |      p</span></span>
 <span><span class="co">#&gt; --------------------------------------------------------</span></span>

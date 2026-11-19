@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -139,7 +139,7 @@
                         <h4 data-toc-skip class="author">The easystats
 team</h4>
             
-            <h4 data-toc-skip class="date">2026-11-17</h4>
+            <h4 data-toc-skip class="date">2026-11-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/vignettes/practical_growthmixture.Rmd" class="external-link"><code>vignettes/practical_growthmixture.Rmd</code></a></small>
       <div class="d-none name"><code>practical_growthmixture.Rmd</code></div>
@@ -298,7 +298,7 @@ belongs to at each time point. We can use the
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_prediction</a></span><span class="op">(</span><span class="va">brms_mixture_2</span>, predict <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Model-based Predictions</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; time | hospital | education |   age | ID | Predicted | Probability</span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
@@ -402,7 +402,7 @@ look at the effect of <code>education</code>. The
 as it computes the means for each class separately.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">brms_mixture_2</span>, by <span class="op">=</span> <span class="st">"education"</span>, predict <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Average Predictions</span></span>
+<span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; education |          Median (CI) | pd   | Class</span></span>
 <span><span class="co">#&gt; -----------------------------------------------</span></span>
@@ -415,6 +415,8 @@ as it computes the means for each class separately.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors modulated: education</span></span>
+<span><span class="co">#&gt; Predictors averaged within levels of education: time, hospital, age</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; Predictions are on the link-scale.</span></span></code></pre></div>
 <p>This table gives us the expected mean <code>QoL</code> for each
 education level, conditional on class membership. For instance, a
@@ -435,7 +437,7 @@ classes, giving a general sense of inequality.</p>
 <span>  <span class="va">brms_mixture_2</span>,</span>
 <span>  contrast <span class="op">=</span> <span class="st">"education"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Averaged Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Marginal Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |         Median (CI) |     pd</span></span>
 <span><span class="co">#&gt; ----------------------------------------------</span></span>
@@ -445,6 +447,8 @@ classes, giving a general sense of inequality.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: education</span></span>
+<span><span class="co">#&gt; Predictors averaged within levels of education: time, hospital, age</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; Contrasts are on the response-scale.</span></span></code></pre></div>
 <p>More interestingly, we can set <code>predict = "link"</code> to get
 contrasts both <em>within</em> and <em>between</em> classes. This
@@ -455,7 +459,7 @@ provides a very detailed picture.</p>
 <span>  contrast <span class="op">=</span> <span class="st">"education"</span>,</span>
 <span>  predict <span class="op">=</span> <span class="st">"link"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Averaged Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Marginal Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |           Median (CI) |     pd</span></span>
 <span><span class="co">#&gt; ------------------------------------------------</span></span>
@@ -477,6 +481,8 @@ provides a very detailed picture.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: education</span></span>
+<span><span class="co">#&gt; Predictors averaged within levels of education: time, hospital, age</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; Contrasts are on the link-scale.</span></span></code></pre></div>
 <p>The output is rich with information. For example,
 <code>2 high | 2 low</code> shows the contrast between high and low
@@ -500,7 +506,7 @@ that variable. Let’s compare the inequality associated with
 <span>  contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"education"</span>, <span class="st">"hospital"</span><span class="op">)</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"inequality"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Averaged Inequality Analysis</span></span>
+<span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter |        Median (CI) |   pd</span></span>
 <span><span class="co">#&gt; -------------------------------------</span></span>
@@ -509,6 +515,7 @@ that variable. Let’s compare the inequality associated with
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: education, hospital</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; Differences are on the response-scale.</span></span></code></pre></div>
 <p>The results are striking. The inequality median for
 <code>education</code> is <code>8.46</code>, while for

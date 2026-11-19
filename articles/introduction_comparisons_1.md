@@ -80,7 +80,7 @@ Let us look at the adjusted predictions.
 \
 `my_predictions`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model1``, ``"episode"``)`\
 `my_predictions`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> episode |           Mean (CI)`\
 `#> -----------------------------`\
@@ -90,7 +90,7 @@ Let us look at the adjusted predictions.
 `#> `\
 `#> Variable predicted: outcome`\
 `#> Predictors modulated: episode`\
-`#> Predictors averaged: grp`\
+`#> Predictors averaged over a balanced grid: grp`\
 \
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``my_predictions``)`
 
@@ -116,7 +116,7 @@ comparisons.
 \
 `` # argument `comparison` defaults to "pairwise" ``\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model1``, ``"episode"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 |     Difference (CI) |     p`\
 `#> ---------------------------------------------`\
@@ -126,7 +126,7 @@ comparisons.
 `#> `\
 `#> Variable predicted: outcome`\
 `#> Predictors contrasted: episode`\
-`#> Predictors averaged: grp`\
+`#> Predictors averaged over a balanced grid: grp`\
 `#> p-values are uncorrected.`
 
 For our quantity of interest, the contrast between episode levels 2 and
@@ -142,7 +142,7 @@ directly, to simplify the output:
 
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model1``, contrast ``=`` ``"episode=c(1,2)"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 |   Difference (CI) |     p`\
 `#> -------------------------------------------`\
@@ -150,7 +150,7 @@ directly, to simplify the output:
 `#> `\
 `#> Variable predicted: outcome`\
 `#> Predictors contrasted: episode=c(1,2)`\
-`#> Predictors averaged: grp`\
+`#> Predictors averaged over a balanced grid: grp`\
 `#> p-values are uncorrected.`
 
 ### Does same level of episode differ between groups?
@@ -178,7 +178,7 @@ of the involved interaction term.
 \
 `my_predictions`` ``<-`` `[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model2``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``)`\
 `my_predictions`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> episode | grp       |            Mean (CI)`\
 `#> ------------------------------------------`\
@@ -212,7 +212,7 @@ are our two variables used for the interaction.
 \
 `# we want "episode = 2-2" and "grp = control-treatment"`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model2``, contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1       | Level2       |     Difference (CI) |     p`\
 `#> ---------------------------------------------------------`\
@@ -255,7 +255,7 @@ specific comparison, we have two options to simplify the output:
 
 \
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model2``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> episode | grp       |            Mean (CI)`\
 `#> ------------------------------------------`\
@@ -281,7 +281,7 @@ calculate the desired comparison directly:
 \
 `# compute specific contrast directly`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model2``, contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``, comparison ``=`` ``"b2 = b5"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Parameter |    Difference (CI) |     p`\
 `#> --------------------------------------`\
@@ -303,7 +303,7 @@ also simplify the output using an alternative syntax:
 `# return pairwise comparisons for specific values, in`\
 `# this case for episode = 2 in both groups`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model2``, contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode=2"``, ``"grp"``)``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1    | Level2  |     Difference (CI) |     p`\
 `#> -------------------------------------------------`\
@@ -338,7 +338,7 @@ predicted values), thus we `comparison` whether `"b4 = b3"`.
 
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model2``, contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``, comparison ``=`` ``"b4 = b3"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Parameter |     Difference (CI) |     p`\
 `#> ---------------------------------------`\
@@ -358,7 +358,7 @@ in the `by` or `contrast` argument:
 
 \
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model2``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode=c(1,3)"``, ``"grp"``)``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> episode | grp       |            Mean (CI)`\
 `#> ------------------------------------------`\
@@ -380,7 +380,7 @@ thus we also can obtain the desired comparison this way:
 `  contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"episode = c(1, 3)"``, ``"grp"``)``,`\
 `  comparison ``=`` ``"b3 = b2"`\
 `)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Parameter |     Difference (CI) |     p`\
 `#> ---------------------------------------`\
@@ -407,7 +407,7 @@ As a reminder, we look at the table of predictions again:
 
 \
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model2``, `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> episode | grp       |            Mean (CI)`\
 `#> ------------------------------------------`\
@@ -434,7 +434,7 @@ differences are equal: `comparison = "(b1 - b2) = (b4 - b5)"`.
 `  `[`c`](https://rdrr.io/r/base/c.html)`(``"episode"``, ``"grp"``)``,`\
 `  comparison ``=`` ``"(b1 - b2) = (b4 - b5)"`\
 `)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Parameter   |    Difference (CI) |     p`\
 `#> ----------------------------------------`\
@@ -489,7 +489,7 @@ interest located in row 8.
 `)`\
 `# quite wide table - we find our comparison in row 8`\
 [`print`](https://rdrr.io/r/base/print.html)`(``result``, table_width ``=`` ``Inf``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Parameter                                           |      Difference (CI) |     p`\
 `#> ----------------------------------------------------------------------------------`\

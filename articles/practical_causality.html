@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -355,7 +355,7 @@ simpler approach.</p>
 <span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
 <span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; -------------------------------------------</span></span>
@@ -363,7 +363,8 @@ simpler approach.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
-<span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
+<span><span class="co">#&gt; Predictors averaged over the full sample: time, education, hospital, age, phq4</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -417,7 +418,7 @@ our <code>treatment</code> predictor.</p>
 <span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
 <span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; -------------------------------------------</span></span>
@@ -425,7 +426,8 @@ our <code>treatment</code> predictor.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
-<span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
+<span><span class="co">#&gt; Predictors averaged over the full sample: time, education, hospital, age, phq4</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -445,7 +447,7 @@ similar.</p>
 <span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
 <span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 | time |      Difference (CI) |      p</span></span>
 <span><span class="co">#&gt; ------------------------------------------------------</span></span>
@@ -455,7 +457,8 @@ similar.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
-<span><span class="co">#&gt; Predictors averaged: education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
+<span><span class="co">#&gt; Predictors averaged over the full sample: education, hospital, age, phq4</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <p>But is the <em>change</em> in the ATE between two time points
 statistically significant? In other words, is the ATE increasing (or
@@ -471,7 +474,7 @@ this vignette</a>) to check this!</p>
 <span>  weights <span class="op">=</span> <span class="st">"ipw"</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"(b3-b1) = (b4-b2)"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter   |      Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; ------------------------------------------</span></span>
@@ -479,7 +482,8 @@ this vignette</a>) to check this!</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
-<span><span class="co">#&gt; Predictors averaged: education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
+<span><span class="co">#&gt; Predictors averaged over the full sample: education, hospital, age, phq4</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
 <span><span class="co">#&gt; Parameters:</span></span>
 <span><span class="co">#&gt; b3 = treatment [0], time [2]</span></span>
@@ -512,7 +516,7 @@ estimated difference of 5.64.</p>
 <span></span>
 <span><span class="co"># complex model, simple contrasts, no g-computation</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m4</span>, <span class="st">"treatment"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Conditional Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |    Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; --------------------------------------------</span></span>
@@ -520,12 +524,14 @@ estimated difference of 5.64.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
-<span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
+<span><span class="co">#&gt; Predictors held at: hospital (0.95), age (0.22), phq4 (-0.076)</span></span>
+<span><span class="co">#&gt; Predictors averaged over a balanced grid: time, education</span></span>
+<span><span class="co">#&gt; Random effects: Averaged over a balanced grid of cluster levels.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
 <span></span>
 <span><span class="co"># complex model, with IPW *and* G-computation (double-robust) is accurate!</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m4</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span>, weights <span class="op">=</span> <span class="st">"ipw"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; -------------------------------------------</span></span>
@@ -533,7 +539,8 @@ estimated difference of 5.64.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
-<span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
+<span><span class="co">#&gt; Predictors averaged over the full sample: time, education, hospital, age, phq4</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -561,7 +568,7 @@ already receive it.</p>
 <span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
 <span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; -------------------------------------------</span></span>
@@ -569,7 +576,8 @@ already receive it.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
-<span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
+<span><span class="co">#&gt; Predictors averaged over the full sample: time, education, hospital, age, phq4</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
 <span></span>
 <span><span class="co"># the ATU - apply g-computation only to the subset of the conrol</span></span>
@@ -580,7 +588,7 @@ already receive it.</p>
 <span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
 <span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; -------------------------------------------</span></span>
@@ -588,7 +596,8 @@ already receive it.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
-<span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
+<span><span class="co">#&gt; Predictors averaged over the full sample: time, education, hospital, age, phq4</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <p>It is helpful to calculate both ATT and ATU, as they can differ
 substantially, indicating a potential bias in the selection mechanism of
@@ -666,7 +675,7 @@ option (which is equivalent to the Huber-White estimator).</p>
 <span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
 <span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
 <span><span class="co">#&gt; -------------------------------------------</span></span>
@@ -674,7 +683,8 @@ option (which is equivalent to the Huber-White estimator).</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
-<span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
+<span><span class="co">#&gt; Predictors averaged over the full sample: time, education, hospital, age, phq4</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <p>A fully Bayesian approach, as demonstrated here, also provides a
 robust alternative.</p>
@@ -690,15 +700,16 @@ robust alternative.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m5</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span>, weights <span class="op">=</span> <span class="st">"ipw"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
+<span><span class="co">#&gt; Marginal Contrasts</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |       Median (CI) |     pd</span></span>
 <span><span class="co">#&gt; --------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 5.53 (1.58, 9.54) | 99.50%</span></span>
+<span><span class="co">#&gt; 1      | 0      | 5.67 (1.81, 9.47) | 99.92%</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL, ipw</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
-<span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span></code></pre></div>
+<span><span class="co">#&gt; Predictors averaged over the full sample: time, education, hospital, age, phq4</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>

@@ -36,7 +36,7 @@ function:
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, contrast ``=`` ``"Species"``)`
 
-    > Marginal Contrasts Analysis
+    > Conditional Contrasts
     > 
     > Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p
     > ------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ applied to more complex models:
 `contrasts`` ``<-`` `[`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``model``, contrast ``=`` ``"Species"``)`\
 `contrasts`
 
-    > Marginal Contrasts Analysis
+    > Conditional Contrasts
     > 
     > Level1     | Level2     | Difference |   SE |         95% CI | t(144) |      p
     > ------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ applied to more complex models:
     > 
     > Variable predicted: Sepal.Width
     > Predictors contrasted: Species
-    > Predictors averaged: Petal.Width (1.2)
+    > Predictors held at: Petal.Width (1.2)
     > p-values are uncorrected.
 
 For instance, if we add `Petal.Width` in the model, we can see that the

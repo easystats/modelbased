@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -246,7 +246,7 @@ methods.</p>
 <span><span class="co"># `estimate = "typical"`, `re.form = NULL`: a "typical" observation</span></span>
 <span><span class="co"># across clusters on average</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"Days"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Days |               Mean (CI)</span></span>
 <span><span class="co">#&gt; ------------------------------</span></span>
@@ -263,12 +263,12 @@ methods.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: Reaction</span></span>
 <span><span class="co">#&gt; Predictors modulated: Days</span></span>
-<span><span class="co">#&gt; Predictors averaged: Subject</span></span>
+<span><span class="co">#&gt; Random effects: Averaged over a balanced grid of cluster levels.</span></span>
 <span></span>
 <span><span class="co"># `estimate = "typical"`, `re.form = NA`: a "typical" observation</span></span>
 <span><span class="co"># for a "typical" (average) cluster - `re.form = NA` has no effect here</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"Days"</span>, re.form <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Days |               Mean (CI)</span></span>
 <span><span class="co">#&gt; ------------------------------</span></span>
@@ -285,11 +285,11 @@ methods.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: Reaction</span></span>
 <span><span class="co">#&gt; Predictors modulated: Days</span></span>
-<span><span class="co">#&gt; Predictors averaged: Subject</span></span>
+<span><span class="co">#&gt; Random effects: Conditional on a typical cluster.</span></span>
 <span></span>
 <span><span class="co"># fully marginalized predictions, still same result as above</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"Days"</span>, estimate <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Average Predictions</span></span>
+<span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Days |               Mean (CI)</span></span>
 <span><span class="co">#&gt; ------------------------------</span></span>
@@ -305,7 +305,8 @@ methods.</p>
 <span><span class="co">#&gt; 9    | 345.61 (316.74, 374.48)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: Reaction</span></span>
-<span><span class="co">#&gt; Predictors modulated: Days</span></span></code></pre></div>
+<span><span class="co">#&gt; Predictors modulated: Days</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="imbalanced-data">Imbalanced Data<a class="anchor" aria-label="anchor" href="#imbalanced-data"></a>
@@ -329,7 +330,7 @@ when we have <em>linear</em> mixed models.</p>
 <span><span class="co"># conditional predictions marginalized over</span></span>
 <span><span class="co"># a "balanced" grid of random effects</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"sex"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |            Mean (CI)</span></span>
 <span><span class="co">#&gt; -----------------------------</span></span>
@@ -338,11 +339,12 @@ when we have <em>linear</em> mixed models.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: bill_len</span></span>
 <span><span class="co">#&gt; Predictors modulated: sex</span></span>
-<span><span class="co">#&gt; Predictors averaged: body_mass, species</span></span>
+<span><span class="co">#&gt; Predictors averaged over a balanced grid: body_mass</span></span>
+<span><span class="co">#&gt; Random effects: Averaged over a balanced grid of cluster levels.</span></span>
 <span></span>
 <span><span class="co"># (fully) marginal predictions</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Average Predictions</span></span>
+<span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |            Mean (CI)</span></span>
 <span><span class="co">#&gt; -----------------------------</span></span>
@@ -351,10 +353,12 @@ when we have <em>linear</em> mixed models.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: bill_len</span></span>
 <span><span class="co">#&gt; Predictors modulated: sex</span></span>
+<span><span class="co">#&gt; Predictors averaged within levels of sex: body_mass</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span></span>
 <span><span class="co"># marginal predictions conditioning on a "typical" cluster</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"sex"</span>, estimate <span class="op">=</span> <span class="st">"average"</span>, re.form <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Average Predictions</span></span>
+<span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; sex    |            Mean (CI)</span></span>
 <span><span class="co">#&gt; -----------------------------</span></span>
@@ -362,10 +366,12 @@ when we have <em>linear</em> mixed models.</p>
 <span><span class="co">#&gt; male   | 46.92 (40.87, 52.98)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: bill_len</span></span>
-<span><span class="co">#&gt; Predictors modulated: sex</span></span></code></pre></div>
+<span><span class="co">#&gt; Predictors modulated: sex</span></span>
+<span><span class="co">#&gt; Predictors averaged within levels of sex: body_mass</span></span>
+<span><span class="co">#&gt; Random effects: Conditional on a typical cluster.</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="excourse-technical-details">Excourse: Technical Details<a class="anchor" aria-label="anchor" href="#excourse-technical-details"></a>
+<h4 id="excursus-technical-details">Excursus: Technical Details<a class="anchor" aria-label="anchor" href="#excursus-technical-details"></a>
 </h4>
 <div class="custom_note">
 <p>To better understand how these predictions are computed under the
@@ -428,7 +434,7 @@ lower (0.66 for <code>camper = 0</code> and 1.68 for
 <span><span class="co"># conditional predictions marginalized over</span></span>
 <span><span class="co"># a "balanced" grid of random effects</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |          Mean (CI)</span></span>
 <span><span class="co">#&gt; ---------------------------</span></span>
@@ -437,12 +443,13 @@ lower (0.66 for <code>camper = 0</code> and 1.68 for
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors modulated: camper</span></span>
-<span><span class="co">#&gt; Predictors averaged: child (0.68), persons (1)</span></span>
+<span><span class="co">#&gt; Predictors held at: child (0.68)</span></span>
+<span><span class="co">#&gt; Random effects: Averaged over a balanced grid of cluster levels.</span></span>
 <span><span class="co">#&gt; Predictions are on the response-scale.</span></span>
 <span></span>
 <span><span class="co"># conditional predictions for a "typical" cluster</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, re.form <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |          Mean (CI)</span></span>
 <span><span class="co">#&gt; ---------------------------</span></span>
@@ -451,7 +458,8 @@ lower (0.66 for <code>camper = 0</code> and 1.68 for
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors modulated: camper</span></span>
-<span><span class="co">#&gt; Predictors averaged: child (0.68), persons (1)</span></span>
+<span><span class="co">#&gt; Predictors held at: child (0.68)</span></span>
+<span><span class="co">#&gt; Random effects: Conditional on a typical cluster.</span></span>
 <span><span class="co">#&gt; Predictions are on the response-scale.</span></span></code></pre></div>
 <p>When using <code>estimate = "average"</code> to average across all
 observations and clusters, the differences between marginal and
@@ -463,7 +471,7 @@ the predictions for “typical” observations based on the default
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># (fully) marginal predictions</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, estimate <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Average Predictions</span></span>
+<span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |           Mean (CI)</span></span>
 <span><span class="co">#&gt; ----------------------------</span></span>
@@ -472,11 +480,13 @@ the predictions for “typical” observations based on the default
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors modulated: camper</span></span>
+<span><span class="co">#&gt; Predictors averaged within levels of camper: child</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; Predictions are on the response-scale.</span></span>
 <span></span>
 <span><span class="co"># marginal predictions, conditioning on a "typical" cluster</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, estimate <span class="op">=</span> <span class="st">"average"</span>, re.form <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Average Predictions</span></span>
+<span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |          Mean (CI)</span></span>
 <span><span class="co">#&gt; ---------------------------</span></span>
@@ -485,6 +495,8 @@ the predictions for “typical” observations based on the default
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors modulated: camper</span></span>
+<span><span class="co">#&gt; Predictors averaged within levels of camper: child</span></span>
+<span><span class="co">#&gt; Random effects: Conditional on a typical cluster.</span></span>
 <span><span class="co">#&gt; Predictions are on the response-scale.</span></span></code></pre></div>
 <p>This highlights that in GLMMs, the choice between marginal and
 conditional predictions significantly impacts the estimated means and,

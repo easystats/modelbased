@@ -108,7 +108,7 @@ Data stems from the [discovr](https://www.discovr.rocks) package (Field
 `# to which factor level of interest. we want to average the two`\
 `# treatment level and compare it to the control level`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m2``, ``"dose_original"``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> dose_original | Mean |   SE |       95% CI | t(24)`\
 `#> --------------------------------------------------`\
@@ -118,12 +118,12 @@ Data stems from the [discovr](https://www.discovr.rocks) package (Field
 `#> `\
 `#> Variable predicted: happiness`\
 `#> Predictors modulated: dose_original`\
-`#> Predictors averaged: puppy_love (-5.9e-17)`\
+`#> Predictors held at: puppy_love (-5.9e-17)`\
 \
 `# treat_vs_none (i.e. average of short and long vs. none)`\
 `# this contrasts corresponds to the estimate of the model m1, 1.94`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m2``, ``"dose_original"``, comparison ``=`` ``"((b2+b3)/2) = b1"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Parameter  | Difference |   SE |       95% CI | t(24) |     p`\
 `#> -------------------------------------------------------------`\
@@ -131,7 +131,7 @@ Data stems from the [discovr](https://www.discovr.rocks) package (Field
 `#> `\
 `#> Variable predicted: happiness`\
 `#> Predictors contrasted: dose_original`\
-`#> Predictors averaged: puppy_love (-5.9e-17)`\
+`#> Predictors held at: puppy_love (-5.9e-17)`\
 `#> p-values are uncorrected.`\
 `#> Parameters:`\
 `#> b2 = dose_original [15 mins]`\
@@ -141,7 +141,7 @@ Data stems from the [discovr](https://www.discovr.rocks) package (Field
 `# short_vs_long`\
 `# this contrasts corresponds to the estimate of the model m1, 0.13`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m2``, ``"dose_original"``, comparison ``=`` ``"b3 = b2"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Parameter | Difference |   SE |        95% CI | t(24) |     p`\
 `#> -------------------------------------------------------------`\
@@ -149,7 +149,7 @@ Data stems from the [discovr](https://www.discovr.rocks) package (Field
 `#> `\
 `#> Variable predicted: happiness`\
 `#> Predictors contrasted: dose_original`\
-`#> Predictors averaged: puppy_love (-5.9e-17)`\
+`#> Predictors held at: puppy_love (-5.9e-17)`\
 `#> p-values are uncorrected.`\
 `#> Parameters:`\
 `#> b3 = dose_original [30 mins]`\
@@ -238,16 +238,16 @@ joint tests, set `comparison = "joint"`.
 `# contrasts of pairwise comparisons of levels of "time" within the`\
 `# different levels of "coffee"`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, contrast ``=`` ``"time"``, by ``=`` ``"coffee"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
-`#> Level1    | Level2  | coffee  | Difference |   SE |        95% CI |    t(114) |      p`\
-`#> --------------------------------------------------------------------------------------`\
-`#> noon      | morning | coffee  |      -1.93 | 2.05 | [-5.99, 2.14] |     -0.94 |  0.350`\
-`#> afternoon | morning | coffee  |       1.93 | 2.05 | [-2.14, 5.99] |      0.94 |  0.350`\
-`#> afternoon | noon    | coffee  |       3.86 | 2.05 | [-0.21, 7.92] |      1.88 |  0.063`\
-`#> noon      | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |      2.82 |  0.006`\
-`#> afternoon | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |      2.82 |  0.006`\
-`#> afternoon | noon    | control |  -3.55e-15 | 2.05 | [-4.07, 4.07] | -1.73e-15 | > .999`\
+`#> Level1    | Level2  | coffee  | Difference |   SE |        95% CI | t(114) |      p`\
+`#> -----------------------------------------------------------------------------------`\
+`#> noon      | morning | coffee  |      -1.93 | 2.05 | [-5.99, 2.14] |  -0.94 |  0.350`\
+`#> afternoon | morning | coffee  |       1.93 | 2.05 | [-2.14, 5.99] |   0.94 |  0.350`\
+`#> afternoon | noon    | coffee  |       3.86 | 2.05 | [-0.21, 7.92] |   1.88 |  0.063`\
+`#> noon      | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |   2.82 |  0.006`\
+`#> afternoon | morning | control |       5.78 | 2.05 | [ 1.72, 9.85] |   2.82 |  0.006`\
+`#> afternoon | noon    | control |       0.00 | 2.05 | [-4.07, 4.07] |   0.00 | > .999`\
 `#> `\
 `#> Variable predicted: alertness`\
 `#> Predictors contrasted: time`\
@@ -256,7 +256,7 @@ joint tests, set `comparison = "joint"`.
 `# jointly test whether the contrasts of all levels of time have an`\
 `# effect within each level of "coffee"`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, contrast ``=`` ``"time"``, by ``=`` ``"coffee"``, comparison ``=`` ``"joint"``)`\
-`#> Marginal Joint Test`\
+`#> Conditional Joint Test`\
 `#> `\
 `#> Contrast | coffee  | df1 | df2 |    F |     p`\
 `#> ---------------------------------------------`\
@@ -278,7 +278,7 @@ The above example can be easily expanded to three-way interactions.
 `  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"coffee"``, ``"sex"``)``,`\
 `  comparison ``=`` ``"joint"`\
 `)`\
-`#> Marginal Joint Test`\
+`#> Conditional Joint Test`\
 `#> `\
 `#> Contrast | coffee  | sex    | df1 | df2 |     F |      p`\
 `#> --------------------------------------------------------`\

@@ -126,7 +126,7 @@ function from the `modelbased` package with
 \
 `out`` ``<-`` `[`estimate_prediction`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``brms_mixture_2``, predict ``=`` ``"classification"``)`\
 [`head`](https://rdrr.io/r/utils/head.html)`(``out``)`\
-`#> Model-based Predictions`\
+`#> Conditional Predictions`\
 `#> `\
 `#> time | hospital | education |   age | ID | Predicted | Probability`\
 `#> ------------------------------------------------------------------`\
@@ -227,7 +227,7 @@ models, as it computes the means for each class separately.
 
 \
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``brms_mixture_2``, by ``=`` ``"education"``, predict ``=`` ``"link"``)`\
-`#> Average Predictions`\
+`#> Marginal Predictions`\
 `#> `\
 `#> education |          Median (CI) | pd   | Class`\
 `#> -----------------------------------------------`\
@@ -240,6 +240,8 @@ models, as it computes the means for each class separately.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors modulated: education`\
+`#> Predictors averaged within levels of education: time, hospital, age`\
+`#> Random effects: Marginalized across clusters.`\
 `#> Predictions are on the link-scale.`
 
 This table gives us the expected mean `QoL` for each education level,
@@ -262,7 +264,7 @@ inequality.
 `  ``brms_mixture_2``,`\
 `  contrast ``=`` ``"education"`\
 `)`\
-`#> Averaged Contrasts Analysis`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1 | Level2 |         Median (CI) |     pd`\
 `#> ----------------------------------------------`\
@@ -272,6 +274,8 @@ inequality.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: education`\
+`#> Predictors averaged within levels of education: time, hospital, age`\
+`#> Random effects: Marginalized across clusters.`\
 `#> Contrasts are on the response-scale.`
 
 More interestingly, we can set `predict = "link"` to get contrasts both
@@ -283,7 +287,7 @@ More interestingly, we can set `predict = "link"` to get contrasts both
 `  contrast ``=`` ``"education"``,`\
 `  predict ``=`` ``"link"`\
 `)`\
-`#> Averaged Contrasts Analysis`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1 | Level2 |           Median (CI) |     pd`\
 `#> ------------------------------------------------`\
@@ -305,6 +309,8 @@ More interestingly, we can set `predict = "link"` to get contrasts both
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: education`\
+`#> Predictors averaged within levels of education: time, hospital, age`\
+`#> Random effects: Marginalized across clusters.`\
 `#> Contrasts are on the link-scale.`
 
 The output is rich with information. For example, `2 high | 2 low` shows
@@ -329,7 +335,7 @@ versus `hospital`.
 `  contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"education"``, ``"hospital"``)``,`\
 `  comparison ``=`` ``"inequality"`\
 `)`\
-`#> Averaged Inequality Analysis`\
+`#> Marginal Inequality Analysis`\
 `#> `\
 `#> Parameter |        Median (CI) |   pd`\
 `#> -------------------------------------`\
@@ -338,6 +344,7 @@ versus `hospital`.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: education, hospital`\
+`#> Random effects: Marginalized across clusters.`\
 `#> Differences are on the response-scale.`
 
 The results are striking. The inequality median for `education` is

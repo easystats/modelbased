@@ -364,7 +364,7 @@ model <- lm(mpg ~ wt, data = mtcars)
 
 # Get predicted and prediction interval (see insight::get_predicted)
 estimate_expectation(model)
-#> Model-based Predictions
+#> Conditional Predictions
 #> 
 #> wt   | Predicted |   SE |         95% CI | Residuals
 #> ----------------------------------------------------
@@ -407,7 +407,7 @@ estimate_expectation(model)
 # Get expected values with confidence interval
 pred <- estimate_relation(model)
 pred
-#> Model-based Predictions
+#> Conditional Predictions
 #> 
 #> wt   | Predicted |   SE |         95% CI
 #> ----------------------------------------
@@ -434,7 +434,7 @@ plot(pred)
 pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
 z <- standardize(pred, include_response = FALSE)
 z
-#> Model-based Predictions (standardized)
+#> Conditional Predictions (standardized)
 #> 
 #> wt    |    am | Predicted |   SE |         95% CI
 #> -------------------------------------------------
@@ -463,7 +463,7 @@ z
 #> Predictors modulated: wt, am
 #> 
 unstandardize(z, include_response = FALSE)
-#> Model-based Predictions (standardized)
+#> Conditional Predictions (standardized)
 #> 
 #> wt   | am | Predicted |   SE |         95% CI
 #> ---------------------------------------------
@@ -495,7 +495,7 @@ unstandardize(z, include_response = FALSE)
 # Logistic Models
 model <- glm(vs ~ wt, data = mtcars, family = "binomial")
 estimate_expectation(model)
-#> Model-based Predictions
+#> Conditional Predictions
 #> 
 #> wt   | Predicted |   SE |       95% CI | Residuals
 #> --------------------------------------------------
@@ -536,7 +536,7 @@ estimate_expectation(model)
 #> Predictions are on the response-scale.
 #> 
 estimate_relation(model)
-#> Model-based Predictions
+#> Conditional Predictions
 #> 
 #> wt   | Predicted |   SE |       95% CI
 #> --------------------------------------
@@ -561,7 +561,7 @@ data(mtcars)
 mtcars$gear <- as.factor(mtcars$gear)
 model <- glmmTMB::glmmTMB(mpg ~ wt + (1 | gear), data = mtcars)
 estimate_expectation(model)
-#> Model-based Predictions
+#> Conditional Predictions
 #> 
 #> wt   | gear | Predicted |   SE |         95% CI | Residuals
 #> -----------------------------------------------------------
@@ -601,7 +601,7 @@ estimate_expectation(model)
 #> Variable predicted: mpg
 #> 
 estimate_relation(model)
-#> Model-based Predictions
+#> Conditional Predictions
 #> 
 #> wt   | Predicted |   SE |             CI
 #> ----------------------------------------
@@ -623,7 +623,7 @@ estimate_relation(model)
 # Predict random effects and calculate contrasts
 estim <- estimate_relation(model, by = "gear")
 estim
-#> Model-based Predictions
+#> Conditional Predictions
 #> 
 #> gear | Predicted |   SE |         95% CI
 #> ----------------------------------------
@@ -633,7 +633,7 @@ estim
 #> 
 #> Variable predicted: mpg
 #> Predictors modulated: gear
-#> Predictors controlled: wt (3.2)
+#> Predictors held at: wt (3.2)
 #> 
 
 estimate_contrasts(estim)
@@ -647,7 +647,7 @@ estimate_contrasts(estim)
 #> 
 #> Variable predicted: mpg
 #> Predictors contrasted: gear
-#> Predictors averaged: wt (3.2)
+#> Predictors held at: wt (3.2)
 #> 
 
 # Bayesian models
@@ -657,7 +657,7 @@ model <- suppressWarnings(rstanarm::stan_glm(
   data = mtcars, refresh = 0, iter = 200
 ))
 estimate_expectation(model)
-#> Model-based Predictions
+#> Conditional Predictions
 #> 
 #> wt   | Predicted |   SE |         95% CI | Residuals
 #> ----------------------------------------------------
@@ -697,7 +697,7 @@ estimate_expectation(model)
 #> Variable predicted: mpg
 #> 
 estimate_relation(model)
-#> Model-based Predictions
+#> Conditional Predictions
 #> 
 #> wt   | Predicted |   SE |         95% CI
 #> ----------------------------------------

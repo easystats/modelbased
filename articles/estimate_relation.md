@@ -21,7 +21,7 @@ expected predictions (read
 `visualization_data`` ``<-`` `[`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``model``)`\
 [`head`](https://rdrr.io/r/utils/head.html)`(``visualization_data``)`
 
-    > Model-based Predictions
+    > Conditional Predictions
     > 
     > Sepal.Width | Predicted |   SE |       95% CI
     > ---------------------------------------------

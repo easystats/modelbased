@@ -214,7 +214,7 @@ results are equivalent to a simpler approach.
 `  estimate ``=`` ``"population"``,`\
 `  weights ``=`` ``"ipw"`\
 `)`\
-`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1 | Level2 |   Difference (CI) |     p`\
 `#> -------------------------------------------`\
@@ -222,7 +222,8 @@ results are equivalent to a simpler approach.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: treatment`\
-`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> Predictors averaged over the full sample: time, education, hospital, age, phq4`\
+`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`
 
 ### ATE calculated from IPW and g-computation in more complex models
@@ -277,7 +278,7 @@ treatment effect cannot be isolated. If we want to know the ATE of
 `  estimate ``=`` ``"population"``,`\
 `  weights ``=`` ``"ipw"`\
 `)`\
-`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1 | Level2 |   Difference (CI) |     p`\
 `#> -------------------------------------------`\
@@ -285,7 +286,8 @@ treatment effect cannot be isolated. If we want to know the ATE of
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: treatment`\
-`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> Predictors averaged over the full sample: time, education, hospital, age, phq4`\
+`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`
 
 ### Analysing Difference in ATE
@@ -306,7 +308,7 @@ and the `by` argument. As we can see, results are fairly similar.
 `  estimate ``=`` ``"population"``,`\
 `  weights ``=`` ``"ipw"`\
 `)`\
-`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1 | Level2 | time |      Difference (CI) |      p`\
 `#> ------------------------------------------------------`\
@@ -316,7 +318,8 @@ and the `by` argument. As we can see, results are fairly similar.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: treatment`\
-`#> Predictors averaged: education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> Predictors averaged over the full sample: education, hospital, age, phq4`\
+`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`
 
 But is the *change* in the ATE between two time points statistically
@@ -335,7 +338,7 @@ to check this!
 `  weights ``=`` ``"ipw"``,`\
 `  comparison ``=`` ``"(b3-b1) = (b4-b2)"`\
 `)`\
-`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Parameter   |      Difference (CI) |     p`\
 `#> ------------------------------------------`\
@@ -343,7 +346,8 @@ to check this!
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: treatment`\
-`#> Predictors averaged: education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> Predictors averaged over the full sample: education, hospital, age, phq4`\
+`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`\
 `#> Parameters:`\
 `#> b3 = treatment [0], time [2]`\
@@ -378,7 +382,7 @@ estimated difference of 5.64.
 \
 `# complex model, simple contrasts, no g-computation`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m4``, ``"treatment"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 |    Difference (CI) |     p`\
 `#> --------------------------------------------`\
@@ -386,12 +390,14 @@ estimated difference of 5.64.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: treatment`\
-`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> Predictors held at: hospital (0.95), age (0.22), phq4 (-0.076)`\
+`#> Predictors averaged over a balanced grid: time, education`\
+`#> Random effects: Averaged over a balanced grid of cluster levels.`\
 `#> p-values are uncorrected.`\
 \
 `# complex model, with IPW *and* G-computation (double-robust) is accurate!`\
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m4``, ``"treatment"``, estimate ``=`` ``"population"``, weights ``=`` ``"ipw"``)`\
-`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1 | Level2 |   Difference (CI) |     p`\
 `#> -------------------------------------------`\
@@ -399,7 +405,8 @@ estimated difference of 5.64.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: treatment`\
-`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> Predictors averaged over the full sample: time, education, hospital, age, phq4`\
+`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`
 
 ### Average treatment effect on the treated and untreated
@@ -428,7 +435,7 @@ already receive it.
 `  estimate ``=`` ``"population"``,`\
 `  weights ``=`` ``"ipw"`\
 `)`\
-`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1 | Level2 |   Difference (CI) |     p`\
 `#> -------------------------------------------`\
@@ -436,7 +443,8 @@ already receive it.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: treatment`\
-`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> Predictors averaged over the full sample: time, education, hospital, age, phq4`\
+`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`\
 \
 `# the ATU - apply g-computation only to the subset of the conrol`\
@@ -447,7 +455,7 @@ already receive it.
 `  estimate ``=`` ``"population"``,`\
 `  weights ``=`` ``"ipw"`\
 `)`\
-`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1 | Level2 |   Difference (CI) |     p`\
 `#> -------------------------------------------`\
@@ -455,7 +463,8 @@ already receive it.
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: treatment`\
-`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> Predictors averaged over the full sample: time, education, hospital, age, phq4`\
+`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`
 
 It is helpful to calculate both ATT and ATU, as they can differ
@@ -530,7 +539,7 @@ function. Package *glmmTMB* supports robust standard errors via the
 `  estimate ``=`` ``"population"``,`\
 `  weights ``=`` ``"ipw"`\
 `)`\
-`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1 | Level2 |   Difference (CI) |     p`\
 `#> -------------------------------------------`\
@@ -538,7 +547,8 @@ function. Package *glmmTMB* supports robust standard errors via the
 `#> `\
 `#> Variable predicted: QoL`\
 `#> Predictors contrasted: treatment`\
-`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`\
+`#> Predictors averaged over the full sample: time, education, hospital, age, phq4`\
+`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`
 
 A fully Bayesian approach, as demonstrated here, also provides a robust
@@ -557,15 +567,16 @@ alternative.
 
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m5``, ``"treatment"``, estimate ``=`` ``"population"``, weights ``=`` ``"ipw"``)`\
-`#> Counterfactual Contrasts Analysis (G-computation)`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1 | Level2 |       Median (CI) |     pd`\
 `#> --------------------------------------------`\
-`#> 1      | 0      | 5.53 (1.58, 9.54) | 99.50%`\
+`#> 1      | 0      | 5.67 (1.81, 9.47) | 99.92%`\
 `#> `\
 `#> Variable predicted: QoL, ipw`\
 `#> Predictors contrasted: treatment`\
-`#> Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID`
+`#> Predictors averaged over the full sample: time, education, hospital, age, phq4`\
+`#> Random effects: Marginalized across clusters.`
 
 ## Conclusion
 

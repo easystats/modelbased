@@ -1,4 +1,4 @@
-# Sample dataset from patients with somatic symptons
+# Sample dataset from patients with somatic symptoms
 
 An artificial, anonymized data set based on a project related to the
 development and persistence of somatic symptoms.

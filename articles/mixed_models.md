@@ -80,7 +80,7 @@ all marginalization methods.
 `` # `estimate = "typical"`, `re.form = NULL`: a "typical" observation ``\
 `# across clusters on average`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"Days"``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> Days |               Mean (CI)`\
 `#> ------------------------------`\
@@ -97,12 +97,12 @@ all marginalization methods.
 `#> `\
 `#> Variable predicted: Reaction`\
 `#> Predictors modulated: Days`\
-`#> Predictors averaged: Subject`\
+`#> Random effects: Averaged over a balanced grid of cluster levels.`\
 \
 `` # `estimate = "typical"`, `re.form = NA`: a "typical" observation ``\
 `` # for a "typical" (average) cluster - `re.form = NA` has no effect here ``\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"Days"``, re.form ``=`` ``NA``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> Days |               Mean (CI)`\
 `#> ------------------------------`\
@@ -119,11 +119,11 @@ all marginalization methods.
 `#> `\
 `#> Variable predicted: Reaction`\
 `#> Predictors modulated: Days`\
-`#> Predictors averaged: Subject`\
+`#> Random effects: Conditional on a typical cluster.`\
 \
 `# fully marginalized predictions, still same result as above`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"Days"``, estimate ``=`` ``"average"``)`\
-`#> Average Predictions`\
+`#> Marginal Predictions`\
 `#> `\
 `#> Days |               Mean (CI)`\
 `#> ------------------------------`\
@@ -139,7 +139,8 @@ all marginalization methods.
 `#> 9    | 345.61 (316.74, 374.48)`\
 `#> `\
 `#> Variable predicted: Reaction`\
-`#> Predictors modulated: Days`
+`#> Predictors modulated: Days`\
+`#> Random effects: Marginalized across clusters.`
 
 #### Imbalanced Data
 
@@ -164,7 +165,7 @@ models.
 `# conditional predictions marginalized over`\
 `# a "balanced" grid of random effects`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> sex    |            Mean (CI)`\
 `#> -----------------------------`\
@@ -173,11 +174,12 @@ models.
 `#> `\
 `#> Variable predicted: bill_len`\
 `#> Predictors modulated: sex`\
-`#> Predictors averaged: body_mass, species`\
+`#> Predictors averaged over a balanced grid: body_mass`\
+`#> Random effects: Averaged over a balanced grid of cluster levels.`\
 \
 `# (fully) marginal predictions`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``, estimate ``=`` ``"average"``)`\
-`#> Average Predictions`\
+`#> Marginal Predictions`\
 `#> `\
 `#> sex    |            Mean (CI)`\
 `#> -----------------------------`\
@@ -186,10 +188,12 @@ models.
 `#> `\
 `#> Variable predicted: bill_len`\
 `#> Predictors modulated: sex`\
+`#> Predictors averaged within levels of sex: body_mass`\
+`#> Random effects: Marginalized across clusters.`\
 \
 `# marginal predictions conditioning on a "typical" cluster`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"sex"``, estimate ``=`` ``"average"``, re.form ``=`` ``NA``)`\
-`#> Average Predictions`\
+`#> Marginal Predictions`\
 `#> `\
 `#> sex    |            Mean (CI)`\
 `#> -----------------------------`\
@@ -197,9 +201,11 @@ models.
 `#> male   | 46.92 (40.87, 52.98)`\
 `#> `\
 `#> Variable predicted: bill_len`\
-`#> Predictors modulated: sex`
+`#> Predictors modulated: sex`\
+`#> Predictors averaged within levels of sex: body_mass`\
+`#> Random effects: Conditional on a typical cluster.`
 
-#### Excourse: Technical Details
+#### Excursus: Technical Details
 
 To better understand how these predictions are computed under the hood,
 let’s break down the underlying workflow. The code below illustrates the
@@ -258,7 +264,7 @@ for `camper = 1`) compared to conditional predictions (using
 `# conditional predictions marginalized over`\
 `# a "balanced" grid of random effects`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> camper |          Mean (CI)`\
 `#> ---------------------------`\
@@ -267,12 +273,13 @@ for `camper = 1`) compared to conditional predictions (using
 `#> `\
 `#> Variable predicted: count`\
 `#> Predictors modulated: camper`\
-`#> Predictors averaged: child (0.68), persons (1)`\
+`#> Predictors held at: child (0.68)`\
+`#> Random effects: Averaged over a balanced grid of cluster levels.`\
 `#> Predictions are on the response-scale.`\
 \
 `# conditional predictions for a "typical" cluster`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, re.form ``=`` ``NA``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> camper |          Mean (CI)`\
 `#> ---------------------------`\
@@ -281,7 +288,8 @@ for `camper = 1`) compared to conditional predictions (using
 `#> `\
 `#> Variable predicted: count`\
 `#> Predictors modulated: camper`\
-`#> Predictors averaged: child (0.68), persons (1)`\
+`#> Predictors held at: child (0.68)`\
+`#> Random effects: Conditional on a typical cluster.`\
 `#> Predictions are on the response-scale.`
 
 When using `estimate = "average"` to average across all observations and
@@ -295,7 +303,7 @@ previous output.
 \
 `# (fully) marginal predictions`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, estimate ``=`` ``"average"``)`\
-`#> Average Predictions`\
+`#> Marginal Predictions`\
 `#> `\
 `#> camper |           Mean (CI)`\
 `#> ----------------------------`\
@@ -304,11 +312,13 @@ previous output.
 `#> `\
 `#> Variable predicted: count`\
 `#> Predictors modulated: camper`\
+`#> Predictors averaged within levels of camper: child`\
+`#> Random effects: Marginalized across clusters.`\
 `#> Predictions are on the response-scale.`\
 \
 `# marginal predictions, conditioning on a "typical" cluster`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, estimate ``=`` ``"average"``, re.form ``=`` ``NA``)`\
-`#> Average Predictions`\
+`#> Marginal Predictions`\
 `#> `\
 `#> camper |          Mean (CI)`\
 `#> ---------------------------`\
@@ -317,6 +327,8 @@ previous output.
 `#> `\
 `#> Variable predicted: count`\
 `#> Predictors modulated: camper`\
+`#> Predictors averaged within levels of camper: child`\
+`#> Random effects: Conditional on a typical cluster.`\
 `#> Predictions are on the response-scale.`
 
 This highlights that in GLMMs, the choice between marginal and

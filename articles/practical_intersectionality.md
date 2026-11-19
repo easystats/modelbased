@@ -23,7 +23,7 @@ The steps we are showing here are:
 2.  Fitting a *simple intersectional* model to see whether
     intersectional strata contribute to between-stratum variance (which
     can be considered as “inequalities”, whether social or health
-    related - also known as *discriminatory accucarcy*).
+    related - also known as *discriminatory accuracy*).
 
 3.  Fitting *partially-adjusted intersectional* models and calculating
     proportional change in the between-stratum variance (PCVs) to
@@ -149,7 +149,7 @@ The purpose of this model - which is sometimes also called *null model*
 or *base model* - is to quantify the “discriminatory accuracy”, which is
 achieved by calculating the ICC (see
 [`performance::icc()`](https://easystats.github.io/performance/reference/icc.html))
-of this model (sometimes also calles the *VPC*, the variance partition
+of this model (sometimes also called the *VPC*, the variance partition
 coefficient). The higher the ICC, the greater the degree of similarity
 *within the strata* (regarding quality of life) and the greater the
 difference in quality of life *between the intersectional strata*. I.e.,
@@ -377,7 +377,7 @@ first ten rows for demonstrating purpose.
 `  contrast ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"employed"``, ``"age"``)``,`\
 `  estimate ``=`` ``"average"`\
 `)``[``1``:``10``, ``]`\
-`#> Averaged Contrasts Analysis`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1             | Level2        | Difference (CI)`\
 `#> ----------------------------------------------------`\
@@ -394,6 +394,7 @@ first ten rows for demonstrating purpose.
 `#> `\
 `#> Variable predicted: qol`\
 `#> Predictors contrasted: gender, employed, age`\
+`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`
 
 If we only want to modulate one factor and compare those groups within
@@ -409,7 +410,7 @@ of the remaining predictors.
 `  by ``=`` ``"age"``,`\
 `  estimate ``=`` ``"average"`\
 `)`\
-`#> Averaged Contrasts Analysis`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1      | Level2     | Difference (CI) |   age`\
 `#> --------------------------------------------------`\
@@ -434,6 +435,7 @@ of the remaining predictors.
 `#> `\
 `#> Variable predicted: qol`\
 `#> Predictors contrasted: gender, employed`\
+`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`
 
 E.g., if we look at the plot and want to know whether female persons
@@ -448,7 +450,7 @@ following code:
 `  by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"gender"``, ``"age"``)``,`\
 `  estimate ``=`` ``"average"`\
 `)`\
-`#> Averaged Contrasts Analysis`\
+`#> Marginal Contrasts`\
 `#> `\
 `#> Level1 | Level2 | Difference (CI) | gender |   age`\
 `#> --------------------------------------------------`\
@@ -461,6 +463,7 @@ following code:
 `#> `\
 `#> Variable predicted: qol`\
 `#> Predictors contrasted: employed`\
+`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`
 
 ### 6. Strata-level residuals: Specific additive vs. multiplicative effects
@@ -517,7 +520,7 @@ Compared to a MAIHDA analysis using *linear* regression models, there
 are two important aspects to consider when using *binary logistic*
 regression models.
 
-#### 7.1 Additive and multiplicatice effects
+#### 7.1 Additive and multiplicative effects
 
 When applying this framework to dichotomous outcomes using logistic
 multilevel models, two important distinctions must be considered. First,

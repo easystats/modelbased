@@ -77,7 +77,7 @@ out <- estimate_means(model, "Species")
 
 # default
 print(out)
-#> Estimated Marginal Means
+#> Conditional Predictions
 #> 
 #> Species    | Mean |   SE |       95% CI | t(147)
 #> ------------------------------------------------

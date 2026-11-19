@@ -55,7 +55,7 @@ are set to their reference level. Thus, a prediction is made for a very
 
 \
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"specific"``)`\
-`#> Model-based Predictions`\
+`#> Conditional Predictions`\
 `#> `\
 `#> sex    |               Mean (CI)`\
 `#> --------------------------------`\
@@ -64,11 +64,11 @@ are set to their reference level. Thus, a prediction is made for a very
 `#> `\
 `#> Variable predicted: flipper_len`\
 `#> Predictors modulated: sex`\
-`#> Predictors controlled: species (Adelie)`\
+`#> Predictors held at: species (Adelie)`\
 \
 `# Alternative code (same result, different wrapper)`\
 [`estimate_relation`](https://easystats.github.io/modelbased/reference/estimate_expectation.md)`(``m``, by ``=`` ``"sex"``)`\
-`#> Model-based Predictions`\
+`#> Conditional Predictions`\
 `#> `\
 `#> sex    |          Predicted (CI)`\
 `#> --------------------------------`\
@@ -77,7 +77,7 @@ are set to their reference level. Thus, a prediction is made for a very
 `#> `\
 `#> Variable predicted: flipper_len`\
 `#> Predictors modulated: sex`\
-`#> Predictors controlled: species (Adelie)`
+`#> Predictors held at: species (Adelie)`
 
 To illustrate, we can calculate this manually. “Female” is the reference
 level for `sex` here. Since `species` is kept at its reference level
@@ -170,7 +170,7 @@ actual empirical data.
 \
 `# This corresponds to the easystats default (estimate = "typical").`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> sex    |               Mean (CI)`\
 `#> --------------------------------`\
@@ -179,7 +179,7 @@ actual empirical data.
 `#> `\
 `#> Variable predicted: flipper_len`\
 `#> Predictors modulated: sex`\
-`#> Predictors averaged: species`
+`#> Predictors averaged over a balanced grid: species`
 
 ## 3. “Average” Observation
 
@@ -208,7 +208,7 @@ their exact empirical distribution.
 \
 `# The corresponding easystats call:`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"average"``)`\
-`#> Average Predictions`\
+`#> Marginal Predictions`\
 `#> `\
 `#> sex    |               Mean (CI)`\
 `#> --------------------------------`\
@@ -216,7 +216,8 @@ their exact empirical distribution.
 `#> male   | 204.51 (203.64, 205.38)`\
 `#> `\
 `#> Variable predicted: flipper_len`\
-`#> Predictors modulated: sex`
+`#> Predictors modulated: sex`\
+`#> Predictors averaged within levels of sex: species`
 
 ## 4. “Counterfactual” Observation (also “Population”)
 
@@ -257,7 +258,7 @@ randomization).
 \
 `# The corresponding easystats call:`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"counterfactual"``)`\
-`#> Average Counterfactual Predictions`\
+`#> Marginal Predictions`\
 `#> `\
 `#> sex    |               Mean (CI)`\
 `#> --------------------------------`\
@@ -266,7 +267,7 @@ randomization).
 `#> `\
 `#> Variable predicted: flipper_len`\
 `#> Predictors modulated: sex`\
-`#> Predictors averaged: species`
+`#> Predictors averaged over the full sample: species`
 
 ------------------------------------------------------------------------
 
@@ -377,7 +378,7 @@ precise comparison.
 `# easystats: Sets numeric variables to their mean and factors`\
 `# to their reference level.`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"specific"``)`\
-`#> Model-based Predictions`\
+`#> Conditional Predictions`\
 `#> `\
 `#> sex    |               Mean (CI)`\
 `#> --------------------------------`\
@@ -386,7 +387,7 @@ precise comparison.
 `#> `\
 `#> Variable predicted: flipper_len`\
 `#> Predictors modulated: sex`\
-`#> Predictors controlled: species (Adelie)`\
+`#> Predictors held at: species (Adelie)`\
 \
 `# marginaleffects: The 'newdata = "mean"' argument replicates this`\
 `# "theoretical" observation behavior.`\
@@ -402,7 +403,7 @@ precise comparison.
 `# easystats: Builds a balanced reference grid and weights each group`\
 `# equally (the default).`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"typical"``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> sex    |               Mean (CI)`\
 `#> --------------------------------`\
@@ -411,7 +412,7 @@ precise comparison.
 `#> `\
 `#> Variable predicted: flipper_len`\
 `#> Predictors modulated: sex`\
-`#> Predictors averaged: species`\
+`#> Predictors averaged over a balanced grid: species`\
 \
 `# marginaleffects: 'newdata = "grid"' creates a similar balanced`\
 `# data grid.`\
@@ -435,7 +436,7 @@ precise comparison.
 `# easystats: Calculates predictions for every observation in the`\
 `# empirical data and averages them.`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"average"``)`\
-`#> Average Predictions`\
+`#> Marginal Predictions`\
 `#> `\
 `#> sex    |               Mean (CI)`\
 `#> --------------------------------`\
@@ -444,6 +445,7 @@ precise comparison.
 `#> `\
 `#> Variable predicted: flipper_len`\
 `#> Predictors modulated: sex`\
+`#> Predictors averaged within levels of sex: species`\
 \
 `# marginaleffects: Using 'by' without modifying 'newdata' averages`\
 `# predictions over the original empirical dataset.`\
@@ -467,7 +469,7 @@ precise comparison.
 `# easystats: Uses G-computation (cloning the dataset to`\
 `# simulate pseudo-randomization).`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"sex"``, estimate ``=`` ``"population"``)`\
-`#> Average Counterfactual Predictions`\
+`#> Marginal Predictions`\
 `#> `\
 `#> sex    |               Mean (CI)`\
 `#> --------------------------------`\
@@ -476,7 +478,7 @@ precise comparison.
 `#> `\
 `#> Variable predicted: flipper_len`\
 `#> Predictors modulated: sex`\
-`#> Predictors averaged: species`\
+`#> Predictors averaged over the full sample: species`\
 \
 `# marginaleffects: Using the 'variables' argument automatically`\
 `# triggers this counterfactual approach.`\

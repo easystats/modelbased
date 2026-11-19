@@ -8,6 +8,19 @@ See also other related functions such as
 and
 [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md).
 
+Proper interpretation of the output requires understanding the
+assumptions behind your model predictions and which target quantity they
+refer to. We therefore strongly recommend thoroughly reading:
+
+- the documentation for the `estimate` argument,
+
+- the vignette on [marginalization
+  methods](https://easystats.github.io/modelbased/articles/technical_marginalization.html),
+  and
+
+- the specific considerations for [mixed
+  models](https://easystats.github.io/modelbased/articles/mixed_models.html).
+
 ## Usage
 
 ``` r
@@ -815,7 +828,7 @@ method, which is documented here:
 model <- lm(Sepal.Width ~ Species, data = iris)
 estimate_contrasts(model)
 #> We selected `contrast=c("Species")`.
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p
 #> ------------------------------------------------------------------------------
@@ -834,7 +847,7 @@ model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 # By default: selects first factor
 estimate_contrasts(model)
 #> We selected `contrast=c("Species")`.
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1     | Level2     | Difference |   SE |         95% CI | t(144) |      p
 #> ------------------------------------------------------------------------------
@@ -844,13 +857,13 @@ estimate_contrasts(model)
 #> 
 #> Variable predicted: Sepal.Width
 #> Predictors contrasted: Species
-#> Predictors averaged: Petal.Width (1.2)
+#> Predictors held at: Petal.Width (1.2)
 #> p-values are uncorrected.
 #> 
 
 # Can also run contrasts between points of numeric, stratified by "Species"
 estimate_contrasts(model, contrast = "Petal.Width", by = "Species")
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1     | Level2     | Difference |   SE |        95% CI | t(144) |     p
 #> ----------------------------------------------------------------------------
@@ -860,13 +873,13 @@ estimate_contrasts(model, contrast = "Petal.Width", by = "Species")
 #> 
 #> Variable predicted: Sepal.Width
 #> Predictors contrasted: Petal.Width
-#> Predictors averaged: Petal.Width (1.2)
+#> Predictors held at: Petal.Width (1.2)
 #> p-values are uncorrected.
 #> 
 
 # Or both
 estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1          | Level2          | Difference |   SE |         95% CI | t(144) |      p
 #> ----------------------------------------------------------------------------------------
@@ -893,7 +906,7 @@ estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 
 # Or with custom specifications
 estimate_contrasts(model, contrast = c("Species", "Petal.Width = c(1, 2)"))
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1        | Level2        | Difference |   SE |         95% CI | t(144) |      p
 #> ------------------------------------------------------------------------------------
@@ -921,7 +934,7 @@ estimate_contrasts(model, contrast = c("Species", "Petal.Width = c(1, 2)"))
 # Or modulate it
 estimate_contrasts(model, by = "Petal.Width", length = 4)
 #> We selected `contrast=c("Species")`.
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1     | Level2     | Petal.Width | Difference |   SE |         95% CI
 #> --------------------------------------------------------------------------
@@ -962,7 +975,7 @@ estimate_contrasts(model, by = "Petal.Width", length = 4)
 estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
 #> We selected `contrast=c("Species")`.
 standardize(estimated)
-#> Marginal Contrasts Analysis (standardized)
+#> Conditional Contrasts (standardized)
 #> 
 #> Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p
 #> ------------------------------------------------------------------------------
@@ -989,7 +1002,7 @@ estimate_contrasts(model, "time", by = "education")
 #>   no more than 5 unique values) and is treated as discrete variable. Set
 #>   `integer_as_continuous = TRUE` to disable this check and always treat
 #>   numeric variables as continuous.
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1 | Level2 | education | Difference |   SE |          95% CI | t(552) |     p
 #> ----------------------------------------------------------------------------------
@@ -1005,7 +1018,7 @@ estimate_contrasts(model, "time", by = "education")
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: time
-#> Predictors averaged: grp
+#> Predictors averaged over a balanced grid: grp
 #> p-values are uncorrected.
 #> 
 
@@ -1018,7 +1031,7 @@ estimate_contrasts(
   by = "education",
   integer_as_continuous = TRUE
 )
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1 | Level2 | Difference |   SE |         95% CI | t(552) |     p
 #> ---------------------------------------------------------------------
@@ -1028,7 +1041,8 @@ estimate_contrasts(
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: time
-#> Predictors averaged: time (2), grp
+#> Predictors held at: time (2)
+#> Predictors averaged over a balanced grid: grp
 #> p-values are uncorrected.
 #> 
 
@@ -1039,7 +1053,7 @@ estimate_contrasts(
   by = c("education", "grp"),
   integer_as_continuous = TRUE
 )
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1        | Level2        | Difference |   SE |          95% CI | t(552) |     p
 #> ------------------------------------------------------------------------------------
@@ -1061,7 +1075,7 @@ estimate_contrasts(
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: time
-#> Predictors averaged: time (2)
+#> Predictors held at: time (2)
 #> p-values are uncorrected.
 #> 
 
@@ -1075,7 +1089,7 @@ estimate_contrasts(
   comparison = ~pairwise | grp,
   integer_as_continuous = TRUE
 )
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Parameter  | grp     | Difference |   SE |         95% CI | t(552) |     p
 #> --------------------------------------------------------------------------
@@ -1088,7 +1102,7 @@ estimate_contrasts(
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: time
-#> Predictors averaged: time (2)
+#> Predictors held at: time (2)
 #> p-values are uncorrected.
 #> 
 
@@ -1119,7 +1133,7 @@ estimate_contrasts(
   comparison = cond_tx,
   backend = "emmeans"
 )
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level        | Difference |        95% CI |   SE | t(24) |     p
 #> ----------------------------------------------------------------
@@ -1139,7 +1153,7 @@ data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 estimate_contrasts(model)
 #> We selected `contrast=c("Species")`.
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1     | Level2     | Difference |   SE |         95% CI | t(145) |      p
 #> ------------------------------------------------------------------------------
@@ -1149,7 +1163,7 @@ estimate_contrasts(model)
 #> 
 #> Variable predicted: Sepal.Width
 #> Predictors contrasted: Species
-#> Predictors averaged: Petal.Length_factor
+#> Random effects: Averaged over a balanced grid of cluster levels.
 #> p-values are uncorrected.
 #> 
 
@@ -1160,7 +1174,7 @@ data$am <- as.factor(data$am)
 model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 estimate_contrasts(model)
 #> We selected `contrast=c("cyl")`.
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1 | Level2 | Median |         95% CI |     pd |          ROPE | % in ROPE
 #> ------------------------------------------------------------------------------
@@ -1170,11 +1184,11 @@ estimate_contrasts(model)
 #> 
 #> Variable predicted: mpg
 #> Predictors contrasted: cyl
-#> Predictors averaged: wt (3.2)
+#> Predictors held at: wt (3.2)
 #> 
 estimate_contrasts(model, by = "wt", length = 4)
 #> We selected `contrast=c("cyl")`.
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1 | Level2 |   wt | Median |          95% CI |     pd |          ROPE | % in ROPE
 #> --------------------------------------------------------------------------------------
@@ -1202,7 +1216,7 @@ model <- rstanarm::stan_glm(
 )
 estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 #> We selected `contrast=c("Species")`.
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1     | Level2     |   BF | Petal.Length | Median |         95% CI
 #> -----------------------------------------------------------------------
@@ -1218,7 +1232,7 @@ estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 #> 
 #> Variable predicted: Sepal.Width
 #> Predictors contrasted: Species
-#> Predictors averaged: Petal.Width (1.2)
+#> Predictors held at: Petal.Width (1.2)
 #> 
 
 # Omnibus and Joint Tests ------------------------------------
@@ -1228,7 +1242,7 @@ data(coffee_data, package = "modelbased")
 m <- lm(alertness ~ time * coffee, data = coffee_data)
 # joint test for simple effects of "time" for levels of "coffee".
 estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
-#> Marginal Joint Test
+#> Conditional Joint Test
 #> 
 #> Contrast | coffee  | df1 | df2 |    F |     p
 #> ---------------------------------------------
@@ -1239,25 +1253,25 @@ estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
 #> 
 # global omnibus test to test for differences between "time" levels
 estimate_contrasts(m, contrast = "time", comparison = "omnibus")
-#> Marginal Omnibus Test
+#> Conditional Omnibus Test
 #> 
 #> df1 | df2 |    F |     p
 #> ------------------------
 #> 3   | 114 | 2.35 | 0.076
 #> 
-#> Predictors averaged: coffee
+#> Predictors averaged over a balanced grid: coffee
 #> p-values are uncorrected.
 #> Null-hypothesis: Group means equal 16.20
 #> 
 # test against a different null-hypothesis
 estimate_contrasts(m, contrast = "time", comparison = "omnibus", null = 15)
-#> Marginal Omnibus Test
+#> Conditional Omnibus Test
 #> 
 #> df1 | df2 |    F |     p
 #> ------------------------
 #> 3   | 114 | 3.72 | 0.014
 #> 
-#> Predictors averaged: coffee
+#> Predictors averaged over a balanced grid: coffee
 #> p-values are uncorrected.
 #> Null-hypothesis: Group means equal 15.00
 #> 
@@ -1279,7 +1293,7 @@ model <- lme4::lmer(
 # at each time point - we calculate the contrast of two average slopes
 # at different levels of "time"
 estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> time | Difference |   SE |         95% CI |     z |      p
 #> ----------------------------------------------------------
@@ -1289,6 +1303,7 @@ estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: phq4_within, phq4_between
+#> Random effects: Averaged over a balanced grid of cluster levels.
 #> p-values are uncorrected.
 #> 
 
@@ -1296,7 +1311,7 @@ estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "time")
 # significant? In this case, we just want the contrasts of the overall
 # average slopes (not stratfied nor contrasted by time).
 estimate_contrasts(model, c("phq4_within", "phq4_between"))
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Difference |   SE |         95% CI |     z |      p
 #> ---------------------------------------------------
@@ -1304,6 +1319,7 @@ estimate_contrasts(model, c("phq4_within", "phq4_between"))
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: phq4_within, phq4_between
+#> Random effects: Averaged over a balanced grid of cluster levels.
 #> p-values are uncorrected.
 #> 
 
@@ -1317,7 +1333,7 @@ model <- lme4::lmer(
 
 # how do time trends of context effects differ between education levels?
 estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "education")
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> education | Difference |   SE |         95% CI |     z |      p
 #> ---------------------------------------------------------------
@@ -1327,13 +1343,14 @@ estimate_contrasts(model, c("phq4_within", "phq4_between"), by = "education")
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: phq4_within, phq4_between
+#> Random effects: Averaged over a balanced grid of cluster levels.
 #> p-values are uncorrected.
 #> 
 
 # are differences in time trends of context effects statistically significant
 # between education levels?
 estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1 | Level2 | Difference |   SE |        95% CI |     z |     p
 #> -------------------------------------------------------------------
@@ -1343,6 +1360,7 @@ estimate_contrasts(model, c("phq4_within", "phq4_between", "education"))
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: phq4_within, phq4_between
+#> Random effects: Averaged over a balanced grid of cluster levels.
 #> p-values are uncorrected.
 #> 
 
@@ -1355,7 +1373,7 @@ model <- lme4::lmer(QoL ~ time * education + (1 + time | ID), data = qol_cancer)
 
 # contrasts (pairwise comparisons - the default) by timepoints
 estimate_contrasts(model, "education=c('low', 'mid')", by = "time")
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1 | Level2 | time | Difference |   SE |         95% CI | t(554) |     p
 #> ----------------------------------------------------------------------------
@@ -1365,7 +1383,7 @@ estimate_contrasts(model, "education=c('low', 'mid')", by = "time")
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: education=c('low', 'mid')
-#> Predictors averaged: ID (1)
+#> Random effects: Averaged over a balanced grid of cluster levels.
 #> p-values are uncorrected.
 #> 
 
@@ -1379,7 +1397,7 @@ estimate_contrasts(model,
   post_process = ~reference
 )
 #> Post-processing ~reference...
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Parameter        | Difference |   SE |         95% CI |    z |     p
 #> --------------------------------------------------------------------
@@ -1388,7 +1406,7 @@ estimate_contrasts(model,
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: education=c('low', 'mid')
-#> Predictors averaged: ID (1)
+#> Random effects: Averaged over a balanced grid of cluster levels.
 #> p-values are uncorrected.
 #> 
 
@@ -1403,7 +1421,7 @@ estimate_contrasts(model,
 )
 #> Post-processing ~reference...
 #> Post-processing ~poly...
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Parameter | Difference |   SE |        95% CI |    z |     p
 #> ------------------------------------------------------------
@@ -1411,7 +1429,7 @@ estimate_contrasts(model,
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: education=c('low', 'mid')
-#> Predictors averaged: ID (1)
+#> Random effects: Averaged over a balanced grid of cluster levels.
 #> p-values are uncorrected.
 #> 
 # }

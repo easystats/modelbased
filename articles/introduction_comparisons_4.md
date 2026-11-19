@@ -40,7 +40,7 @@ Let’s look at a simple example.
 \
 `m`` ``<-`` `[`glm`](https://rdrr.io/r/stats/glm.html)`(``outcome`` ``~`` ``x1`` ``+`` ``x2`` ``+`` ``x3``, data ``=`` ``dat``, family ``=`` `[`binomial`](https://rdrr.io/r/stats/family.html)`(``)``)`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"x1"``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> x1 | Probability |       95% CI`\
 `#> -------------------------------`\
@@ -50,8 +50,9 @@ Let’s look at a simple example.
 `#> `\
 `#> Variable predicted: outcome`\
 `#> Predictors modulated: x1`\
-`#> Predictors averaged: x2 (10), x3`\
-`#> Predictions are on the response-scale.`
+`#> Predictors held at: x2 (10)`\
+`#> Predictors averaged over a balanced grid: x3`\
+`#> Predictions are on the inverse-link-scale.`
 
 ### Contrasts and comparisons for categorical focal terms
 
@@ -61,7 +62,7 @@ probabilities (in percentage points).
 
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, ``"x1"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 | Difference |   SE |        95% CI |     z |     p`\
 `#> -------------------------------------------------------------------`\
@@ -71,9 +72,10 @@ probabilities (in percentage points).
 `#> `\
 `#> Variable predicted: outcome`\
 `#> Predictors contrasted: x1`\
-`#> Predictors averaged: x2 (10), x3`\
+`#> Predictors held at: x2 (10)`\
+`#> Predictors averaged over a balanced grid: x3`\
 `#> p-values are uncorrected.`\
-`#> Contrasts are on the response-scale.`
+`#> Contrasts are on the inverse-link-scale.`
 
 The difference between the predicted probability of `x1 = 1` (21.2%) and
 `x1 = 2` (13.9%) is roughly 7.3 percentage points. This difference is
@@ -84,7 +86,7 @@ this case as *log-odds*. To do so, use `predict = "link"`.
 
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, ``"x1"``, predict ``=`` ``"link"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 | Difference |   SE |        95% CI |     z |     p`\
 `#> -------------------------------------------------------------------`\
@@ -94,7 +96,8 @@ this case as *log-odds*. To do so, use `predict = "link"`.
 `#> `\
 `#> Variable predicted: outcome`\
 `#> Predictors contrasted: x1`\
-`#> Predictors averaged: x2 (10), x3`\
+`#> Predictors held at: x2 (10)`\
+`#> Predictors averaged over a balanced grid: x3`\
 `#> p-values are uncorrected.`\
 `#> Contrasts are on the link-scale.`
 
@@ -106,7 +109,7 @@ to *odds ratios*, we can use `transform = "exp"` in combination with
 
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, ``"x1"``, predict ``=`` ``"link"``, transform ``=`` ``"exp"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 | Difference |        95% CI |     p`\
 `#> ----------------------------------------------------`\
@@ -116,7 +119,8 @@ to *odds ratios*, we can use `transform = "exp"` in combination with
 `#> `\
 `#> Variable predicted: outcome`\
 `#> Predictors contrasted: x1`\
-`#> Predictors averaged: x2 (10), x3`\
+`#> Predictors held at: x2 (10)`\
+`#> Predictors averaged over a balanced grid: x3`\
 `#> p-values are uncorrected.`\
 `#> Contrasts are on the exp-transformed link-scale.`
 

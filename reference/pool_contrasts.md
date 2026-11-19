@@ -46,7 +46,7 @@ comparisons <- lapply(1:5, function(i) {
   estimate_contrasts(m, "age")
 })
 pool_contrasts(comparisons)
-#> Marginal Contrasts Analysis
+#> Conditional Contrasts
 #> 
 #> Level1 | Level2 | Difference |   SE |          95% CI |     t |    df |     p
 #> -----------------------------------------------------------------------------
@@ -56,7 +56,8 @@ pool_contrasts(comparisons)
 #> 
 #> Variable predicted: bmi
 #> Predictors contrasted: age
-#> Predictors averaged: hyp, chl (2e+02)
+#> Predictors held at: chl (2e+02)
+#> Predictors averaged over a balanced grid: hyp
 #> p-values are uncorrected.
 #> 
 ```

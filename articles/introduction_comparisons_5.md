@@ -117,7 +117,7 @@ component.
 \
 `# predicting the conditional mean`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"mined"``, predict ``=`` ``"conditional"``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> mined | Mean |   SE |       95% CI |     z`\
 `#> ------------------------------------------`\
@@ -126,11 +126,11 @@ component.
 `#> `\
 `#> Variable predicted: count`\
 `#> Predictors modulated: mined`\
-`#> Predictors averaged: site`\
+`#> Random effects: Averaged over a balanced grid of cluster levels.`\
 `#> Predictions are on the conditional-scale.`\
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, ``"mined"``, predict ``=`` ``"conditional"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 | Difference |   SE |       95% CI |    z |      p`\
 `#> ------------------------------------------------------------------`\
@@ -138,7 +138,7 @@ component.
 `#> `\
 `#> Variable predicted: count`\
 `#> Predictors contrasted: mined`\
-`#> Predictors averaged: site`\
+`#> Random effects: Averaged over a balanced grid of cluster levels.`\
 `#> p-values are uncorrected.`\
 `#> Contrasts are on the conditional-scale.`
 
@@ -151,7 +151,7 @@ zero-inflation component.
 \
 `# predicting the expected value of the response`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"mined"``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> mined | Mean |   SE |       95% CI |     z`\
 `#> ------------------------------------------`\
@@ -160,11 +160,11 @@ zero-inflation component.
 `#> `\
 `#> Variable predicted: count`\
 `#> Predictors modulated: mined`\
-`#> Predictors averaged: site`\
+`#> Random effects: Averaged over a balanced grid of cluster levels.`\
 `#> Predictions are on the response-scale.`\
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, ``"mined"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 | Difference |   SE |       95% CI |    z |      p`\
 `#> ------------------------------------------------------------------`\
@@ -172,7 +172,7 @@ zero-inflation component.
 `#> `\
 `#> Variable predicted: count`\
 `#> Predictors contrasted: mined`\
-`#> Predictors averaged: site`\
+`#> Random effects: Averaged over a balanced grid of cluster levels.`\
 `#> p-values are uncorrected.`\
 `#> Contrasts are on the response-scale.`
 
@@ -184,7 +184,7 @@ use `predict = "zprob"`.
 \
 `# predicting the zero-inflation probabilities`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``m``, ``"mined"``, predict ``=`` ``"zprob"``)`\
-`#> Estimated Marginal Means`\
+`#> Conditional Predictions`\
 `#> `\
 `#> mined | Probability |   SE |       95% CI |     z`\
 `#> -------------------------------------------------`\
@@ -193,11 +193,11 @@ use `predict = "zprob"`.
 `#> `\
 `#> Variable predicted: count`\
 `#> Predictors modulated: mined`\
-`#> Predictors averaged: site`\
+`#> Random effects: Averaged over a balanced grid of cluster levels.`\
 `#> Predictions are on the zprob-scale.`\
 \
 [`estimate_contrasts`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)`(``m``, ``"mined"``, predict ``=`` ``"zprob"``)`\
-`#> Marginal Contrasts Analysis`\
+`#> Conditional Contrasts`\
 `#> `\
 `#> Level1 | Level2 | Difference |   SE |         95% CI |     z |      p`\
 `#> ---------------------------------------------------------------------`\
@@ -205,6 +205,6 @@ use `predict = "zprob"`.
 `#> `\
 `#> Variable predicted: count`\
 `#> Predictors contrasted: mined`\
-`#> Predictors averaged: site`\
+`#> Random effects: Averaged over a balanced grid of cluster levels.`\
 `#> p-values are uncorrected.`\
 `#> Contrasts are on the zprob-scale.`
