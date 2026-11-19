@@ -3,7 +3,7 @@
 \docType{data}
 \name{stigma}
 \alias{stigma}
-\title{Sample dataset from patients with somatic symptons}
+\title{Sample dataset from patients with somatic symptoms}
 \description{
 An artificial, anonymized data set based on a project related to
 the development and persistence of somatic symptoms.

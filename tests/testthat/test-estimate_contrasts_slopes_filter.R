@@ -21,7 +21,7 @@ expect_slope_contrasts <- function(out, at) {
 test_that("estimate_contrasts, slopes, by-filters", {
   by <- c("g='4'", "a")
   expect_slope_contrasts(
-    estimate_contrasts(m3, "wt", by = by, estimate = "average"),
+    estimate_contrasts(m3, "wt", by = by, estimate = "average", verbose = FALSE),
     list(g = "4")
   )
   expect_slope_contrasts(
@@ -31,12 +31,15 @@ test_that("estimate_contrasts, slopes, by-filters", {
 
   by <- c("g=c('4','6')", "a='1'")
   at <- list(g = c("4", "6"), a = "1")
-  expect_slope_contrasts(estimate_contrasts(m3, "wt", by = by, estimate = "average"), at)
+  expect_slope_contrasts(
+    estimate_contrasts(m3, "wt", by = by, estimate = "average", verbose = FALSE),
+    at
+  )
   expect_slope_contrasts(estimate_contrasts(m3, "wt", by = by, backend = "emmeans"), at)
 
   by <- c("g=c('4','5')", "a")
   expect_slope_contrasts(
-    estimate_contrasts(m3, "wt", by = by, estimate = "average"),
+    estimate_contrasts(m3, "wt", by = by, estimate = "average", verbose = FALSE),
     list(g = "4")
   )
   expect_slope_contrasts(

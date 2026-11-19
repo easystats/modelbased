@@ -164,7 +164,8 @@ estimate_contrasts.estimate_predicted <- function(
     by = contrast,
     type = "contrasts",
     model = model,
-    info = info
+    info = info,
+    verbose = verbose
   )
 
   # Add attributes

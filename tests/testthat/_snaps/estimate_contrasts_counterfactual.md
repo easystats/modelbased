@@ -3,7 +3,7 @@
     Code
       print(out, table_width = Inf)
     Output
-      Counterfactual Contrasts Analysis (G-computation)
+      Marginal Contrasts
       
       Level1 | Level2  | Difference |   SE |       95% CI |    z |     p
       ------------------------------------------------------------------
@@ -11,7 +11,8 @@
       
       Variable predicted: QoL
       Predictors contrasted: treatment
-      Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID
+      Predictors averaged over the full sample: time, education, hospital, age, phq4
+      Random effects: Marginalized across clusters.
       p-values are uncorrected.
 
 ---
@@ -19,7 +20,7 @@
     Code
       print(out, table_width = Inf)
     Output
-      Counterfactual Contrasts Analysis (G-computation)
+      Marginal Contrasts
       
       Level1 | Level2  | time | Difference |   SE |         95% CI |     z |      p
       -----------------------------------------------------------------------------
@@ -29,6 +30,7 @@
       
       Variable predicted: QoL
       Predictors contrasted: treatment
-      Predictors averaged: education, hospital (0.95), age (0.22), phq4 (-0.076), ID
+      Predictors averaged over the full sample: education, hospital, age, phq4
+      Random effects: Marginalized across clusters.
       p-values are uncorrected.
 
