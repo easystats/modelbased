@@ -21,6 +21,11 @@
   effect sizes in the wrong rows (e.g., when factor levels were not sorted
   alphabetically) or in the wrong columns (when `by` was specified).
 
+* Fixed issue where `effectsize = "boot"` in `estimate_contrasts()` with
+  `backend = "emmeans"` returned effect sizes in the wrong rows, when the
+  contrasts were sorted in another order than in *emmeans* (e.g., when factor
+  levels were not sorted alphabetically, or for polynomial contrasts).
+
 * The confidence intervals of effect sizes from `effectsize = "emmeans"` now
   use the level of `ci`. Before, they were always 95% intervals.
 

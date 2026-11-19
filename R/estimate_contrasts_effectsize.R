@@ -135,6 +135,12 @@
         paste0(bootES_type, "_CI_low"),
         paste0(bootES_type, "_CI_high")
       )
+      # match effect sizes to the contrasts, which may be sorted differently
+      emmeans_rows <- attributes(contrasts_results)$emmeans_rows
+      if (!is.null(emmeans_rows)) {
+        eff <- eff[emmeans_rows, , drop = FALSE]
+      }
+      rownames(eff) <- NULL
 
       contrasts_results <- cbind(contrasts_results, eff)
     }
