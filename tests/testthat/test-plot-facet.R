@@ -1,4 +1,4 @@
-skip_on_os(c("mac", "solaris", "linux"))
+skip_on_os(c("mac", "solaris"))
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")
@@ -15,44 +15,84 @@ test_that("plots facets", {
 
   pr <- estimate_means(fit, c("c12hour", "c172code", "c161sex"))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-interaction-facets-1", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-1",
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
+  )
 
   pr <- estimate_means(fit, c("c12hour", "c172code", "barthtot"))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-interaction-facets-2", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-2",
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
+  )
 
   pr <- estimate_means(fit, c("c12hour", "c172code", "c161sex", "barthtot"))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-interaction-facets-3", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-3",
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
+  )
 
   pr <- estimate_means(fit, c("c12hour", "c172code", "barthtot", "c161sex"))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-interaction-facets-4", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-4",
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
+  )
 
   pr <- estimate_means(fit, c("c12hour", "barthtot", "c161sex", "c172code"))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-interaction-facets-5", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-5",
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
+  )
 
   fit <- lm(neg_c_7 ~ c12hour * barthtot * c161sex * c172code * e16sex, data = efc)
   set.seed(123)
   pr <- estimate_means(fit, c("c12hour", "barthtot", "c161sex", "c172code", "e16sex"))
-  vdiffr::expect_doppelganger("plot-interaction-facets-6", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-6",
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
+  )
 
   pr <- estimate_means(fit, c("c12hour", "c161sex", "c172code", "e16sex", "barthtot"))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-interaction-facets-7", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-7",
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
+  )
 
   pr <- estimate_means(fit, c("c12hour", "c172code", "c161sex", "barthtot"))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-interaction-facets-8", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-8",
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
+  )
 
   pr <- estimate_means(fit, c("c12hour", "c172code", "barthtot", "c161sex"))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-interaction-facets-9", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-9",
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
+  )
 
   pr <- estimate_means(fit, c("c12hour", "e16sex", "c161sex", "c172code"))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-interaction-facets-10", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-10",
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
+  )
 })
 
 
@@ -66,12 +106,14 @@ test_that("plots facets", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-interaction-facets-cat-1",
-    plot(pr, show_data = FALSE)
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
   )
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-interaction-facets-cat-1-lines",
-    plot(pr, show_data = FALSE, join_dots = TRUE)
+    plot(pr, show_data = FALSE, join_dots = TRUE),
+    variant = snapshot_variant()
   )
 
   fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst * negc7d, data = efc)
@@ -79,19 +121,22 @@ test_that("plots facets", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-interaction-facets-cat-2",
-    plot(pr, show_data = FALSE)
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
   )
   # connecting lines
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-interaction-facets-cat-3-lines",
-    plot(pr, show_data = FALSE, join_dots = TRUE)
+    plot(pr, show_data = FALSE, join_dots = TRUE),
+    variant = snapshot_variant()
   )
   # no connecting lines
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-interaction-facets-cat-3",
-    plot(pr, show_data = FALSE, join_dots = FALSE)
+    plot(pr, show_data = FALSE, join_dots = FALSE),
+    variant = snapshot_variant()
   )
 })
 
@@ -110,7 +155,8 @@ test_that("plots facets, emmeans", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-interaction-facets-cat-4emmeans",
-    plot(pr, show_data = FALSE)
+    plot(pr, show_data = FALSE),
+    variant = snapshot_variant()
   )
 
   fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst * negc7d, data = efc)
@@ -123,12 +169,14 @@ test_that("plots facets, emmeans", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-interaction-facets-cat-5emmeans",
-    plot(pr, show_data = FALSE, join_dots = TRUE)
+    plot(pr, show_data = FALSE, join_dots = TRUE),
+    variant = snapshot_variant()
   )
   # no connecting lines
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-interaction-facets-cat-6emmeans",
-    plot(pr, show_data = FALSE, join_dots = FALSE)
+    plot(pr, show_data = FALSE, join_dots = FALSE),
+    variant = snapshot_variant()
   )
 })
