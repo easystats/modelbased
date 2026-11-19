@@ -64,6 +64,9 @@
   # for later use
   cleaned_by <- .grep_cleaned_by_vars(by)
 
+  ## TODO: we have no "adjusted_for" when backend = "emmeans". We could also
+  ##       check adjustments here for a more comprehensive/informative footer
+
   if (!is.null(adjusted_for) && length(adjusted_for) >= 1 && !all(is.na(adjusted_for))) {
     # if we have values of adjusted terms, add these here
     if (all(adjusted_for %in% colnames(x))) {

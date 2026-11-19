@@ -505,6 +505,9 @@ estimate_means <- function(
       verbose = verbose,
       ...
     )
+    # for backend emmeans, we default "estimate" to "typical" - the argument
+    # is not used, but this makes sure the right table header is used.
+    estimate <- "typical"
     means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
     # Marginalmeans ----------------------------------------------------------
