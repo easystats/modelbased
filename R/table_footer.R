@@ -140,16 +140,24 @@
     }
   }
 
-  #
+  # Warn if numeric focal terms are used with marginalization = "average", as
+  # predictions will only reflect observed data points rather than a balanced
+  # grid
   if (
     verbose &&
       marginalization == "average" &&
       !is.null(ref_cat_data) &&
       all(cleaned_by %in% colnames(ref_cat_data))
   ) {
+    # Check if any of the focal terms (`by`) are numeric
     numeric_by <- vapply(ref_cat_data[by], is.numeric, logical(1))
-    if (all(numeric_by)) {
-      insight::format_warning("test")
+    if (any(numeric_by)) {
+      insight::format_warning(paste0(
+        "One or all focal terms are numeric. With `estimate = \"average\"`, values ",
+        "are only based on the data points that actually exist. Consequently, the ",
+        "output may not represent a balanced range or grid of values from your focal ",
+        "term(s). Use `verbose = FALSE` to silence this warning."
+      ))
     }
   }
 

@@ -37,12 +37,35 @@ test_that("estimate_means - print footer for estimate types and re.form", {
     estimate = "population"
   )))
 
+  # check warnings
+  expect_warning(estimate_means(model, c("sex", "bill_dep"), estimate = "average"))
+  expect_no_warning(estimate_means(
+    model,
+    c("sex", "bill_dep"),
+    estimate = "average",
+    verbose = FALSE
+  ))
+
   # one numeric
   model <- lm(body_mass ~ species + bill_dep + sex + bill_len, data = penguins)
   expect_snapshot(print(estimate_means(model, "bill_dep", estimate = "specific")))
   expect_snapshot(print(estimate_means(model, "bill_dep", estimate = "typical")))
-  expect_snapshot(print(estimate_means(model, "bill_dep", estimate = "average")))
+  expect_snapshot(print(estimate_means(
+    model,
+    "bill_dep",
+    estimate = "average",
+    verbose = FALSE
+  )))
   expect_snapshot(print(estimate_means(model, "bill_dep", estimate = "population")))
+
+  # check warnings
+  expect_warning(estimate_means(model, "bill_dep", estimate = "average"))
+  expect_no_warning(estimate_means(
+    model,
+    "bill_dep",
+    estimate = "average",
+    verbose = FALSE
+  ))
 
   # two categorical
   model <- lm(body_mass ~ species * sex + bill_dep + bill_len, data = penguins)
@@ -58,6 +81,9 @@ test_that("estimate_means - print footer for estimate types and re.form", {
     c("sex", "species"),
     estimate = "population"
   )))
+
+  # check warnings
+  expect_no_warning(estimate_means(model, c("sex", "species"), estimate = "average"))
 
   # mixed models
   data(cbpp, package = "lme4")
