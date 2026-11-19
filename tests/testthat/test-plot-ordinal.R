@@ -36,44 +36,6 @@ test_that("plots package ordinal", {
 test_that("plots packages bracl and nnet", {
   skip_if_not_installed("brglm2")
   skip_if_not_installed("nnet")
-  skip_on_os("linux")
-
-  data("stemcell", package = "brglm2")
-  m_bracl <- brglm2::bracl(
-    research ~ as.numeric(religion) + gender,
-    weights = frequency,
-    data = stemcell,
-    type = "ML"
-  )
-  m_nnet <- nnet::multinom(
-    research ~ as.numeric(religion) + gender,
-    weights = frequency,
-    data = stemcell
-  )
-
-  out <- estimate_means(m_bracl, "gender")
-  set.seed(123)
-  vdiffr::expect_doppelganger("plot-ordinal-bracl", plot(out, show_data = FALSE))
-
-  out <- estimate_means(m_nnet, "gender")
-  set.seed(123)
-  vdiffr::expect_doppelganger("plot-ordinal-nnet", plot(out, show_data = FALSE))
-
-  m_nnet <- nnet::multinom(
-    research ~ as.numeric(religion) * gender,
-    weights = frequency,
-    data = stemcell
-  )
-  out <- estimate_means(m_nnet, c("religion", "gender"))
-  set.seed(123)
-  vdiffr::expect_doppelganger("plot-ordinal-nnet-2", plot(out, show_data = FALSE))
-})
-
-
-test_that("plots packages bracl and nnet under Linux", {
-  skip_if_not_installed("brglm2")
-  skip_if_not_installed("nnet")
-  skip_on_os("windows")
 
   data("stemcell", package = "brglm2")
   m_bracl <- brglm2::bracl(
@@ -93,7 +55,7 @@ test_that("plots packages bracl and nnet under Linux", {
   vdiffr::expect_doppelganger(
     "plot-ordinal-bracl",
     plot(out, show_data = FALSE),
-    variant = "linux"
+    variant = snapshot_variant()
   )
 
   out <- estimate_means(m_nnet, "gender")
@@ -101,7 +63,7 @@ test_that("plots packages bracl and nnet under Linux", {
   vdiffr::expect_doppelganger(
     "plot-ordinal-nnet",
     plot(out, show_data = FALSE),
-    variant = "linux"
+    variant = snapshot_variant()
   )
 
   m_nnet <- nnet::multinom(
@@ -114,6 +76,6 @@ test_that("plots packages bracl and nnet under Linux", {
   vdiffr::expect_doppelganger(
     "plot-ordinal-nnet-2",
     plot(out, show_data = FALSE),
-    variant = "linux"
+    variant = snapshot_variant()
   )
 })
