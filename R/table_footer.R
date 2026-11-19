@@ -56,7 +56,7 @@
   # --------------------------------------------------------------------------
 
   # flag whether the estimate-option indicates that we average over the
-  # sampe for non-focal terms
+  # sample for non-focal terms
   sample_average <- !is.null(marginalization) &&
     length(marginalization) == 1 &&
     marginalization %in% c("average", "population", "counterfactual")
@@ -112,8 +112,14 @@
           !is.null(ref_cat_data) &&
           all(cleaned_by %in% colnames(ref_cat_data))
       ) {
-        # Check if any of the focal terms (`by`) are numeric
-        numeric_by <- vapply(ref_cat_data[by], is.numeric, logical(1))
+        # Check if any of the focal terms (`by`) are numeric, not likert-alike
+        numeric_by <- vapply(
+          ref_cat_data[by],
+          function(n) {
+            is.numeric(n) && !.is_likert(n)
+          },
+          logical(1)
+        )
         if (any(numeric_by)) {
           insight::format_warning(paste0(
             datawizard::text_concatenate(names(numeric_by)[numeric_by], enclose = "`"),
