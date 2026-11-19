@@ -80,7 +80,12 @@ test_that("estimate_contrasts, effectsize boot, effect sizes follow their contra
   expected <- vapply(
     as.character(out$Level),
     function(p) {
-      boot_d(chickwts, "weight", "feed", stats::setNames(poly_weights[[p]], levels(chickwts$feed)))
+      boot_d(
+        chickwts,
+        "weight",
+        "feed",
+        stats::setNames(poly_weights[[p]], levels(chickwts$feed))
+      )
     },
     numeric(1),
     USE.NAMES = FALSE
