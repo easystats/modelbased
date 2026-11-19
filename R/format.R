@@ -620,8 +620,7 @@ format.marginaleffects_contrasts <- function(
 
 #' @keywords internal
 .is_ratio_comparison <- function(comparison) {
-  (inherits(comparison, "formula") &&
-    identical(deparse(comparison[[2]]), "ratio")) ||
+  (inherits(comparison, "formula") && identical(deparse(comparison[[2]]), "ratio")) ||
     identical(comparison, "ratio")
 }
 
@@ -723,11 +722,7 @@ format.marginaleffects_contrasts <- function(
     # "SepalLength"), and uses these names in the contrast labels. The names
     # of `find_response()` hold these brms names
     model_response <- insight::find_response(model)
-    response_levels <- unique(c(
-      response_levels,
-      model_response,
-      names(model_response)
-    ))
+    response_levels <- unique(c(response_levels, model_response, names(model_response)))
   }
   if (!length(response_levels)) {
     return(params)
@@ -830,7 +825,8 @@ equivalence_columns <- c(
     # for a focal term named "hypothesis", marginaleffects names its own
     # "hypothesis" column "hypothesis.1"
     if (
-      "hypothesis" %in% protected_focal &&
+      "hypothesis" %in%
+        protected_focal &&
         !"hypothesis.1" %in% protected_focal &&
         "hypothesis.1" %in% colnames(x)
     ) {
@@ -1118,7 +1114,8 @@ equivalence_columns <- c(
   protected <- vapply(
     focal_terms,
     function(i) {
-      i %in% colnames(x) &&
+      i %in%
+        colnames(x) &&
         any(vapply(
           grids,
           function(g) {
@@ -1134,9 +1131,10 @@ equivalence_columns <- c(
     return(character(0))
   }
   # temporary names must not match any existing column
-  temporary <- make.unique(
-    c(colnames(x), paste0(".modelbased_focal_", seq_along(protected)))
-  )[-seq_along(colnames(x))]
+  temporary <- make.unique(c(
+    colnames(x),
+    paste0(".modelbased_focal_", seq_along(protected))
+  ))[-seq_along(colnames(x))]
   stats::setNames(protected, temporary)
 }
 
@@ -1280,9 +1278,9 @@ equivalence_columns <- c(
   } else if (predict_type == "survival" && info$is_survival) {
     # this is for survival models, where we want to predict the survival probability
     estimate_name <- "Probability"
-  } else if (predict_type %in% c("zprob", "zero")) {
+  } else if (predict_type %in% c("zprob", "zero", "probs")) {
     # this is for zero-inflated models, where we want to predict the probability
-    # of a zero-inflated outcome
+    # of a zero-inflated outcome, or for ordinal models
     estimate_name <- "Probability"
   } else if (
     predict_type %in%

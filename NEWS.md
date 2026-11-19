@@ -30,6 +30,9 @@
   contrasts of the latent variable are divided by the SD of the latent error,
   i.e. `pi / sqrt(3)` (logit) or `1` (probit).
 
+* The `"marginaleffects"`-backend now supports the ordinal family from package
+  *glmmTMB*.
+
 ## Bug fixes
 
 * If the filter in `by` keeps one level, `estimate_contrasts()` with

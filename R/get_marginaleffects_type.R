@@ -136,6 +136,13 @@
   if (!model_class %in% .default_type$class) {
     return("response")
   }
+  # special handling for glmmTMB ordinal family
+  if (
+    inherits(model, "glmmTMB") && identical(insight::get_family(model)$family, "ordinal")
+  ) {
+    model_class <- "glmmTMB_ordinal"
+  }
+
   # extract all valid types for model class
   out <- .default_type$type[.default_type$class == model_class]
   # sanity check - for omnibus test, we change the default from
@@ -149,6 +156,12 @@
 
 # all valid "type" arguments for each model class.
 # Run "marginaleffects:::type_dictionary_build()" to update this list
+# Since marginaleffects > 1.0.0, we have the "glmmTMB_ordinal" class, which
+# we have to rename and remove duplicated tyes:
+# x <- marginaleffects:::type_dictionary_build()
+# x[-which(x$class == "glmmTMB_ordinal" & x$type != "probs"), ]
+# x$class[x$class == "glmmTMB_ordinal"] <- "glmmTMB"
+# dput(x)
 
 # fmt: skip
 .typedic <- data.frame(
@@ -168,12 +181,12 @@
     "Gam", "geeglm", "geeglm", "Gls", "glimML", "glimML", "glm",
     "glm", "glm", "glmerMod", "glmerMod", "glmgee", "glmgee", "gnm",
     "gnm", "glmrob", "glmrob", "glmmTMB", "glmmTMB", "glmmTMB", "glmmTMB",
-    "glmmTMB", "glmmTMB", "glmmTMB_ordinal", "glmmTMB_ordinal", "glmmTMB_ordinal",
-    "glmmPQL", "glmmPQL", "glmx", "glm_weightit", "glm_weightit",
-    "glm_weightit", "glm_weightit", "glm_weightit", "ivreg", "lda",
-    "lda", "lm", "lmerMod", "lmerModLmerTest", "lmrob", "lm_robust",
-    "lrm", "lrm", "lrm", "mblogit", "mblogit", "mblogit", "mclogit",
-    "mclogit", "mclogit", "MCMCglmm", "model_fit", "model_fit", "model_fit",
+    "glmmTMB", "glmmTMB", "glmmTMB", "glmmTMB", "glmmTMB", "glmmPQL",
+    "glmmPQL", "glmx", "glm_weightit", "glm_weightit", "glm_weightit",
+    "glm_weightit", "glm_weightit", "ivreg", "lda", "lda", "lm",
+    "lmerMod", "lmerModLmerTest", "lmrob", "lm_robust", "lrm", "lrm",
+    "lrm", "mblogit", "mblogit", "mblogit", "mclogit", "mclogit",
+    "mclogit", "MCMCglmm", "model_fit", "model_fit", "model_fit",
     "workflow", "workflow", "workflow", "multinom", "multinom", "multinom_weightit",
     "multinom_weightit", "multinom_weightit", "mhurdle", "mhurdle",
     "mhurdle", "mvgam", "mvgam", "mvgam", "mvgam", "mvgam", "nestedLogit",
