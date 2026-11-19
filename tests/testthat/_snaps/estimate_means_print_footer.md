@@ -150,7 +150,7 @@
       
       Variable predicted: body_mass
       Predictors modulated: sex, bill_dep
-      Predictors averaged within levels of sex: species, bill_len
+      Predictors averaged within levels of sex and bill_dep: species, bill_len
 
 ---
 
@@ -251,7 +251,7 @@
       
       Variable predicted: body_mass
       Predictors modulated: bill_dep
-      Predictors averaged over the full sample: species, sex, bill_len
+      Predictors averaged within levels of bill_dep: species, sex, bill_len
 
 ---
 
