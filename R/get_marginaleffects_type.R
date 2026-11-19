@@ -157,7 +157,7 @@
 # all valid "type" arguments for each model class.
 # Run "marginaleffects:::type_dictionary_build()" to update this list
 # Since marginaleffects > 1.0.0, we have the "glmmTMB_ordinal" class, which
-# we have to rename and remove duplicated tyes:
+# we have to rename and remove duplicated types:
 # x <- marginaleffects:::type_dictionary_build()
 # x[-which(x$class == "glmmTMB_ordinal" & x$type != "probs"), ]
 # x$class[x$class == "glmmTMB_ordinal"] <- "glmmTMB"
