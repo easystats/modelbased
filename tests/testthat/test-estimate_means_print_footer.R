@@ -14,6 +14,10 @@ test_that("estimate_means - print footer for estimate types and re.form", {
   expect_snapshot(print(estimate_means(model, "sex", estimate = "average")))
   expect_snapshot(print(estimate_means(model, "sex", estimate = "population")))
 
+  # warnings
+  expect_no_warning(estimate_means(model, "sex", estimate = "average"))
+  expect_no_warning(estimate_means(model, "sex", estimate = "population"))
+
   # one categorical, one numeric
   model <- lm(body_mass ~ species + bill_dep * sex + bill_len, data = penguins)
   expect_snapshot(print(estimate_means(
@@ -45,6 +49,8 @@ test_that("estimate_means - print footer for estimate types and re.form", {
     estimate = "average",
     verbose = FALSE
   ))
+  # warnings
+  expect_no_warning(estimate_means(model, c("sex", "bill_dep"), estimate = "population"))
 
   # one numeric
   model <- lm(body_mass ~ species + bill_dep + sex + bill_len, data = penguins)
