@@ -116,10 +116,16 @@
         numeric_by <- vapply(ref_cat_data[by], is.numeric, logical(1))
         if (any(numeric_by)) {
           insight::format_warning(paste0(
-            "One or all focal terms are numeric. With `estimate = \"average\"`, values ",
-            "are only based on the data points that actually exist. Consequently, the ",
-            "output may not represent a balanced range or grid of values from your focal ",
-            "term(s). Use `verbose = FALSE` to silence this warning."
+            datawizard::text_concatenate(names(numeric_by)[numeric_by], enclose = "`"),
+            ifelse(
+              sum(numeric_by) > 1,
+              " are numeric focal terms. ",
+              " is a numeric focal term. "
+            ),
+            "With `estimate = \"average\"`, values are based only on the data points ",
+            "that actually exist. Consequently, the  output may not represent a ",
+            "balanced range or grid of values from your focal  term(s). Use ",
+            "`verbose = FALSE` to silence this warning."
           ))
         }
       }
