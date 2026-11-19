@@ -347,7 +347,8 @@ contrast1 <- estimate_contrasts(
   contrast = "time",
   by = "symptoms_unreal",
   integer_as_continuous = TRUE,
-  estimate = "average"
+  estimate = "average",
+  verbose = FALSE
 )
 ```
 
