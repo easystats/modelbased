@@ -114,7 +114,7 @@
       ) {
         # Check if any of the focal terms (`by`) are numeric, not likert-alike
         numeric_by <- vapply(
-          ref_cat_data[by],
+          ref_cat_data[cleaned_by],
           function(n) {
             is.numeric(n) && !.is_likert(n)
           },
