@@ -1116,7 +1116,7 @@ test_that("estimate_contrasts, backend emmeans, ordinal, effect size errors", {
 
 test_that("estimate_means, backend marginaleffects, ordinal", {
   skip_if_not_installed("ordinal")
-  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.15.2")
   skip_if_not_installed("marginaleffects", minimum_version = "1.0.0.10008")
   data(wine, package = "ordinal")
   m2 <- glmmTMB::glmmTMB(
