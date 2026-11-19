@@ -205,7 +205,7 @@ get_emcontrasts <- function(
 
   # emmeans is always conditioning on a typical cluster
   if (insight::is_mixed_model(model)) {
-    attr(estimated, "re_form_na") <- TRUE
+    attr(out, "re_form_na") <- TRUE
   }
 
   attr(out, "contrast") <- my_args$contrast

@@ -108,7 +108,7 @@
       # grid
       if (
         verbose &&
-          marginalization == "average" &&
+          identical(marginalization, "average") &&
           !is.null(ref_cat_data) &&
           all(cleaned_by %in% colnames(ref_cat_data))
       ) {
