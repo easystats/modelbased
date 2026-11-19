@@ -92,14 +92,6 @@
           averaged_over <- c(averaged_over, adjusted_for[av])
         }
       }
-      # check if we have categorical focal terms - if these are all numeric,
-      # we do not average within levels
-      cleaned_by <- .grep_cleaned_by_vars(by)
-      if (all(cleaned_by %in% colnames(ref_cat_data))) {
-        focal_factors <- vapply(ref_cat_data[cleaned_by], is.factor, logical(1))
-      }
-    } else {
-      focal_factors <- NULL
     }
 
     # convert to strings
@@ -123,14 +115,10 @@
       average_string <- switch(
         marginalization,
         typical = "Predictors averaged over a balanced grid",
-        average = if (!is.null(focal_factors) && any(focal_factors)) {
-          paste0(
-            "Predictors averaged within levels of ",
-            datawizard::text_concatenate(names(focal_factors)[focal_factors])
-          )
-        } else {
-          "Predictors averaged over the full sample"
-        },
+        average = paste0(
+          "Predictors averaged within levels of ",
+          datawizard::text_concatenate(.grep_cleaned_by_vars(by))
+        ),
         population = ,
         counterfactual = "Predictors averaged over the full sample",
         ""
