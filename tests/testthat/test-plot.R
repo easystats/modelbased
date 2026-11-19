@@ -13,30 +13,36 @@ test_that("plots emmeans", {
   x <- estimate_means(model, by = "Species", backend = "emmeans")
   vdiffr::expect_doppelganger(
     "plot-means-1",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
   vdiffr::expect_doppelganger(
     "plot-means-1-lines",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE, join_dots = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE, join_dots = TRUE)),
+    variant = "windows"
   )
   x <- estimate_means(model, by = "Sepal.Width", backend = "emmeans")
   vdiffr::expect_doppelganger(
     "plot-means-2",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
   x <- estimate_means(model, by = c("Sepal.Width", "Species"), backend = "emmeans")
   vdiffr::expect_doppelganger(
     "plot-means-3",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
   x <- estimate_means(model, by = c("Species", "Sepal.Width"), backend = "emmeans")
   vdiffr::expect_doppelganger(
     "plot-means-4",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
   vdiffr::expect_doppelganger(
     "plot-means-4-lines",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE, join_dots = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE, join_dots = TRUE)),
+    variant = "windows"
   )
 })
 
@@ -49,25 +55,29 @@ test_that("plots, show_data", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-means-showdata-1",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
   x <- estimate_means(model, by = "Sepal.Width")
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-means-showdata-2",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
   x <- estimate_means(model, by = c("Sepal.Width", "Species"))
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-means-showdata-3",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
   x <- estimate_means(model, by = c("Species", "Sepal.Width"))
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-means-showdata-4",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
 })
 
@@ -79,12 +89,14 @@ test_that("plots marginalmeans", {
   x <- estimate_means(model, by = "Species", backend = "marginaleffects")
   vdiffr::expect_doppelganger(
     "plot-me-means-1",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
   x <- estimate_means(model, by = "Sepal.Width", backend = "marginaleffects")
   vdiffr::expect_doppelganger(
     "plot-me-means-2",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
   x <- estimate_means(
     model,
@@ -93,7 +105,8 @@ test_that("plots marginalmeans", {
   )
   vdiffr::expect_doppelganger(
     "plot-me-means-3",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
   x <- estimate_means(
     model,
@@ -102,7 +115,8 @@ test_that("plots marginalmeans", {
   )
   vdiffr::expect_doppelganger(
     "plot-me-means-4",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
 })
 
@@ -115,13 +129,15 @@ test_that("plots marginalmeans, show_data", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-me-means-showdata-1",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
   x <- estimate_means(model, by = "Sepal.Width", backend = "marginaleffects")
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-me-means-showdata-2",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
   x <- estimate_means(
     model,
@@ -131,7 +147,8 @@ test_that("plots marginalmeans, show_data", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-me-means-showdata-3",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
   x <- estimate_means(
     model,
@@ -141,7 +158,8 @@ test_that("plots marginalmeans, show_data", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-me-means-showdata-4",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
 })
 
@@ -153,22 +171,26 @@ test_that("plots relation", {
   x <- estimate_relation(model, by = "Species")
   vdiffr::expect_doppelganger(
     "plot-relation-1",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
   x <- estimate_relation(model, by = "Sepal.Width")
   vdiffr::expect_doppelganger(
     "plot-relation-2",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
   x <- estimate_relation(model, by = c("Sepal.Width", "Species"))
   vdiffr::expect_doppelganger(
     "plot-relation-3",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
   x <- estimate_relation(model, by = c("Species", "Sepal.Width"))
   vdiffr::expect_doppelganger(
     "plot-relation-4",
-    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE)),
+    variant = "windows"
   )
 })
 
@@ -181,25 +203,29 @@ test_that("plots, relation show_data", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-relation-showdata-1",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
   x <- estimate_relation(model, by = "Sepal.Width")
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-relation-showdata-2",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
   x <- estimate_relation(model, by = c("Sepal.Width", "Species"))
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-relation-showdata-3",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
   x <- estimate_relation(model, by = c("Species", "Sepal.Width"))
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-relation-showdata-4",
-    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE)),
+    variant = "windows"
   )
 })
 
@@ -218,7 +244,8 @@ test_that("plots, relation, percentage for logistic", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-relation-logistic-percentage-1",
-    plot(modelbased::visualisation_recipe(out))
+    plot(modelbased::visualisation_recipe(out)),
+    variant = "windows"
   )
 })
 
@@ -229,11 +256,15 @@ test_that("plots, grouplevel lme4", {
   d$Newfactor <- rep(c("A", "B", "C", "D"))
   model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = d)
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-grouplevel-lme4-1", plot(estimate_grouplevel(model)))
+  vdiffr::expect_doppelganger(
+    "plot-grouplevel-lme4-1",
+    plot(estimate_grouplevel(model)),
+    variant = "windows"
+  )
   out <- estimate_grouplevel(model)
   vr <- visualisation_recipe(out, pointrange = list(color = "black"))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-grouplevel-lme4-2", plot(vr))
+  vdiffr::expect_doppelganger("plot-grouplevel-lme4-2", plot(vr), variant = "windows")
 })
 
 
@@ -242,7 +273,11 @@ test_that("plots, relation, multiple CI", {
   m <- lm(mpg ~ qsec, data = mtcars)
   em <- estimate_relation(m, ci = c(0.5, 0.8, 0.9))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-relation-multiple-ci-1", plot(em, show_data = TRUE))
+  vdiffr::expect_doppelganger(
+    "plot-relation-multiple-ci-1",
+    plot(em, show_data = TRUE),
+    variant = "windows"
+  )
 })
 
 
@@ -252,7 +287,11 @@ test_that("plots, estimate_means works with Poisson", {
   dat_glm <- glm(y ~ fa, data = dat, family = poisson(link = "log"))
   x <- estimate_means(dat_glm, "fa", backend = "emmeans")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-means-poisson-1", plot(x, show_data = TRUE))
+  vdiffr::expect_doppelganger(
+    "plot-means-poisson-1",
+    plot(x, show_data = TRUE),
+    variant = "windows"
+  )
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-means-poisson-1-lines",
@@ -260,7 +299,11 @@ test_that("plots, estimate_means works with Poisson", {
   )
   x <- estimate_means(dat_glm, "fa", backend = "marginaleffects")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-means-poisson-2", plot(x, show_data = TRUE))
+  vdiffr::expect_doppelganger(
+    "plot-means-poisson-2",
+    plot(x, show_data = TRUE),
+    variant = "windows"
+  )
 })
 
 
@@ -269,24 +312,40 @@ test_that("plots, estimate_means, order of predictors", {
   model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
   pr <- estimate_means(model, by = c("Species", "Sepal.Width"), backend = "emmeans")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-means-predictor-order-1", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-means-predictor-order-1",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
   pr <- estimate_means(model, by = c("Sepal.Width", "Species"), backend = "emmeans")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-means-predictor-order-2", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-means-predictor-order-2",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
   pr <- estimate_means(
     model,
     by = c("Species", "Sepal.Width"),
     backend = "marginaleffects"
   )
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-means-predictor-order-3", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-means-predictor-order-3",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
   pr <- estimate_means(
     model,
     by = c("Sepal.Width", "Species"),
     backend = "marginaleffects"
   )
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-means-predictor-order-4", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-means-predictor-order-4",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
 })
 
 
@@ -297,29 +356,57 @@ test_that("plots, numeric or categorical predictors are detected", {
   m_cat <- lm(mpg ~ cyl, data = dat)
   pr <- estimate_expectation(m_cat, by = "cyl")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-cat-num-predictor-1", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-1",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
   pr <- estimate_means(m_cat, by = "cyl", backend = "marginaleffects")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-cat-num-predictor-2", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-2",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
   m_cat <- lm(mpg ~ cyl, data = mtcars)
   pr <- estimate_expectation(m_cat, by = "cyl")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-cat-num-predictor-3", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-3",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
   pr <- estimate_means(m_cat, by = "cyl", backend = "marginaleffects")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-cat-num-predictor-4", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-4",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
   pr <- estimate_expectation(m_cat, by = "cyl", range = "grid")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-cat-num-predictor-5", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-5",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
 
   data(efc, package = "modelbased")
   m <- lm(neg_c_7 ~ barthtot, data = efc)
   pr <- estimate_means(m, by = "barthtot", backend = "marginaleffects")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-cat-num-predictor-6", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-6",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
   pr <- estimate_means(m, by = "barthtot", range = "grid", backend = "marginaleffects")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-cat-num-predictor-7", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-7",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
 })
 
 
@@ -332,7 +419,11 @@ test_that("plots, at special values", {
     preserve_range = FALSE
   )
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-expectation-fivenum", plot(pr, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-expectation-fivenum",
+    plot(pr, show_data = FALSE),
+    variant = "windows"
+  )
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-expectation-fivenum.2",
@@ -353,7 +444,7 @@ test_that("plots, estimate_slope", {
     backend = "emmeans"
   )
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-slopes-1", plot(slopes))
+  vdiffr::expect_doppelganger("plot-slopes-1", plot(slopes), variant = "windows")
 
   model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)
   slopes <- estimate_slopes(
@@ -363,7 +454,7 @@ test_that("plots, estimate_slope", {
     backend = "emmeans"
   )
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-slopes-2", plot(slopes))
+  vdiffr::expect_doppelganger("plot-slopes-2", plot(slopes), variant = "windows")
 
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
   slopes <- estimate_slopes(
@@ -373,7 +464,7 @@ test_that("plots, estimate_slope", {
     backend = "marginaleffects"
   )
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-slopes-3", plot(slopes))
+  vdiffr::expect_doppelganger("plot-slopes-3", plot(slopes), variant = "windows")
 
   model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)
   slopes <- estimate_slopes(
@@ -384,7 +475,7 @@ test_that("plots, estimate_slope", {
     backend = "marginaleffects"
   )
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-slopes-4", plot(slopes))
+  vdiffr::expect_doppelganger("plot-slopes-4", plot(slopes), variant = "windows")
 
   data(iris)
   x <- iris
@@ -398,7 +489,7 @@ test_that("plots, estimate_slope", {
     backend = "marginaleffects"
   )
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-slopes-5", plot(slopes))
+  vdiffr::expect_doppelganger("plot-slopes-5", plot(slopes), variant = "windows")
 })
 
 
@@ -407,10 +498,18 @@ test_that("plots, automatically join dots", {
   m <- lm(Sepal.Width ~ Petal.Length + Species * Petal.Width, data = iris)
   out <- estimate_expectation(m, by = c("Species", "Petal.Width"))
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-join-dots-1", plot(out, show_data = TRUE))
+  vdiffr::expect_doppelganger(
+    "plot-join-dots-1",
+    plot(out, show_data = TRUE),
+    variant = "windows"
+  )
   out <- estimate_expectation(m, by = c("Species", "Petal.Width"), preserve_range = FALSE)
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-join-dots-2", plot(out, show_data = TRUE))
+  vdiffr::expect_doppelganger(
+    "plot-join-dots-2",
+    plot(out, show_data = TRUE),
+    variant = "windows"
+  )
 })
 
 
@@ -419,7 +518,11 @@ test_that("plots, logistic regression", {
   model <- glm(vs ~ wt, data = mtcars, family = "binomial")
   out <- estimate_means(model, "wt", length = 100, backend = "marginaleffects")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-glm-logistic-1", plot(out, show_data = TRUE))
+  vdiffr::expect_doppelganger(
+    "plot-glm-logistic-1",
+    plot(out, show_data = TRUE),
+    variant = "windows"
+  )
   out <- estimate_means(
     model,
     "wt",
@@ -428,7 +531,11 @@ test_that("plots, logistic regression", {
     backend = "marginaleffects"
   )
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-glm-logistic-2", plot(out, show_data = TRUE))
+  vdiffr::expect_doppelganger(
+    "plot-glm-logistic-2",
+    plot(out, show_data = TRUE),
+    variant = "windows"
+  )
 })
 
 
@@ -441,7 +548,11 @@ test_that("plots, 4-way with numeric", {
   by <- c("c12hour", "c161sex", "c172code", "barthtot = [fivenum]")
   estim <- estimate_means(m, by = by, backend = "marginaleffects")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-4way-numeric-1", plot(estim, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-4way-numeric-1",
+    plot(estim, show_data = FALSE),
+    variant = "windows"
+  )
 })
 
 
@@ -455,7 +566,11 @@ test_that("plots, glm logistic inside bound", {
   m <- glm(outcome ~ var1 * var2, data = data, family = binomial(link = "logit"))
   out1 <- estimate_means(m, c("var2 = [sd]", "var1"), backend = "marginaleffects")
   set.seed(123)
-  vdiffr::expect_doppelganger("plot-logistic-bounds-1", plot(out1, show_data = FALSE))
+  vdiffr::expect_doppelganger(
+    "plot-logistic-bounds-1",
+    plot(out1, show_data = FALSE),
+    variant = "windows"
+  )
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-logistic-bounds-2",

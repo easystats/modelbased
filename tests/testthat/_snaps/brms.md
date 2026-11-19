@@ -3,7 +3,7 @@
     Code
       print(out)
     Output
-      Model-based Predictions: rt
+      Conditional Predictions: rt
       
       Row |   rt | Predicted |   SE |       95% CI
       --------------------------------------------
@@ -13,7 +13,7 @@
       4   | 1.54 |      1.20 | 0.85 | [0.32, 3.37]
       5   | 1.48 |      1.19 | 0.83 | [0.33, 3.38]
       
-      Model-based Predictions: response
+      Conditional Predictions: response
       
       Row | response | Predicted |   SE |       95% CI
       ------------------------------------------------
@@ -32,7 +32,7 @@
     Code
       print(out, table_width = Inf)
     Output
-      Model-based Predictions: rt
+      Conditional Predictions: rt
       
       Row |   rt | Predicted |   SE |       95% CI | iter_1 | iter_2 | iter_3
       -----------------------------------------------------------------------
@@ -42,7 +42,7 @@
       4   | 1.54 |      1.20 | 0.85 | [0.32, 3.37] |   0.42 |   1.29 |   1.28
       5   | 1.48 |      1.19 | 0.83 | [0.33, 3.38] |   2.15 |   0.51 |   1.38
       
-      Model-based Predictions: response
+      Conditional Predictions: response
       
       Row | response | Predicted |   SE |       95% CI | iter_1 | iter_2 | iter_3
       ---------------------------------------------------------------------------

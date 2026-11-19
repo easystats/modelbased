@@ -1078,8 +1078,6 @@ test_that("estimate_contrasts - different options for comparison", {
 })
 
 
-skip_on_os(c("mac", "linux"))
-
 test_that("estimate_contrasts - filtering works", {
   data(efc, package = "modelbased")
 
@@ -1087,11 +1085,14 @@ test_that("estimate_contrasts - filtering works", {
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
   levels(efc$c172code) <- c("low", "mid", "high")
   fit <- lm(neg_c_7 ~ e16sex + c161sex + c172code, data = efc)
-  expect_snapshot(print(
-    estimate_contrasts(fit, "c172code", backend = "marginaleffects"),
-    table_width = Inf,
-    zap_small = TRUE
-  ))
+  expect_snapshot(
+    print(
+      estimate_contrasts(fit, "c172code", backend = "marginaleffects"),
+      table_width = Inf,
+      zap_small = TRUE
+    ),
+    variant = "windows"
+  )
 
   fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
   expect_snapshot(print(
@@ -1099,18 +1100,24 @@ test_that("estimate_contrasts - filtering works", {
     table_width = Inf,
     zap_small = TRUE
   ))
-  expect_snapshot(print(
-    estimate_contrasts(fit, "c161sex", "c172code", backend = "marginaleffects"),
-    table_width = Inf,
-    zap_small = TRUE
-  ))
+  expect_snapshot(
+    print(
+      estimate_contrasts(fit, "c161sex", "c172code", backend = "marginaleffects"),
+      table_width = Inf,
+      zap_small = TRUE
+    ),
+    variant = "windows"
+  )
 
   fit <- lm(neg_c_7 ~ barthtot + c161sex + c172code, data = efc)
-  expect_snapshot(print(
-    estimate_slopes(fit, "barthtot", backend = "marginaleffects"),
-    table_width = Inf,
-    zap_small = TRUE
-  ))
+  expect_snapshot(
+    print(
+      estimate_slopes(fit, "barthtot", backend = "marginaleffects"),
+      table_width = Inf,
+      zap_small = TRUE
+    ),
+    variant = "windows"
+  )
   # error
   expect_error(
     estimate_contrasts(fit, "barthtot", backend = "marginaleffects"),
@@ -1118,27 +1125,36 @@ test_that("estimate_contrasts - filtering works", {
   )
 
   fit <- lm(neg_c_7 ~ e16sex + barthtot * c172code, data = efc)
-  expect_snapshot(print(
-    estimate_slopes(fit, "barthtot", by = "c172code", backend = "marginaleffects"),
-    table_width = Inf,
-    zap_small = TRUE
-  ))
-  expect_snapshot(print(
-    estimate_contrasts(fit, "barthtot", "c172code", backend = "marginaleffects"),
-    table_width = Inf,
-    zap_small = TRUE
-  ))
-  fit <- lm(neg_c_7 ~ e16sex * barthtot * c172code, data = efc)
-  expect_snapshot(print(
-    estimate_contrasts(
-      fit,
-      "barthtot",
-      c("c172code", "e16sex"),
-      backend = "marginaleffects"
+  expect_snapshot(
+    print(
+      estimate_slopes(fit, "barthtot", by = "c172code", backend = "marginaleffects"),
+      table_width = Inf,
+      zap_small = TRUE
     ),
-    table_width = Inf,
-    zap_small = TRUE
-  ))
+    variant = "windows"
+  )
+  expect_snapshot(
+    print(
+      estimate_contrasts(fit, "barthtot", "c172code", backend = "marginaleffects"),
+      table_width = Inf,
+      zap_small = TRUE
+    ),
+    variant = "windows"
+  )
+  fit <- lm(neg_c_7 ~ e16sex * barthtot * c172code, data = efc)
+  expect_snapshot(
+    print(
+      estimate_contrasts(
+        fit,
+        "barthtot",
+        c("c172code", "e16sex"),
+        backend = "marginaleffects"
+      ),
+      table_width = Inf,
+      zap_small = TRUE
+    ),
+    variant = "windows"
+  )
   # error
   expect_error(
     estimate_contrasts(fit, c("barthtot", "c172code"), backend = "marginaleffects"),
@@ -1152,24 +1168,38 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
   data(iris)
 
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
-  expect_snapshot(print(
-    estimate_contrasts(model, "Species", backend = "marginaleffects"),
-    table_width = Inf
-  ))
+  expect_snapshot(
+    print(
+      estimate_contrasts(model, "Species", backend = "marginaleffects"),
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
 
   data(coffee_data, package = "modelbased")
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
-  expect_snapshot(print(
-    estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects"),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
+  expect_snapshot(
+    print(
+      estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects"),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
 
-  expect_snapshot(print(
-    estimate_contrasts(m, contrast = "time", by = "coffee", backend = "marginaleffects"),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
+  expect_snapshot(
+    print(
+      estimate_contrasts(
+        m,
+        contrast = "time",
+        by = "coffee",
+        backend = "marginaleffects"
+      ),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
 
   data(Salamanders, package = "glmmTMB")
   model <- glmmTMB::glmmTMB(
@@ -1177,21 +1207,31 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
     data = Salamanders,
     family = "poisson"
   )
-  expect_snapshot(print(
-    estimate_contrasts(model, contrast = c("mined", "spp"), backend = "marginaleffects"),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
-  expect_snapshot(print(
-    estimate_contrasts(
-      model,
-      contrast = "mined",
-      by = "spp",
-      backend = "marginaleffects"
+  expect_snapshot(
+    print(
+      estimate_contrasts(
+        model,
+        contrast = c("mined", "spp"),
+        backend = "marginaleffects"
+      ),
+      zap_small = TRUE,
+      table_width = Inf
     ),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
+    variant = "windows"
+  )
+  expect_snapshot(
+    print(
+      estimate_contrasts(
+        model,
+        contrast = "mined",
+        by = "spp",
+        backend = "marginaleffects"
+      ),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
 })
 
 
@@ -1388,21 +1428,30 @@ test_that("estimate_contrasts - examples from docs work as intendec", {
     zap_small = TRUE,
     table_width = Inf
   ))
-  expect_snapshot(print(
-    estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
-  expect_snapshot(print(
-    estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)")),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
-  expect_snapshot(print(
-    estimate_contrasts(model, by = "Petal.Width", length = 4),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
+  expect_snapshot(
+    print(
+      estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
+  expect_snapshot(
+    print(
+      estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)")),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
+  expect_snapshot(
+    print(
+      estimate_contrasts(model, by = "Petal.Width", length = 4),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
 })
 
 
@@ -1418,41 +1467,62 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
   )
   model2 <- lm(score ~ grp * time * x, data = d)
 
-  expect_snapshot(print(
-    estimate_contrasts(model2, c("grp", "time", "x")),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
-  expect_snapshot(print(
-    estimate_contrasts(model2, c("grp", "time"), by = "x"),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
-  expect_snapshot(print(
-    estimate_contrasts(model2, "grp", by = c("time", "x")),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
-  expect_snapshot(print(
-    estimate_contrasts(model2, "grp", by = "time"),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
-  expect_snapshot(print(
-    estimate_contrasts(model2, c("grp", "time", "x='a'")),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
-  expect_snapshot(print(
-    estimate_contrasts(model2, c("grp", "time=1"), by = "x"),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
-  expect_snapshot(print(
-    estimate_contrasts(model2, "grp", by = c("time", "x='a'")),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
+  expect_snapshot(
+    print(
+      estimate_contrasts(model2, c("grp", "time", "x")),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
+  expect_snapshot(
+    print(
+      estimate_contrasts(model2, c("grp", "time"), by = "x"),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
+  expect_snapshot(
+    print(
+      estimate_contrasts(model2, "grp", by = c("time", "x")),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
+  expect_snapshot(
+    print(
+      estimate_contrasts(model2, "grp", by = "time"),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
+  expect_snapshot(
+    print(
+      estimate_contrasts(model2, c("grp", "time", "x='a'")),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
+  expect_snapshot(
+    print(
+      estimate_contrasts(model2, c("grp", "time=1"), by = "x"),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
+  expect_snapshot(
+    print(
+      estimate_contrasts(model2, "grp", by = c("time", "x='a'")),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
 
   set.seed(123)
   n <- 1000
@@ -1463,16 +1533,22 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
   )
   model2 <- lm(score ~ grp * time, data = d)
 
-  expect_snapshot(print(
-    estimate_contrasts(model2, "time=c(1,2)", by = "grp"),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
-  expect_snapshot(print(
-    estimate_contrasts(model2, c("grp", "time=2")),
-    zap_small = TRUE,
-    table_width = Inf
-  ))
+  expect_snapshot(
+    print(
+      estimate_contrasts(model2, "time=c(1,2)", by = "grp"),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
+  expect_snapshot(
+    print(
+      estimate_contrasts(model2, c("grp", "time=2")),
+      zap_small = TRUE,
+      table_width = Inf
+    ),
+    variant = "windows"
+  )
 })
 
 

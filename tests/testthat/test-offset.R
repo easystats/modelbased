@@ -28,7 +28,7 @@ test_that("offset works", {
     regex = "and you average"
   )
   expect_equal(out1$Mean, c(295.12035, 454.3339, 654.64225), tolerance = 1e-3)
-  expect_equal(out2$Mean, c(256.42016, 289.02697, 707.83022), tolerance = 1e-3)
+  expect_equal(out2$Mean, c(295.78503, 360.70428, 760.80046), tolerance = 1e-3)
 
   expect_message(estimate_means(moff, "x"), regex = "We also found")
 
@@ -100,6 +100,14 @@ test_that("offset works when not in formula", {
   expect_message(
     {
       out <- estimate_means(moff, "x", estimate = "average")
+    },
+    regex = "and you average"
+  )
+  expect_equal(out$Mean, c(305, 216.5, 530.2), tolerance = 1e-3)
+
+  expect_message(
+    {
+      out <- estimate_means(moff, "x", estimate = "average", predict = "inverse_link")
     },
     regex = "and you average"
   )

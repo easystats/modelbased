@@ -122,6 +122,11 @@ get_emmeans <- function(
     keep_iterations <- FALSE
   }
 
+  # emmeans is always conditioning on a typical cluster
+  if (insight::is_mixed_model(model)) {
+    attr(estimated, "re_form_na") <- TRUE
+  }
+
   attr(estimated, "at") <- my_args$by
   attr(estimated, "by") <- my_args$by
   attr(estimated, "predict") <- predict
@@ -318,7 +323,9 @@ get_emmeans <- function(
   }
   estimate_name <- x@misc$estName
   if (!is.null(estimate_name) && estimate_name %in% colnames(means)) {
-    colnames(means)[colnames(means) == estimate_name] <- .emmeans_ordinal_estimate_names[[ordinal_mode]]
+    colnames(means)[colnames(means) == estimate_name] <- .emmeans_ordinal_estimate_names[[
+      ordinal_mode
+    ]]
   }
   .clean_pseudo_factor_emmeans_ordinal(
     means,
@@ -603,7 +610,11 @@ get_emmeans <- function(
 # we cannot use the response in `by` (or `contrast`) for the other modes.
 # `ordinal_mode` is the mode the user asked for, not the mode that we use
 # internally for slopes
-.check_ordinal_response_filter <- function(response_filter, ordinal_mode, argument = "by") {
+.check_ordinal_response_filter <- function(
+  response_filter,
+  ordinal_mode,
+  argument = "by"
+) {
   if (!is.null(response_filter) && !identical(ordinal_mode, "prob")) {
     insight::format_error(paste0(
       "The response `",

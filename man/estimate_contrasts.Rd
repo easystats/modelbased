@@ -366,6 +366,15 @@ Run a contrast analysis by estimating the differences between each level of a
 factor. For plotting, check the examples in \code{\link[see:plot.see_estimate_contrasts]{see::plot.see_estimate_contrasts()}}.
 See also other related functions such as \code{\link[=estimate_means]{estimate_means()}} and
 \code{\link[=estimate_slopes]{estimate_slopes()}}.
+
+Proper interpretation of the output requires understanding the assumptions
+behind your model predictions and which target quantity they refer to. We
+therefore strongly recommend thoroughly reading:
+\itemize{
+\item the documentation for the \code{estimate} argument,
+\item the vignette on \href{https://easystats.github.io/modelbased/articles/technical_marginalization.html}{marginalization methods}, and
+\item the specific considerations for \href{https://easystats.github.io/modelbased/articles/mixed_models.html}{mixed models}.
+}
 }
 \details{
 The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}}
