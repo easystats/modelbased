@@ -10,9 +10,9 @@ test_that("attributes_means, means", {
   expect_named(
     attributes(estim),
     c(
-      "names", "row.names", "class", "at", "by", "table_title", "table_footer",
-      "model", "response", "ci", "backend", "coef_name", "call", "focal_terms",
-      "predict", "transform", "keep_iterations", "model_info"
+      "names", "row.names", "class", "at", "by", "df", "table_title",
+      "table_footer", "model", "response", "ci", "backend", "coef_name", "call",
+      "focal_terms", "predict", "transform", "keep_iterations", "model_info"
     )
   )
   estim <- suppressMessages(estimate_means(model, "Species", backend = "marginaleffects"))
@@ -140,7 +140,7 @@ test_that("attributes_means, expectation", {
   expect_named(
     attributes(estim),
     c(
-      "names", "class", "row.names", "ci", "keep_iterations", "response",
+      "names", "class", "row.names", "ci", "df", "keep_iterations", "response",
       "transform", "model", "datagrid", "focal_terms", "preserve_range",
       "table_title", "coef_name", "model_info", "predict", "table_footer",
       "adjusted_for", "at_specs", "at", "by", "reference", "data"

@@ -75,3 +75,38 @@ test_that("pool_slopes", {
   expect_equal(out$CI_low, c(-10.17755, -17.75063), tolerance = 1e-2)
   expect_named(out, c("Comparison", "Slope", "SE", "CI_low", "CI_high", "t", "df", "p"))
 })
+
+
+test_that("pool_predictions uses the model df for objects without a df column", {
+  skip_if_not_installed("emmeans")
+  set.seed(123)
+  data("nhanes2", package = "mice")
+  imp <- mice::mice(nhanes2, printFlag = FALSE)
+  models <- lapply(1:5, function(i) {
+    lm(bmi ~ age + hyp + chl, data = mice::complete(imp, action = i))
+  })
+
+  # reference: Rubin's rules with complete-data df 20 (25 rows, 5 coefficients)
+  rubin_ci_low <- function(estimates, se) {
+    vapply(
+      seq_len(nrow(estimates)),
+      function(i) {
+        pooled <- mice::pool.scalar(estimates[i, ], se[i, ]^2, n = 25, k = 5)
+        pooled$qbar - stats::qt(0.975, pooled$df) * sqrt(pooled$t)
+      },
+      numeric(1)
+    )
+  }
+
+  predictions <- lapply(models, estimate_relation, by = "age")
+  out <- pool_predictions(predictions)
+  estimates <- sapply(predictions, function(i) i$Predicted)
+  se <- sapply(predictions, function(i) i$SE)
+  expect_equal(out$CI_low, rubin_ci_low(estimates, se), tolerance = 1e-6)
+
+  predictions <- lapply(models, estimate_means, by = "age", backend = "emmeans")
+  out <- pool_predictions(predictions)
+  estimates <- sapply(predictions, function(i) i$Mean)
+  se <- sapply(predictions, function(i) i$SE)
+  expect_equal(out$CI_low, rubin_ci_low(estimates, se), tolerance = 1e-6)
+})
