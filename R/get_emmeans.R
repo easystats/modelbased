@@ -282,6 +282,8 @@ get_emmeans <- function(
   predict <- attributes(x)$predict
   m_info <- insight::model_info(model, response = 1)
 
+  emmeans_df <- NULL
+
   # Summarize and clean
   if (m_info$is_bayesian) {
     means <- parameters::parameters(x, ci = ci, ...)
@@ -294,6 +296,9 @@ get_emmeans <- function(
     }
   } else {
     means <- as.data.frame(stats::confint(x, level = ci))
+    # the df column is not shown, but `pool_predictions()` needs the df
+    # that emmeans used for the confidence intervals
+    emmeans_df <- means$df
     means$df <- NULL
     means <- .clean_names_emmeans_ordinal(means, x, model)
     means <- .clean_names_frequentist(means, predict, m_info)
@@ -309,6 +314,7 @@ get_emmeans <- function(
 
   attr(means, "at") <- info$by
   attr(means, "by") <- info$by
+  attr(means, "df") <- emmeans_df
 
   .add_posterior_draws_emmeans(info, means)
 }

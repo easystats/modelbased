@@ -579,6 +579,7 @@ estimate_relation <- function(
 
   # Store relevant information
   attr(out, "ci") <- ci
+  attr(out, "df") <- .get_predicted_df(model, predictions, dots$ci_method)
   attr(out, "iterations") <- iterations
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
@@ -628,4 +629,26 @@ estimate_relation <- function(
   )
 
   out
+}
+
+
+# degrees of freedom that insight::get_predicted() used for the confidence
+# intervals, which `pool_predictions()` needs. NULL when the intervals come from
+# draws or from a `ci_method` other than "wald".
+.get_predicted_df <- function(model, predictions, ci_method = NULL) {
+  if ("iterations" %in% names(attributes(predictions))) {
+    return(NULL)
+  }
+  if (!is.null(ci_method) && !identical(tolower(ci_method), "wald")) {
+    return(NULL)
+  }
+  if (identical(insight::find_statistic(model), "z-statistic")) {
+    return(Inf)
+  }
+  dof <- .safe(insight::get_df(model, type = "wald", verbose = FALSE))
+  # same as insight: lme models have one df per coefficient
+  if (inherits(model, "lme") && length(dof) > 1L) {
+    dof <- min(dof)
+  }
+  dof
 }

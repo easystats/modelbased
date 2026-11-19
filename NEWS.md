@@ -53,6 +53,14 @@
 * Fixed issue with wrong calculation of degrees of freedom when pooling predictions
   or contrasts.
 
+* For objects with no `df` column, `pool_predictions()` now uses the degrees of
+  freedom of each object's confidence intervals. These objects come from
+  `estimate_relation()`, `estimate_expectation()`, `estimate_prediction()`,
+  `estimate_link()`, and `estimate_means()` with `backend = "emmeans"`. Before,
+  the pooled confidence intervals of these objects used the normal distribution
+  instead of the t-distribution, so they were too narrow for models with
+  t-statistics, such as linear models.
+
 * Filters on the response categories of frequentist ordinal models with
   `backend = "emmeans"`, where `Sat` is the response:
   * `estimate_means()`, `estimate_contrasts()` and `estimate_slopes()` now

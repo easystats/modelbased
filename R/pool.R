@@ -139,15 +139,12 @@ pool_predictions <- function(x, transform = NULL, ...) {
 
   ci <- attributes(x[[1]])$ci
   model <- insight::get_model(x[[1]])
-  dof <- x[[1]]$df
+  dof <- .pool_complete_data_df(x[[1]])
 
   # we don't use the link-inverse because standard errors are calculated using
   # the delta method, hence, these would be incorrect if we apply link-inverse
   # transformation to calculate CIs.
 
-  if (is.null(dof)) {
-    dof <- Inf
-  }
   if (isTRUE(transform)) {
     transform_fun <- insight::get_transformation(model, verbose = FALSE)$inverse
   } else {
@@ -185,6 +182,25 @@ pool_slopes <- pool_predictions
 
 
 # helper ------
+
+# complete-data degrees of freedom for the Barnard-Rubin adjustment. Objects
+# from the emmeans backend and from `estimate_relation()` and related functions
+# have no df column. For these, we use the df that the object used for its
+# confidence intervals, stored as attribute.
+.pool_complete_data_df <- function(x) {
+  dof <- x[["df"]]
+  if (is.null(dof)) {
+    dof <- x[["df_error"]]
+  }
+  if (is.null(dof)) {
+    dof <- attr(x, "df", exact = TRUE)
+  }
+  if (is.null(dof)) {
+    dof <- Inf
+  }
+  dof
+}
+
 
 # pool estimate
 .pool_estimates <- function(original_x, estimate_name, pooled_predictions) {
