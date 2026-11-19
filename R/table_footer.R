@@ -1,6 +1,13 @@
 # Table footer ===============================================================
 
-.table_footer <- function(x, by = NULL, type = "means", model = NULL, info = NULL) {
+.table_footer <- function(
+  x,
+  by = NULL,
+  type = "means",
+  model = NULL,
+  info = NULL,
+  verbose = TRUE
+) {
   # extract necessary information from attributes
   predict <- info$predict
   comparison <- info$comparison
@@ -53,6 +60,9 @@
   sample_average <- !is.null(marginalization) &&
     length(marginalization) == 1 &&
     marginalization %in% c("average", "population", "counterfactual")
+
+  # for later use
+  cleaned_by <- .grep_cleaned_by_vars(by)
 
   if (!is.null(adjusted_for) && length(adjusted_for) >= 1 && !all(is.na(adjusted_for))) {
     # if we have values of adjusted terms, add these here
@@ -117,7 +127,7 @@
         typical = "Predictors averaged over a balanced grid",
         average = paste0(
           "Predictors averaged within levels of ",
-          datawizard::text_concatenate(.grep_cleaned_by_vars(by))
+          datawizard::text_concatenate(cleaned_by)
         ),
         population = ,
         counterfactual = "Predictors averaged over the full sample",
@@ -127,6 +137,19 @@
         table_footer,
         paste0("\n", average_string, ": ", toString(averaged_over))
       )
+    }
+  }
+
+  #
+  if (
+    verbose &&
+      marginalization == "average" &&
+      !is.null(ref_cat_data) &&
+      all(cleaned_by %in% colnames(ref_cat_data))
+  ) {
+    numeric_by <- vapply(ref_cat_data[by], is.numeric, logical(1))
+    if (all(numeric_by)) {
+      insight::format_warning("test")
     }
   }
 

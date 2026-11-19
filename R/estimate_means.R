@@ -550,7 +550,8 @@ estimate_means <- function(
     type = ifelse(estimate == "specific", "predictions", "means"),
     by = info$by,
     model = model,
-    info = info
+    info = info,
+    verbose = verbose
   )
 
   # Add attributes

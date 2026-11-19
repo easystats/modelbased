@@ -628,7 +628,8 @@ estimate_contrasts.default <- function(
     by = info$contrast,
     type = type,
     model = model,
-    info = info
+    info = info,
+    verbose = verbose
   )
 
   # Add attributes
