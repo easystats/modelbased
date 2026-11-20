@@ -4,5 +4,5 @@
 # the same on every OS, so a local test run does not delete the snapshots of
 # the other OS.
 snapshot_variant <- function() {
-  if (identical(Sys.info()[["sysname"]], "Linux")) "linux" else "windows"
+  switch(Sys.info()[["sysname"]], Linux = "linux", Windows = "windows", "mac")
 }
