@@ -1,4 +1,4 @@
-skip_on_os(c("mac", "linux"))
+skip_on_os(c("mac", "solaris"))
 skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 skip_if_not_installed("withr")
@@ -78,7 +78,7 @@ test_that("estimate_means - print multiple by's", {
       table_width = Inf
     ),
     variant = snapshot_variant()
-  ) # nolint
+  )
 })
 
 
@@ -89,10 +89,13 @@ test_that("estimate_means - using display() to print multiple by's", {
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
   fit <- lm(neg_c_7 ~ c12hour * barthtot * c161sex * c172code, data = efc)
-  expect_snapshot(display(
-    estimate_means(fit, c("c12hour = c(50, 100)", "c172code", "c161sex")),
-    format = "tt"
-  ))
+  expect_snapshot(
+    display(
+      estimate_means(fit, c("c12hour = c(50, 100)", "c172code", "c161sex")),
+      format = "tt"
+    ),
+    variant = snapshot_variant()
+  )
 })
 
 
@@ -112,7 +115,7 @@ test_that("estimate_means - full labels", {
       table_width = Inf
     ),
     variant = snapshot_variant()
-  ) # nolint
+  )
   expect_snapshot(
     print(
       estimate_means(
@@ -124,7 +127,7 @@ test_that("estimate_means - full labels", {
       table_width = Inf
     ),
     variant = snapshot_variant()
-  ) # nolint
+  )
 
   fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst * negc7d, data = efc)
   expect_snapshot(
@@ -137,7 +140,7 @@ test_that("estimate_means - full labels", {
       table_width = Inf
     ),
     variant = snapshot_variant()
-  ) # nolint
+  )
   expect_snapshot(
     print(
       estimate_means(
@@ -149,7 +152,7 @@ test_that("estimate_means - full labels", {
       table_width = Inf
     ),
     variant = snapshot_variant()
-  ) # nolint
+  )
 })
 
 
@@ -192,41 +195,58 @@ withr::with_options(
       )),
       c(9L, 10L)
     )
-    expect_snapshot(print(
-      estimate_contrasts(
-        fit,
-        "c172code",
-        "barthtot = [sd]",
-        backend = "marginaleffects",
-        p_adjust = "holm"
+    expect_snapshot(
+      print(
+        estimate_contrasts(
+          fit,
+          "c172code",
+          "barthtot = [sd]",
+          backend = "marginaleffects",
+          p_adjust = "holm"
+        ),
+        table_width = Inf,
+        zap_small = TRUE
       ),
-      table_width = Inf,
-      zap_small = TRUE
-    )) # nolint
-    expect_snapshot(print(
-      estimate_contrasts(
-        fit,
-        c("c172code", "barthtot = [sd]"),
-        backend = "marginaleffects",
-        p_adjust = "holm"
+      variant = snapshot_variant()
+    )
+    expect_snapshot(
+      print(
+        estimate_contrasts(
+          fit,
+          c("c172code", "barthtot = [sd]"),
+          backend = "marginaleffects",
+          p_adjust = "holm"
+        ),
+        table_width = Inf,
+        zap_small = TRUE
       ),
-      table_width = Inf,
-      zap_small = TRUE
-    )) # nolint
-    expect_snapshot(print(
-      estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects"),
-      table_width = Inf,
-      zap_small = TRUE
-    )) # nolint
-    expect_snapshot(print(
-      estimate_contrasts(
-        fit,
-        c("c172code", "barthtot = [sd]"),
-        backend = "marginaleffects"
+      variant = snapshot_variant()
+    )
+    expect_snapshot(
+      print(
+        estimate_contrasts(
+          fit,
+          "c172code",
+          "barthtot = [sd]",
+          backend = "marginaleffects"
+        ),
+        table_width = Inf,
+        zap_small = TRUE
       ),
-      table_width = Inf,
-      zap_small = TRUE
-    )) # nolint
+      variant = snapshot_variant()
+    )
+    expect_snapshot(
+      print(
+        estimate_contrasts(
+          fit,
+          c("c172code", "barthtot = [sd]"),
+          backend = "marginaleffects"
+        ),
+        table_width = Inf,
+        zap_small = TRUE
+      ),
+      variant = snapshot_variant()
+    )
   })
 )
 
@@ -237,24 +257,30 @@ test_that("estimate_means - by is list", {
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
   levels(efc$c172code) <- c("low", "mid", "high")
   fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
-  expect_snapshot(print(
-    estimate_means(
-      fit,
-      list(c172code = c("low", "high"), c161sex = c("Female", "Male")),
-      backend = "marginaleffects"
+  expect_snapshot(
+    print(
+      estimate_means(
+        fit,
+        list(c172code = c("low", "high"), c161sex = c("Female", "Male")),
+        backend = "marginaleffects"
+      ),
+      table_width = Inf,
+      zap_small = TRUE
     ),
-    table_width = Inf,
-    zap_small = TRUE
-  )) # nolint
-  expect_snapshot(print(
-    estimate_means(
-      fit,
-      c("c172code = c('low', 'high')", "c161sex = c('Female', 'Male')"),
-      backend = "marginaleffects"
+    variant = snapshot_variant()
+  )
+  expect_snapshot(
+    print(
+      estimate_means(
+        fit,
+        c("c172code = c('low', 'high')", "c161sex = c('Female', 'Male')"),
+        backend = "marginaleffects"
+      ),
+      table_width = Inf,
+      zap_small = TRUE
     ),
-    table_width = Inf,
-    zap_small = TRUE
-  )) # nolint
+    variant = snapshot_variant()
+  )
 })
 
 
@@ -267,10 +293,10 @@ test_that("estimate_epectation - don't print empty RE columns", {
     family = poisson(),
     data = Salamanders
   )
-  expect_snapshot(print(
-    estimate_expectation(m, by = "spp", predict = "conditional"),
-    zap_small = TRUE
-  ))
+  expect_snapshot(
+    print(estimate_expectation(m, by = "spp", predict = "conditional"), zap_small = TRUE),
+    variant = snapshot_variant()
+  )
 })
 
 
@@ -278,13 +304,19 @@ test_that("print - layouts and include data grid", {
   data(iris)
   model <- lm(Petal.Length ~ Species, data = iris)
   out <- estimate_means(model, "Species")
-  expect_snapshot(print(out))
-  expect_snapshot(print(out, select = "minimal"))
+  expect_snapshot(print(out), variant = snapshot_variant())
+  expect_snapshot(print(out, select = "minimal"), variant = snapshot_variant())
   out <- estimate_contrasts(model, "Species")
-  expect_snapshot(print(out, select = "minimal"))
-  expect_snapshot(print(out, select = "{estimate}{stars}|{ci}"))
+  expect_snapshot(print(out, select = "minimal"), variant = snapshot_variant())
+  expect_snapshot(
+    print(out, select = "{estimate}{stars}|{ci}"),
+    variant = snapshot_variant()
+  )
 
   m <- lm(wt ~ qsec + mpg, dat = mtcars)
-  expect_snapshot(print(estimate_relation(m, by = "qsec")))
-  expect_snapshot(print(estimate_relation(m, by = "qsec"), include_grid = TRUE))
+  expect_snapshot(print(estimate_relation(m, by = "qsec")), variant = snapshot_variant())
+  expect_snapshot(
+    print(estimate_relation(m, by = "qsec"), include_grid = TRUE),
+    variant = snapshot_variant()
+  )
 })

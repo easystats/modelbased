@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_on_os(c("mac", "solaris", "linux"))
+skip_on_os(c("mac", "solaris"))
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")

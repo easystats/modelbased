@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_on_os(c("mac", "solaris", "linux"))
+skip_on_os(c("mac", "solaris"))
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")
@@ -29,7 +29,11 @@ test_that("plots show data with collapsing by group", {
   )
 
   set.seed(1234)
-  vdiffr::expect_doppelganger("plot-show_data_me3", plot(me, show_residuals = TRUE))
+  vdiffr::expect_doppelganger(
+    "plot-show_data_me3",
+    plot(me, show_residuals = TRUE),
+    variant = snapshot_variant()
+  )
 
   set.seed(1234)
   vdiffr::expect_doppelganger(
