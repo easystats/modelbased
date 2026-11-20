@@ -37,9 +37,27 @@ test_that("estimate_means correct inverse link for glm", {
   expect_true(all(out$CI_high >= 0 & out$CI_high <= 1))
 
   # response scale - some CI < 0
-  out <- estimate_means(m, by = c("var1", "var2"), estimate = "population")
+  expect_message(
+    {
+      out <- estimate_means(m, by = c("var1", "var2"), estimate = "population")
+    },
+    regex = "Some confidence intervals"
+  )
   expect_true(sum(out$CI_low < 0) > 0)
   expect_true(sum(out$CI_high > 1) > 0)
+
+  expect_no_message(estimate_means(
+    m,
+    by = c("var1", "var2"),
+    estimate = "population",
+    predict = "inverse_link"
+  ))
+  expect_no_message(estimate_means(
+    m,
+    by = c("var1", "var2"),
+    estimate = "population",
+    verbose = FALSE
+  ))
 })
 
 
