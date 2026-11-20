@@ -520,8 +520,8 @@ get_marginalmeans <- function(
 
   # if lower/upper CI exceeds valid bounds, throw alert
   if (
-    (lower_bound_zero && any(means$conf.low < 0)) ||
-      (upper_bound_one && any(means$conf.high > 1))
+    (lower_bound_zero && any(means$conf.low < 0, na.rm = TRUE)) ||
+      (upper_bound_one && any(means$conf.high > 1, na.rm = TRUE))
   ) {
     insight::format_alert(paste0(
       "Some confidence intervals extend beyond plausible bounds. For ",
