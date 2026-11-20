@@ -823,7 +823,11 @@ test_that("estimate_means, backend emmeans, ordinal, list and data frame filter 
   expect_equal(out_list$Slope, out$Slope, tolerance = 1e-10)
 
   footer_lines <- function(out) {
-    grep("^Predictors modulated", insight::trim_ws(utils::capture.output(print(out))), value = TRUE)
+    grep(
+      "^Predictors modulated",
+      insight::trim_ws(utils::capture.output(print(out))),
+      value = TRUE
+    )
   }
   by_forms <- list(
     formula = ~ Infl + Sat,
@@ -985,13 +989,30 @@ test_that("estimate_contrasts, backend emmeans, ordinal, latent-scale effect siz
 
   # logit: the latent error SD is pi / sqrt(3)
   m <- MASS::polr(Sat ~ Infl + Type, weights = Freq, data = housing, Hess = TRUE)
-  out <- estimate_contrasts(m, "Infl", predict = "latent", effectsize = "emmeans", backend = "emmeans")
+  out <- estimate_contrasts(
+    m,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans"
+  )
   expect_identical(nrow(out), 3L)
-  expect_equal(out[es_cols], out[ci_cols] / (pi / sqrt(3)), tolerance = 1e-6, ignore_attr = TRUE)
+  expect_equal(
+    out[es_cols],
+    out[ci_cols] / (pi / sqrt(3)),
+    tolerance = 1e-6,
+    ignore_attr = TRUE
+  )
 
   # probit: the latent error SD is 1
   mp <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing, link = "probit")
-  out <- estimate_contrasts(mp, "Infl", predict = "latent", effectsize = "emmeans", backend = "emmeans")
+  out <- estimate_contrasts(
+    mp,
+    "Infl",
+    predict = "latent",
+    effectsize = "emmeans",
+    backend = "emmeans"
+  )
   expect_equal(out[es_cols], out[ci_cols], tolerance = 1e-6, ignore_attr = TRUE)
 
   # the effect-size limits are at the level of `ci`
@@ -1003,7 +1024,12 @@ test_that("estimate_contrasts, backend emmeans, ordinal, latent-scale effect siz
     backend = "emmeans",
     ci = 0.8
   )
-  expect_equal(out[es_cols], out[ci_cols] / (pi / sqrt(3)), tolerance = 1e-6, ignore_attr = TRUE)
+  expect_equal(
+    out[es_cols],
+    out[ci_cols] / (pi / sqrt(3)),
+    tolerance = 1e-6,
+    ignore_attr = TRUE
+  )
 
   # a partly matched, negative `rescale` also rescales the latent error SD
   out_r <- estimate_contrasts(
@@ -1030,7 +1056,13 @@ test_that("estimate_contrasts, backend emmeans, ordinal, effect size errors", {
     "latent"
   )
   expect_error(
-    estimate_contrasts(m, "Infl", predict = "latent", effectsize = "marginal", backend = "emmeans"),
+    estimate_contrasts(
+      m,
+      "Infl",
+      predict = "latent",
+      effectsize = "marginal",
+      backend = "emmeans"
+    ),
     "non-Gaussian"
   )
   expect_error(
@@ -1048,17 +1080,60 @@ test_that("estimate_contrasts, backend emmeans, ordinal, effect size errors", {
 
   mc <- ordinal::clm(Sat ~ Infl + Type, weights = Freq, data = housing, link = "cloglog")
   expect_error(
-    estimate_contrasts(mc, "Infl", predict = "latent", effectsize = "emmeans", backend = "emmeans"),
+    estimate_contrasts(
+      mc,
+      "Infl",
+      predict = "latent",
+      effectsize = "emmeans",
+      backend = "emmeans"
+    ),
     "cloglog"
   )
   ms <- ordinal::clm(Sat ~ Infl + Type, scale = ~Cont, weights = Freq, data = housing)
   expect_error(
-    estimate_contrasts(ms, "Infl", predict = "latent", effectsize = "emmeans", backend = "emmeans"),
+    estimate_contrasts(
+      ms,
+      "Infl",
+      predict = "latent",
+      effectsize = "emmeans",
+      backend = "emmeans"
+    ),
     "scale"
   )
   mn <- ordinal::clm(Sat ~ Infl, nominal = ~Type, weights = Freq, data = housing)
   expect_error(
-    estimate_contrasts(mn, "Type", predict = "latent", effectsize = "emmeans", backend = "emmeans"),
+    estimate_contrasts(
+      mn,
+      "Type",
+      predict = "latent",
+      effectsize = "emmeans",
+      backend = "emmeans"
+    ),
     "nominal"
+  )
+})
+
+
+test_that("estimate_means, backend marginaleffects, ordinal", {
+  skip_if_not_installed("ordinal")
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.15.2")
+  skip_if_not_installed("marginaleffects", minimum_version = "1.0.0.10008")
+  data(wine, package = "ordinal")
+  m2 <- glmmTMB::glmmTMB(
+    rating ~ temp * contact + (1 | bottle),
+    data = wine,
+    family = glmmTMB::ordinal()
+  )
+
+  out <- estimate_means(m2, by = c("temp", "contact"))
+  # fmt: skip
+  expect_equal(
+    out$Probability,
+    c(
+      0.19604, 0.0596, 0.02337, 0.00432, 0.5623, 0.3896, 0.2121,
+      0.0486, 0.20865, 0.43467, 0.50643, 0.28982, 0.02593, 0.08939,
+      0.19028, 0.37104, 0.00709, 0.02674, 0.06781, 0.28623
+    ),
+    tolerance = 1e-3
   )
 })
