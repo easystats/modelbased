@@ -15,12 +15,17 @@ test_that("plots show data with collapsing by group", {
   me <- estimate_means(model, "c161sex")
 
   set.seed(1234)
-  vdiffr::expect_doppelganger("plot-show_data_me1", plot(me, show_data = TRUE))
+  vdiffr::expect_doppelganger(
+    "plot-show_data_me1",
+    plot(me, show_data = TRUE),
+    variant = snapshot_variant()
+  )
 
   set.seed(1234)
   vdiffr::expect_doppelganger(
     "plot-show_data_me2",
-    plot(me, show_data = TRUE, collapse_group = "e15relat")
+    plot(me, show_data = TRUE, collapse_group = "e15relat"),
+    variant = snapshot_variant()
   )
 
   set.seed(1234)
@@ -29,6 +34,7 @@ test_that("plots show data with collapsing by group", {
   set.seed(1234)
   vdiffr::expect_doppelganger(
     "plot-show_data_me4",
-    plot(me, show_residuals = TRUE, collapse_group = "e15relat")
+    plot(me, show_residuals = TRUE, collapse_group = "e15relat"),
+    variant = snapshot_variant()
   )
 })

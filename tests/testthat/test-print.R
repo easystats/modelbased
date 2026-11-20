@@ -20,16 +20,16 @@ test_that("estimate_slopes - print summary", {
   deriv <- estimate_slopes(model_lm, trend = "x", by = "x", backend = "emmeans")
   expect_snapshot(
     estimate_slopes(model_lm, trend = "x", by = "x", backend = "emmeans"),
-    variant = "windows"
+    variant = snapshot_variant()
   )
-  expect_snapshot(summary(deriv), variant = "windows")
+  expect_snapshot(summary(deriv), variant = snapshot_variant())
 
   deriv2 <- estimate_slopes(model_lm, trend = "x", by = "x", backend = "marginaleffects")
   expect_snapshot(
     estimate_slopes(model_lm, trend = "x", by = "x", backend = "marginaleffects"),
-    variant = "windows"
+    variant = snapshot_variant()
   )
-  expect_snapshot(summary(deriv2), variant = "windows")
+  expect_snapshot(summary(deriv2), variant = snapshot_variant())
 })
 
 
@@ -38,11 +38,11 @@ test_that("estimate_slopes - print regular", {
   model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
   expect_snapshot(
     print(estimate_slopes(model, trend = "Petal.Length", backend = "emmeans")),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(estimate_slopes(model, trend = "Petal.Length", backend = "marginaleffects")),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 })
 
@@ -63,7 +63,7 @@ test_that("estimate_means - print multiple by's", {
       ),
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   ) # nolint
 
   fit <- lm(neg_c_7 ~ c12hour * barthtot * c161sex * c172code * e16sex, data = efc)
@@ -77,7 +77,7 @@ test_that("estimate_means - print multiple by's", {
       ),
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   ) # nolint
 })
 
@@ -111,7 +111,7 @@ test_that("estimate_means - full labels", {
       ),
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   ) # nolint
   expect_snapshot(
     print(
@@ -123,7 +123,7 @@ test_that("estimate_means - full labels", {
       full_labels = FALSE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   ) # nolint
 
   fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst * negc7d, data = efc)
@@ -136,7 +136,7 @@ test_that("estimate_means - full labels", {
       ),
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   ) # nolint
   expect_snapshot(
     print(
@@ -148,7 +148,7 @@ test_that("estimate_means - full labels", {
       full_labels = FALSE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   ) # nolint
 })
 
@@ -161,7 +161,7 @@ test_that("estimate_means - protect integers", {
 
   expect_snapshot(
     estimate_expectation(model, by = c("c160age=[fivenum]", "c161sex")),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     estimate_means(
@@ -169,7 +169,7 @@ test_that("estimate_means - protect integers", {
       by = c("c160age=[fivenum]", "c161sex"),
       backend = "marginaleffects"
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 })
 
