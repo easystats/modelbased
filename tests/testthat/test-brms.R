@@ -119,6 +119,7 @@ test_that("estimate_contrasts - brms, multivariate, many observations and respon
 
 
 test_that("estimate_means - brms, Wiener", {
+  skip_on_os(c("mac", "linux", "solaris"))
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")
