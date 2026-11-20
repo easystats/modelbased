@@ -1,4 +1,4 @@
-skip_on_os(c("mac", "solaris", "linux"))
+skip_on_os(c("mac", "solaris"))
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")
@@ -13,7 +13,8 @@ test_that("plot slopes, correct y axis labels", {
 
   vdiffr::expect_doppelganger(
     "plot-slopes-y-axis-labels-1",
-    plot(slopes)
+    plot(slopes),
+    variant = snapshot_variant()
   )
 
   model <- lm(mpg ~ hp * gear, data = mtcars)
@@ -21,7 +22,8 @@ test_that("plot slopes, correct y axis labels", {
 
   vdiffr::expect_doppelganger(
     "plot-slopes-y-axis-labels-2",
-    plot(slopes)
+    plot(slopes),
+    variant = snapshot_variant()
   )
 })
 
@@ -41,6 +43,7 @@ test_that("estimate_slopes, plotting works with brms", {
   out <- estimate_slopes(m, "Murder", by = "Illiteracy", length = 4)
   vdiffr::expect_doppelganger(
     "plot-slopes-brms-1",
-    plot(out)
+    plot(out),
+    variant = snapshot_variant()
   )
 })
