@@ -1872,7 +1872,13 @@ test_that("estimate_contrast, slopes with different estimate options", {
   out <- estimate_contrasts(m, "bill_dep", by = "island")
   expect_equal(out$Difference, c(0.08507, -0.00071, -0.08578), tolerance = 1e-4)
 
-  out <- estimate_contrasts(m, "bill_dep", by = "island", estimate = "average")
+  expect_warning(
+    {
+      out <- estimate_contrasts(m, "bill_dep", by = "island", estimate = "average")
+    },
+    regex = "`bill_dep` is a numeric",
+    fixed = TRUE
+  )
   expect_equal(out$Difference, c(-0.05295, -0.07655, -0.0236), tolerance = 1e-4)
 })
 

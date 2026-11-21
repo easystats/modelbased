@@ -68,7 +68,7 @@
       Predictors modulated: spp
       Predictors averaged over a balanced grid: mined
       Random effects: Averaged over a balanced grid of cluster levels.
-      Predictions are on the response-scale.
+      Predictions are on the inverse-link-scale.
 
 ---
 
@@ -92,7 +92,7 @@
       Predictors modulated: spp
       Predictors averaged over the full sample: mined
       Random effects: Marginalized across clusters.
-      Predictions are on the response-scale.
+      Predictions are on the inverse-link-scale.
 
 ---
 

@@ -25,7 +25,7 @@
       Variable predicted: count
       Predictors modulated: mined, spp
       Random effects: Averaged over a balanced grid of cluster levels.
-      Predictions are on the response-scale.
+      Predictions are on the inverse-link-scale.
 
 ---
 
