@@ -31,7 +31,7 @@ the specific considerations for mixed models.
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -464,21 +464,31 @@ estimations expressed in log-odds (probabilities on logit scale) and
 <p>To predict distributional parameters (called "dpar" in other packages), for
 instance when using complex formulae in <code>brms</code> models, the <code>predict</code> argument
 can take the value of the parameter you want to estimate, for instance
-<code>"sigma"</code>, <code>"kappa"</code>, etc.</p>
-<p><code>"response"</code> and <code>"inverse_link"</code> both return predictions on the response
-scale, however, <code>"response"</code> first calculates predictions on the response
-scale for each observation and <em>then</em> aggregates them by groups or levels
-defined in <code>by</code>. <code>"inverse_link"</code> first calculates predictions on the link
-scale for each observation, then aggregates them by groups or levels defined
-in <code>by</code>, and finally back-transforms the predictions to the response scale.
-Both approaches have advantages and disadvantages. <code>"response"</code> usually
-produces less biased predictions, but confidence intervals might be outside
-reasonable bounds (i.e., for instance can be negative for count data). The
-<code>"inverse_link"</code> approach is more robust in terms of confidence intervals,
-but might produce biased predictions. However, you can try to set
-<code>bias_correction = TRUE</code>, to adjust for this bias.</p>
+<code>"sigma"</code>, <code>"kappa"</code>, etc.</p><div class="section">
+<h3 id="jensen-s-inequality">Jensen's Inequality<a class="anchor" aria-label="anchor" href="#jensen-s-inequality"></a></h3>
+
+
+<p>For non-Gaussian models with non-linear link functions, back-transforming
+aggregated predictions from the link scale does not equal aggregating
+predictions already transformed to the response scale - a phenomenon known as
+<em>Jensen's inequality</em>. <code>"response"</code> and <code>"inverse_link"</code> both return
+predictions on the response scale; however, <code>"response"</code> first calculates
+predictions on the response scale for each observation and <em>then</em> aggregates
+them by the groups or levels defined in <code>by</code>. By contrast, <code>"inverse_link"</code>
+first calculates predictions on the link scale for each observation,
+aggregates them by the groups or levels defined in <code>by</code>, and finally
+back-transforms the predictions to the response scale. Both approaches have
+advantages and disadvantages. <code>"response"</code> usually produces less biased
+predictions, but confidence intervals may fall outside reasonable bounds (for
+instance, becoming negative for count data). The <code>"inverse_link"</code> approach is
+more robust in terms of confidence intervals, though it may produce biased
+predictions. However, you can set <code>bias_correction = TRUE</code> to adjust for this
+bias (and optionally pass a sensible value to <code>residual_variance</code> to specify
+the assumed variance).</p>
 <p>In particular for mixed models, using <code>"response"</code> is recommended, because
 averaging across random effects groups is then more accurate.</p>
+</div>
+
     </div>
     <div class="section level2">
     <h2 id="finite-mixture-models">Finite mixture models<a class="anchor" aria-label="anchor" href="#finite-mixture-models"></a></h2>

@@ -454,19 +454,26 @@ for instance when using complex formulae in `brms` models, the `predict`
 argument can take the value of the parameter you want to estimate, for
 instance `"sigma"`, `"kappa"`, etc.
 
-`"response"` and `"inverse_link"` both return predictions on the
-response scale, however, `"response"` first calculates predictions on
-the response scale for each observation and *then* aggregates them by
-groups or levels defined in `by`. `"inverse_link"` first calculates
-predictions on the link scale for each observation, then aggregates them
-by groups or levels defined in `by`, and finally back-transforms the
-predictions to the response scale. Both approaches have advantages and
-disadvantages. `"response"` usually produces less biased predictions,
-but confidence intervals might be outside reasonable bounds (i.e., for
-instance can be negative for count data). The `"inverse_link"` approach
-is more robust in terms of confidence intervals, but might produce
-biased predictions. However, you can try to set
-`bias_correction = TRUE`, to adjust for this bias.
+### Jensen's Inequality
+
+For non-Gaussian models with non-linear link functions,
+back-transforming aggregated predictions from the link scale does not
+equal aggregating predictions already transformed to the response
+scale - a phenomenon known as *Jensen's inequality*. `"response"` and
+`"inverse_link"` both return predictions on the response scale; however,
+`"response"` first calculates predictions on the response scale for each
+observation and *then* aggregates them by the groups or levels defined
+in `by`. By contrast, `"inverse_link"` first calculates predictions on
+the link scale for each observation, aggregates them by the groups or
+levels defined in `by`, and finally back-transforms the predictions to
+the response scale. Both approaches have advantages and disadvantages.
+`"response"` usually produces less biased predictions, but confidence
+intervals may fall outside reasonable bounds (for instance, becoming
+negative for count data). The `"inverse_link"` approach is more robust
+in terms of confidence intervals, though it may produce biased
+predictions. However, you can set `bias_correction = TRUE` to adjust for
+this bias (and optionally pass a sensible value to `residual_variance`
+to specify the assumed variance).
 
 In particular for mixed models, using `"response"` is recommended,
 because averaging across random effects groups is then more accurate.

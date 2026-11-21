@@ -34,7 +34,7 @@
 
     <a class="navbar-brand me-2" href="index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -250,14 +250,14 @@
 <span><span class="co"># 2. Obtain estimated means</span></span>
 <span><span class="va">means</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
 <span><span class="va">means</span></span>
-<span><span class="co">## Estimated Marginal Means</span></span>
-<span><span class="co">##</span></span>
+<span><span class="co">## Conditional Predictions</span></span>
+<span><span class="co">## </span></span>
 <span><span class="co">## Species    | Mean |   SE |       95% CI | t(147)</span></span>
 <span><span class="co">## ------------------------------------------------</span></span>
 <span><span class="co">## setosa     | 3.43 | 0.05 | [3.33, 3.52] |  71.36</span></span>
 <span><span class="co">## versicolor | 2.77 | 0.05 | [2.68, 2.86] |  57.66</span></span>
 <span><span class="co">## virginica  | 2.97 | 0.05 | [2.88, 3.07] |  61.91</span></span>
-<span><span class="co">##</span></span>
+<span><span class="co">## </span></span>
 <span><span class="co">## Variable predicted: Sepal.Width</span></span>
 <span><span class="co">## Predictors modulated: Species</span></span>
 <span></span>
@@ -277,11 +277,11 @@
 <span>  <span class="co"># Improve colors</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pink"</span>, <span class="st">"lightblue"</span>, <span class="st">"lightgreen"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-3-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-3-1.png" alt="" width="100%"></p>
 <p>You can also get a “quick” plot using the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">means</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-4-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-4-1.png" alt="" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="contrast-analysis">Contrast analysis<a class="anchor" aria-label="anchor" href="#contrast-analysis"></a>
@@ -300,18 +300,18 @@
 <span><span class="co"># 2. Estimate marginal contrasts</span></span>
 <span><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
 <span><span class="va">contrasts</span></span>
-<span><span class="co">## Marginal Contrasts Analysis</span></span>
-<span><span class="co">##</span></span>
+<span><span class="co">## Conditional Contrasts</span></span>
+<span><span class="co">## </span></span>
 <span><span class="co">## Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p</span></span>
 <span><span class="co">## ------------------------------------------------------------------------------</span></span>
 <span><span class="co">## versicolor | setosa     |      -0.66 | 0.07 | [-0.79, -0.52] |  -9.69 | &lt; .001</span></span>
 <span><span class="co">## virginica  | setosa     |      -0.45 | 0.07 | [-0.59, -0.32] |  -6.68 | &lt; .001</span></span>
 <span><span class="co">## virginica  | versicolor |       0.20 | 0.07 | [ 0.07,  0.34] |   3.00 |  0.003</span></span>
-<span><span class="co">##</span></span>
+<span><span class="co">## </span></span>
 <span><span class="co">## Variable predicted: Sepal.Width</span></span>
 <span><span class="co">## Predictors contrasted: Species</span></span>
 <span><span class="co">## p-values are uncorrected.</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-6-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-6-1.png" alt="" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="check-the-contrasts-at-different-points-of-another-linear-predictor">Check the contrasts at different points of another linear predictor<a class="anchor" aria-label="anchor" href="#check-the-contrasts-at-different-points-of-another-linear-predictor"></a>
@@ -332,8 +332,8 @@
 <span><span class="op">)</span></span>
 <span><span class="co"># no line break for table</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">difference</span>, table_width <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
-<span><span class="co">## Marginal Contrasts Analysis</span></span>
-<span><span class="co">##</span></span>
+<span><span class="co">## Conditional Contrasts</span></span>
+<span><span class="co">## </span></span>
 <span><span class="co">## Level1     | Level2     | Petal.Length | Difference |   SE |         95% CI | t(144) |      p</span></span>
 <span><span class="co">## ---------------------------------------------------------------------------------------------</span></span>
 <span><span class="co">## versicolor | setosa     |         1.00 |      -1.70 | 0.34 | [-2.37, -1.02] |  -4.97 | &lt; .001</span></span>
@@ -345,7 +345,7 @@
 <span><span class="co">## versicolor | setosa     |         6.90 |      -1.78 | 1.44 | [-4.62,  1.06] |  -1.24 |  0.218</span></span>
 <span><span class="co">## virginica  | setosa     |         6.90 |      -2.25 | 1.42 | [-5.06,  0.56] |  -1.58 |  0.116</span></span>
 <span><span class="co">## virginica  | versicolor |         6.90 |      -0.47 | 0.28 | [-1.03,  0.09] |  -1.65 |  0.101</span></span>
-<span><span class="co">##</span></span>
+<span><span class="co">## </span></span>
 <span><span class="co">## Variable predicted: Sepal.Width</span></span>
 <span><span class="co">## Predictors contrasted: Species</span></span>
 <span><span class="co">## p-values are uncorrected.</span></span></code></pre></div>
@@ -373,7 +373,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Colors</span></span>
 <span>  <span class="fu">theme_modern</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-8-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-8-1.png" alt="" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="create-smart-grids-to-represent-complex-interactions">Create smart grids to represent complex interactions<a class="anchor" aria-label="anchor" href="#create-smart-grids-to-represent-complex-interactions"></a>
@@ -411,7 +411,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span>guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-9-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-9-1.png" alt="" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="generate-predictions-from-your-model-to-compare-it-with-original-data">Generate predictions from your model to compare it with original data<a class="anchor" aria-label="anchor" href="#generate-predictions-from-your-model-to-compare-it-with-original-data"></a>
@@ -431,8 +431,8 @@
 <span></span>
 <span><span class="co"># Print first 5 lines of output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred1</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">## Model-based Predictions</span></span>
-<span><span class="co">##</span></span>
+<span><span class="co">## Conditional Predictions</span></span>
+<span><span class="co">## </span></span>
 <span><span class="co">## Sepal.Length | Predicted |   SE |       95% CI | Residuals | Petal.Length</span></span>
 <span><span class="co">## -------------------------------------------------------------------------</span></span>
 <span><span class="co">## 5.10         |      2.38 | 0.10 | [2.19, 2.57] |     -0.98 |         1.40</span></span>
@@ -440,7 +440,7 @@
 <span><span class="co">## 4.70         |      1.63 | 0.12 | [1.39, 1.87] |     -0.33 |         1.30</span></span>
 <span><span class="co">## 4.60         |      1.45 | 0.13 | [1.19, 1.70] |      0.05 |         1.50</span></span>
 <span><span class="co">## 5.00         |      2.19 | 0.10 | [1.99, 2.39] |     -0.79 |         1.40</span></span>
-<span><span class="co">##</span></span>
+<span><span class="co">## </span></span>
 <span><span class="co">## Variable predicted: Petal.Length</span></span>
 <span></span>
 <span><span class="co"># Same for model 2</span></span>
@@ -460,7 +460,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Petal.Length (predicted)"</span>, color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Model 1"</span> <span class="op">=</span> <span class="st">"blue"</span>, <span class="st">"Model 2"</span> <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_modern</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-10-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-10-1.png" alt="" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="extract-and-format-group-level-random-effects">Extract and format group-level random effects<a class="anchor" aria-label="anchor" href="#extract-and-format-group-level-random-effects"></a>
@@ -491,7 +491,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-11-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-11-1.png" alt="" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="estimate-derivative-of-non-linear-relationships-eg-in-gams">Estimate derivative of non-linear relationships (e.g., in GAMs)<a class="anchor" aria-label="anchor" href="#estimate-derivative-of-non-linear-relationships-eg-in-gams"></a>
@@ -522,7 +522,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">200</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-12-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-12-1.png" alt="" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="describe-the-smooth-term-by-its-linear-parts">Describe the smooth term by its linear parts<a class="anchor" aria-label="anchor" href="#describe-the-smooth-term-by-its-linear-parts"></a>
@@ -546,7 +546,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Petal.Length</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Aesthetics</span></span>
 <span>  <span class="fu">theme_modern</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-13-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-13-1.png" alt="" width="100%"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span></span>
@@ -573,7 +573,7 @@
 <span><span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"hp"</span>, by <span class="op">=</span> <span class="st">"wt"</span>, length <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-14-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-14-1.png" alt="" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="visualize-predictions-with-random-effects">Visualize predictions with random effects<a class="anchor" aria-label="anchor" href="#visualize-predictions-with-random-effects"></a>
@@ -588,7 +588,7 @@
 <span><span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">preds</span>, ribbon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># Make CI ribbon transparent for clarity</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-15-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-15-1.png" alt="" width="100%"></p>
 <p>As we can see, each participant has a different “intercept” (starting point on the y-axis), but all their slopes are the same: this is because the only slope is the “general” one estimated across all participants by the fixed effect. Let’s address that and allow the slope to vary for each participant too.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span></span>
@@ -596,7 +596,7 @@
 <span><span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">preds</span>, ribbon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-16-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-16-1.png" alt="" width="100%"></p>
 <p>As we can see, the effect is now different for all participants. Let’s plot, on top of that, the “fixed” effect estimated across all these individual effects.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fixed_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="co"># This time, include_random is FALSE (default)</span></span>
@@ -604,20 +604,20 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">preds</span>, ribbon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Previous plot</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fixed_pred</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Days</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fixed_pred</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Days</span>, y <span class="op">=</span> <span class="va">Predicted</span><span class="op">)</span>, linewidth <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-17-1.png" width="100%"></p>
+<p><img src="reference/figures/unnamed-chunk-17-1.png" alt="" width="100%"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="technical-details">Technical Details<a class="anchor" aria-label="anchor" href="#technical-details"></a>
 </h2>
 <p>The algorithmic heavy lifting is done by <a href="https://easystats.github.io/modelbased/">modelbased</a>’s two back-end packages, <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> and <a href="https://marginaleffects.com/" class="external-link">marginaleffects</a> (the default), which can be set as a global option (e.g., with <code>options(modelbased_backend = "emmeans")</code>).</p>
-<p>Of the two, <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> <a href="https://doi.org/10.32614/CRAN.package.emmeans" class="external-link">(Russell, 2024)</a> is the more senior package and was originally known as <code>{lsmeans}</code> (for “Least-Squares Means”). This term has been historically used to describe what are now more commonly referred to as “Estimated Marginal Means” or EMMs: predictions made over a regular grid—a grid typically constructed from all possible combinations of the categorical predictors in the model and the mean of numerical predictors. The package was renamed in 2016 to <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> to clarify its extension beyond least-squares estimation and its support of a wider range of models (e.g., Bayesian models).</p>
+<p>Of the two, <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> <a href="https://doi.org/10.32614/CRAN.package.emmeans" class="external-link">(Russell, 2024)</a> is the more senior package and was originally known as <code>{lsmeans}</code> (for “Least-Squares Means”). This term has been historically used to describe what are now more commonly referred to as “Estimated Marginal Means” or EMMs: predictions made over a regular grid - a grid typically constructed from all possible combinations of the categorical predictors in the model and the mean of numerical predictors. The package was renamed in 2016 to <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> to clarify its extension beyond least-squares estimation and its support of a wider range of models (e.g., Bayesian models).</p>
 <p>Within <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a>, estimates are generated as a linear function of the model’s coefficients, with standard errors produced in a similar manner by taking a linear combination of the coefficients’ variance-covariance matrix. For example if <span class="math inline">b</span> is a vector of 4 coefficients, and <span class="math inline">V</span> is a 4-by-4 matrix of the coefficients’ variance-covariance, we can get an estimate and SE for a linear combination (or set of linear combinations) <span class="math inline">L</span> like so:</p>
 <p><span class="math display">\hat{b} = L \cdot b</span></p>
 <p><span class="math display">SE_{\hat{b}} = \sqrt{\text{diag}(L \cdot V \cdot L^T)}</span></p>
 <p>These grid predictions are sometimes averaged over (averaging being a linear operation itself) to produce “marginal” predictions (in the sense of marginalized-over): means. These predictions can then be contrasted using various built-in or custom contrasts weights to obtain meaningful estimates of various effects. Using linear combinations with regular grids often means that results from <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> directly correspond to a models coefficients (which is a benefit for those who are used to understanding models by examining coefficient tables).</p>
 <p><a href="https://marginaleffects.com/" class="external-link">marginaleffects</a> <a href="https://doi.org/10.18637/jss.v111.i09" class="external-link">(Arel-Bundock et al., 2024)</a> was more recently introduced and also relies on the Delta method, but uses numeric differentiation (and can easily switch to bootstrap or simulation-based approaches). By default, it estimates various effects by generating two counter-factual predictions of unit-level observations, then taking the difference between them - which can easily be done on the response scale, rather than the link scale. Because these effects are calculated for every observation, they can then be averaged (e.g., as an Average Treatment Effect). This approach is more iterative compared to the linear matrix multiplication used by <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a>, but is similarly efficient.</p>
-<p>While both packages employ the Delta method to obtain standard errors on transformed scales, they differ in how they construct and average predictions. <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> often produces <em>effects at the mean</em> of non-focal predictors (via linear contrasts), whereas <a href="https://marginaleffects.com/" class="external-link">marginaleffects</a> tends to compute <em>mean effects</em> by averaging over observations. Depending on the model and the type of quantity you want to estimate, results from these two approaches can be very similar—or differ in interesting ways.</p>
+<p>While both packages employ the Delta method to obtain standard errors on transformed scales, they differ in how they construct and average predictions. <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> often produces <em>effects at the mean</em> of non-focal predictors (via linear contrasts), whereas <a href="https://marginaleffects.com/" class="external-link">marginaleffects</a> tends to compute <em>mean effects</em> by averaging over observations. Depending on the model and the type of quantity you want to estimate, results from these two approaches can be very similar - or differ in interesting ways.</p>
 <p>Note that <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> can also perform numeric differentiation or use non-regular grids, just as <a href="https://marginaleffects.com/" class="external-link">marginaleffects</a> can construct linear predictions at the mean. Because each package has evolved with slightly different philosophies regarding how to form and interpret predictions, users can select whichever approach best suits their research questions. In <a href="https://easystats.github.io/modelbased/">modelbased</a>, you can switch easily between either back end by setting the global option, for example <code>options(modelbased_backend = "marginaleffects")</code>, to access these features.</p>
 <p>Finally, <a href="https://easystats.github.io/modelbased/">modelbased</a> leverages the <code>get_datagrid()</code> function from the <a href="https://easystats.github.io/insight/" class="external-link">insight</a> package <a href="https://doi.org/10.21105/joss.01412" class="external-link">(Lüdecke et al., 2019)</a> to intuitively generate an appropriate grid of data points for which predictions or effects or slopes will be estimated. Since these packages support a wider range of models - including generalized linear models, mixed models, and Bayesian models - <a href="https://easystats.github.io/modelbased/">modelbased</a> also inherits the support for such models.</p>
 </div>
@@ -631,7 +631,7 @@
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
 </h2>
 <p>Please note that the modelbased project is released with a <a href="https://easystats.github.io/modelbased/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2">
 <div id="ref-arel2024interpret" class="csl-entry">
 Arel-Bundock, V., Greifer, N., &amp; Heiss, A. (2024). How to interpret statistical models using marginaleffects for R and Python. <em>Journal of Statistical Software</em>, <em>111</em>, 1–32. <a href="https://doi.org/10.18637/jss.v111.i09" class="external-link uri">https://doi.org/10.18637/jss.v111.i09</a>
 </div>

@@ -87,7 +87,7 @@ First, we start with calculating the within- and between-effects from
 | education (mid)  | 5.01        | 2.35 | (0.40, 9.62)   | 2.14   | 0.033   |
 | education (high) | 5.52        | 2.75 | (0.11, 10.93)  | 2.00   | 0.046   |
 
-Model Summary {#tinytable_to5i0ad2mwexg9kdvwh7 .table .tinytable
+Model Summary {#tinytable_1ityi1mikmm3yzjmqclk .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -149,7 +149,7 @@ different from each other, we can estimate their contrast:
 
 [TABLE]
 
-Conditional Contrasts {#tinytable_ooo9vczmpyy42h7wdnvn .table .tinytable
+Conditional Contrasts {#tinytable_p6sfc7e0e3nz0jk4gwl1 .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -195,7 +195,7 @@ measurement (`time`) and our two centered variables (`phq4_within` and
 | time × phq4 within  | 0.33        | 0.61 | (-0.87, 1.52)  | 0.54   | 0.592   |
 | time × phq4 between | -0.66       | 0.37 | (-1.39, 0.07)  | -1.77  | 0.077   |
 
-Model Summary {#tinytable_qn93i3jbiipjlq4p7hns .table .tinytable
+Model Summary {#tinytable_1tvcea0x0uqyptelw5qf .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -261,7 +261,7 @@ understand the underlying dynamics.
 
 [TABLE]
 
-Estimated Marginal Effects {#tinytable_uaf3aff8w17mlwazkg8x .table
+Estimated Marginal Effects {#tinytable_own2se4p5lou7skjy62y .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -271,7 +271,7 @@ quarto-disable-processing="true"}
 
 [TABLE]
 
-Estimated Marginal Effects {#tinytable_a0qq2gkt18rjrb91ek74 .table
+Estimated Marginal Effects {#tinytable_uac7i8t1nwg8dx5n6237 .table
 .tinytable style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -296,7 +296,7 @@ marginal contrasts at each specific time point.
 
 [TABLE]
 
-Conditional Contrasts {#tinytable_1fc8x9m18rg9wg8z91pe .table .tinytable
+Conditional Contrasts {#tinytable_gh3h350q99j6co76hs94 .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -342,7 +342,7 @@ points.
 
 [TABLE]
 
-Conditional Contrasts {#tinytable_3djo9ahfwz5i8o6bywq0 .table .tinytable
+Conditional Contrasts {#tinytable_2o6s6xdynujec2vd521e .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -377,7 +377,7 @@ the within- and between-effects without stratifying by time.
 
 [TABLE]
 
-Conditional Contrasts {#tinytable_mnzzafs0a653xaxg31i4 .table .tinytable
+Conditional Contrasts {#tinytable_hqifde6moxbzvbqs4kj3 .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -421,7 +421,7 @@ variables.
 
 [TABLE]
 
-Conditional Contrasts {#tinytable_emugquh8gldc5n4v4pb3 .table .tinytable
+Conditional Contrasts {#tinytable_nm8b8dzekrodmzylupa5 .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -482,7 +482,7 @@ term to our contrast statement.
 
 [TABLE]
 
-Conditional Contrasts {#tinytable_a577uqt1fhmlqek0c4p7 .table .tinytable
+Conditional Contrasts {#tinytable_k9g6d3l416mtegjbrdl4 .table .tinytable
 style="width: auto; margin-left: auto; margin-right: auto;"
 quarto-disable-processing="true"}
 
@@ -508,8 +508,8 @@ does not hit everyone equally. The structural or psychological
 advantages possessed by the highly educated group (such as better access
 to support networks, financial stability, or coping resources) create a
 mathematically significant difference in how chronic distress is
-processed. Compared directly to the middle-educated tier—who bear the
-full weight of the context effect—highly educated patients are
+processed. Compared directly to the middle-educated tier - who bear the
+full weight of the context effect - highly educated patients are
 significantly better protected from the cumulative “wear and tear” of a
 chronically high baseline burden.
 
