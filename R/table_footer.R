@@ -179,7 +179,8 @@
   # Random effects handling ------------------------------------------------
   # --------------------------------------------------------------------------
 
-  # check if we have random effects that are not yet in "by"
+  # check if we have random effects that are not yet in "by", i.e. if we
+  # marginalize across *all* cluster or not
   if (is.null(re_intercept)) {
     not_all_clusters <- FALSE
   } else {
