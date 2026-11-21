@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_on_os(c("mac", "solaris", "linux"))
+skip_on_os(c("mac", "solaris"))
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")
@@ -14,10 +14,18 @@ test_that("plots grouplevel frequentist", {
   model <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)
 
   out <- estimate_grouplevel(model)
-  vdiffr::expect_doppelganger("plot-grouplevel-freq-1", plot(out))
+  vdiffr::expect_doppelganger(
+    "plot-grouplevel-freq-1",
+    plot(out),
+    variant = snapshot_variant()
+  )
 
   out <- estimate_grouplevel(model, type = "total")
-  vdiffr::expect_doppelganger("plot-grouplevel-freq-2", plot(out))
+  vdiffr::expect_doppelganger(
+    "plot-grouplevel-freq-2",
+    plot(out),
+    variant = snapshot_variant()
+  )
 })
 
 test_that("plots grouplevel Bayesian", {
@@ -30,21 +38,41 @@ test_that("plots grouplevel Bayesian", {
   skip_if(is.null(model))
 
   out <- estimate_grouplevel(model)
-  vdiffr::expect_doppelganger("plot-grouplevel-Bayes-1", plot(out))
+  vdiffr::expect_doppelganger(
+    "plot-grouplevel-Bayes-1",
+    plot(out),
+    variant = snapshot_variant()
+  )
 
   out <- estimate_grouplevel(model, type = "total")
-  vdiffr::expect_doppelganger("plot-grouplevel-Bayes-2", plot(out))
+  vdiffr::expect_doppelganger(
+    "plot-grouplevel-Bayes-2",
+    plot(out),
+    variant = snapshot_variant()
+  )
 
   model <- insight::download_model("brms_zi_4")
   skip_if(is.null(model))
 
   out <- estimate_grouplevel(model)
-  vdiffr::expect_doppelganger("plot-grouplevel-Bayes-3", plot(out))
+  vdiffr::expect_doppelganger(
+    "plot-grouplevel-Bayes-3",
+    plot(out),
+    variant = snapshot_variant()
+  )
 
   out <- estimate_grouplevel(model, type = "total")
-  vdiffr::expect_doppelganger("plot-grouplevel-Bayes-4", plot(out))
+  vdiffr::expect_doppelganger(
+    "plot-grouplevel-Bayes-4",
+    plot(out),
+    variant = snapshot_variant()
+  )
 
   out <- estimate_grouplevel(model, type = "total")
   vr <- visualisation_recipe(out, pointrange = list(color = "black"))
-  vdiffr::expect_doppelganger("plot-grouplevel-Bayes-5", plot(vr))
+  vdiffr::expect_doppelganger(
+    "plot-grouplevel-Bayes-5",
+    plot(vr),
+    variant = snapshot_variant()
+  )
 })
