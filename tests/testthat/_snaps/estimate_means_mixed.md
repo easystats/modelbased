@@ -31,6 +31,13 @@
 
     Code
       estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
+    Message
+      Some confidence intervals extend beyond plausible bounds. For poisson
+        models, `predict = "response"` generally yields less biased point
+        estimates, but symmetric confidence intervals can fall outside the valid
+        parameter range. Consider using `predict = "inverse_link"` with
+        `bias_correction = TRUE` instead. Optionally, you can also set
+        `residual_variance` to a sensible value to specify the assumed variance.
     Output
       Conditional Predictions
       
