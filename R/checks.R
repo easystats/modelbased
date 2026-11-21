@@ -458,3 +458,59 @@
   }
   trend
 }
+
+
+# Check for valid CI bounds ------------------------------------------------
+#
+# When predicting on the response scale (`predict = "response"`), standard errors
+# and confidence intervals are typically computed via the delta method directly on
+# the response scale. For non-Gaussian models with bounded support (e.g.,
+# binomial, beta, or count models), this symmetrical approximation can yield
+# confidence interval limits outside the theoretically valid parameter space
+# (such as negative values or probabilities greater than 1).
+#
+# By contrast, computing intervals on the link scale and back-transforming them
+# (`predict = "inverse_link"`) guarantees bounds within the valid domain, though
+# point estimates may require bias adjustment (`bias_correction = TRUE`) due to
+# Jensen's inequality.
+#
+# This helper checks whether any lower or upper confidence limits violate the
+# model family's natural boundaries and alerts the user accordingly.
+.check_ci_bounds <- function(means, predict, model_info, verbose) {
+  if (!verbose) {
+    return()
+  }
+  if (!identical(predict, "response")) {
+    return()
+  }
+
+  # check which bounds are valid
+  lower_bound_zero <- any(unlist(
+    model_info[c("is_binomial", "is_count", "is_negbin", "is_beta")],
+    use.names = FALSE
+  ))
+  upper_bound_one <- any(unlist(
+    model_info[c("is_binomial", "is_beta")],
+    use.names = FALSE
+  ))
+
+  # if lower/upper CI exceeds valid bounds, throw alert
+  if (
+    (lower_bound_zero && any(means$conf.low < 0, na.rm = TRUE)) ||
+      (upper_bound_one && any(means$conf.high > 1, na.rm = TRUE))
+  ) {
+    insight::format_alert(
+      paste0(
+        "Some confidence intervals extend beyond plausible bounds. For ",
+        model_info$family,
+        " models, `predict = \"response\"` ",
+        "generally yields less biased point estimates, but symmetric confidence intervals ",
+        "can fall outside the valid parameter range. Consider using ",
+        "`predict = \"inverse_link\"` with `bias_correction = TRUE` instead. ",
+        "Optionally, you can also set `residual_variance` to a sensible value ",
+        "to specify the assumed variance."
+      ),
+      "Set `verbose = FALSE` to silent this message (and other warnings)."
+    )
+  }
+}
