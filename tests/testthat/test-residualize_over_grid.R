@@ -20,10 +20,7 @@ test_that("residualize_over_grid", {
   expect_equal(sum(out$Predicted), 875.7863, tolerance = 1e-2)
 
   pr <- estimate_relation(model, by = c("Sepal.Width", "Species"))
-  expect_error(
-    residualize_over_grid(pr, model),
-    regex = "Grid for partial"
-  )
+  expect_error(residualize_over_grid(pr, model), regex = "Grid for partial")
 })
 
 
@@ -40,13 +37,15 @@ test_that("plots show_resisuals", {
   est <- estimate_means(m, c("x", "z=[sd]"))
   vdiffr::expect_doppelganger(
     "plot-show_residuals-1",
-    plot(est, show_residuals = TRUE)
+    plot(est, show_residuals = TRUE),
+    variant = snapshot_variant()
   )
 
   est <- estimate_means(m, c("x", "z"))
   vdiffr::expect_doppelganger(
     "plot-show_residuals-2",
-    plot(est, show_residuals = TRUE)
+    plot(est, show_residuals = TRUE),
+    variant = snapshot_variant()
   )
 
   data(iris)
@@ -55,6 +54,7 @@ test_that("plots show_resisuals", {
   pr <- estimate_means(model, c("Sepal.Width", "Species"))
   vdiffr::expect_doppelganger(
     "plot-show_residuals-3",
-    plot(pr, show_residuals = TRUE)
+    plot(pr, show_residuals = TRUE),
+    variant = snapshot_variant()
   )
 })
