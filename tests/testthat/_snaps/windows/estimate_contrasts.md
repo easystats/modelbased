@@ -256,6 +256,13 @@
     Code
       print(estimate_contrasts(model, contrast = c("mined", "spp"), backend = "marginaleffects"),
       zap_small = TRUE, table_width = Inf)
+    Message
+      Some confidence intervals extend beyond plausible bounds. For poisson
+        models, `predict = "response"` generally yields less biased point
+        estimates, but symmetric confidence intervals can fall outside the valid
+        parameter range. Consider using `predict = "inverse_link"` with
+        `bias_correction = TRUE` instead. Optionally, you can also set
+        `residual_variance` to a sensible value to specify the assumed variance.
     Output
       Conditional Contrasts
       
