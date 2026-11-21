@@ -296,7 +296,7 @@ get_marginalmeans <- function(
   if (predict_args$backtransform) {
     means <- .backtransform_predictions(means, model, predict_args, ci, df = dots$df)
     # make sure we have the original string value for the "predict" argument
-    predict_args$predict <- "response"
+    predict_args$predict <- "invlink(link)"
   }
 
   # =========================================================================
