@@ -1,0 +1,58 @@
+# estimate_means - brms, Wiener
+
+    Code
+      print(out)
+    Output
+      Conditional Predictions: rt
+      
+      Row |   rt | Predicted |   SE |       95% CI
+      --------------------------------------------
+      1   | 0.96 |      1.20 | 0.90 | [0.32, 3.70]
+      2   | 0.69 |      1.17 | 0.80 | [0.31, 3.26]
+      3   | 1.18 |      1.21 | 0.89 | [0.32, 3.85]
+      4   | 1.54 |      1.20 | 0.85 | [0.32, 3.37]
+      5   | 1.48 |      1.19 | 0.83 | [0.33, 3.38]
+      
+      Conditional Predictions: response
+      
+      Row | response | Predicted |   SE |       95% CI
+      ------------------------------------------------
+      1   |        1 |      0.41 | 0.49 | [0.00, 1.00]
+      2   |        0 |      0.41 | 0.49 | [0.00, 1.00]
+      3   |        0 |      0.43 | 0.49 | [0.00, 1.00]
+      4   |        0 |      0.42 | 0.49 | [0.00, 1.00]
+      5   |        0 |      0.44 | 0.50 | [0.00, 1.00]
+      
+      Variable predicted: rt, response
+      Predictions are on the response-scale.
+      Intervals are prediction intervals.
+
+---
+
+    Code
+      print(out, table_width = Inf)
+    Output
+      Conditional Predictions: rt
+      
+      Row |   rt | Predicted |   SE |       95% CI | iter_1 | iter_2 | iter_3
+      -----------------------------------------------------------------------
+      1   | 0.96 |      1.20 | 0.90 | [0.32, 3.70] |   1.77 |   1.26 |   1.70
+      2   | 0.69 |      1.17 | 0.80 | [0.31, 3.26] |   0.37 |   0.83 |   0.59
+      3   | 1.18 |      1.21 | 0.89 | [0.32, 3.85] |   0.64 |   2.14 |   1.43
+      4   | 1.54 |      1.20 | 0.85 | [0.32, 3.37] |   0.42 |   1.29 |   1.28
+      5   | 1.48 |      1.19 | 0.83 | [0.33, 3.38] |   2.15 |   0.51 |   1.38
+      
+      Conditional Predictions: response
+      
+      Row | response | Predicted |   SE |       95% CI | iter_1 | iter_2 | iter_3
+      ---------------------------------------------------------------------------
+      1   |        1 |      0.41 | 0.49 | [0.00, 1.00] |      1 |      0 |      0
+      2   |        0 |      0.41 | 0.49 | [0.00, 1.00] |      0 |      0 |      1
+      3   |        0 |      0.43 | 0.49 | [0.00, 1.00] |      1 |      1 |      1
+      4   |        0 |      0.42 | 0.49 | [0.00, 1.00] |      1 |      0 |      1
+      5   |        0 |      0.44 | 0.50 | [0.00, 1.00] |      1 |      0 |      0
+      
+      Variable predicted: rt, response
+      Predictions are on the response-scale.
+      Intervals are prediction intervals.
+
