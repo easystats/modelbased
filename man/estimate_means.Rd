@@ -350,22 +350,29 @@ To predict distributional parameters (called "dpar" in other packages), for
 instance when using complex formulae in \code{brms} models, the \code{predict} argument
 can take the value of the parameter you want to estimate, for instance
 \code{"sigma"}, \code{"kappa"}, etc.
+\subsection{Jensen's Inequality}{
 
-\code{"response"} and \code{"inverse_link"} both return predictions on the response
-scale, however, \code{"response"} first calculates predictions on the response
-scale for each observation and \emph{then} aggregates them by groups or levels
-defined in \code{by}. \code{"inverse_link"} first calculates predictions on the link
-scale for each observation, then aggregates them by groups or levels defined
-in \code{by}, and finally back-transforms the predictions to the response scale.
-Both approaches have advantages and disadvantages. \code{"response"} usually
-produces less biased predictions, but confidence intervals might be outside
-reasonable bounds (i.e., for instance can be negative for count data). The
-\code{"inverse_link"} approach is more robust in terms of confidence intervals,
-but might produce biased predictions. However, you can try to set
-\code{bias_correction = TRUE}, to adjust for this bias.
+For non-Gaussian models with non-linear link functions, back-transforming
+aggregated predictions from the link scale does not equal aggregating
+predictions already transformed to the response scale - a phenomenon known as
+\emph{Jensen's inequality}. \code{"response"} and \code{"inverse_link"} both return
+predictions on the response scale; however, \code{"response"} first calculates
+predictions on the response scale for each observation and \emph{then} aggregates
+them by the groups or levels defined in \code{by}. By contrast, \code{"inverse_link"}
+first calculates predictions on the link scale for each observation,
+aggregates them by the groups or levels defined in \code{by}, and finally
+back-transforms the predictions to the response scale. Both approaches have
+advantages and disadvantages. \code{"response"} usually produces less biased
+predictions, but confidence intervals may fall outside reasonable bounds (for
+instance, becoming negative for count data). The \code{"inverse_link"} approach is
+more robust in terms of confidence intervals, though it may produce biased
+predictions. However, you can set \code{bias_correction = TRUE} to adjust for this
+bias (and optionally pass a sensible value to \code{residual_variance} to specify
+the assumed variance).
 
 In particular for mixed models, using \code{"response"} is recommended, because
 averaging across random effects groups is then more accurate.
+}
 }
 
 \section{Finite mixture models}{

@@ -174,14 +174,14 @@ model <- lm(Sepal.Width ~ Species, data = iris)
 # 2. Obtain estimated means
 means <- estimate_means(model, by = "Species")
 means
-## Estimated Marginal Means
-##
+## Conditional Predictions
+## 
 ## Species    | Mean |   SE |       95% CI | t(147)
 ## ------------------------------------------------
 ## setosa     | 3.43 | 0.05 | [3.33, 3.52] |  71.36
 ## versicolor | 2.77 | 0.05 | [2.68, 2.86] |  57.66
 ## virginica  | 2.97 | 0.05 | [2.88, 3.07] |  61.91
-##
+## 
 ## Variable predicted: Sepal.Width
 ## Predictors modulated: Species
 
@@ -203,7 +203,7 @@ ggplot(iris, aes(x = Species, y = Sepal.Width)) +
   theme_minimal()
 ```
 
-<img src="man/figures/unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-3-1.png" alt="" width="100%" />
 
 You can also get a “quick” plot using the `plot()` function:
 
@@ -211,7 +211,7 @@ You can also get a “quick” plot using the `plot()` function:
 plot(means)
 ```
 
-<img src="man/figures/unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-4-1.png" alt="" width="100%" />
 
 ### Contrast analysis
 
@@ -233,20 +233,20 @@ model <- lm(Sepal.Width ~ Species, data = iris)
 # 2. Estimate marginal contrasts
 contrasts <- estimate_contrasts(model, contrast = "Species")
 contrasts
-## Marginal Contrasts Analysis
-##
+## Conditional Contrasts
+## 
 ## Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p
 ## ------------------------------------------------------------------------------
 ## versicolor | setosa     |      -0.66 | 0.07 | [-0.79, -0.52] |  -9.69 | < .001
 ## virginica  | setosa     |      -0.45 | 0.07 | [-0.59, -0.32] |  -6.68 | < .001
 ## virginica  | versicolor |       0.20 | 0.07 | [ 0.07,  0.34] |   3.00 |  0.003
-##
+## 
 ## Variable predicted: Sepal.Width
 ## Predictors contrasted: Species
 ## p-values are uncorrected.
 ```
 
-<img src="man/figures/unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-6-1.png" alt="" width="100%" />
 
 ### Check the contrasts at different points of another linear predictor
 
@@ -268,8 +268,8 @@ difference <- estimate_contrasts(
 )
 # no line break for table
 print(difference, table_width = Inf)
-## Marginal Contrasts Analysis
-##
+## Conditional Contrasts
+## 
 ## Level1     | Level2     | Petal.Length | Difference |   SE |         95% CI | t(144) |      p
 ## ---------------------------------------------------------------------------------------------
 ## versicolor | setosa     |         1.00 |      -1.70 | 0.34 | [-2.37, -1.02] |  -4.97 | < .001
@@ -281,7 +281,7 @@ print(difference, table_width = Inf)
 ## versicolor | setosa     |         6.90 |      -1.78 | 1.44 | [-4.62,  1.06] |  -1.24 |  0.218
 ## virginica  | setosa     |         6.90 |      -2.25 | 1.42 | [-5.06,  0.56] |  -1.58 |  0.116
 ## virginica  | versicolor |         6.90 |      -0.47 | 0.28 | [-1.03,  0.09] |  -1.65 |  0.101
-##
+## 
 ## Variable predicted: Sepal.Width
 ## Predictors contrasted: Species
 ## p-values are uncorrected.
@@ -313,7 +313,7 @@ ggplot(contrasts, aes(x = Petal.Length, y = Difference, )) +
   theme_modern()
 ```
 
-<img src="man/figures/unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-8-1.png" alt="" width="100%" />
 
 ### Create smart grids to represent complex interactions
 
@@ -357,7 +357,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   theme_minimal()
 ```
 
-<img src="man/figures/unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-9-1.png" alt="" width="100%" />
 
 ### Generate predictions from your model to compare it with original data
 
@@ -382,8 +382,8 @@ pred1$Petal.Length <- iris$Petal.Length # Add true response
 
 # Print first 5 lines of output
 head(pred1, n = 5)
-## Model-based Predictions
-##
+## Conditional Predictions
+## 
 ## Sepal.Length | Predicted |   SE |       95% CI | Residuals | Petal.Length
 ## -------------------------------------------------------------------------
 ## 5.10         |      2.38 | 0.10 | [2.19, 2.57] |     -0.98 |         1.40
@@ -391,7 +391,7 @@ head(pred1, n = 5)
 ## 4.70         |      1.63 | 0.12 | [1.39, 1.87] |     -0.33 |         1.30
 ## 4.60         |      1.45 | 0.13 | [1.19, 1.70] |      0.05 |         1.50
 ## 5.00         |      2.19 | 0.10 | [1.99, 2.39] |     -0.79 |         1.40
-##
+## 
 ## Variable predicted: Petal.Length
 
 # Same for model 2
@@ -413,7 +413,7 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-<img src="man/figures/unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-10-1.png" alt="" width="100%" />
 
 ### Extract and format group-level random effects
 
@@ -447,7 +447,7 @@ plot(random) +
   theme_minimal()
 ```
 
-<img src="man/figures/unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-11-1.png" alt="" width="100%" />
 
 ### Estimate derivative of non-linear relationships (e.g., in GAMs)
 
@@ -490,7 +490,7 @@ plot(estimate_relation(model, length = 200)) /
   geom_hline(yintercept = 0, linetype = "dashed")
 ```
 
-<img src="man/figures/unnamed-chunk-12-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-12-1.png" alt="" width="100%" />
 
 ### Describe the smooth term by its linear parts
 
@@ -516,7 +516,7 @@ ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-<img src="man/figures/unnamed-chunk-13-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-13-1.png" alt="" width="100%" />
 
 ``` r
 
@@ -553,7 +553,7 @@ slopes <- estimate_slopes(model, trend = "hp", by = "wt", length = 200)
 plot(slopes)
 ```
 
-<img src="man/figures/unnamed-chunk-14-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-14-1.png" alt="" width="100%" />
 
 ### Visualize predictions with random effects
 
@@ -577,7 +577,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0)) # Make CI ribbon transparent for clarity
 ```
 
-<img src="man/figures/unnamed-chunk-15-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-15-1.png" alt="" width="100%" />
 
 As we can see, each participant has a different “intercept” (starting
 point on the y-axis), but all their slopes are the same: this is because
@@ -593,7 +593,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0.1))
 ```
 
-<img src="man/figures/unnamed-chunk-16-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-16-1.png" alt="" width="100%" />
 
 As we can see, the effect is now different for all participants. Let’s
 plot, on top of that, the “fixed” effect estimated across all these
@@ -607,7 +607,7 @@ plot(preds, ribbon = list(alpha = 0)) + # Previous plot
   geom_line(data = fixed_pred, aes(x = Days, y = Predicted), linewidth = 2)
 ```
 
-<img src="man/figures/unnamed-chunk-17-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-17-1.png" alt="" width="100%" />
 
 ## Technical Details
 
@@ -621,7 +621,7 @@ Of the two, `{emmeans}` [(Russell,
 package and was originally known as `{lsmeans}` (for “Least-Squares
 Means”). This term has been historically used to describe what are now
 more commonly referred to as “Estimated Marginal Means” or EMMs:
-predictions made over a regular grid—a grid typically constructed from
+predictions made over a regular grid - a grid typically constructed from
 all possible combinations of the categorical predictors in the model and
 the mean of numerical predictors. The package was renamed in 2016 to
 `{emmeans}` to clarify its extension beyond least-squares estimation and
@@ -671,7 +671,7 @@ predictions. `{emmeans}` often produces *effects at the mean* of
 non-focal predictors (via linear contrasts), whereas `{marginaleffects}`
 tends to compute *mean effects* by averaging over observations.
 Depending on the model and the type of quantity you want to estimate,
-results from these two approaches can be very similar—or differ in
+results from these two approaches can be very similar - or differ in
 interesting ways.
 
 Note that `{emmeans}` can also perform numeric differentiation or use
@@ -710,7 +710,7 @@ Conduct](https://easystats.github.io/modelbased/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
 
 <div id="refs" class="references csl-bib-body hanging-indent"
-entry-spacing="0" line-spacing="2">
+data-entry-spacing="0" data-line-spacing="2">
 
 <div id="ref-arel2024interpret" class="csl-entry">
 

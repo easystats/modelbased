@@ -359,7 +359,7 @@ test_that("estimate_contrasts - Frequentist, duplicated levels", {
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -367,7 +367,7 @@ test_that("estimate_contrasts - Frequentist, duplicated levels", {
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 
   dat <- iris
@@ -1091,7 +1091,7 @@ test_that("estimate_contrasts - filtering works", {
       table_width = Inf,
       zap_small = TRUE
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 
   fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
@@ -1106,7 +1106,7 @@ test_that("estimate_contrasts - filtering works", {
       table_width = Inf,
       zap_small = TRUE
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 
   fit <- lm(neg_c_7 ~ barthtot + c161sex + c172code, data = efc)
@@ -1116,7 +1116,7 @@ test_that("estimate_contrasts - filtering works", {
       table_width = Inf,
       zap_small = TRUE
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   # error
   expect_error(
@@ -1131,7 +1131,7 @@ test_that("estimate_contrasts - filtering works", {
       table_width = Inf,
       zap_small = TRUE
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -1139,7 +1139,7 @@ test_that("estimate_contrasts - filtering works", {
       table_width = Inf,
       zap_small = TRUE
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   fit <- lm(neg_c_7 ~ e16sex * barthtot * c172code, data = efc)
   expect_snapshot(
@@ -1153,7 +1153,7 @@ test_that("estimate_contrasts - filtering works", {
       table_width = Inf,
       zap_small = TRUE
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   # error
   expect_error(
@@ -1173,7 +1173,7 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
       estimate_contrasts(model, "Species", backend = "marginaleffects"),
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 
   data(coffee_data, package = "modelbased")
@@ -1184,7 +1184,7 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 
   expect_snapshot(
@@ -1198,7 +1198,7 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 
   data(Salamanders, package = "glmmTMB")
@@ -1217,7 +1217,7 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -1230,7 +1230,7 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 })
 
@@ -1434,7 +1434,7 @@ test_that("estimate_contrasts - examples from docs work as intendec", {
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -1442,7 +1442,7 @@ test_that("estimate_contrasts - examples from docs work as intendec", {
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -1450,7 +1450,7 @@ test_that("estimate_contrasts - examples from docs work as intendec", {
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 })
 
@@ -1473,7 +1473,7 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -1481,7 +1481,7 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -1489,7 +1489,7 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -1497,7 +1497,7 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -1505,7 +1505,7 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -1513,7 +1513,7 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -1521,7 +1521,7 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 
   set.seed(123)
@@ -1539,7 +1539,7 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
   expect_snapshot(
     print(
@@ -1547,7 +1547,7 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
       zap_small = TRUE,
       table_width = Inf
     ),
-    variant = "windows"
+    variant = snapshot_variant()
   )
 })
 

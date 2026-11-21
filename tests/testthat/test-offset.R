@@ -35,9 +35,19 @@ test_that("offset works", {
   expect_silent({
     out1 <- estimate_means(moff, "x", offset = 100)
   })
-  expect_silent({
-    out2 <- estimate_means(moff, "x", estimate = "average", offset = 100)
-  })
+  expect_silent(estimate_means(
+    moff,
+    "x",
+    estimate = "average",
+    offset = 100,
+    verbose = FALSE
+  ))
+  expect_message(
+    {
+      out2 <- estimate_means(moff, "x", estimate = "average", offset = 100)
+    },
+    regex = "Some confidence intervals"
+  )
   expect_equal(out1$Mean, c(664.68547, 1023.27456, 1474.41949), tolerance = 1e-3)
   expect_equal(out2$Mean, c(664.68547, 1023.27456, 1474.41949), tolerance = 1e-3)
 
@@ -58,9 +68,12 @@ test_that("offset works", {
   out2 <- estimate_means(moff, "x", estimate = "population", offset = 100)
   expect_equal(out1$estimate, out2$Mean, tolerance = 1e-4)
 
-  expect_silent({
-    out3 <- estimate_means(moff, c("x", "offset_1 = 100"), estimate = "population")
-  })
+  expect_message(
+    {
+      out3 <- estimate_means(moff, c("x", "offset_1 = 100"), estimate = "population")
+    },
+    regex = "Some confidence intervals"
+  )
   expect_equal(out3$Mean, out2$Mean, tolerance = 1e-4)
 
   set.seed(1)

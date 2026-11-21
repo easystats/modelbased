@@ -1,4 +1,4 @@
-skip_on_os(c("mac", "solaris", "linux"))
+skip_on_os(c("mac", "solaris"))
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")
@@ -17,12 +17,14 @@ test_that("plot 2nd by is numeric", {
   pr <- estimate_means(model, c("x1", "x2"))
   vdiffr::expect_doppelganger(
     "plot-auto-numeric-by-1",
-    plot(pr)
+    plot(pr),
+    variant = snapshot_variant()
   )
 
   pr <- estimate_means(model, c("x1", "x2 = [sd]"))
   vdiffr::expect_doppelganger(
     "plot-auto-numeric-by-2",
-    plot(pr)
+    plot(pr),
+    variant = snapshot_variant()
   )
 })

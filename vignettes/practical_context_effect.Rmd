@@ -296,7 +296,7 @@ The output now displays the mathematical difference in the size of the context e
 
 This pairwise comparison formally solidifies our previous suspicion: The buffering effect of higher education is statistically robust.
 
-It proves that the "chronic penalty" for long-term psychological burden does not hit everyone equally. The structural or psychological advantages possessed by the highly educated group (such as better access to support networks, financial stability, or coping resources) create a mathematically significant difference in how chronic distress is processed. Compared directly to the middle-educated tier—who bear the full weight of the context effect—highly educated patients are significantly better protected from the cumulative "wear and tear" of a chronically high baseline burden.
+It proves that the "chronic penalty" for long-term psychological burden does not hit everyone equally. The structural or psychological advantages possessed by the highly educated group (such as better access to support networks, financial stability, or coping resources) create a mathematically significant difference in how chronic distress is processed. Compared directly to the middle-educated tier - who bear the full weight of the context effect - highly educated patients are significantly better protected from the cumulative "wear and tear" of a chronically high baseline burden.
 
 # Disclaimer
 

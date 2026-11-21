@@ -5,7 +5,6 @@ skip_on_os("mac")
 
 test_that("estimate_contrasts - ATT and ATU", {
   skip_if_not_installed("Rdatasets")
-  skip_on_os("linux")
 
   dat <- marginaleffects::get_dataset("lottery")
   dat <- subset(dat, win_big == 1 | win == 0)
@@ -63,10 +62,10 @@ test_that("estimate_contrasts - ATT and ATU", {
   )
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
 
-  # error
+  # error - updated error msg
   expect_error(
     estimate_contrasts(mod, "win_big", newdata = subset(dat, win_big == 1)),
-    regex = "It seems that not all"
+    regex = "No rows returned"
   )
 })
 

@@ -1,4 +1,4 @@
-skip_on_os(c("mac", "linux"))
+skip_on_os("mac")
 skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 skip_if_not_installed("withr")
 
