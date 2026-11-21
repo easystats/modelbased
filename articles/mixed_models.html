@@ -166,9 +166,9 @@ clustered data, offer powerful tools for understanding complex
 relationships. A key aspect of interpreting these models is
 understanding <strong>estimated marginal means (EMMs)</strong>, which
 represent the predicted outcome for specific groups or conditions, while
-holding other variables constant. However, calculating EMMs in mixed
-models is not always straightforward, and the results can vary depending
-on the approach taken.</p>
+holding other variables constant, or averaging over them. However,
+calculating EMMs in mixed models is not always straightforward, and the
+results can vary depending on the approach taken.</p>
 <p>One crucial distinction is between <strong>conditional</strong> and
 <strong>marginal</strong> predictions (or effects). Conditional
 predictions are specific to a particular level of the random effect
@@ -244,7 +244,7 @@ methods.</p>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># `estimate = "typical"`, `re.form = NULL`: a "typical" observation</span></span>
-<span><span class="co"># across clusters on average</span></span>
+<span><span class="co"># across (balanced) clusters on average</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"Days"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -433,9 +433,7 @@ lower (0.66 for <code>camper = 0</code> and 1.68 for
 <span></span>
 <span><span class="co"># conditional predictions marginalized over</span></span>
 <span><span class="co"># a "balanced" grid of random effects</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some confidence intervals extend beyond plausible bounds. For poisson models, `predict = "response"` generally yields less biased point estimates, but symmetric confidence intervals can fall outside the valid parameter range. Consider using `predict = "inverse_link"` with `bias_correction = TRUE` instead. Optionally, you can also set `residual_variance` to a sensible value to specify the assumed variance.</span></span>
-<span><span class="co">#&gt;   Set `verbose = FALSE` to silent this message (and other warnings).</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |          Mean (CI)</span></span>
@@ -450,9 +448,7 @@ lower (0.66 for <code>camper = 0</code> and 1.68 for
 <span><span class="co">#&gt; Predictions are on the response-scale.</span></span>
 <span></span>
 <span><span class="co"># conditional predictions for a "typical" cluster</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, re.form <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some confidence intervals extend beyond plausible bounds. For poisson models, `predict = "response"` generally yields less biased point estimates, but symmetric confidence intervals can fall outside the valid parameter range. Consider using `predict = "inverse_link"` with `bias_correction = TRUE` instead. Optionally, you can also set `residual_variance` to a sensible value to specify the assumed variance.</span></span>
-<span><span class="co">#&gt;   Set `verbose = FALSE` to silent this message (and other warnings).</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, re.form <span class="op">=</span> <span class="cn">NA</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Conditional Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |          Mean (CI)</span></span>
@@ -474,9 +470,7 @@ the predictions for “typical” observations based on the default
 <code>estimate</code> option, as shown in the previous output.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># (fully) marginal predictions</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, estimate <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some confidence intervals extend beyond plausible bounds. For poisson models, `predict = "response"` generally yields less biased point estimates, but symmetric confidence intervals can fall outside the valid parameter range. Consider using `predict = "inverse_link"` with `bias_correction = TRUE` instead. Optionally, you can also set `residual_variance` to a sensible value to specify the assumed variance.</span></span>
-<span><span class="co">#&gt;   Set `verbose = FALSE` to silent this message (and other warnings).</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, estimate <span class="op">=</span> <span class="st">"average"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |           Mean (CI)</span></span>
@@ -491,9 +485,7 @@ the predictions for “typical” observations based on the default
 <span><span class="co">#&gt; Predictions are on the response-scale.</span></span>
 <span></span>
 <span><span class="co"># marginal predictions, conditioning on a "typical" cluster</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, estimate <span class="op">=</span> <span class="st">"average"</span>, re.form <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Some confidence intervals extend beyond plausible bounds. For poisson models, `predict = "response"` generally yields less biased point estimates, but symmetric confidence intervals can fall outside the valid parameter range. Consider using `predict = "inverse_link"` with `bias_correction = TRUE` instead. Optionally, you can also set `residual_variance` to a sensible value to specify the assumed variance.</span></span>
-<span><span class="co">#&gt;   Set `verbose = FALSE` to silent this message (and other warnings).</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, estimate <span class="op">=</span> <span class="st">"average"</span>, re.form <span class="op">=</span> <span class="cn">NA</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |          Mean (CI)</span></span>

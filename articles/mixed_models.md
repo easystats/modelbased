@@ -7,9 +7,9 @@ clustered data, offer powerful tools for understanding complex
 relationships. A key aspect of interpreting these models is
 understanding **estimated marginal means (EMMs)**, which represent the
 predicted outcome for specific groups or conditions, while holding other
-variables constant. However, calculating EMMs in mixed models is not
-always straightforward, and the results can vary depending on the
-approach taken.
+variables constant, or averaging over them. However, calculating EMMs in
+mixed models is not always straightforward, and the results can vary
+depending on the approach taken.
 
 One crucial distinction is between **conditional** and **marginal**
 predictions (or effects). Conditional predictions are specific to a
@@ -78,7 +78,7 @@ all marginalization methods.
 `model`` ``<-`` ``lme4``::`[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Reaction`` ``~`` ``Days`` ``+`` ``(``1`` ``+`` ``Days`` ``|`` ``Subject``)``, data ``=`` ``sleepstudy``)`\
 \
 `` # `estimate = "typical"`, `re.form = NULL`: a "typical" observation ``\
-`# across clusters on average`\
+`# across (balanced) clusters on average`\
 [`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"Days"``)`\
 `#> Conditional Predictions`\
 `#> `\
@@ -263,9 +263,7 @@ for `camper = 1`) compared to conditional predictions (using
 \
 `# conditional predictions marginalized over`\
 `# a "balanced" grid of random effects`\
-[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``)`\
-`` #> Some confidence intervals extend beyond plausible bounds. For poisson models, `predict = "response"` generally yields less biased point estimates, but symmetric confidence intervals can fall outside the valid parameter range. Consider using `predict = "inverse_link"` with `bias_correction = TRUE` instead. Optionally, you can also set `residual_variance` to a sensible value to specify the assumed variance. ``\
-`` #>   Set `verbose = FALSE` to silent this message (and other warnings). ``\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, verbose ``=`` ``FALSE``)`\
 `#> Conditional Predictions`\
 `#> `\
 `#> camper |          Mean (CI)`\
@@ -280,9 +278,7 @@ for `camper = 1`) compared to conditional predictions (using
 `#> Predictions are on the response-scale.`\
 \
 `# conditional predictions for a "typical" cluster`\
-[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, re.form ``=`` ``NA``)`\
-`` #> Some confidence intervals extend beyond plausible bounds. For poisson models, `predict = "response"` generally yields less biased point estimates, but symmetric confidence intervals can fall outside the valid parameter range. Consider using `predict = "inverse_link"` with `bias_correction = TRUE` instead. Optionally, you can also set `residual_variance` to a sensible value to specify the assumed variance. ``\
-`` #>   Set `verbose = FALSE` to silent this message (and other warnings). ``\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, re.form ``=`` ``NA``, verbose ``=`` ``FALSE``)`\
 `#> Conditional Predictions`\
 `#> `\
 `#> camper |          Mean (CI)`\
@@ -306,9 +302,7 @@ previous output.
 
 \
 `# (fully) marginal predictions`\
-[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, estimate ``=`` ``"average"``)`\
-`` #> Some confidence intervals extend beyond plausible bounds. For poisson models, `predict = "response"` generally yields less biased point estimates, but symmetric confidence intervals can fall outside the valid parameter range. Consider using `predict = "inverse_link"` with `bias_correction = TRUE` instead. Optionally, you can also set `residual_variance` to a sensible value to specify the assumed variance. ``\
-`` #>   Set `verbose = FALSE` to silent this message (and other warnings). ``\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, estimate ``=`` ``"average"``, verbose ``=`` ``FALSE``)`\
 `#> Marginal Predictions`\
 `#> `\
 `#> camper |           Mean (CI)`\
@@ -323,9 +317,7 @@ previous output.
 `#> Predictions are on the response-scale.`\
 \
 `# marginal predictions, conditioning on a "typical" cluster`\
-[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, estimate ``=`` ``"average"``, re.form ``=`` ``NA``)`\
-`` #> Some confidence intervals extend beyond plausible bounds. For poisson models, `predict = "response"` generally yields less biased point estimates, but symmetric confidence intervals can fall outside the valid parameter range. Consider using `predict = "inverse_link"` with `bias_correction = TRUE` instead. Optionally, you can also set `residual_variance` to a sensible value to specify the assumed variance. ``\
-`` #>   Set `verbose = FALSE` to silent this message (and other warnings). ``\
+[`estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md)`(``model``, ``"camper"``, estimate ``=`` ``"average"``, re.form ``=`` ``NA``, verbose ``=`` ``FALSE``)`\
 `#> Marginal Predictions`\
 `#> `\
 `#> camper |          Mean (CI)`\
