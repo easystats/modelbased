@@ -1,3 +1,24 @@
+# warn about custom contrasts combined with filtering and `estimate = "average"`
+#
+# When `estimate = "average"`, predictions are based on the empirical data rather
+# than a balanced reference grid. If the user simultaneously filters levels or
+# values in `contrast` or `by` (e.g., `contrast = "x = c('a', 'b')"`) and passes
+# a custom `comparison` hypothesis using positional row references (such as
+# `"b2 - b1"`), the internal row re-ordering can mismatch the filtered rows and
+# silently yield wrong contrast estimates.
+#
+# This helper detects that combination and issues a warning advising the user
+# to pass bare variable names to `contrast` and `by` and inspect the row order
+# via `estimate_means()` first.
+#
+# Arguments:
+# - estimate: The marginalization type string (e.g., `"average"`).
+# - by: Character vector of focal variables (possibly including filter specs).
+# - original_contrast: The user-supplied `contrast` argument before cleaning.
+# - comparison: The custom hypothesis specification passed to `comparison`.
+#
+# Returns: `NULL` (called for its warning side-effect).
+#
 #' @keywords internal
 #' @noRd
 .check_custom_contrasts_and_filter <- function(
@@ -67,6 +88,29 @@
 }
 
 
+# check for missing (all-NA) standard errors ----------------------------------
+#
+# In some models - particularly complex mixed-effects models - the underlying
+# backend (`{marginaleffects}` or `{emmeans}`) may fail to compute the
+# variance-covariance matrix for contrasts, resulting in `SE` values that are
+# entirely `NA`.
+#
+# When `verbose = TRUE` and all standard errors are `NA`, this helper informs
+# the user and - if `by` or `contrast` variables are available - constructs a
+# ready-to-run two-step workaround using `estimate_relation()` followed by
+# `estimate_contrasts()`.
+#
+# Arguments:
+# - out: Formatted data frame of estimated means, contrasts, or slopes.
+# - by: Optional character vector of `by` variable names.
+# - contrast: Optional character vector of `contrast` variable names.
+# - model: The fitted model object (currently unused, kept for consistency).
+# - model_name: Deparsed name of the model object for the example code snippet.
+# - verbose: Logical, whether to print the informative message.
+# - ...: Additional arguments (currently unused).
+#
+# Returns: `NULL` (called for its message side-effect).
+#
 #' @keywords internal
 #' @noRd
 .check_standard_errors <- function(
@@ -134,6 +178,32 @@
 }
 
 
+# inform user about how model offset terms are handled ------------------------
+#
+# When a regression model includes an `offset()` term and the user has not
+# explicitly supplied a fixed `offset` value, passed the offset in `newdata`, or
+# included it as a focal predictor in `by`, predictions depend on the chosen
+# `estimate` method:
+# - `"specific"` / `"typical"` fix the offset at its sample mean.
+# - `"average"` / `"population"` average predictions across the empirical
+#   distribution of the offset.
+#
+# This helper alerts the user to this behavior and additionally clarifies that
+# for log-transformed offsets (e.g., `offset(log(exposure))`), the `offset`
+# argument expects values on the original (untransformed) scale.
+#
+# Arguments:
+# - model: The fitted model object.
+# - estimate: The marginalization type string (`"specific"`, `"typical"`,
+#   `"average"`, or `"population"`).
+# - offset: The user-supplied `offset` value (if any).
+# - my_args: List of parsed focal arguments (containing `$by`).
+# - dots: List of additional arguments passed via `...` (checked for `newdata`
+#   and `offset`).
+# - verbose: Logical, whether to display the alert.
+#
+# Returns: `NULL` (called for its alert side-effect).
+#
 #' @keywords internal
 #' @noRd
 .check_offset <- function(
@@ -207,6 +277,29 @@
 }
 
 
+# prevent variable names that collide with `{marginaleffects}` output columns -
+#
+# `{marginaleffects}` reserves specific column names in its returned data frames
+# (such as `"rowid"`, `"df"`, `"s.value"`, or `"predicted"`). If a predictor in
+# the user's model shares one of these names, `{marginaleffects}` overwrites or
+# renames the column, leading to silent miscalculations or downstream failures.
+#
+# This helper strips filter specifications from focal variables and throws an
+# informative error if any predictor name collides with the reserved names for
+# the requested estimation type (`"means"` vs. slopes/contrasts). Bayesian
+# models are skipped because their output is tidied via `describe_posterior()`.
+#
+# Arguments:
+# - model: The fitted model object.
+# - model_info: Model metadata list from `insight::model_info()`.
+# - focal: Character vector of all focal predictor names.
+# - contrast: Optional character vector of `contrast` predictor names.
+# - trend: Optional character vector of `trend` predictor names.
+# - type: Estimation context (`"means"` or other, e.g., `"slopes"`), which
+#   determines the exact set of reserved column names checked.
+#
+# Returns: `NULL` invisibly (throws an error if a collision is detected).
+#
 #' @keywords internal
 #' @noRd
 .check_marginaleffects_names <- function(
@@ -268,6 +361,20 @@
 }
 
 
+# harmonize `data` and `newdata` arguments passed via `...` -------------------
+#
+# Across the `{easystats}` ecosystem, `data` is supported as a consistent alias
+# for `{marginaleffects}`'s `newdata` argument. This helper moves `dots$data`
+# into `dots$newdata`, removes `dots$data`, and alerts the user if both were
+# supplied simultaneously.
+#
+# Arguments:
+# - dots: Named list of extra arguments captured from `...`.
+# - verbose: Logical, whether to alert the user when both `data` and `newdata`
+#   are present.
+#
+# Returns: The updated `dots` list with `data` normalized to `newdata`.
+#
 #' @keywords internal
 #' @noRd
 .check_dots_data <- function(dots, verbose) {
@@ -284,6 +391,24 @@
 }
 
 
+# normalize formula-based inequality comparisons to canonical strings ---------
+#
+# Users can request inequality / concentration metrics (such as Gini or Atkinson
+# indices via `estimate_contrasts()`) either as character keywords (e.g.,
+# `"inequality"`) or as formulas (e.g., `~inequality` or `ratio ~ inequality`).
+#
+# This helper converts unstratified inequality formulas into their canonical
+# string identifiers so they can be dispatched uniformly, while leaving
+# stratified formulas (e.g., `~ inequality | grp1 + grp2`) untouched for later
+# processing by `.process_inequality_formula()`.
+#
+# Arguments:
+# - comparison: The `comparison` argument (character string, formula, or
+#   function).
+#
+# Returns: A canonical inequality string if `comparison` is an unstratified
+#   inequality formula; otherwise, the unchanged `comparison` object.
+#
 #' @keywords internal
 #' @noRd
 .check_for_inequality_comparison <- function(comparison) {
@@ -317,6 +442,17 @@
 }
 
 
+# determine HTML table formatting backend -------------------------------------
+#
+# Resolves which table-rendering backend should be used for HTML export methods
+# (`print_html()`): `"tt"` when `backend = "tt"` (`{tinytable}`) is explicitly
+# requested via `...`, and `"html"` (`{gt}`) otherwise.
+#
+# Arguments:
+# - ...: Additional arguments passed to `print_html()`, checked for `backend`.
+#
+# Returns: Character string (`"tt"` or `"html"`).
+#
 #' @keywords internal
 #' @noRd
 .check_format_backend <- function(...) {
@@ -330,6 +466,21 @@
 }
 
 
+# validate the `predict` argument after matching ------------------------------
+#
+# Argument validation helpers return `NA` when a user-supplied `predict` string
+# does not match any supported prediction scale or type. This helper catches
+# that `NA` sentinel and throws a formatted error listing all valid options
+# (always including `"response"` and `"link"`).
+#
+# Arguments:
+# - predict: The matched `predict` value (or `NA` if matching failed).
+# - valid_types: Character vector of model-specific valid prediction types.
+# - error_arg: Name of the argument to display in the error message (usually
+#   `"predict"`).
+#
+# Returns: `NULL` (throws an error if `predict` is `NA`).
+#
 #' @keywords internal
 #' @noRd
 .check_predict_arg <- function(predict, valid_types, error_arg) {
@@ -419,6 +570,19 @@
 }
 
 
+# check that post-filtering results contain at least one row ------------------
+#
+# Certain combinations of `by`/`contrast` filters and `estimate = "average"`
+# can produce an empty data frame when none of the requested values occur in
+# the underlying data. This helper checks for zero-row results and throws a
+# standardized error suggesting alternative `estimate` options or `newdata`.
+#
+# Arguments:
+# - result: A data frame of estimated means, contrasts, or slopes.
+# - prefix: Optional context-specific sentence prepended to the error message.
+#
+# Returns: `NULL` (throws an error if `nrow(result) == 0`).
+#
 #' @keywords internal
 #' @noRd
 .check_filter_args <- function(result, prefix = "") {
@@ -434,6 +598,19 @@
 }
 
 
+# ensure only a single focal predictor is passed to `trend` -------------------
+#
+# `estimate_slopes()` computes marginal effects (derivatives) with respect to
+# a single numeric focal variable specified in `trend`. If a user passes a
+# vector of multiple variables to `trend`, this helper retains only the first
+# variable and alerts the user to pass conditioning variables via `by` instead.
+#
+# Arguments:
+# - trend: Character vector specifying the focal trend variable(s).
+# - verbose: Logical, whether to display the alert when `length(trend) > 1`.
+#
+# Returns: A character scalar containing the first element of `trend`.
+#
 #' @param trend The `trend` argument
 #' @return updated `trend` variable
 #' @keywords internal
@@ -516,8 +693,24 @@
 }
 
 
-# emmeans only:
-# stops when `values` are not categories of the ordinal response
+# validate user-specified response categories for ordinal models (emmeans) ----
+#
+# When filtering or contrasting specific response levels of a frequentist
+# ordinal model (e.g., `by = "Sat = 'Low'"`), the requested values must match
+# the outcome categories recognized by the fitted model. This helper extracts
+# the model's response levels and throws an error if unknown categories are
+# requested.
+#
+# Arguments:
+# - model: The fitted ordinal model object.
+# - data: Model data frame (fallback if levels are not stored on `model`).
+# - response: Character string naming the ordinal response variable.
+# - values: Character vector of requested response category names.
+#
+# Returns: `NULL` invisibly (throws an error if any `values` are invalid).
+#
+#' @keywords internal
+#' @noRd
 .check_ordinal_response_values <- function(model, data, response, values) {
   # the categories of the model, which can differ from the factor levels in
   # the data (e.g. `clm()` drops unused levels)
@@ -545,11 +738,26 @@
 }
 
 
-# emmeans only:
-# the response categories are only in the output for `predict = "prob"`, so
-# we cannot use the response in `by` (or `contrast`) for the other modes.
-# `ordinal_mode` is the mode the user asked for, not the mode that we use
-# internally for slopes
+# restrict ordinal response filtering to `predict = "prob"` (emmeans) ---------
+#
+# With `backend = "emmeans"`, response categories are only included as a column
+# in the output when `predict = "prob"` (the default). Other ordinal modes
+# (such as `"cum.prob"`, `"exc.prob"`, `"latent"`, or `"mean.class"`) operate on
+# thresholds or latent/mean scales instead. This helper throws an error if the
+# user attempts to filter response categories in `by` or `contrast` under any
+# mode other than `"prob"`.
+#
+# Arguments:
+# - response_filter: List with elements `$response` and `$values` extracted by
+#   `.extract_ordinal_response_filter()`, or `NULL`.
+# - ordinal_mode: Character string indicating the requested ordinal mode.
+# - argument: Name of the argument where filtering was attempted (`"by"` or
+#   `"contrast"`).
+#
+# Returns: `NULL` (throws an error if filtering is invalid for `ordinal_mode`).
+#
+#' @keywords internal
+#' @noRd
 .check_ordinal_response_filter <- function(
   response_filter,
   ordinal_mode,
