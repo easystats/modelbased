@@ -263,6 +263,7 @@
         parameter range. Consider using `predict = "inverse_link"` with
         `bias_correction = TRUE` instead. Optionally, you can also set
         `residual_variance` to a sensible value to specify the assumed variance.
+        Set `verbose = FALSE` to silent this message (and other warnings).
     Output
       Conditional Contrasts
       
