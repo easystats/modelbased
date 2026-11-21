@@ -179,15 +179,19 @@
   # Random effects handling ------------------------------------------------
   # --------------------------------------------------------------------------
 
+  # check if we have random effects that are not yet in "by"
+  if (is.null(re_intercept)) {
+    not_all_clusters <- FALSE
+  } else {
+    not_all_clusters <- !identical(setdiff(re_intercept, cleaned_by), re_intercept)
+  }
+
   if (
     !is.null(re_intercept) &&
       !isTRUE(re_form_na) &&
       !is.null(marginalization) &&
       !all(re_intercept %in% cleaned_by)
   ) {
-    # check if we have random effects that are not yet in "by"
-    not_all_clusters <- !identical(setdiff(re_intercept, cleaned_by), re_intercept)
-
     if (sample_average) {
       table_footer <- paste0(
         table_footer,
