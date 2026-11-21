@@ -182,7 +182,7 @@
 #
 # Determines whether a numeric predictor `x` should be treated as a discrete
 # integer variable (e.g., an ordinal or Likert-scale item) rather than a
-# continuous variable—for example, when deciding between pairwise value
+# continuous variable - for example, when deciding between pairwise value
 # contrasts and slope contrasts in `estimate_contrasts()`.
 #
 # A variable is classified as discrete/Likert if all of its values are whole
