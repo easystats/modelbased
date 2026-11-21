@@ -179,16 +179,33 @@
   # Random effects handling ------------------------------------------------
   # --------------------------------------------------------------------------
 
-  if (!is.null(re_intercept) && !isTRUE(re_form_na) && !is.null(marginalization)) {
+  # check if we have random effects that are not yet in "by", i.e. if we
+  # marginalize across *all* cluster or not
+  if (is.null(re_intercept)) {
+    not_all_clusters <- FALSE
+  } else {
+    not_all_clusters <- !identical(setdiff(re_intercept, cleaned_by), re_intercept)
+  }
+
+  if (
+    !is.null(re_intercept) &&
+      !isTRUE(re_form_na) &&
+      !is.null(marginalization) &&
+      !all(re_intercept %in% cleaned_by)
+  ) {
     if (sample_average) {
       table_footer <- paste0(
         table_footer,
-        "\nRandom effects: Marginalized across clusters."
+        "\nRandom effects: Marginalized across ",
+        ifelse(not_all_clusters, "remaining ", ""),
+        "clusters."
       )
     } else {
       table_footer <- paste0(
         table_footer,
-        "\nRandom effects: Averaged over a balanced grid of cluster levels."
+        "\nRandom effects: Averaged over a balanced grid of ",
+        ifelse(not_all_clusters, "remaining ", ""),
+        "cluster levels."
       )
     }
   }
@@ -196,7 +213,9 @@
   if (isTRUE(re_form_na)) {
     table_footer <- paste0(
       table_footer,
-      "\nRandom effects: Conditional on a typical cluster."
+      "\nRandom effects: Conditional on a typical ",
+      ifelse(not_all_clusters, "remaining ", ""),
+      "cluster."
     )
   }
 
