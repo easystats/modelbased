@@ -394,7 +394,6 @@ first ten rows for demonstrating purpose.
 `#> `\
 `#> Variable predicted: qol`\
 `#> Predictors contrasted: gender, employed, age`\
-`#> Random effects: Marginalized across clusters.`\
 `#> p-values are uncorrected.`
 
 If we only want to modulate one factor and compare those groups within
@@ -435,7 +434,7 @@ of the remaining predictors.
 `#> `\
 `#> Variable predicted: qol`\
 `#> Predictors contrasted: gender, employed`\
-`#> Random effects: Marginalized across clusters.`\
+`#> Random effects: Marginalized across remaining clusters.`\
 `#> p-values are uncorrected.`
 
 E.g., if we look at the plot and want to know whether female persons
@@ -463,7 +462,7 @@ following code:
 `#> `\
 `#> Variable predicted: qol`\
 `#> Predictors contrasted: employed`\
-`#> Random effects: Marginalized across clusters.`\
+`#> Random effects: Marginalized across remaining clusters.`\
 `#> p-values are uncorrected.`
 
 ### 6. Strata-level residuals: Specific additive vs. multiplicative effects

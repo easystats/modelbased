@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -534,7 +534,6 @@ first ten rows for demonstrating purpose.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: qol</span></span>
 <span><span class="co">#&gt; Predictors contrasted: gender, employed, age</span></span>
-<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <p>If we only want to modulate one factor and compare those groups
 within the levels of the other groups, we can use the <code>by</code>
@@ -573,7 +572,7 @@ within the levels of the remaining predictors.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: qol</span></span>
 <span><span class="co">#&gt; Predictors contrasted: gender, employed</span></span>
-<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across remaining clusters.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <p>E.g., if we look at the plot and want to know whether female persons
 aged 65+ differ depending on their employment status, we can use the
@@ -599,7 +598,7 @@ following code:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: qol</span></span>
 <span><span class="co">#&gt; Predictors contrasted: employed</span></span>
-<span><span class="co">#&gt; Random effects: Marginalized across clusters.</span></span>
+<span><span class="co">#&gt; Random effects: Marginalized across remaining clusters.</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 </div>
 <div class="section level3">
