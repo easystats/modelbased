@@ -584,55 +584,6 @@ get_emmeans <- function(
 }
 
 
-# stops when `values` are not categories of the ordinal response
-.check_ordinal_response_values <- function(model, data, response, values) {
-  # the categories of the model, which can differ from the factor levels in
-  # the data (e.g. `clm()` drops unused levels)
-  response_levels <- model$y.levels
-  if (is.null(response_levels)) {
-    response_levels <- model$lev
-  }
-  if (is.null(response_levels)) {
-    response_levels <- levels(droplevels(as.factor(data[[response]])))
-  }
-  unknown <- setdiff(values, response_levels)
-  if (length(unknown)) {
-    insight::format_error(paste0(
-      "The response `",
-      response,
-      "` has no ",
-      if (length(unknown) == 1) "category " else "categories ",
-      datawizard::text_concatenate(unknown, enclose = "`"),
-      ". Its categories are ",
-      datawizard::text_concatenate(response_levels, enclose = "`"),
-      "."
-    ))
-  }
-  invisible(NULL)
-}
-
-
-# the response categories are only in the output for `predict = "prob"`, so
-# we cannot use the response in `by` (or `contrast`) for the other modes.
-# `ordinal_mode` is the mode the user asked for, not the mode that we use
-# internally for slopes
-.check_ordinal_response_filter <- function(
-  response_filter,
-  ordinal_mode,
-  argument = "by"
-) {
-  if (!is.null(response_filter) && !identical(ordinal_mode, "prob")) {
-    insight::format_error(paste0(
-      "The response `",
-      response_filter$response,
-      "` can only be used in `",
-      argument,
-      "` with `predict = \"prob\"` (the default), which returns the probability of each response category."
-    ))
-  }
-}
-
-
 # keeps the response categories of `response_contrast_filter` in the emmeans
 # grid `estimated`, so that only these categories are contrasted.
 # `pseudo_factor` is the grid column with the response categories
