@@ -523,16 +523,19 @@ get_marginalmeans <- function(
     (lower_bound_zero && any(means$conf.low < 0, na.rm = TRUE)) ||
       (upper_bound_one && any(means$conf.high > 1, na.rm = TRUE))
   ) {
-    insight::format_alert(paste0(
-      "Some confidence intervals extend beyond plausible bounds. For ",
-      model_info$family,
-      " models, `predict = \"response\"` ",
-      "generally yields less biased point estimates, but symmetric confidence intervals ",
-      "can fall outside the valid parameter range. Consider using ",
-      "`predict = \"inverse_link\"` with `bias_correction = TRUE` instead. ",
-      "Optionally, you can also set `residual_variance` to a sensible value ",
-      "to specify the assumed variance."
-    ))
+    insight::format_alert(
+      paste0(
+        "Some confidence intervals extend beyond plausible bounds. For ",
+        model_info$family,
+        " models, `predict = \"response\"` ",
+        "generally yields less biased point estimates, but symmetric confidence intervals ",
+        "can fall outside the valid parameter range. Consider using ",
+        "`predict = \"inverse_link\"` with `bias_correction = TRUE` instead. ",
+        "Optionally, you can also set `residual_variance` to a sensible value ",
+        "to specify the assumed variance."
+      ),
+      "Set `verbose = FALSE` to silent this message (and other warnings)."
+    )
   }
 }
 
