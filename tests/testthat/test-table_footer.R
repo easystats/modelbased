@@ -144,7 +144,7 @@ test_that("table_footer, no prediction intervals if insight falls back", {
 })
 
 
-test_that("table_footer, report random effects wheb actually occurs", {
+test_that("table_footer, report random effects when actually occurs", {
   skip_if_not_installed("lme4")
   skip_if(getRversion() < "4.5.0")
 
@@ -179,4 +179,60 @@ test_that("table_footer, report random effects wheb actually occurs", {
     capture.output(out)[11],
     "Random effects: Marginalized across clusters."
   )
+})
+
+
+test_that("table_footer, report random effects when actually occurs, with re.form=NA", {
+  skip_if_not_installed("lme4")
+  skip_if(getRversion() < "4.5.0")
+
+  data(penguins)
+
+  model <- lme4::lmer(bill_len ~ sex + body_mass + (1 | species), data = penguins)
+  out <- estimate_means(model, "species", estimate = "average", re.form = NA)
+  expect_identical(
+    capture.output(out)[11],
+    "Predictors averaged within levels of species: sex, body_mass"
+  )
+
+  out <- estimate_means(model, "sex", estimate = "average", re.form = NA)
+  expect_identical(
+    capture.output(out)[11],
+    "Random effects: Conditional on a typical cluster."
+  )
+
+  model <- lme4::lmer(
+    bill_len ~ sex + body_mass + (1 | species) + (1 | island),
+    data = penguins
+  )
+
+  out <- estimate_means(model, "species", estimate = "average", re.form = NA)
+  expect_identical(
+    capture.output(out)[12],
+    "Random effects: Conditional on a typical remaining cluster."
+  )
+
+  out <- estimate_means(model, "sex", estimate = "average", re.form = NA)
+  expect_identical(
+    capture.output(out)[11],
+    "Random effects: Conditional on a typical cluster."
+  )
+})
+
+
+test_that("table_footer, don't random effects when formula", {
+  skip_if_not_installed("lme4")
+  skip_if(getRversion() < "4.5.0")
+
+  data(penguins)
+
+  model <- lme4::lmer(bill_len ~ sex + body_mass + (1 | species), data = penguins)
+  out <- estimate_means(model, "species", estimate = "average", re.form = ~ (1 | species))
+  expect_identical(
+    capture.output(out)[11],
+    "Predictors averaged within levels of species: sex, body_mass"
+  )
+
+  out <- estimate_means(model, "sex", estimate = "average", re.form = ~ (1 | species))
+  expect_true(is.na(capture.output(out)[11]))
 })
