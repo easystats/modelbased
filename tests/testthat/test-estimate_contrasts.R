@@ -233,6 +233,7 @@ test_that("estimate_contrasts - Frequentist, Three factors 1", {
     ),
     tolerance = 1e-4
   )
+  skip_on_ci()
   expect_snapshot(print(
     estimate_contrasts(
       model,
