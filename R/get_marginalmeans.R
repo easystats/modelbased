@@ -341,7 +341,10 @@ get_marginalmeans <- function(
     ),
     # needed for some additional information for mixed models
     model = model,
-    re_form_na = !is.null(dots$re.form) && is.na(dots$re.form)
+    re_form_na = !is.null(dots$re.form) &&
+      !inherits(dots$re.form, "formula") &&
+      is.na(dots$re.form),
+    re_form_formula = !is.null(dots$re.form) && inherits(dots$re.form, "formula")
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
 
@@ -578,7 +581,8 @@ get_marginalmeans <- function(
   model_info = NULL,
   info = NULL,
   model = NULL,
-  re_form_na = NULL
+  re_form_na = NULL,
+  re_form_formula = NULL
 ) {
   attr(x, "at") <- by
   attr(x, "by") <- by
@@ -606,11 +610,11 @@ get_marginalmeans <- function(
     # we definitely don't want the random-intercept in the "adjusted for" list
     info$adjusted_for <- setdiff(info$adjusted_for, re_intercept)
     # save information about random effects (cluster/grouping variable)
-    if (!isTRUE(re_form_na)) {
-      info$re_intercept <- re_intercept
-    }
+    info$re_intercept <- re_intercept
     # save info if re.form was NA
     info$re_form_na <- isTRUE(re_form_na)
+    # save info if re.form was a formula
+    info$re_form_formula <- isTRUE(re_form_formula)
   }
 
   if (!is.null(info) && length(info)) {
@@ -636,7 +640,8 @@ get_marginalmeans <- function(
     "contrast", "estimate", "p_adjust", "transform", "transform_arg", "datagrid",
     "preserve_range", "coef_name", "slope", "ci", "model_info", "contrast_filter", "null",
     "iterations", "keep_iterations", "joint_test", "omnibus_test", "vcov",
-    "equivalence", "context_effects", "renamed_focal", "re_intercept", "re_form_na"
+    "equivalence", "context_effects", "renamed_focal", "re_intercept", "re_form_na",
+    "re_form_formula"
   )
 }
 

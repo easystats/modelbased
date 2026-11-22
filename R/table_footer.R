@@ -16,6 +16,7 @@
   adjusted_for <- info$adjusted_for
   re_intercept <- info$re_intercept
   re_form_na <- info$re_form_na
+  re_form_formula <- info$re_form_formula
   transform <- info$transform
   model_info <- info$model_info
   marginalization <- info$estimate
@@ -179,44 +180,40 @@
   # Random effects handling ------------------------------------------------
   # --------------------------------------------------------------------------
 
-  # check if we have random effects that are not yet in "by", i.e. if we
-  # marginalize across *all* cluster or not
-  if (is.null(re_intercept)) {
-    not_all_clusters <- FALSE
-  } else {
-    not_all_clusters <- !identical(setdiff(re_intercept, cleaned_by), re_intercept)
-  }
-
   if (
-    !is.null(re_intercept) &&
-      !isTRUE(re_form_na) &&
-      !is.null(marginalization) &&
+    !isTRUE(re_form_formula) &&
+      !is.null(re_intercept) &&
       !all(re_intercept %in% cleaned_by)
   ) {
-    if (sample_average) {
+    # check if we have random effects that are not yet in "by", i.e. if we
+    # marginalize across *all* cluster or not
+    not_all_clusters <- !identical(setdiff(re_intercept, cleaned_by), re_intercept)
+
+    if (!isTRUE(re_form_na) && !is.null(marginalization)) {
+      if (sample_average) {
+        table_footer <- paste0(
+          table_footer,
+          "\nRandom effects: Marginalized across ",
+          ifelse(not_all_clusters, "remaining ", ""),
+          "clusters."
+        )
+      } else {
+        table_footer <- paste0(
+          table_footer,
+          "\nRandom effects: Averaged over a balanced grid of ",
+          ifelse(not_all_clusters, "remaining ", ""),
+          "cluster levels."
+        )
+      }
+    }
+    if (isTRUE(re_form_na)) {
       table_footer <- paste0(
         table_footer,
-        "\nRandom effects: Marginalized across ",
+        "\nRandom effects: Conditional on a typical ",
         ifelse(not_all_clusters, "remaining ", ""),
-        "clusters."
-      )
-    } else {
-      table_footer <- paste0(
-        table_footer,
-        "\nRandom effects: Averaged over a balanced grid of ",
-        ifelse(not_all_clusters, "remaining ", ""),
-        "cluster levels."
+        "cluster."
       )
     }
-  }
-
-  if (isTRUE(re_form_na)) {
-    table_footer <- paste0(
-      table_footer,
-      "\nRandom effects: Conditional on a typical ",
-      ifelse(not_all_clusters, "remaining ", ""),
-      "cluster."
-    )
   }
 
   # P-value adjustment footer ------------------------------------------------
