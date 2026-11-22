@@ -341,10 +341,7 @@ get_marginalmeans <- function(
     ),
     # needed for some additional information for mixed models
     model = model,
-    re_form_na = !is.null(dots$re.form) &&
-      !inherits(dots$re.form, "formula") &&
-      is.na(dots$re.form),
-    re_form_formula = !is.null(dots$re.form) && inherits(dots$re.form, "formula")
+    dots = dots
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
 
@@ -581,8 +578,7 @@ get_marginalmeans <- function(
   model_info = NULL,
   info = NULL,
   model = NULL,
-  re_form_na = NULL,
-  re_form_formula = NULL
+  dots = NULL
 ) {
   attr(x, "at") <- by
   attr(x, "by") <- by
@@ -592,8 +588,12 @@ get_marginalmeans <- function(
   if (!is.null(model)) {
     response <- insight::find_response(model, combine = FALSE)
     re_intercept <- insight::find_random(model, flatten = TRUE, split_nested = TRUE)
+    re_form_na <- !is.null(dots$re.form) &&
+      !inherits(dots$re.form, "formula") &&
+      isTRUE(is.na(dots$re.form))
+    re_form_formula <- !is.null(dots$re.form) && inherits(dots$re.form, "formula")
   } else {
-    response <- re_form_na <- re_intercept <- NULL
+    response <- re_form_na <- re_form_formula <- re_intercept <- NULL
   }
 
   # compact list

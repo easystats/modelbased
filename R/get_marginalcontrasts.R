@@ -255,7 +255,7 @@ get_marginalcontrasts <- function(
     ),
     # needed for some additional information for mixed models
     model = model,
-    re_form_na = !is.null(dots$re.form) && is.na(dots$re.form)
+    dots = dots
   )
   out <- .rename_focal_attributes(out)
 
