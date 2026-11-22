@@ -4,7 +4,7 @@
 
 * Table headers and footers are now harmonized to conceptually align with the
   package documentation (see the `estimate` argument in `?estimate_means`, as
-  well as the vignettes on the modeling-approach
+  well as the vignettes on the modelization-approach
   (https://easystats.github.io/modelbased/articles/post_estimation_framework.html)
   and technical details on marginalization
   (https://easystats.github.io/modelbased/articles/technical_marginalization.html)).
