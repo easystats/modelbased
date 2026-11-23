@@ -1,5 +1,198 @@
 # Changelog
 
+## modelbased 0.19.0
+
+CRAN release: 2026-11-22
+
+### Breaking Changes
+
+- Table headers and footers are now harmonized to conceptually align
+  with the package documentation (see the `estimate` argument in
+  [`?estimate_means`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+  as well as the vignettes on the modelization-approach
+  (<https://easystats.github.io/modelbased/articles/post_estimation_framework.html>)
+  and technical details on marginalization
+  (<https://easystats.github.io/modelbased/articles/technical_marginalization.html>)).
+  Specifically, `estimate` defines the *unit of interest* for your
+  *estimand*, distinguishing between predictions *conditioned* on
+  specific, theoretical reference levels and *marginal* predictions
+  averaged over empirical observations at the sample or population
+  level. Furthermore, table footers for mixed models are now more
+  informative, detailing how random effects are handled. Finally, when
+  `predict = "inverse_link"`, the footer now explicitly identifies this
+  scale rather than printing `response-scale`. Due to Jensen’s
+  inequality, back-transforming averaged predictions from the link scale
+  (`"inverse_link"`) yields different results for non-Gaussian models
+  than first predicting on the response scale and then averaging.
+
+- For `estimate = "average"` and `estimate = "population"`, the default
+  for the `predict` argument for models of class `glm` has changed from
+  `"inverse_link"` to `"response"`.
+
+### Changes
+
+- `effectsize = "emmeans"` in
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  now also works for `polr` and `clm` models with `predict = "latent"`
+  and a logit or probit link. The contrasts of the latent variable are
+  divided by the SD of the latent error, i.e. `pi / sqrt(3)` (logit) or
+  `1` (probit).
+
+- The `"marginaleffects"`-backend now supports the ordinal family from
+  package *glmmTMB*.
+
+### Bug fixes
+
+- If the filter in `by` keeps one level,
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  with `backend = "marginaleffects"` now returns contrasts of slopes for
+  ordinal models, such as
+  [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html) or
+  [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html). An
+  example is `estimate_contrasts(m, "x", by = "Infl = 'Low'")`. The
+  output compares the slopes of the response categories at that level.
+  Before, calls with `estimate = "typical"` stopped with the error “No
+  contrasts to show”, and calls with `estimate = "average"` ignored the
+  filter.
+
+- Fixed issue where `effectsize = "emmeans"` in
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  returned effect sizes in the wrong rows (e.g., when factor levels were
+  not sorted alphabetically) or in the wrong columns (when `by` was
+  specified).
+
+- Fixed issue where `effectsize = "boot"` in
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  with `backend = "emmeans"` returned effect sizes in the wrong rows,
+  when the contrasts were sorted in another order than in *emmeans*
+  (e.g., when factor levels were not sorted alphabetically, or for
+  polynomial contrasts).
+
+- The confidence intervals of effect sizes from `effectsize = "emmeans"`
+  now use the level of `ci`. Before, they were always 95% intervals.
+
+- [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  now gives an informative error when effect sizes are requested for
+  joint or omnibus tests.
+
+- Fixed issue with wrong calculation of degrees of freedom when pooling
+  predictions or contrasts.
+
+- For objects with no `df` column,
+  [`pool_predictions()`](https://easystats.github.io/modelbased/reference/pool_predictions.md)
+  now uses the degrees of freedom of each object’s confidence intervals.
+  These objects come from
+  [`estimate_relation()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md),
+  [`estimate_expectation()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md),
+  [`estimate_prediction()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md),
+  [`estimate_link()`](https://easystats.github.io/modelbased/reference/estimate_expectation.md),
+  and
+  [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+  with `backend = "emmeans"`. Before, the pooled confidence intervals of
+  these objects used the normal distribution instead of the
+  t-distribution, so they were too narrow for models with t-statistics,
+  such as linear models.
+
+- Filters on the response categories of frequentist ordinal models with
+  `backend = "emmeans"`, where `Sat` is the response:
+
+  - [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+    [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+    and
+    [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+    now also filter the response categories in a list or data-frame
+    `by`, for example `by = list(Infl = "Low", Sat = "Low")`. Before,
+    [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+    and
+    [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+    returned all response categories, and
+    [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+    gave an error. With a list, a data frame or a formula such as
+    `by = ~ Infl + Sat`, the printed output no longer lists the response
+    under “Predictors modulated”.
+  - [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+    now contrasts only the named response categories, for example
+    `estimate_contrasts(m, "Sat = c('Low', 'High')", by = "Infl")`.
+    Before, it ignored the values and contrasted all categories. A
+    single category gives an error, and so does a filter on the response
+    in `by` when the response is also in `contrast`.
+  - For contrasts of slopes, a filter in `by` that leaves one level to
+    compare, for example `by = "Infl = 'Low'"`, now gives a clear error.
+    Before,
+    [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+    returned a table with empty contrasts.
+
+- [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  now applies the filter values in `by` to contrasts of slopes with
+  `estimate = "average"` and with `backend = "emmeans"`, for example
+  `estimate_contrasts(m, "wt", by = c("cyl = '4'", "am"))`, where `cyl`
+  and `am` are factors. Before, these contrasts compared the slopes of
+  all levels and ignored the filter. With `backend = "emmeans"`, the
+  filter applies only to `by` variables that are all factors or
+  character vectors. If the filter leaves fewer than two slopes to
+  compare,
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  now stops with a clear error. Multinomial models, Bayesian ordinal
+  models, frequentist ordinal models with `backend = "marginaleffects"`,
+  and a custom hypothesis in `comparison` (such as `"b1 = b2"`, a
+  function or a matrix), get no such check.
+
+- `p_adjust = "tukey"` and `p_adjust = "sidak"` now give the same
+  p-values as *emmeans* in
+  [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+  and
+  [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  with `backend = "marginaleffects"`:
+
+  - For comparisons that are not pairwise, for example
+    `comparison = "reference"` or `"sequential"`, `"tukey"` is replaced
+    by `"sidak"` with a message. Before, the Tukey adjustment was
+    applied.
+  - For slopes tested against a value other than 0, for example
+    `hypothesis = 1`, and for slopes that are not compared pairwise,
+    `"tukey"` is replaced by `"sidak"` with a message. Slopes compared
+    pairwise, for example with `comparison = ~pairwise` or
+    `post_process = ~pairwise`, keep the Tukey adjustment.
+  - The Tukey adjustment of slopes compared pairwise with
+    [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+    now counts the slopes, not the comparisons. Before, 4 slopes were
+    counted as 6, the number of comparisons, which made the p-values too
+    large. With a group term, for example
+    `comparison = ~pairwise | group`, the slopes and the comparisons are
+    counted in each group.
+  - The Sidak adjustment of contrasts now counts the comparisons in each
+    group of the `by` variables. Before, it counted the levels of the
+    contrast variable, so for 4 levels and 6 pairwise comparisons, the
+    p-values were too small. A joint test, or another output with one
+    test in each group, is therefore no longer changed by `"sidak"`.
+  - A partly matched `hypothesis` argument, for example
+    `hypo = ~pairwise`, is now treated as `hypothesis`.
+
+- [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+  with `backend = "emmeans"` now applies `p_adjust` for the
+  [`stats::p.adjust()`](https://rdrr.io/r/stats/p.adjust.html) methods,
+  `"tukey"` and `"sidak"`. Before, it returned the unadjusted p-values
+  for every method. As in
+  [`emmeans::test()`](https://rvlenth.github.io/emmeans/reference/summary.emmGrid.html),
+  `"tukey"` is replaced by `"sidak"` with a message, because the slopes
+  are tested against 0.
+
+- Joint tests with `comparison = "joint"` and `backend = "emmeans"` now
+  give the correct statistics for contrasts between the response
+  categories of ordinal models, such as
+  [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html) and
+  [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html). An
+  example is
+  `estimate_contrasts(m, "Sat", by = "Infl", comparison = "joint", backend = "emmeans")`.
+  Before, the F and Chi-squared statistics were wrong. For example, they
+  were 4 to 52 times too large for
+  `polr(Sat ~ Infl + Type, weights = Freq, data = MASS::housing)`. Joint
+  tests of probabilities (the default `predict = "prob"`) also no longer
+  warn with “NaNs produced”. The `Chisq` column of joint tests with
+  `backend = "emmeans"` now prints with two decimals, and
+  [`get_emcontrasts()`](https://easystats.github.io/modelbased/reference/get_emmeans.md)
+  with `comparison = "joint"` now returns a data frame that prints.
+
 ## modelbased 0.18.0
 
 CRAN release: 2026-10-18
