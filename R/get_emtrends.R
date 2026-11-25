@@ -29,6 +29,7 @@ get_emtrends <- function(
   my_args <- .guess_emtrends_arguments(model, trend, by, verbose, ...)
 
   # ordinal models: prediction mode, used for formatting and the table footer
+  ordinal <- NULL
   ordinal_mode <- NULL
 
   # setup function arguments
@@ -72,7 +73,7 @@ get_emtrends <- function(
 
   # slopes of probabilities or of the mean class, from the slopes of the
   # cumulative probabilities
-  if (!is.null(ordinal_mode) && ordinal_mode %in% c("prob", "mean.class")) {
+  if (isTRUE(ordinal$from_cumprob)) {
     estimated <- .emtrends_ordinal_from_cumprob(estimated, model, ordinal_mode)
   }
 
@@ -103,7 +104,7 @@ get_emtrends <- function(
 # `.emtrends_ordinal_from_cumprob()`), because `emtrends()` with these modes
 # can fail ("Irregular reference grid") or return wrong slopes (clmm)
 .emtrends_ordinal_arguments <- function(fun_args, ordinal) {
-  if (ordinal$mode %in% c("prob", "mean.class")) {
+  if (isTRUE(ordinal$from_cumprob)) {
     fun_args$mode <- "cum.prob"
     fun_args$specs <- .add_emmeans_pseudo_factor(fun_args$specs, "cut")
   } else {

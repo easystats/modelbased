@@ -1,3 +1,14 @@
+# modelbased (devel)
+
+## Bug fixes
+
+* `estimate_means()`, `estimate_contrasts()` and `estimate_slopes()` with
+  `backend = "emmeans"` now return the probabilities of each response category
+  for `nnet::multinom()` models. Before, the results were wrong: emmeans
+  averaged over the response categories, so each probability was one divided
+  by the number of categories, contrasts and slopes were zero, and a filter on
+  the response in `by` returned a probability of 1.
+
 # modelbased 0.19.0
 
 ## Breaking Changes

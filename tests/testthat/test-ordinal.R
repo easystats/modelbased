@@ -281,6 +281,42 @@ test_that("estimate_means, print bracl", {
 })
 
 
+test_that("estimate_means, estimate_contrasts and estimate_slopes, backend emmeans, multinom", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("nnet")
+  data(housing, package = "MASS")
+  m <- nnet::multinom(Sat ~ Infl + Type, weights = Freq, data = housing, trace = FALSE)
+  emm <- emmeans::emmeans(m, ~ Infl | Sat, mode = "prob")
+
+  # one probability per response category
+  out <- estimate_means(m, "Infl", backend = "emmeans")
+  expected <- as.data.frame(emm)
+  expect_identical(as.character(out$Response), as.character(expected$Sat))
+  expect_identical(as.character(out$Infl), as.character(expected$Infl))
+  expect_equal(out$Probability, expected$prob, tolerance = 1e-6)
+  expect_equal(out$SE, expected$SE, tolerance = 1e-6)
+
+  out <- estimate_means(m, c("Infl", "Sat='Low'"), backend = "emmeans")
+  expect_identical(as.character(out$Response), rep("Low", 3))
+  expect_equal(out$Probability, expected$prob[1:3], tolerance = 1e-6)
+
+  out <- estimate_contrasts(m, "Infl", backend = "emmeans")
+  expected <- as.data.frame(emmeans::contrast(emm, "revpairwise", adjust = "none"))
+  expect_identical(as.character(out$Response), as.character(expected$Sat))
+  expect_equal(out$Difference, expected$estimate, tolerance = 1e-6)
+  expect_equal(out$SE, expected$SE, tolerance = 1e-6)
+
+  set.seed(123)
+  housing$x <- rnorm(nrow(housing))
+  m <- nnet::multinom(Sat ~ Infl + x, weights = Freq, data = housing, trace = FALSE)
+  out <- estimate_slopes(m, "x", backend = "emmeans")
+  expected <- as.data.frame(emmeans::emtrends(m, ~Sat, var = "x", mode = "prob"))
+  expect_identical(as.character(out$Response), as.character(expected$Sat))
+  expect_equal(out$Slope, expected$x.trend, tolerance = 1e-6)
+  expect_equal(out$SE, expected$SE, tolerance = 1e-6)
+})
+
+
 test_that("estimate_contrasts, backend emmeans, ordinal modes", {
   skip_if_not_installed("emmeans")
   data(housing, package = "MASS")
