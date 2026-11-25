@@ -191,14 +191,7 @@ get_emmeans <- function(
   if (inherits(model, "multinom") && length(response) == 1) {
     response <- all.names(str2lang(response))[1]
   }
-  switch(
-    mode,
-    prob = response,
-    cum.prob = ,
-    exc.prob = ,
-    linear.predictor = "cut",
-    NULL
-  )
+  switch(mode, prob = response, cum.prob = , exc.prob = , linear.predictor = "cut", NULL)
 }
 
 
