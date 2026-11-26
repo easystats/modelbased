@@ -302,6 +302,24 @@ test_that("estimate_means, backend emmeans, brms categorical", {
 })
 
 
+test_that("estimate_slopes, backend emmeans, brms ordinal", {
+  skip_if_not_installed("emmeans")
+  m <- insight::download_model("brms_ordinal_1")
+  skip_if(is.null(m))
+
+  # one slope per response category
+  out <- suppressWarnings(estimate_slopes(m, "mpg", backend = "emmeans"))
+  expected <- as.data.frame(suppressWarnings(emmeans::emtrends(
+    m,
+    ~rep.meas,
+    var = "mpg",
+    epred = TRUE
+  )))
+  expect_identical(as.character(out$Response), as.character(expected$rep.meas))
+  expect_equal(out$Slope, expected$mpg.trend, tolerance = 1e-6)
+})
+
+
 test_that("estimate_means, print bracl", {
   skip_if_not_installed("brglm2")
   # required for the penguins dataset, which was added in R 4.5.0
