@@ -1,6 +1,47 @@
 
 # modelbased <img src='man/figures/logo.png' align="right" height="139" />
 
+<style type="text/css">
+/* --- modelbased in a nutshell card --- */
+.nutshell-card {
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: 5px solid #2563eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-size: 0.95em;
+}
+&#10;.nutshell-card ol,
+.nutshell-card ul {
+  margin-bottom: 0.5rem;
+  padding-left: 1.25rem;
+}
+&#10;.nutshell-card li {
+  margin-bottom: 0.45rem;
+}
+&#10;.nutshell-footer {
+  font-size: 0.9em;
+  color: #475569;
+  margin-top: 0.85rem;
+  margin-bottom: 0;
+  padding-top: 0.65rem;
+  border-top: 1px solid #e2e8f0;
+}
+&#10;/* --- Dark Mode Anpassung (pkgdown / Bootstrap 5) --- */
+[data-bs-theme="dark"] .nutshell-card {
+  background-color: hsl(220, 25%, 16%);
+  border-color: hsl(220, 20%, 26%);
+  border-top-color: #60a5fa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+&#10;[data-bs-theme="dark"] .nutshell-footer {
+  color: #94a3b8;
+  border-top-color: hsl(220, 20%, 26%);
+}
+</style>
+
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.07969/status.svg)](https://doi.org/10.21105/joss.07969)
 [![downloads](https://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/modelbased)](https://cranlogs.r-pkg.org/)
@@ -228,7 +269,7 @@ ggplot(iris, aes(x = Species, y = Sepal.Width)) +
   theme_minimal()
 ```
 
-<img src="man/figures/unnamed-chunk-3-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-4-1.png" alt="" width="100%" />
 
 You can also get a “quick” plot using the `plot()` function:
 
@@ -236,7 +277,7 @@ You can also get a “quick” plot using the `plot()` function:
 plot(means)
 ```
 
-<img src="man/figures/unnamed-chunk-4-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-5-1.png" alt="" width="100%" />
 
 ### Contrast analysis
 
@@ -271,7 +312,7 @@ contrasts
 ## p-values are uncorrected.
 ```
 
-<img src="man/figures/unnamed-chunk-6-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-7-1.png" alt="" width="100%" />
 
 ### Check the contrasts at different points of another linear predictor
 
@@ -338,7 +379,7 @@ ggplot(contrasts, aes(x = Petal.Length, y = Difference, )) +
   theme_modern()
 ```
 
-<img src="man/figures/unnamed-chunk-8-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-9-1.png" alt="" width="100%" />
 
 ### Create smart grids to represent complex interactions
 
@@ -382,7 +423,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   theme_minimal()
 ```
 
-<img src="man/figures/unnamed-chunk-9-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-10-1.png" alt="" width="100%" />
 
 ### Generate predictions from your model to compare it with original data
 
@@ -438,7 +479,7 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-<img src="man/figures/unnamed-chunk-10-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-11-1.png" alt="" width="100%" />
 
 ### Extract and format group-level random effects
 
@@ -472,7 +513,7 @@ plot(random) +
   theme_minimal()
 ```
 
-<img src="man/figures/unnamed-chunk-11-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-12-1.png" alt="" width="100%" />
 
 ### Estimate derivative of non-linear relationships (e.g., in GAMs)
 
@@ -515,7 +556,7 @@ plot(estimate_relation(model, length = 200)) /
   geom_hline(yintercept = 0, linetype = "dashed")
 ```
 
-<img src="man/figures/unnamed-chunk-12-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-13-1.png" alt="" width="100%" />
 
 ### Describe the smooth term by its linear parts
 
@@ -541,7 +582,7 @@ ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-<img src="man/figures/unnamed-chunk-13-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-14-1.png" alt="" width="100%" />
 
 ``` r
 
@@ -578,7 +619,7 @@ slopes <- estimate_slopes(model, trend = "hp", by = "wt", length = 200)
 plot(slopes)
 ```
 
-<img src="man/figures/unnamed-chunk-14-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-15-1.png" alt="" width="100%" />
 
 ### Visualize predictions with random effects
 
@@ -602,7 +643,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0)) # Make CI ribbon transparent for clarity
 ```
 
-<img src="man/figures/unnamed-chunk-15-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-16-1.png" alt="" width="100%" />
 
 As we can see, each participant has a different “intercept” (starting
 point on the y-axis), but all their slopes are the same: this is because
@@ -618,7 +659,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0.1))
 ```
 
-<img src="man/figures/unnamed-chunk-16-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-17-1.png" alt="" width="100%" />
 
 As we can see, the effect is now different for all participants. Let’s
 plot, on top of that, the “fixed” effect estimated across all these
@@ -632,7 +673,7 @@ plot(preds, ribbon = list(alpha = 0)) + # Previous plot
   geom_line(data = fixed_pred, aes(x = Days, y = Predicted), linewidth = 2)
 ```
 
-<img src="man/figures/unnamed-chunk-17-1.png" alt="" width="100%" />
+<img src="man/figures/unnamed-chunk-18-1.png" alt="" width="100%" />
 
 ## Technical Details
 

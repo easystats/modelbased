@@ -27,6 +27,52 @@ knitr::opts_chunk$set(
 options(marginaleffects_safe = FALSE)
 ```
 
+```{css, echo=FALSE}
+/* --- modelbased in a nutshell card --- */
+.nutshell-card {
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: 5px solid #2563eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-size: 0.95em;
+}
+
+.nutshell-card ol,
+.nutshell-card ul {
+  margin-bottom: 0.5rem;
+  padding-left: 1.25rem;
+}
+
+.nutshell-card li {
+  margin-bottom: 0.45rem;
+}
+
+.nutshell-footer {
+  font-size: 0.9em;
+  color: #475569;
+  margin-top: 0.85rem;
+  margin-bottom: 0;
+  padding-top: 0.65rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* --- Dark Mode Anpassung (pkgdown / Bootstrap 5) --- */
+[data-bs-theme="dark"] .nutshell-card {
+  background-color: hsl(220, 25%, 16%);
+  border-color: hsl(220, 20%, 26%);
+  border-top-color: #60a5fa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+[data-bs-theme="dark"] .nutshell-footer {
+  color: #94a3b8;
+  border-top-color: hsl(220, 20%, 26%);
+}
+```
+
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.07969/status.svg)](https://doi.org/10.21105/joss.07969) [![downloads](https://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/modelbased)](https://cranlogs.r-pkg.org/)
