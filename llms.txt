@@ -47,6 +47,18 @@ questions:
     predictions are for a typical individual, an average of the sample,
     or an average of a broader population.
 
+We view **modelbased** as part of a broader analytical workflow that we
+call [the modelisation
+approach](https://easystats.github.io/modelbased/articles/post_estimation_framework.html).
+This approach requires careful thinking about the *estimand* - that is,
+both the target *quantity* and *unit* of interest. While the former is
+covered by the three core functions
+([`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
+[`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md),
+and
+[`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)),
+the latter is controlled via the `estimate` argument.
+
 ## Installation
 
 [![CRAN](https://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased)
@@ -92,19 +104,18 @@ check-out these vignettes:
 - [What are, why use and how to get marginal
   means](https://easystats.github.io/modelbased/articles/estimate_means.html)
 - [Contrast
-  analysis](https://easystats.github.io/modelbased/articles/estimate_contrasts.html)
+  analysis](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
 - [Marginal effects and
   derivatives](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
-- [Use a model to make
-  predictions](https://easystats.github.io/modelbased/articles/estimate_response.html)
 - [Interpret simple and complex models using the power of effect
   derivatives](https://easystats.github.io/modelbased/articles/derivatives.html)
+- [Estimated Marginal Means in Mixed Effects Models: Navigating
+  Conditional and Marginal
+  Effects](https://easystats.github.io/modelbased/articles/mixed_models.html)
 - [How to use mixed models to estimate individuals’
   scores](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
 - [Visualize effects and
   interactions](https://easystats.github.io/modelbased/articles/estimate_relation.html)
-- [The modelisation approach to
-  statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 
 ## Features
 

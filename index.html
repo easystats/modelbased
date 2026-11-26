@@ -154,6 +154,7 @@
 <li><p>Evaluation Points: At which specific values should the predictor be evaluated? This is also defined in the <code>by</code> argument. For a more refined control over the evaluation points, see the <a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">data grids</a> vignette.</p></li>
 <li><p>Target Population: What population should the inferences generalize to? The <code>estimate</code> argument controls this by defining whether predictions are for a typical individual, an average of the sample, or an average of a broader population.</p></li>
 </ol>
+<p>We view <strong>modelbased</strong> as part of a broader analytical workflow that we call <a href="https://easystats.github.io/modelbased/articles/post_estimation_framework.html">the modelisation approach</a>. This approach requires careful thinking about the <em>estimand</em> - that is, both the target <em>quantity</em> and <em>unit</em> of interest. While the former is covered by the three core functions (<code><a href="reference/estimate_means.html">estimate_means()</a></code>, <code><a href="reference/estimate_contrasts.html">estimate_contrasts()</a></code>, and <code><a href="reference/estimate_slopes.html">estimate_slopes()</a></code>), the latter is controlled via the <code>estimate</code> argument.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -200,13 +201,12 @@
 <ul>
 <li><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">Data grids</a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_means.html">What are, why use and how to get marginal means</a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/estimate_contrasts.html">Contrast analysis</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html">Contrast analysis</a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_slopes.html">Marginal effects and derivatives</a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/estimate_response.html">Use a model to make predictions</a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/derivatives.html">Interpret simple and complex models using the power of effect derivatives</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/mixed_models.html">Estimated Marginal Means in Mixed Effects Models: Navigating Conditional and Marginal Effects</a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_grouplevel.html">How to use mixed models to estimate individuals’ scores</a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_relation.html">Visualize effects and interactions</a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/modelisation_approach.html">The modelisation approach to statistics</a></li>
 </ul>
 </div>
 <div class="section level2">
