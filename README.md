@@ -59,13 +59,13 @@ questions:
 
 <p class="nutshell-footer">
 
-<em>Note: We view <strong>modelbased</strong> as part of a broader
-analytical workflow that we call [the modelisation
+<em>Note: These are just the core concepts. We view
+<strong>modelbased</strong> as part of a broader analytical workflow
+that we call [the modelisation
 approach](https://easystats.github.io/modelbased/articles/post_estimation_framework.html).
-These are just the core concepts. <strong>modelbased</strong> offers
-many more features—including equivalence tests, custom data grids,
-random-effects predictions, and support for dozens of model classes.
-Explore the
+Moreover, <strong>modelbased</strong> offers many more
+features—including equivalence tests, custom data grids, random-effects
+predictions, and support for dozens of model classes. Explore the
 <a href="https://easystats.github.io/modelbased/reference/index.html">package
 documentation</a> and
 <a href="https://easystats.github.io/modelbased/articles/">articles</a>
