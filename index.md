@@ -56,13 +56,12 @@ questions:
       to your actual sample or a broader target population by averaging
       across observed or counterfactual covariate distributions.
 
-*Note: We view **modelbased** as part of a broader analytical workflow
-that we call [the modelisation
+*Note: These are just the core concepts. We view **modelbased** as part
+of a broader analytical workflow that we call [the modelisation
 approach](https://easystats.github.io/modelbased/articles/post_estimation_framework.html).
-These are just the core concepts. **modelbased** offers many more
-features—including equivalence tests, custom data grids, random-effects
-predictions, and support for dozens of model classes. Explore the
-[package
+Moreover, **modelbased** offers many more features—including equivalence
+tests, custom data grids, random-effects predictions, and support for
+dozens of model classes. Explore the [package
 documentation](https://easystats.github.io/modelbased/reference/index.html)
 and [articles](https://easystats.github.io/modelbased/articles/) to
 learn more!*
