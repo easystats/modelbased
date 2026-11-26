@@ -71,10 +71,10 @@ get_emmeans <- function(
       dpars <- FALSE
       fun_args$epred <- TRUE
       fun_args$type <- "response"
-      # ordinal models: brms adds the response categories as pseudo-factor
-      # "rep.meas" to the reference grid. We add it to `specs`, else emmeans
-      # averages over it
-      if (.is_brms_ordinal(model)) {
+      # ordinal and categorical models: brms adds the response categories as
+      # pseudo-factor "rep.meas" to the reference grid. We add it to `specs`,
+      # else emmeans averages over it
+      if (.is_brms_ordinal_or_categorical(model)) {
         fun_args$specs <- .add_emmeans_pseudo_factor(fun_args$specs, "rep.meas")
       }
     } else if (predict %in% .brms_aux_elements(model)) {
@@ -181,10 +181,13 @@ get_emmeans <- function(
 }
 
 
-# ordinal models from brms
-.is_brms_ordinal <- function(model) {
-  inherits(model, "brmsfit") &&
-    isTRUE(insight::model_info(model, response = 1, verbose = FALSE)$is_ordinal)
+# ordinal and categorical models from brms
+.is_brms_ordinal_or_categorical <- function(model) {
+  if (!inherits(model, "brmsfit")) {
+    return(FALSE)
+  }
+  m_info <- insight::model_info(model, response = 1, verbose = FALSE)
+  isTRUE(m_info$is_ordinal) || isTRUE(m_info$is_categorical)
 }
 
 
@@ -307,8 +310,8 @@ get_emmeans <- function(
     if (length(colums_to_add)) {
       means <- cbind(em_grid[colums_to_add], means)
     }
-    # brms ordinal models: the response categories
-    if (.is_brms_ordinal(model) && "rep.meas" %in% colnames(means)) {
+    # brms ordinal and categorical models: the response categories
+    if (.is_brms_ordinal_or_categorical(model) && "rep.meas" %in% colnames(means)) {
       new_name <- "Response"
       # a predictor can have the same name, so we add a suffix ("Response.1")
       if (new_name %in% colnames(means)) {
