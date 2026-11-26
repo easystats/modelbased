@@ -195,6 +195,22 @@ get_emmeans <- function(
 }
 
 
+# ordinal and categorical models from brms: renames the pseudo-factor with
+# the response categories ("rep.meas") to "Response"
+.clean_brms_response_categories <- function(x, model) {
+  if (!.is_brms_ordinal_or_categorical(model) || !"rep.meas" %in% colnames(x)) {
+    return(x)
+  }
+  new_name <- "Response"
+  # a predictor can have the same name, so we add a suffix ("Response.1")
+  if (new_name %in% colnames(x)) {
+    new_name <- make.unique(c(colnames(x), new_name))[ncol(x) + 1]
+  }
+  colnames(x)[colnames(x) == "rep.meas"] <- new_name
+  x
+}
+
+
 # name of the pseudo-factor that emmeans adds to the reference grid for
 # ordinal models: the response categories for `mode = "prob"`, and the
 # thresholds for `mode = "cum.prob"`, `"exc.prob"` and `"linear.predictor"`.
@@ -320,15 +336,7 @@ get_emmeans <- function(
     if (length(colums_to_add)) {
       means <- cbind(em_grid[colums_to_add], means)
     }
-    # brms ordinal and categorical models: the response categories
-    if (.is_brms_ordinal_or_categorical(model) && "rep.meas" %in% colnames(means)) {
-      new_name <- "Response"
-      # a predictor can have the same name, so we add a suffix ("Response.1")
-      if (new_name %in% colnames(means)) {
-        new_name <- make.unique(c(colnames(means), new_name))[ncol(means) + 1]
-      }
-      colnames(means)[colnames(means) == "rep.meas"] <- new_name
-    }
+    means <- .clean_brms_response_categories(means, model)
   } else {
     means <- as.data.frame(stats::confint(x, level = ci))
     # the df column is not shown, but `pool_predictions()` needs the df

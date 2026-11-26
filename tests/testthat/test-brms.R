@@ -200,3 +200,36 @@ test_that("estimate_means - brms, Wiener, printing", {
     )
   )
 })
+
+
+test_that("estimate_contrasts - brms ordinal, emmeans backend", {
+  d <- mtcars
+  d$cyl_ord <- factor(d$cyl, ordered = TRUE)
+  d$am_f <- factor(d$am, labels = c("auto", "manual"))
+  m <- suppressWarnings(brms::brm(
+    cyl_ord ~ mpg + am_f,
+    data = d,
+    family = brms::cumulative(),
+    refresh = 0,
+    iter = 500,
+    chains = 1,
+    seed = 123
+  ))
+
+  # contrasts within each response category
+  out <- suppressWarnings(estimate_contrasts(m, "am_f", backend = "emmeans"))
+  expected <- as.data.frame(emmeans::contrast(
+    emmeans::regrid(emmeans::emmeans(m, ~ am_f | rep.meas, epred = TRUE)),
+    "revpairwise"
+  ))
+  expect_identical(as.character(out$Response), as.character(expected$rep.meas))
+  expect_equal(out$Difference, expected$estimate, tolerance = 1e-6)
+
+  out <- suppressWarnings(estimate_contrasts(m, "mpg", by = "am_f", backend = "emmeans"))
+  expected <- as.data.frame(emmeans::contrast(
+    emmeans::emtrends(m, ~ am_f | rep.meas, var = "mpg", epred = TRUE),
+    "revpairwise"
+  ))
+  expect_identical(as.character(out$Response), as.character(expected$rep.meas))
+  expect_equal(out$Difference, expected$estimate, tolerance = 1e-6)
+})

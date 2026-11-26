@@ -14,6 +14,11 @@
   Before, the results were wrong: emmeans averaged over the response
   categories, so each probability was one divided by the number of categories.
 
+* `estimate_slopes()` and `estimate_contrasts()` with `backend = "emmeans"` now
+  return the slopes and contrasts of each response category for ordinal and
+  categorical models from *brms*. Before, the results were wrong: emmeans
+  averaged over the response categories, so slopes and contrasts were zero.
+
 # modelbased 0.19.0
 
 ## Breaking Changes

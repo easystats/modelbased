@@ -49,6 +49,11 @@ get_emtrends <- function(
       # slope of the expected response
       fun_args$epred <- TRUE
       fun_args$type <- "response"
+      # ordinal and categorical models: one slope per response category, else
+      # emmeans averages over the categories
+      if (.is_brms_ordinal_or_categorical(model)) {
+        fun_args$specs <- .add_emmeans_pseudo_factor(fun_args$specs, "rep.meas")
+      }
     } else if (predict %in% .brms_aux_elements(model)) {
       # slope of a specific distributional parameter
       fun_args$dpar <- predict
@@ -239,6 +244,7 @@ get_emtrends <- function(
     if (length(colums_to_add)) {
       trends <- cbind(em_grid[colums_to_add], trends)
     }
+    trends <- .clean_brms_response_categories(trends, model)
   } else {
     trends <- parameters::parameters(estimated, ci = ci, ...)
   }

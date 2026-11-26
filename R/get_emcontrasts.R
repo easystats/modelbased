@@ -46,6 +46,9 @@ get_emcontrasts <- function(
   # setup arguments
   fun_args <- list(model)
   ordinal <- list(mode = NULL, pseudo_factor = NULL)
+  # ordinal and categorical models from brms: pseudo-factor with the response
+  # categories, which we contrast within
+  brms_pseudo_factor <- NULL
 
   # handle distributional parameters
   if (inherits(model, "brmsfit")) {
@@ -53,6 +56,9 @@ get_emcontrasts <- function(
       dpars <- FALSE
       fun_args$epred <- TRUE
       fun_args$type <- "response"
+      if (.is_brms_ordinal_or_categorical(model)) {
+        brms_pseudo_factor <- "rep.meas"
+      }
     } else if (predict %in% .brms_aux_elements(model)) {
       dpars <- TRUE
       fun_args$dpar <- predict
@@ -122,7 +128,7 @@ get_emcontrasts <- function(
         model,
         my_args$by,
         slope_filter,
-        within_categories = !is.null(ordinal$mode)
+        within_categories = !is.null(ordinal$mode) || !is.null(brms_pseudo_factor)
       )
     }
     # Run emmeans. Filters in `by` go into `at`, so only those slopes are
@@ -132,8 +138,9 @@ get_emcontrasts <- function(
       fun_args$at <- slope_filter
     }
     if (is.null(ordinal$mode)) {
+      fun_args$specs <- .add_emmeans_pseudo_factor(fun_args$specs, brms_pseudo_factor)
       estimated <- suppressMessages(do.call(emmeans::emtrends, fun_args))
-      emm_by <- NULL
+      emm_by <- brms_pseudo_factor
     } else {
       # ordinal models: for modes with response categories or thresholds, we
       # contrast the slopes within each one
@@ -147,7 +154,10 @@ get_emcontrasts <- function(
   } else {
     # Run emmeans. For ordinal models, the pseudo-factor (response categories
     # or thresholds) is added to `specs`, so we contrast within each category
-    specs <- .add_emmeans_pseudo_factor(my_args$emmeans_specs, ordinal$pseudo_factor)
+    specs <- .add_emmeans_pseudo_factor(
+      my_args$emmeans_specs,
+      c(ordinal$pseudo_factor, brms_pseudo_factor)
+    )
     fun_args <- c(fun_args, list(specs = specs, at = my_args$emmeans_at))
     estimated <- suppressMessages(do.call(emmeans::emmeans, fun_args))
     # ordinal models: a `contrast` term on the response with values keeps only
@@ -213,7 +223,7 @@ get_emcontrasts <- function(
   attr(out, "at") <- my_args$by
   attr(out, "by") <- my_args$by
   # the pseudo-factor of ordinal models is no focal term
-  focal_terms <- setdiff(emm_by, ordinal$pseudo_factor)
+  focal_terms <- setdiff(emm_by, c(ordinal$pseudo_factor, brms_pseudo_factor))
   if (!length(focal_terms)) {
     focal_terms <- NULL
   }
@@ -291,6 +301,7 @@ get_emcontrasts <- function(
       )
     )
     out <- .clean_names_bayesian(out, model, predict, type = "contrast")
+    out <- .clean_brms_response_categories(out, model)
   } else {
     ordinal_mode <- attributes(estimated)$ordinal_mode
     if (isTRUE(attributes(estimated)$joint_test)) {
