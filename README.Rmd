@@ -51,6 +51,8 @@ The package's approach simplifies estimation by focusing on three key questions:
 
 3. Target Population: What population should the inferences generalize to? The `estimate` argument controls this by defining whether predictions are for a typical individual, an average of the sample, or an average of a broader population.
 
+We view **modelbased** as part of a broader analytical workflow that we call [the modelisation approach](https://easystats.github.io/modelbased/articles/post_estimation_framework.html). This approach requires careful thinking about the *estimand* - that is, both the target *quantity* and *unit* of interest. While the former is covered by the three core functions (`estimate_means()`, `estimate_contrasts()`, and `estimate_slopes()`), the latter is controlled via the `estimate` argument.
+
 ## Installation
 
 [![CRAN](https://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased) [![modelbased status badge](https://easystats.r-universe.dev/badges/modelbased)](https://easystats.r-universe.dev)
@@ -87,13 +89,12 @@ Access the package [**documentation**](https://easystats.github.io/modelbased/),
 
 * [Data grids](https://easystats.github.io/insight/reference/get_datagrid.html)
 * [What are, why use and how to get marginal means](https://easystats.github.io/modelbased/articles/estimate_means.html)
-* [Contrast analysis](https://easystats.github.io/modelbased/articles/estimate_contrasts.html)
+* [Contrast analysis](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
 * [Marginal effects and derivatives](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
-* [Use a model to make predictions](https://easystats.github.io/modelbased/articles/estimate_response.html)
 * [Interpret simple and complex models using the power of effect derivatives](https://easystats.github.io/modelbased/articles/derivatives.html)
+* [Estimated Marginal Means in Mixed Effects Models: Navigating Conditional and Marginal Effects](https://easystats.github.io/modelbased/articles/mixed_models.html)
 * [How to use mixed models to estimate individuals' scores](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
 * [Visualize effects and interactions](https://easystats.github.io/modelbased/articles/estimate_relation.html)
-* [The modelisation approach to statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 
 ## Features
 
