@@ -18,7 +18,8 @@
 <link href="deps/Roboto_Slab-0.5.0/font.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Estimation of Model-Based Predictions, Contrasts and Means">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
+<meta property="og:title" content="Estimation of Model-Based Predictions, Contrasts and Means">
 <meta name="description" content="Implements a general interface for model-based estimations for a wide variety of models, used in the computation of marginal means, contrast analysis and predictions. For a list of supported models, see insight::supported_models().">
 <meta property="og:description" content="Implements a general interface for model-based estimations for a wide variety of models, used in the computation of marginal means, contrast analysis and predictions. For a list of supported models, see insight::supported_models().">
 <meta property="og:image" content="https://easystats.github.io/modelbased/reference/figures/card.png">
@@ -147,14 +148,41 @@
 <p><strong>modelbased</strong> is a package helping with model-based estimations, to easily compute marginal means, contrast analysis and model predictions.</p>
 <p>The two probably most popular R packages for extracting these quantities of interest are <strong>emmeans</strong> (Lenth, 2024) and <strong>marginaleffects</strong> (Arel-Bundock et al., 2024). These packages pack an enormously rich set of features and cover (almost) all imaginable needs for post-hoc analysis of statistical models. But their power and flexibility can be intimidating for users not familiar with the underlying statistical concepts.</p>
 <p><strong>modelbased</strong>, built on top of these two packages, aims to unleash this untapped potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons, and model predictions from a wide range of statistical models. In line with the <strong>easystats</strong>’ <em>raison d’être</em>, <strong>modelbased</strong> focuses on simplicity, flexibility, and user-friendliness to help researchers harness the full power of their models.</p>
-<p><em>How to start?</em></p>
+<div class="section level2">
+<h2 id="modelbased-in-a-nutshell">
+<code>modelbased</code> in a nutshell<a class="anchor" aria-label="anchor" href="#modelbased-in-a-nutshell"></a>
+</h2>
+<div class="nutshell-card">
 <p>The package’s approach simplifies estimation by focusing on three key questions:</p>
 <ol style="list-style-type: decimal">
-<li><p>Predictor of Interest: Which variable’s effect do you want to analyze? This is specified with the <code>by</code>, <code>contrast</code>, or <code>slope</code> arguments.</p></li>
-<li><p>Evaluation Points: At which specific values should the predictor be evaluated? This is also defined in the <code>by</code> argument. For a more refined control over the evaluation points, see the <a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">data grids</a> vignette.</p></li>
-<li><p>Target Population: What population should the inferences generalize to? The <code>estimate</code> argument controls this by defining whether predictions are for a typical individual, an average of the sample, or an average of a broader population.</p></li>
+<li>
+<strong>Define your Estimand - Quantity of Interest:</strong> Specify <em>what</em> statistical metric you want to estimate. Choose the core function that directly answers your research question:
+<ul>
+<li>
+<code><a href="reference/estimate_means.html">estimate_means()</a></code> for expected values and model predictions</li>
+<li>
+<code><a href="reference/estimate_contrasts.html">estimate_contrasts()</a></code> for group differences and pairwise comparisons</li>
+<li>
+<code><a href="reference/estimate_slopes.html">estimate_slopes()</a></code> for trends and marginal effects</li>
+</ul>
+</li>
+<li>
+<strong>Predictor of Interest: Set Evaluation Points &amp; Specific Values:</strong> Specify which predictor(s) to analyze and at which exact values or levels to evaluate predictions via <code>by</code>, <code>contrast</code>, or <code>slope</code> (e.g., <code>by = "x = c(1, 2)"</code> or custom <a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">data grids</a>).</li>
+<li>
+<strong>Define your Estimand - Unit of Interest (<code>estimate</code>):</strong> Specify <em>whom</em> (which group or population) you want to generalize your findings to:
+<ul>
+<li>
+<strong>Conditional predictions</strong> (<code>"specific"</code>, <code>"typical"</code>): Generalize to a theoretical individual or balanced reference grid by holding non-focal covariates at fixed or typical values.</li>
+<li>
+<strong>Marginal predictions</strong> (<code>"average"</code>, <code>"population"</code>): Generalize to your actual sample or a broader target population by averaging across observed or counterfactual covariate distributions.</li>
+</ul>
+</li>
 </ol>
-<p>We view <strong>modelbased</strong> as part of a broader analytical workflow that we call <a href="https://easystats.github.io/modelbased/articles/post_estimation_framework.html">the modelisation approach</a>. This approach requires careful thinking about the <em>estimand</em> - that is, both the target <em>quantity</em> and <em>unit</em> of interest. While the former is covered by the three core functions (<code><a href="reference/estimate_means.html">estimate_means()</a></code>, <code><a href="reference/estimate_contrasts.html">estimate_contrasts()</a></code>, and <code><a href="reference/estimate_slopes.html">estimate_slopes()</a></code>), the latter is controlled via the <code>estimate</code> argument.</p>
+<p class="nutshell-footer">
+<em>Note: We view <strong>modelbased</strong> as part of a broader analytical workflow that we call <a href="https://easystats.github.io/modelbased/articles/post_estimation_framework.html">the modelisation approach</a>. These are just the core concepts. <strong>modelbased</strong> offers many more features—including equivalence tests, custom data grids, random-effects predictions, and support for dozens of model classes. Explore the <a href="https://easystats.github.io/modelbased/reference/index.html">package documentation</a> and <a href="https://easystats.github.io/modelbased/articles/">articles</a> to learn more!</em>
+</p>
+</div>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>

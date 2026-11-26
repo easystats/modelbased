@@ -27,37 +27,45 @@ from a wide range of statistical models. In line with the **easystats**’
 user-friendliness to help researchers harness the full power of their
 models.
 
-*How to start?*
+## `modelbased` in a nutshell
 
 The package’s approach simplifies estimation by focusing on three key
 questions:
 
-1.  Predictor of Interest: Which variable’s effect do you want to
-    analyze? This is specified with the `by`, `contrast`, or `slope`
-    arguments.
+1.  **Define your Estimand - Quantity of Interest:** Specify *what*
+    statistical metric you want to estimate. Choose the core function
+    that directly answers your research question:
+    - [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md)
+      for expected values and model predictions
+    - [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md)
+      for group differences and pairwise comparisons
+    - [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)
+      for trends and marginal effects
+2.  **Predictor of Interest: Set Evaluation Points & Specific Values:**
+    Specify which predictor(s) to analyze and at which exact values or
+    levels to evaluate predictions via `by`, `contrast`, or `slope`
+    (e.g., `by = "x = c(1, 2)"` or custom [data
+    grids](https://easystats.github.io/insight/reference/get_datagrid.html)).
+3.  **Define your Estimand - Unit of Interest (`estimate`):** Specify
+    *whom* (which group or population) you want to generalize your
+    findings to:
+    - **Conditional predictions** (`"specific"`, `"typical"`):
+      Generalize to a theoretical individual or balanced reference grid
+      by holding non-focal covariates at fixed or typical values.
+    - **Marginal predictions** (`"average"`, `"population"`): Generalize
+      to your actual sample or a broader target population by averaging
+      across observed or counterfactual covariate distributions.
 
-2.  Evaluation Points: At which specific values should the predictor be
-    evaluated? This is also defined in the `by` argument. For a more
-    refined control over the evaluation points, see the [data
-    grids](https://easystats.github.io/insight/reference/get_datagrid.html)
-    vignette.
-
-3.  Target Population: What population should the inferences generalize
-    to? The `estimate` argument controls this by defining whether
-    predictions are for a typical individual, an average of the sample,
-    or an average of a broader population.
-
-We view **modelbased** as part of a broader analytical workflow that we
-call [the modelisation
+*Note: We view **modelbased** as part of a broader analytical workflow
+that we call [the modelisation
 approach](https://easystats.github.io/modelbased/articles/post_estimation_framework.html).
-This approach requires careful thinking about the *estimand* - that is,
-both the target *quantity* and *unit* of interest. While the former is
-covered by the three core functions
-([`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.md),
-[`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.md),
-and
-[`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.md)),
-the latter is controlled via the `estimate` argument.
+These are just the core concepts. **modelbased** offers many more
+features—including equivalence tests, custom data grids, random-effects
+predictions, and support for dozens of model classes. Explore the
+[package
+documentation](https://easystats.github.io/modelbased/reference/index.html)
+and [articles](https://easystats.github.io/modelbased/articles/) to
+learn more!*
 
 ## Installation
 
