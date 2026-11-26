@@ -46,22 +46,25 @@ questions:
     levels to evaluate predictions via `by`, `contrast`, or `slope`
     (e.g., `by = "x = c(1, 2)"` or custom [data
     grids](https://easystats.github.io/insight/reference/get_datagrid.html)).
-3.  **Define your Estimand - Unit of Interest (`estimate`):** Specify
-    *whom* (which group or population) you want to generalize your
-    findings to:
-    - **Conditional predictions** (`"specific"`, `"typical"`):
-      Generalize to a theoretical individual or balanced reference grid
-      by holding non-focal covariates at fixed or typical values.
-    - **Marginal predictions** (`"average"`, `"population"`): Generalize
-      to your actual sample or a broader target population by averaging
-      across observed or counterfactual covariate distributions.
+3.  **Define your Estimand - Unit of Interest:** Specify *whom* (which
+    group or population, using argument `estimate`) you want to
+    generalize your findings to:
+    - **Conditional predictions** (`estimate` is `"specific"` or
+      `"typical"`): Generalize to a theoretical individual or balanced
+      reference grid by holding non-focal covariates at fixed or typical
+      values.
+    - **Marginal predictions** (`estimate` is `"average"` or
+      `"population"`): Generalize to your actual sample or a broader
+      target population by averaging across observed or counterfactual
+      covariate distributions.
 
 *Note: These are just the core concepts. We view **modelbased** as part
 of a broader analytical workflow that we call [the modelisation
 approach](https://easystats.github.io/modelbased/articles/post_estimation_framework.html).
-Moreover, **modelbased** offers many more features—including equivalence
-tests, custom data grids, random-effects predictions, and support for
-dozens of model classes. Explore the [package
+Moreover, **modelbased** offers many more features - including
+equivalence tests, custom data grids, random-effects predictions, easy
+visualization, and support for dozens of model classes. Explore the
+[package
 documentation](https://easystats.github.io/modelbased/reference/index.html)
 and [articles](https://easystats.github.io/modelbased/articles/) to
 learn more!*

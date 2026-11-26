@@ -169,17 +169,17 @@
 <li>
 <strong>Predictor of Interest: Set Evaluation Points &amp; Specific Values:</strong> Specify which predictor(s) to analyze and at which exact values or levels to evaluate predictions via <code>by</code>, <code>contrast</code>, or <code>slope</code> (e.g., <code>by = "x = c(1, 2)"</code> or custom <a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">data grids</a>).</li>
 <li>
-<strong>Define your Estimand - Unit of Interest (<code>estimate</code>):</strong> Specify <em>whom</em> (which group or population) you want to generalize your findings to:
+<strong>Define your Estimand - Unit of Interest:</strong> Specify <em>whom</em> (which group or population, using argument <code>estimate</code>) you want to generalize your findings to:
 <ul>
 <li>
-<strong>Conditional predictions</strong> (<code>"specific"</code>, <code>"typical"</code>): Generalize to a theoretical individual or balanced reference grid by holding non-focal covariates at fixed or typical values.</li>
+<strong>Conditional predictions</strong> (<code>estimate</code> is <code>"specific"</code> or <code>"typical"</code>): Generalize to a theoretical individual or balanced reference grid by holding non-focal covariates at fixed or typical values.</li>
 <li>
-<strong>Marginal predictions</strong> (<code>"average"</code>, <code>"population"</code>): Generalize to your actual sample or a broader target population by averaging across observed or counterfactual covariate distributions.</li>
+<strong>Marginal predictions</strong> (<code>estimate</code> is <code>"average"</code> or <code>"population"</code>): Generalize to your actual sample or a broader target population by averaging across observed or counterfactual covariate distributions.</li>
 </ul>
 </li>
 </ol>
 <p class="nutshell-footer">
-<em>Note: These are just the core concepts. We view <strong>modelbased</strong> as part of a broader analytical workflow that we call <a href="https://easystats.github.io/modelbased/articles/post_estimation_framework.html">the modelisation approach</a>. Moreover, <strong>modelbased</strong> offers many more features—including equivalence tests, custom data grids, random-effects predictions, and support for dozens of model classes. Explore the <a href="https://easystats.github.io/modelbased/reference/index.html">package documentation</a> and <a href="https://easystats.github.io/modelbased/articles/">articles</a> to learn more!</em>
+<em>Note: These are just the core concepts. We view <strong>modelbased</strong> as part of a broader analytical workflow that we call <a href="https://easystats.github.io/modelbased/articles/post_estimation_framework.html">the modelisation approach</a>. Moreover, <strong>modelbased</strong> offers many more features - including equivalence tests, custom data grids, random-effects predictions, easy visualization, and support for dozens of model classes. Explore the <a href="https://easystats.github.io/modelbased/reference/index.html">package documentation</a> and <a href="https://easystats.github.io/modelbased/articles/">articles</a> to learn more!</em>
 </p>
 </div>
 </div>
