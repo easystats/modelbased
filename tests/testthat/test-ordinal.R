@@ -264,6 +264,44 @@ test_that("estimate_means, backend emmeans, clmm shows response level names", {
 })
 
 
+test_that("estimate_means, backend emmeans, brms ordinal", {
+  skip_if_not_installed("emmeans")
+  m <- insight::download_model("brms_ordinal_1")
+  skip_if(is.null(m))
+
+  # one probability per response category
+  out <- suppressWarnings(estimate_means(m, "mpg", length = 3, backend = "emmeans"))
+  expected <- as.data.frame(suppressWarnings(emmeans::emmeans(
+    m,
+    specs = c("mpg", "rep.meas"),
+    at = list(mpg = c(10.4, 22.15, 33.9)),
+    epred = TRUE
+  )))
+  expect_identical(as.character(out$Response), as.character(expected$rep.meas))
+  expect_equal(out$mpg, expected$mpg, tolerance = 1e-6)
+  expect_equal(out$Probability, expected$emmean, tolerance = 1e-6)
+})
+
+
+test_that("estimate_means, backend emmeans, brms categorical", {
+  skip_if_not_installed("emmeans")
+  m <- insight::download_model("brms_categorical_2_num")
+  skip_if(is.null(m))
+
+  # one probability per response category
+  out <- suppressWarnings(estimate_means(m, "Sepal.Width", length = 3, backend = "emmeans"))
+  expected <- as.data.frame(suppressWarnings(emmeans::emmeans(
+    m,
+    specs = c("Sepal.Width", "rep.meas"),
+    at = list(Sepal.Width = c(2, 3.2, 4.4)),
+    epred = TRUE
+  )))
+  expect_identical(as.character(out$Response), as.character(expected$rep.meas))
+  expect_equal(out$Sepal.Width, expected$Sepal.Width, tolerance = 1e-6)
+  expect_equal(out$Probability, expected$emmean, tolerance = 1e-6)
+})
+
+
 test_that("estimate_means, print bracl", {
   skip_if_not_installed("brglm2")
   # required for the penguins dataset, which was added in R 4.5.0

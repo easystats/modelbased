@@ -1,3 +1,12 @@
+# modelbased (devel)
+
+## Bug fixes
+
+* `estimate_means()` with `backend = "emmeans"` now returns the probabilities
+  of each response category for ordinal and categorical models from *brms*.
+  Before, the results were wrong: emmeans averaged over the response
+  categories, so each probability was one divided by the number of categories.
+
 # modelbased 0.19.0
 
 ## Breaking Changes
