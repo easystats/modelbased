@@ -171,10 +171,14 @@ get_emmeans <- function(
 )
 
 
-# frequentist ordinal models, which support the `mode` argument in emmeans
+# frequentist ordinal models and multinomial models from nnet, which support
+# the `mode` argument in emmeans
 .is_emmeans_ordinal <- function(model) {
   if (inherits(model, "brmsfit")) {
     return(FALSE)
+  }
+  if (inherits(model, "multinom")) {
+    return(TRUE)
   }
   m_info <- insight::model_info(model, response = 1, verbose = FALSE)
   isTRUE(m_info$is_ordinal) && !isTRUE(m_info$is_bayesian)
@@ -195,32 +199,38 @@ get_emmeans <- function(
 # ordinal models: the response categories for `mode = "prob"`, and the
 # thresholds for `mode = "cum.prob"`, `"exc.prob"` and `"linear.predictor"`.
 # emmeans names the response pseudo-factor after the left-hand side of the
-# formula, e.g. `factor(y)`, so we need the response term, not the variable
+# formula, e.g. `factor(y)`, so we need the response term, not the variable.
+# For multinom models, emmeans uses the first name of the left-hand side, e.g.
+# `factor` for `factor(y)`
 .emmeans_ordinal_pseudo_factor <- function(model, mode) {
-  switch(
-    mode,
-    prob = insight::find_terms(model, verbose = FALSE)$response,
-    cum.prob = ,
-    exc.prob = ,
-    linear.predictor = "cut",
-    NULL
-  )
+  response <- insight::find_terms(model, verbose = FALSE)$response
+  if (inherits(model, "multinom") && length(response) == 1) {
+    response <- all.names(str2lang(response))[1]
+  }
+  switch(mode, prob = response, cum.prob = , exc.prob = , linear.predictor = "cut", NULL)
 }
 
 
 # for ordinal models, emmeans ignores `type = "response"`, and we need the
 # `mode` argument instead. Probabilities are the default. Returns `predict`
 # (changed to "prob" for the default), and for ordinal models the emmeans mode
-# and the pseudo-factor that this mode adds to the reference grid
+# and the pseudo-factor that this mode adds to the reference grid.
+# Multinomial models only use the "prob" mode here. `from_cumprob` is `TRUE`
+# when slopes are computed from the slopes of the cumulative probabilities
+# (see `.emtrends_ordinal_arguments()`). Multinomial models have no cumulative
+# probabilities, and `emtrends()` returns their slopes directly
 .emmeans_ordinal_mode <- function(model, predict) {
   ordinal_model <- .is_emmeans_ordinal(model)
+  multinomial <- inherits(model, "multinom")
   if (ordinal_model && (is.null(predict) || identical(predict, "response"))) {
     predict <- "prob"
   }
-  out <- list(predict = predict, mode = NULL, pseudo_factor = NULL)
-  if (ordinal_model && !is.null(predict) && predict %in% .emmeans_ordinal_types) {
+  modes <- if (multinomial) "prob" else .emmeans_ordinal_types
+  out <- list(predict = predict, mode = NULL, pseudo_factor = NULL, from_cumprob = FALSE)
+  if (ordinal_model && !is.null(predict) && predict %in% modes) {
     out$mode <- predict
     out$pseudo_factor <- .emmeans_ordinal_pseudo_factor(model, predict)
+    out$from_cumprob <- predict %in% c("prob", "mean.class") && !multinomial
   }
   out
 }

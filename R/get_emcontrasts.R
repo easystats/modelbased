@@ -139,7 +139,7 @@ get_emcontrasts <- function(
       # contrast the slopes within each one
       fun_args <- .emtrends_ordinal_arguments(fun_args, ordinal)
       estimated <- suppressMessages(do.call(emmeans::emtrends, fun_args))
-      if (ordinal$mode %in% c("prob", "mean.class")) {
+      if (isTRUE(ordinal$from_cumprob)) {
         estimated <- .emtrends_ordinal_from_cumprob(estimated, model, ordinal$mode)
       }
       emm_by <- ordinal$pseudo_factor
