@@ -5,7 +5,7 @@
 #   has a "link" prediction type
 .backtransform_predictions <- function(means, model, predict_args, ci, df = Inf) {
   # In `.get_marginaleffects_type_argument()`, where we set the `predict`
-  # aergument, we check whether response-scale is requested - if so, we set
+  # argument, we check whether response-scale is requested - if so, we set
   # predict-type to "link" and now backtransform predictions and CIs
   if (isTRUE(predict_args$backtransform) && all(c("conf.low", "conf.high", "estimate") %in% colnames(means))) {
     # extract link-inverse
@@ -17,14 +17,28 @@
       t_crit <- stats::qt(alpha, df = df)
       # first transform CI, then SE and finally estimates. this order is
       # required - e.g., SE would be wrong if we backtransform estimate first
-      means$conf.low <- linv(means$estimate - t_crit * means$std.error)
-      means$conf.high <- linv(means$estimate + t_crit * means$std.error)
-      means$std.error <- exp(means$estimate) * means$std.error
+      conf_low <- linv(means$estimate - t_crit * means$std.error)
+      conf_high <- linv(means$estimate + t_crit * means$std.error)
+      mu_eta <- attr(linv, "mu.eta", exact = TRUE)
+      if (is.null(mu_eta)) {
+        mu_eta <- .safe(insight::get_family(model)$mu.eta)
+      }
+      if (is.null(mu_eta)) {
+        mu_eta <- function(eta) {
+          eps <- 1e-6 * pmax(1, abs(eta))
+          (linv(eta + eps) - linv(eta - eps)) / (2 * eps)
+        }
+      }
+      means$std.error <- abs(mu_eta(means$estimate)) * means$std.error
     } else {
       # for some models, we have no std.error, so just transform CIs
-      means$conf.low <- linv(means$conf.low)
-      means$conf.high <- linv(means$conf.high)
+      conf_low <- linv(means$conf.low)
+      conf_high <- linv(means$conf.high)
     }
+    # swap CI bounds for decreasing inverse links (e.g. Gamma inverse)
+    swap <- !is.na(conf_low) & !is.na(conf_high) & conf_low > conf_high
+    means$conf.low <- ifelse(swap, conf_high, conf_low)
+    means$conf.high <- ifelse(swap, conf_low, conf_high)
     means$estimate <- linv(means$estimate)
   }
 
@@ -43,12 +57,19 @@
     if (!is.null(dots$sigma) && !is.na(dots$sigma)) {
       residual_variance <- dots$sigma^2
     }
-    l <- .bias_correction(model, residual_variance, verbose, ...)$linkinv
+    bc <- .bias_correction(model, residual_variance, verbose, ...)
+    l <- bc$linkinv
+    mu_eta <- bc$mu.eta
     if (is.null(l)) {
       l <- insight::link_inverse(model)
+      mu_eta <- .safe(insight::get_family(model)$mu.eta)
     }
   } else {
     l <- insight::link_inverse(model)
+    mu_eta <- .safe(insight::get_family(model)$mu.eta)
+  }
+  if (!is.null(l) && !is.null(mu_eta)) {
+    attr(l, "mu.eta") <- mu_eta
   }
   l
 }
