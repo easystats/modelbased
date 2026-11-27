@@ -19,6 +19,13 @@
   categorical models from *brms*. Before, the results were wrong: emmeans
   averaged over the response categories, so slopes and contrasts were zero.
 
+* With `predict = "inverse_link"`, standard errors of back-transformed
+  predictions now use the derivative of the inverse link (`mu.eta`). Before,
+  the log-link derivative was used for every link, so standard errors were
+  wrong for non-log links such as logit or inverse. Confidence limits are now
+  also returned in increasing order for decreasing inverse links (e.g.,
+  `Gamma("inverse")`).
+
 # modelbased 0.19.0
 
 ## Breaking Changes
