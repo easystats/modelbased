@@ -51,7 +51,13 @@ test_that("backtransform_predictions uses bias-adjusted derivative for SE with b
     data = dat,
     family = binomial("logit")
   )
-  out_mb <- estimate_means(m1, "var_binom", bias_correction = TRUE, sigma = 2.5, re.form = NA)
+  out_mb <- estimate_means(
+    m1,
+    "var_binom",
+    bias_correction = TRUE,
+    sigma = 2.5,
+    re.form = NA
+  )
   out_em <- as.data.frame(emmeans::emmeans(
     m1,
     "var_binom",
