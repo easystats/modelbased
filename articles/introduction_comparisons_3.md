@@ -392,10 +392,8 @@ Plagborg-Møller, 2019), providing a more rigorous test for the interval.
 `#> `\
 `#> Start |  End | Direction | Confidence     `\
 `#> ------------------------------------------`\
-`#> 0.50  | 0.50 | positive  | Significant    `\
-`#> 0.76  | 1.27 | positive  | Not Significant`\
-`#> 1.52  | 2.54 | negative  | Not Significant`\
-`#> 2.80  | 2.80 | negative  | Significant    `\
+`#> 0.50  | 1.27 | positive  | Not Significant`\
+`#> 1.52  | 2.80 | negative  | Not Significant`\
 `#> `\
 `#> Marginal effects estimated for Murder`\
 `#> Type of slope was dY/dX`
