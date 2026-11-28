@@ -470,13 +470,10 @@
   x$conf.low <- x$estimate - tcrit * x$std.error
   x$conf.high <- x$estimate + tcrit * x$std.error
 
-  # update p-values - we need to ensure that length of "statisic" matches number
-  # of rows, so we pick just as many values from "statistic" as required
-  range_mod <- floor((1:nrow(x)) * (nrow(x) / 100) * length(range_sequence))
-  if (length(range_sequence) == length(statistic)) {
-    statistic <- statistic[range_mod]
-    # update p-values
-    x$p.value <- 2 * stats::pt(abs(statistic), df = dof, lower.tail = FALSE)
-  }
+  # update p-values, using the statistic of each row. They are scaled by the
+  # same factor as the significance level, so that p < 1 - ci exactly when the
+  # confidence interval excludes zero
+  p_rows <- 2 * stats::pt(abs(x$estimate / x$std.error), df = dof, lower.tail = FALSE)
+  x$p.value <- pmin(1, p_rows / multipliers[i])
   x
 }

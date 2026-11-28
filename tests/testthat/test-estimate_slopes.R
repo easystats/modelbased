@@ -213,7 +213,7 @@ test_that("estimate_slopes, johnson-neyman p-adjust", {
   )
   expect_equal(
     out$p,
-    c(0.03438, 0.14813, 0.50393, 0.83427, 0.24689, 0.03326, 0.00219, 9e-05, 0, 0),
+    c(0.01624, 0.09023, 0.44097, 1, 1, 0.19092, 0.0123, 0.00041, 1e-05, 0),
     tolerance = 1e-2
   )
 
@@ -241,6 +241,26 @@ test_that("estimate_slopes, johnson-neyman p-adjust", {
     c(0.01765, 0.08691, 0.36222, 0.9097, 0.76792, 0.17275, 0.01369, 5e-04, 1e-05, 0),
     tolerance = 1e-2
   )
+})
+
+
+test_that("estimate_slopes, esarey p-values belong to their rows", {
+  data(iris)
+  model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)
+  for (n in c(10, 20)) {
+    unadjusted <- estimate_slopes(model, "Petal.Width", by = "Petal.Length", length = n)
+    out <- estimate_slopes(
+      model,
+      "Petal.Width",
+      by = "Petal.Length",
+      length = n,
+      p_adjust = "esarey"
+    )
+    expect_false(anyNA(out$p))
+    expect_true(all(out$p >= unadjusted$p))
+    # p < .05 exactly when the 95% CI excludes zero
+    expect_identical(out$p < 0.05, out$CI_low > 0 | out$CI_high < 0)
+  }
 })
 
 

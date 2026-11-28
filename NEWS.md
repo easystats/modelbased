@@ -26,6 +26,12 @@
   also returned in increasing order for decreasing inverse links (e.g.,
   `Gamma("inverse")`).
 
+* `estimate_slopes()` with `p_adjust = "esarey"` now returns the p-value of
+  each row at its own value of the moderator, adjusted by the same factor as
+  the confidence intervals. Before, the p-values were unadjusted and taken from
+  other values of the moderator, and some were `NA` when the output had more
+  than 10 rows.
+
 # modelbased 0.19.0
 
 ## Breaking Changes
